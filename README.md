@@ -36,7 +36,8 @@ area[name="Bonn"]->.a;
   rel(area.a)[railway=station]; );
 out;'
 
-read.table(text=overpass_query(osmcsv), sep="\t", header=TRUE, check.names=FALSE, stringsAsFactors=FALSE)
+read.table(text=overpass_query(osmcsv), sep="\t", header=TRUE, 
+           check.names=FALSE, stringsAsFactors=FALSE)
 #>          @id @type               name
 #> 1   26945519  node    Bonn-Oberkassel
 #> 2 1271017705  node         Bonn-Beuel
@@ -141,7 +142,7 @@ library(overpass)
 library(testthat)
 
 date()
-#> [1] "Mon Aug 10 12:25:16 2015"
+#> [1] "Mon Aug 10 12:25:46 2015"
 
 test_dir("tests/")
 #> testthat results ===========================================================
