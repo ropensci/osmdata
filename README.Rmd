@@ -13,12 +13,6 @@ knitr::opts_chunk$set(
   fig.path = "README-"
 )
 ```
-
-[![Build Status](https://travis-ci.org/hrbrmstr/overpass.svg)](https://travis-ci.org/hrbrmstr/overpass) 
-![Project Status: Concept - Minimal or no implementation has been done yet.](http://www.repostatus.org/badges/0.1.0/concept.svg)](http://www.repostatus.org/#concept)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/overpass)](http://cran.r-project.org/web/packages/overpass) 
-![downloads](http://cranlogs.r-pkg.org/badges/grand-total/overpass)
-
 overpass is a packge with tools to work with the OpenStreetMap (OSM) [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API)
 
 The following functions are implemented:

@@ -1,6 +1,4 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Build Status](https://travis-ci.org/hrbrmstr/overpass.svg)](https://travis-ci.org/hrbrmstr/overpass) ![Project Status: Concept - Minimal or no implementation has been done yet.](http://www.repostatus.org/badges/0.1.0/concept.svg)](<http://www.repostatus.org/#concept>) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/overpass)](http://cran.r-project.org/web/packages/overpass) ![downloads](http://cranlogs.r-pkg.org/badges/grand-total/overpass)
-
 overpass is a packge with tools to work with the OpenStreetMap (OSM) [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API)
 
 The following functions are implemented:
@@ -88,7 +86,7 @@ library(overpass)
 library(testthat)
 
 date()
-#> [1] "Mon Aug 10 11:19:39 2015"
+#> [1] "Mon Aug 10 11:22:03 2015"
 
 test_dir("tests/")
 #> testthat results ========================================================================================================
