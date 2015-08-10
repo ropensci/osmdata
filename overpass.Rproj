@@ -14,3 +14,12 @@ BuildType: Package
 PackageUseDevtools: Yes
 PackageInstallArgs: --no-multiarch --with-keep.source
 PackageRoxygenize: rd,collate,namespace
+
+UseSpacesForTab: Yes
+NumSpacesForTab: 2
+
+RnwWeave: Sweave
+LaTeX: pdfLaTeX
+
+PackageBuildArgs: --resave-data
+PackageCheckArgs: --as-cran
