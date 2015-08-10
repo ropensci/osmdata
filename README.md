@@ -1,5 +1,5 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-overpass is a packge with tools to work with the OpenStreetMap (OSM) [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API)
+overpass is a packge with tools to work with the OpenStreetMap (OSM) [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API). To explore simple Overpass queries interactively, try [overpass turbo](http://overpass-turbo.eu/).
 
 Here's an [RPub](http://rpubs.com/hrbrmstr/overpass) for `overpass` that I'll continually update as this goes (that will eventually be a vignette).
 
@@ -102,27 +102,17 @@ plot(awy)
 <img src="README-actual_ways-1.png" title="" alt="" width="672" />
 
 ``` r
-# more complex example from Robin
+# more complex example from Robin: motorways surrounding London
 
-from_robin <- '<osm-script output="xml" timeout="25">
-<union into="_">
-<query into="_" type="node">
-<has-kv k="highway" modv="" v="motorway"/>
-<bbox-query e="-1.9267272949218748" into="_" n="53.62550271303527" s="53.372678592569365" w="-2.44171142578125"/>
-</query>
-<query into="_" type="way">
-<has-kv k="highway" modv="" v="motorway"/>
-<bbox-query e="-1.9267272949218748" into="_" n="53.62550271303527" s="53.372678592569365" w="-2.44171142578125"/>
-</query>
-<query into="_" type="relation">
-<has-kv k="highway" modv="" v="motorway"/>
-<bbox-query e="-1.9267272949218748" into="_" n="53.62550271303527" s="53.372678592569365" w="-2.44171142578125"/>
-</query>
-</union>
-<print e="" from="_" geometry="skeleton" limit="" mode="body" n="" order="id" s="" w=""/>
-<recurse from="_" into="_" type="down"/>
-<print e="" from="_" geometry="skeleton" limit="" mode="skeleton" n="" order="quadtile" s="" w=""/>
-</osm-script>'
+from_robin <- '[out:xml][timeout:100];
+(
+  node["highway"="motorway"](51.24,-0.61,51.73,0.41);
+  way["highway"="motorway"](51.24,-0.61,51.73,0.41);
+  relation["highway"="motorway"](51.24,-0.61,51.73,0.41);
+);
+out body;
+>;
+out skel qt;'
 
 frb <- overpass_query(from_robin)
 
@@ -144,7 +134,7 @@ library(overpass)
 library(testthat)
 
 date()
-#> [1] "Mon Aug 10 16:24:08 2015"
+#> [1] "Tue Aug 11 00:41:41 2015"
 
 test_dir("tests/")
 #> testthat results ===========================================================
