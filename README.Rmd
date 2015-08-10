@@ -19,6 +19,8 @@ knitr::opts_chunk$set(
 ```
 overpass is a packge with tools to work with the OpenStreetMap (OSM) [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API)
 
+Here's an [RPub](http://rpubs.com/hrbrmstr/overpass) for `overpass` that I'll continually update as this goes (that will eventually be a vignette).
+
 The following functions are implemented:
 
 - `overpass_query`: Issue OSM Overpass Query

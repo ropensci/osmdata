@@ -1,6 +1,8 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 overpass is a packge with tools to work with the OpenStreetMap (OSM) [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API)
 
+Here's an [RPub](http://rpubs.com/hrbrmstr/overpass) for `overpass` that I'll continually update as this goes (that will eventually be a vignette).
+
 The following functions are implemented:
 
 -   `overpass_query`: Issue OSM Overpass Query
@@ -24,7 +26,7 @@ library(ggplot2)
 
 # current verison
 packageVersion("overpass")
-#> [1] '0.0.0.9000'
+#> [1] '0.0.0.9001'
 ```
 
 ``` r
@@ -142,7 +144,7 @@ library(overpass)
 library(testthat)
 
 date()
-#> [1] "Mon Aug 10 15:18:00 2015"
+#> [1] "Mon Aug 10 16:24:08 2015"
 
 test_dir("tests/")
 #> testthat results ===========================================================

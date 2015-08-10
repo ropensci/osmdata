@@ -45,6 +45,13 @@ overpass_query <- function(query) {
     return(osm_ways_to_spldf(doc, osm_ways))
   }
 
+  if (has_relations) {
+
+    # this inherently has to return a list structure of some kind
+    # class should be "overrel"
+
+  }
+
   # if we got here something is really wrong
   return(NULL)
 
