@@ -25,6 +25,5 @@ process_osm_nodes <- function(doc) {
 osm_nodes_to_sptsdf <- function(osm_nodes) {
   df <- data.frame(filter(osm_nodes, -lon, -lat))
   spdf <- SpatialPointsDataFrame(as.matrix(osm_nodes[, c("lon", "lat")]), df)
-  class(spdf) <- c("overnode", class(spdf))
   spdf
 }

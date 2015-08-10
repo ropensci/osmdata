@@ -42,7 +42,6 @@ osm_ways_to_spldf <- function(doc, osm_ways) {
   rownames(ways_dat) <- names(osm_ways)
 
   sldf <- SpatialLinesDataFrame(SpatialLines(osm_ways), data.frame(ways_dat))
-  class(sldf) <- c("overways", class(sldf))
   sldf
 
 }
