@@ -20,11 +20,33 @@ devtools::install_github("hrbrmstr/overpass")
 ``` r
 library(overpass)
 library(sp)
+library(ggplot2)
 
 # current verison
 packageVersion("overpass")
 #> [1] '0.0.0.9000'
+```
 
+``` r
+# CSV example
+osmcsv <- '[out:csv(::id,::type,"name")];
+area[name="Bonn"]->.a;
+( node(area.a)[railway=station];
+  way(area.a)[railway=station];
+  rel(area.a)[railway=station]; );
+out;'
+
+read.table(text=overpass_query(osmcsv), sep="\t", check.names=FALSE, stringsAsFactors=FALSE)
+#>           V1    V2                 V3
+#> 1        @id @type               name
+#> 2   26945519  node    Bonn-Oberkassel
+#> 3 1271017705  node         Bonn-Beuel
+#> 4 2428355974  node Bonn-Bad Godesberg
+#> 5 2713060210  node  Bonn Hauptbahnhof
+#> 6 3400717493  node        Bonn-Mehlem
+```
+
+``` r
 # just nodes
 only_nodes <- '[out:xml];
 node
@@ -38,10 +60,9 @@ pts <- overpass_query(only_nodes)
 plot(pts)
 ```
 
-<img src="README-unnamed-chunk-4-1.png" title="" alt="" width="672" />
+<img src="README-only_nodes-1.png" title="" alt="" width="672" />
 
 ``` r
-
 # ways & nodes
 nodes_and_ways <- '[out:xml];
 (node["amenity"="fire_station"]
@@ -57,10 +78,9 @@ wys <- overpass_query(nodes_and_ways)
 plot(wys)
 ```
 
-<img src="README-unnamed-chunk-4-2.png" title="" alt="" width="672" />
+<img src="README-nodes_and_ways-1.png" title="" alt="" width="672" />
 
 ``` r
-
 # xml version of the query
 actual_ways <- '<osm-script output="xml">
   <query type="way">
@@ -77,10 +97,9 @@ awy <- overpass_query(actual_ways)
 plot(awy)
 ```
 
-<img src="README-unnamed-chunk-4-3.png" title="" alt="" width="672" />
+<img src="README-actual_ways-1.png" title="" alt="" width="672" />
 
 ``` r
-
 # more complex example from Robin
 
 from_robin <- '<osm-script output="xml" timeout="25">
@@ -105,8 +124,6 @@ from_robin <- '<osm-script output="xml" timeout="25">
 
 frb <- overpass_query(from_robin)
 
-library(ggplot2)
-
 gg <- ggplot()
 gg <- gg + geom_path(data=fortify(frb), 
                      aes(x=long, y=lat, group=group),
@@ -116,7 +133,7 @@ gg <- gg + ggthemes::theme_map()
 gg
 ```
 
-<img src="README-unnamed-chunk-4-4.png" title="" alt="" width="672" />
+<img src="README-from_robin-1.png" title="" alt="" width="672" />
 
 ### Test Results
 
@@ -125,10 +142,10 @@ library(overpass)
 library(testthat)
 
 date()
-#> [1] "Mon Aug 10 11:37:57 2015"
+#> [1] "Mon Aug 10 12:19:06 2015"
 
 test_dir("tests/")
-#> testthat results ========================================================================================================
+#> testthat results ===========================================================
 #> OK: 0 SKIPPED: 0 FAILED: 0
 #> 
 #> DONE

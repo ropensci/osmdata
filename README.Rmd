@@ -6,11 +6,12 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, echo = FALSE}
+```{r opts, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   warning = FALSE,
   message = FALSE,
+  width = 120,
   comment = "#>",
   fig.retina = 2,
   fig.path = "README-"
@@ -28,23 +29,34 @@ The following functions are implemented:
 
 ### Installation
 
-```{r eval=FALSE}
+```{r install, eval=FALSE}
 devtools::install_github("hrbrmstr/overpass")
-```
-
-```{r echo=FALSE, message=FALSE, warning=FALSE, error=FALSE}
-options(width=120)
 ```
 
 ### Usage
 
-```{r}
+```{r usage}
 library(overpass)
 library(sp)
+library(ggplot2)
 
 # current verison
 packageVersion("overpass")
+```
 
+```{r csv, cache=TRUE}
+# CSV example
+osmcsv <- '[out:csv(::id,::type,"name")];
+area[name="Bonn"]->.a;
+( node(area.a)[railway=station];
+  way(area.a)[railway=station];
+  rel(area.a)[railway=station]; );
+out;'
+
+read.table(text=overpass_query(osmcsv), sep="\t", check.names=FALSE, stringsAsFactors=FALSE)
+```
+
+```{r only_nodes, cache=TRUE}
 # just nodes
 only_nodes <- '[out:xml];
 node
@@ -56,7 +68,9 @@ out body;'
 
 pts <- overpass_query(only_nodes)
 plot(pts)
+```
 
+```{r nodes_and_ways, cache=TRUE}
 # ways & nodes
 nodes_and_ways <- '[out:xml];
 (node["amenity"="fire_station"]
@@ -70,7 +84,9 @@ out;'
 
 wys <- overpass_query(nodes_and_ways)
 plot(wys)
+```
 
+```{r actual_ways, cache=TRUE}
 # xml version of the query
 actual_ways <- '<osm-script output="xml">
   <query type="way">
@@ -85,7 +101,9 @@ actual_ways <- '<osm-script output="xml">
 
 awy <- overpass_query(actual_ways)
 plot(awy)
+```
 
+```{r from_robin, cache=TRUE}
 # more complex example from Robin
 
 from_robin <- '<osm-script output="xml" timeout="25">
@@ -110,8 +128,6 @@ from_robin <- '<osm-script output="xml" timeout="25">
 
 frb <- overpass_query(from_robin)
 
-library(ggplot2)
-
 gg <- ggplot()
 gg <- gg + geom_path(data=fortify(frb), 
                      aes(x=long, y=lat, group=group),
@@ -119,12 +135,11 @@ gg <- gg + geom_path(data=fortify(frb),
 gg <- gg + coord_quickmap()
 gg <- gg + ggthemes::theme_map()
 gg
-
 ```
 
 ### Test Results
 
-```{r}
+```{r test}
 library(overpass)
 library(testthat)
 
