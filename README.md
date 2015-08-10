@@ -38,7 +38,7 @@ pts <- overpass_query(only_nodes)
 plot(pts)
 ```
 
-![](README-unnamed-chunk-4-1.png)
+<img src="README-unnamed-chunk-4-1.png" title="" alt="" width="672" />
 
 ``` r
 
@@ -57,7 +57,7 @@ wys <- overpass_query(nodes_and_ways)
 plot(wys)
 ```
 
-![](README-unnamed-chunk-4-2.png)
+<img src="README-unnamed-chunk-4-2.png" title="" alt="" width="672" />
 
 ``` r
 
@@ -77,7 +77,46 @@ awy <- overpass_query(actual_ways)
 plot(awy)
 ```
 
-![](README-unnamed-chunk-4-3.png)
+<img src="README-unnamed-chunk-4-3.png" title="" alt="" width="672" />
+
+``` r
+
+# more complex example from Robin
+
+from_robin <- '<osm-script output="xml" timeout="25">
+<union into="_">
+<query into="_" type="node">
+<has-kv k="highway" modv="" v="motorway"/>
+<bbox-query e="-1.9267272949218748" into="_" n="53.62550271303527" s="53.372678592569365" w="-2.44171142578125"/>
+</query>
+<query into="_" type="way">
+<has-kv k="highway" modv="" v="motorway"/>
+<bbox-query e="-1.9267272949218748" into="_" n="53.62550271303527" s="53.372678592569365" w="-2.44171142578125"/>
+</query>
+<query into="_" type="relation">
+<has-kv k="highway" modv="" v="motorway"/>
+<bbox-query e="-1.9267272949218748" into="_" n="53.62550271303527" s="53.372678592569365" w="-2.44171142578125"/>
+</query>
+</union>
+<print e="" from="_" geometry="skeleton" limit="" mode="body" n="" order="id" s="" w=""/>
+<recurse from="_" into="_" type="down"/>
+<print e="" from="_" geometry="skeleton" limit="" mode="skeleton" n="" order="quadtile" s="" w=""/>
+</osm-script>'
+
+frb <- overpass_query(from_robin)
+
+library(ggplot2)
+
+gg <- ggplot()
+gg <- gg + geom_path(data=fortify(frb), 
+                     aes(x=long, y=lat, group=group),
+                     color="black", size=0.25)
+gg <- gg + coord_quickmap()
+gg <- gg + ggthemes::theme_map()
+gg
+```
+
+<img src="README-unnamed-chunk-4-4.png" title="" alt="" width="672" />
 
 ### Test Results
 
@@ -86,7 +125,7 @@ library(overpass)
 library(testthat)
 
 date()
-#> [1] "Mon Aug 10 11:22:03 2015"
+#> [1] "Mon Aug 10 11:37:57 2015"
 
 test_dir("tests/")
 #> testthat results ========================================================================================================
