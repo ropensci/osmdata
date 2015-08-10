@@ -11,7 +11,7 @@
 #'         will return a \code{SpatialLinesDataFrame} with the \code{way}s\cr\cr
 #'         \code{relations}s are not handled yet.\cr\cr
 #'         If you asked for a CSV, you will receive the text response back, suitable for
-#'         processing by \code{read.table(text=..., sep=..., check.names=FALSE, stringsAsFactors=FALSE)}.
+#'         processing by \code{read.table(text=..., sep=..., header=TRUE, check.names=FALSE, stringsAsFactors=FALSE)}.
 #' @export
 overpass_query <- function(query) {
 

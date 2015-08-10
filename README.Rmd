@@ -53,7 +53,7 @@ area[name="Bonn"]->.a;
   rel(area.a)[railway=station]; );
 out;'
 
-read.table(text=overpass_query(osmcsv), sep="\t", check.names=FALSE, stringsAsFactors=FALSE)
+read.table(text=overpass_query(osmcsv), sep="\t", header=TRUE, check.names=FALSE, stringsAsFactors=FALSE)
 ```
 
 ```{r only_nodes, cache=TRUE}
