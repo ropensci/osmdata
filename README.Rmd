@@ -23,13 +23,20 @@ To explore simple Overpass queries interactively, try [overpass turbo](http://ov
 
 Here's an [RPub](http://rpubs.com/hrbrmstr/overpass) for `overpass` that I'll continually update as this goes (that will eventually be a vignette).
 
+The Overpass API (or OSM3S) is a read-only API that serves up custom selected parts of the OSM map data. It acts as a database over the web: the client sends a query to the API and gets back the data set that corresponds to the query.
+
+Unlike the main API, which is optimized for editing, Overpass API is optimized for data consumers that need a few elements within a glimpse or up to roughly 100 million elements in some minutes, both selected by search criteria like e.g. location, type of objects, tag properties, proximity, or combinations of them. It acts as a database backend for various services.
+
+Overpass API has a powerful query language (language guide, language reference, an IDE) beyond XAPI, but also has a compatibility layer to allow a smooth transition from XAPI.
+
 The following functions are implemented:
 
 - `overpass_query`: Issue OSM Overpass Query
-- `read_osm`: Read OSM Overpass Response
+- `read_osm`: Read an XML OSM Overpass response from path
 
 ### News
 
+- Version 0.0.0.9005 released - HUGE speed improvement; passes CRAN checks;  
 - Version 0.0.0.9000 released
 
 ### Installation

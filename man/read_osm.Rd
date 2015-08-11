@@ -2,12 +2,23 @@
 % Please edit documentation in R/read_osm.R
 \name{read_osm}
 \alias{read_osm}
-\title{Read OSM Overpass Response}
+\title{Read an XML OSM Overpass response from path}
 \usage{
-read_osm(osm_response)
+read_osm(osm_response, encoding = "")
 }
 \arguments{
-\item{osm_response}{file containing an OSM Overpass XML response}
+\item{osm_response}{file containing an OSM Overpass (XML) response. Can be
+A string, a connection, or a raw vector.\cr
+A string can be either a path, a url or literal xml.
+Urls will be converted into connections either using
+\code{base::url} or, if installed, \code{curl::curl}.
+Local paths ending in \code{.gz}, \code{.bz2}, \code{.xz},
+\code{.zip} will be automatically uncompressed.}
+
+\item{encoding}{Specify a default encoding for the document. Unless otherwise
+specified XML documents are assumed to be in UTF-8 or UTF-16. If the
+document is not UTF-8/16, and lacks an explicit encoding directive,
+this allows you to supply a default.}
 }
 \value{
 If the \code{query} result only has OSM \code{node}s then the function
@@ -17,6 +28,7 @@ If the \code{query} result only has OSM \code{node}s then the function
         \code{relations}s are not handled yet.\cr\cr
 }
 \description{
-Read OSM Overpass Response
+Read an (XML format) OSM Overpass response from a string, a connection,
+or a raw vector.
 }
 
