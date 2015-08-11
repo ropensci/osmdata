@@ -5,3 +5,9 @@
 ^\.travis\.yml$
 ^CONDUCT\.md$
 ^README\.md$
+^NOTES\.md$
+README_cache/
+^overpass-example\.Rmd$
+^overpass-example\.html$
+overpass-example_cache/
+rsconnect/
