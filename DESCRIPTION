@@ -11,6 +11,8 @@ Depends: R (>= 3.0.0)
 License: MIT + file LICENSE
 LazyData: true
 Suggests: testthat,
-    knitr
-Imports: fastmatch, pbapply, sp, xml2, httr, jsonlite, dplyr, utils, data.table, ggmap, tidyr
+    knitr,
+    RJSONIO,
+    ggmap
+Imports: fastmatch, pbapply, sp, xml2, httr, dplyr, utils, tidyr
 VignetteBuilder: knitr

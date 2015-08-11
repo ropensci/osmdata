@@ -4,7 +4,7 @@
 \name{overpass}
 \alias{overpass}
 \alias{overpass-package}
-\title{Tools to Work With the OpenStreetMap (OSM) Overpass API}
+\title{Tools to Work with the OpenStreetMap (OSM) Overpass API}
 \description{
 The Overpass API (or OSM3S) is a read-only API that serves up custom
 selected parts of the OSM map data. It acts as a database over the web:

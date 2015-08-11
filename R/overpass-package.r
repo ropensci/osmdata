@@ -1,4 +1,4 @@
-#' Tools to Work With the OpenStreetMap (OSM) Overpass API
+#' Tools to Work with the OpenStreetMap (OSM) Overpass API
 #'
 #' The Overpass API (or OSM3S) is a read-only API that serves up custom
 #' selected parts of the OSM map data. It acts as a database over the web:
@@ -19,6 +19,6 @@
 #' @name overpass
 #' @docType package
 #' @author Bob Rudis, Robin Lovelace
-#' @import fastmatch pbapply sp xml2 httr jsonlite dplyr tidyr
+#' @import fastmatch pbapply sp xml2 httr dplyr tidyr
 #' @importFrom utils read.table
 NULL

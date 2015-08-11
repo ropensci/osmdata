@@ -2,3 +2,6 @@
 .Rhistory
 .RData
 inst/doc
+rsconnect/
+README_cache/
+overpass-example_cache/
