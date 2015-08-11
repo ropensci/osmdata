@@ -43,7 +43,7 @@ devtools::install_github("hrbrmstr/overpass")
 ```{r usage}
 library(overpass)
 library(sp)
-library(ggplot2)
+library(ggmap)
 
 # current verison
 packageVersion("overpass")
@@ -58,8 +58,10 @@ area[name="Bonn"]->.a;
   rel(area.a)[railway=station]; );
 out;'
 
-read.table(text=overpass_query(osmcsv), sep="\t", header=TRUE, 
+opq <- overpass_query(osmcsv)
+read.table(text = opq, sep="\t", header=TRUE, 
            check.names=FALSE, stringsAsFactors=FALSE)
+
 ```
 
 ```{r only_nodes, cache=TRUE}
@@ -109,7 +111,7 @@ awy <- overpass_query(actual_ways)
 plot(awy)
 ```
 
-```{r from_robin, cache=FALSE}
+```{r from_robin, eval=FALSE}
 # more complex example from Robin: motorways surrounding London
 # warning: may take a few minutes to run
 from_robin <- '[out:xml][timeout:100];
@@ -131,7 +133,10 @@ gg <- gg + geom_path(data=fortify(frb),
 gg <- gg + coord_quickmap()
 gg <- gg + ggthemes::theme_map()
 gg
+ggsave("README-from_robin-1.png")
 ```
+
+![london](README-from_robin-1.png)
 
 ### Test Results
 
