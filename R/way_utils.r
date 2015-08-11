@@ -7,17 +7,18 @@ process_osm_ways <- function(doc, osm_nodes) {
   #   - ensure the way id is in the rowname since that's how Spatial* stuff
   #     works best in R
 
-  pblapply(xml_find_all(doc, "//way"), function(x) {
-    way_id <- xml_attr(x, "id")
+  ways <- xml_find_all(doc, "//way")
+  idx <- which(!duplicated(xml_attr(ways, "id")))
 
-    # initially tried this
+  pblapply(seq_along(idx), function(i) {
+    x <- ways[[i]]
+    way_id <- xml_attr(x, "id")
     nds <- data_frame(id=xml_attr(xml_find_all(x, "./nd"), "ref"))
     # convert to lat/lon
     nds_df <- left_join(nds, osm_nodes, by="id")
-    #     nds_df <- filter(osm_nodes, id %fmin% xml_attr(xml_find_all(x, "./nd"), "ref")),
     Lines(list(Line(as.matrix(nds_df[, c("lon", "lat")]))), ID=way_id)
   }) -> osm_ways
-  names(osm_ways) <- xml_attr(xml_find_all(doc, "//way"), "id")
+  names(osm_ways) <- xml_attr(ways, "id")[idx]
   osm_ways
 }
 

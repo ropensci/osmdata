@@ -25,34 +25,6 @@ overpass_query <- function(query) {
 
   doc <- read_xml(content(res, as="text"))
 
-  # which types of OSM things do we have?
-  has_nodes <- has_xpath(doc, "//node")
-  has_ways <- has_xpath(doc, "//way")
-  has_relations <- has_xpath(doc, "//relation")
-
-  # start crunching
-  if (has_nodes) {
-    osm_nodes <- process_osm_nodes(doc)
-    # if we only have nodes return a SpatialPointsDataFrame
-    if (!has_ways) return(osm_nodes_to_sptsdf(osm_nodes))
-  }
-
-  if (has_ways) {
-    # gotta have nodes to make ways
-    if (!has_nodes) stop("Cannot make ways if query results do not have nodes", call.=FALSE)
-    osm_ways <- process_osm_ways(doc, osm_nodes)
-    # TODO if we have relations we need to do more things
-    return(osm_ways_to_spldf(doc, osm_ways))
-  }
-
-  if (has_relations) {
-
-    # this inherently has to return a list structure of some kind
-    # class should be "overrel"
-
-  }
-
-  # if we got here something is really wrong
-  return(NULL)
+  process_doc(doc)
 
 }

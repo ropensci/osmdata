@@ -6,6 +6,7 @@ Here's an [RPub](http://rpubs.com/hrbrmstr/overpass) for `overpass` that I'll co
 The following functions are implemented:
 
 -   `overpass_query`: Issue OSM Overpass Query
+-   `read_osm`: Read OSM Overpass Response
 
 ### News
 
@@ -103,7 +104,7 @@ plot(awy)
 
 ``` r
 # more complex example from Robin: motorways surrounding London
-
+# warning: may take a few minutes to run
 from_robin <- '[out:xml][timeout:100];
 (
   node["highway"="motorway"](51.24,-0.61,51.73,0.41);
@@ -134,7 +135,7 @@ library(overpass)
 library(testthat)
 
 date()
-#> [1] "Tue Aug 11 00:41:41 2015"
+#> [1] "Tue Aug 11 01:17:31 2015"
 
 test_dir("tests/")
 #> testthat results ===========================================================

@@ -1,23 +1,24 @@
 # find all the nodes and store them in a data frame
 process_osm_nodes <- function(doc) {
 
-  bind_rows(pblapply(xml_attrs(xml_find_all(doc, "//node")), function(x) {
+  tmp <- xml_attrs(xml_find_all(doc, "//node"))
+  nodes <- as.data.frame(t(do.call(cbind, tmp)), stringsAsFactors=FALSE)
+  nodes <- nodes[, c("id", "lon", "lat")]
 
-    # easy to make the lon/lat entries
-    pts <- data_frame(id=x["id"], lon=as.numeric(x["lon"]), lat=as.numeric(x["lat"]))
+  nodes_with_tags <- tryCatch(xml_find_all(doc, "//node[child::tag]"),
+                              errror=function(err){ return(list(0)) })
 
-    # find any tags and make them columns. bind_rows will be nice and fill in NAs
-    tag_path <- sprintf("//node[@id='%s']/tag", x["id"])
+  if (length(nodes_with_tags) > 0) {
+    bind_rows(lapply(nodes_with_tags, function(x) {
+      v <- xml_attr(xml_find_all(x, "tag"), "v")
+      names(v) <- xml_attr(xml_find_all(x, "tag"), "k")
+      pts <- cbind.data.frame(id=xml_attr(x, "id"), t(v),
+                              stringsAsFactors=FALSE)
+    })) -> node_attrs
+    nodes <- left_join(nodes, node_attrs, by="id")
+  }
 
-    if (has_xpath(doc, tag_path)) {
-      v <- xml_attr(xml_find_all(doc, tag_path), "v")
-      names(v) <- xml_attr(xml_find_all(doc, tag_path), "k")
-      pts <- cbind.data.frame(pts, t(v), stringsAsFactors=FALSE)
-    }
-
-    pts
-
-  }))
+  mutate(nodes, lon=as.numeric(lon), lat=as.numeric(lat))
 
 }
 

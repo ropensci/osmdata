@@ -26,6 +26,7 @@ Here's an [RPub](http://rpubs.com/hrbrmstr/overpass) for `overpass` that I'll co
 The following functions are implemented:
 
 - `overpass_query`: Issue OSM Overpass Query
+- `read_osm`: Read OSM Overpass Response
 
 ### News
 
