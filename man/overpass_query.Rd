@@ -4,12 +4,16 @@
 \alias{overpass_query}
 \title{Issue OSM Overpass Query}
 \usage{
-overpass_query(query)
+overpass_query(query, quiet = FALSE)
 }
 \arguments{
 \item{query}{OSM Overpass query. Please note that the function is in ALPHA
 dev stage and needs YOU to specify that the output type is XML.
 However, you can use Overpass XML or Overpass QL formats.}
+
+\item{quiet}{suppress status messages. OSM Overpass queries may not return quickly. The
+package will display status messages by default showing when the query started/completed.
+You can disable these messages by setting this value to \code{TRUE}.}
 }
 \value{
 If the \code{query} result only has OSM \code{node}s then the function
@@ -25,6 +29,22 @@ Issue OSM Overpass Query
 }
 \note{
 wrap function with \code{httr::with_verbose} if you want to see the \code{httr}
-      query (useful for debugging connection issues)
+      query (useful for debugging connection issues).\cr
+      \cr
+      You can disable progress bars by calling \code{pbapply::pboptions(type="none")} in your
+      code. See \code{\link[pbapply]{pboptions}} for all the various progress bar settings.
+}
+\examples{
+\dontrun{
+only_nodes <- '[out:xml];
+node
+  ["highway"="bus_stop"]
+  ["shelter"]
+  ["shelter"!~"no"]
+  (50.7,7.1,50.8,7.25);
+out body;'
+
+pts <- overpass_query(only_nodes)
+}
 }
 

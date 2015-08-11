@@ -1,6 +1,6 @@
 Package: overpass
 Title: Tools to Work With the OpenStreetMap (OSM) Overpass API
-Version: 0.0.0.9005
+Version: 0.1.0.9000
 Authors@R: c(
         person("Bob", "Rudis", email = "bob@rudis.net", role = c("aut", "cre")),
         person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "ctb"))

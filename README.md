@@ -13,9 +13,13 @@ The following functions are implemented:
 
 -   `overpass_query`: Issue OSM Overpass Query
 -   `read_osm`: Read an XML OSM Overpass response from path
+-   `opq`: Begin building an Overpass query
+-   `add_feature`: Add a feature to an Overpass query
+-   `issue_query`: Finalize and issue an Overpass query
 
 ### News
 
+-   Version 0.1.0.9000 released - trying out `opq` / `add_feature` / `issue_query`
 -   Version 0.0.0.9005 released - HUGE speed improvement; passes CRAN checks;
 -   Version 0.0.0.9000 released
 
@@ -34,7 +38,7 @@ library(ggmap)
 
 # current verison
 packageVersion("overpass")
-#> [1] '0.0.0.9005'
+#> [1] '0.1.0.9000'
 ```
 
 ``` r
@@ -144,7 +148,7 @@ library(overpass)
 library(testthat)
 
 date()
-#> [1] "Tue Aug 11 11:38:46 2015"
+#> [1] "Tue Aug 11 17:41:59 2015"
 
 test_dir("tests/")
 #> testthat results ===========================================================

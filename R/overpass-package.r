@@ -19,6 +19,23 @@
 #' @name overpass
 #' @docType package
 #' @author Bob Rudis, Robin Lovelace
-#' @import fastmatch pbapply sp xml2 httr dplyr tidyr
+#' @import fastmatch pbapply sp xml2 httr tidyr
+#' @importFrom dplyr %>% select left_join filter arrange bind_rows mutate do group_by distinct data_frame
 #' @importFrom utils read.table
+NULL
+
+
+#' overpass exported operators
+#'
+#' The following functions are imported and then re-exported
+#' from the overpass package to enable use of the magrittr/dplyr
+#' pipe operator with no additional library calls
+#'
+#' @name overpass-exports
+NULL
+
+#' @importFrom dplyr %>%
+#' @name %>%
+#' @export
+#' @rdname overpass-exports
 NULL

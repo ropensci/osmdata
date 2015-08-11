@@ -14,12 +14,16 @@
 #'        specified XML documents are assumed to be in UTF-8 or UTF-16. If the
 #'        document is not UTF-8/16, and lacks an explicit encoding directive,
 #'        this allows you to supply a default.
+#' @note You can disable progress bars by calling \code{pbapply::pboptions(type="none")} in your
+#'       code. See \code{\link[pbapply]{pboptions}} for all the various progress bar settings.
 #' @return If the \code{query} result only has OSM \code{node}s then the function
 #'         will return a \code{SpatialPointsDataFrame} with the \code{node}s.\cr\cr
 #'         If the \code{query} result has OSM \code{way}s then the function
 #'         will return a \code{SpatialLinesDataFrame} with the \code{way}s\cr\cr
 #'         \code{relations}s are not handled yet.\cr\cr
 #' @export
+#' @examples
+#' mammoth <- read_osm(system.file("osm/mammoth.osm", package="overpass"))
 read_osm <- function(osm_response, encoding = "") {
 
   doc <- read_xml(osm_response, encoding=encoding)
