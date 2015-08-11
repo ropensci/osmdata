@@ -8,8 +8,12 @@ process_osm_ways <- function(doc, osm_nodes) {
   idxs <- which(!duplicated(way_ids))
   dup <- way_ids[which(duplicated(way_ids))]
 
-  ways_not_nd <- sprintf("//way[%s]/nd",
-                         paste0(sprintf("@id != %s", dup), collapse=" and "))
+  if (length(dup) > 0) {
+    ways_not_nd <- sprintf("//way[%s]/nd",
+                           paste0(sprintf("@id != %s", dup), collapse=" and "))
+  } else {
+    ways_not_nd <- "//way/nd"
+  }
 
   tmp <- pblapply(xml_find_all(doc, ways_not_nd), function(x) {
     c(way_id=xml_attr(xml_find_one(x, ".."), "id"),
@@ -39,8 +43,12 @@ osm_ways_to_spldf <- function(doc, osm_ways) {
   idxs <- which(!duplicated(way_ids))
   dup <- way_ids[which(duplicated(way_ids))]
 
-  ways_not_tag <- sprintf("//way[%s]/tag",
-                         paste0(sprintf("@id != %s", dup), collapse=" and "))
+  if (length(dup) > 0) {
+    ways_not_tag <- sprintf("//way[%s]/tag",
+                            paste0(sprintf("@id != %s", dup), collapse=" and "))
+  } else {
+    ways_not_tag <- sprintf("//way/tag")
+  }
 
   tmp <- pblapply(xml_find_all(doc, ways_not_tag), function(x) {
     c(way_id=xml_attr(xml_find_one(x, ".."), "id"),
