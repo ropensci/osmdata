@@ -1,12 +1,16 @@
 Package: overpass
 Title: Tools to Work With the OpenStreetMap (OSM) Overpass API
-Version: 0.0.0.9002
-Authors@R: c(person("Bob", "Rudis", email = "bob@rudis.net", role = c("aut", "cre")))
+Version: 0.0.0.9005
+Authors@R: c(
+        person("Bob", "Rudis", email = "bob@rudis.net", role = c("aut", "cre")),
+        person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "ctb"))
+    )
+Maintainer: Bob Rudis <bob@rudis.net>
 Description: Query the OSM Overpass API and retrieve "Spatial" objects.
 Depends: R (>= 3.0.0)
 License: MIT + file LICENSE
 LazyData: true
 Suggests: testthat,
     knitr
-Imports: fastmatch, pbapply, sp, xml2, httr, jsonlite, dplyr, utils, data.table, ggmap
+Imports: fastmatch, pbapply, sp, xml2, httr, jsonlite, dplyr, utils, data.table, ggmap, tidyr
 VignetteBuilder: knitr

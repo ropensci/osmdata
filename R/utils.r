@@ -1,4 +1,5 @@
-id <- lon <- lat <- NULL # for CRAN checks until I switch to underscore versions of dplyr stuff
+# for CRAN checks until I switch to underscore versions of dplyr stuff
+. <- k <- v <- way_id <- id <- lon <- lat <- NULL
 
 overpass_base_url <- "http://overpass-api.de/api/interpreter"
 
@@ -40,7 +41,6 @@ process_doc <- function(doc) {
   if (has_relations) {
 
     # this inherently has to return a list structure of some kind
-    # class should be "overrel"
 
   }
 

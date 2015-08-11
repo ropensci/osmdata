@@ -2,47 +2,82 @@
 # NOTE: ways can be polygons; need to figure that out
 process_osm_ways <- function(doc, osm_nodes) {
 
-  # for each way
-  #   - connect all the nodes
-  #   - ensure the way id is in the rowname since that's how Spatial* stuff
-  #     works best in R
-
+  # get all the way ids
   ways <- xml_find_all(doc, "//way")
-  idx <- which(!duplicated(xml_attr(ways, "id")))
+  way_ids <- xml_attr(ways, "id")
 
-  pblapply(seq_along(idx), function(i) {
-    x <- ways[[i]]
-    way_id <- xml_attr(x, "id")
-    nds <- data_frame(id=xml_attr(xml_find_all(x, "./nd"), "ref"))
-    # convert to lat/lon
-    nds_df <- left_join(nds, osm_nodes, by="id")
-    Lines(list(Line(as.matrix(nds_df[, c("lon", "lat")]))), ID=way_id)
-  }) -> osm_ways
-  names(osm_ways) <- xml_attr(ways, "id")[idx]
+  # see if any are duplicated (they shouldn't be but it happens)
+  idxs <- which(!duplicated(way_ids))
+  dup <- way_ids[which(duplicated(way_ids))]
+
+  # setup the way->node query
+  if (length(dup) > 0) {
+    ways_not_nd <- sprintf("//way[%s]/nd",
+                           paste0(sprintf("@id != %s", dup),
+                                  collapse=" and "))
+  } else {
+    ways_not_nd <- "//way/nd"
+  }
+
+  # get all the nodes for the ways. this is a list of
+  # named vectors
+  tmp <- pblapply(xml_find_all(doc, ways_not_nd), function(x) {
+    c(way_id=xml_attr(xml_find_one(x, ".."), "id"),
+      id=xml_attr(x, "ref"))
+  })
+  # we can quickly and memory efficiently turn that into a matrix
+  # then data frame, then merge in the coordinates
+  filtered_ways <- as.data.frame(t(do.call(cbind, tmp)), stringsAsFactors=FALSE)
+  filtered_ways <- left_join(filtered_ways, select(osm_nodes, id, lon, lat), by="id")
+
+  # for the 'do' below. this just keeps the code neater
+  make_lines <- function(grp) {
+    Lines(list(Line(as.matrix(grp[, c("lon", "lat")]))), ID=unique(grp$way_id))
+  }
+  # makes Lines, grouping by way id
+  osm_ways <- do(group_by(filtered_ways, way_id), lines=make_lines(.))$lines
+  names(osm_ways) <- distinct(filtered_ways, way_id)$way_id
+
   osm_ways
+
 }
 
 # make a SpatialLinesDataFrame from the ways
 # NOTE: ways can be polygons; need to figure that out
 osm_ways_to_spldf <- function(doc, osm_ways) {
 
-  # for each way:
-  #   - grab any tags to use in @data
-  #   - ensure @data at least has an id column data frame
+  # see process_osm_ways() for most of the logic
+  ways <- xml_find_all(doc, "//way")
+  way_ids <- xml_attr(ways, "id")
 
-  bind_rows(pblapply(xml_find_all(doc, "//way"), function(x) {
-    tag_path <- sprintf("//way[@id='%s']/tag", xml_attr(x, "id"))
-    if (has_xpath(doc, tag_path)) {
-      v <- xml_attr(xml_find_all(doc, tag_path), "v")
-      names(v) <- xml_attr(xml_find_all(doc, tag_path), "k")
-      cbind.data.frame(id=xml_attr(x, "id"), t(v), stringsAsFactors=FALSE)
-    } else {
-      data.frame(id=xml_attr(x, "id"), stringsAsFactors=FALSE)
-    }
-  })) -> ways_dat
-  rownames(ways_dat) <- names(osm_ways)
+  idxs <- which(!duplicated(way_ids))
+  dup <- way_ids[which(duplicated(way_ids))]
 
-  sldf <- SpatialLinesDataFrame(SpatialLines(osm_ways), data.frame(ways_dat))
+  if (length(dup) > 0) {
+    ways_not_tag <- sprintf("//way[%s]/tag",
+                            paste0(sprintf("@id != %s", dup),
+                                   collapse=" and "))
+  } else {
+    ways_not_tag <- sprintf("//way/tag")
+  }
+
+  tmp <- pblapply(xml_find_all(doc, ways_not_tag), function(x) {
+    c(way_id=xml_attr(xml_find_one(x, ".."), "id"),
+      k=xml_attr(x, "k"),
+      v=xml_attr(x, "v"))
+  })
+  kvs <- as.data.frame(t(do.call(cbind, tmp)), stringsAsFactors=FALSE)
+
+  # some ways may not have had tags, but we need the data.frame to
+  # be complete, so we have to merge what we did find with all of
+  # the ways to be safe
+  ways_dat <- data.frame(left_join(data_frame(way_id=names(osm_ways)),
+                                   spread(kvs, k, v), by="way_id"),
+                         stringsAsFactors=FALSE)
+  rownames(ways_dat) <- ways_dat$way_id
+
+  sldf <- SpatialLinesDataFrame(SpatialLines(osm_ways),
+                                data.frame(ways_dat))
   sldf
 
 }
