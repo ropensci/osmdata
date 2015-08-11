@@ -10,5 +10,7 @@ Description: Query the OSM Overpass API and retrieve "Spatial" objects.
 Depends: R (>= 3.0.0)
 License: MIT + file LICENSE
 LazyData: true
-Suggests: testthat
-Imports: fastmatch, pbapply, sp, xml2, httr, jsonlite, dplyr, utils, tidyr
+Suggests: testthat,
+    knitr
+Imports: fastmatch, pbapply, sp, xml2, httr, jsonlite, dplyr, utils, data.table, ggmap, tidyr
+VignetteBuilder: knitr

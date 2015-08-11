@@ -30,7 +30,7 @@ devtools::install_github("hrbrmstr/overpass")
 ``` r
 library(overpass)
 library(sp)
-library(ggplot2)
+library(ggmap)
 
 # current verison
 packageVersion("overpass")
@@ -46,7 +46,8 @@ area[name="Bonn"]->.a;
   rel(area.a)[railway=station]; );
 out;'
 
-read.table(text=overpass_query(osmcsv), sep="\t", header=TRUE, 
+opq <- overpass_query(osmcsv)
+read.table(text = opq, sep="\t", header=TRUE, 
            check.names=FALSE, stringsAsFactors=FALSE)
 #>          @id @type               name
 #> 1   26945519  node    Bonn-Oberkassel
@@ -131,9 +132,10 @@ gg <- gg + geom_path(data=fortify(frb),
 gg <- gg + coord_quickmap()
 gg <- gg + ggthemes::theme_map()
 gg
+ggsave("README-from_robin-1.png")
 ```
 
-<img src="README-from_robin-1.png" title="" alt="" width="672" />
+![london](README-from_robin-1.png)
 
 ### Test Results
 
