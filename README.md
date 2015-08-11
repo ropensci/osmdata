@@ -144,7 +144,7 @@ library(overpass)
 library(testthat)
 
 date()
-#> [1] "Tue Aug 11 07:51:44 2015"
+#> [1] "Tue Aug 11 11:38:46 2015"
 
 test_dir("tests/")
 #> testthat results ===========================================================
