@@ -8,7 +8,11 @@ opq(bbox = NULL)
 }
 \arguments{
 \item{bbox}{base bounding box to use with the features. Must set the individual
-feature bbox values if this value is not set.}
+       feature bbox values if this value is not set. Can be a matrix (i.e. what
+       \code{sp::bbox} returns), an string with values ("left,bottom,top,right"),
+       a vector of length 4. If the vector is named, the names will be used,
+       otherwise, you should ensure the vector is in \code{c(top, left, bottom, right)}
+       order.}
 }
 \value{
 \code{opq} object
@@ -23,6 +27,6 @@ opq(bbox="43.0135509,-70.8229993,43.0996118,-70.7280563") \%>\%
   add_feature("amenity", "library") \%>\%
   issue_query() -> reading_noms
 
-plot(reading_noms)
+sp::plot(reading_noms)
 }
 

@@ -9,6 +9,8 @@ Unlike the main API, which is optimized for editing, Overpass API is optimized f
 
 Overpass API has a powerful query language (language guide, language reference, an IDE) beyond XAPI, but also has a compatibility layer to allow a smooth transition from XAPI.
 
+This package pairs nicely with [nominatim](http://github.com/hrbrmstr/nominatim).
+
 The following functions are implemented:
 
 -   `overpass_query`: Issue OSM Overpass Query
@@ -21,6 +23,7 @@ The following functions are implemented:
 
 ### News
 
+-   Version 0.1.1.9000 released - Bounding box tweaks
 -   Version 0.1.0.9000 released - trying out `opq` / `add_feature` / `issue_query`
 -   Version 0.0.0.9005 released - HUGE speed improvement; passes CRAN checks;
 -   Version 0.0.0.9000 released
@@ -40,7 +43,7 @@ library(ggmap)
 
 # current verison
 packageVersion("overpass")
-#> [1] '0.1.0.9000'
+#> [1] '0.1.1.9000'
 ```
 
 ``` r
@@ -150,7 +153,7 @@ library(overpass)
 library(testthat)
 
 date()
-#> [1] "Tue Aug 11 22:02:11 2015"
+#> [1] "Wed Aug 12 17:06:32 2015"
 
 test_dir("tests/")
 #> testthat results ===========================================================
