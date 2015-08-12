@@ -14,5 +14,5 @@ Suggests: testthat,
     knitr,
     RJSONIO,
     ggmap
-Imports: fastmatch, pbapply, sp, xml2, httr, dplyr, utils, tidyr
+Imports: fastmatch, pbapply, sp, xml2, httr, dplyr, utils, tidyr, rvest
 VignetteBuilder: knitr

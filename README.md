@@ -16,6 +16,8 @@ The following functions are implemented:
 -   `opq`: Begin building an Overpass query
 -   `add_feature`: Add a feature to an Overpass query
 -   `issue_query`: Finalize and issue an Overpass query
+-   `available_features`: List recognized features in OSM Overpass
+-   `available_tags`: List tags associated with a feature
 
 ### News
 
@@ -148,7 +150,7 @@ library(overpass)
 library(testthat)
 
 date()
-#> [1] "Tue Aug 11 17:41:59 2015"
+#> [1] "Tue Aug 11 22:02:11 2015"
 
 test_dir("tests/")
 #> testthat results ===========================================================

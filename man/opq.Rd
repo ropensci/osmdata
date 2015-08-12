@@ -10,6 +10,9 @@ opq(bbox = NULL)
 \item{bbox}{base bounding box to use with the features. Must set the individual
 feature bbox values if this value is not set.}
 }
+\value{
+\code{opq} object
+}
 \description{
 Begin building an Overpass query
 }

@@ -16,7 +16,13 @@ add_feature(opq, key, value, bbox = NULL)
 \item{bbox}{optional bounding box for the feature query; must be set if no
 opq query bbox has been set}
 }
+\value{
+\code{opq} object
+}
 \description{
 Add a feature to an Overpass query
+}
+\references{
+\url{http://wiki.openstreetmap.org/wiki/Map_Features}
 }
 

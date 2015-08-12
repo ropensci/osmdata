@@ -2,6 +2,7 @@
 #'
 #' @param bbox base bounding box to use with the features. Must set the individual
 #'        feature bbox values if this value is not set.
+#' @return \code{opq} object
 #' @export
 #' @examples
 #' opq(bbox="43.0135509,-70.8229993,43.0996118,-70.7280563") %>%
@@ -23,6 +24,8 @@ opq <- function(bbox=NULL) {
 #' @param value value for feature key
 #' @param bbox optional bounding box for the feature query; must be set if no
 #'        opq query bbox has been set
+#' @return \code{opq} object
+#' @references \url{http://wiki.openstreetmap.org/wiki/Map_Features}
 #' @export
 add_feature <- function(opq, key, value, bbox=NULL) {
 
