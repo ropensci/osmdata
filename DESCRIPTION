@@ -1,0 +1,13 @@
+Package: osmdatar
+Title: Download OpenStreetMap Data with the overpass API
+Version: 0.0.0
+Authors@R: c(person("Mark", "Padgham", 
+    email = "mark.padgham@email.com", 
+    role = c("aut", "cre")),
+    person("Robin", "Lovelace", email="rob00x@gmail.com", role="aut"),
+    person("Richard", "Ellison", role="aut"))
+Description: Download OpenStreetMap Data with the overpass API
+Depends: R (>= 3.2.4)
+License: MIT
+LazyData: true
+Suggests: testthat
