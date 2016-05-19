@@ -45,11 +45,12 @@ process_xml_doc3 <- function (txt)
 {
     dat <- get_highways (txt)
     nd <- names (dat)
-    indx <- which (nchar (nd) == 0)
-    nd2 <- rep (1, length (indx))
-    while (any (duplicated (nd2)))
-        nd2 <- paste0 (round (runif (length (indx)) * 1e6))
-    nd [indx] <- nd2
+    # Duplicated OSM IDs do occur (rarely), and will crash sp
+    while (any (duplicated (nd)))
+    {
+        indx <- which (duplicated (nd))
+        nd [indx] <- paste0 (round (runif (length (indx)) * 1e6))
+    }
     for (i in seq (dat)) 
     {
         di <- data.frame (do.call (rbind,  dat [[i]]))

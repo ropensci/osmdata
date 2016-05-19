@@ -63,7 +63,6 @@ class Xml
         std::string _tempstr;
     protected:
     public:
-        int tempi;
         std::string tempstr;
         Ways ways;
         umapPair nodes;
@@ -86,7 +85,7 @@ class Xml
     void traverseXML (const boost::property_tree::ptree& pt);
     RawWay traverseWay (const boost::property_tree::ptree& pt, RawWay rway);
     Node traverseNode (const boost::property_tree::ptree& pt, Node node);
-};
+}; // end Class::Xml
 
 
 /************************************************************************
@@ -119,7 +118,6 @@ void Xml::parseXML ( std::string & is )
 
 void Xml::traverseXML (const boost::property_tree::ptree& pt)
 {
-    int tempi;
     RawWay rway;
     Way way;
     Node node;
