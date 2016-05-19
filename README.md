@@ -63,7 +63,6 @@ And then the actual test, using `process_xml_doc3`:
 ``` r
 txt <- get_xml_doc3 (bbox=bbox)
 mb3 <- microbenchmark ( obj3 <- process_xml_doc3 (txt), times=100L )
-obj3 <- process_xml_doc3 (txt)
 tt3 <- formatC (mean (mb3$time) / 1e9, format="f", digits=2)
 ```
 
