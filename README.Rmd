@@ -9,6 +9,7 @@ setwd ("..")
 devtools::document ("osmdatar")
 devtools::load_all ("osmdatar")
 setwd ("./osmdatar")
+Sys.unsetenv ('PKG_CXXFLAGS')
 ```
 
 ## Speed comparisons
