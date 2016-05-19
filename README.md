@@ -5,10 +5,24 @@ R package for downloading OSM data
 
 ------------------------------------------------------------------------
 
+Install
+-------
+
+``` r
+Sys.setenv ('PKG_CXXFLAGS'='-std=c++11')
+setwd ("..")
+#devtools::document ("osmdatar")
+devtools::load_all ("osmdatar")
+setwd ("./osmdatar")
+Sys.unsetenv ('PKG_CXXFLAGS')
+```
+
+------------------------------------------------------------------------
+
 Speed comparisons
 -----------------
 
-The `osmplotr` package uses `XML` to process the API query, and `osmar` to convert the result to `sp` structures. The [overpass](https://github.com/hrbrmstr/overpass/) repo of [hrbrmstr](https://github.com/hrbrmstr) uses `xml2` and thus all cribbed functions are called `_xml2_`.
+The `osmplotr` package uses `XML` to process the API query, and `osmar` to convert the result to `sp` structures. The [overpass](https://github.com/hrbrmstr/overpass/) repo of [hrbrmstr](https://github.com/hrbrmstr) uses `xml2` and thus all cribbed functions are called `_xml2_`. All of my new `Rcpp` functions are then `_3`.
 
 ``` r
 library (microbenchmark)
@@ -50,13 +64,15 @@ The code of **hrbrmstr** using `dplyr` is (only) around 30% faster than using `o
 Rcpp
 ----
 
-The function calls don't yet compile properly within the `load_all` call, so have to be done manually for the moment here:
+The function calls *should* compile properly within the `load_all` call, but in case they don't they can be loaded manually here:
 
 ``` r
 Sys.setenv ('PKG_CXXFLAGS'='-std=c++11')
 Rcpp::sourceCpp('src/get_highways.cpp')
 Sys.unsetenv ('PKG_CXXFLAGS')
 ```
+
+(One reason this might be necesssary is because `devtools::document` fails to insert the necessary line `useDynLib(osmdatar)` in `NAMESPACE`. Re-inserting this manually should fix the problem.)
 
 And then the actual test, using `process_xml_doc3`:
 
