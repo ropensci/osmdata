@@ -9,25 +9,20 @@ List test (std::string st)
     Xml xml (st);
 
     int count = 0;
-    float ll [2];
     long long ni;
     umapPair_Itr umapitr;
     typedef std::vector <long long>::iterator ll_Itr;
-    std::ofstream out_file;
 
     List result (xml.ways.size ());
 
     std::vector <float> vec;
     std::vector <std::vector <float> > mat;
 
-    out_file.open ("junk.txt", std::ofstream::out);
-    out_file << "There are " << xml.ways.size () << " ways and " <<
-        xml.nodes.size () << " nodes " << std::endl;
-
     for (Ways_Itr wi = xml.ways.begin(); wi != xml.ways.end(); ++wi)
     {
         // Set up first origin node
         ni = (*wi).nodes.front ();
+        // TODO: Not much point having assert in an Rcpp file!
         assert ((umapitr = xml.nodes.find (ni)) != xml.nodes.end ());
 
         vec.resize (0);
@@ -49,11 +44,10 @@ List test (std::string st)
             vec.push_back (xml.nodes [*it].second);
             mat.push_back (vec);
         }
-        result [count] = mat;
-        count++;
+        result [count++] = mat;
     }
-    out_file.close ();
 
+    vec.resize (0);
     mat.resize (0);
 
     return result;
