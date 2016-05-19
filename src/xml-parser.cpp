@@ -13,13 +13,16 @@ List test (std::string st)
     umapPair_Itr umapitr;
     typedef std::vector <long long>::iterator ll_Itr;
 
-    List result (xml.ways.size ());
-
     std::vector <float> vec;
     std::vector <std::vector <float> > mat;
+    std::vector <std::string> names;
+    List result (xml.ways.size ());
+
+    names.resize (0);
 
     for (Ways_Itr wi = xml.ways.begin(); wi != xml.ways.end(); ++wi)
     {
+        names.push_back ((*wi).name);
         // Set up first origin node
         ni = (*wi).nodes.front ();
         // TODO: Not much point having assert in an Rcpp file!
@@ -46,9 +49,11 @@ List test (std::string st)
         }
         result [count++] = mat;
     }
+    result.attr ("names") = names;
 
     vec.resize (0);
     mat.resize (0);
+    names.resize (0);
 
     return result;
 }
