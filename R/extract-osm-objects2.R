@@ -43,7 +43,7 @@ get_xml2_doc <- function (bbox=NULL)
 #' @examples
 #' bbox <- matrix (c (-0.13, 51.5, -0.11, 51.52), nrow=2, ncol=2)
 #' doc <- get_xml2_doc (bbox=bbox)
-#' obj <- process_xml2_doc (doc)
+#' obj <- process_xml2_doc2 (doc)
 
 process_xml2_doc <- function (doc)
 {

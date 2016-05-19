@@ -6,17 +6,21 @@ Authors@R: c(
     person("Richard", "Ellison", role="aut"))
 Title: Download OpenStreetMap Data with the overpass API
 Description: Download OpenStreetMap Data with the overpass API
-Depends: R (>= 3.2.4)
+Depends:
+    R (>= 3.2.4)
 License: MIT
 LazyData: true
-Imports: 
+Imports:
     dplyr,
     httr,
     osmar,
+    Rcpp (>= 0.12.4),
     sp,
     tidyr,
     XML,
     xml2
-Suggests: 
+Suggests:
     testthat
+LinkingTo: Rcpp
 Date: 2016-04-06
+RoxygenNote: 5.0.1
