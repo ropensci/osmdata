@@ -61,7 +61,7 @@ The function calls don't yet compile properly within the `load_all` call, so
 have to be done manually for the moment here:
 ```{r, eval=FALSE}
 Sys.setenv ('PKG_CXXFLAGS'='-std=c++11')
-Rcpp::sourceCpp('src/xml-parser.cpp')
+Rcpp::sourceCpp('src/get_highways.cpp')
 Sys.unsetenv ('PKG_CXXFLAGS')
 ```
 

@@ -54,7 +54,7 @@ The function calls don't yet compile properly within the `load_all` call, so hav
 
 ``` r
 Sys.setenv ('PKG_CXXFLAGS'='-std=c++11')
-Rcpp::sourceCpp('src/xml-parser.cpp')
+Rcpp::sourceCpp('src/get_highways.cpp')
 Sys.unsetenv ('PKG_CXXFLAGS')
 ```
 
@@ -63,6 +63,7 @@ And then the actual test, using `process_xml_doc3`:
 ``` r
 txt <- get_xml_doc3 (bbox=bbox)
 mb3 <- microbenchmark ( obj3 <- process_xml_doc3 (txt), times=100L )
+obj3 <- process_xml_doc3 (txt)
 tt3 <- formatC (mean (mb3$time) / 1e9, format="f", digits=2)
 ```
 
