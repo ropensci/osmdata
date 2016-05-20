@@ -1,5 +1,13 @@
 # osmdatar
-R package for downloading OSM data
+
+R package for downloading OSM data. Current status (on test data of highways
+only):
+
+method  |   computation time (s)
+------  | ------
+osmplotr    |   2.05
+hrbrmstr    |   1.48
+Rcpp    |   0.22
 
 ------
 
@@ -80,7 +88,7 @@ mb3 <- microbenchmark ( obj3 <- process_xml_doc3 (txt), times=100L )
 tt3 <- formatC (mean (mb3$time) / 1e9, format="f", digits=2)
 ```
 ```{r, echo=FALSE}
-tt3 <- 0.34
+tt3 <- 0.22
 ```
 ```{r}
 cat ("Mean time to convert with Rcpp code =", tt3, "\n")

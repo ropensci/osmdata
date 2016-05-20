@@ -13,10 +13,10 @@ List get_highways (std::string st)
     umapPair_Itr umapitr;
     typedef std::vector <long long>::iterator ll_Itr;
 
-    std::vector <float> vec;
-    std::vector <std::vector <float> > mat;
+    std::vector <float> lat, lon;
     std::vector <std::string> names;
     List result (xml.ways.size ());
+    NumericMatrix nmat (Dimension (0, 0));
 
     names.resize (0);
 
@@ -28,31 +28,36 @@ List get_highways (std::string st)
         // TODO: Not much point having assert in an Rcpp file!
         assert ((umapitr = xml.nodes.find (ni)) != xml.nodes.end ());
 
-        vec.resize (0);
-        mat.resize (0);
+        lon.resize (0);
+        lat.resize (0);
         // TODO: Find out why the following pointer lines do not work here
-        //vec.push_back ((*umapitr).second.first);
-        //vec.push_back ((*umapitr).second.second);
-        vec.push_back (xml.nodes [ni].first);
-        vec.push_back (xml.nodes [ni].second);
-        mat.push_back (vec);
+        //lon.push_back ((*umapitr).second.first);
+        //lat.push_back ((*umapitr).second.second);
+        lon.push_back (xml.nodes [ni].first);
+        lat.push_back (xml.nodes [ni].second);
 
         // Then iterate over the remaining nodes of that way
         for (ll_Itr it = std::next ((*wi).nodes.begin ());
                 it != (*wi).nodes.end (); it++)
         {
             assert ((umapitr = nodes.find (*it)) != nodes.end ());
-            vec.resize (0);
-            vec.push_back (xml.nodes [*it].first);
-            vec.push_back (xml.nodes [*it].second);
-            mat.push_back (vec);
+            lon.push_back (xml.nodes [*it].first);
+            lat.push_back (xml.nodes [*it].second);
         }
-        result [count++] = mat;
+
+        // Current solution: Copy to nmat. TODO: Improve?
+        nmat = NumericMatrix (Dimension (lon.size (), 2));
+        for (int i=0; i<lon.size (); i++)
+        {
+            nmat (i, 0) = lon [i];
+            nmat (i, 1) = lat [i];
+        }
+        result [count++] = nmat;
     }
     result.attr ("names") = names;
 
-    vec.resize (0);
-    mat.resize (0);
+    lon.resize (0);
+    lat.resize (0);
     names.resize (0);
 
     return result;

@@ -51,11 +51,13 @@ process_xml_doc3 <- function (txt)
         indx <- which (duplicated (nd))
         nd [indx] <- paste0 (round (runif (length (indx)) * 1e6))
     }
+
+    # Constructed as a loop in order to insert the unique IDs
+    # TODO: Improve this!
     for (i in seq (dat)) 
     {
-        di <- data.frame (do.call (rbind,  dat [[i]]))
-        names (di) <- c ('x', 'y')
-        dat [[i]] <- sp::Lines (sp::Line (di), ID=nd [i])
+        names (dat [[i]]) <- c ('x', 'y')
+        dat [[i]] <- sp::Lines (sp::Line (dat [[i]]), ID=nd [i])
     }
     sp::SpatialLines (dat)
 }

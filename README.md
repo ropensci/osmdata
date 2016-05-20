@@ -1,7 +1,13 @@
 osmdatar
 ========
 
-R package for downloading OSM data
+R package for downloading OSM data. Current status (on test data of highways only):
+
+| method   | computation time (s) |
+|----------|----------------------|
+| osmplotr | 2.05                 |
+| hrbrmstr | 1.48                 |
+| Rcpp     | 0.22                 |
 
 ------------------------------------------------------------------------
 
@@ -86,6 +92,6 @@ tt3 <- formatC (mean (mb3$time) / 1e9, format="f", digits=2)
 cat ("Mean time to convert with Rcpp code =", tt3, "\n")
 ```
 
-    ## Mean time to convert with Rcpp code = 0.34
+    ## Mean time to convert with Rcpp code = 0.22
 
 It's a promising start, and admittedly slow at present because it relies on a loop within `process_xml_doc3` that ought definitely be able to be constructed in a much faster way.
