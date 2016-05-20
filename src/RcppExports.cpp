@@ -16,3 +16,14 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// get_highways_with_id
+List get_highways_with_id(std::string st);
+RcppExport SEXP osmdatar_get_highways_with_id(SEXP stSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type st(stSEXP);
+    __result = Rcpp::wrap(get_highways_with_id(st));
+    return __result;
+END_RCPP
+}

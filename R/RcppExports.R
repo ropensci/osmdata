@@ -5,3 +5,7 @@ get_highways <- function(st) {
     .Call('osmdatar_get_highways', PACKAGE = 'osmdatar', st)
 }
 
+get_highways_with_id <- function(st) {
+    .Call('osmdatar_get_highways_with_id', PACKAGE = 'osmdatar', st)
+}
+

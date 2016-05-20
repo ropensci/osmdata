@@ -27,7 +27,7 @@ get_xml2_doc <- function (bbox=NULL)
     # from hrbrmstr/overpass/overpass_query.r
     res <- httr::POST (url_base, body=query)
     httr::stop_for_status (res) 
-    xml2::read_xml (httr::content (res, as='text'))
+    xml2::read_xml (httr::content (res, as='text', encoding='UTF-8'))
 }
 
 #' process_xml2_doc

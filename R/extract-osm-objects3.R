@@ -41,7 +41,7 @@ get_xml_doc3 <- function (bbox=NULL)
 #' doc <- get_xml_doc (bbox=bbox)
 #' obj <- process_xml_doc (doc)
 
-process_xml_doc3 <- function (txt)
+process_xml_doc3a <- function (txt)
 {
     dat <- get_highways (txt)
     nd <- names (dat)
@@ -56,8 +56,71 @@ process_xml_doc3 <- function (txt)
     # TODO: Improve this!
     for (i in seq (dat)) 
     {
-        names (dat [[i]]) <- c ('x', 'y')
+        colnames (dat [[i]]) <- c ('x', 'y')
         dat [[i]] <- sp::Lines (sp::Line (dat [[i]]), ID=nd [i])
     }
     sp::SpatialLines (dat)
+}
+
+process_xml_doc3b <- function (txt)
+{
+    dat <- get_highways_with_id (txt)
+    nd <- names (dat)
+    # Duplicated OSM IDs do occur (rarely), and will crash sp
+    while (any (duplicated (nd)))
+    {
+        indx <- which (duplicated (nd))
+        nd [indx] <- paste0 (round (runif (length (indx)) * 1e6))
+    }
+
+    for (i in seq (dat)) 
+    {
+        colnames (dat [[i]]) <- c ('id', 'x', 'y')
+        dat [[i]] <- sp::Lines (sp::Line (dat [[i]] [,2:3]), 
+                                ID=dat [[i]][1,1])
+    }
+    sp::SpatialLines (dat)
+}
+
+process_xml_doc3c <- function (txt)
+{
+    dat <- get_highways_with_id (txt)
+    nd <- names (dat)
+    # Duplicated OSM IDs do occur (rarely), and will crash sp
+    while (any (duplicated (nd)))
+    {
+        indx <- which (duplicated (nd))
+        nd [indx] <- paste0 (round (runif (length (indx)) * 1e6))
+    }
+
+    dat <- lapply (dat, function (i)
+                   {
+                       colnames (i) <- c ('id', 'x', 'y')
+                       sp::Lines (sp::Line (i [,2:3]), ID=i [1,1])
+                   })
+    sp::SpatialLines (dat)
+}
+
+process_xml_doc3d <- function (txt)
+{
+    dat <- get_highways_with_id (txt)
+    nd <- names (dat)
+    # Duplicated OSM IDs do occur (rarely), and will crash sp
+    while (any (duplicated (nd)))
+    {
+        indx <- which (duplicated (nd))
+        nd [indx] <- paste0 (round (runif (length (indx)) * 1e6))
+    }
+
+    dat <- data.frame (do.call (rbind, dat))
+    names (dat) <- c ('id', 'x', 'y')
+    make_lines <- function (grp) 
+        sp::Lines (list (sp::Line (as.matrix (grp[, c('x', 'y')]))),
+                  ID=unique(grp$id))
+    # makes Lines, grouping by way id
+    osm_ways <- dplyr::do (dplyr::group_by (dat, id),
+                          lines=make_lines(.))$lines
+    names (osm_ways) <- nd
+
+    sp::SpatialLines (osm_ways)
 }
