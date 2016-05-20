@@ -3,7 +3,7 @@ osmdatar
 
 R package for downloading OSM data. Current status (on test data of highways only):
 
-| method   | computation time (s) |
+| method   | Computation time (s) |
 |----------|----------------------|
 | osmplotr | 2.05                 |
 | hrbrmstr | 1.48                 |
@@ -34,11 +34,11 @@ The `osmplotr` package uses `XML` to process the API query, and `osmar` to conve
 library (microbenchmark)
 ```
 
-Osmar / osmplotr
-----------------
+1. Osmar / osmplotr
+-------------------
 
 ``` r
-bbox <- matrix (c (-0.12, 51.51, -0.11, 51.52), nrow=2, ncol=2)
+bbox <- matrix (c (-0.12, 51.51, -0.11, 51.52), nrow=2, ncol=2) 
 doc <- get_xml_doc (bbox=bbox)
 mb <- microbenchmark ( obj <- process_xml_doc (doc), times=100L)
 tt <- formatC (mean (mb$time) / 1e9, format="f", digits=2)
@@ -50,8 +50,8 @@ cat ("Mean time to convert with osmar =", tt, "s\n")
 
     ## Mean time to convert with osmar = 2.05 s
 
-hrbrmstr
---------
+2. hrbrmstr
+-----------
 
 ``` r
 doc2 <- get_xml2_doc (bbox=bbox)
@@ -67,8 +67,8 @@ cat ("Mean time to convert with hrbrmstr code =", tt2, "\n")
 
 The code of **hrbrmstr** using `dplyr` is (only) around 30% faster than using `osmar`. And then for the C++ version ...
 
-Rcpp
-----
+3. Rcpp
+-------
 
 The function calls *should* compile properly within the `load_all` call, but in case they don't they can be loaded manually here:
 

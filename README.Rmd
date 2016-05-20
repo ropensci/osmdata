@@ -3,11 +3,12 @@
 R package for downloading OSM data. Current status (on test data of highways
 only):
 
-method  |   computation time (s)
-------  | ------
-osmplotr    |   2.05
-hrbrmstr    |   1.48
-Rcpp    |   0.22
+method    |   Computation time (s)
+------  | ------    
+osmplotr    |   2.05    
+hrbrmstr    |   1.48    
+Rcpp    |   0.22    
+
 
 ------
 
@@ -36,10 +37,10 @@ functions are called `_xml2_`. All of my new `Rcpp` functions are then `_3`.
 library (microbenchmark)
 ```
 
-## Osmar / osmplotr
+## 1. Osmar / osmplotr
 
 ```{r, eval=FALSE}
-bbox <- matrix (c (-0.12, 51.51, -0.11, 51.52), nrow=2, ncol=2)
+bbox <- matrix (c (-0.12, 51.51, -0.11, 51.52), nrow=2, ncol=2) 
 doc <- get_xml_doc (bbox=bbox)
 mb <- microbenchmark ( obj <- process_xml_doc (doc), times=100L)
 tt <- formatC (mean (mb$time) / 1e9, format="f", digits=2)
@@ -51,7 +52,7 @@ tt <- 2.05
 cat ("Mean time to convert with osmar =", tt, "s\n")
 ```
 
-## hrbrmstr
+## 2. hrbrmstr
 
 ```{r, eval=FALSE}
 doc2 <- get_xml2_doc (bbox=bbox)
@@ -68,7 +69,7 @@ cat ("Mean time to convert with hrbrmstr code =", tt2, "\n")
 The code of **hrbrmstr** using `dplyr` is (only) around 30% faster than using
 `osmar`. And then for the C++ version ...
 
-## Rcpp
+## 3. Rcpp
 
 The function calls *should* compile properly within the `load_all` call, but in
 case they don't they can be loaded manually here:
