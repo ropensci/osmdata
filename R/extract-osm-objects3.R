@@ -40,7 +40,6 @@ get_xml_doc3 <- function (bbox=NULL)
 #' bbox <- matrix (c (-0.13, 51.5, -0.11, 51.52), nrow=2, ncol=2)
 #' doc <- get_xml_doc (bbox=bbox)
 #' obj <- process_xml_doc (doc)
-
 process_xml_doc3a <- function (txt)
 {
     dat <- get_highways (txt)
@@ -55,10 +54,7 @@ process_xml_doc3a <- function (txt)
     # Constructed as a loop in order to insert the unique IDs
     # TODO: Improve this!
     for (i in seq (dat)) 
-    {
-        colnames (dat [[i]]) <- c ('x', 'y')
         dat [[i]] <- sp::Lines (sp::Line (dat [[i]]), ID=nd [i])
-    }
     sp::SpatialLines (dat)
 }
 
@@ -74,11 +70,8 @@ process_xml_doc3b <- function (txt)
     }
 
     for (i in seq (dat)) 
-    {
-        colnames (dat [[i]]) <- c ('id', 'x', 'y')
         dat [[i]] <- sp::Lines (sp::Line (dat [[i]] [,2:3]), 
                                 ID=dat [[i]][1,1])
-    }
     sp::SpatialLines (dat)
 }
 
@@ -94,10 +87,7 @@ process_xml_doc3c <- function (txt)
     }
 
     dat <- lapply (dat, function (i)
-                   {
-                       colnames (i) <- c ('id', 'x', 'y')
-                       sp::Lines (sp::Line (i [,2:3]), ID=i [1,1])
-                   })
+                       sp::Lines (sp::Line (i [,2:3]), ID=i [1,1]))
     sp::SpatialLines (dat)
 }
 
@@ -113,9 +103,8 @@ process_xml_doc3d <- function (txt)
     }
 
     dat <- data.frame (do.call (rbind, dat))
-    names (dat) <- c ('id', 'x', 'y')
     make_lines <- function (grp) 
-        sp::Lines (list (sp::Line (as.matrix (grp[, c('x', 'y')]))),
+        sp::Lines (list (sp::Line (as.matrix (grp[, c('lon', 'lat')]))),
                   ID=unique(grp$id))
     # makes Lines, grouping by way id
     osm_ways <- dplyr::do (dplyr::group_by (dat, id),

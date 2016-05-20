@@ -14,15 +14,17 @@ List get_highways (std::string st)
     typedef std::vector <long long>::iterator ll_Itr;
 
     std::vector <float> lat, lon;
-    std::vector <std::string> names;
-    List result (xml.ways.size ());
+    std::vector <std::string> colnames, waynames;
+    colnames.push_back ("lon");
+    colnames.push_back ("lat");
+    List dimnames (2), result (xml.ways.size ());
     NumericMatrix nmat (Dimension (0, 0));
 
-    names.resize (0);
+    waynames.resize (0);
 
     for (Ways_Itr wi = xml.ways.begin(); wi != xml.ways.end(); ++wi)
     {
-        names.push_back (std::to_string ((*wi).id));
+        waynames.push_back (std::to_string ((*wi).id));
         // Set up first origin node
         ni = (*wi).nodes.front ();
         // TODO: Not much point having assert in an Rcpp file!
@@ -52,15 +54,16 @@ List get_highways (std::string st)
             nmat (i, 0) = lon [i];
             nmat (i, 1) = lat [i];
         }
-        // name can be stored for each list element, but this is slower:
-        //nmat.attr ("name") = std::to_string ((*wi).id);
+        dimnames (1) = colnames;
+        nmat.attr ("dimnames") = dimnames;
         result [count++] = nmat;
     }
-    result.attr ("names") = names;
+    result.attr ("names") = waynames;
 
     lon.resize (0);
     lat.resize (0);
-    names.resize (0);
+    waynames.resize (0);
+    colnames.resize (0);
 
     return result;
 }
@@ -76,15 +79,18 @@ List get_highways_with_id (std::string st)
     typedef std::vector <long long>::iterator ll_Itr;
 
     std::vector <float> lat, lon;
-    std::vector <std::string> names;
-    List result (xml.ways.size ());
+    std::vector <std::string> colnames, waynames;
+    colnames.push_back ("id");
+    colnames.push_back ("lon");
+    colnames.push_back ("lat");
+    List dimnames (2), result (xml.ways.size ());
     NumericMatrix nmat (Dimension (0, 0));
 
-    names.resize (0);
+    waynames.resize (0);
 
     for (Ways_Itr wi = xml.ways.begin(); wi != xml.ways.end(); ++wi)
     {
-        names.push_back (std::to_string ((*wi).id));
+        waynames.push_back (std::to_string ((*wi).id));
         // Set up first origin node
         ni = (*wi).nodes.front ();
         // TODO: Not much point having assert in an Rcpp file!
@@ -117,13 +123,16 @@ List get_highways_with_id (std::string st)
         }
         // name can be stored for each list element, but this is slower:
         //nmat.attr ("name") = std::to_string ((*wi).id);
+        dimnames (1) = colnames;
+        nmat.attr ("dimnames") = dimnames;
         result [count++] = nmat;
     }
-    result.attr ("names") = names;
+    result.attr ("names") = waynames;
 
     lon.resize (0);
     lat.resize (0);
-    names.resize (0);
+    colnames.resize (0);
+    waynames.resize (0);
 
     return result;
 }
