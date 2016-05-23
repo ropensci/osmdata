@@ -291,6 +291,14 @@ Rcpp::S4 get_highways_spLines (std::string st)
             lon.push_back (xml.nodes [*it].first);
             lat.push_back (xml.nodes [*it].second);
             rownames.push_back (std::to_string (*it));
+            if (lon [0] < xmin)
+                xmin = lon [0];
+            else if (lon [0] > xmax)
+                xmax = lon [0];
+            if (lat [0] < ymin)
+                ymin = lat [0];
+            else if (lat [0] > ymax)
+                ymax = lat [0];
         }
 
         // Current solution: Copy to nmat. TODO: Improve?
@@ -329,6 +337,124 @@ Rcpp::S4 get_highways_spLines (std::string st)
 
     lon.resize (0);
     lat.resize (0);
+    waynames.resize (0);
+    colnames.resize (0);
+    rownames.resize (0);
+
+    Rcpp::Language sp_lines_call ("new", "SpatialLines");
+    Rcpp::S4 sp_lines;
+    sp_lines = sp_lines_call.eval ();
+    sp_lines.slot ("lines") = result;
+
+    sp_lines.slot ("bbox") = rcpp_get_bbox (xmin, xmax, ymin, ymax);
+
+    return sp_lines;
+}
+
+
+// [[Rcpp::export]]
+Rcpp::S4 get_highways_spLines2 (std::string st)
+{
+    /*
+     * Modified from get_highways_spLines, but here loading nmat directly from
+     * the nodes, rather than first storing them in a vector in
+     * get_highways_spLines. This works, but is potentially dangerous because
+     * nmat has to be given an explicit size and filled with an index, rather
+     * than the safe way of filling it directly from the iterator.
+     *
+     * Most importantly, it does not save any time, and so this is not worth
+     * doing anyway.
+     */
+    // TODO: Deal with potential duplicate IDs
+    Xml xml (st);
+
+    int count = 0, ncount;
+    long long ni;
+    float lon, lat;
+    float tempf, xmin = FLOAT_MAX, xmax = -FLOAT_MAX, 
+          ymin = FLOAT_MAX, ymax = -FLOAT_MAX;
+    umapPair_Itr umapitr;
+    typedef std::vector <long long>::iterator ll_Itr;
+
+    std::vector <std::string> colnames, rownames, waynames;
+    colnames.push_back ("lon");
+    colnames.push_back ("lat");
+    List dimnames (0);
+    NumericMatrix nmat (Dimension (0, 0));
+    List result (xml.ways.size ());
+
+    Rcpp::Language line_call ("new", "Line");
+    Rcpp::Language lines_call ("new", "Lines");
+    Rcpp::S4 line;
+    Rcpp::S4 lines;
+    Rcpp::List dummy_list (0);
+
+    waynames.resize (0);
+
+    for (Ways_Itr wi = xml.ways.begin(); wi != xml.ways.end(); ++wi)
+    {
+        waynames.push_back (std::to_string ((*wi).id));
+        // Set up first origin node
+        ni = (*wi).nodes.front ();
+        nmat = NumericMatrix (Dimension ((*wi).nodes.size (), 2));
+        lon = xml.nodes [ni].first;
+        lat = xml.nodes [ni].second;
+        nmat (0, 0) = lon;
+        nmat (0, 1) = lat;
+        //nmat (0, 0) = xml.nodes [ni].first;
+        //nmat (0, 1) = xml.nodes [ni].second;
+        rownames.resize (0);
+        rownames.push_back (std::to_string (ni));
+        ncount = 1;
+        if (lon < xmin)
+            xmin = lon;
+        else if (lon > xmax)
+            xmax = lon;
+        if (lat < ymin)
+            ymin = lat;
+        else if (lat > ymax)
+            ymax = lat;
+
+        // Then iterate over the remaining nodes of that way
+        for (ll_Itr it = std::next ((*wi).nodes.begin ());
+                it != (*wi).nodes.end (); it++)
+        {
+            lon = xml.nodes [*it].first;
+            lat = xml.nodes [*it].second;
+            nmat (ncount, 0) = lon;
+            nmat (ncount, 1) = lat;
+            ncount++;
+            //nmat (ncount, 0) = xml.nodes [*it].first;
+            //nmat (ncount, 1) = xml.nodes [*it].second;
+            rownames.push_back (std::to_string (*it));
+            if (lon < xmin)
+                xmin = lon;
+            else if (lon > xmax)
+                xmax = lon;
+            if (lat < ymin)
+                ymin = lat;
+            else if (lat > ymax)
+                ymax = lat;
+        }
+        // This only works with push_back, not with direct re-allocation
+        dimnames.push_back (rownames);
+        dimnames.push_back (colnames);
+        nmat.attr ("dimnames") = dimnames;
+        while (dimnames.size () > 0)
+            dimnames.erase (0);
+
+        line = line_call.eval ();
+        line.slot ("coords") = nmat;
+        dummy_list.push_back (line);
+        lines = lines_call.eval ();
+        lines.slot ("Lines") = dummy_list;
+        lines.slot ("ID") = std::to_string ((*wi).id);
+        result [count++] = lines;
+        
+        dummy_list.erase (0);
+    }
+    result.attr ("names") = waynames;
+
     waynames.resize (0);
     colnames.resize (0);
     rownames.resize (0);
