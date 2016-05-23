@@ -5,6 +5,29 @@ using namespace Rcpp;
 
 const float FLOAT_MAX = std::numeric_limits<float>::max ();
 
+Rcpp::NumericMatrix rcpp_get_bbox (float xmin, float xmax, float ymin, float ymax)
+{
+    std::vector <std::string> colnames, rownames;
+    colnames.push_back ("min");
+    colnames.push_back ("max");
+    rownames.push_back ("x");
+    rownames.push_back ("y");
+    List dimnames (2);
+    dimnames (0) = rownames;
+    dimnames (1) = colnames;
+
+    NumericMatrix bbox (Dimension (2, 2));
+    bbox (0, 0) = xmin;
+    bbox (0, 1) = xmax;
+    bbox (1, 0) = ymin;
+    bbox (1, 1) = ymax;
+
+    bbox.attr ("dimnames") = dimnames;
+
+    return bbox;
+};
+
+
 // [[Rcpp::export]]
 List get_highways (std::string st)
 {
@@ -217,6 +240,7 @@ List get_highways_sp (std::string st)
 // [[Rcpp::export]]
 Rcpp::S4 get_highways_spLines (std::string st)
 {
+    // TODO: Deal with potential duplicate IDs
     Xml xml (st);
 
     int count = 0;
@@ -227,11 +251,10 @@ Rcpp::S4 get_highways_spLines (std::string st)
     typedef std::vector <long long>::iterator ll_Itr;
 
     std::vector <float> lat, lon;
-    std::vector <std::string> colnames, waynames;
+    std::vector <std::string> colnames, rownames, waynames;
     colnames.push_back ("lon");
     colnames.push_back ("lat");
-    List dimnames (2);
-    dimnames (1) = colnames;
+    List dimnames (0);
     NumericMatrix nmat (Dimension (0, 0));
     List result (xml.ways.size ());
 
@@ -257,6 +280,8 @@ Rcpp::S4 get_highways_spLines (std::string st)
         //lat.push_back ((*umapitr).second.second);
         lon.push_back (xml.nodes [ni].first);
         lat.push_back (xml.nodes [ni].second);
+        rownames.resize (0);
+        rownames.push_back (std::to_string (ni));
 
         // Then iterate over the remaining nodes of that way
         for (ll_Itr it = std::next ((*wi).nodes.begin ());
@@ -265,6 +290,7 @@ Rcpp::S4 get_highways_spLines (std::string st)
             //assert ((umapitr = nodes.find (*it)) != nodes.end ());
             lon.push_back (xml.nodes [*it].first);
             lat.push_back (xml.nodes [*it].second);
+            rownames.push_back (std::to_string (*it));
         }
 
         // Current solution: Copy to nmat. TODO: Improve?
@@ -282,7 +308,12 @@ Rcpp::S4 get_highways_spLines (std::string st)
             else if (nmat (i, 1) > ymax)
                 ymax = nmat (i, 1);
         }
+        // This only works with push_back, not with direct re-allocation
+        dimnames.push_back (rownames);
+        dimnames.push_back (colnames);
         nmat.attr ("dimnames") = dimnames;
+        while (dimnames.size () > 0)
+            dimnames.erase (0);
 
         line = line_call.eval ();
         line.slot ("coords") = nmat;
@@ -300,29 +331,14 @@ Rcpp::S4 get_highways_spLines (std::string st)
     lat.resize (0);
     waynames.resize (0);
     colnames.resize (0);
+    rownames.resize (0);
 
     Rcpp::Language sp_lines_call ("new", "SpatialLines");
     Rcpp::S4 sp_lines;
     sp_lines = sp_lines_call.eval ();
     sp_lines.slot ("lines") = result;
 
-    NumericMatrix bbox (Dimension (2, 2));
-    bbox (0, 0) = xmin;
-    bbox (0, 1) = xmax;
-    bbox (1, 0) = ymin;
-    bbox (1, 1) = ymax;
-
-    std::vector <std::string> rownames;
-    colnames.resize (0);
-    colnames.push_back ("min");
-    colnames.push_back ("max");
-    rownames.push_back ("x");
-    rownames.push_back ("y");
-    dimnames (0) = rownames;
-    dimnames (1) = colnames;
-    bbox.attr ("dimnames") = dimnames;
-
-    sp_lines.slot ("bbox") = bbox;
+    sp_lines.slot ("bbox") = rcpp_get_bbox (xmin, xmax, ymin, ymax);
 
     return sp_lines;
 }
