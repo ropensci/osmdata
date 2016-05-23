@@ -2,7 +2,3 @@
 
 useDynLib(osmdatar)
 export(get_highways)
-export(get_xml2_doc)
-export(get_xml_doc)
-export(process_xml2_doc)
-export(process_xml_doc)
