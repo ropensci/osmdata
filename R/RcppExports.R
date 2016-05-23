@@ -13,3 +13,7 @@ get_highways_sp <- function(st) {
     .Call('osmdatar_get_highways_sp', PACKAGE = 'osmdatar', st)
 }
 
+get_highways_spLines <- function(st) {
+    .Call('osmdatar_get_highways_spLines', PACKAGE = 'osmdatar', st)
+}
+

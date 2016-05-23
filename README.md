@@ -8,7 +8,7 @@ R package for downloading OSM data. Current status (on test data of highways onl
 | osmplotr                   | 1.86                 |
 | hrbrmstr                   | 1.47                 |
 | Rcpp (-&gt;`sp` in `R`)    | 0.25                 |
-| Rcpp (-&gt;`sp` in `Rcpp`) | 0.11                 |
+| Rcpp (-&gt;`sp` in `Rcpp`) | 0.08                 |
 
 ------------------------------------------------------------------------
 
@@ -119,19 +119,22 @@ The `dplyr` approach of **hrbrmstr** is thus considerably slower than simply usi
 
 ------------------------------------------------------------------------
 
-Rcpp with internall S4 objects
-------------------------------
+Rcpp with internal S4 objects
+-----------------------------
 
-Finally, the `sp` S4 objects can be constructed within `Rcpp`, with results as follows:
+Finally, the `sp` S4 objects can be constructed within `Rcpp`. The first version constructs `sp::SpatialLines` objects which are then converted in `R` to `sp::SpatialLinesDataFrame` objects (using `process_xml_doc3e`). The second and final version constructs `sp::SpatialLinesDataFrame` objects entirely within `Rcpp` (using `process_xml_docf`).
 
 ``` r
 txt <- get_xml_doc3 (bbox=bbox)
 mb3e <- microbenchmark ( obj3 <- process_xml_doc3e (txt), times=100L )
+mb3f <- microbenchmark ( obj3 <- process_xml_doc3f (txt), times=100L )
 tt3e <- formatC (mean (mb3e$time) / 1e9, format="f", digits=2)
+tt3f <- formatC (mean (mb3f$time) / 1e9, format="f", digits=2)
 ```
 
 ``` r
-cat ("Mean time to convert with Rcpp+sp code =", tt3e, "\n")
+cat ("Mean time to convert with Rcpp+sp code = (", tt3e, ", ", tt3f, 
+     ")\n", sep="")
 ```
 
-    ## Mean time to convert with Rcpp+sp code = 0.11
+    ## Mean time to convert with Rcpp+sp code = (0.11, 0.8)

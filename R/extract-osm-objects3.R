@@ -165,7 +165,10 @@ process_xml_doc3d <- function (txt)
 
 #' process_xml_doc3e
 #'
-#' Uses 'get_highways_sp' which constructs S4 sp objects within Rcpp
+#' Uses the Rcpp function 'get_highways_sp' which constructs S4 sp objects
+#' within Rcpp. This '_sp' function constructs 'SpatialLines', while
+#' 'process_xml_docf' uses the equivalent function that constructs the entire
+#' 'SpatialLinesDataFrame' within Rcpp
 #'
 #' @param doc A text document extracted with 'get_xml_doc3'
 #'
@@ -180,4 +183,24 @@ process_xml_doc3e <- function (txt)
 {
     dat_sp <- get_highways_sp (txt)
     sp::SpatialLines (dat_sp)
+}
+
+
+#' process_xml_doc3f
+#'
+#' Uses the Rcpp function 'get_highways_spLines' which constructs the entire
+#' SpatialLinesDataFrame object within Rcpp.
+#'
+#' @param doc A text document extracted with 'get_xml_doc3'
+#'
+#' @return A SpatialLinesDataFrame
+#' @export
+#' 
+#' @examples
+#' bbox <- matrix (c (-0.13, 51.5, -0.11, 51.52), nrow=2, ncol=2)
+#' doc <- get_xml_doc3 (bbox=bbox)
+#' obj <- process_xml_doc3f (doc)
+process_xml_doc3f <- function (txt)
+{
+    get_highways_spLines (txt)
 }
