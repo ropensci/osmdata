@@ -29,7 +29,10 @@ get_xml_doc3 <- function (bbox=NULL)
     httr::content (dat, "text", encoding='UTF-8')
 }
 
-#' process_xml_doc3
+#' process_xml_doc3a
+#'
+#' Uses an explicit loop to convert list objects returned from 'get_highways'
+#' into Spatial Lines objects
 #'
 #' @param doc A text document extracted with 'get_xml_doc3'
 #'
@@ -38,8 +41,8 @@ get_xml_doc3 <- function (bbox=NULL)
 #' 
 #' @examples
 #' bbox <- matrix (c (-0.13, 51.5, -0.11, 51.52), nrow=2, ncol=2)
-#' doc <- get_xml_doc (bbox=bbox)
-#' obj <- process_xml_doc (doc)
+#' doc <- get_xml_doc3 (bbox=bbox)
+#' obj <- process_xml_doc3a (doc)
 process_xml_doc3a <- function (txt)
 {
     dat <- get_highways (txt)
@@ -58,6 +61,22 @@ process_xml_doc3a <- function (txt)
     sp::SpatialLines (dat)
 }
 
+#' process_xml_doc3b
+#'
+#' Differs from 'process_xml_doc3a' only in calling the 'Rcpp' function
+#' 'get_highways_with_id' instead of 'get_highways'. The list elements returned
+#' from the latter each have 2 columns (lon, lat), while they former prepends a
+#' third column with the ID of the OSM highway.
+#'
+#' @param doc A text document extracted with 'get_xml_doc3'
+#'
+#' @return A SpatialLinesDataFrame
+#' @export
+#' 
+#' @examples
+#' bbox <- matrix (c (-0.12, 51.52, -0.11, 51.52), nrow=2, ncol=2)
+#' doc <- get_xml_doc3 (bbox=bbox)
+#' obj <- process_xml_doc3b (doc)
 process_xml_doc3b <- function (txt)
 {
     dat <- get_highways_with_id (txt)
@@ -70,11 +89,25 @@ process_xml_doc3b <- function (txt)
     }
 
     for (i in seq (dat)) 
-        dat [[i]] <- sp::Lines (sp::Line (dat [[i]] [,2:3]), 
-                                ID=dat [[i]][1,1])
+        dat [[i]] <- sp::Lines (sp::Line (dat [[i]] [,c('lon','lat')]), 
+                                ID=dat [[i]][1,'id'])
     sp::SpatialLines (dat)
 }
 
+#' process_xml_doc3c
+#'
+#' Differs from 'process_xml_doc3b' only in replacing the explicit loop with an
+#' 'lapply'.
+#'
+#' @param doc A text document extracted with 'get_xml_doc3'
+#'
+#' @return A SpatialLinesDataFrame
+#' @export
+#' 
+#' @examples
+#' bbox <- matrix (c (-0.12, 51.52, -0.11, 51.52), nrow=2, ncol=2)
+#' doc <- get_xml_doc3 (bbox=bbox)
+#' obj <- process_xml_doc3c (doc)
 process_xml_doc3c <- function (txt)
 {
     dat <- get_highways_with_id (txt)
@@ -87,10 +120,25 @@ process_xml_doc3c <- function (txt)
     }
 
     dat <- lapply (dat, function (i)
-                       sp::Lines (sp::Line (i [,2:3]), ID=i [1,1]))
+                    sp::Lines (sp::Line (i [,c('lon','lat')]), ID=i [1,'id']))
     sp::SpatialLines (dat)
 }
 
+#' process_xml_doc3d
+#'
+#' Instead of the loops or 'lapply' calls of 'process_xml_doc3b/c', this version
+#' uses the 'dplyr::group_by' approach of hrbrmstr. This is definitely slower
+#' than the above versions!
+#'
+#' @param doc A text document extracted with 'get_xml_doc3'
+#'
+#' @return A SpatialLinesDataFrame
+#' @export
+#' 
+#' @examples
+#' bbox <- matrix (c (-0.12, 51.52, -0.11, 51.52), nrow=2, ncol=2)
+#' doc <- get_xml_doc3 (bbox=bbox)
+#' obj <- process_xml_doc3d (doc)
 process_xml_doc3d <- function (txt)
 {
     dat <- get_highways_with_id (txt)
@@ -112,4 +160,24 @@ process_xml_doc3d <- function (txt)
     names (osm_ways) <- nd
 
     sp::SpatialLines (osm_ways)
+}
+
+
+#' process_xml_doc3e
+#'
+#' Uses 'get_highways_sp' which constructs S4 sp objects within Rcpp
+#'
+#' @param doc A text document extracted with 'get_xml_doc3'
+#'
+#' @return A SpatialLinesDataFrame
+#' @export
+#' 
+#' @examples
+#' bbox <- matrix (c (-0.13, 51.5, -0.11, 51.52), nrow=2, ncol=2)
+#' doc <- get_xml_doc3 (bbox=bbox)
+#' obj <- process_xml_doc3e (doc)
+process_xml_doc3e <- function (txt)
+{
+    dat_sp <- get_highways_sp (txt)
+    sp::SpatialLines (dat_sp)
 }

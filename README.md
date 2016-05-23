@@ -3,11 +3,12 @@ osmdatar
 
 R package for downloading OSM data. Current status (on test data of highways only):
 
-| method   | Computation time (s) |
-|----------|----------------------|
-| osmplotr | 1.86                 |
-| hrbrmstr | 1.47                 |
-| Rcpp     | 0.25                 |
+| method                     | Computation time (s) |
+|----------------------------|----------------------|
+| osmplotr                   | 1.86                 |
+| hrbrmstr                   | 1.47                 |
+| Rcpp (-&gt;`sp` in `R`)    | 0.25                 |
+| Rcpp (-&gt;`sp` in `Rcpp`) | 0.11                 |
 
 ------------------------------------------------------------------------
 
@@ -34,6 +35,8 @@ The `osmplotr` package uses `XML` to process the API query, and `osmar` to conve
 library (microbenchmark)
 ```
 
+------------------------------------------------------------------------
+
 1. Osmar / osmplotr
 -------------------
 
@@ -49,6 +52,8 @@ cat ("Mean time to convert with osmar =", tt, "s\n")
 ```
 
     ## Mean time to convert with osmar = 1.86 s
+
+------------------------------------------------------------------------
 
 2. hrbrmstr
 -----------
@@ -67,8 +72,10 @@ cat ("Mean time to convert with hrbrmstr code =", tt2, "\n")
 
 The code of **hrbrmstr** using `dplyr` is (only) around 20% faster than using `osmar`. And then for the C++ version ...
 
-3. Rcpp
--------
+------------------------------------------------------------------------
+
+3. Rcpp routines returning lists
+--------------------------------
 
 The function calls *should* compile properly within the `load_all` call, but in case they don't they can be loaded manually here:
 
@@ -78,9 +85,9 @@ Rcpp::sourceCpp('src/get_highways.cpp')
 Sys.unsetenv ('PKG_CXXFLAGS')
 ```
 
-(One reason this might be necesssary is because `devtools::document` fails to insert the necessary line `useDynLib(osmdatar)` in `NAMESPACE`. Re-inserting this manually should fix the problem.)
+(One reason this might be necessary is because `devtools::document` fails to insert the necessary line `useDynLib(osmdatar)` in `NAMESPACE`. Re-inserting this manually should fix the problem.)
 
-And then the actual tests, performed here with 4 versions, the first of which uses the `Rcpp` function `get_highways`, which returns a list of matrices of 2 columns. The subsequent 3 use `get_highways_with_id`, which returns a list of matrices of 3 columns, the first of which contains the OSM way ID.
+This section details `Rcpp` routines which return lists of coordinates for ways. These lists are then converted within `R` to `sp` objects. The tests cover 4 versions, the first of which uses the `Rcpp` function `get_highways`, which returns a list of matrices of 2 columns. The subsequent 3 use `get_highways_with_id`, which returns a list of matrices of 3 columns, the first of which contains the OSM way ID.
 
 The differences between the corresponding `R` functions are:
 
@@ -109,3 +116,22 @@ cat ("Mean times to convert with Rcpp code = (",
     ## Mean times to convert with Rcpp code = (0.25, 0.25, 0.25, 0.35)
 
 The `dplyr` approach of **hrbrmstr** is thus considerably slower than simply using direct loops, while the addition of an extra ID column to the `Rcpp` output does not slow things down at all. It is possible that the `Rcpp` routine could be sped up a little, but this is unlikely to make any difference compared to the necessity of looping / `dplyr`-ing within `R`. The slowness simply comes from the fact that so-called `Spatial___DataFrame` structures are actually **lists**, yet do not redefine any assignment operators for list elements, and so inevitably require loops.
+
+------------------------------------------------------------------------
+
+Rcpp with internall S4 objects
+------------------------------
+
+Finally, the `sp` S4 objects can be constructed within `Rcpp`, with results as follows:
+
+``` r
+txt <- get_xml_doc3 (bbox=bbox)
+mb3e <- microbenchmark ( obj3 <- process_xml_doc3e (txt), times=100L )
+tt3e <- formatC (mean (mb3e$time) / 1e9, format="f", digits=2)
+```
+
+``` r
+cat ("Mean time to convert with Rcpp+sp code =", tt3e, "\n")
+```
+
+    ## Mean time to convert with Rcpp+sp code = 0.11

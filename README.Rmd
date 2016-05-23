@@ -7,7 +7,8 @@ method    |   Computation time (s)
 ------  | ------    
 osmplotr    |   1.86
 hrbrmstr    |   1.47    
-Rcpp    |   0.25
+Rcpp (->`sp` in `R`)    |   0.25
+Rcpp (->`sp` in `Rcpp`)    |   0.11
 
 
 ------
@@ -39,6 +40,8 @@ convert an xml document to the same SpatialLinesDataFrame of highways.
 library (microbenchmark)
 ```
 
+-------
+
 ## 1. Osmar / osmplotr
 
 ```{r, eval=FALSE}
@@ -53,6 +56,8 @@ tt <- 1.86
 ```{r}
 cat ("Mean time to convert with osmar =", tt, "s\n")
 ```
+
+-------
 
 ## 2. hrbrmstr
 
@@ -71,7 +76,9 @@ cat ("Mean time to convert with hrbrmstr code =", tt2, "\n")
 The code of **hrbrmstr** using `dplyr` is (only) around 20% faster than using
 `osmar`. And then for the C++ version ...
 
-## 3. Rcpp
+-------
+
+## 3. Rcpp routines returning lists
 
 The function calls *should* compile properly within the `load_all` call, but in
 case they don't they can be loaded manually here:
@@ -80,14 +87,16 @@ Sys.setenv ('PKG_CXXFLAGS'='-std=c++11')
 Rcpp::sourceCpp('src/get_highways.cpp')
 Sys.unsetenv ('PKG_CXXFLAGS')
 ```
-(One reason this might be necesssary is because `devtools::document` fails to
+(One reason this might be necessary is because `devtools::document` fails to
 insert the necessary line `useDynLib(osmdatar)` in `NAMESPACE`. Re-inserting
 this manually should fix the problem.)
 
-And then the actual tests, performed here with 4 versions, the first of which
-uses the `Rcpp` function `get_highways`, which returns a list of matrices of 2
-columns.  The subsequent 3 use `get_highways_with_id`, which returns a list of
-matrices of 3 columns, the first of which contains the OSM way ID.
+This section details `Rcpp` routines which return lists of coordinates for ways.
+These lists are then converted within `R` to `sp` objects. The tests cover 4
+versions, the first of which uses the `Rcpp` function `get_highways`, which
+returns a list of matrices of 2 columns.  The subsequent 3 use
+`get_highways_with_id`, which returns a list of matrices of 3 columns, the first
+of which contains the OSM way ID.
 
 The differences between the corresponding `R` functions are:
 
@@ -127,3 +136,22 @@ to the necessity of looping / `dplyr`-ing within `R`. The slowness simply comes
 from the fact that so-called `Spatial___DataFrame` structures are actually
 **lists**, yet do not redefine any assignment operators for list elements, and
 so inevitably require loops.
+
+-------
+
+## Rcpp with internall S4 objects
+
+Finally, the `sp` S4 objects can be constructed within `Rcpp`, with results as
+follows:
+
+```{r, eval=FALSE}
+txt <- get_xml_doc3 (bbox=bbox)
+mb3e <- microbenchmark ( obj3 <- process_xml_doc3e (txt), times=100L )
+tt3e <- formatC (mean (mb3e$time) / 1e9, format="f", digits=2)
+```
+```{r, echo=FALSE}
+tt3e <- 0.11
+```
+```{r}
+cat ("Mean time to convert with Rcpp+sp code =", tt3e, "\n")
+```

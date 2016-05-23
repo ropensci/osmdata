@@ -27,3 +27,14 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// get_highways_sp
+List get_highways_sp(std::string st);
+RcppExport SEXP osmdatar_get_highways_sp(SEXP stSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type st(stSEXP);
+    __result = Rcpp::wrap(get_highways_sp(st));
+    return __result;
+END_RCPP
+}
