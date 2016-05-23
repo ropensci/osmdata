@@ -5,47 +5,14 @@
 
 using namespace Rcpp;
 
-// get_highways
-List get_highways(std::string st);
-RcppExport SEXP osmdatar_get_highways(SEXP stSEXP) {
+// rcpp_get_highways
+Rcpp::S4 rcpp_get_highways(std::string st);
+RcppExport SEXP osmdatar_rcpp_get_highways(SEXP stSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< std::string >::type st(stSEXP);
-    __result = Rcpp::wrap(get_highways(st));
-    return __result;
-END_RCPP
-}
-// get_highways_with_id
-List get_highways_with_id(std::string st);
-RcppExport SEXP osmdatar_get_highways_with_id(SEXP stSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type st(stSEXP);
-    __result = Rcpp::wrap(get_highways_with_id(st));
-    return __result;
-END_RCPP
-}
-// get_highways_sp
-List get_highways_sp(std::string st);
-RcppExport SEXP osmdatar_get_highways_sp(SEXP stSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type st(stSEXP);
-    __result = Rcpp::wrap(get_highways_sp(st));
-    return __result;
-END_RCPP
-}
-// get_highways_spLines
-Rcpp::S4 get_highways_spLines(std::string st);
-RcppExport SEXP osmdatar_get_highways_spLines(SEXP stSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type st(stSEXP);
-    __result = Rcpp::wrap(get_highways_spLines(st));
+    __result = Rcpp::wrap(rcpp_get_highways(st));
     return __result;
 END_RCPP
 }
