@@ -32,20 +32,46 @@ devtools::load_all ("osmdatar")
 setwd ("./osmdatar")
 Sys.unsetenv ('PKG_CXXFLAGS')
 ```
+Note that `devtools::document` overwrites `NAMESPACE` yet fails to insert the
+necessary line, `useDynLib(osmdatar)`. This must be manually reinserted for the
+package to load properly!
 
+------
 
+## Speed test
+
+This speed test uses `get_xml_doc` which is simply `get_highways` without the final line:
+
+```{r}
+get_xml_doc <- function (bbox=NULL)
+{
+    bbox <- paste0 ('(', bbox [2,1], ',', bbox [1,1], ',',
+                    bbox [2,2], ',', bbox [1,2], ')')
+
+    key <- "['highway']"
+    query <- paste0 ('(node', key, bbox,
+                    ';way', key, bbox,
+                    ';rel', key, bbox, ';')
+    url_base <- 'http://overpass-api.de/api/interpreter?data='
+    query <- paste0 (url_base, query, ');(._;>;);out;')
+
+    dat <- httr::GET (query)
+    if (dat$status_code != 200)
+        warning (httr::http_status (dat)$message)
+    # Encoding must be supplied to suppress warning
+    httr::content (dat, "text", encoding='UTF-8')
+}
+```
+
+Then the actual speed test:
 ```{r, eval=FALSE}
-txt <- get_xml_doc3 (bbox=bbox)
-mb3e <- microbenchmark ( obj3 <- process_xml_doc3e (txt), times=100L )
-mb3f <- microbenchmark ( obj3 <- process_xml_doc3f (txt), times=100L )
-tt3e <- formatC (mean (mb3e$time) / 1e9, format="f", digits=2)
-tt3f <- formatC (mean (mb3f$time) / 1e9, format="f", digits=2)
+txt <- get_xml_doc (bbox=bbox)
+mb <- microbenchmark ( obj <- rcpp_get_highways (txt), times=100L )
+tt <- formatC (mean (mb$time) / 1e9, format="f", digits=2)
 ```
 ```{r, echo=FALSE}
-tt3e <- 0.11
-tt3f <- 0.08
+tt <- 0.08
 ```
 ```{r}
-cat ("Mean time to convert with Rcpp+sp code = (", tt3e, ", ", tt3f, 
-     ")\n", sep="")
+cat ("Mean time to convert with Rcpp code =", tt, "\n")
 ```
