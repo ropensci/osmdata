@@ -156,7 +156,7 @@ tt3f <- formatC (mean (mb3f$time) / 1e9, format="f", digits=2)
 ```
 ```{r, echo=FALSE}
 tt3e <- 0.11
-tt3f <- 0.8
+tt3f <- 0.08
 ```
 ```{r}
 cat ("Mean time to convert with Rcpp+sp code = (", tt3e, ", ", tt3f, 

@@ -137,4 +137,4 @@ cat ("Mean time to convert with Rcpp+sp code = (", tt3e, ", ", tt3f,
      ")\n", sep="")
 ```
 
-    ## Mean time to convert with Rcpp+sp code = (0.11, 0.8)
+    ## Mean time to convert with Rcpp+sp code = (0.11, 0.08)
