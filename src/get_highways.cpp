@@ -34,15 +34,15 @@ Rcpp::S4 rcpp_get_highways (std::string st)
 {
     Xml xml (st);
 
-    int tempi, count = 0;
+    int tempi, coli, rowi, count = 0;
     long long ni;
     float lon, lat;
     float tempf, xmin = FLOAT_MAX, xmax = -FLOAT_MAX, 
           ymin = FLOAT_MAX, ymax = -FLOAT_MAX;
     std::vector <float> lons, lats;
-    std::string id;
-    std::unordered_set <std::string> idset;
-    std::vector <std::string> colnames, rownames, waynames;
+    std::string id, key;
+    std::unordered_set <std::string> idset; // see TODO below
+    std::vector <std::string> colnames, rownames, waynames, varnames;
     Rcpp::List dimnames (0), dummy_list (0), result (xml.ways.size ());
     Rcpp::NumericMatrix nmat (Dimension (0, 0));
 
@@ -53,6 +53,9 @@ Rcpp::S4 rcpp_get_highways (std::string st)
     colnames.push_back ("lon");
     colnames.push_back ("lat");
     waynames.resize (0);
+    varnames.push_back ("name");
+    varnames.push_back ("type");
+    // other varnames added below
 
     Rcpp::Language line_call ("new", "Line");
     Rcpp::Language lines_call ("new", "Lines");
@@ -66,13 +69,25 @@ Rcpp::S4 rcpp_get_highways (std::string st)
      * this does *NOT* make the routine any faster, and so the current version
      * which more safely uses iterators is kept instead.
      */
+    std::vector <std::pair <std::string, std::string> >::iterator kv_iter;
 
     for (Ways_Itr wi = xml.ways.begin(); wi != xml.ways.end(); ++wi)
     {
+        // Collect all unique keys
+        for (kv_iter = (*wi).key_val.begin (); kv_iter != (*wi).key_val.end ();
+                ++kv_iter)
+        {
+            key = (*kv_iter).first;
+            if (std::find (varnames.begin (), varnames.end (), key) == varnames.end ())
+                varnames.push_back (key);
+        }
+        
         /*
          * The following lines check for duplicate way IDs -- which do very
          * occasionally occur -- and ensures unique values as required by 'sp'
          * through appending decimal digits to <long long> OSM IDs.
+         * TODO: This uses an unordered_set: check if it's faster with a simple
+         * vector and std::find
          */
         id = std::to_string ((*wi).id);
         while (idset.find (id) != idset.end ())
@@ -150,13 +165,32 @@ Rcpp::S4 rcpp_get_highways (std::string st)
     }
     result.attr ("names") = waynames;
 
-    lons.resize (0);
-    lats.resize (0);
-    waynames.resize (0);
-    colnames.resize (0);
-    rownames.resize (0);
+    // Store all key-val pairs in one massive DF
+    int nrow = xml.ways.size (), ncol = varnames.size ();
+    Rcpp::CharacterVector kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na());
+    for (Ways_Itr wi = xml.ways.begin(); wi != xml.ways.end(); ++wi)
+    {
+        auto it = std::find (varnames.begin (), varnames.end (), "name");
+        coli = it - varnames.begin (); 
+        rowi = wi - xml.ways.begin ();
+        kv_vec (coli * nrow + rowi) = (*wi).name;
+        it = std::find (varnames.begin (), varnames.end (), "type");
+        coli = it - varnames.begin (); 
+        rowi = wi - xml.ways.begin ();
+        kv_vec (coli * nrow + rowi) = (*wi).type;
+        for (kv_iter = (*wi).key_val.begin (); kv_iter != (*wi).key_val.end ();
+                ++kv_iter)
+        {
+            key = (*kv_iter).first;
+            it = std::find (varnames.begin (), varnames.end (), key);
+            // key must exist in varnames!
+            coli = it - varnames.begin (); 
+            rowi = wi - xml.ways.begin ();
+            kv_vec (coli * nrow + rowi) = (*kv_iter).second;
+        }
+    }
 
-    Rcpp::Language sp_lines_call ("new", "SpatialLines");
+    Rcpp::Language sp_lines_call ("new", "SpatialLinesDataFrame");
     Rcpp::S4 sp_lines;
     sp_lines = sp_lines_call.eval ();
     sp_lines.slot ("lines") = result;
@@ -167,6 +201,18 @@ Rcpp::S4 rcpp_get_highways (std::string st)
     Rcpp::S4 crs = crs_call.eval ();
     crs.slot ("projargs") = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0";
     sp_lines.slot ("proj4string") = crs;
+
+    Rcpp::CharacterMatrix kv_mat (nrow, ncol, kv_vec.begin());
+    Rcpp::DataFrame kv_df = kv_mat;
+    kv_df.attr ("names") = varnames;
+    sp_lines.slot ("data") = kv_df;
+
+    lons.resize (0);
+    lats.resize (0);
+    waynames.resize (0);
+    colnames.resize (0);
+    rownames.resize (0);
+    varnames.resize (0);
 
     return sp_lines;
 }
