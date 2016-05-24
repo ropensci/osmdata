@@ -39,7 +39,7 @@ Rcpp::S4 rcpp_get_highways (std::string st)
     float lon, lat;
     float tempf, xmin = FLOAT_MAX, xmax = -FLOAT_MAX, 
           ymin = FLOAT_MAX, ymax = -FLOAT_MAX;
-    std::vector <float> lonlat;
+    std::vector <float> lons, lats;
     std::string id;
     std::unordered_set <std::string> idset;
     std::vector <std::string> colnames, rownames, waynames;
@@ -86,15 +86,16 @@ Rcpp::S4 rcpp_get_highways (std::string st)
         // Set up first origin node
         ni = (*wi).nodes.front ();
 
-        lonlat.resize (0);
+        lons.resize (0);
+        lats.resize (0);
         // TODO: Find out why the following pointer lines do not work here
         // assert ((umapitr = xml.nodes.find (ni)) != xml.nodes.end ());
         //lon = (*umapitr).second.first;
         //lat = (*umapitr).second.second;
         lon = xml.nodes [ni].first;
         lat = xml.nodes [ni].second;
-        lonlat.push_back (lon);
-        lonlat.push_back (lat);
+        lons.push_back (lon);
+        lats.push_back (lat);
         if (lon < xmin)
             xmin = lon;
         else if (lon > xmax)
@@ -113,8 +114,8 @@ Rcpp::S4 rcpp_get_highways (std::string st)
         {
             lon = xml.nodes [*it].first;
             lat = xml.nodes [*it].second;
-            lonlat.push_back (lon);
-            lonlat.push_back (lat);
+            lons.push_back (lon);
+            lats.push_back (lat);
             rownames.push_back (std::to_string (*it));
             if (lon < xmin)
                 xmin = lon;
@@ -126,8 +127,9 @@ Rcpp::S4 rcpp_get_highways (std::string st)
                 ymax = lat;
         }
 
-        nmat = NumericMatrix (Dimension (round (lonlat.size () / 2), 2));
-        std::copy (lonlat.begin (), lonlat.end (), nmat.begin ());
+        nmat = NumericMatrix (Dimension (lons.size (), 2));
+        std::copy (lons.begin (), lons.end (), nmat.begin ());
+        std::copy (lats.begin (), lats.end (), nmat.begin () + lons.size ());
 
         // This only works with push_back, not with direct re-allocation
         dimnames.push_back (rownames);
@@ -148,7 +150,8 @@ Rcpp::S4 rcpp_get_highways (std::string st)
     }
     result.attr ("names") = waynames;
 
-    lonlat.resize (0);
+    lons.resize (0);
+    lats.resize (0);
     waynames.resize (0);
     colnames.resize (0);
     rownames.resize (0);
