@@ -1,4 +1,4 @@
-#include "get_highways.h"
+#include "get_ways.h"
 #include <unordered_set>
 #include <Rcpp.h>
 
@@ -30,9 +30,9 @@ Rcpp::NumericMatrix rcpp_get_bbox (float xmin, float xmax, float ymin, float yma
 
 
 // [[Rcpp::export]]
-Rcpp::S4 rcpp_get_highways (std::string st)
+Rcpp::S4 rcpp_get_ways (std::string st)
 {
-    Xml xml (st);
+    Xml xml (st, false);
 
     int tempi, coli, rowi, count = 0;
     long long ni;
