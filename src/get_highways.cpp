@@ -1,4 +1,5 @@
 #include "get_highways.h"
+#include <unordered_set>
 #include <Rcpp.h>
 
 using namespace Rcpp;
@@ -31,32 +32,32 @@ Rcpp::NumericMatrix rcpp_get_bbox (float xmin, float xmax, float ymin, float yma
 // [[Rcpp::export]]
 Rcpp::S4 rcpp_get_highways (std::string st)
 {
-    // TODO: Deal with potential duplicate IDs
     Xml xml (st);
 
-    int count = 0;
+    int tempi, count = 0;
     long long ni;
     float lon, lat;
     float tempf, xmin = FLOAT_MAX, xmax = -FLOAT_MAX, 
           ymin = FLOAT_MAX, ymax = -FLOAT_MAX;
+    std::vector <float> lonlat;
+    std::string id;
+    std::unordered_set <std::string> idset;
+    std::vector <std::string> colnames, rownames, waynames;
+    Rcpp::List dimnames (0), dummy_list (0), result (xml.ways.size ());
+    Rcpp::NumericMatrix nmat (Dimension (0, 0));
+
+    // TODO: delete umapitr
     umapPair_Itr umapitr;
     typedef std::vector <long long>::iterator ll_Itr;
 
-    std::vector <float> lonlat;
-    std::vector <std::string> colnames, rownames, waynames;
     colnames.push_back ("lon");
     colnames.push_back ("lat");
-    List dimnames (0);
-    NumericMatrix nmat (Dimension (0, 0));
-    List result (xml.ways.size ());
+    waynames.resize (0);
 
     Rcpp::Language line_call ("new", "Line");
     Rcpp::Language lines_call ("new", "Lines");
     Rcpp::S4 line;
     Rcpp::S4 lines;
-    Rcpp::List dummy_list (0);
-
-    waynames.resize (0);
 
     /*
      * NOTE: Nodes are first loaded into the 2 vectors of (lon, lat), and these
@@ -68,7 +69,20 @@ Rcpp::S4 rcpp_get_highways (std::string st)
 
     for (Ways_Itr wi = xml.ways.begin(); wi != xml.ways.end(); ++wi)
     {
-        waynames.push_back (std::to_string ((*wi).id));
+        /*
+         * The following lines check for duplicate way IDs -- which do very
+         * occasionally occur -- and ensures unique values as required by 'sp'
+         * through appending decimal digits to <long long> OSM IDs.
+         */
+        id = std::to_string ((*wi).id);
+        while (idset.find (id) != idset.end ())
+        {
+            tempi = 0;
+            id = std::to_string ((*wi).id) + "." + std::to_string (tempi);
+        }
+        auto si = idset.insert (id);
+
+        waynames.push_back (id);
         // Set up first origin node
         ni = (*wi).nodes.front ();
 
