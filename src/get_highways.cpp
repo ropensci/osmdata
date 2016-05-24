@@ -55,6 +55,7 @@ Rcpp::S4 rcpp_get_highways (std::string st)
     waynames.resize (0);
     varnames.push_back ("name");
     varnames.push_back ("type");
+    varnames.push_back ("oneway");
     // other varnames added below
 
     Rcpp::Language line_call ("new", "Line");
@@ -174,10 +175,20 @@ Rcpp::S4 rcpp_get_highways (std::string st)
         coli = it - varnames.begin (); 
         rowi = wi - xml.ways.begin ();
         kv_vec (coli * nrow + rowi) = (*wi).name;
+
         it = std::find (varnames.begin (), varnames.end (), "type");
         coli = it - varnames.begin (); 
         rowi = wi - xml.ways.begin ();
         kv_vec (coli * nrow + rowi) = (*wi).type;
+
+        it = std::find (varnames.begin (), varnames.end (), "oneway");
+        coli = it - varnames.begin (); 
+        rowi = wi - xml.ways.begin ();
+        if ((*wi).oneway)
+            kv_vec (coli * nrow + rowi) = "true";
+        else
+            kv_vec (coli * nrow + rowi) = "false";
+
         for (kv_iter = (*wi).key_val.begin (); kv_iter != (*wi).key_val.end ();
                 ++kv_iter)
         {
