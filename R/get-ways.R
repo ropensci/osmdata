@@ -1,16 +1,16 @@
-#' get_highways
+#' get_ways
 #'
-#' Extracts highways from an overpass download.
+#' Extracts ways from an overpass download.
 #'
-#' @param bbox the bounding box within which highways should be downloaded.  A
+#' @param bbox the bounding box within which ways should be downloaded.  A
 #' 2-by-2 matrix of 4 elements with columns of min and max values, and rows of x
 #' and y values.
 #'
-#' @return A 'SpatialLinesDataFrame' object containing all the highways within
+#' @return A 'SpatialLinesDataFrame' object containing all the ways within
 #' the given bounding box.
 #' @export
 
-get_highways <- function (bbox=NULL)
+get_ways <- function (bbox=NULL)
 {
     bbox <- paste0 ('(', bbox [2,1], ',', bbox [1,1], ',',
                     bbox [2,2], ',', bbox [1,2], ')')
@@ -27,5 +27,5 @@ get_highways <- function (bbox=NULL)
         warning (httr::http_status (dat)$message)
     # Encoding must be supplied to suppress warning
     txt <- httr::content (dat, "text", encoding='UTF-8')
-    rcpp_get_highways (txt)
+    rcpp_get_ways (txt)
 }

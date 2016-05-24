@@ -5,14 +5,14 @@
 
 using namespace Rcpp;
 
-// rcpp_get_highways
-Rcpp::S4 rcpp_get_highways(std::string st);
-RcppExport SEXP osmdatar_rcpp_get_highways(SEXP stSEXP) {
+// rcpp_get_ways
+Rcpp::S4 rcpp_get_ways(std::string st);
+RcppExport SEXP osmdatar_rcpp_get_ways(SEXP stSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< std::string >::type st(stSEXP);
-    __result = Rcpp::wrap(rcpp_get_highways(st));
+    __result = Rcpp::wrap(rcpp_get_ways(st));
     return __result;
 END_RCPP
 }

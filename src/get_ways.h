@@ -48,6 +48,7 @@ struct Way
 
 typedef std::vector <Way> Ways;
 typedef std::vector <Way>::iterator Ways_Itr;
+typedef std::vector <Node> Nodes;
 
 
 /************************************************************************
@@ -66,13 +67,18 @@ class Xml
     protected:
     public:
         std::string tempstr;
+        Nodes nodelist;
         Ways ways;
         umapPair nodes;
+        // "nodelist" contains all nodes to be returned as a
+        // SpatialPointsDataFrame, while "nodes" is the unordered set used to
+        // quickly extract lon-lats from nodal IDs.
 
     Xml (std::string str, bool nkv)
         : _tempstr (str), _node_keyvals (nkv)
     {
         ways.resize (0);
+        nodelist.resize (0);
         nodes.clear ();
 
         parseXML (_tempstr);
@@ -80,6 +86,7 @@ class Xml
     ~Xml ()
     {
         ways.resize (0);
+        nodelist.resize (0);
         nodes.clear ();
     }
 
@@ -131,10 +138,12 @@ void Xml::traverseXML (const boost::property_tree::ptree& pt)
     {
         if (it->first == "node")
         {
-            if (!_node_keyvals)
-                node = traverseNode (it->second, node);
-            else
+            if (_node_keyvals)
+            {
                 node = traverseNode_keyval (it->second, node);
+                nodelist.push_back (node);
+            } else
+                node = traverseNode (it->second, node);
             nodes [node.id] = std::make_pair (node.lon, node.lat);
         }
         if (it->first == "way")
