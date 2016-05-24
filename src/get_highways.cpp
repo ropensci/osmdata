@@ -36,12 +36,13 @@ Rcpp::S4 rcpp_get_highways (std::string st)
 
     int count = 0;
     long long ni;
+    float lon, lat;
     float tempf, xmin = FLOAT_MAX, xmax = -FLOAT_MAX, 
           ymin = FLOAT_MAX, ymax = -FLOAT_MAX;
     umapPair_Itr umapitr;
     typedef std::vector <long long>::iterator ll_Itr;
 
-    std::vector <float> lat, lon;
+    std::vector <float> lonlat;
     std::vector <std::string> colnames, rownames, waynames;
     colnames.push_back ("lon");
     colnames.push_back ("lat");
@@ -71,14 +72,24 @@ Rcpp::S4 rcpp_get_highways (std::string st)
         // Set up first origin node
         ni = (*wi).nodes.front ();
 
-        lon.resize (0);
-        lat.resize (0);
+        lonlat.resize (0);
         // TODO: Find out why the following pointer lines do not work here
         // assert ((umapitr = xml.nodes.find (ni)) != xml.nodes.end ());
-        //lon.push_back ((*umapitr).second.first);
-        //lat.push_back ((*umapitr).second.second);
-        lon.push_back (xml.nodes [ni].first);
-        lat.push_back (xml.nodes [ni].second);
+        //lon = (*umapitr).second.first;
+        //lat = (*umapitr).second.second;
+        lon = xml.nodes [ni].first;
+        lat = xml.nodes [ni].second;
+        lonlat.push_back (lon);
+        lonlat.push_back (lat);
+        if (lon < xmin)
+            xmin = lon;
+        else if (lon > xmax)
+            xmax = lon;
+        if (lat < ymin)
+            ymin = lat;
+        else if (lat > ymax)
+            ymax = lat;
+
         rownames.resize (0);
         rownames.push_back (std::to_string (ni));
 
@@ -86,33 +97,24 @@ Rcpp::S4 rcpp_get_highways (std::string st)
         for (ll_Itr it = std::next ((*wi).nodes.begin ());
                 it != (*wi).nodes.end (); it++)
         {
-            lon.push_back (xml.nodes [*it].first);
-            lat.push_back (xml.nodes [*it].second);
+            lon = xml.nodes [*it].first;
+            lat = xml.nodes [*it].second;
+            lonlat.push_back (lon);
+            lonlat.push_back (lat);
             rownames.push_back (std::to_string (*it));
-            if (lon [0] < xmin)
-                xmin = lon [0];
-            else if (lon [0] > xmax)
-                xmax = lon [0];
-            if (lat [0] < ymin)
-                ymin = lat [0];
-            else if (lat [0] > ymax)
-                ymax = lat [0];
+            if (lon < xmin)
+                xmin = lon;
+            else if (lon > xmax)
+                xmax = lon;
+            if (lat < ymin)
+                ymin = lat;
+            else if (lat > ymax)
+                ymax = lat;
         }
 
-        nmat = NumericMatrix (Dimension (lon.size (), 2));
-        for (int i=0; i<lon.size (); i++)
-        {
-            nmat (i, 0) = lon [i];
-            nmat (i, 1) = lat [i];
-            if (nmat (i, 0) < xmin)
-                xmin = nmat (i, 0);
-            else if (nmat (i, 0) > xmax)
-                xmax = nmat (i, 0);
-            if (nmat (i, 1) < ymin)
-                ymin = nmat (i, 1);
-            else if (nmat (i, 1) > ymax)
-                ymax = nmat (i, 1);
-        }
+        nmat = NumericMatrix (Dimension (round (lonlat.size () / 2), 2));
+        std::copy (lonlat.begin (), lonlat.end (), nmat.begin ());
+
         // This only works with push_back, not with direct re-allocation
         dimnames.push_back (rownames);
         dimnames.push_back (colnames);
@@ -132,8 +134,7 @@ Rcpp::S4 rcpp_get_highways (std::string st)
     }
     result.attr ("names") = waynames;
 
-    lon.resize (0);
-    lat.resize (0);
+    lonlat.resize (0);
     waynames.resize (0);
     colnames.resize (0);
     rownames.resize (0);
@@ -144,6 +145,11 @@ Rcpp::S4 rcpp_get_highways (std::string st)
     sp_lines.slot ("lines") = result;
 
     sp_lines.slot ("bbox") = rcpp_get_bbox (xmin, xmax, ymin, ymax);
+
+    Rcpp::Language crs_call ("new", "CRS");
+    Rcpp::S4 crs = crs_call.eval ();
+    crs.slot ("projargs") = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0";
+    sp_lines.slot ("proj4string") = crs;
 
     return sp_lines;
 }
