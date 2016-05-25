@@ -5,6 +5,17 @@
 
 using namespace Rcpp;
 
+// rcpp_get_nodes
+Rcpp::S4 rcpp_get_nodes(std::string st);
+RcppExport SEXP osmdatar_rcpp_get_nodes(SEXP stSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type st(stSEXP);
+    __result = Rcpp::wrap(rcpp_get_nodes(st));
+    return __result;
+END_RCPP
+}
 // rcpp_get_ways
 Rcpp::S4 rcpp_get_ways(std::string st);
 RcppExport SEXP osmdatar_rcpp_get_ways(SEXP stSEXP) {

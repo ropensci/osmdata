@@ -31,7 +31,7 @@ Rcpp::NumericMatrix rcpp_get_bbox (float xmin, float xmax, float ymin, float yma
 // [[Rcpp::export]]
 Rcpp::S4 rcpp_get_ways (std::string st)
 {
-    Xml xml (st);
+    XmlWays xml (st);
 
     int tempi, coli, rowi, count = 0;
     long long ni;

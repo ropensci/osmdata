@@ -1,0 +1,137 @@
+#include <string>
+#include <fstream> // ifstream
+#include <iostream>
+#include <unordered_set>
+#include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+
+
+struct Node
+{
+    long long id;
+    std::vector <std::string> key, value;
+    float lat, lon;
+};
+
+typedef std::vector <Node> Nodes;
+typedef std::vector <Node>::iterator Nodes_Itr;
+
+
+/************************************************************************
+ ************************************************************************
+ **                                                                    **
+ **                           CLASS::XMLNODES                          **
+ **                                                                    **
+ ************************************************************************
+ ************************************************************************/
+
+class XmlNodes
+{
+    private:
+        std::string _tempstr;
+    protected:
+    public:
+        std::string tempstr;
+        Nodes nodes;
+
+    XmlNodes (std::string str)
+        : _tempstr (str)
+    {
+        nodes.resize (0);
+
+        parseXMLNodes (_tempstr);
+    }
+    ~XmlNodes ()
+    {
+        nodes.resize (0);
+    }
+
+    void parseXMLNodes ( std::string & is );
+    void traverseNodes (const boost::property_tree::ptree& pt);
+    Node traverseNode (const boost::property_tree::ptree& pt, Node node);
+}; // end Class::XmlNodes
+
+
+/************************************************************************
+ ************************************************************************
+ **                                                                    **
+ **                       FUNCTION::PARSEXMLNODES                      **
+ **                                                                    **
+ ************************************************************************
+ ************************************************************************/
+
+void XmlNodes::parseXMLNodes ( std::string & is )
+{
+    // populate tree structure pt
+    using boost::property_tree::ptree;
+    ptree pt;
+    std::stringstream istream (is, std::stringstream::in);
+    read_xml (istream, pt);
+
+    traverseNodes (pt);
+}
+
+
+/************************************************************************
+ ************************************************************************
+ **                                                                    **
+ **                       FUNCTION::TRAVERSENODES                      **
+ **                                                                    **
+ ************************************************************************
+ ************************************************************************/
+
+void XmlNodes::traverseNodes (const boost::property_tree::ptree& pt)
+{
+    std::unordered_set <long long> nodeIDs;
+    Node node;
+    // NOTE: Node is (lon, lat) = (x, y)!
+
+    for (boost::property_tree::ptree::const_iterator it = pt.begin ();
+            it != pt.end (); ++it)
+    {
+        if (it->first == "node")
+        {
+            node = traverseNode (it->second, node);
+            if (nodeIDs.find (node.id) == nodeIDs.end ())
+            {
+                nodes.push_back (node);
+                auto p = nodeIDs.insert (node.id);
+            }
+        } else
+            traverseNodes (it->second);
+    }
+    nodeIDs.clear ();
+} // end function XmlNodes::traverseNodes
+
+
+/************************************************************************
+ ************************************************************************
+ **                                                                    **
+ **                       FUNCTION::TRAVERSENODE                       **
+ **                                                                    **
+ ************************************************************************
+ ************************************************************************/
+
+Node XmlNodes::traverseNode (const boost::property_tree::ptree& pt, Node node)
+{
+    // Only coordinates of nodes are read, because only those are stored in the
+    // unordered map. More node info is unlikely to be necessary ... ?
+    for (boost::property_tree::ptree::const_iterator it = pt.begin ();
+            it != pt.end (); ++it)
+    {
+        if (it->first == "id")
+            node.id = it->second.get_value <long long> ();
+        else if (it->first == "lat")
+            node.lat = it->second.get_value <float> ();
+        else if (it->first == "lon")
+            node.lon = it->second.get_value <float> ();
+        else if (it->first == "k")
+            node.key.push_back (it->second.get_value <std::string> ());
+        else if (it->first == "v")
+            node.value.push_back (it->second.get_value <std::string> ());
+        // No other key-value pairs currently extracted for nodes
+        node = traverseNode (it->second, node);
+    }
+
+    return node;
+} // end function XmlNodes::traverseNode

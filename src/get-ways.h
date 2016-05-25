@@ -54,12 +54,12 @@ typedef std::vector <Node> Nodes;
 /************************************************************************
  ************************************************************************
  **                                                                    **
- **                             CLASS::XML                             **
+ **                           CLASS::XMLWAYS                           **
  **                                                                    **
  ************************************************************************
  ************************************************************************/
 
-class Xml 
+class XmlWays
 {
     private:
         std::string _tempstr;
@@ -73,38 +73,38 @@ class Xml
         // SpatialPointsDataFrame, while "nodes" is the unordered set used to
         // quickly extract lon-lats from nodal IDs.
 
-    Xml (std::string str)
+    XmlWays (std::string str)
         : _tempstr (str)
     {
         ways.resize (0);
         nodelist.resize (0);
         nodes.clear ();
 
-        parseXML (_tempstr);
+        parseXMLWays (_tempstr);
     }
-    ~Xml ()
+    ~XmlWays ()
     {
         ways.resize (0);
         nodelist.resize (0);
         nodes.clear ();
     }
 
-    void parseXML ( std::string & is );
+    void parseXMLWays ( std::string & is );
     void traverseWays (const boost::property_tree::ptree& pt);
     RawWay traverseWay (const boost::property_tree::ptree& pt, RawWay rway);
     Node traverseNode (const boost::property_tree::ptree& pt, Node node);
-}; // end Class::Xml
+}; // end Class::XmlWays
 
 
 /************************************************************************
  ************************************************************************
  **                                                                    **
- **                         FUNCTION::PARSEXML                         **
+ **                       FUNCTION::PARSEXMLWAYS                       **
  **                                                                    **
  ************************************************************************
  ************************************************************************/
 
-void Xml::parseXML ( std::string & is )
+void XmlWays::parseXMLWays ( std::string & is )
 {
     // populate tree structure pt
     using boost::property_tree::ptree;
@@ -124,7 +124,7 @@ void Xml::parseXML ( std::string & is )
  ************************************************************************
  ************************************************************************/
 
-void Xml::traverseWays (const boost::property_tree::ptree& pt)
+void XmlWays::traverseWays (const boost::property_tree::ptree& pt)
 {
     RawWay rway;
     Way way;
@@ -178,7 +178,7 @@ void Xml::traverseWays (const boost::property_tree::ptree& pt)
     rway.key.resize (0);
     rway.value.resize (0);
     rway.nodes.resize (0);
-} // end function Xml::traverseWays
+} // end function XmlWays::traverseWays
 
 /************************************************************************
  ************************************************************************
@@ -188,7 +188,7 @@ void Xml::traverseWays (const boost::property_tree::ptree& pt)
  ************************************************************************
  ************************************************************************/
 
-RawWay Xml::traverseWay (const boost::property_tree::ptree& pt, RawWay rway)
+RawWay XmlWays::traverseWay (const boost::property_tree::ptree& pt, RawWay rway)
 {
     for (boost::property_tree::ptree::const_iterator it = pt.begin ();
             it != pt.end (); ++it)
@@ -205,7 +205,7 @@ RawWay Xml::traverseWay (const boost::property_tree::ptree& pt, RawWay rway)
     }
 
     return rway;
-} // end function Xml::traverseWay
+} // end function XmlWays::traverseWay
 
 
 /************************************************************************
@@ -216,7 +216,7 @@ RawWay Xml::traverseWay (const boost::property_tree::ptree& pt, RawWay rway)
  ************************************************************************
  ************************************************************************/
 
-Node Xml::traverseNode (const boost::property_tree::ptree& pt, Node node)
+Node XmlWays::traverseNode (const boost::property_tree::ptree& pt, Node node)
 {
     // Only coordinates of nodes are read, because only those are stored in the
     // unordered map. More node info is unlikely to be necessary ... ?
@@ -234,4 +234,4 @@ Node Xml::traverseNode (const boost::property_tree::ptree& pt, Node node)
     }
 
     return node;
-} // end function Xml::traverseNode
+} // end function XmlWays::traverseNode

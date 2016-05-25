@@ -4,7 +4,7 @@
 \alias{get_ways}
 \title{get_ways}
 \usage{
-get_ways(bbox = NULL)
+get_ways(bbox, key)
 }
 \arguments{
 \item{bbox}{the bounding box within which ways should be downloaded.  A
