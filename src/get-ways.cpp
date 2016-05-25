@@ -42,7 +42,7 @@ Rcpp::S4 rcpp_get_ways (std::string st)
     std::string id, key;
     std::unordered_set <std::string> idset; // see TODO below
     std::vector <std::string> colnames, rownames, waynames, varnames;
-    Rcpp::List dimnames (0), dummy_list (0), result (xml.ways.size ());
+    Rcpp::List dimnames (0), dummy_list (0), wayList (xml.ways.size ());
     Rcpp::NumericMatrix nmat (Dimension (0, 0));
 
     // TODO: delete umapitr
@@ -90,11 +90,9 @@ Rcpp::S4 rcpp_get_ways (std::string st)
          * vector and std::find
          */
         id = std::to_string ((*wi).id);
+        tempi = 0;
         while (idset.find (id) != idset.end ())
-        {
-            tempi = 0;
-            id = std::to_string ((*wi).id) + "." + std::to_string (tempi);
-        }
+            id = std::to_string ((*wi).id) + "." + std::to_string (tempi++);
         auto si = idset.insert (id);
 
         waynames.push_back (id);
@@ -159,11 +157,11 @@ Rcpp::S4 rcpp_get_ways (std::string st)
         lines = lines_call.eval ();
         lines.slot ("Lines") = dummy_list;
         lines.slot ("ID") = std::to_string ((*wi).id);
-        result [count++] = lines;
+        wayList [count++] = lines;
         
         dummy_list.erase (0);
     }
-    result.attr ("names") = waynames;
+    wayList.attr ("names") = waynames;
 
     // Store all key-val pairs in one massive DF
     int nrow = xml.ways.size (), ncol = varnames.size ();
@@ -203,7 +201,7 @@ Rcpp::S4 rcpp_get_ways (std::string st)
     Rcpp::Language sp_lines_call ("new", "SpatialLinesDataFrame");
     Rcpp::S4 sp_lines;
     sp_lines = sp_lines_call.eval ();
-    sp_lines.slot ("lines") = result;
+    sp_lines.slot ("lines") = wayList;
 
     sp_lines.slot ("bbox") = rcpp_get_bbox (xmin, xmax, ymin, ymax);
 

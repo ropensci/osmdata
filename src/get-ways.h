@@ -153,7 +153,7 @@ void XmlWays::traverseWays (const boost::property_tree::ptree& pt)
             way.name = way.type = "";
             way.key_val.resize (0);
             way.oneway = false;
-            // TODO: oneway also exists is pairs:
+            // TODO: oneway also exists in pairs:
             // k='oneway' v='yes'
             // k='oneway:bicycle' v='no'
             for (int i=0; i<rway.key.size (); i++)
@@ -218,8 +218,8 @@ RawWay XmlWays::traverseWay (const boost::property_tree::ptree& pt, RawWay rway)
 
 Node XmlWays::traverseNode (const boost::property_tree::ptree& pt, Node node)
 {
-    // Only coordinates of nodes are read, because only those are stored in the
-    // unordered map. More node info is unlikely to be necessary ... ?
+    // Only coordinates of nodes are read here; full data can be extracted with
+    // get-nodes
     for (boost::property_tree::ptree::const_iterator it = pt.begin ();
             it != pt.end (); ++it)
     {
@@ -229,7 +229,6 @@ Node XmlWays::traverseNode (const boost::property_tree::ptree& pt, Node node)
             node.lat = it->second.get_value <float> ();
         else if (it->first == "lon")
             node.lon = it->second.get_value <float> ();
-        // No other key-value pairs currently extracted for nodes
         node = traverseNode (it->second, node);
     }
 
