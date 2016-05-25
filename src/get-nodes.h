@@ -9,7 +9,8 @@
 struct Node
 {
     long long id;
-    std::vector <std::string> key, value;
+    std::string key, value;
+    std::vector <std::pair <std::string, std::string> > key_val;
     float lat, lon;
 };
 
@@ -85,12 +86,15 @@ void XmlNodes::traverseNodes (const boost::property_tree::ptree& pt)
     std::unordered_set <long long> nodeIDs;
     Node node;
     // NOTE: Node is (lon, lat) = (x, y)!
-
+    
     for (boost::property_tree::ptree::const_iterator it = pt.begin ();
             it != pt.end (); ++it)
     {
         if (it->first == "node")
         {
+            node.key = "";
+            node.value = "";
+            node.key_val.resize (0);
             node = traverseNode (it->second, node);
             if (nodeIDs.find (node.id) == nodeIDs.end ())
             {
@@ -114,8 +118,6 @@ void XmlNodes::traverseNodes (const boost::property_tree::ptree& pt)
 
 Node XmlNodes::traverseNode (const boost::property_tree::ptree& pt, Node node)
 {
-    // Only coordinates of nodes are read, because only those are stored in the
-    // unordered map. More node info is unlikely to be necessary ... ?
     for (boost::property_tree::ptree::const_iterator it = pt.begin ();
             it != pt.end (); ++it)
     {
@@ -126,10 +128,15 @@ Node XmlNodes::traverseNode (const boost::property_tree::ptree& pt, Node node)
         else if (it->first == "lon")
             node.lon = it->second.get_value <float> ();
         else if (it->first == "k")
-            node.key.push_back (it->second.get_value <std::string> ());
+            node.key = it->second.get_value <std::string> ();
         else if (it->first == "v")
-            node.value.push_back (it->second.get_value <std::string> ());
-        // No other key-value pairs currently extracted for nodes
+        {
+            node.value = it->second.get_value <std::string> ();
+            node.key_val.push_back (std::make_pair (node.key, node.value));
+            node.key = "";
+            node.value = "";
+        }
+
         node = traverseNode (it->second, node);
     }
 
