@@ -1,6 +1,7 @@
 #include <string>
 #include <fstream> // ifstream
 #include <iostream>
+#include <unordered_set>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/unordered_map.hpp>
@@ -22,7 +23,6 @@ std::size_t hash_value(const ffPair &f)
 struct Node
 {
     long long id;
-    std::vector <std::string> key, value;
     float lat, lon;
 };
 
@@ -62,7 +62,6 @@ typedef std::vector <Node> Nodes;
 class Xml 
 {
     private:
-        bool _node_keyvals;
         std::string _tempstr;
     protected:
     public:
@@ -74,8 +73,8 @@ class Xml
         // SpatialPointsDataFrame, while "nodes" is the unordered set used to
         // quickly extract lon-lats from nodal IDs.
 
-    Xml (std::string str, bool nkv)
-        : _tempstr (str), _node_keyvals (nkv)
+    Xml (std::string str)
+        : _tempstr (str)
     {
         ways.resize (0);
         nodelist.resize (0);
@@ -91,10 +90,9 @@ class Xml
     }
 
     void parseXML ( std::string & is );
-    void traverseXML (const boost::property_tree::ptree& pt);
+    void traverseWays (const boost::property_tree::ptree& pt);
     RawWay traverseWay (const boost::property_tree::ptree& pt, RawWay rway);
     Node traverseNode (const boost::property_tree::ptree& pt, Node node);
-    Node traverseNode_keyval (const boost::property_tree::ptree& pt, Node node);
 }; // end Class::Xml
 
 
@@ -114,19 +112,19 @@ void Xml::parseXML ( std::string & is )
     std::stringstream istream (is, std::stringstream::in);
     read_xml (istream, pt);
 
-    traverseXML (pt);
+    traverseWays (pt);
 }
 
 
 /************************************************************************
  ************************************************************************
  **                                                                    **
- **                        FUNCTION::TRAVERSEXML                       **
+ **                        FUNCTION::TRAVERSEWAYS                      **
  **                                                                    **
  ************************************************************************
  ************************************************************************/
 
-void Xml::traverseXML (const boost::property_tree::ptree& pt)
+void Xml::traverseWays (const boost::property_tree::ptree& pt)
 {
     RawWay rway;
     Way way;
@@ -138,15 +136,10 @@ void Xml::traverseXML (const boost::property_tree::ptree& pt)
     {
         if (it->first == "node")
         {
-            if (_node_keyvals)
-            {
-                node = traverseNode_keyval (it->second, node);
-                nodelist.push_back (node);
-            } else
-                node = traverseNode (it->second, node);
+            node = traverseNode (it->second, node);
             nodes [node.id] = std::make_pair (node.lon, node.lat);
         }
-        if (it->first == "way")
+        else if (it->first == "way")
         {
             rway.key.resize (0);
             rway.value.resize (0);
@@ -180,12 +173,12 @@ void Xml::traverseXML (const boost::property_tree::ptree& pt)
                 way.nodes.push_back (*it);
             ways.push_back (way);
         } else
-            traverseXML (it->second);
+            traverseWays (it->second);
     }
     rway.key.resize (0);
     rway.value.resize (0);
     rway.nodes.resize (0);
-} // end function Xml::traverseXML
+} // end function Xml::traverseWays
 
 /************************************************************************
  ************************************************************************
@@ -236,39 +229,6 @@ Node Xml::traverseNode (const boost::property_tree::ptree& pt, Node node)
             node.lat = it->second.get_value <float> ();
         else if (it->first == "lon")
             node.lon = it->second.get_value <float> ();
-        // No other key-value pairs currently extracted for nodes
-        node = traverseNode (it->second, node);
-    }
-
-    return node;
-} // end function Xml::traverseNode
-
-
-/************************************************************************
- ************************************************************************
- **                                                                    **
- **                   FUNCTION::TRAVERSENODE_KEYVAL                    **
- **                                                                    **
- ************************************************************************
- ************************************************************************/
-
-Node Xml::traverseNode_keyval (const boost::property_tree::ptree& pt, Node node)
-{
-    // Only coordinates of nodes are read, because only those are stored in the
-    // unordered map. More node info is unlikely to be necessary ... ?
-    for (boost::property_tree::ptree::const_iterator it = pt.begin ();
-            it != pt.end (); ++it)
-    {
-        if (it->first == "id")
-            node.id = it->second.get_value <long long> ();
-        else if (it->first == "lat")
-            node.lat = it->second.get_value <float> ();
-        else if (it->first == "lon")
-            node.lon = it->second.get_value <float> ();
-        else if (it->first == "k")
-            node.key.push_back (it->second.get_value <std::string> ());
-        else if (it->first == "v")
-            node.value.push_back (it->second.get_value <std::string> ());
         // No other key-value pairs currently extracted for nodes
         node = traverseNode (it->second, node);
     }

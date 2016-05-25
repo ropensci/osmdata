@@ -10,12 +10,19 @@
 #' the given bounding box.
 #' @export
 
-get_ways <- function (bbox=NULL)
+get_ways <- function (bbox, key)
 {
+    if (missing (bbox))
+        stop ("bbox must be provided")
+
     bbox <- paste0 ('(', bbox [2,1], ',', bbox [1,1], ',',
                     bbox [2,2], ',', bbox [1,2], ')')
 
-    key <- "['highway']"
+    if (missing (key))
+        key <- ''
+    else
+        key <- paste0 ("['", key, "']")
+    
     query <- paste0 ('(node', key, bbox,
                     ';way', key, bbox,
                     ';rel', key, bbox, ';')

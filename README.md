@@ -23,12 +23,10 @@ Install
 -------
 
 ``` r
-Sys.setenv ('PKG_CXXFLAGS'='-std=c++11')
 setwd ("..")
 #devtools::document ("osmdatar")
 devtools::load_all ("osmdatar")
 setwd ("./osmdatar")
-Sys.unsetenv ('PKG_CXXFLAGS')
 ```
 
 Note that `devtools::document` overwrites `NAMESPACE` yet fails to insert the necessary line, `useDynLib(osmdatar)`. This must be manually reinserted for the package to load properly!
