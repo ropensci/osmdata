@@ -152,6 +152,7 @@ void XmlWays::traverseWays (const boost::property_tree::ptree& pt)
             way.id = rway.id;
             way.name = way.type = "";
             way.key_val.resize (0);
+            way.nodes.resize (0);
             way.oneway = false;
             // TODO: oneway also exists in pairs:
             // k='oneway' v='yes'
@@ -167,7 +168,6 @@ void XmlWays::traverseWays (const boost::property_tree::ptree& pt)
                     way.key_val.push_back (std::make_pair (rway.key [i], rway.value [i]));
 
             // Then copy nodes from rway to way. 
-            way.nodes.resize (0);
             for (std::vector <long long>::iterator it = rway.nodes.begin ();
                     it != rway.nodes.end (); it++)
                 way.nodes.push_back (*it);
@@ -178,6 +178,8 @@ void XmlWays::traverseWays (const boost::property_tree::ptree& pt)
     rway.key.resize (0);
     rway.value.resize (0);
     rway.nodes.resize (0);
+    way.nodes.resize (0);
+    way.key_val.resize (0);
 } // end function XmlWays::traverseWays
 
 /************************************************************************

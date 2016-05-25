@@ -105,6 +105,7 @@ void XmlNodes::traverseNodes (const boost::property_tree::ptree& pt)
             traverseNodes (it->second);
     }
     nodeIDs.clear ();
+    node.key_val.resize (0);
 } // end function XmlNodes::traverseNodes
 
 
@@ -131,6 +132,8 @@ Node XmlNodes::traverseNode (const boost::property_tree::ptree& pt, Node node)
             node.key = it->second.get_value <std::string> ();
         else if (it->first == "v")
         {
+            // Note that values sometimes exist without keys, but the following
+            // still inserts the pair because values **always** come after keys.
             node.value = it->second.get_value <std::string> ();
             node.key_val.push_back (std::make_pair (node.key, node.value));
             node.key = "";
