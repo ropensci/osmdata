@@ -1,0 +1,5 @@
+^\.travis\.yml$
+makefile$
+\.md$
+^README\.Rmd$
+^README\.html$

@@ -13,14 +13,10 @@ SystemRequirements: C++11
 NeedsCompilation: yes
 LazyData: true
 Imports:
-    dplyr,
     httr,
-    osmar,
     Rcpp (>= 0.12.4),
     sp,
-    tidyr,
-    XML,
-    xml2
+    XML
 Suggests:
     testthat
 LinkingTo: Rcpp

@@ -31,7 +31,13 @@ Rcpp::NumericMatrix rcpp_get_bbox2 (float xmin, float xmax, float ymin, float ym
     return bbox;
 };
 
-
+//' rcpp_get_nodes
+//'
+//' Extracts all nodes from an overpass API query
+//'
+//' @param st Text contents of an overpass API query
+//' @return A SpatialPointsDataFrame contains all nodes and associated data
+//' @export
 // [[Rcpp::export]]
 Rcpp::S4 rcpp_get_nodes (std::string st)
 {

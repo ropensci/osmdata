@@ -28,6 +28,13 @@ Rcpp::NumericMatrix rcpp_get_bbox (float xmin, float xmax, float ymin, float yma
     return bbox;
 };
 
+//' rcpp_get_ways
+//'
+//' Extracts all nodes from an overpass API query
+//'
+//' @param st Text contents of an overpass API query
+//' @return A SpatialLinesDataFrame contains all ways and associated data
+//' @export
 // [[Rcpp::export]]
 Rcpp::S4 rcpp_get_ways (std::string st)
 {
