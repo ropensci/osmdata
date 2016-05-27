@@ -12,12 +12,14 @@
 #' in order to extract particular 'key'-'value' combinations
 #' @param raw_data If TRUE, 'get_ways' returns unprocessed data as directly
 #' returned from the overpass API query.
+#' @param verbose If TRUE, provides notification of progress
 #'
 #' @return A 'SpatialPointsDataFrame' object containing all the nodes within
 #' the given bounding box.
 #' @export
 
-get_nodes <- function (bbox, key, url_download, raw_data=FALSE)
+get_nodes <- function (bbox, key, url_download, raw_data=FALSE,
+                       verbose=FALSE)
 {
     if (missing (url_download))
     {
@@ -38,13 +40,20 @@ get_nodes <- function (bbox, key, url_download, raw_data=FALSE)
         url_base <- 'http://overpass-api.de/api/interpreter?data='
         query <- paste0 (url_base, query, ');(._;>;);out;')
 
+        if (verbose) cat ("Downloading data ...")
         dat <- httr::GET (query)
         if (dat$status_code != 200)
             warning (httr::http_status (dat)$message)
         # Encoding must be supplied to suppress warning
         result <- httr::content (dat, "text", encoding='UTF-8')
-    }
+        if (verbose) cat (" done\n")
+    } else
+        result <- url_download 
     if (!raw_data)
-        result <- rcpp_get_nodes (url_download)
+    {
+        if (verbose) cat ("Processing data ...")
+        result <- rcpp_get_nodes (result)
+        if (verbose) cat (" done\n")
+    }
     return (result)
 }

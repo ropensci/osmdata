@@ -4,7 +4,7 @@
 \alias{get_ways}
 \title{get_ways}
 \usage{
-get_ways(bbox, key, url_download, raw_data = FALSE)
+get_ways(bbox, key, url_download, raw_data = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{bbox}{the bounding box within which ways should be downloaded.  A
@@ -20,6 +20,8 @@ in order to extract particular 'key'-'value' combinations}
 
 \item{raw_data}{If TRUE, 'get_ways' returns unprocessed data as directly
 returned from the overpass API query.}
+
+\item{verbose}{If TRUE, provides notification of progress}
 }
 \value{
 A 'SpatialLinesDataFrame' object containing all the ways within

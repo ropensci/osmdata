@@ -4,7 +4,7 @@
 \alias{get_nodes}
 \title{get_nodes}
 \usage{
-get_nodes(bbox, key, url_download, raw_data = FALSE)
+get_nodes(bbox, key, url_download, raw_data = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{bbox}{the bounding box within which ways should be downloaded.  A
@@ -20,6 +20,8 @@ in order to extract particular 'key'-'value' combinations}
 
 \item{raw_data}{If TRUE, 'get_ways' returns unprocessed data as directly
 returned from the overpass API query.}
+
+\item{verbose}{If TRUE, provides notification of progress}
 }
 \value{
 A 'SpatialPointsDataFrame' object containing all the nodes within
