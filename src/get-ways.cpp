@@ -30,7 +30,7 @@ Rcpp::NumericMatrix rcpp_get_bbox (float xmin, float xmax, float ymin, float yma
 
 //' rcpp_get_ways
 //'
-//' Extracts all nodes from an overpass API query
+//' Extracts all ways from an overpass API query
 //'
 //' @param st Text contents of an overpass API query
 //' @return A SpatialLinesDataFrame contains all ways and associated data
@@ -158,6 +158,12 @@ Rcpp::S4 rcpp_get_ways (std::string st)
         while (dimnames.size () > 0)
             dimnames.erase (0);
 
+        // sp::Line and sp::Lines objects can be constructed directly from the
+        // data with the following two lines, but this is *enormously* slower:
+        //Rcpp::S4 line = Rcpp::Language ("Line", nmat).eval ();
+        //Rcpp::S4 lines = Rcpp::Language ("Lines", line, id).eval ();
+        // This way of constructing "new" objects and feeding slots is much
+        // faster:
         line = line_call.eval ();
         line.slot ("coords") = nmat;
         dummy_list.push_back (line);
