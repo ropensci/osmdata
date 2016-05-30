@@ -19,8 +19,8 @@ rcpp_get_nodes <- function(st) {
 #' @param st Text contents of an overpass API query
 #' @return A SpatialLinesDataFrame contains all polygons and associated data
 #' @export
-rcpp_get_polys <- function(st) {
-    .Call('osmdatar_rcpp_get_polys', PACKAGE = 'osmdatar', st)
+rcpp_get_polygons <- function(st) {
+    .Call('osmdatar_rcpp_get_polygons', PACKAGE = 'osmdatar', st)
 }
 
 #' rcpp_get_ways

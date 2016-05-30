@@ -13,6 +13,6 @@ rcpp_get_ways(st)
 A SpatialLinesDataFrame contains all ways and associated data
 }
 \description{
-Extracts all nodes from an overpass API query
+Extracts all ways from an overpass API query
 }
 

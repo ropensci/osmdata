@@ -16,14 +16,14 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// rcpp_get_polys
-Rcpp::S4 rcpp_get_polys(std::string st);
-RcppExport SEXP osmdatar_rcpp_get_polys(SEXP stSEXP) {
+// rcpp_get_polygons
+Rcpp::S4 rcpp_get_polygons(std::string st);
+RcppExport SEXP osmdatar_rcpp_get_polygons(SEXP stSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< std::string >::type st(stSEXP);
-    __result = Rcpp::wrap(rcpp_get_polys(st));
+    __result = Rcpp::wrap(rcpp_get_polygons(st));
     return __result;
 END_RCPP
 }
