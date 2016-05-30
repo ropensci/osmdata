@@ -3,3 +3,4 @@ makefile$
 \.md$
 ^README\.Rmd$
 ^README\.html$
+figure/
