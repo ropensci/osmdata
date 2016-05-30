@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{rcpp_get_polygons}
 \alias{rcpp_get_polygons}
-\title{rcpp_get_polys}
+\title{rcpp_get_polygons}
 \usage{
 rcpp_get_polygons(st)
 }

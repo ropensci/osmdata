@@ -52,7 +52,7 @@ get_polygons <- function (bbox, key, url_download, raw_data=FALSE,
     if (!raw_data)
     {
         if (verbose) cat ("Processing data ...")
-        result <- rcpp_get_polys (result)
+        result <- rcpp_get_polygons (result)
         if (verbose) cat (" done\n")
     }
     return (result)

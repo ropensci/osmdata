@@ -28,7 +28,7 @@ Rcpp::NumericMatrix rcpp_get_bbox3 (float xmin, float xmax, float ymin, float ym
     return bbox;
 };
 
-//' rcpp_get_polys
+//' rcpp_get_polygons
 //'
 //' Extracts all polygons from an overpass API query
 //'

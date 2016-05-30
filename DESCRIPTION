@@ -8,7 +8,7 @@ Title: Download OpenStreetMap Data with the overpass API
 Description: Download OpenStreetMap Data with the overpass API
 Depends:
     R (>= 3.2.4)
-License: MIT
+License: GPL-3
 SystemRequirements: C++11
 NeedsCompilation: yes
 LazyData: true
@@ -20,5 +20,5 @@ Imports:
 Suggests:
     testthat
 LinkingTo: Rcpp
-Date: 2016-05-24
+Date: 2016-05-30
 RoxygenNote: 5.0.1

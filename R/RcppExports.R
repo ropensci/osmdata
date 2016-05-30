@@ -12,7 +12,7 @@ rcpp_get_nodes <- function(st) {
     .Call('osmdatar_rcpp_get_nodes', PACKAGE = 'osmdatar', st)
 }
 
-#' rcpp_get_polys
+#' rcpp_get_polygons
 #'
 #' Extracts all polygons from an overpass API query
 #'
