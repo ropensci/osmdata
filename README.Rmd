@@ -2,9 +2,9 @@
 
 ![](./figure/map.png)
 
-# osmdatar
-
 R package for downloading OSM data. 
+
+------------
 
 
 ## Speed comparisons
