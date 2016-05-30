@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/osmdatar/osmdatar.svg?branch=master)](https://travis-ci.org/osmdatar/osmdatar)
+
+![](./figure/map.png)
+
 # osmdatar
 
 R package for downloading OSM data. 
