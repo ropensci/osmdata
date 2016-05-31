@@ -75,6 +75,8 @@ Rcpp::S4 rcpp_get_polygons (std::string st)
 
     Rcpp::Environment sp_env = Rcpp::Environment::namespace_env ("sp");
     Rcpp::Function Polygon = sp_env ["Polygon"];
+    Rcpp::Language polygons_call ("new", "Polygons");
+    Rcpp::S4 polygons;
 
     for (Polys_Itr wi = xml.polys.begin(); wi != xml.polys.end(); ++wi)
     {
@@ -158,7 +160,13 @@ Rcpp::S4 rcpp_get_polygons (std::string st)
 
             //Rcpp::S4 poly = Rcpp::Language ("Polygon", nmat).eval ();
             Rcpp::S4 poly = Polygon (nmat);
-            polyList [count++] = poly;
+            dummy_list.push_back (poly);
+            polygons = polygons_call.eval ();
+            polygons.slot ("Polygons") = dummy_list;
+            polygons.slot ("ID") = std::to_string ((*wi).id);
+            polyList [count++] = polygons;
+        
+            dummy_list.erase (0);
         }
     }
     polyList.attr ("names") = polynames;
