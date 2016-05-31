@@ -3,8 +3,6 @@
 #include <unordered_set>
 #include <Rcpp.h>
 
-using namespace Rcpp;
-
 const float FLOAT_MAX = std::numeric_limits<float>::max ();
 
 //' rcpp_get_nodes
@@ -27,7 +25,7 @@ Rcpp::S4 rcpp_get_nodes (std::string st)
     std::vector <float> lons, lats;
     std::vector <std::string> colnames, rownames, varnames;
     Rcpp::List dimnames (0);
-    Rcpp::NumericMatrix nmat (Dimension (0, 0));
+    Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
 
     colnames.push_back ("lon");
     colnames.push_back ("lat");
@@ -79,7 +77,7 @@ Rcpp::S4 rcpp_get_nodes (std::string st)
         }
     }
 
-    nmat = Rcpp::NumericMatrix (Dimension (lons.size (), 2));
+    nmat = Rcpp::NumericMatrix (Rcpp::Dimension (lons.size (), 2));
     std::copy (lons.begin (), lons.end (), nmat.begin ());
     std::copy (lats.begin (), lats.end (), nmat.begin () + lons.size ());
     dimnames.push_back (rownames);

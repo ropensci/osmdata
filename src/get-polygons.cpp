@@ -5,8 +5,6 @@
 
 // [[Rcpp::depends(sp)]]
 
-using namespace Rcpp;
-
 const float FLOAT_MAX = std::numeric_limits<float>::max ();
 
 //' rcpp_get_polygons
@@ -31,7 +29,7 @@ Rcpp::S4 rcpp_get_polygons (std::string st)
     std::unordered_set <std::string> idset; // see TODO below
     std::vector <std::string> colnames, rownames, polynames, varnames;
     Rcpp::List dimnames (0), dummy_list (0), polyList (xml.polys.size ());
-    Rcpp::NumericMatrix nmat (Dimension (0, 0));
+    Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
 
     // TODO: delete umapitr
     umapPair_Itr umapitr;
@@ -126,7 +124,7 @@ Rcpp::S4 rcpp_get_polygons (std::string st)
                     ymax = lat;
             }
 
-            nmat = NumericMatrix (Dimension (lons.size (), 2));
+            nmat = Rcpp::NumericMatrix (Rcpp::Dimension (lons.size (), 2));
             std::copy (lons.begin (), lons.end (), nmat.begin ());
             std::copy (lats.begin (), lats.end (), nmat.begin () + lons.size ());
 
