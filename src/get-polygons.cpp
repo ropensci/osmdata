@@ -1,4 +1,5 @@
 #include "get-polygons.h"
+#include "get-bbox.h"
 #include <unordered_set>
 #include <Rcpp.h>
 
@@ -7,28 +8,6 @@
 using namespace Rcpp;
 
 const float FLOAT_MAX = std::numeric_limits<float>::max ();
-
-Rcpp::NumericMatrix rcpp_get_bbox3 (float xmin, float xmax, float ymin, float ymax)
-{
-    std::vector <std::string> colnames, rownames;
-    colnames.push_back ("min");
-    colnames.push_back ("max");
-    rownames.push_back ("x");
-    rownames.push_back ("y");
-    List dimnames (2);
-    dimnames (0) = rownames;
-    dimnames (1) = colnames;
-
-    NumericMatrix bbox (Dimension (2, 2));
-    bbox (0, 0) = xmin;
-    bbox (0, 1) = xmax;
-    bbox (1, 0) = ymin;
-    bbox (1, 1) = ymax;
-
-    bbox.attr ("dimnames") = dimnames;
-
-    return bbox;
-};
 
 //' rcpp_get_polygons
 //'
@@ -201,7 +180,7 @@ Rcpp::S4 rcpp_get_polygons (std::string st)
     Rcpp::S4 sp_polys = sp_polys_call.eval ();
     sp_polys.slot ("polygons") = polyList;
 
-    sp_polys.slot ("bbox") = rcpp_get_bbox3 (xmin, xmax, ymin, ymax);
+    sp_polys.slot ("bbox") = rcpp_get_bbox (xmin, xmax, ymin, ymax);
 
     Rcpp::Language crs_call ("new", "CRS");
     Rcpp::S4 crs = crs_call.eval ();
