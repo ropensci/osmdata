@@ -73,9 +73,8 @@ Rcpp::S4 rcpp_get_polygons (std::string st)
      */
     std::vector <std::pair <std::string, std::string> >::iterator kv_iter;
 
-    //Rcpp::Environment spenv = Rcpp::Environment ("package:sp");
-    //Rcpp::Function Polygon = "package:sp" ["Polygon"];
-    //Rcpp::Function Polygon ("Polygon");
+    Rcpp::Environment sp_env = Rcpp::Environment::namespace_env ("sp");
+    Rcpp::Function Polygon = sp_env ["Polygon"];
 
     for (Polys_Itr wi = xml.polys.begin(); wi != xml.polys.end(); ++wi)
     {
@@ -157,8 +156,8 @@ Rcpp::S4 rcpp_get_polygons (std::string st)
             while (dimnames.size () > 0)
                 dimnames.erase (0);
 
-            Rcpp::S4 poly = Rcpp::Language ("Polygon", nmat).eval ();
-            //Rcpp::S4 poly = Polygon (nmat);
+            //Rcpp::S4 poly = Rcpp::Language ("Polygon", nmat).eval ();
+            Rcpp::S4 poly = Polygon (nmat);
             polyList [count++] = poly;
         }
     }
