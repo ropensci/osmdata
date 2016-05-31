@@ -164,7 +164,7 @@ void XmlPolys::traversePolys (const boost::property_tree::ptree& pt)
             // a cycle
             long long junk = *rpoly.nodes.begin ();
             if (rpoly.nodes.size () > 0 && 
-                    (*rpoly.nodes.begin () == *rpoly.nodes.end ()))
+                    (rpoly.nodes.front () == rpoly.nodes.back ()))
             {
                 for (std::vector <long long>::iterator it = rpoly.nodes.begin ();
                         it != rpoly.nodes.end (); it++)

@@ -2,6 +2,8 @@
 #include <unordered_set>
 #include <Rcpp.h>
 
+// [[Rcpp::depends(sp)]]
+
 using namespace Rcpp;
 
 const float FLOAT_MAX = std::numeric_limits<float>::max ();
@@ -71,12 +73,16 @@ Rcpp::S4 rcpp_get_polygons (std::string st)
      */
     std::vector <std::pair <std::string, std::string> >::iterator kv_iter;
 
+    //Rcpp::Environment spenv = Rcpp::Environment ("package:sp");
+    //Rcpp::Function Polygon = "package:sp" ["Polygon"];
+    //Rcpp::Function Polygon ("Polygon");
+
     for (Polys_Itr wi = xml.polys.begin(); wi != xml.polys.end(); ++wi)
     {
         // Only proceed if start and end points are the same, otherwise it's
         // just a normal way
         if ((*wi).nodes.size () > 0 && 
-                (*(*wi).nodes.begin () == *(*wi).nodes.end ()))
+                ((*wi).nodes.front () == (*wi).nodes.back ()))
         {
             // Collect all unique keys
             for (kv_iter = (*wi).key_val.begin (); 
@@ -152,6 +158,7 @@ Rcpp::S4 rcpp_get_polygons (std::string st)
                 dimnames.erase (0);
 
             Rcpp::S4 poly = Rcpp::Language ("Polygon", nmat).eval ();
+            //Rcpp::S4 poly = Polygon (nmat);
             polyList [count++] = poly;
         }
     }
@@ -163,7 +170,7 @@ Rcpp::S4 rcpp_get_polygons (std::string st)
     for (Polys_Itr wi = xml.polys.begin(); wi != xml.polys.end(); ++wi)
     {
         if ((*wi).nodes.size () > 0 && 
-                ((*wi).nodes.begin () == (*wi).nodes.end ()))
+                ((*wi).nodes.front () == (*wi).nodes.back ()))
         {
             auto it = std::find (varnames.begin (), varnames.end (), "name");
             coli = it - varnames.begin (); 
