@@ -5,7 +5,9 @@ Authors@R: c(
     person("Robin", "Lovelace", email="rob00x@gmail.com", role="aut"), 
     person("Richard", "Ellison", role="aut"))
 Title: Download OpenStreetMap Data with the overpass API
-Description: Download OpenStreetMap Data with the overpass API
+Description: Very fast download of OpenStreetMap (OSM) data into 'sp' objects.
+    OSM data are extracted from the overpass API and processed with very fast
+    C++ routines for return to R.
 Depends:
     R (>= 3.2.4)
 License: GPL-3

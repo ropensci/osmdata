@@ -48,7 +48,11 @@ get_nodes <- function (bbox, key, url_download, raw_data=FALSE,
         result <- httr::content (dat, "text", encoding='UTF-8')
         if (verbose) cat (" done\n")
     } else
+    {
+        if (!is.character (url_download))
+            stop ("url_download must be character class")
         result <- url_download 
+    }
     if (!raw_data)
     {
         if (verbose) cat ("Processing data ...")
