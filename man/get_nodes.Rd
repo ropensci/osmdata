@@ -12,19 +12,19 @@ get_nodes(bbox, key, url_download, raw_data = FALSE, verbose = FALSE)
 and y values.}
 
 \item{key}{The OpenStreetMap key to be passed to the overpass API query, or
-to be extracted from pre-downloaded data passed as 'url_download`}
+to be extracted from pre-downloaded data passed as \code{url_download}}
 
 \item{url_download}{Data as directly downloaded from the overpass API and
-returned with 'raw_data=TRUE'. This may be subsequently passed to 'get_ways'
-in order to extract particular 'key'-'value' combinations}
+returned with \code{raw_data=TRUE}. This may be subsequently passed to
+\code{get_ways} in order to extract particular \code{key-value} combinations}
 
-\item{raw_data}{If TRUE, 'get_ways' returns unprocessed data as directly
+\item{raw_data}{If TRUE, \code{get_ways} returns unprocessed data as directly
 returned from the overpass API query.}
 
 \item{verbose}{If TRUE, provides notification of progress}
 }
 \value{
-A 'SpatialPointsDataFrame' object containing all the nodes within
+A \code{SpatialPointsDataFrame} object containing all the nodes within
 the given bounding box.
 }
 \description{

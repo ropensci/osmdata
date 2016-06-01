@@ -10,7 +10,7 @@ const float FLOAT_MAX = std::numeric_limits<float>::max ();
 //' Extracts all nodes from an overpass API query
 //'
 //' @param st Text contents of an overpass API query
-//' @return A SpatialPointsDataFrame contains all nodes and associated data
+//' @return A \code{SpatialPointsDataFrame} contains all nodes and associated data
 //' @export
 // [[Rcpp::export]]
 Rcpp::S4 rcpp_get_nodes (std::string st)

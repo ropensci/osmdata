@@ -10,7 +10,7 @@ rcpp_get_ways(st)
 \item{st}{Text contents of an overpass API query}
 }
 \value{
-A SpatialLinesDataFrame contains all ways and associated data
+A \code{SpatialLinesDataFrame} contains all ways and associated data
 }
 \description{
 Extracts all ways from an overpass API query

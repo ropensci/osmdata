@@ -6,15 +6,15 @@
 #' 2-by-2 matrix of 4 elements with columns of min and max values, and rows of x
 #' and y values.
 #' @param key The OpenStreetMap key to be passed to the overpass API query, or
-#' to be extracted from pre-downloaded data passed as 'url_download`
+#' to be extracted from pre-downloaded data passed as \code{url_download}
 #' @param url_download Data as directly downloaded from the overpass API and
-#' returned with 'raw_data=TRUE'. This may be subsequently passed to 'get_ways'
-#' in order to extract particular 'key'-'value' combinations
-#' @param raw_data If TRUE, 'get_ways' returns unprocessed data as directly
+#' returned with \code{raw_data=TRUE}. This may be subsequently passed to
+#' \code{get_ways} in order to extract particular \code{key-value} combinations
+#' @param raw_data If TRUE, \code{get_ways} returns unprocessed data as directly
 #' returned from the overpass API query.
 #' @param verbose If TRUE, provides notification of progress
 #'
-#' @return A 'SpatialLinesDataFrame' object containing all the ways within
+#' @return A \code{SpatialLinesDataFrame} object containing all the ways within
 #' the given bounding box.
 #' @export
 

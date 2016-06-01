@@ -6,7 +6,7 @@
 #' Extracts all nodes from an overpass API query
 #'
 #' @param st Text contents of an overpass API query
-#' @return A SpatialPointsDataFrame contains all nodes and associated data
+#' @return A \code{SpatialPointsDataFrame} contains all nodes and associated data
 #' @export
 rcpp_get_nodes <- function(st) {
     .Call('osmdatar_rcpp_get_nodes', PACKAGE = 'osmdatar', st)
@@ -17,7 +17,7 @@ rcpp_get_nodes <- function(st) {
 #' Extracts all polygons from an overpass API query
 #'
 #' @param st Text contents of an overpass API query
-#' @return A SpatialLinesDataFrame contains all polygons and associated data
+#' @return A \code{SpatialLinesDataFrame} contains all polygons and associated data
 #' @export
 rcpp_get_polygons <- function(st) {
     .Call('osmdatar_rcpp_get_polygons', PACKAGE = 'osmdatar', st)
@@ -28,7 +28,7 @@ rcpp_get_polygons <- function(st) {
 #' Extracts all ways from an overpass API query
 #'
 #' @param st Text contents of an overpass API query
-#' @return A SpatialLinesDataFrame contains all ways and associated data
+#' @return A \code{SpatialLinesDataFrame} contains all ways and associated data
 #' @export
 rcpp_get_ways <- function(st) {
     .Call('osmdatar_rcpp_get_ways', PACKAGE = 'osmdatar', st)

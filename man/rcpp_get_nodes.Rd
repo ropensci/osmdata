@@ -10,7 +10,7 @@ rcpp_get_nodes(st)
 \item{st}{Text contents of an overpass API query}
 }
 \value{
-A SpatialPointsDataFrame contains all nodes and associated data
+A \code{SpatialPointsDataFrame} contains all nodes and associated data
 }
 \description{
 Extracts all nodes from an overpass API query

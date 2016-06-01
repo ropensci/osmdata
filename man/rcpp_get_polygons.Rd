@@ -10,7 +10,7 @@ rcpp_get_polygons(st)
 \item{st}{Text contents of an overpass API query}
 }
 \value{
-A SpatialLinesDataFrame contains all polygons and associated data
+A \code{SpatialLinesDataFrame} contains all polygons and associated data
 }
 \description{
 Extracts all polygons from an overpass API query
