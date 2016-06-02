@@ -20,6 +20,8 @@ Speed comparisons can be examined in the branch `speed-comparisons`, with the ma
 
 Processing everything, including the construction of the `sp` S4 objects, within `Rcpp` routines is obviously enourmously faster (&gt;20 times). `osmdatar` downloads OSM data within `R` using `httr`, then passes the raw character file result to `Rcpp` routines which parse the XML structure and convert the results to S4 `sp` objects prior to return to `R`.
 
+(See this [gist](https://gist.github.com/mpadge/c046031989e5eb7d8d8ec49a3a3136ae) for further exploration of the fastest way to construct `sp` objects in `C++`.)
+
 The package currently downloads and converts points, lines, and polygons, with the three respective functions:
 
 1.  `get_nodes`
