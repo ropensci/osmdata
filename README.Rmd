@@ -2,7 +2,7 @@
 
 ![](./figure/map.png)
 
-R package for downloading OSM data and converting to `sp` objects *really quickly*
+R package for downloading OSM data and converting to `sp` objects *really quickly*!
 
 ------------
 
@@ -28,7 +28,7 @@ to S4 `sp` objects prior to return to `R`.
 
 (See this 
 [gist](https://gist.github.com/mpadge/c046031989e5eb7d8d8ec49a3a3136ae) for
-further exploration of the fastest way to construct `sp` objects in `C++`.)
+further exploration of ways to speed up construction of `sp` objects in `C++`.)
 
 The package currently downloads and converts points, lines, and polygons, with
 the three respective functions:
