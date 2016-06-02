@@ -21,8 +21,13 @@ Rcpp (->`sp` in `R`)    |   0.25
 Rcpp (->`sp` in `Rcpp`)    |   0.08
 
 Processing everything, including the construction of the `sp` S4 objects, within
-`Rcpp` routines is obviously enourmously faster. The package currently downloads
-and converts points, lines, and polygons, with the three respective functions:
+`Rcpp` routines is obviously enourmously faster (>20 times). `osmdatar`
+downloads OSM data within `R` using `httr`, then passes the raw character file
+result to `Rcpp` routines which parse the XML structure and convert the results
+to S4 `sp` objects.
+
+The package currently downloads and converts points, lines, and polygons, with
+the three respective functions:
 
 1. `get_nodes`
 
@@ -121,9 +126,13 @@ tt <- 1.86
 cat ("Mean time to convert with osmar =", tt, "s\n")
 ```
 
+------
+
 ### `osmdatar`
 
-The `osmdatar` speed test:
+To enable different elements to be extracted from a single download, `osmdatar`
+allows raw data to first be downloaded prior to re-submission to the same
+function for subsequent parsing. The `osmdatar` speed test thus simply requires:
 ```{r, eval=FALSE}
 mb <- microbenchmark ( obj <- get_ways (url_download=dat_raw), times=100L )
 tt <- formatC (mean (mb$time) / 1e9, format="f", digits=2)
@@ -134,6 +143,3 @@ tt <- 0.08
 ```{r}
 cat ("Mean time to convert with osmdatar =", tt, "s\n")
 ```
-
-`osmdatar` is thus over 20 times faster than the internal `R` routines of
-`osmar`.
