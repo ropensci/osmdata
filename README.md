@@ -18,7 +18,7 @@ Speed comparisons can be examined in the branch `speed-comparisons`, with the ma
 | Rcpp (-&gt;`sp` in `R`)    | 0.25                 |
 | Rcpp (-&gt;`sp` in `Rcpp`) | 0.08                 |
 
-Processing everything, including the construction of the `sp` S4 objects, within `Rcpp` routines is obviously enourmously faster (&gt;20 times). `osmdatar` downloads OSM data within `R` using `httr`, then passes the raw character file result to `Rcpp` routines which parse the XML structure and convert the results to S4 `sp` objects.
+Processing everything, including the construction of the `sp` S4 objects, within `Rcpp` routines is obviously enourmously faster (&gt;20 times). `osmdatar` downloads OSM data within `R` using `httr`, then passes the raw character file result to `Rcpp` routines which parse the XML structure and convert the results to S4 `sp` objects prior to return to `R`.
 
 The package currently downloads and converts points, lines, and polygons, with the three respective functions:
 
@@ -44,14 +44,14 @@ devtools::install_github ('osmdatar/osmdatar')
 Running Speed Tests
 -------------------
 
-The speed of `osmdatar` can be compared with `osmplotr`, which uses `osmar` to download and process OSM data. The data can be downloaded with `osmdatar` with this code:
+The speed of `osmdatar` can be compared with `osmplotr`, which uses `osmar` to download and process OSM data. Raw data as returned directly from the [overpass API](https://overpass-api.de). can be downloaded with `osmdatar` with this code:
 
 ``` r
 bbox <- matrix (c (-0.12, 51.51, -0.11, 51.52), nrow=2, ncol=2) 
 dat_raw <- get_ways (bbox=bbox, raw_data=TRUE, key='highway')
 ```
 
-This returns a character string representing the (non-parsed) XML data returned directly from the [overpass API](https://overpass-api.de).
+This returns a character string representing the (non-parsed) XML data.
 
 ------------------------------------------------------------------------
 
