@@ -46,7 +46,7 @@ devtools::install_github ('osmdatar/osmdatar')
 Running Speed Tests
 -------------------
 
-The speed of `osmdatar` can be compared with `osmplotr`, which uses `osmar` to download and process OSM data. Raw data as returned directly from the [overpass API](https://overpass-api.de). can be downloaded with `osmdatar` with this code:
+The speed of `osmdatar` can be compared with `osmplotr`, which uses `osmar` to download and process OSM data. Raw data are downloaded directly from the [overpass API](https://overpass-api.de) and can be downloaded with `osmdatar` with this code:
 
 ``` r
 bbox <- matrix (c (-0.12, 51.51, -0.11, 51.52), nrow=2, ncol=2) 
@@ -59,7 +59,7 @@ This returns a character string representing the (non-parsed) XML data.
 
 ### `osmplotr`
 
-`osmplotr` has a single function (`extract_osm_data`) that both downloads and processes OSM data. To time just the processing stage, the relevant code has to be re-created here (hard-coded for `key=highway`):
+`osmplotr` has a single function (`extract_osm_data`) that both downloads and processes OSM data. To time just the processing stage, the portion of the code in which the download is processed has to be re-created here (hard-coded for `key=highway`):
 
 ``` r
 library (osmplotr)
@@ -103,7 +103,7 @@ cat ("Mean time to convert with osmar =", tt, "s\n")
 
 ### `osmdatar`
 
-To enable different elements to be extracted from a single download, `osmdatar` allows raw data to first be downloaded prior to re-submission to the same function for subsequent parsing. The `osmdatar` speed test thus simply requires:
+`osmdatar` allows raw data to first be downloaded prior to re-submission to the same function for subsequent parsing. (This allows different elements to be extracted quickly and conveniently from a single download.) The `osmdatar` speed test thus simply requires:
 
 ``` r
 mb <- microbenchmark ( obj <- get_ways (url_download=dat_raw), times=100L )
