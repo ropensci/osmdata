@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/osmdatar/osmdatar.svg?branch=master)](https://travis-ci.org/osmdatar/osmdatar)
+[![Build Status](https://travis-ci.org/osmdatar/osmdatar.svg?branch=master)](https://travis-ci.org/osmdatar/osmdatar) [![codecov](https://codecov.io/gh/osmdatar/osmdatar/branch/master/graph/badge.svg)](https://codecov.io/gh/osmdatar/osmdatar)
 
 ![](./figure/map.png)
 
