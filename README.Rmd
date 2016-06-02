@@ -2,7 +2,7 @@
 
 ![](./figure/map.png)
 
-R package for downloading OSM data. 
+R package for downloading OSM data and converting to `sp` objects *really quickly*
 
 ------------
 
