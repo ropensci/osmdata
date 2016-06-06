@@ -30,7 +30,7 @@ The package currently downloads and converts points, lines, and polygons, with t
 
 3.  `get_polygons`
 
-The only remaining task is to implement the conversion of OSM `multipolygon` objects.
+The only remaining task is to implement the conversion of OSM `multipolygon` objects. These are currently read but not yet processed in `get_polygons`.
 
 ------------------------------------------------------------------------
 

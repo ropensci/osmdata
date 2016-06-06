@@ -1,0 +1,3 @@
+# for codecov, otherwise not necessary and may be deleted
+PKG_CXXFLAGS=-fprofile-arcs -ftest-coverage
+PKG_LIBS=-lgcov
