@@ -46,6 +46,22 @@ struct Poly
     std::vector <long long> nodes;
 };
 
+struct RawRelation
+{
+    long long id;
+    std::vector <std::string> key, value;
+    std::vector <long long> ways; 
+    std::vector <bool> outer;
+};
+
+struct Relation
+{
+    long long id;
+    std::vector <std::pair <std::string, std::string> > key_val;
+    std::vector <std::pair <long long, bool> > ways; // bool flags inner/outer
+};
+
+typedef std::vector <Relation> Relations;
 typedef std::vector <Poly> Polys;
 typedef std::vector <Poly>::iterator Polys_Itr;
 typedef std::vector <Node> Nodes;
@@ -91,6 +107,8 @@ class XmlPolys
 
     void parseXMLPolys ( std::string & is );
     void traversePolys (const boost::property_tree::ptree& pt);
+    RawRelation traverseRelation (const boost::property_tree::ptree& pt, 
+            RawRelation rrel);
     RawPoly traversePoly (const boost::property_tree::ptree& pt, RawPoly rpoly);
     Node traverseNode (const boost::property_tree::ptree& pt, Node node);
 }; // end Class::XmlPolys
@@ -126,7 +144,9 @@ void XmlPolys::parseXMLPolys ( std::string & is )
 
 void XmlPolys::traversePolys (const boost::property_tree::ptree& pt)
 {
+    RawRelation rrel;
     RawPoly rpoly;
+    Relation relation;
     Poly poly;
     Node node;
     // NOTE: Node is (lon, lat) = (x, y)!
@@ -157,7 +177,8 @@ void XmlPolys::traversePolys (const boost::property_tree::ptree& pt)
                 if (rpoly.key [i] == "name")
                     poly.name = rpoly.value [i];
                 else
-                    poly.key_val.push_back (std::make_pair (rpoly.key [i], rpoly.value [i]));
+                    poly.key_val.push_back (std::make_pair 
+                            (rpoly.key [i], rpoly.value [i]));
 
             // This is the only place at which get-polys really differs from
             // get-ways, in that rpoly is copied to poly only if the nodes form
@@ -171,6 +192,22 @@ void XmlPolys::traversePolys (const boost::property_tree::ptree& pt)
                     poly.nodes.push_back (*it);
                 polys.push_back (poly);
             }
+        } else if (it->first == "relation")
+        {
+            rrel.key.resize (0);
+            rrel.value.resize (0);
+            rrel.ways.resize (0);
+            rrel.outer.resize (0);
+
+            rrel = traverseRelation (it->second, rrel);
+            assert (rrel.key.size () == rrel.value.size ());
+
+            relation.id = rrel.id;
+            relation.key_val.resize (0);
+            relation.ways.resize (0);
+            for (int i=0; i<rrel.key.size (); i++)
+                relation.key_val.push_back (std::make_pair
+                        (rrel.key [i], rrel.value [i]));
         } else
             traversePolys (it->second);
     }
@@ -179,7 +216,53 @@ void XmlPolys::traversePolys (const boost::property_tree::ptree& pt)
     rpoly.nodes.resize (0);
     poly.nodes.resize (0);
     poly.key_val.resize (0);
+    rrel.key.resize (0);
+    rrel.value.resize (0);
+    rrel.ways.resize (0);
+    rrel.outer.resize (0);
+
 } // end function XmlPolys::traversePolys
+
+
+/************************************************************************
+ ************************************************************************
+ **                                                                    **
+ **                     FUNCTION::TRAVERSERELATION                     **
+ **                                                                    **
+ ************************************************************************
+ ************************************************************************/
+
+RawRelation XmlPolys::traverseRelation (const boost::property_tree::ptree& pt, 
+        RawRelation rrel)
+{
+    std::string outer;
+
+    for (boost::property_tree::ptree::const_iterator it = pt.begin ();
+            it != pt.end (); ++it)
+    {
+        if (it->first == "k")
+            rrel.key.push_back (it->second.get_value <std::string> ());
+        else if (it->first == "v")
+            rrel.value.push_back (it->second.get_value <std::string> ());
+        else if (it->first == "id")
+            rrel.id = it->second.get_value <long long> ();
+        else if (it->first == "ref")
+            rrel.ways.push_back (it->second.get_value <long long> ());
+        else if (it->first == "role")
+        {
+            outer = it->second.get_value <std::string> ();
+            if (outer == "outer")
+                rrel.outer.push_back (true);
+            else
+                rrel.outer.push_back (false);
+        }
+        rrel = traverseRelation (it->second, rrel);
+    }
+
+    return rrel;
+} // end function XmlPolys::traverseRelation
+
+
 
 /************************************************************************
  ************************************************************************
@@ -189,7 +272,8 @@ void XmlPolys::traversePolys (const boost::property_tree::ptree& pt)
  ************************************************************************
  ************************************************************************/
 
-RawPoly XmlPolys::traversePoly(const boost::property_tree::ptree& pt, RawPoly rpoly)
+RawPoly XmlPolys::traversePoly(const boost::property_tree::ptree& pt, 
+        RawPoly rpoly)
 {
     for (boost::property_tree::ptree::const_iterator it = pt.begin ();
             it != pt.end (); ++it)
