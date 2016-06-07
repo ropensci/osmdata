@@ -4,5 +4,5 @@ makefile$
 ^README\.Rmd$
 ^README\.html$
 ^figure/
-^src/*.gcno$
-^src/*.gcda$
+^src/*\.gcno$
+^src/*\.gcda$
