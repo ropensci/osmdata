@@ -12,9 +12,7 @@ Description: Very fast download of OpenStreetMap (OSM) data into 'sp' objects.
 Depends:
     R (>= 3.2.4)
 License: GPL-3
-SystemRequirements: 
-    C++11,
-    GNU make
+SystemRequirements: C++11
 NeedsCompilation: yes
 LazyData: true
 Imports:
