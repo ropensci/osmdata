@@ -1,7 +1,5 @@
 [![Build Status](https://travis-ci.org/osmdatar/osmdatar.svg?branch=master)](https://travis-ci.org/osmdatar/osmdatar) [![codecov](https://codecov.io/gh/osmdatar/osmdatar/branch/master/graph/badge.svg)](https://codecov.io/gh/osmdatar/osmdatar)
 
-(See travis report for build error: It's an internal travis thing)
-
 ![](./figure/map.png)
 
 R package for downloading OSM data and converting to `sp` objects *really quickly*!
