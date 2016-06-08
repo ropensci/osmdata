@@ -1,2 +1,0 @@
-PKG_CPPFLAGS=-fprofile-arcs -ftest-coverage
-PKG_LIBS=-lgcov
