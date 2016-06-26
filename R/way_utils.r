@@ -22,7 +22,7 @@ process_osm_ways <- function(doc, osm_nodes) {
   # get all the nodes for the ways. this is a list of
   # named vectors
   tmp <- pblapply(xml_find_all(doc, ways_not_nd), function(x) {
-    c(way_id=xml_attr(xml_find_one(x, ".."), "id"),
+    c(way_id=xml_attr(xml_find_first(x, ".."), "id"),
       id=xml_attr(x, "ref"))
   })
   # we can quickly and memory efficiently turn that into a matrix
@@ -62,7 +62,7 @@ osm_ways_to_spldf <- function(doc, osm_ways) {
   }
 
   tmp <- pblapply(xml_find_all(doc, ways_not_tag), function(x) {
-    c(way_id=xml_attr(xml_find_one(x, ".."), "id"),
+    c(way_id=xml_attr(xml_find_first(x, ".."), "id"),
       k=xml_attr(x, "k"),
       v=xml_attr(x, "v"))
   })
