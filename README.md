@@ -30,7 +30,7 @@ The package currently downloads and converts points, lines, and polygons, with t
 
 3.  `get_polygons`
 
-Points generally correspond to OSM nodes, and ways to OSM highways, although more specific
+Points generally correspond to OSM nodes, and ways to OSM highways, with the exact case dependending on the specific `key-value` pairs passed to the [overpass](http://overpass-api.de/) API.
 
 Note that `get_polygons` does not yet have the capability to process OpenStreetMap `multipolygon` objects.
 
