@@ -64,6 +64,7 @@ An example in a small part of central London, U.K.
 ```{r dat_H, eval=TRUE}
 bbox <- matrix (c (-0.11, 51.51, -0.10, 51.52), nrow=2, ncol=2) 
 system.time ( dat_H <- get_ways (bbox=bbox, key='highway'))
+class (dat_H)
 ```
 
 ```{r dat_HP, eval=TRUE}

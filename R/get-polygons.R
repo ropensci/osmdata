@@ -84,6 +84,15 @@ get_polygons <- function (bbox, key, value, extra_pairs, raw_data=FALSE,
 
     if (verbose) cat ("Downloading data ...")
     dat <- httr::GET (query)
+
+    count <- 1
+    # code#429 = "Too Many Requests (RFC 6585)"
+    while (dat$status_code == 429 && count < 10)
+    {
+        dat <- httr::GET (query)
+        count <- count + 1
+    }
+
     if (dat$status_code != 200)
         warning (httr::http_status (dat)$message)
     # Encoding must be supplied to suppress warning

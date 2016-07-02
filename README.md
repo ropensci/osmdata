@@ -45,7 +45,15 @@ system.time ( dat_H <- get_ways (bbox=bbox, key='highway'))
 ```
 
     ##    user  system elapsed 
-    ##   0.252   0.012   2.225
+    ##   0.228   0.008   2.225
+
+``` r
+class (dat_H)
+```
+
+    ## [1] "SpatialLinesDataFrame"
+    ## attr(,"package")
+    ## [1] "sp"
 
 ``` r
 dat_HP <- get_ways (bbox=bbox, key='highway', value='primary')
