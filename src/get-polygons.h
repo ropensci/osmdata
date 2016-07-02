@@ -1,10 +1,4 @@
-#include <string>
-#include <fstream> // ifstream
-#include <iostream>
-#include <unordered_set>
-#include <boost/property_tree/xml_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/unordered_map.hpp>
+#include "header.h"
 
 // get-polygons is most adapted directly from get-ways
 // TODO: Implement Rcpp error control for asserts
