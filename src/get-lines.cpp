@@ -1,18 +1,18 @@
-#include "get-ways.h"
+#include "get-lines.h"
 #include "get-bbox.h"
 #include <unordered_set>
 #include <Rcpp.h>
 
 const float FLOAT_MAX = std::numeric_limits<float>::max ();
 
-//' rcpp_get_ways
+//' rcpp_get_lines
 //'
 //' Extracts all ways from an overpass API query
 //'
 //' @param st Text contents of an overpass API query
 //' @return A \code{SpatialLinesDataFrame} contains all ways and associated data
 // [[Rcpp::export]]
-Rcpp::S4 rcpp_get_ways (std::string st)
+Rcpp::S4 rcpp_get_lines (std::string st)
 {
     XmlWays xml (st);
 

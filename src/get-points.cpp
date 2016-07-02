@@ -1,18 +1,18 @@
-#include "get-nodes.h"
+#include "get-points.h"
 #include "get-bbox.h"
 #include <unordered_set>
 #include <Rcpp.h>
 
 const float FLOAT_MAX = std::numeric_limits<float>::max ();
 
-//' rcpp_get_nodes
+//' rcpp_get_points
 //'
 //' Extracts all nodes from an overpass API query
 //'
 //' @param st Text contents of an overpass API query
 //' @return A \code{SpatialPointsDataFrame} contains all nodes and associated data
 // [[Rcpp::export]]
-Rcpp::S4 rcpp_get_nodes (std::string st)
+Rcpp::S4 rcpp_get_points (std::string st)
 {
     XmlNodes xmlNodes (st);
 

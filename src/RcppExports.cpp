@@ -5,14 +5,25 @@
 
 using namespace Rcpp;
 
-// rcpp_get_nodes
-Rcpp::S4 rcpp_get_nodes(std::string st);
-RcppExport SEXP osmdatar_rcpp_get_nodes(SEXP stSEXP) {
+// rcpp_get_lines
+Rcpp::S4 rcpp_get_lines(std::string st);
+RcppExport SEXP osmdatar_rcpp_get_lines(SEXP stSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< std::string >::type st(stSEXP);
-    __result = Rcpp::wrap(rcpp_get_nodes(st));
+    __result = Rcpp::wrap(rcpp_get_lines(st));
+    return __result;
+END_RCPP
+}
+// rcpp_get_points
+Rcpp::S4 rcpp_get_points(std::string st);
+RcppExport SEXP osmdatar_rcpp_get_points(SEXP stSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type st(stSEXP);
+    __result = Rcpp::wrap(rcpp_get_points(st));
     return __result;
 END_RCPP
 }
@@ -24,17 +35,6 @@ BEGIN_RCPP
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< std::string >::type st(stSEXP);
     __result = Rcpp::wrap(rcpp_get_polygons(st));
-    return __result;
-END_RCPP
-}
-// rcpp_get_ways
-Rcpp::S4 rcpp_get_ways(std::string st);
-RcppExport SEXP osmdatar_rcpp_get_ways(SEXP stSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type st(stSEXP);
-    __result = Rcpp::wrap(rcpp_get_ways(st));
     return __result;
 END_RCPP
 }

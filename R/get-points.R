@@ -1,8 +1,8 @@
-#' get_nodes
+#' get_points
 #'
-#' Extracts nodes from an overpass download.
+#' Extracts points (such as OpenStreetMap nodes) from an overpass download.
 #'
-#' @param bbox the bounding box within which ways should be downloaded.  A
+#' @param bbox the bounding box within which points should be downloaded.  A
 #' 2-by-2 matrix of 4 elements with columns of min and max values, and rows of x
 #' and y values.
 #' @param key The OpenStreetMap key to be passed to the overpass API query, or
@@ -11,15 +11,15 @@
 #' returned.  Negation is specified by \code{!value}.
 #' @param extra_pairs A list of additional \code{key-value} pairs to be passed
 #' to the overpass API.
-#' @param raw_data If TRUE, \code{get_ways} returns unprocessed data as directly
-#' returned from the overpass API query.
+#' @param raw_data If TRUE, \code{get_points} returns unprocessed data as
+#' directly returned from the overpass API query.
 #' @param verbose If TRUE, provides notification of progress
 #'
 #' @return A \code{SpatialPointsDataFrame} object containing all the nodes within
 #' the given bounding box.
 #' @export
 
-get_nodes <- function (bbox, key, value, extra_pairs, raw_data=FALSE,
+get_points <- function (bbox, key, value, extra_pairs, raw_data=FALSE,
                        verbose=FALSE)
 {
     if (missing (bbox))
@@ -88,7 +88,7 @@ get_nodes <- function (bbox, key, value, extra_pairs, raw_data=FALSE,
     if (!raw_data)
     {
         if (verbose) cat ("Processing data ...")
-        result <- rcpp_get_nodes (result)
+        result <- rcpp_get_points (result)
         if (verbose) cat (" done\n")
     }
     return (result)

@@ -2,7 +2,7 @@
 #'
 #' Extracts polygons from an overpass download.
 #'
-#' @param bbox the bounding box within which ways should be downloaded.  A
+#' @param bbox the bounding box within which polygons should be downloaded.  A
 #' 2-by-2 matrix of 4 elements with columns of min and max values, and rows of x
 #' and y values.
 #' @param key The OpenStreetMap key to be passed to the overpass API query, or
@@ -11,8 +11,8 @@
 #' returned.  Negation is specified by \code{!value}.
 #' @param extra_pairs A list of additional \code{key-value} pairs to be passed
 #' to the overpass API.
-#' @param raw_data If TRUE, \code{get_ways} returns unprocessed data as directly
-#' returned from the overpass API query.
+#' @param raw_data If TRUE, \code{get_polygons} returns unprocessed data as
+#' directly returned from the overpass API query.
 #' @param verbose If TRUE, provides notification of progress
 #'
 #' @return A \code{SpatialPolygonsDataFrame} object containing all the polygons

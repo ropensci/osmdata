@@ -13,9 +13,9 @@ routines for return to R.
 \section{Functions}{
 
 \tabular{ll}{
-\code{get_nodes}\tab Extract nodes from OSM data and return as
+\code{get_points}\tab Extract points (such as nodes) from OSM data and return as
 \code{SpatialPointsDataFrame}\cr
-\code{get_ways}\tab Extract ways from OSM data and return as
+\code{get_lines}\tab Extract lines (such as highways) from OSM data and return as
 \code{SpatialLinesDataFrame}\cr
 \code{get_polygons}\tab Extract polygons from OSM data and return as
 \code{SpatialPolygonsDataFrame}\cr

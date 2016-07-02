@@ -8,7 +8,7 @@ get_polygons(bbox, key, value, extra_pairs, raw_data = FALSE,
   verbose = FALSE)
 }
 \arguments{
-\item{bbox}{the bounding box within which ways should be downloaded.  A
+\item{bbox}{the bounding box within which polygons should be downloaded.  A
 2-by-2 matrix of 4 elements with columns of min and max values, and rows of x
 and y values.}
 
@@ -21,8 +21,8 @@ returned.  Negation is specified by \code{!value}.}
 \item{extra_pairs}{A list of additional \code{key-value} pairs to be passed
 to the overpass API.}
 
-\item{raw_data}{If TRUE, \code{get_ways} returns unprocessed data as directly
-returned from the overpass API query.}
+\item{raw_data}{If TRUE, \code{get_polygons} returns unprocessed data as
+directly returned from the overpass API query.}
 
 \item{verbose}{If TRUE, provides notification of progress}
 }
