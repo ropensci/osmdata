@@ -2,9 +2,9 @@
 
 ![](./figure/map.png)
 
-R package for downloading OpenStreetMap data and converting to `sp` objects *really quickly*! It does not do anything not currently possible with [`osmar`](https://cran.r-project.org/package=osmar) or [`osmplotr`](https://cran.r-project.org/package=osmplotr), but what these packages do `osmdatar` does a heck of a lot faster.
+R package for downloading OpenStreetMap data and converting to [`sp`](https://cran.r-project.org/package=sp) objects *really quickly*! It does not do anything not currently possible with [`osmar`](https://cran.r-project.org/package=osmar) or [`osmplotr`](https://cran.r-project.org/package=osmplotr), but what these packages do `osmdatar` does a heck of a lot faster.
 
-`osmdatar`, like [`osmplotr`](https://cran.r-project.org/package=osmplotr), uses the [overpass](http://overpass-api.de/) API, which allows specific `key-value` queries, along with additional `extra_pairs` for more specific requests and much faster downloads. The real advantage nevertheless lies in the processing. Conversion of the streets in the above map to a `SpatialLinesDataFrame` is 25 times faster with `osmdatar` than `osmar`.
+`osmdatar`, like [`osmplotr`](https://cran.r-project.org/package=osmplotr), uses the [overpass](http://overpass-api.de/) API, which allows specific `key-value` queries, along with additional `extra_pairs` for more specific requests and much faster downloads. The real advantage nevertheless lies in the processing. Conversion of the streets in the above map to a `SpatialLinesDataFrame` is 25 times faster with `osmdatar` than [`osmar`](https://cran.r-project.org/package=osmar) / [`osmplotr`](https://cran.r-project.org/package=osmplotr).
 
 Given that specific downloading with the [`overpass`](http://overpass-api.de/) API is likely to be at least 10 times faster than the generic downloads of [`osmar`](https://cran.r-project.org/package=osmar), `osmdatar` is likely to be several hundred times faster than other current options for accessing OpenStreetMap data.
 
@@ -22,15 +22,15 @@ devtools::install_github ('osmdatar/osmdatar')
 Usage
 -----
 
-The package currently downloads and converts points, lines, and polygons, with the three respective functions:
+The package currently downloads and converts points, lines, and polygons with the three respective functions:
 
-1. `get_points (bbox, key, value, extra_pairs, ...)`
+1.  `get_points (bbox, key, value, extra_pairs, ...)`
 
-2. `get_lines (bbox, key, value, extra_pairs, ...)`
+2.  `get_lines (bbox, key, value, extra_pairs, ...)`
 
-3. `get_polygons (bbox, key, value, extra_pairs, ...)`
+3.  `get_polygons (bbox, key, value, extra_pairs, ...)`
 
-Points generally correspond to OSM nodes, and ways to OSM highways, with the exact case dependending on the specific `key-value` pairs passed to the [overpass](http://overpass-api.de/) API.
+which respectively return `sp::Spatial(Points/Lines/Polygons)DataFrame` objects. Points generally correspond to OSM nodes, and ways to OSM highways, but may be used for other purposes dependent on the specific `key-value` pairs passed to the [overpass](http://overpass-api.de/) API.
 
 Note that `get_polygons` does not yet have the capability to process OpenStreetMap `multipolygon` objects.
 
@@ -47,7 +47,7 @@ system.time ( dat_H <- get_lines (bbox=bbox, key='highway'))
 ```
 
     ##    user  system elapsed 
-    ##   0.240   0.008   1.981
+    ##   0.256   0.008   1.981
 
 ``` r
 class (dat_H)
