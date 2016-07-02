@@ -4,7 +4,7 @@
 \alias{get_ways}
 \title{get_ways}
 \usage{
-get_ways(bbox, key, url_download, raw_data = FALSE, verbose = FALSE)
+get_ways(bbox, key, value, extra_pairs, raw_data = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{bbox}{the bounding box within which ways should be downloaded.  A
@@ -14,9 +14,11 @@ and y values.}
 \item{key}{The OpenStreetMap key to be passed to the overpass API query, or
 to be extracted from pre-downloaded data passed as \code{url_download}}
 
-\item{url_download}{Data as directly downloaded from the overpass API and
-returned with \code{raw_data=TRUE}. This may be subsequently passed to
-\code{get_ways} in order to extract particular \code{key-value} combinations}
+\item{value}{OSM value to match to key. If \code{NULL}, all keys will be
+returned.  Negation is specified by \code{!value}.}
+
+\item{extra_pairs}{A list of additional \code{key-value} pairs to be passed
+to the overpass API.}
 
 \item{raw_data}{If TRUE, \code{get_ways} returns unprocessed data as directly
 returned from the overpass API query.}

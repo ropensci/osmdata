@@ -4,3 +4,4 @@ makefile$
 ^README\.Rmd$
 ^README\.html$
 ^figure/
+^src/Makevars$

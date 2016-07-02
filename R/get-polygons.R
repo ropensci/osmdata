@@ -7,9 +7,10 @@
 #' and y values.
 #' @param key The OpenStreetMap key to be passed to the overpass API query, or
 #' to be extracted from pre-downloaded data passed as \code{url_download}
-#' @param url_download Data as directly downloaded from the overpass API and
-#' returned with \code{raw_data=TRUE}. This may be subsequently passed to
-#' \code{get_ways} in order to extract particular \code{key-value} combinations
+#' @param value OSM value to match to key. If \code{NULL}, all keys will be
+#' returned.  Negation is specified by \code{!value}.
+#' @param extra_pairs A list of additional \code{key-value} pairs to be passed
+#' to the overpass API.
 #' @param raw_data If TRUE, \code{get_ways} returns unprocessed data as directly
 #' returned from the overpass API query.
 #' @param verbose If TRUE, provides notification of progress
@@ -18,37 +19,77 @@
 #' within the given bounding box.
 #' @export
 
-get_polygons <- function (bbox, key, url_download, raw_data=FALSE,
-                       verbose=FALSE)
+get_polygons <- function (bbox, key, value, extra_pairs, raw_data=FALSE,
+                          verbose=FALSE)
 {
-    if (missing (url_download))
+    if (missing (bbox))
+        stop ("bbox must be provided")
+
+    bbox <- paste0 ('(', bbox [2,1], ',', bbox [1,1], ',',
+                    bbox [2,2], ',', bbox [1,2], ')')
+
+    if (missing (key))
+        key <- value <- ''
+    else
     {
-        if (missing (bbox))
-            stop ("bbox must be provided")
-
-        bbox <- paste0 ('(', bbox [2,1], ',', bbox [1,1], ',',
-                        bbox [2,2], ',', bbox [1,2], ')')
-
-        if (missing (key))
+        if (key == 'park')
+        {
+            key <- 'leisure'
+            value <- 'park'
+        } else if (key == 'grass')
+        {
+            key <- 'landuse'
+            value <- 'grass'
+        } else if (key == 'tree')
+        {
+            key <- 'natural'
+            value <- 'tree'
+        }
+    
+        # Construct the overpass query, starting with main key-value pair and
+        # possible negation
+        if (!missing (value))
+        {
+            if (substring (value, 1, 1) == '!')
+                value <- paste0 ("['", key, "'!='", 
+                                substring (value, 2, nchar (value)), "']")
+            else if (key == 'name')
+                value <- paste0 ("['", key, "'~'", value, "']")
+            else
+                value <- paste0 ("['", key, "'='", value, "']")
+        } else
+            value <- ''
+        if (key == 'name')
             key <- ''
         else
             key <- paste0 ("['", key, "']")
-        
-        query <- paste0 ('(node', key, bbox,
-                        ';way', key, bbox,
-                        ';rel', key, bbox, ';')
-        url_base <- 'http://overpass-api.de/api/interpreter?data='
-        query <- paste0 (url_base, query, ');(._;>;);out;')
+    }
 
-        if (verbose) cat ("Downloading data ...")
-        dat <- httr::GET (query)
-        if (dat$status_code != 200)
-            warning (httr::http_status (dat)$message)
-        # Encoding must be supplied to suppress warning
-        result <- httr::content (dat, "text", encoding='UTF-8')
-        if (verbose) cat (" done\n")
+    if (!missing (extra_pairs))
+    {
+        if (!is.list (extra_pairs))
+            extra_pairs <- list (extra_pairs)
+        ep <- NULL
+        for (i in extra_pairs)
+            ep <- paste0 (ep, "['", i [1], "'~'", i [2], "']")
+        extra_pairs <- ep
     } else
-        result <- url_download 
+        extra_pairs <- ''
+        
+    query <- paste0 ('(node', key, value, extra_pairs, bbox,
+                    ';way', key, value, extra_pairs, bbox,
+                    ';rel', key, value, extra_pairs, bbox, ';')
+    url_base <- 'http://overpass-api.de/api/interpreter?data='
+    query <- paste0 (url_base, query, ');(._;>;);out;')
+
+    if (verbose) cat ("Downloading data ...")
+    dat <- httr::GET (query)
+    if (dat$status_code != 200)
+        warning (httr::http_status (dat)$message)
+    # Encoding must be supplied to suppress warning
+    result <- httr::content (dat, "text", encoding='UTF-8')
+    if (verbose) cat (" done\n")
+
     if (!raw_data)
     {
         if (verbose) cat ("Processing data ...")
