@@ -4,7 +4,7 @@
 \alias{get_polygons}
 \title{get_polygons}
 \usage{
-get_polygons(bbox, key, value, extra_pairs, raw_data = FALSE,
+get_polygons(bbox, key, value, extra_pairs, raw_data = FALSE, overpass_data,
   verbose = FALSE)
 }
 \arguments{
@@ -23,6 +23,11 @@ to the overpass API.}
 
 \item{raw_data}{If TRUE, \code{get_polygons} returns unprocessed data as
 directly returned from the overpass API query.}
+
+\item{overpass_data}{Data either returned with \code{raw_data=TRUE} or
+directly downloaded from the overpass API. This option exists primarily for
+the latter case, for which this function enables data downloaded directly
+from the \code{overpass} API to be transformed into \code{sp} objects.}
 
 \item{verbose}{If TRUE, provides notification of progress}
 }

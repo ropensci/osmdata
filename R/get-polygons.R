@@ -13,6 +13,10 @@
 #' to the overpass API.
 #' @param raw_data If TRUE, \code{get_polygons} returns unprocessed data as
 #' directly returned from the overpass API query.
+#' @param overpass_data Data either returned with \code{raw_data=TRUE} or
+#' directly downloaded from the overpass API. This option exists primarily for
+#' the latter case, for which this function enables data downloaded directly
+#' from the \code{overpass} API to be transformed into \code{sp} objects.
 #' @param verbose If TRUE, provides notification of progress
 #'
 #' @return A \code{SpatialPolygonsDataFrame} object containing all the polygons
@@ -20,84 +24,88 @@
 #' @export
 
 get_polygons <- function (bbox, key, value, extra_pairs, raw_data=FALSE,
-                          verbose=FALSE)
+                          overpass_data, verbose=FALSE)
 {
-    if (missing (bbox))
-        stop ("bbox must be provided")
-
-    bbox <- paste0 ('(', bbox [2,1], ',', bbox [1,1], ',',
-                    bbox [2,2], ',', bbox [1,2], ')')
-
-    if (missing (key))
-        key <- value <- ''
-    else
+    if (missing (overpass_data))
     {
-        if (key == 'park')
-        {
-            key <- 'leisure'
-            value <- 'park'
-        } else if (key == 'grass')
-        {
-            key <- 'landuse'
-            value <- 'grass'
-        } else if (key == 'tree')
-        {
-            key <- 'natural'
-            value <- 'tree'
-        }
-    
-        # Construct the overpass query, starting with main key-value pair and
-        # possible negation
-        if (!missing (value))
-        {
-            if (substring (value, 1, 1) == '!')
-                value <- paste0 ("['", key, "'!='", 
-                                substring (value, 2, nchar (value)), "']")
-            else if (key == 'name')
-                value <- paste0 ("['", key, "'~'", value, "']")
-            else
-                value <- paste0 ("['", key, "'='", value, "']")
-        } else
-            value <- ''
-        if (key == 'name')
-            key <- ''
+        if (missing (bbox))
+            stop ("bbox must be provided")
+
+        bbox <- paste0 ('(', bbox [2,1], ',', bbox [1,1], ',',
+                        bbox [2,2], ',', bbox [1,2], ')')
+
+        if (missing (key))
+            key <- value <- ''
         else
-            key <- paste0 ("['", key, "']")
-    }
-
-    if (!missing (extra_pairs))
-    {
-        if (!is.list (extra_pairs))
-            extra_pairs <- list (extra_pairs)
-        ep <- NULL
-        for (i in extra_pairs)
-            ep <- paste0 (ep, "['", i [1], "'~'", i [2], "']")
-        extra_pairs <- ep
-    } else
-        extra_pairs <- ''
+        {
+            if (key == 'park')
+            {
+                key <- 'leisure'
+                value <- 'park'
+            } else if (key == 'grass')
+            {
+                key <- 'landuse'
+                value <- 'grass'
+            } else if (key == 'tree')
+            {
+                key <- 'natural'
+                value <- 'tree'
+            }
         
-    query <- paste0 ('(node', key, value, extra_pairs, bbox,
-                    ';way', key, value, extra_pairs, bbox,
-                    ';rel', key, value, extra_pairs, bbox, ';')
-    url_base <- 'http://overpass-api.de/api/interpreter?data='
-    query <- paste0 (url_base, query, ');(._;>;);out;')
+            # Construct the overpass query, starting with main key-value pair and
+            # possible negation
+            if (!missing (value))
+            {
+                if (substring (value, 1, 1) == '!')
+                    value <- paste0 ("['", key, "'!='", 
+                                    substring (value, 2, nchar (value)), "']")
+                else if (key == 'name')
+                    value <- paste0 ("['", key, "'~'", value, "']")
+                else
+                    value <- paste0 ("['", key, "'='", value, "']")
+            } else
+                value <- ''
+            if (key == 'name')
+                key <- ''
+            else
+                key <- paste0 ("['", key, "']")
+        }
 
-    if (verbose) cat ("Downloading data ...")
-    dat <- httr::GET (query)
+        if (!missing (extra_pairs))
+        {
+            if (!is.list (extra_pairs))
+                extra_pairs <- list (extra_pairs)
+            ep <- NULL
+            for (i in extra_pairs)
+                ep <- paste0 (ep, "['", i [1], "'~'", i [2], "']")
+            extra_pairs <- ep
+        } else
+            extra_pairs <- ''
+            
+        query <- paste0 ('(node', key, value, extra_pairs, bbox,
+                        ';way', key, value, extra_pairs, bbox,
+                        ';rel', key, value, extra_pairs, bbox, ';')
+        url_base <- 'http://overpass-api.de/api/interpreter?data='
+        query <- paste0 (url_base, query, ');(._;>;);out;')
 
-    count <- 1
-    # code#429 = "Too Many Requests (RFC 6585)"
-    while (dat$status_code == 429 && count < 10)
-    {
+        if (verbose) cat ("Downloading data ...")
         dat <- httr::GET (query)
-        count <- count + 1
-    }
 
-    if (dat$status_code != 200)
-        warning (httr::http_status (dat)$message)
-    # Encoding must be supplied to suppress warning
-    result <- httr::content (dat, "text", encoding='UTF-8')
-    if (verbose) cat (" done\n")
+        count <- 1
+        # code#429 = "Too Many Requests (RFC 6585)"
+        while (dat$status_code == 429 && count < 10)
+        {
+            dat <- httr::GET (query)
+            count <- count + 1
+        }
+
+        if (dat$status_code != 200)
+            warning (httr::http_status (dat)$message)
+        # Encoding must be supplied to suppress warning
+        result <- httr::content (dat, "text", encoding='UTF-8')
+        if (verbose) cat (" done\n")
+    } else # !missing (overpass_data)
+        result <- overpass_data
 
     if (!raw_data)
     {

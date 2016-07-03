@@ -4,7 +4,8 @@
 \alias{get_lines}
 \title{get_lines}
 \usage{
-get_lines(bbox, key, value, extra_pairs, raw_data = FALSE, verbose = FALSE)
+get_lines(bbox, key, value, extra_pairs, raw_data = FALSE, overpass_data,
+  verbose = FALSE)
 }
 \arguments{
 \item{bbox}{the bounding box within which lines should be downloaded.  A
@@ -22,6 +23,11 @@ to the overpass API.}
 
 \item{raw_data}{If TRUE, \code{get_lines} returns unprocessed data as directly
 returned from the overpass API query.}
+
+\item{overpass_data}{Data either returned with \code{raw_data=TRUE} or
+directly downloaded from the overpass API. This option exists primarily for
+the latter case, for which this function enables data downloaded directly
+from the \code{overpass} API to be transformed into \code{sp} objects.}
 
 \item{verbose}{If TRUE, provides notification of progress}
 }
