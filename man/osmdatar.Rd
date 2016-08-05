@@ -4,7 +4,7 @@
 \name{osmdatar}
 \alias{osmdatar}
 \alias{osmdatar-package}
-\title{osmdata}
+\title{osmdatar}
 \description{
 Very fast download of OpenStreetMap (OSM) data into \code{sp} objects. OSM
 data are extracted from the overpass API and processed with very fast C++
