@@ -34,7 +34,7 @@ OpenStreetMap data.
 devtools::install_github ('osmdatar/osmdatar')
 ```
 ```{r, echo=FALSE, message=FALSE}
-setwd ("..")
+while (length (grep ('osmplotr', getwd ())) > 0) setwd ("..")
 #devtools::document ("osmdatar")
 #devtools::check ("osmdatar")
 devtools::load_all ("osmdatar")
