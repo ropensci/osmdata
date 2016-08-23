@@ -89,13 +89,29 @@ get_polygons <- function (bbox, key, value, extra_pairs, raw_data=FALSE,
         query <- paste0 (url_base, query, ');(._;>;);out;')
 
         if (verbose) cat ("Downloading data ...")
-        dat <- httr::GET (query)
+        # httr::GET sometimes errors with 'Error in curl::curl_fetch_memory (url,
+        #       handle=handle) : Timeout was reached'. The current tryCatch catches
+        #       this error only.
+        dat <- tryCatch (
+            httr::GET (query, timeout=60),
+            error=function (err) {
+                message ('error in httr::GET - most likely Timeout')
+                return (list (status_code=504))
+            })
 
         count <- 1
         # code#429 = "Too Many Requests (RFC 6585)"
         while (dat$status_code == 429 && count < 10)
         {
-            dat <- httr::GET (query)
+            # httr::GET sometimes errors with 'Error in curl::curl_fetch_memory (url,
+            #       handle=handle) : Timeout was reached'. The current tryCatch catches
+            #       this error only.
+            dat <- tryCatch (
+                httr::GET (query, timeout=60),
+                error=function (err) {
+                    message ('error in httr::GET - most likely Timeout')
+                    return (list (status_code=504))
+                })
             count <- count + 1
         }
 
