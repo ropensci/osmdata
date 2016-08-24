@@ -7,7 +7,7 @@ apt_packages:
 
 r:
     - release
-    - devel
+      #- devel
 
 r_github_packages:
       - jimhester/covr
