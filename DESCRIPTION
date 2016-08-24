@@ -10,7 +10,7 @@ Description: Very fast download of OpenStreetMap (OSM) data into 'sp' objects.
     OSM data are extracted from the overpass API and processed with very fast
     C++ routines for return to R.
 Depends:
-    R (>= 3.2.4)
+    R (>= 3.2.3)
 License: GPL-3
 SystemRequirements: C++11
 NeedsCompilation: yes
@@ -25,5 +25,5 @@ Suggests:
 LinkingTo: Rcpp
 URL: https://github.com/osmdatar/osmdatar
 BugReports: https://github.com/osmdatar/osmdatar/issues
-Date: 2016-06-01
+Date: 2016-08-23
 RoxygenNote: 5.0.1
