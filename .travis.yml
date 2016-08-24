@@ -6,8 +6,8 @@ apt_packages:
     libboost-dev
 
 r:
+    #- devel
     - release
-    - devel
 
 r_github_packages:
       - jimhester/covr
