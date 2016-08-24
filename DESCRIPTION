@@ -10,7 +10,7 @@ Description: Very fast download of OpenStreetMap (OSM) data into 'sp' objects.
     OSM data are extracted from the overpass API and processed with very fast
     C++ routines for return to R.
 Depends:
-    R (>= 3.2.3)
+    R (>= 3.2.0)
 License: GPL-3
 SystemRequirements: C++11
 NeedsCompilation: yes
