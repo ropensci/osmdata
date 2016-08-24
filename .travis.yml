@@ -6,6 +6,7 @@ apt_packages:
     libboost-dev
 
 r:
+    - release
     - devel
 
 r_github_packages:
