@@ -78,6 +78,7 @@ class XmlPolys
         std::string tempstr;
         Nodes nodelist;
         Polys polys;
+        Relations relations;
         umapPair nodes;
         // "nodelist" contains all nodes to be returned as a
         // SpatialPointsDataFrame, while "nodes" is the unordered set used to
@@ -86,6 +87,7 @@ class XmlPolys
     XmlPolys (std::string str)
         : _tempstr (str)
     {
+        relations.resize (0);
         polys.resize (0);
         nodelist.resize (0);
         nodes.clear ();
@@ -94,6 +96,7 @@ class XmlPolys
     }
     ~XmlPolys ()
     {
+        relations.resize (0);
         polys.resize (0);
         nodelist.resize (0);
         nodes.clear ();
@@ -202,6 +205,7 @@ void XmlPolys::traversePolys (const boost::property_tree::ptree& pt)
             for (int i=0; i<rrel.key.size (); i++)
                 relation.key_val.push_back (std::make_pair
                         (rrel.key [i], rrel.value [i]));
+            relations.push_back (relation);
         } else
             traversePolys (it->second);
     }

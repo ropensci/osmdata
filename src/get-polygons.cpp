@@ -1,7 +1,7 @@
 #include "get-polygons.h"
 #include "get-bbox.h"
-#include <unordered_set>
 #include <Rcpp.h>
+#include <unordered_set>
 
 // [[Rcpp::depends(sp)]]
 
