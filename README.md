@@ -17,6 +17,7 @@ The following functions are implemented:
 -   `add_feature`: Add a feature to an Overpass query
 -   `available_features`: List recognized features in OSM Overpass
 -   `available_tags`: List tags associated with a feature
+-   `bbox_to_string`: Convert a named matrix or a named vector (or an unnamed vector) return a string
 -   `issue_query`: Finalize and issue an Overpass query
 -   `opq`: Begin building an Overpass query
 -   `overpass_query`: Issue OSM Overpass Query
@@ -148,7 +149,7 @@ library(overpass)
 library(testthat)
 
 date()
-#> [1] "Thu Oct  6 13:14:01 2016"
+#> [1] "Thu Oct  6 13:47:56 2016"
 
 test_dir("tests/")
 #> testthat results ===========================================================
