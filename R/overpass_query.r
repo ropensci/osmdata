@@ -16,14 +16,16 @@ overpass_status <- function(quiet=FALSE) {
   if (!quiet) message(status_now)
 
   if (grepl("after", status_now)) {
+    available <- FALSE
     slot_time <- lubridate::ymd_hms(gsub("Slot available after: ", "", status_now))
-    slot_time <- slot_timeupdate(slot_time, hour = hour(slot_time) + 2)
-    slot_time <- slot_timeforce_tz(slot_time, tz = Sys.timezone())
+    slot_time <- update(slot_time, hour = hour(slot_time) + 2)
+    slot_time <- lubridate::force_tz(slot_time, tz = Sys.timezone())
   } else {
+    available <- TRUE
     slot_time <- Sys.time()
   }
 
-  return(invisible(list(available=TRUE, next_slot=slot_time, msg=status_now)))
+  return(invisible(list(available=available, next_slot=slot_time, msg=status)))
 
 }
 
@@ -66,7 +68,8 @@ make_query <- function(query, quiet=FALSE) {
 #'         will return a \code{SpatialLinesDataFrame} with the \code{way}s\cr\cr
 #'         \code{relations}s are not handled yet.\cr\cr
 #'         If you asked for a CSV, you will receive the text response back, suitable for
-#'         processing by \code{read.table(text=..., sep=..., header=TRUE, check.names=FALSE, stringsAsFactors=FALSE)}.
+#'         processing by \code{read.table(text=..., sep=..., header=TRUE, check.names=FALSE,
+#'         stringsAsFactors=FALSE)}.
 #' @export
 #' @examples \dontrun{
 #' only_nodes <- '[out:xml];
