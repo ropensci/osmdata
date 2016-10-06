@@ -18,9 +18,9 @@
 #'
 #' @name overpass
 #' @docType package
-#' @author Bob Rudis, Robin Lovelace
-#' @import fastmatch pbapply sp xml2 httr tidyr
-#' @importFrom rvest html html_attr html_nodes
+#' @author Bob Rudis, Robin Lovelace, Maëlle Salmon
+#' @import fastmatch pbapply sp xml2 httr tidyr lubridate
+#' @importFrom rvest html_attr html_nodes
 #' @importFrom dplyr %>% select left_join filter arrange bind_rows mutate do group_by distinct data_frame
 #' @importFrom utils read.table
 NULL

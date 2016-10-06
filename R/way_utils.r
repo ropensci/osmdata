@@ -3,8 +3,8 @@
 process_osm_ways <- function(doc, osm_nodes) {
 
   # get all the way ids
-  ways <- xml_find_all(doc, "//way")
-  way_ids <- xml_attr(ways, "id")
+  ways <- xml2::xml_find_all(doc, "//way")
+  way_ids <- xml2::xml_attr(ways, "id")
 
   # see if any are duplicated (they shouldn't be but it happens)
   idxs <- which(!duplicated(way_ids))
@@ -21,22 +21,22 @@ process_osm_ways <- function(doc, osm_nodes) {
 
   # get all the nodes for the ways. this is a list of
   # named vectors
-  tmp <- pblapply(xml_find_all(doc, ways_not_nd), function(x) {
-    c(way_id=xml_attr(xml_find_first(x, ".."), "id"),
-      id=xml_attr(x, "ref"))
+  tmp <- pblapply(xml2::xml_find_all(doc, ways_not_nd), function(x) {
+    c(way_id=xml2::xml_attr(xml2::xml_find_first(x, ".."), "id"),
+      id=xml2::xml_attr(x, "ref"))
   })
   # we can quickly and memory efficiently turn that into a matrix
   # then data frame, then merge in the coordinates
   filtered_ways <- as.data.frame(t(do.call(cbind, tmp)), stringsAsFactors=FALSE)
-  filtered_ways <- left_join(filtered_ways, select(osm_nodes, id, lon, lat), by="id")
+  filtered_ways <- dplyr::left_join(filtered_ways, select(osm_nodes, id, lon, lat), by="id")
 
   # for the 'do' below. this just keeps the code neater
   make_lines <- function(grp) {
     Lines(list(Line(as.matrix(grp[, c("lon", "lat")]))), ID=unique(grp$way_id))
   }
   # makes Lines, grouping by way id
-  osm_ways <- do(group_by(filtered_ways, way_id), lines=make_lines(.))$lines
-  names(osm_ways) <- distinct(filtered_ways, way_id)$way_id
+  osm_ways <- dplyr::do(group_by(filtered_ways, way_id), lines=make_lines(.))$lines
+  names(osm_ways) <- dplyr::distinct(filtered_ways, way_id)$way_id
 
   osm_ways
 
@@ -47,8 +47,8 @@ process_osm_ways <- function(doc, osm_nodes) {
 osm_ways_to_spldf <- function(doc, osm_ways) {
 
   # see process_osm_ways() for most of the logic
-  ways <- xml_find_all(doc, "//way")
-  way_ids <- xml_attr(ways, "id")
+  ways <- xml2::xml_find_all(doc, "//way")
+  way_ids <- xml2::xml_attr(ways, "id")
 
   idxs <- which(!duplicated(way_ids))
   dup <- way_ids[which(duplicated(way_ids))]
@@ -61,10 +61,10 @@ osm_ways_to_spldf <- function(doc, osm_ways) {
     ways_not_tag <- sprintf("//way/tag")
   }
 
-  tmp <- pblapply(xml_find_all(doc, ways_not_tag), function(x) {
-    c(way_id=xml_attr(xml_find_first(x, ".."), "id"),
-      k=xml_attr(x, "k"),
-      v=xml_attr(x, "v"))
+  tmp <- pblapply(xml2::xml_find_all(doc, ways_not_tag), function(x) {
+    c(way_id=xml2::xml_attr(xml2::xml_find_first(x, ".."), "id"),
+      k=xml2::xml_attr(x, "k"),
+      v=xml2::xml_attr(x, "v"))
   })
   kvs <- as.data.frame(t(do.call(cbind, tmp)), stringsAsFactors=FALSE)
 

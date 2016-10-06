@@ -1,7 +1,4 @@
 ---
-title: "Overpass"
-author: "Bob Rudis (@hrbrmstr)"
-date: "August 10, 2015"
 output: html_document
 ---
 

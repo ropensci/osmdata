@@ -1,3 +1,4 @@
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 overpass is a packge with tools to work with the OpenStreetMap (OSM) [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API). To explore simple Overpass queries interactively, try [overpass turbo](http://overpass-turbo.eu/).
 
@@ -13,20 +14,14 @@ This package pairs nicely with [nominatim](http://github.com/hrbrmstr/nominatim)
 
 The following functions are implemented:
 
--   `overpass_query`: Issue OSM Overpass Query
--   `read_osm`: Read an XML OSM Overpass response from path
--   `opq`: Begin building an Overpass query
 -   `add_feature`: Add a feature to an Overpass query
--   `issue_query`: Finalize and issue an Overpass query
 -   `available_features`: List recognized features in OSM Overpass
 -   `available_tags`: List tags associated with a feature
-
-### News
-
--   Version 0.1.1.9000 released - Bounding box tweaks
--   Version 0.1.0.9000 released - trying out `opq` / `add_feature` / `issue_query`
--   Version 0.0.0.9005 released - HUGE speed improvement; passes CRAN checks;
--   Version 0.0.0.9000 released
+-   `issue_query`: Finalize and issue an Overpass query
+-   `opq`: Begin building an Overpass query
+-   `overpass_query`: Issue OSM Overpass Query
+-   `overpass_status`: Retrieve status of the Overpass API
+-   `read_osm`: Read an XML OSM Overpass response from path
 
 ### Installation
 
@@ -43,7 +38,7 @@ library(ggmap)
 
 # current verison
 packageVersion("overpass")
-#> [1] '0.1.1.9000'
+#> [1] '0.2.0.9000'
 ```
 
 ``` r
@@ -80,7 +75,7 @@ pts <- overpass_query(only_nodes)
 plot(pts)
 ```
 
-<img src="README-only_nodes-1.png" title="" alt="" width="672" />
+<img src="README-only_nodes-1.png" width="672" />
 
 ``` r
 # ways & nodes
@@ -98,7 +93,7 @@ wys <- overpass_query(nodes_and_ways)
 plot(wys)
 ```
 
-<img src="README-nodes_and_ways-1.png" title="" alt="" width="672" />
+<img src="README-nodes_and_ways-1.png" width="672" />
 
 ``` r
 # xml version of the query
@@ -117,7 +112,7 @@ awy <- overpass_query(actual_ways)
 plot(awy)
 ```
 
-<img src="README-actual_ways-1.png" title="" alt="" width="672" />
+<img src="README-actual_ways-1.png" width="672" />
 
 ``` r
 # more complex example from Robin: motorways surrounding London
@@ -153,13 +148,13 @@ library(overpass)
 library(testthat)
 
 date()
-#> [1] "Wed Aug 12 17:06:32 2015"
+#> [1] "Thu Oct  6 13:14:01 2016"
 
 test_dir("tests/")
 #> testthat results ===========================================================
 #> OK: 4 SKIPPED: 0 FAILED: 0
 #> 
-#> DONE
+#> DONE ======================================================================
 ```
 
 ### Code of Conduct

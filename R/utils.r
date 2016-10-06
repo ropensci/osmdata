@@ -9,7 +9,7 @@ overpass_base_url <- "http://overpass-api.de/api/interpreter"
 # test if a given xpath exists in doc
 has_xpath <- function(doc, xpath) {
 
-  tryCatch(length(xml_find_all(doc, xpath)) > 0,
+  tryCatch(length(xml2::xml_find_all(doc, xpath)) > 0,
            error=function(err) { return(FALSE) },
            warning=function(wrn) { message(wrn$message) ; return(TRUE); })
 

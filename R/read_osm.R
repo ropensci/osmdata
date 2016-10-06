@@ -26,7 +26,7 @@
 #' mammoth <- read_osm(system.file("osm/mammoth.osm", package="overpass"))
 read_osm <- function(osm_response, encoding = "") {
 
-  doc <- read_xml(osm_response, encoding=encoding)
+  doc <- xml2::read_xml(osm_response, encoding=encoding)
 
   process_doc(doc)
 
