@@ -4,7 +4,7 @@
 \alias{overpass_query}
 \title{Issue OSM Overpass Query}
 \usage{
-overpass_query(query, quiet = FALSE, wait = TRUE)
+overpass_query(query, quiet = FALSE, wait = TRUE, pad_wait = 5)
 }
 \arguments{
 \item{query}{OSM Overpass query. Please note that the function is in ALPHA
@@ -18,6 +18,9 @@ You can disable these messages by setting this value to \code{TRUE}.}
 \item{wait}{if \code{TRUE} and if there is a queue at the Overpass API server, should
 this function wait and try again at the next available slot time or should it
 throw a an exception?}
+
+\item{pad_wait}{if there is a queue and \code{wait} is \code{TRUE}, pad the next query
+start time by \code{pad_wait} seconds (default = 5 seconds).}
 }
 \value{
 If the \code{query} result only has OSM \code{node}s then the function

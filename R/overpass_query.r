@@ -18,7 +18,6 @@ overpass_status <- function(quiet=FALSE) {
   if (grepl("after", status_now)) {
     available <- FALSE
     slot_time <- lubridate::ymd_hms(gsub("Slot available after: ", "", status_now))
-    slot_time <- update(slot_time, hour = hour(slot_time) + 2)
     slot_time <- lubridate::force_tz(slot_time, tz = Sys.timezone())
   } else {
     available <- TRUE
@@ -57,6 +56,8 @@ make_query <- function(query, quiet=FALSE) {
 #' @param wait if \code{TRUE} and if there is a queue at the Overpass API server, should
 #'        this function wait and try again at the next available slot time or should it
 #'        throw a an exception?
+#' @param pad_wait if there is a queue and \code{wait} is \code{TRUE}, pad the next query
+#'        start time by \code{pad_wait} seconds (default = 5 seconds).
 #' @note wrap function with \code{httr::with_verbose} if you want to see the \code{httr}
 #'       query (useful for debugging connection issues).\cr
 #'       \cr
@@ -82,7 +83,7 @@ make_query <- function(query, quiet=FALSE) {
 #'
 #' pts <- overpass_query(only_nodes)
 #' }
-overpass_query <- function(query, quiet=FALSE, wait=TRUE) {
+overpass_query <- function(query, quiet=FALSE, wait=TRUE, pad_wait=5) {
 
   if (!quiet) message("Issuing query to OSM Overpass...")
 
@@ -92,7 +93,8 @@ overpass_query <- function(query, quiet=FALSE, wait=TRUE) {
     make_query(query, quiet)
   } else {
     if (wait) {
-       wait <- max(0, as.numeric(difftime(o_stat$next_slot, Sys.time(), units = "secs"))) + 5
+       wait <- max(0, as.numeric(difftime(o_stat$next_slot, Sys.time(), units = "secs"))) +
+         pad_wait
        message(sprintf("Waiting %s seconds", wait))
        Sys.sleep(wait)
        make_query(query, quiet)
