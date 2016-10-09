@@ -3,6 +3,7 @@
 
 #include <Rcpp.h>
 
+#include <map>
 #include <unordered_set>
 #include <algorithm>
 
@@ -39,13 +40,10 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
     const umapPair& xmlnodes = xml.nodes();
     const Ways& xmlways = xml.ways();
 
-    int tempi, coli, rowi, count = 0;
-    long long ni;
-    float lon, lat;
+    int count = 0;
     float xmin = FLOAT_MAX, xmax = -FLOAT_MAX,
           ymin = FLOAT_MAX, ymax = -FLOAT_MAX;
     std::vector <float> lons, lats;
-    std::string id, key;
     std::unordered_set <std::string> idset; // see TODO below
     std::vector <std::string> colnames, rownames, waynames;
     std::set<std::string> varnames;
@@ -75,7 +73,7 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
      * this does *NOT* make the routine any faster, and so the current version
      * which more safely uses iterators is kept instead.
      */
-    std::vector <std::pair <std::string, std::string> >::const_iterator kv_iter;
+    std::map<std::string, std::string>::const_iterator kv_iter;
 
     /// APS prealloc memory for all the way names
     waynames.reserve(xmlways.size());
@@ -92,15 +90,15 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
          * TODO: This uses an unordered_set: check if it's faster with a simple
          * vector and std::find
          */
-        id = std::to_string ((*wi).id);
-        tempi = 0;
+        std::string id = std::to_string ((*wi).id);
+        int tempi = 0;
         while (idset.find (id) != idset.end ())
             id = std::to_string ((*wi).id) + "." + std::to_string (tempi++);
         idset.insert (id);
 
         waynames.push_back (id);
         // Set up first origin node
-        ni = (*wi).nodes.front ();
+        long long ni = (*wi).nodes.front ();
 
         lons.clear();
         lats.clear();
@@ -116,8 +114,8 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
         //lon = (*umapitr).second.first;
         //lat = (*umapitr).second.second;
         // APS probably need some protection in case ni doesnt exist in xmlnodes
-        lon = xmlnodes.find(ni)->second.first;
-        lat = xmlnodes.find(ni)->second.second;
+        float lon = xmlnodes.find(ni)->second.first;
+        float lat = xmlnodes.find(ni)->second.second;
         lons.push_back (lon);
         lats.push_back (lat);
 
@@ -178,7 +176,7 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
     int onewaycoli = std::distance(varnames.begin (), varnames.find("oneway"));
     for (Ways_Itr wi = xmlways.begin(); wi != xmlways.end(); ++wi)
     {
-        rowi = wi - xmlways.begin ();
+        int rowi = wi - xmlways.begin ();
         kv_vec (namecoli * nrow + rowi) = (*wi).name;
         kv_vec (typecoli * nrow + rowi) = (*wi).type;
 
@@ -190,11 +188,10 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
         for (kv_iter = (*wi).key_val.begin (); kv_iter != (*wi).key_val.end ();
                 ++kv_iter)
         {
-            key = (*kv_iter).first;
+            const std::string& key = (*kv_iter).first;
             auto it = varnames.find(key);
             // key must exist in varnames!
-            coli = std::distance(varnames.begin (), it);
-            rowi = wi - xmlways.begin ();
+            int coli = std::distance(varnames.begin (), it);
             kv_vec (coli * nrow + rowi) = (*kv_iter).second;
         }
     }

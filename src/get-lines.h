@@ -1,11 +1,10 @@
 #pragma once
 
-#include <boost/property_tree/xml_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
+#include "common.h"
 
 #include <vector>
+#include <map>
 #include <unordered_map>
-#include <sstream>
 
 typedef std::pair <float, float> ffPair; // lat-lon
 
@@ -37,7 +36,8 @@ struct Way
     long long id;
     std::string type, name; // type is highway type (value for highway key)
     // APS would (key,value) be better in a std::map?
-    std::vector <std::pair <std::string, std::string> > key_val;
+    //std::vector <std::pair <std::string, std::string> > key_val;
+    std::map<std::string, std::string> key_val;
     std::vector <long long> nodes;
 };
 
@@ -69,7 +69,7 @@ public:
 
     XmlWays (const std::string& str)
     {
-        parseXMLWays (str);
+      traverseWays(common::parseXML(str));
     }
 
     ~XmlWays ()
@@ -81,7 +81,8 @@ public:
     const Ways& ways() const { return m_ways; }
     const umapPair& nodes() const { return m_nodes; }
 
-    void parseXMLWays (const std::string & is );
+private:
+
     void traverseWays (const boost::property_tree::ptree& pt);
     // APS Pass by reference and modify in-place to avoid copy
     void traverseWay (const boost::property_tree::ptree& pt, RawWay& rway);
@@ -89,26 +90,6 @@ public:
     void traverseNode (const boost::property_tree::ptree& pt, Node& node);
 }; // end Class::XmlWays
 
-
-/************************************************************************
- ************************************************************************
- **                                                                    **
- **                       FUNCTION::PARSEXMLWAYS                       **
- **                                                                    **
- ************************************************************************
- ************************************************************************/
-
-// APS inline purely to avoid possible linker errors (if this header was included in multiple sources)
-inline void XmlWays::parseXMLWays (const std::string & is )
-{
-    // populate tree structure pt
-    using namespace boost::property_tree;
-    ptree pt;
-    std::istringstream istream (is);
-    xml_parser::read_xml (istream, pt);
-
-    traverseWays (pt);
-}
 
 
 /************************************************************************
@@ -149,7 +130,7 @@ inline void XmlWays::traverseWays (const boost::property_tree::ptree& pt)
             way.id = rway.id;
             way.name = way.type = "";
             way.key_val.clear();
-            way.key_val.reserve(rway.key.size ());
+            //way.key_val.reserve(rway.key.size ());
             way.nodes.clear();
             way.nodes.reserve(rway.nodes.size());
             way.oneway = false;
@@ -165,7 +146,7 @@ inline void XmlWays::traverseWays (const boost::property_tree::ptree& pt)
                 else if (rway.key [i] == "oneway" && rway.value [i] == "yes")
                     way.oneway = true;
                 else
-                    way.key_val.push_back (std::make_pair (rway.key [i], rway.value [i]));
+                    way.key_val.insert (std::make_pair (rway.key [i], rway.value [i]));
             }
             // Then copy nodes from rway to way.
             std::copy(rway.nodes.begin (), rway.nodes.end(), std::back_inserter(way.nodes));
