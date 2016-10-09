@@ -1,16 +1,19 @@
-#include "header.h"
+#include "common.h"
+
+#include <map>
+#include <unordered_set>
 
 
 struct Node
 {
     long long id;
     std::string key, value;
-    std::vector <std::pair <std::string, std::string> > key_val;
+    std::map<std::string, std::string> key_val;
     float lat, lon;
 };
 
 typedef std::vector <Node> Nodes;
-typedef std::vector <Node>::iterator Nodes_Itr;
+typedef std::vector <Node>::const_iterator Nodes_Itr;
 
 
 /************************************************************************
@@ -23,49 +26,25 @@ typedef std::vector <Node>::iterator Nodes_Itr;
 
 class XmlNodes
 {
-    private:
-        std::string _tempstr;
-    protected:
-    public:
-        std::string tempstr;
-        Nodes nodes;
+private:
 
-    XmlNodes (std::string str)
-        : _tempstr (str)
+    Nodes m_nodes;
+
+public:
+    XmlNodes (const std::string& str)
     {
-        nodes.resize (0);
-
-        parseXMLNodes (_tempstr);
+      traverseNodes(common::parseXML(str));
     }
     ~XmlNodes ()
     {
-        nodes.resize (0);
     }
 
-    void parseXMLNodes ( std::string & is );
+    const Nodes& nodes() const { return m_nodes; }
+
+private:
     void traverseNodes (const boost::property_tree::ptree& pt);
-    Node traverseNode (const boost::property_tree::ptree& pt, Node node);
+    void traverseNode (const boost::property_tree::ptree& pt, Node& node);
 }; // end Class::XmlNodes
-
-
-/************************************************************************
- ************************************************************************
- **                                                                    **
- **                       FUNCTION::PARSEXMLNODES                      **
- **                                                                    **
- ************************************************************************
- ************************************************************************/
-
-void XmlNodes::parseXMLNodes ( std::string & is )
-{
-    // populate tree structure pt
-    using boost::property_tree::ptree;
-    ptree pt;
-    std::stringstream istream (is, std::stringstream::in);
-    read_xml (istream, pt);
-
-    traverseNodes (pt);
-}
 
 
 /************************************************************************
@@ -76,7 +55,7 @@ void XmlNodes::parseXMLNodes ( std::string & is )
  ************************************************************************
  ************************************************************************/
 
-void XmlNodes::traverseNodes (const boost::property_tree::ptree& pt)
+inline void XmlNodes::traverseNodes (const boost::property_tree::ptree& pt)
 {
     std::unordered_set <long long> nodeIDs;
     Node node;
@@ -89,18 +68,16 @@ void XmlNodes::traverseNodes (const boost::property_tree::ptree& pt)
         {
             node.key = "";
             node.value = "";
-            node.key_val.resize (0);
-            node = traverseNode (it->second, node);
+            node.key_val.clear();
+            traverseNode (it->second, node);
             if (nodeIDs.find (node.id) == nodeIDs.end ())
             {
-                nodes.push_back (node);
+                m_nodes.push_back (node);
                 nodeIDs.insert (node.id);
             }
         } else
             traverseNodes (it->second);
     }
-    nodeIDs.clear ();
-    node.key_val.resize (0);
 } // end function XmlNodes::traverseNodes
 
 
@@ -112,7 +89,7 @@ void XmlNodes::traverseNodes (const boost::property_tree::ptree& pt)
  ************************************************************************
  ************************************************************************/
 
-Node XmlNodes::traverseNode (const boost::property_tree::ptree& pt, Node node)
+inline void XmlNodes::traverseNode (const boost::property_tree::ptree& pt, Node& node)
 {
     for (boost::property_tree::ptree::const_iterator it = pt.begin ();
             it != pt.end (); ++it)
@@ -130,13 +107,12 @@ Node XmlNodes::traverseNode (const boost::property_tree::ptree& pt, Node node)
             // Note that values sometimes exist without keys, but the following
             // still inserts the pair because values **always** come after keys.
             node.value = it->second.get_value <std::string> ();
-            node.key_val.push_back (std::make_pair (node.key, node.value));
+            node.key_val.insert (std::make_pair (node.key, node.value));
             node.key = "";
             node.value = "";
         }
 
-        node = traverseNode (it->second, node);
+        traverseNode (it->second, node);
     }
 
-    return node;
 } // end function XmlNodes::traverseNode

@@ -1,7 +1,7 @@
 
-context ('test_perf')
+context ('get_lines')
 
-test_that ('get_lines', {
+test_that ('test-get_lines-perf', {
   bbox <- matrix (c (-0.11, 51.51, -0.10, 51.52), nrow=2, ncol=2)
   print(system.time ( dat_H <- get_lines (bbox=bbox, key='highway')))
   class(dat_H)
