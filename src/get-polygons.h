@@ -1,23 +1,16 @@
-#include "header.h"
+#include "common.h"
+
+#include <map>
+#include <unordered_map>
 
 // get-polygons is most adapted directly from get-ways
 // TODO: Implement Rcpp error control for asserts
 
 typedef std::pair <float, float> ffPair; // lat-lon
 
-typedef boost::unordered_map <long long, ffPair> umapPair;
-typedef boost::unordered_map <long long, ffPair>::iterator umapPair_Itr;
+typedef std::unordered_map <long long, ffPair> UMapPair;
+typedef std::unordered_map <long long, ffPair>::const_iterator UMapPair_Itr;
 
-// See http://theboostcpplibraries.com/boost.unordered
-/*
-std::size_t hash_value(const ffPair &f)
-{
-    std::size_t seed = 0;
-    boost::hash_combine(seed, f.first);
-    boost::hash_combine(seed, f.second);
-    return seed;
-}
-*/
 
 struct Node
 {
@@ -36,7 +29,7 @@ struct Poly
 {
     long long id;
     std::string type, name;
-    std::vector <std::pair <std::string, std::string> > key_val;
+    std::map<std::string, std::string> key_val;
     std::vector <long long> nodes;
 };
 
@@ -51,13 +44,13 @@ struct RawRelation
 struct Relation
 {
     long long id;
-    std::vector <std::pair <std::string, std::string> > key_val;
+    std::map<std::string, std::string> key_val;
     std::vector <std::pair <long long, bool> > ways; // bool flags inner/outer
 };
 
 typedef std::vector <Relation> Relations;
 typedef std::vector <Poly> Polys;
-typedef std::vector <Poly>::iterator Polys_Itr;
+typedef std::vector <Poly>::const_iterator Polys_Itr;
 typedef std::vector <Node> Nodes;
 
 
@@ -71,64 +64,35 @@ typedef std::vector <Node> Nodes;
 
 class XmlPolys
 {
-    private:
-        std::string _tempstr;
-    protected:
-    public:
-        std::string tempstr;
-        Nodes nodelist;
-        Polys polys;
-        Relations relations;
-        umapPair nodes;
-        // "nodelist" contains all nodes to be returned as a
-        // SpatialPointsDataFrame, while "nodes" is the unordered set used to
-        // quickly extract lon-lats from nodal IDs.
+private:
+    Nodes m_nodelist;
+    Polys m_polys;
+    Relations m_relations;
+    UMapPair m_nodes;
+    // "nodelist" contains all nodes to be returned as a
+    // SpatialPointsDataFrame, while "nodes" is the unordered set used to
+    // quickly extract lon-lats from nodal IDs.
 
-    XmlPolys (std::string str)
-        : _tempstr (str)
+public:
+    XmlPolys (const std::string& str)
     {
-        relations.resize (0);
-        polys.resize (0);
-        nodelist.resize (0);
-        nodes.clear ();
-
-        parseXMLPolys (_tempstr);
+      traversePolys(common::parseXML(str));
     }
     ~XmlPolys ()
     {
-        relations.resize (0);
-        polys.resize (0);
-        nodelist.resize (0);
-        nodes.clear ();
     }
 
-    void parseXMLPolys ( std::string & is );
+    const Nodes& nodelist() const { return m_nodelist; }
+    const Polys& polys() const { return m_polys; }
+    const Relations& relations() const { return m_relations; }
+    const UMapPair& nodes() const { return m_nodes; }
+
+private:
     void traversePolys (const boost::property_tree::ptree& pt);
-    RawRelation traverseRelation (const boost::property_tree::ptree& pt,
-            RawRelation rrel);
-    RawPoly traversePoly (const boost::property_tree::ptree& pt, RawPoly rpoly);
-    Node traverseNode (const boost::property_tree::ptree& pt, Node node);
+    void traverseRelation (const boost::property_tree::ptree& pt, RawRelation& rrel);
+    void traversePoly (const boost::property_tree::ptree& pt, RawPoly& rpoly);
+    void traverseNode (const boost::property_tree::ptree& pt, Node& node);
 }; // end Class::XmlPolys
-
-
-/************************************************************************
- ************************************************************************
- **                                                                    **
- **                      FUNCTION::PARSEXMLPOLYS                       **
- **                                                                    **
- ************************************************************************
- ************************************************************************/
-
-void XmlPolys::parseXMLPolys ( std::string & is )
-{
-    // populate tree structure pt
-    using boost::property_tree::ptree;
-    ptree pt;
-    std::stringstream istream (is, std::stringstream::in);
-    read_xml (istream, pt);
-
-    traversePolys (pt);
-}
 
 
 /************************************************************************
@@ -139,7 +103,7 @@ void XmlPolys::parseXMLPolys ( std::string & is )
  ************************************************************************
  ************************************************************************/
 
-void XmlPolys::traversePolys (const boost::property_tree::ptree& pt)
+inline void XmlPolys::traversePolys (const boost::property_tree::ptree& pt)
 {
     RawRelation rrel;
     RawPoly rpoly;
@@ -153,28 +117,28 @@ void XmlPolys::traversePolys (const boost::property_tree::ptree& pt)
     {
         if (it->first == "node")
         {
-            node = traverseNode (it->second, node);
-            nodes [node.id] = std::make_pair (node.lon, node.lat);
+            traverseNode (it->second, node);
+            m_nodes [node.id] = std::make_pair (node.lon, node.lat);
         }
         else if (it->first == "way")
         {
-            rpoly.key.resize (0);
-            rpoly.value.resize (0);
-            rpoly.nodes.resize (0);
+            rpoly.key.clear();
+            rpoly.value.clear();
+            rpoly.nodes.clear();
 
-            rpoly = traversePoly(it->second, rpoly);
+            traversePoly(it->second, rpoly);
             assert (rpoly.key.size () == rpoly.value.size ());
 
             // This is much easier as explicit loop than with an iterator
             poly.id = rpoly.id;
             poly.name = poly.type = "";
-            poly.key_val.resize (0);
-            poly.nodes.resize (0);
+            poly.key_val.clear();
+            poly.nodes.clear();
             for (size_t i=0; i<rpoly.key.size (); i++)
                 if (rpoly.key [i] == "name")
                     poly.name = rpoly.value [i];
                 else
-                    poly.key_val.push_back (std::make_pair
+                    poly.key_val.insert (std::make_pair
                             (rpoly.key [i], rpoly.value [i]));
 
             // This is the only place at which get-polys really differs from
@@ -183,40 +147,29 @@ void XmlPolys::traversePolys (const boost::property_tree::ptree& pt)
             if (rpoly.nodes.size () > 0 &&
                     (rpoly.nodes.front () == rpoly.nodes.back ()))
             {
-                for (std::vector <long long>::iterator it = rpoly.nodes.begin ();
-                        it != rpoly.nodes.end (); it++)
-                    poly.nodes.push_back (*it);
-                polys.push_back (poly);
+                poly.nodes.swap(rpoly.nodes);
+                m_polys.push_back (poly);
             }
         } else if (it->first == "relation")
         {
-            rrel.key.resize (0);
-            rrel.value.resize (0);
-            rrel.ways.resize (0);
-            rrel.outer.resize (0);
+            rrel.key.clear();
+            rrel.value.clear();
+            rrel.ways.clear();
+            rrel.outer.clear();
 
-            rrel = traverseRelation (it->second, rrel);
+            traverseRelation (it->second, rrel);
             assert (rrel.key.size () == rrel.value.size ());
 
             relation.id = rrel.id;
-            relation.key_val.resize (0);
-            relation.ways.resize (0);
+            relation.key_val.clear();
+            relation.ways.clear();
             for (size_t i=0; i<rrel.key.size (); i++)
-                relation.key_val.push_back (std::make_pair
+                relation.key_val.insert (std::make_pair
                         (rrel.key [i], rrel.value [i]));
-            relations.push_back (relation);
+            m_relations.push_back (relation);
         } else
             traversePolys (it->second);
     }
-    rpoly.key.resize (0);
-    rpoly.value.resize (0);
-    rpoly.nodes.resize (0);
-    poly.nodes.resize (0);
-    poly.key_val.resize (0);
-    rrel.key.resize (0);
-    rrel.value.resize (0);
-    rrel.ways.resize (0);
-    rrel.outer.resize (0);
 
 } // end function XmlPolys::traversePolys
 
@@ -229,8 +182,8 @@ void XmlPolys::traversePolys (const boost::property_tree::ptree& pt)
  ************************************************************************
  ************************************************************************/
 
-RawRelation XmlPolys::traverseRelation (const boost::property_tree::ptree& pt,
-        RawRelation rrel)
+inline void XmlPolys::traverseRelation (const boost::property_tree::ptree& pt,
+        RawRelation& rrel)
 {
     std::string outer;
 
@@ -253,10 +206,8 @@ RawRelation XmlPolys::traverseRelation (const boost::property_tree::ptree& pt,
             else
                 rrel.outer.push_back (false);
         }
-        rrel = traverseRelation (it->second, rrel);
+        traverseRelation (it->second, rrel);
     }
-
-    return rrel;
 } // end function XmlPolys::traverseRelation
 
 
@@ -269,8 +220,8 @@ RawRelation XmlPolys::traverseRelation (const boost::property_tree::ptree& pt,
  ************************************************************************
  ************************************************************************/
 
-RawPoly XmlPolys::traversePoly(const boost::property_tree::ptree& pt,
-        RawPoly rpoly)
+inline void XmlPolys::traversePoly(const boost::property_tree::ptree& pt,
+        RawPoly& rpoly)
 {
     for (boost::property_tree::ptree::const_iterator it = pt.begin ();
             it != pt.end (); ++it)
@@ -283,10 +234,8 @@ RawPoly XmlPolys::traversePoly(const boost::property_tree::ptree& pt,
             rpoly.id = it->second.get_value <long long> ();
         else if (it->first == "ref")
             rpoly.nodes.push_back (it->second.get_value <long long> ());
-        rpoly = traversePoly (it->second, rpoly);
+        traversePoly (it->second, rpoly);
     }
-
-    return rpoly;
 } // end function XmlPolys::traversePoly
 
 
@@ -298,7 +247,7 @@ RawPoly XmlPolys::traversePoly(const boost::property_tree::ptree& pt,
  ************************************************************************
  ************************************************************************/
 
-Node XmlPolys::traverseNode (const boost::property_tree::ptree& pt, Node node)
+inline void XmlPolys::traverseNode (const boost::property_tree::ptree& pt, Node& node)
 {
     // Only coordinates of nodes are read here; full data can be extracted with
     // get-nodes
@@ -311,8 +260,6 @@ Node XmlPolys::traverseNode (const boost::property_tree::ptree& pt, Node node)
             node.lat = it->second.get_value <float> ();
         else if (it->first == "lon")
             node.lon = it->second.get_value <float> ();
-        node = traverseNode (it->second, node);
+        traverseNode (it->second, node);
     }
-
-    return node;
 } // end function XmlPolys::traverseNode

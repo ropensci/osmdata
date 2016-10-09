@@ -134,7 +134,7 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
         }
 
         xmin = std::min(xmin, *std::min_element(lons.begin(), lons.end()));
-        xmin = std::max(xmax, *std::max_element(lons.begin(), lons.end()));
+        xmax = std::max(xmax, *std::max_element(lons.begin(), lons.end()));
         ymin = std::min(ymin, *std::min_element(lats.begin(), lats.end()));
         ymax = std::max(ymax, *std::max_element(lats.begin(), lats.end()));
 
