@@ -6,12 +6,12 @@
 using namespace Rcpp;
 
 // rcpp_get_lines
-Rcpp::S4 rcpp_get_lines(std::string st);
+Rcpp::S4 rcpp_get_lines(const std::string& st);
 RcppExport SEXP osmdatar_rcpp_get_lines(SEXP stSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type st(stSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type st(stSEXP);
     rcpp_result_gen = Rcpp::wrap(rcpp_get_lines(st));
     return rcpp_result_gen;
 END_RCPP

@@ -1,18 +1,17 @@
-#include "header.h"
+#pragma once
+
+#include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+
+#include <vector>
+#include <unordered_map>
+#include <sstream>
 
 typedef std::pair <float, float> ffPair; // lat-lon
 
-typedef boost::unordered_map <long long, ffPair> umapPair;
-typedef boost::unordered_map <long long, ffPair>::iterator umapPair_Itr;
+typedef std::unordered_map <long long, ffPair> umapPair;
+typedef std::unordered_map <long long, ffPair>::const_iterator umapPair_Itr;
 
-// See http://theboostcpplibraries.com/boost.unordered
-std::size_t hash_value(const ffPair &f)
-{
-    std::size_t seed = 0;
-    boost::hash_combine(seed, f.first);
-    boost::hash_combine(seed, f.second);
-    return seed;
-}
 
 struct Node
 {
@@ -27,6 +26,7 @@ struct Node
 struct RawWay
 {
     long long id;
+    // APS would (key,value) be better in a std::map?
     std::vector <std::string> key, value;
     std::vector <long long> nodes;
 };
@@ -36,12 +36,13 @@ struct Way
     bool oneway;
     long long id;
     std::string type, name; // type is highway type (value for highway key)
+    // APS would (key,value) be better in a std::map?
     std::vector <std::pair <std::string, std::string> > key_val;
     std::vector <long long> nodes;
 };
 
 typedef std::vector <Way> Ways;
-typedef std::vector <Way>::iterator Ways_Itr;
+typedef std::vector <Way>::const_iterator Ways_Itr;
 typedef std::vector <Node> Nodes;
 
 
@@ -55,38 +56,37 @@ typedef std::vector <Node> Nodes;
 
 class XmlWays
 {
-    private:
-        std::string _tempstr;
-    protected:
-    public:
-        std::string tempstr;
-        Nodes nodelist;
-        Ways ways;
-        umapPair nodes;
-        // "nodelist" contains all nodes to be returned as a
-        // SpatialPointsDataFrame, while "nodes" is the unordered set used to
-        // quickly extract lon-lats from nodal IDs.
+private:
 
-    XmlWays (std::string str)
-        : _tempstr (str)
+    Nodes m_nodelist;
+    Ways m_ways;
+    umapPair m_nodes;
+    // "nodelist" contains all nodes to be returned as a
+    // SpatialPointsDataFrame, while "nodes" is the unordered set used to
+    // quickly extract lon-lats from nodal IDs.
+
+public:
+
+    XmlWays (const std::string& str)
     {
-        ways.resize (0);
-        nodelist.resize (0);
-        nodes.clear ();
-
-        parseXMLWays (_tempstr);
+        parseXMLWays (str);
     }
+
     ~XmlWays ()
     {
-        ways.resize (0);
-        nodelist.resize (0);
-        nodes.clear ();
     }
 
-    void parseXMLWays ( std::string & is );
+    // Const accessors for members
+    const Nodes& nodelist() const { return m_nodelist; }
+    const Ways& ways() const { return m_ways; }
+    const umapPair& nodes() const { return m_nodes; }
+
+    void parseXMLWays (const std::string & is );
     void traverseWays (const boost::property_tree::ptree& pt);
-    RawWay traverseWay (const boost::property_tree::ptree& pt, RawWay rway);
-    Node traverseNode (const boost::property_tree::ptree& pt, Node node);
+    // APS Pass by reference and modify in-place to avoid copy
+    void traverseWay (const boost::property_tree::ptree& pt, RawWay& rway);
+    // APS Pass by reference and modify in-place to avoid copy
+    void traverseNode (const boost::property_tree::ptree& pt, Node& node);
 }; // end Class::XmlWays
 
 
@@ -98,13 +98,14 @@ class XmlWays
  ************************************************************************
  ************************************************************************/
 
-void XmlWays::parseXMLWays ( std::string & is )
+// APS inline purely to avoid possible linker errors (if this header was included in multiple sources)
+inline void XmlWays::parseXMLWays (const std::string & is )
 {
     // populate tree structure pt
-    using boost::property_tree::ptree;
+    using namespace boost::property_tree;
     ptree pt;
-    std::stringstream istream (is, std::stringstream::in);
-    read_xml (istream, pt);
+    std::istringstream istream (is);
+    xml_parser::read_xml (istream, pt);
 
     traverseWays (pt);
 }
@@ -118,7 +119,7 @@ void XmlWays::parseXMLWays ( std::string & is )
  ************************************************************************
  ************************************************************************/
 
-void XmlWays::traverseWays (const boost::property_tree::ptree& pt)
+inline void XmlWays::traverseWays (const boost::property_tree::ptree& pt)
 {
     RawWay rway;
     Way way;
@@ -130,28 +131,33 @@ void XmlWays::traverseWays (const boost::property_tree::ptree& pt)
     {
         if (it->first == "node")
         {
-            node = traverseNode (it->second, node);
-            nodes [node.id] = std::make_pair (node.lon, node.lat);
+            // APS this call modifies node
+            traverseNode (it->second, node);
+            m_nodes [node.id] = std::make_pair (node.lon, node.lat);
         }
         else if (it->first == "way")
         {
-            rway.key.resize (0);
-            rway.value.resize (0);
-            rway.nodes.resize (0);
+            rway.key.clear();
+            rway.value.clear();
+            rway.nodes.clear();
 
-            rway = traverseWay (it->second, rway);
+            // APS this call modifies node
+            traverseWay (it->second, rway);
             assert (rway.key.size () == rway.value.size ());
 
             // This is much easier as explicit loop than with an iterator
             way.id = rway.id;
             way.name = way.type = "";
-            way.key_val.resize (0);
-            way.nodes.resize (0);
+            way.key_val.clear();
+            way.key_val.reserve(rway.key.size ());
+            way.nodes.clear();
+            way.nodes.reserve(rway.nodes.size());
             way.oneway = false;
             // TODO: oneway also exists in pairs:
             // k='oneway' v='yes'
             // k='oneway:bicycle' v='no'
-            for (int i=0; i<rway.key.size (); i++)
+            for (size_t i=0; i<rway.key.size (); i++)
+            {
                 if (rway.key [i] == "name")
                     way.name = rway.value [i];
                 else if (rway.key [i] == "highway")
@@ -160,20 +166,14 @@ void XmlWays::traverseWays (const boost::property_tree::ptree& pt)
                     way.oneway = true;
                 else
                     way.key_val.push_back (std::make_pair (rway.key [i], rway.value [i]));
-
-            // Then copy nodes from rway to way. 
-            for (std::vector <long long>::iterator it = rway.nodes.begin ();
-                    it != rway.nodes.end (); it++)
-                way.nodes.push_back (*it);
-            ways.push_back (way);
+            }
+            // Then copy nodes from rway to way.
+            std::copy(rway.nodes.begin (), rway.nodes.end(), std::back_inserter(way.nodes));
+            m_ways.push_back (way);
         } else
             traverseWays (it->second);
     }
-    rway.key.resize (0);
-    rway.value.resize (0);
-    rway.nodes.resize (0);
-    way.nodes.resize (0);
-    way.key_val.resize (0);
+
 } // end function XmlWays::traverseWays
 
 /************************************************************************
@@ -184,7 +184,7 @@ void XmlWays::traverseWays (const boost::property_tree::ptree& pt)
  ************************************************************************
  ************************************************************************/
 
-RawWay XmlWays::traverseWay (const boost::property_tree::ptree& pt, RawWay rway)
+inline void XmlWays::traverseWay (const boost::property_tree::ptree& pt, RawWay& rway)
 {
     for (boost::property_tree::ptree::const_iterator it = pt.begin ();
             it != pt.end (); ++it)
@@ -197,10 +197,8 @@ RawWay XmlWays::traverseWay (const boost::property_tree::ptree& pt, RawWay rway)
             rway.id = it->second.get_value <long long> ();
         else if (it->first == "ref")
             rway.nodes.push_back (it->second.get_value <long long> ());
-        rway = traverseWay (it->second, rway);
+        traverseWay (it->second, rway);
     }
-
-    return rway;
 } // end function XmlWays::traverseWay
 
 
@@ -212,7 +210,7 @@ RawWay XmlWays::traverseWay (const boost::property_tree::ptree& pt, RawWay rway)
  ************************************************************************
  ************************************************************************/
 
-Node XmlWays::traverseNode (const boost::property_tree::ptree& pt, Node node)
+inline void XmlWays::traverseNode (const boost::property_tree::ptree& pt, Node& node)
 {
     // Only coordinates of nodes are read here; full data can be extracted with
     // get-nodes
@@ -225,8 +223,6 @@ Node XmlWays::traverseNode (const boost::property_tree::ptree& pt, Node node)
             node.lat = it->second.get_value <float> ();
         else if (it->first == "lon")
             node.lon = it->second.get_value <float> ();
-        node = traverseNode (it->second, node);
+        traverseNode (it->second, node);
     }
-
-    return node;
 } // end function XmlWays::traverseNode

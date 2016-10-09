@@ -21,7 +21,7 @@ Rcpp::S4 rcpp_get_polygons (std::string st)
     int tempi, coli, rowi, count = 0;
     long long ni;
     float lon, lat;
-    float tempf, xmin = FLOAT_MAX, xmax = -FLOAT_MAX, 
+    float xmin = FLOAT_MAX, xmax = -FLOAT_MAX,
           ymin = FLOAT_MAX, ymax = -FLOAT_MAX;
     std::vector <float> lons, lats;
     std::string id, key;
@@ -58,19 +58,19 @@ Rcpp::S4 rcpp_get_polygons (std::string st)
     {
         // Only proceed if start and end points are the same, otherwise it's
         // just a normal way
-        if ((*wi).nodes.size () > 0 && 
+        if ((*wi).nodes.size () > 0 &&
                 ((*wi).nodes.front () == (*wi).nodes.back ()))
         {
             // Collect all unique keys
-            for (kv_iter = (*wi).key_val.begin (); 
+            for (kv_iter = (*wi).key_val.begin ();
                     kv_iter != (*wi).key_val.end (); ++kv_iter)
             {
                 key = (*kv_iter).first;
-                if (std::find (varnames.begin (), 
+                if (std::find (varnames.begin (),
                             varnames.end (), key) == varnames.end ())
                     varnames.push_back (key);
             }
-        
+
             /*
              * The following lines check for duplicate way IDs -- which do very
              * occasionally occur -- and ensures unique values as required by 'sp'
@@ -80,7 +80,7 @@ Rcpp::S4 rcpp_get_polygons (std::string st)
             tempi = 0;
             while (idset.find (id) != idset.end ())
                 id = std::to_string ((*wi).id) + "." + std::to_string (tempi++);
-            auto si = idset.insert (id);
+            idset.insert (id);
 
             polynames.push_back (id);
             // Set up first origin node
@@ -141,7 +141,7 @@ Rcpp::S4 rcpp_get_polygons (std::string st)
             polygons.slot ("Polygons") = dummy_list;
             polygons.slot ("ID") = std::to_string ((*wi).id);
             polyList [count++] = polygons;
-        
+
             dummy_list.erase (0);
         }
     }
@@ -152,11 +152,11 @@ Rcpp::S4 rcpp_get_polygons (std::string st)
     Rcpp::CharacterVector kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na());
     for (Polys_Itr wi = xml.polys.begin(); wi != xml.polys.end(); ++wi)
     {
-        if ((*wi).nodes.size () > 0 && 
+        if ((*wi).nodes.size () > 0 &&
                 ((*wi).nodes.front () == (*wi).nodes.back ()))
         {
             auto it = std::find (varnames.begin (), varnames.end (), "name");
-            coli = it - varnames.begin (); 
+            coli = it - varnames.begin ();
             rowi = wi - xml.polys.begin ();
             kv_vec (coli * nrow + rowi) = (*wi).name;
 
@@ -166,7 +166,7 @@ Rcpp::S4 rcpp_get_polygons (std::string st)
                 key = (*kv_iter).first;
                 it = std::find (varnames.begin (), varnames.end (), key);
                 // key must exist in varnames!
-                coli = it - varnames.begin (); 
+                coli = it - varnames.begin ();
                 rowi = wi - xml.polys.begin ();
                 kv_vec (coli * nrow + rowi) = (*kv_iter).second;
             }

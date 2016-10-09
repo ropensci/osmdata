@@ -81,7 +81,7 @@ void XmlNodes::traverseNodes (const boost::property_tree::ptree& pt)
     std::unordered_set <long long> nodeIDs;
     Node node;
     // NOTE: Node is (lon, lat) = (x, y)!
-    
+
     for (boost::property_tree::ptree::const_iterator it = pt.begin ();
             it != pt.end (); ++it)
     {
@@ -94,7 +94,7 @@ void XmlNodes::traverseNodes (const boost::property_tree::ptree& pt)
             if (nodeIDs.find (node.id) == nodeIDs.end ())
             {
                 nodes.push_back (node);
-                auto p = nodeIDs.insert (node.id);
+                nodeIDs.insert (node.id);
             }
         } else
             traverseNodes (it->second);
