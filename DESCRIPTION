@@ -21,6 +21,10 @@ Imports:
     sp,
     XML
 Suggests:
+    devtools,
+    knitr,
+    roxygen2,
+    rmarkdown,
     testthat
 LinkingTo: Rcpp
 URL: https://github.com/osmdatar/osmdatar
