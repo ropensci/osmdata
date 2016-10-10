@@ -1,7 +1,19 @@
 #include "get-lines.h"
 #include "get-bbox.h"
-#include <unordered_set>
+
 #include <Rcpp.h>
+
+#include <map>
+#include <unordered_set>
+#include <algorithm>
+
+// APS uncomment to save xml input string to a file
+//#define DUMP_INPUT
+
+#ifdef DUMP_INPUT
+#include <fstream>
+#endif
+
 
 const float FLOAT_MAX = std::numeric_limits<float>::max ();
 
@@ -12,32 +24,41 @@ const float FLOAT_MAX = std::numeric_limits<float>::max ();
 //' @param st Text contents of an overpass API query
 //' @return A \code{SpatialLinesDataFrame} contains all ways and associated data
 // [[Rcpp::export]]
-Rcpp::S4 rcpp_get_lines (std::string st)
+Rcpp::S4 rcpp_get_lines (const std::string& st)
 {
-    XmlWays xml (st);
+#ifdef DUMP_INPUT
+    {
+        std::ofstream dump("./get-lines.xml");
+        if (dump.is_open())
+        {
+            dump.write(st.c_str(), st.size());
+        }
+    }
+#endif
 
-    int tempi, coli, rowi, count = 0;
-    long long ni;
-    float lon, lat;
-    float tempf, xmin = FLOAT_MAX, xmax = -FLOAT_MAX, 
+    XmlWays xml (st);
+    const umapPair& xmlnodes = xml.nodes();
+    const Ways& xmlways = xml.ways();
+
+    int count = 0;
+    float xmin = FLOAT_MAX, xmax = -FLOAT_MAX,
           ymin = FLOAT_MAX, ymax = -FLOAT_MAX;
     std::vector <float> lons, lats;
-    std::string id, key;
     std::unordered_set <std::string> idset; // see TODO below
-    std::vector <std::string> colnames, rownames, waynames, varnames;
-    Rcpp::List dimnames (0), dummy_list (0), wayList (xml.ways.size ());
+    std::vector <std::string> colnames, rownames, waynames;
+    std::set<std::string> varnames;
+    Rcpp::List dimnames (0), dummy_list (0), wayList (xmlways.size ());
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
 
     // TODO: delete umapitr
     umapPair_Itr umapitr;
-    typedef std::vector <long long>::iterator ll_Itr;
+    typedef std::vector <long long>::const_iterator ll_Itr;
 
     colnames.push_back ("lon");
     colnames.push_back ("lat");
-    waynames.resize (0);
-    varnames.push_back ("name");
-    varnames.push_back ("type");
-    varnames.push_back ("oneway");
+    varnames.insert ("name");
+    varnames.insert ("type");
+    varnames.insert ("oneway");
     // other varnames added below
 
     Rcpp::Language line_call ("new", "Line");
@@ -52,19 +73,16 @@ Rcpp::S4 rcpp_get_lines (std::string st)
      * this does *NOT* make the routine any faster, and so the current version
      * which more safely uses iterators is kept instead.
      */
-    std::vector <std::pair <std::string, std::string> >::iterator kv_iter;
+    std::map<std::string, std::string>::const_iterator kv_iter;
 
-    for (Ways_Itr wi = xml.ways.begin(); wi != xml.ways.end(); ++wi)
+    /// APS prealloc memory for all the way names
+    waynames.reserve(xmlways.size());
+
+    for (Ways_Itr wi = xmlways.begin(); wi != xmlways.end(); ++wi)
     {
         // Collect all unique keys
-        for (kv_iter = (*wi).key_val.begin (); kv_iter != (*wi).key_val.end ();
-                ++kv_iter)
-        {
-            key = (*kv_iter).first;
-            if (std::find (varnames.begin (), varnames.end (), key) == varnames.end ())
-                varnames.push_back (key);
-        }
-        
+        std::for_each(wi->key_val.begin (), wi->key_val.end (),
+                      [&](const std::pair<std::string, std::string>& p) { varnames.insert(p.first); });
         /*
          * The following lines check for duplicate way IDs -- which do very
          * occasionally occur -- and ensures unique values as required by 'sp'
@@ -72,56 +90,53 @@ Rcpp::S4 rcpp_get_lines (std::string st)
          * TODO: This uses an unordered_set: check if it's faster with a simple
          * vector and std::find
          */
-        id = std::to_string ((*wi).id);
-        tempi = 0;
+        std::string id = std::to_string ((*wi).id);
+        int tempi = 0;
         while (idset.find (id) != idset.end ())
             id = std::to_string ((*wi).id) + "." + std::to_string (tempi++);
-        auto si = idset.insert (id);
+        idset.insert (id);
 
         waynames.push_back (id);
         // Set up first origin node
-        ni = (*wi).nodes.front ();
+        long long ni = (*wi).nodes.front ();
 
-        lons.resize (0);
-        lats.resize (0);
+        lons.clear();
+        lats.clear();
+        rownames.clear();
+        // APS we can alloc the right amount of memory upfront since we know the size of xml.ways
+        // this will avoid potentially expensive reallocs as the vector grows in size
+        lons.reserve(wi->nodes.size());
+        lats.reserve(wi->nodes.size());
+        rownames.reserve(wi->nodes.size());
+
         // TODO: Find out why the following pointer lines do not work here
         // assert ((umapitr = xml.nodes.find (ni)) != xml.nodes.end ());
         //lon = (*umapitr).second.first;
         //lat = (*umapitr).second.second;
-        lon = xml.nodes [ni].first;
-        lat = xml.nodes [ni].second;
+        // APS probably need some protection in case ni doesnt exist in xmlnodes
+        float lon = xmlnodes.find(ni)->second.first;
+        float lat = xmlnodes.find(ni)->second.second;
         lons.push_back (lon);
         lats.push_back (lat);
-        if (lon < xmin)
-            xmin = lon;
-        else if (lon > xmax)
-            xmax = lon;
-        if (lat < ymin)
-            ymin = lat;
-        else if (lat > ymax)
-            ymax = lat;
 
-        rownames.resize (0);
         rownames.push_back (std::to_string (ni));
 
         // Then iterate over the remaining nodes of that way
         for (ll_Itr it = std::next ((*wi).nodes.begin ());
                 it != (*wi).nodes.end (); it++)
         {
-            lon = xml.nodes [*it].first;
-            lat = xml.nodes [*it].second;
+            // APS probably need some protection in case *it doesnt exist in xmlnodes
+            lon = xmlnodes.find(*it)->second.first;
+            lat = xmlnodes.find(*it)->second.second;
             lons.push_back (lon);
             lats.push_back (lat);
             rownames.push_back (std::to_string (*it));
-            if (lon < xmin)
-                xmin = lon;
-            else if (lon > xmax)
-                xmax = lon;
-            if (lat < ymin)
-                ymin = lat;
-            else if (lat > ymax)
-                ymax = lat;
         }
+
+        xmin = std::min(xmin, *std::min_element(lons.begin(), lons.end()));
+        xmax = std::max(xmax, *std::max_element(lons.begin(), lons.end()));
+        ymin = std::min(ymin, *std::min_element(lats.begin(), lats.end()));
+        ymax = std::max(ymax, *std::max_element(lats.begin(), lats.end()));
 
         nmat = Rcpp::NumericMatrix (Rcpp::Dimension (lons.size (), 2));
         std::copy (lons.begin (), lons.end (), nmat.begin ());
@@ -131,8 +146,7 @@ Rcpp::S4 rcpp_get_lines (std::string st)
         dimnames.push_back (rownames);
         dimnames.push_back (colnames);
         nmat.attr ("dimnames") = dimnames;
-        while (dimnames.size () > 0)
-            dimnames.erase (0);
+        dimnames.erase(0, dimnames.size());
 
         // sp::Line and sp::Lines objects can be constructed directly from the
         // data with the following two lines, but this is *enormously* slower:
@@ -147,42 +161,37 @@ Rcpp::S4 rcpp_get_lines (std::string st)
         lines.slot ("Lines") = dummy_list;
         lines.slot ("ID") = std::to_string ((*wi).id);
         wayList [count++] = lines;
-        
+
         dummy_list.erase (0);
     }
     wayList.attr ("names") = waynames;
 
     // Store all key-val pairs in one massive DF
-    int nrow = xml.ways.size (), ncol = varnames.size ();
+    int nrow = xmlways.size (), ncol = varnames.size ();
     Rcpp::CharacterVector kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na());
-    for (Ways_Itr wi = xml.ways.begin(); wi != xml.ways.end(); ++wi)
+    // APS precalc repeated column names. Also use container's find implementation which is likely more
+    // efficient than the generic find.
+    int namecoli = std::distance(varnames.begin (), varnames.find("name"));
+    int typecoli = std::distance(varnames.begin (), varnames.find("type"));
+    int onewaycoli = std::distance(varnames.begin (), varnames.find("oneway"));
+    for (Ways_Itr wi = xmlways.begin(); wi != xmlways.end(); ++wi)
     {
-        auto it = std::find (varnames.begin (), varnames.end (), "name");
-        coli = it - varnames.begin (); 
-        rowi = wi - xml.ways.begin ();
-        kv_vec (coli * nrow + rowi) = (*wi).name;
+        int rowi = wi - xmlways.begin ();
+        kv_vec (namecoli * nrow + rowi) = (*wi).name;
+        kv_vec (typecoli * nrow + rowi) = (*wi).type;
 
-        it = std::find (varnames.begin (), varnames.end (), "type");
-        coli = it - varnames.begin (); 
-        rowi = wi - xml.ways.begin ();
-        kv_vec (coli * nrow + rowi) = (*wi).type;
-
-        it = std::find (varnames.begin (), varnames.end (), "oneway");
-        coli = it - varnames.begin (); 
-        rowi = wi - xml.ways.begin ();
         if ((*wi).oneway)
-            kv_vec (coli * nrow + rowi) = "true";
+            kv_vec (onewaycoli * nrow + rowi) = "true";
         else
-            kv_vec (coli * nrow + rowi) = "false";
+            kv_vec (onewaycoli * nrow + rowi) = "false";
 
         for (kv_iter = (*wi).key_val.begin (); kv_iter != (*wi).key_val.end ();
                 ++kv_iter)
         {
-            key = (*kv_iter).first;
-            it = std::find (varnames.begin (), varnames.end (), key);
+            const std::string& key = (*kv_iter).first;
+            auto it = varnames.find(key);
             // key must exist in varnames!
-            coli = it - varnames.begin (); 
-            rowi = wi - xml.ways.begin ();
+            int coli = std::distance(varnames.begin (), it);
             kv_vec (coli * nrow + rowi) = (*kv_iter).second;
         }
     }
@@ -203,13 +212,6 @@ Rcpp::S4 rcpp_get_lines (std::string st)
     Rcpp::DataFrame kv_df = kv_mat;
     kv_df.attr ("names") = varnames;
     sp_lines.slot ("data") = kv_df;
-
-    lons.resize (0);
-    lats.resize (0);
-    waynames.resize (0);
-    colnames.resize (0);
-    rownames.resize (0);
-    varnames.resize (0);
 
     return sp_lines;
 }
