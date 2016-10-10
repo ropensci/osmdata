@@ -1,2 +1,2 @@
-PKG_CPPFLAGS=@cflags@ -std=c++11 -Wall -Werror
+PKG_CPPFLAGS=@cflags@
 PKG_LIBS=@libs@

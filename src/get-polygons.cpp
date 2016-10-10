@@ -60,7 +60,10 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
         {
             // Collect all unique keys
             std::for_each(wi->key_val.begin (), wi->key_val.end (),
-                          [&](const std::pair<std::string, std::string>& p) { varnames.insert(p.first); });
+                          [&](const std::pair<std::string, std::string>& p) 
+                          { 
+                              varnames.insert(p.first); 
+                          });
 
             /*
              * The following lines check for duplicate way IDs -- which do very
@@ -84,8 +87,9 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
             lons.reserve(nodes.size());
             lats.reserve(nodes.size());
 
-            // APS using find segfaults on the test data so need to check iterator validity
-            // NB previously using operator[ni] it would have inserted a new element if key ni didnt exist
+            // APS using find segfaults on the test data so need to check
+            // iterator validity NB previously using operator[ni] it would have
+            // inserted a new element if key ni didnt exist
             float lon = 0.0;
             float lat = 0.0;
             auto it = nodes.find(ni);
@@ -154,8 +158,8 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
         {
             kv_vec (namecoli * nrow + rowi) = (*wi).name;
 
-            for (kv_iter = (*wi).key_val.begin (); kv_iter != (*wi).key_val.end ();
-                    ++kv_iter)
+            for (kv_iter = (*wi).key_val.begin (); 
+                    kv_iter != (*wi).key_val.end (); ++kv_iter)
             {
                 const std::string& key = (*kv_iter).first;
                 auto it = varnames.find(key);
