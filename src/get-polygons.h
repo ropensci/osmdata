@@ -89,7 +89,8 @@ public:
 
 private:
     void traversePolys (const boost::property_tree::ptree& pt);
-    void traverseRelation (const boost::property_tree::ptree& pt, RawRelation& rrel);
+    void traverseRelation (const boost::property_tree::ptree& pt, 
+            RawRelation& rrel);
     void traversePoly (const boost::property_tree::ptree& pt, RawPoly& rpoly);
     void traverseNode (const boost::property_tree::ptree& pt, Node& node);
 }; // end Class::XmlPolys
@@ -247,7 +248,8 @@ inline void XmlPolys::traversePoly(const boost::property_tree::ptree& pt,
  ************************************************************************
  ************************************************************************/
 
-inline void XmlPolys::traverseNode (const boost::property_tree::ptree& pt, Node& node)
+inline void XmlPolys::traverseNode (const boost::property_tree::ptree& pt, 
+        Node& node)
 {
     // Only coordinates of nodes are read here; full data can be extracted with
     // get-nodes

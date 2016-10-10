@@ -146,10 +146,12 @@ inline void XmlWays::traverseWays (const boost::property_tree::ptree& pt)
                 else if (rway.key [i] == "oneway" && rway.value [i] == "yes")
                     way.oneway = true;
                 else
-                    way.key_val.insert (std::make_pair (rway.key [i], rway.value [i]));
+                    way.key_val.insert (std::make_pair (rway.key [i], 
+                                rway.value [i]));
             }
             // Then copy nodes from rway to way.
-            std::copy(rway.nodes.begin (), rway.nodes.end(), std::back_inserter(way.nodes));
+            std::copy(rway.nodes.begin (), rway.nodes.end(), 
+                    std::back_inserter(way.nodes));
             m_ways.push_back (way);
         } else
             traverseWays (it->second);
@@ -165,7 +167,8 @@ inline void XmlWays::traverseWays (const boost::property_tree::ptree& pt)
  ************************************************************************
  ************************************************************************/
 
-inline void XmlWays::traverseWay (const boost::property_tree::ptree& pt, RawWay& rway)
+inline void XmlWays::traverseWay (const boost::property_tree::ptree& pt, 
+        RawWay& rway)
 {
     for (boost::property_tree::ptree::const_iterator it = pt.begin ();
             it != pt.end (); ++it)
@@ -191,7 +194,8 @@ inline void XmlWays::traverseWay (const boost::property_tree::ptree& pt, RawWay&
  ************************************************************************
  ************************************************************************/
 
-inline void XmlWays::traverseNode (const boost::property_tree::ptree& pt, Node& node)
+inline void XmlWays::traverseNode (const boost::property_tree::ptree& pt, 
+        Node& node)
 {
     // Only coordinates of nodes are read here; full data can be extracted with
     // get-nodes
