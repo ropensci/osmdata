@@ -5,8 +5,6 @@
 
 // [[Rcpp::depends(sp)]]
 
-const float FLOAT_MAX = std::numeric_limits<float>::max ();
-
 //' rcpp_get_polygons
 //'
 //' Extracts all polygons from an overpass API query
@@ -162,7 +160,7 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
                     kv_iter != (*wi).key_val.end (); ++kv_iter)
             {
                 const std::string& key = (*kv_iter).first;
-                auto it = varnames.find(key);
+                auto it = varnames.find (key);
                 // key must exist in varnames!
                 int coli = std::distance(varnames.begin (), it);
                 kv_vec (coli * nrow + rowi) = (*kv_iter).second;

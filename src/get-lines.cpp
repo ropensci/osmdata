@@ -15,8 +15,6 @@
 #endif
 
 
-const float FLOAT_MAX = std::numeric_limits<float>::max ();
-
 //' rcpp_get_lines
 //'
 //' Extracts all ways from an overpass API query

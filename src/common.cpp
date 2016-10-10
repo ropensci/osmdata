@@ -4,7 +4,6 @@
 
 #include <sstream>
 
-
 boost::property_tree::ptree common::parseXML(const std::string& xmlString)
 {
   // populate tree structure pt

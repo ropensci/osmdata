@@ -3,8 +3,6 @@
 #include <unordered_set>
 #include <Rcpp.h>
 
-const float FLOAT_MAX = std::numeric_limits<float>::max ();
-
 //' rcpp_get_points
 //'
 //' Extracts all nodes from an overpass API query
@@ -41,7 +39,7 @@ Rcpp::S4 rcpp_get_points (const std::string& st)
         std::for_each(ni->key_val.begin (), ni->key_val.end (),
                       [&](const std::pair<std::string, std::string>& p) 
                       { 
-                          varnames.insert(p.first); 
+                          varnames.insert (p.first); 
                       });
 
         float lon = (*ni).lon;
