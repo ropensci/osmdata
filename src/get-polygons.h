@@ -160,13 +160,17 @@ inline void XmlPolys::traversePolys (const boost::property_tree::ptree& pt)
 
             traverseRelation (it->second, rrel);
             assert (rrel.key.size () == rrel.value.size ());
+            assert (rrel.ways.size () == rrel.outer.size ());
 
             relation.id = rrel.id;
             relation.key_val.clear();
             relation.ways.clear();
             for (size_t i=0; i<rrel.key.size (); i++)
-                relation.key_val.insert (std::make_pair
-                        (rrel.key [i], rrel.value [i]));
+                relation.key_val.insert (std::make_pair (rrel.key [i],
+                            rrel.value [i]));
+            for (size_t i=0; i<rrel.ways.size (); i++)
+                relation.ways.push_back (std::make_pair (rrel.ways [i],
+                            rrel.outer [i]));
             m_relations.push_back (relation);
         } else
             traversePolys (it->second);
