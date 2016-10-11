@@ -15,8 +15,6 @@
 #endif
 
 
-const float FLOAT_MAX = std::numeric_limits<float>::max ();
-
 //' rcpp_get_lines
 //'
 //' Extracts all ways from an overpass API query
@@ -81,8 +79,11 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
     for (Ways_Itr wi = xmlways.begin(); wi != xmlways.end(); ++wi)
     {
         // Collect all unique keys
-        std::for_each(wi->key_val.begin (), wi->key_val.end (),
-                      [&](const std::pair<std::string, std::string>& p) { varnames.insert(p.first); });
+        std::for_each (wi->key_val.begin (), wi->key_val.end (),
+                      [&](const std::pair<std::string, std::string>& p) 
+                      { 
+                          varnames.insert(p.first); 
+                      });
         /*
          * The following lines check for duplicate way IDs -- which do very
          * occasionally occur -- and ensures unique values as required by 'sp'
@@ -103,8 +104,9 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
         lons.clear();
         lats.clear();
         rownames.clear();
-        // APS we can alloc the right amount of memory upfront since we know the size of xml.ways
-        // this will avoid potentially expensive reallocs as the vector grows in size
+        // APS we can alloc the right amount of memory upfront since we know the
+        // size of xml.ways this will avoid potentially expensive reallocs as
+        // the vector grows in size
         lons.reserve(wi->nodes.size());
         lats.reserve(wi->nodes.size());
         rownames.reserve(wi->nodes.size());
@@ -125,7 +127,8 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
         for (ll_Itr it = std::next ((*wi).nodes.begin ());
                 it != (*wi).nodes.end (); it++)
         {
-            // APS probably need some protection in case *it doesnt exist in xmlnodes
+            // APS probably need some protection in case *it doesnt exist in
+            // xmlnodes
             lon = xmlnodes.find(*it)->second.first;
             lat = xmlnodes.find(*it)->second.second;
             lons.push_back (lon);
@@ -169,8 +172,8 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
     // Store all key-val pairs in one massive DF
     int nrow = xmlways.size (), ncol = varnames.size ();
     Rcpp::CharacterVector kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na());
-    // APS precalc repeated column names. Also use container's find implementation which is likely more
-    // efficient than the generic find.
+    // APS precalc repeated column names. Also use container's find
+    // implementation which is likely more efficient than the generic find.
     int namecoli = std::distance(varnames.begin (), varnames.find("name"));
     int typecoli = std::distance(varnames.begin (), varnames.find("type"));
     int onewaycoli = std::distance(varnames.begin (), varnames.find("oneway"));

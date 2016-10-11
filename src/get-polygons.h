@@ -89,7 +89,8 @@ public:
 
 private:
     void traversePolys (const boost::property_tree::ptree& pt);
-    void traverseRelation (const boost::property_tree::ptree& pt, RawRelation& rrel);
+    void traverseRelation (const boost::property_tree::ptree& pt, 
+            RawRelation& rrel);
     void traversePoly (const boost::property_tree::ptree& pt, RawPoly& rpoly);
     void traverseNode (const boost::property_tree::ptree& pt, Node& node);
 }; // end Class::XmlPolys
@@ -159,13 +160,17 @@ inline void XmlPolys::traversePolys (const boost::property_tree::ptree& pt)
 
             traverseRelation (it->second, rrel);
             assert (rrel.key.size () == rrel.value.size ());
+            assert (rrel.ways.size () == rrel.outer.size ());
 
             relation.id = rrel.id;
             relation.key_val.clear();
             relation.ways.clear();
             for (size_t i=0; i<rrel.key.size (); i++)
-                relation.key_val.insert (std::make_pair
-                        (rrel.key [i], rrel.value [i]));
+                relation.key_val.insert (std::make_pair (rrel.key [i],
+                            rrel.value [i]));
+            for (size_t i=0; i<rrel.ways.size (); i++)
+                relation.ways.push_back (std::make_pair (rrel.ways [i],
+                            rrel.outer [i]));
             m_relations.push_back (relation);
         } else
             traversePolys (it->second);
@@ -247,7 +252,8 @@ inline void XmlPolys::traversePoly(const boost::property_tree::ptree& pt,
  ************************************************************************
  ************************************************************************/
 
-inline void XmlPolys::traverseNode (const boost::property_tree::ptree& pt, Node& node)
+inline void XmlPolys::traverseNode (const boost::property_tree::ptree& pt, 
+        Node& node)
 {
     // Only coordinates of nodes are read here; full data can be extracted with
     // get-nodes

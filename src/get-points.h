@@ -89,7 +89,8 @@ inline void XmlNodes::traverseNodes (const boost::property_tree::ptree& pt)
  ************************************************************************
  ************************************************************************/
 
-inline void XmlNodes::traverseNode (const boost::property_tree::ptree& pt, Node& node)
+inline void XmlNodes::traverseNode (const boost::property_tree::ptree& pt, 
+        Node& node)
 {
     for (boost::property_tree::ptree::const_iterator it = pt.begin ();
             it != pt.end (); ++it)
