@@ -23,7 +23,7 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
     std::unordered_set <std::string> idset; // see TODO below
     std::vector <std::string> colnames, rownames, polynames;
     std::set<std::string> varnames;
-    Rcpp::List dimnames (0), dummy_list (0), polyList (xml.polys().size ());
+    Rcpp::List dimnames (0), dummy_list (0), polyList (xml.ways().size ());
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
 
     typedef std::vector <long long>::const_iterator ll_Itr;
@@ -49,7 +49,13 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
     Rcpp::Language polygons_call ("new", "Polygons");
     Rcpp::S4 polygons;
 
-    for (Polys_Itr wi = xml.polys().begin(); wi != xml.polys().end(); ++wi)
+    /*
+     * NOTE: OSM polygons are stored as ways, and thus all objects in the class
+     * xmlPolys are rightly referred to as ways. Here within this Rcpp function,
+     * these are referred to as Polygons, but the iteration is over the actual
+     * polygonal ways.
+     */
+    for (Ways_Itr wi = xml.ways().begin(); wi != xml.ways().end(); ++wi)
     {
         // Only proceed if start and end points are the same, otherwise it's
         // just a normal way
@@ -139,12 +145,12 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
     polyList.attr ("names") = polynames;
 
     // Store all key-val pairs in one massive DF
-    int nrow = xml.polys().size (), ncol = varnames.size ();
+    int nrow = xml.ways().size (), ncol = varnames.size ();
     Rcpp::CharacterVector kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na());
     int namecoli = std::distance (varnames.begin (), varnames.find("name"));
-    for (Polys_Itr wi = xml.polys().begin(); wi != xml.polys().end(); ++wi)
+    for (Ways_Itr wi = xml.ways().begin(); wi != xml.ways().end(); ++wi)
     {
-      int rowi = wi - xml.polys().begin ();
+      int rowi = wi - xml.ways().begin ();
 
       if ((*wi).nodes.size () > 0 &&
                 ((*wi).nodes.front () == (*wi).nodes.back ()))

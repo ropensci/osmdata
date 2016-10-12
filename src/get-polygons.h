@@ -7,6 +7,8 @@
 
 // TODO: Implement Rcpp error control for asserts
 
+// NOTE: OSM polygons are stored as ways, and thus all objects in the class
+// xmlPolys are rightly referred to as ways. 
 
 struct Node
 {
@@ -14,14 +16,14 @@ struct Node
     float lat, lon;
 };
 
-struct RawPoly
+struct RawWay
 {
     osmid_t id;
     std::vector <std::string> key, value;
     std::vector <osmid_t> nodes;
 };
 
-struct Poly
+struct OneWay
 {
     osmid_t id;
     std::string type, name;
@@ -45,10 +47,10 @@ struct Relation
 };
 
 typedef std::vector <Relation> Relations;
-typedef std::vector <Poly> Polys;
-typedef std::vector <Poly>::const_iterator Polys_Itr;
-//typedef std::map <long long, Poly> Polys;
-//typedef std::map <long long, Poly>::const_iterator Polys_Itr;
+typedef std::vector <OneWay> Ways;
+typedef std::vector <OneWay>::const_iterator Ways_Itr;
+//typedef std::map <long long, OneWay> Ways;
+//typedef std::map <long long, OneWay>::const_iterator Ways_Itr;
 
 // MP: the long long is Node.id, and thus repetitive, but traverseNode has to
 // stored the ID in the Node struct first, before this can be used to make the
@@ -67,7 +69,7 @@ class XmlPolys
 {
 private:
     Nodes m_nodes;
-    Polys m_polys;
+    Ways m_ways;
     Relations m_relations;
 
 public:
@@ -78,26 +80,26 @@ public:
     XmlPolys (const std::string& str)
     {
         m_nodes.clear ();
-        m_polys.clear ();
+        m_ways.clear ();
         XmlDocPtr p = parseXML (str);
-        traversePolys (p->first_node ());
+        traverseWays (p->first_node ());
     }
 
     ~XmlPolys ()
     {
         m_nodes.clear ();
-        m_polys.clear ();
+        m_ways.clear ();
     }
 
     const Nodes& nodes() const { return m_nodes; }
-    const Polys& polys() const { return m_polys; }
+    const Ways& ways() const { return m_ways; }
     const Relations& relations() const { return m_relations; }
 
 private:
 
-    void traversePolys (XmlNodePtr pt);
+    void traverseWays (XmlNodePtr pt);
     void traverseRelation (XmlNodePtr pt, RawRelation& rrel);
-    void traversePoly (XmlNodePtr pt, RawPoly& rpoly);
+    void traverseWay (XmlNodePtr pt, RawWay& rway);
     void traverseNode (XmlNodePtr pt, Node& node);
 
 }; // end Class::XmlPolys
@@ -106,17 +108,17 @@ private:
 /************************************************************************
  ************************************************************************
  **                                                                    **
- **                       FUNCTION::TRAVERSEPOLYS                      **
+ **                       FUNCTION::TRAVERSEWAYS                      **
  **                                                                    **
  ************************************************************************
  ************************************************************************/
 
-inline void XmlPolys::traversePolys (XmlNodePtr pt)
+inline void XmlPolys::traverseWays (XmlNodePtr pt)
 {
   RawRelation rrel;
-  RawPoly rpoly;
+  RawWay rway;
   Relation relation;
-  Poly poly;
+  OneWay way;
   Node node;
   // NOTE: Node is (lon, lat) = (x, y)!
 
@@ -130,34 +132,34 @@ inline void XmlPolys::traversePolys (XmlNodePtr pt)
     }
     else if (!strcmp(it->name(), "way"))
     {
-      rpoly.key.clear();
-      rpoly.value.clear();
-      rpoly.nodes.clear();
+      rway.key.clear();
+      rway.value.clear();
+      rway.nodes.clear();
 
-      traversePoly(it, rpoly);
-      assert (rpoly.key.size () == rpoly.value.size ());
+      traverseWay (it, rway);
+      assert (rway.key.size () == rway.value.size ());
 
       // This is much easier as explicit loop than with an iterator
-      poly.id = rpoly.id;
-      poly.name = poly.type = "";
-      poly.key_val.clear();
-      poly.nodes.clear();
-      for (size_t i=0; i<rpoly.key.size (); i++)
+      way.id = rway.id;
+      way.name = way.type = "";
+      way.key_val.clear();
+      way.nodes.clear();
+      for (size_t i=0; i<rway.key.size (); i++)
       {
-        if (rpoly.key [i] == "name")
-          poly.name = rpoly.value [i];
+        if (rway.key [i] == "name")
+          way.name = rway.value [i];
         else
-          poly.key_val.insert (std::make_pair
-                                 (rpoly.key [i], rpoly.value [i]));
+          way.key_val.insert (std::make_pair
+                                 (rway.key [i], rway.value [i]));
       }
       // This is the only place at which get-polys really differs from
-      // get-ways, in that rpoly is copied to poly only if the nodes form
+      // get-ways, in that rway is copied to way only if the nodes form
       // a cycle
-      if (rpoly.nodes.size () > 0 &&
-          (rpoly.nodes.front () == rpoly.nodes.back ()))
+      if (rway.nodes.size () > 0 &&
+          (rway.nodes.front () == rway.nodes.back ()))
       {
-        poly.nodes.swap(rpoly.nodes);
-        m_polys.push_back (poly);
+        way.nodes.swap(rway.nodes);
+        m_ways.push_back (way);
       }
     }
     else if (!strcmp(it->name(), "relation"))
@@ -184,11 +186,11 @@ inline void XmlPolys::traversePolys (XmlNodePtr pt)
     }
     else
     {
-      traversePolys (it);
+      traverseWays (it);
     }
   }
 
-} // end function XmlWays::traverseWays
+} // end function XmlPolys::traverseWays
 
 
 /************************************************************************
@@ -201,7 +203,8 @@ inline void XmlPolys::traversePolys (XmlNodePtr pt)
 
 inline void XmlPolys::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
 {
-  for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; it = it->next_attribute())
+  for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; 
+          it = it->next_attribute())
   {
     if (!strcmp(it->name(), "k"))
       rrel.key.push_back (it->value());
@@ -230,31 +233,32 @@ inline void XmlPolys::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
 /************************************************************************
  ************************************************************************
  **                                                                    **
- **                        FUNCTION::TRAVERSEPOLY                      **
+ **                        FUNCTION::TRAVERSEWAY                       **
  **                                                                    **
  ************************************************************************
  ************************************************************************/
 
-inline void XmlPolys::traversePoly (XmlNodePtr pt, RawPoly& rpoly)
+inline void XmlPolys::traverseWay (XmlNodePtr pt, RawWay& rway)
 {
-  for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; it = it->next_attribute())
+  for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; 
+          it = it->next_attribute())
   {
     if (!strcmp(it->name(), "k"))
-      rpoly.key.push_back (it->value());
+      rway.key.push_back (it->value());
     else if (!strcmp(it->name(), "v"))
-      rpoly.value.push_back (it->value());
+      rway.value.push_back (it->value());
     else if (!strcmp(it->name(), "id"))
-      rpoly.id = std::stoll(it->value());
+      rway.id = std::stoll(it->value());
     else if (!strcmp(it->name(), "ref"))
-      rpoly.nodes.push_back (std::stoll(it->value()));
+      rway.nodes.push_back (std::stoll(it->value()));
   }
   // allows for >1 child nodes
   for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
   {
-    traversePoly (it, rpoly);
+    traverseWay (it, rway);
   }
 
-} // end function XmlNodes::traverseNode
+} // end function XmlNodes::traverseWay
 
 
 /************************************************************************
@@ -267,7 +271,8 @@ inline void XmlPolys::traversePoly (XmlNodePtr pt, RawPoly& rpoly)
 
 inline void XmlPolys::traverseNode (XmlNodePtr pt, Node& node)
 {
-  for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; it = it->next_attribute())
+  for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; 
+          it = it->next_attribute())
   {
     if (!strcmp(it->name(), "id"))
       node.id = std::stoll(it->value());
