@@ -14,8 +14,8 @@ Rcpp::S4 rcpp_get_points (const std::string& st)
 {
     XmlNodes xmlNodes (st);
 
-    float xmin = FLOAT_MAX, xmax = -FLOAT_MAX,
-          ymin = FLOAT_MAX, ymax = -FLOAT_MAX;
+    float xmin = FLOAT_MAX, xmax = FLOAT_MIN,
+          ymin = FLOAT_MAX, ymax = FLOAT_MIN;
     std::vector <std::string> colnames, rownames;
     std::set<std::string> varnames;
     Rcpp::List dimnames (0);
@@ -37,9 +37,9 @@ Rcpp::S4 rcpp_get_points (const std::string& st)
     {
         // Collect all unique keys
         std::for_each(ni->key_val.begin (), ni->key_val.end (),
-                      [&](const std::pair<std::string, std::string>& p) 
-                      { 
-                          varnames.insert (p.first); 
+                      [&](const std::pair<std::string, std::string>& p)
+                      {
+                          varnames.insert (p.first);
                       });
 
         float lon = (*ni).lon;
