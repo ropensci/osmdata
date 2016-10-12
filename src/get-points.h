@@ -1,12 +1,16 @@
 #include "common.h"
 
 #include <map>
+#include <vector>
 #include <unordered_set>
+
+#include <cstring>
+
 
 // APS TODO fix multiple definitions in different headers
 struct Node
 {
-    long long id;
+    osmid_t id;
     std::string key, value;
     std::map<std::string, std::string> key_val;
     float lat, lon;
@@ -33,7 +37,9 @@ private:
 public:
     XmlNodes (const std::string& str)
     {
-      traverseNodes(common::parseXML(str));
+        //traverseNodes(common::parseXMLold(str));
+        XmlDocPtr p = parseXML(str);
+        traverseNodes(p->first_node());
     }
     ~XmlNodes ()
     {
@@ -42,8 +48,8 @@ public:
     const Nodes& nodes() const { return m_nodes; }
 
 private:
-    void traverseNodes (const boost::property_tree::ptree& pt);
-    void traverseNode (const boost::property_tree::ptree& pt, Node& node);
+    void traverseNodes (XmlNodePtr pt);
+    void traverseNode (XmlNodePtr pt, Node& node);
 }; // end Class::XmlNodes
 
 
@@ -55,30 +61,33 @@ private:
  ************************************************************************
  ************************************************************************/
 
-inline void XmlNodes::traverseNodes (const boost::property_tree::ptree& pt)
+inline void XmlNodes::traverseNodes (XmlNodePtr pt)
 {
-    std::unordered_set <long long> nodeIDs;
-    Node node;
-    // NOTE: Node is (lon, lat) = (x, y)!
+  std::unordered_set <osmid_t> nodeIDs;
+  Node node;
+  // NOTE: Node is (lon, lat) = (x, y)!
 
-    for (boost::property_tree::ptree::const_iterator it = pt.begin ();
-            it != pt.end (); ++it)
+
+  for (XmlNodePtr it = pt->first_node (); it != nullptr; it = it->next_sibling())
+  {
+    if (!strcmp(it->name(), "node"))
     {
-        if (it->first == "node")
-        {
-            node.key = "";
-            node.value = "";
-            node.key_val.clear();
-            traverseNode (it->second, node);
-            if (nodeIDs.find (node.id) == nodeIDs.end ())
-            {
-                m_nodes.push_back (node);
-                nodeIDs.insert (node.id);
-            }
-        } else
-            traverseNodes (it->second);
+      node.key = "";
+      node.value = "";
+      node.key_val.clear();
+      traverseNode (it, node);
+      if (nodeIDs.find (node.id) == nodeIDs.end ())
+      {
+        m_nodes.push_back (node);
+        nodeIDs.insert (node.id);
+      }
     }
-} // end function XmlNodes::traverseNodes
+    else
+    {
+      traverseNodes (it);
+    }
+  }
+}
 
 
 /************************************************************************
@@ -89,31 +98,35 @@ inline void XmlNodes::traverseNodes (const boost::property_tree::ptree& pt)
  ************************************************************************
  ************************************************************************/
 
-inline void XmlNodes::traverseNode (const boost::property_tree::ptree& pt, 
-        Node& node)
+inline void XmlNodes::traverseNode (XmlNodePtr pt,
+                                    Node& node)
 {
-    for (boost::property_tree::ptree::const_iterator it = pt.begin ();
-            it != pt.end (); ++it)
+  for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; it = it->next_attribute())
+  {
+    if (!strcmp(it->name(), "id"))
+      node.id = std::stoll(it->value());
+    else if (!strcmp(it->name(), "lat"))
+      node.lat = std::stof(it->value());
+    else if (!strcmp(it->name(), "lon"))
+      node.lon = std::stof(it->value());
+    else if (!strcmp(it->name(), "k"))
+      node.key = it->value();
+    else if (!strcmp(it->name(), "v"))
     {
-        if (it->first == "id")
-            node.id = it->second.get_value <long long> ();
-        else if (it->first == "lat")
-            node.lat = it->second.get_value <float> ();
-        else if (it->first == "lon")
-            node.lon = it->second.get_value <float> ();
-        else if (it->first == "k")
-            node.key = it->second.get_value <std::string> ();
-        else if (it->first == "v")
-        {
-            // Note that values sometimes exist without keys, but the following
-            // still inserts the pair because values **always** come after keys.
-            node.value = it->second.get_value <std::string> ();
-            node.key_val.insert (std::make_pair (node.key, node.value));
-            node.key = "";
-            node.value = "";
-        }
-
-        traverseNode (it->second, node);
+      // Note that values sometimes exist without keys, but the following
+      // still inserts the pair because values **always** come after keys.
+      node.value = it->value();
+      node.key_val.insert (std::make_pair (node.key, node.value));
+      node.key = "";
+      node.value = "";
     }
 
+  }
+  // allows for >1 child nodes
+  for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
+  {
+    traverseNode (it, node);
+  }
+
 } // end function XmlNodes::traverseNode
+

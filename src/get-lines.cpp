@@ -39,8 +39,8 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
     const Ways& xmlways = xml.ways();
 
     int count = 0;
-    float xmin = FLOAT_MAX, xmax = -FLOAT_MAX,
-          ymin = FLOAT_MAX, ymax = -FLOAT_MAX;
+    float xmin = FLOAT_MAX, xmax = FLOAT_MIN,
+          ymin = FLOAT_MAX, ymax = FLOAT_MIN;
     std::vector <float> lons, lats;
     std::unordered_set <std::string> idset; // see TODO below
     std::vector <std::string> colnames, rownames, waynames;
@@ -80,9 +80,9 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
     {
         // Collect all unique keys
         std::for_each (wi->key_val.begin (), wi->key_val.end (),
-                      [&](const std::pair<std::string, std::string>& p) 
-                      { 
-                          varnames.insert(p.first); 
+                      [&](const std::pair<std::string, std::string>& p)
+                      {
+                          varnames.insert(p.first);
                       });
         /*
          * The following lines check for duplicate way IDs -- which do very
