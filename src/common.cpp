@@ -1,17 +1,11 @@
 
 #include "common.h"
-#include <boost/property_tree/xml_parser.hpp>
 
-#include <sstream>
-
-boost::property_tree::ptree common::parseXML(const std::string& xmlString)
+// APS sadly xml_document has nop copy constructor, so despite NRVO/copy elision, cannot return by value.
+// This forces us into using a unique_ptr
+XmlDocPtr parseXML(const std::string& xmlString)
 {
-  // populate tree structure pt
-  boost::property_tree::ptree pt;
-  std::istringstream istream (xmlString, std::stringstream::in);
-  boost::property_tree::xml_parser::read_xml (istream, pt);
-  // hopfully this copy is elided, might be worth checking
-  return pt;
+  XmlDocPtr doc(new rapidxml::xml_document<>());
+  doc->parse<0>(const_cast<char*>(xmlString.c_str()));
+  return doc;
 }
-
-
