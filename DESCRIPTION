@@ -26,7 +26,7 @@ Suggests:
     roxygen2,
     rmarkdown,
     testthat
-LinkingTo: Rcpp
+LinkingTo: Rcpp, BH
 URL: https://github.com/osmdatar/osmdatar
 BugReports: https://github.com/osmdatar/osmdatar/issues
 Date: 2016-08-23
