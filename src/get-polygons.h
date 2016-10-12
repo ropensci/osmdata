@@ -47,10 +47,8 @@ struct Relation
 };
 
 typedef std::vector <Relation> Relations;
-typedef std::vector <OneWay> Ways;
-typedef std::vector <OneWay>::const_iterator Ways_Itr;
-//typedef std::map <long long, OneWay> Ways;
-//typedef std::map <long long, OneWay>::const_iterator Ways_Itr;
+typedef std::map <long long, OneWay> Ways;
+typedef std::map <long long, OneWay>::const_iterator Ways_Itr;
 
 // MP: the long long is Node.id, and thus repetitive, but traverseNode has to
 // stored the ID in the Node struct first, before this can be used to make the
@@ -158,8 +156,8 @@ inline void XmlPolys::traverseWays (XmlNodePtr pt)
       if (rway.nodes.size () > 0 &&
           (rway.nodes.front () == rway.nodes.back ()))
       {
-        way.nodes.swap(rway.nodes);
-        m_ways.push_back (way);
+          way.nodes.swap (rway.nodes);
+          m_ways.insert (std::make_pair (way.id, way));
       }
     }
     else if (!strcmp(it->name(), "relation"))
