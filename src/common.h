@@ -17,5 +17,5 @@ typedef std::unique_ptr<rapidxml::xml_document<>> XmlDocPtr;
 typedef const rapidxml::xml_node<>* XmlNodePtr;
 typedef const rapidxml::xml_attribute<>* XmlAttrPtr;
 
-XmlDocPtr parseXML(const std::string& xmlString);
+XmlDocPtr parseXML (const std::string& xmlString);
 

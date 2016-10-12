@@ -58,37 +58,37 @@ typedef std::vector <Node> Nodes;
 
 class XmlWays
 {
-private:
+    private:
 
-    Nodes m_nodelist;
-    Ways m_ways;
-    umapPair m_nodes;
-    // "nodelist" contains all nodes to be returned as a
-    // SpatialPointsDataFrame, while "nodes" is the unordered set used to
-    // quickly extract lon-lats from nodal IDs.
+        Nodes m_nodelist;
+        Ways m_ways;
+        umapPair m_nodes;
+        // "nodelist" contains all nodes to be returned as a
+        // SpatialPointsDataFrame, while "nodes" is the unordered set used to
+        // quickly extract lon-lats from nodal IDs.
 
-public:
+    public:
 
-    XmlWays (const std::string& str)
-    {
-      XmlDocPtr p = parseXML(str);
-      traverseWays(p->first_node());
-    }
+        XmlWays (const std::string& str)
+        {
+            XmlDocPtr p = parseXML (str);
+            traverseWays (p->first_node());
+        }
 
-    ~XmlWays ()
-    {
-    }
+        ~XmlWays ()
+        {
+        }
 
-    // Const accessors for members
-    const Nodes& nodelist() const { return m_nodelist; }
-    const Ways& ways() const { return m_ways; }
-    const umapPair& nodes() const { return m_nodes; }
+        // Const accessors for members
+        const Nodes& nodelist() const { return m_nodelist; }
+        const Ways& ways() const { return m_ways; }
+        const umapPair& nodes() const { return m_nodes; }
 
-private:
+    private:
 
-    void traverseWays (XmlNodePtr pt);
-    void traverseWay (XmlNodePtr pt, RawWay& way);
-    void traverseNode (XmlNodePtr pt, Node& node);
+        void traverseWays (XmlNodePtr pt);
+        void traverseWay (XmlNodePtr pt, RawWay& way);
+        void traverseNode (XmlNodePtr pt, Node& node);
 
 }; // end Class::XmlWays
 
@@ -109,7 +109,8 @@ inline void XmlWays::traverseWays (XmlNodePtr pt)
     Node node;
     // NOTE: Node is (lon, lat) = (x, y)!
 
-    for (XmlNodePtr it = pt->first_node (); it != nullptr; it = it->next_sibling())
+    for (XmlNodePtr it = pt->first_node (); it != nullptr; 
+            it = it->next_sibling())
     {
         if (!strcmp(it->name(), "node"))
         {
@@ -174,22 +175,23 @@ inline void XmlWays::traverseWays (XmlNodePtr pt)
 
 inline void XmlWays::traverseWay (XmlNodePtr pt, RawWay& rway)
 {
-  for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; it = it->next_attribute())
-  {
-    if (!strcmp(it->name(), "k"))
-      rway.key.push_back (it->value());
-    else if (!strcmp(it->name(), "v"))
-      rway.value.push_back (it->value());
-    else if (!strcmp(it->name(), "id"))
-      rway.id = std::stoll(it->value());
-    else if (!strcmp(it->name(), "ref"))
-      rway.nodes.push_back (std::stoll(it->value()));
-  }
-  // allows for >1 child nodes
-  for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
-  {
-    traverseWay (it, rway);
-  }
+    for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; it = 
+            it->next_attribute())
+    {
+        if (!strcmp(it->name(), "k"))
+            rway.key.push_back (it->value());
+        else if (!strcmp(it->name(), "v"))
+            rway.value.push_back (it->value());
+        else if (!strcmp(it->name(), "id"))
+            rway.id = std::stoll(it->value());
+        else if (!strcmp(it->name(), "ref"))
+            rway.nodes.push_back (std::stoll(it->value()));
+    }
+    // allows for >1 child nodes
+    for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
+    {
+        traverseWay (it, rway);
+    }
 } // end function XmlWays::traverseWay
 
 
@@ -203,20 +205,20 @@ inline void XmlWays::traverseWay (XmlNodePtr pt, RawWay& rway)
 
 inline void XmlWays::traverseNode (XmlNodePtr pt, Node& node)
 {
-  for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; it = it->next_attribute())
-  {
-    if (!strcmp(it->name(), "id"))
-      node.id = std::stoll(it->value());
-    else if (!strcmp(it->name(), "lat"))
-      node.lat = std::stof(it->value());
-    else if (!strcmp(it->name(), "lon"))
-      node.lon = std::stof(it->value());
-  }
-  // allows for >1 child nodes
-  for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
-  {
-    traverseNode (it, node);
-  }
+    for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; it = it->next_attribute())
+    {
+        if (!strcmp(it->name(), "id"))
+            node.id = std::stoll(it->value());
+        else if (!strcmp(it->name(), "lat"))
+            node.lat = std::stof(it->value());
+        else if (!strcmp(it->name(), "lon"))
+            node.lon = std::stof(it->value());
+    }
+    // allows for >1 child nodes
+    for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
+    {
+        traverseNode (it, node);
+    }
 
 } // end function XmlNodes::traverseNode
 

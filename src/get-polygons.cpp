@@ -17,8 +17,8 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
     XmlPolys xml (st);
 
     int count = 0;
-    float xmin = FLOAT_MAX, xmax = FLOAT_MIN,
-          ymin = FLOAT_MAX, ymax = FLOAT_MIN;
+    float xmin = FLOAT_MAX, xmax = -FLOAT_MAX,
+          ymin = FLOAT_MAX, ymax = -FLOAT_MAX;
     std::vector <float> lons, lats;
     std::unordered_set <std::string> idset; // see TODO below
     std::vector <std::string> colnames, rownames, polynames;
