@@ -67,7 +67,7 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
                     wi->second.key_val.end (),
                     [&](const std::pair <std::string, std::string>& p) 
                     { 
-                        varnames.insert (p.first); 
+                    varnames.insert (p.first); 
                     });
 
             /*
@@ -79,7 +79,7 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
 
             int tempi = 0;
             while (idset.find (id) != idset.end ())
-              id = std::to_string (wi->first) + "." + std::to_string (tempi++);
+                id = std::to_string (wi->first) + "." + std::to_string (tempi++);
             idset.insert (id);
 
             polynames.push_back (id);
@@ -150,9 +150,9 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
     int namecoli = std::distance (varnames.begin (), varnames.find ("name"));
     for (Ways_Itr wi = xml.ways().begin(); wi != xml.ways().end(); ++wi)
     {
-      int rowi = std::distance (std::begin (xml.ways ()), wi);
+        int rowi = std::distance (std::begin (xml.ways ()), wi);
 
-      if (wi->second.nodes.size () > 0 &&
+        if (wi->second.nodes.size () > 0 &&
                 (wi->second.nodes.front () == wi->second.nodes.back ()))
         {
             kv_vec (namecoli * nrow + rowi) = wi->second.name;
