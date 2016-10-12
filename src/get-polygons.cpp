@@ -22,7 +22,7 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
     std::vector <float> lons, lats;
     std::unordered_set <std::string> idset; // see TODO below
     std::vector <std::string> colnames, rownames, polynames;
-    std::set<std::string> varnames;
+    std::set <std::string> varnames;
     Rcpp::List dimnames (0), dummy_list (0), polyList (xml.ways().size ());
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
 
@@ -59,15 +59,15 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
     {
         // Only proceed if start and end points are the same, otherwise it's
         // just a normal way
-        if ((*wi).nodes.size () > 0 &&
-                ((*wi).nodes.front () == (*wi).nodes.back ()))
+        if (wi->second.nodes.size () > 0 &&
+                (wi->second.nodes.front () == wi->second.nodes.back ()))
         {
             // Collect all unique keys
-            std::for_each (wi->key_val.begin (), wi->key_val.end (),
+            std::for_each (wi->second.key_val.begin (), 
+                    wi->second.key_val.end (),
                     [&](const std::pair <std::string, std::string>& p) 
                     { 
-                        if (varnames.find (p.first) == varnames.end ())
-                            varnames.insert (p.first); 
+                    varnames.insert (p.first); 
                     });
 
             /*
@@ -75,16 +75,16 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
              * occasionally occur -- and ensures unique values as required by 'sp'
              * through appending decimal digits to <long long> OSM IDs.
              */
-            std::string id = std::to_string ((*wi).id);
+            std::string id = std::to_string (wi->first);
 
             int tempi = 0;
             while (idset.find (id) != idset.end ())
-              id = std::to_string ((*wi).id) + "." + std::to_string (tempi++);
+                id = std::to_string (wi->first) + "." + std::to_string (tempi++);
             idset.insert (id);
 
             polynames.push_back (id);
             // Set up first origin node
-            int ni = (*wi).nodes.front ();
+            int ni = wi->second.nodes.front ();
 
             const std::map <long long, Node>& nodes = xml.nodes ();
             lons.clear ();
@@ -105,8 +105,8 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
             rownames.push_back (std::to_string (ni));
 
             // Then iterate over the remaining nodes of that way
-            for (ll_Itr it = std::next ((*wi).nodes.begin ());
-                    it != (*wi).nodes.end (); it++)
+            for (ll_Itr it = std::next (wi->second.nodes.begin ());
+                    it != wi->second.nodes.end (); it++)
             {
                 // APS needs protection from invalid iterator
                 // MP Done, but TODO: Proper exception handler
@@ -136,7 +136,7 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
             dummy_list.push_back (poly);
             polygons = polygons_call.eval ();
             polygons.slot ("Polygons") = dummy_list;
-            polygons.slot ("ID") = std::to_string ((*wi).id);
+            polygons.slot ("ID") = std::to_string (wi->first);
             polyList [count++] = polygons;
 
             dummy_list.erase (0);
@@ -147,18 +147,18 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
     // Store all key-val pairs in one massive DF
     int nrow = xml.ways().size (), ncol = varnames.size ();
     Rcpp::CharacterVector kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na());
-    int namecoli = std::distance (varnames.begin (), varnames.find("name"));
+    int namecoli = std::distance (varnames.begin (), varnames.find ("name"));
     for (Ways_Itr wi = xml.ways().begin(); wi != xml.ways().end(); ++wi)
     {
-      int rowi = wi - xml.ways().begin ();
+        int rowi = std::distance (std::begin (xml.ways ()), wi);
 
-      if ((*wi).nodes.size () > 0 &&
-                ((*wi).nodes.front () == (*wi).nodes.back ()))
+        if (wi->second.nodes.size () > 0 &&
+                (wi->second.nodes.front () == wi->second.nodes.back ()))
         {
-            kv_vec (namecoli * nrow + rowi) = (*wi).name;
+            kv_vec (namecoli * nrow + rowi) = wi->second.name;
 
-            for (kv_iter = (*wi).key_val.begin ();
-                    kv_iter != (*wi).key_val.end (); ++kv_iter)
+            for (kv_iter = wi->second.key_val.begin ();
+                    kv_iter != wi->second.key_val.end (); ++kv_iter)
             {
                 const std::string& key = (*kv_iter).first;
                 auto it = varnames.find (key);

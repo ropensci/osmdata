@@ -5,6 +5,7 @@
 
 #include <limits>
 #include <memory>
+#include <string>
 
 // make clear the id type
 typedef long long osmid_t;
