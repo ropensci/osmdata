@@ -3,13 +3,7 @@
 #include <map>
 #include <unordered_map>
 
-// get-polygons is most adapted directly from get-ways
 // TODO: Implement Rcpp error control for asserts
-
-typedef std::pair <float, float> ffPair; // lat-lon
-
-typedef std::unordered_map <long long, ffPair> UMapPair;
-typedef std::unordered_map <long long, ffPair>::const_iterator UMapPair_Itr;
 
 
 struct Node
@@ -29,7 +23,7 @@ struct Poly
 {
     long long id;
     std::string type, name;
-    std::map<std::string, std::string> key_val;
+    std::map <std::string, std::string> key_val;
     std::vector <long long> nodes;
 };
 
@@ -51,8 +45,13 @@ struct Relation
 typedef std::vector <Relation> Relations;
 typedef std::vector <Poly> Polys;
 typedef std::vector <Poly>::const_iterator Polys_Itr;
-typedef std::vector <Node> Nodes;
+//typedef std::map <long long, Poly> Polys;
+//typedef std::map <long long, Poly>::const_iterator Polys_Itr;
 
+// MP: the long long is Node.id, and thus repetitive, but traverseNode has to
+// stored the ID in the Node struct first, before this can be used to make the
+// map of Nodes. TODO: Is there a better way?
+typedef std::map <long long, Node> Nodes;
 
 /************************************************************************
  ************************************************************************
@@ -65,27 +64,30 @@ typedef std::vector <Node> Nodes;
 class XmlPolys
 {
 private:
-    Nodes m_nodelist;
+    Nodes m_nodes;
     Polys m_polys;
     Relations m_relations;
-    UMapPair m_nodes;
+
+public:
     // "nodelist" contains all nodes to be returned as a
     // SpatialPointsDataFrame, while "nodes" is the unordered set used to
     // quickly extract lon-lats from nodal IDs.
 
-public:
     XmlPolys (const std::string& str)
     {
-      traversePolys(common::parseXML(str));
+        m_nodes.clear ();
+        m_polys.clear ();
+        traversePolys (common::parseXML (str));
     }
     ~XmlPolys ()
     {
+        m_nodes.clear ();
+        m_polys.clear ();
     }
 
-    const Nodes& nodelist() const { return m_nodelist; }
+    const Nodes& nodes() const { return m_nodes; }
     const Polys& polys() const { return m_polys; }
     const Relations& relations() const { return m_relations; }
-    const UMapPair& nodes() const { return m_nodes; }
 
 private:
     void traversePolys (const boost::property_tree::ptree& pt);
@@ -119,7 +121,7 @@ inline void XmlPolys::traversePolys (const boost::property_tree::ptree& pt)
         if (it->first == "node")
         {
             traverseNode (it->second, node);
-            m_nodes [node.id] = std::make_pair (node.lon, node.lat);
+            m_nodes.insert (std::make_pair (node.id, node));
         }
         else if (it->first == "way")
         {
@@ -148,7 +150,7 @@ inline void XmlPolys::traversePolys (const boost::property_tree::ptree& pt)
             if (rpoly.nodes.size () > 0 &&
                     (rpoly.nodes.front () == rpoly.nodes.back ()))
             {
-                poly.nodes.swap(rpoly.nodes);
+                poly.nodes.swap (rpoly.nodes);
                 m_polys.push_back (poly);
             }
         } else if (it->first == "relation")

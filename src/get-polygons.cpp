@@ -26,9 +26,9 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
     Rcpp::List dimnames (0), dummy_list (0), polyList (xml.polys().size ());
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
 
-    // TODO: delete umapitr
-    UMapPair_Itr umapitr;
     typedef std::vector <long long>::const_iterator ll_Itr;
+
+    idset.clear ();
 
     colnames.push_back ("lon");
     colnames.push_back ("lat");
@@ -57,11 +57,12 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
                 ((*wi).nodes.front () == (*wi).nodes.back ()))
         {
             // Collect all unique keys
-            std::for_each(wi->key_val.begin (), wi->key_val.end (),
-                          [&](const std::pair<std::string, std::string>& p) 
-                          { 
-                              varnames.insert(p.first); 
-                          });
+            std::for_each (wi->key_val.begin (), wi->key_val.end (),
+                    [&](const std::pair <std::string, std::string>& p) 
+                    { 
+                        if (varnames.find (p.first) == varnames.end ())
+                            varnames.insert (p.first); 
+                    });
 
             /*
              * The following lines check for duplicate way IDs -- which do very
@@ -79,46 +80,40 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
             // Set up first origin node
             int ni = (*wi).nodes.front ();
 
-            const UMapPair& nodes = xml.nodes();
-            lons.clear();
-            lats.clear();
-            lons.reserve(nodes.size());
-            lats.reserve(nodes.size());
+            const std::map <long long, Node>& nodes = xml.nodes ();
+            lons.clear ();
+            lats.clear ();
+            lons.reserve (nodes.size ());
+            lats.reserve (nodes.size ());
 
             // APS using find segfaults on the test data so need to check
-            // iterator validity NB previously using operator[ni] it would have
-            // inserted a new element if key ni didnt exist
-            float lon = 0.0;
-            float lat = 0.0;
-            auto it = nodes.find(ni);
-            if (it != nodes.end())
-            {
-              lon = it->second.first;
-              lat = it->second.second;
-            }
-            lons.push_back (lon);
-            lats.push_back (lat);
+            // iterator validity 
+            // MP Done, but TODO: Proper exception handler
+            auto it = nodes.find (ni);
+            assert (it != nodes.end ());
+            lons.push_back (it->second.lon);
+            lats.push_back (it->second.lat);
 
-            rownames.clear();
-            rownames.reserve(nodes.size());
+            rownames.clear ();
+            rownames.reserve (nodes.size ());
             rownames.push_back (std::to_string (ni));
 
             // Then iterate over the remaining nodes of that way
             for (ll_Itr it = std::next ((*wi).nodes.begin ());
                     it != (*wi).nodes.end (); it++)
             {
-                // APS needs protection from invalid iterator, see above
-                lon = nodes.find(*it)->second.first;
-                lat = nodes.find(*it)->second.second;
-                lons.push_back (lon);
-                lats.push_back (lat);
+                // APS needs protection from invalid iterator
+                // MP Done, but TODO: Proper exception handler
+                assert (nodes.find (*it) != nodes.end ());
+                lons.push_back (nodes.find (*it)->second.lon);
+                lats.push_back (nodes.find (*it)->second.lat);
                 rownames.push_back (std::to_string (*it));
             }
 
-            xmin = std::min(xmin, *std::min_element(lons.begin(), lons.end()));
-            xmax = std::max(xmax, *std::max_element(lons.begin(), lons.end()));
-            ymin = std::min(ymin, *std::min_element(lats.begin(), lats.end()));
-            ymax = std::max(ymax, *std::max_element(lats.begin(), lats.end()));
+            xmin = std::min (xmin, *std::min_element (lons.begin(), lons.end()));
+            xmax = std::max (xmax, *std::max_element (lons.begin(), lons.end()));
+            ymin = std::min (ymin, *std::min_element (lats.begin(), lats.end()));
+            ymax = std::max (ymax, *std::max_element (lats.begin(), lats.end()));
 
             nmat = Rcpp::NumericMatrix (Rcpp::Dimension (lons.size (), 2));
             std::copy (lons.begin (), lons.end (), nmat.begin ());
@@ -146,7 +141,7 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
     // Store all key-val pairs in one massive DF
     int nrow = xml.polys().size (), ncol = varnames.size ();
     Rcpp::CharacterVector kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na());
-    int namecoli = std::distance(varnames.begin (), varnames.find("name"));
+    int namecoli = std::distance (varnames.begin (), varnames.find("name"));
     for (Polys_Itr wi = xml.polys().begin(); wi != xml.polys().end(); ++wi)
     {
       int rowi = wi - xml.polys().begin ();
@@ -183,6 +178,8 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
     Rcpp::DataFrame kv_df = kv_mat;
     kv_df.attr ("names") = varnames;
     sp_polys.slot ("data") = kv_df;
+
+    idset.clear ();
 
     return sp_polys;
 }
