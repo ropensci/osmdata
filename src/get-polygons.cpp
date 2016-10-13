@@ -117,6 +117,8 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
 
         // Then iterate over nodes of that way and store all lat-lons
         size_t n = itw->second.nodes.size ();
+        lons.clear ();
+        lats.clear ();
         lons.reserve (n);
         lats.reserve (n);
         for (auto itn = itw->second.nodes.begin ();
@@ -193,12 +195,6 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
     Rcpp::DataFrame kv_df = kv_mat;
     kv_df.attr ("names") = varnames;
     sp_polys.slot ("data") = kv_df;
-
-    idset.clear ();
-    colnames.clear ();
-    rownames.clear ();
-    polynames.clear ();
-    varnames.clear ();
 
     return sp_polys;
 }

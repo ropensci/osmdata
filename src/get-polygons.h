@@ -48,7 +48,6 @@ struct Relation
 
 typedef std::vector <Relation> Relations;
 typedef std::map <long long, OneWay> Ways;
-typedef std::map <long long, OneWay>::const_iterator Ways_Itr;
 
 // MP: the long long is Node.id, and thus repetitive, but traverseNode has to
 // stored the ID in the Node struct first, before this can be used to make the
