@@ -118,17 +118,17 @@ inline void XmlPolys::traverseWays (XmlNodePtr pt)
     Relation relation;
     OneWay way;
     Node node;
-    // NOTE: Node is (lon, lat) = (x, y)!
 
-    for (XmlNodePtr it = pt->first_node (); it != nullptr; it = it->next_sibling())
+    for (XmlNodePtr it = pt->first_node (); it != nullptr; 
+            it = it->next_sibling())
     {
-        if (!strcmp(it->name(), "node"))
+        if (!strcmp (it->name(), "node"))
         {
             traverseNode (it, node);
             //m_nodes [node.id] = std::make_pair (node.lon, node.lat);
             m_nodes.insert (std::make_pair (node.id, node));
         }
-        else if (!strcmp(it->name(), "way"))
+        else if (!strcmp (it->name(), "way"))
         {
             rway.key.clear();
             rway.value.clear();
@@ -160,7 +160,7 @@ inline void XmlPolys::traverseWays (XmlNodePtr pt)
                 m_ways.insert (std::make_pair (way.id, way));
             }
         }
-        else if (!strcmp(it->name(), "relation"))
+        else if (!strcmp (it->name(), "relation"))
         {
             rrel.key.clear();
             rrel.value.clear();
