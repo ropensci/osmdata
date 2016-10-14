@@ -3,16 +3,7 @@
 
 #include <Rcpp.h>
 
-#include <map>
-#include <unordered_set>
-#include <algorithm>
-
-// APS uncomment to save xml input string to a file
-//#define DUMP_INPUT
-
-#ifdef DUMP_INPUT
-#include <fstream>
-#endif
+#include <algorithm> // TODO: Really?
 
 
 //' rcpp_get_lines
@@ -26,15 +17,16 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
 {
 #ifdef DUMP_INPUT
     {
-        std::ofstream dump("./get-lines.xml");
+        std::ofstream dump ("./get-lines.xml");
         if (dump.is_open())
         {
-            dump.write(st.c_str(), st.size());
+            dump.write (st.c_str(), st.size());
         }
     }
 #endif
 
     XmlWays xml (st);
+
     const umapPair& xmlnodes = xml.nodes();
     const Ways& xmlways = xml.ways();
 

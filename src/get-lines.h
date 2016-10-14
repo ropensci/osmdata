@@ -2,12 +2,6 @@
 
 #include "common.h"
 
-#include <vector>
-#include <map>
-#include <unordered_map>
-
-#include <cstring>
-
 typedef std::pair <float, float> ffPair; // lat-lon
 
 typedef std::unordered_map <osmid_t, ffPair> umapPair;
@@ -36,9 +30,8 @@ struct Way
 {
     bool oneway;
     osmid_t id;
-    std::string type, name; // type is highway type (value for highway key)
+    std::string type, name; 
     // APS would (key,value) be better in a std::map?
-    //std::vector <std::pair <std::string, std::string> > key_val;
     std::map<std::string, std::string> key_val;
     std::vector <osmid_t> nodes;
 };

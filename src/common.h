@@ -7,6 +7,19 @@
 #include <memory>
 #include <string>
 
+#include <vector>
+#include <map>
+#include <unordered_set>
+#include <unordered_map> // TODO: Delete are fixing get-lines
+#include <cstring>
+
+// APS uncomment to save xml input string to a file
+//#define DUMP_INPUT
+#ifdef DUMP_INPUT
+#include <fstream>
+#endif
+
+
 // make clear the id type
 typedef long long osmid_t;
 

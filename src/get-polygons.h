@@ -1,9 +1,6 @@
-#include "common.h"
+#pragma once
 
-#include <map>
-#include <vector>
-#include <unordered_map>
-#include <cstring>
+#include "common.h"
 
 // TODO: Implement Rcpp error control for asserts
 
@@ -34,6 +31,7 @@ struct OneWay
 struct RawRelation
 {
     osmid_t id;
+    // APS would (key,value) be better in a std::map?
     std::vector <std::string> key, value;
     std::vector <osmid_t> ways;
     std::vector <bool> outer;
@@ -70,9 +68,6 @@ class XmlPolys
         Relations m_relations;
 
     public:
-        // "nodelist" contains all nodes to be returned as a
-        // SpatialPointsDataFrame, while "nodes" is the unordered set used to
-        // quickly extract lon-lats from nodal IDs.
 
         XmlPolys (const std::string& str)
         {
@@ -124,7 +119,6 @@ inline void XmlPolys::traverseWays (XmlNodePtr pt)
         if (!strcmp (it->name(), "node"))
         {
             traverseNode (it, node);
-            //m_nodes [node.id] = std::make_pair (node.lon, node.lat);
             m_nodes.insert (std::make_pair (node.id, node));
         }
         else if (!strcmp (it->name(), "way"))
@@ -149,15 +143,8 @@ inline void XmlPolys::traverseWays (XmlNodePtr pt)
                     way.key_val.insert (std::make_pair
                             (rway.key [i], rway.value [i]));
             }
-            // This is the only place at which get-polys really differs from
-            // get-ways, in that rway is copied to way only if the nodes form
-            // a cycle
-            if (rway.nodes.size () > 0 &&
-                    (rway.nodes.front () == rway.nodes.back ()))
-            {
-                way.nodes.swap (rway.nodes);
-                m_ways.insert (std::make_pair (way.id, way));
-            }
+            way.nodes.swap (rway.nodes);
+            m_ways.insert (std::make_pair (way.id, way));
         }
         else if (!strcmp (it->name(), "relation"))
         {
@@ -254,7 +241,6 @@ inline void XmlPolys::traverseWay (XmlNodePtr pt, RawWay& rway)
     {
         traverseWay (it, rway);
     }
-
 } // end function XmlNodes::traverseWay
 
 
@@ -283,6 +269,5 @@ inline void XmlPolys::traverseNode (XmlNodePtr pt, Node& node)
     {
         traverseNode (it, node);
     }
-
 } // end function XmlNodes::traverseNode
 

@@ -1,7 +1,6 @@
 #include "get-polygons.h"
 #include "get-bbox.h"
 #include <Rcpp.h>
-#include <unordered_set>
 
 // [[Rcpp::depends(sp)]]
 
@@ -14,6 +13,16 @@
 // [[Rcpp::export]]
 Rcpp::S4 rcpp_get_polygons (const std::string& st)
 {
+#ifdef DUMP_INPUT
+    {
+        std::ofstream dump ("./get-lines.xml");
+        if (dump.is_open())
+        {
+            dump.write (st.c_str(), st.size());
+        }
+    }
+#endif
+
     XmlPolys xml (st);
 
     const std::map <long long, Node>& nodes = xml.nodes ();
