@@ -117,10 +117,12 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
 
         // Then iterate over nodes of that way and store all lat-lons
         size_t n = itw->second.nodes.size ();
-        //lons.clear ();
-        //lats.clear ();
+        lons.clear ();
+        lats.clear ();
+        rownames.clear ();
         lons.reserve (n);
         lats.reserve (n);
+        rownames.reserve (n);
         for (auto itn = itw->second.nodes.begin ();
                 itn != itw->second.nodes.end (); ++itn)
         {
