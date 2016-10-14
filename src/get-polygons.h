@@ -4,54 +4,6 @@
 
 // TODO: Implement Rcpp error control for asserts
 
-// NOTE: OSM polygons are stored as ways, and thus all objects in the class
-// xmlPolys are rightly referred to as ways. 
-
-struct Node
-{
-    osmid_t id;
-    float lat, lon;
-};
-
-struct RawWay
-{
-    osmid_t id;
-    std::vector <std::string> key, value;
-    std::vector <osmid_t> nodes;
-};
-
-struct OneWay
-{
-    osmid_t id;
-    std::string type, name;
-    std::map <std::string, std::string> key_val;
-    std::vector <osmid_t> nodes;
-};
-
-struct RawRelation
-{
-    osmid_t id;
-    // APS would (key,value) be better in a std::map?
-    std::vector <std::string> key, value;
-    std::vector <osmid_t> ways;
-    std::vector <bool> outer;
-};
-
-struct Relation
-{
-    osmid_t id;
-    std::map<std::string, std::string> key_val;
-    std::vector <std::pair <osmid_t, bool> > ways; // bool flags inner/outer
-};
-
-typedef std::vector <Relation> Relations;
-typedef std::map <long long, OneWay> Ways;
-
-// MP: the long long is Node.id, and thus repetitive, but traverseNode has to
-// stored the ID in the Node struct first, before this can be used to make the
-// map of Nodes. TODO: Is there a better way?
-typedef std::map <long long, Node> Nodes;
-
 /************************************************************************
  ************************************************************************
  **                                                                    **
@@ -63,6 +15,7 @@ typedef std::map <long long, Node> Nodes;
 class XmlPolys
 {
     private:
+
         Nodes m_nodes;
         Ways m_ways;
         Relations m_relations;
@@ -83,6 +36,7 @@ class XmlPolys
             m_ways.clear ();
         }
 
+        // Const accessors for members
         const Nodes& nodes() const { return m_nodes; }
         const Ways& ways() const { return m_ways; }
         const Relations& relations() const { return m_relations; }
@@ -143,6 +97,7 @@ inline void XmlPolys::traverseWays (XmlNodePtr pt)
                     way.key_val.insert (std::make_pair
                             (rway.key [i], rway.value [i]));
             }
+            // Then copy nodes from rway to way.
             way.nodes.swap (rway.nodes);
             m_ways.insert (std::make_pair (way.id, way));
         }

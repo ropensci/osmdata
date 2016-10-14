@@ -1,5 +1,6 @@
 #include "get-polygons.h"
 #include "get-bbox.h"
+
 #include <Rcpp.h>
 
 // [[Rcpp::depends(sp)]]
@@ -15,7 +16,7 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
 {
 #ifdef DUMP_INPUT
     {
-        std::ofstream dump ("./get-lines.xml");
+        std::ofstream dump ("./get-polygons.xml");
         if (dump.is_open())
         {
             dump.write (st.c_str(), st.size());
