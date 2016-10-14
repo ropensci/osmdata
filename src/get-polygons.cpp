@@ -33,7 +33,7 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
     float xmin = FLOAT_MAX, xmax = -FLOAT_MAX,
           ymin = FLOAT_MAX, ymax = -FLOAT_MAX;
     std::vector <float> lons, lats;
-    std::unordered_set <std::string> idset; 
+    std::unordered_set <std::string> idset; // see TODO below
     std::vector <std::string> colnames, rownames, polynames;
     std::set <std::string> varnames;
     Rcpp::List dimnames (0), dummy_list (0);
@@ -73,7 +73,6 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
 
     // Step#1
     std::set <osmid_t> the_ways; // Set will only insert unique values
-    //const std::vector <Relation>& rels = xml.relations ();
     for (auto it = rels.begin (); it != rels.end (); ++it)
         for (auto itw = (*it).ways.begin (); itw != (*it).ways.end (); ++itw)
         {
@@ -162,18 +161,16 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
         dummy_list.push_back (poly);
         polygons = polygons_call.eval ();
         polygons.slot ("Polygons") = dummy_list;
-        polygons.slot ("ID") = std::to_string (itw->first);
+        polygons.slot ("ID") = id;
         polyList [count++] = polygons;
 
         dummy_list.erase (0);
     } // end for it over the_ways
-    lons.clear ();
-    lats.clear ();
     polyList.attr ("names") = polynames;
 
     // Store all key-val pairs in one massive DF
     int nrow = the_ways.size (), ncol = varnames.size ();
-    Rcpp::CharacterVector kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na());
+    Rcpp::CharacterVector kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na ());
     int namecoli = std::distance (varnames.begin (), varnames.find ("name"));
     for (auto it = the_ways.begin (); it != the_ways.end (); ++it)
     {
@@ -184,8 +181,7 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
                 kv_iter != itw->second.key_val.end (); ++kv_iter)
         {
             const std::string& key = (*kv_iter).first;
-            auto ni = varnames.find (key);
-            // key must exist in varnames!
+            auto ni = varnames.find (key); // key must exist in varnames!
             int coli = std::distance (varnames.begin (), ni);
             kv_vec (coli * nrow + rowi) = (*kv_iter).second;
         }
