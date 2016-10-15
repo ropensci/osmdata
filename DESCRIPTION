@@ -5,9 +5,8 @@ Authors@R: c(
     person("Bob", "Rubin", role="aut"), 
     person("Andrew", "Smith", role="ctb"),
     person("Robin", "Lovelace", email="rob00x@gmail.com", role="ctb"), 
-    person("Marcin", "Kalicinski", role = c("ctb", "cph"), 
-        comment = "Author of included RapidXML code"),
-    )
+    person("Marcin", "Kalicinski", role="ctb", 
+        comment="Author of included RapidXML code"))
 Maintainer: Mark Padgham <mark.padgham@email.com>
 Title: Download OpenStreetMap Data with the Overpass API
 Description: Very fast download of OpenStreetMap (OSM) data into 'sp' objects.
