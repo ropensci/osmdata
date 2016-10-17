@@ -1,58 +1,38 @@
+/***************************************************************************
+ *  Project:    osmdatar
+ *  File:       get-polygons.h
+ *  Language:   C++
+ *
+ *  osmdatar is free software: you can redistribute it and/or modify it under
+ *  the terms of the GNU General Public License as published by the Free
+ *  Software Foundation, either version 3 of the License, or (at your option)
+ *  any later version.
+ *
+ *  osmdatar is distributed in the hope that it will be useful, but WITHOUT ANY
+ *  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ *  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ *  details.
+ *
+ *  You should have received a copy of the GNU General Public License along with
+ *  osm-router.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Author:     Mark Padgham / Andrew Smith
+ *  E-Mail:     mark.padgham@email.com / andrew@casacazaz.net
+ *
+ *  Description:    Class definition of XmlPolys
+ *
+ *  Limitations:
+ *
+ *  Dependencies:       none (rapidXML header included in osmdatar)
+ *
+ *  Compiler Options:   -std=c++11 
+ ***************************************************************************/
+
+#pragma once
+
 #include "common.h"
 
-#include <map>
-#include <vector>
-#include <unordered_map>
-#include <cstring>
-
 // TODO: Implement Rcpp error control for asserts
-
-// NOTE: OSM polygons are stored as ways, and thus all objects in the class
-// xmlPolys are rightly referred to as ways. 
-
-struct Node
-{
-    osmid_t id;
-    float lat, lon;
-};
-
-struct RawWay
-{
-    osmid_t id;
-    std::vector <std::string> key, value;
-    std::vector <osmid_t> nodes;
-};
-
-struct OneWay
-{
-    osmid_t id;
-    std::string type, name;
-    std::map <std::string, std::string> key_val;
-    std::vector <osmid_t> nodes;
-};
-
-struct RawRelation
-{
-    osmid_t id;
-    std::vector <std::string> key, value;
-    std::vector <osmid_t> ways;
-    std::vector <bool> outer;
-};
-
-struct Relation
-{
-    osmid_t id;
-    std::map<std::string, std::string> key_val;
-    std::vector <std::pair <osmid_t, bool> > ways; // bool flags inner/outer
-};
-
-typedef std::vector <Relation> Relations;
-typedef std::map <long long, OneWay> Ways;
-
-// MP: the long long is Node.id, and thus repetitive, but traverseNode has to
-// stored the ID in the Node struct first, before this can be used to make the
-// map of Nodes. TODO: Is there a better way?
-typedef std::map <long long, Node> Nodes;
 
 /************************************************************************
  ************************************************************************
@@ -65,14 +45,12 @@ typedef std::map <long long, Node> Nodes;
 class XmlPolys
 {
     private:
+
         Nodes m_nodes;
         Ways m_ways;
         Relations m_relations;
 
     public:
-        // "nodelist" contains all nodes to be returned as a
-        // SpatialPointsDataFrame, while "nodes" is the unordered set used to
-        // quickly extract lon-lats from nodal IDs.
 
         XmlPolys (const std::string& str)
         {
@@ -88,6 +66,7 @@ class XmlPolys
             m_ways.clear ();
         }
 
+        // Const accessors for members
         const Nodes& nodes() const { return m_nodes; }
         const Ways& ways() const { return m_ways; }
         const Relations& relations() const { return m_relations; }
@@ -124,7 +103,6 @@ inline void XmlPolys::traverseWays (XmlNodePtr pt)
         if (!strcmp (it->name(), "node"))
         {
             traverseNode (it, node);
-            //m_nodes [node.id] = std::make_pair (node.lon, node.lat);
             m_nodes.insert (std::make_pair (node.id, node));
         }
         else if (!strcmp (it->name(), "way"))
@@ -149,15 +127,9 @@ inline void XmlPolys::traverseWays (XmlNodePtr pt)
                     way.key_val.insert (std::make_pair
                             (rway.key [i], rway.value [i]));
             }
-            // This is the only place at which get-polys really differs from
-            // get-ways, in that rway is copied to way only if the nodes form
-            // a cycle
-            if (rway.nodes.size () > 0 &&
-                    (rway.nodes.front () == rway.nodes.back ()))
-            {
-                way.nodes.swap (rway.nodes);
-                m_ways.insert (std::make_pair (way.id, way));
-            }
+            // Then copy nodes from rway to way.
+            way.nodes.swap (rway.nodes);
+            m_ways.insert (std::make_pair (way.id, way));
         }
         else if (!strcmp (it->name(), "relation"))
         {
@@ -254,7 +226,6 @@ inline void XmlPolys::traverseWay (XmlNodePtr pt, RawWay& rway)
     {
         traverseWay (it, rway);
     }
-
 } // end function XmlNodes::traverseWay
 
 
@@ -283,6 +254,5 @@ inline void XmlPolys::traverseNode (XmlNodePtr pt, Node& node)
     {
         traverseNode (it, node);
     }
-
 } // end function XmlNodes::traverseNode
 

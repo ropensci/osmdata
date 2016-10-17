@@ -1,6 +1,6 @@
 #include "get-points.h"
 #include "get-bbox.h"
-#include <unordered_set>
+
 #include <Rcpp.h>
 
 //' rcpp_get_points
@@ -12,7 +12,19 @@
 // [[Rcpp::export]]
 Rcpp::S4 rcpp_get_points (const std::string& st)
 {
-    XmlNodes xmlNodes (st);
+#ifdef DUMP_INPUT
+    {
+        std::ofstream dump ("./get-points.xml");
+        if (dump.is_open())
+        {
+            dump.write (st.c_str(), st.size());
+        }
+    }
+#endif
+
+    XmlNodes xml (st);
+
+    const std::map <long long, Node>& nodes = xml.nodes ();
 
     float xmin = FLOAT_MAX, xmax = -FLOAT_MAX,
           ymin = FLOAT_MAX, ymax = -FLOAT_MAX;
@@ -24,48 +36,43 @@ Rcpp::S4 rcpp_get_points (const std::string& st)
     colnames.push_back ("lon");
     colnames.push_back ("lat");
 
-    std::map<std::string, std::string>::const_iterator kv_iter;
-
-    const Nodes& nodes = xmlNodes.nodes();
-
     std::vector <float> lons, lats;
-    lons.reserve(nodes.size());
-    lats.reserve(nodes.size());
-    rownames.reserve(nodes.size());
+    lons.reserve (nodes.size ());
+    lats.reserve (nodes.size ());
+    rownames.reserve (nodes.size ());
 
-    for (Nodes_Itr ni = nodes.begin (); ni != nodes.end (); ++ni)
+    for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
         // Collect all unique keys
-        std::for_each(ni->key_val.begin (), ni->key_val.end (),
+        std::for_each (ni->second.key_val.begin (), ni->second.key_val.end (),
                       [&](const std::pair<std::string, std::string>& p)
                       {
                           varnames.insert (p.first);
                       });
 
-        float lon = (*ni).lon;
-        float lat = (*ni).lat;
-        lons.push_back (lon);
-        lats.push_back (lat);
-        rownames.push_back (std::to_string ((*ni).id));
+        lons.push_back (ni->second.lon);
+        lats.push_back (ni->second.lat);
+        rownames.push_back (std::to_string (ni->first));
     }
-    xmin = std::min(xmin, *std::min_element(lons.begin(), lons.end()));
-    xmax = std::max(xmax, *std::max_element(lons.begin(), lons.end()));
-    ymin = std::min(ymin, *std::min_element(lats.begin(), lats.end()));
-    ymax = std::max(ymax, *std::max_element(lats.begin(), lats.end()));
+
+    xmin = std::min (xmin, *std::min_element (lons.begin(), lons.end()));
+    xmax = std::max (xmax, *std::max_element (lons.begin(), lons.end()));
+    ymin = std::min (ymin, *std::min_element (lats.begin(), lats.end()));
+    ymax = std::max (ymax, *std::max_element (lats.begin(), lats.end()));
 
     // Store all key-val pairs in one massive DF
-    int nrow = xmlNodes.nodes().size (), ncol = varnames.size ();
-    Rcpp::CharacterVector kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na());
-    for (Nodes_Itr ni = nodes.begin (); ni != nodes.end (); ++ni)
+    int nrow = nodes.size (), ncol = varnames.size ();
+    Rcpp::CharacterVector kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na ());
+    for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
-        int rowi = ni - nodes.begin ();
-        for (kv_iter = (*ni).key_val.begin (); kv_iter != (*ni).key_val.end ();
-                  ++kv_iter)
+        //int rowi = ni - nodes.begin ();
+        int rowi = std::distance (nodes.begin (), ni);
+        for (auto kv_iter = ni->second.key_val.begin (); 
+                kv_iter != ni->second.key_val.end (); ++kv_iter)
         {
             const std::string& key = (*kv_iter).first;
-            auto it = varnames.find (key);
-            // key must exist in varnames!
-            int coli = std::distance(varnames.begin (), it);
+            auto it = varnames.find (key); // key must exist in varnames!
+            int coli = std::distance (varnames.begin (), it);
             kv_vec (coli * nrow + rowi) = (*kv_iter).second;
         }
     }
