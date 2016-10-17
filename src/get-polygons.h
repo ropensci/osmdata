@@ -42,8 +42,8 @@
  ************************************************************************
  ************************************************************************/
 
-// APS make the class final so don't need to make destructor virtual
-class XmlPolys final
+
+class XmlPolys
 {
     private:
 
@@ -60,7 +60,8 @@ class XmlPolys final
             traverseWays (p->first_node ());
         }
 
-        ~XmlPolys ()
+        // APS make the dtor virtual since compiler support for "final" is limited
+        virtual ~XmlPolys ()
         {
           // APS m_nodes/m_ways/m_relations destructed here, no need to explicitly clear
         }

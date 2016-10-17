@@ -43,7 +43,7 @@
  ************************************************************************/
 
 // APS make the class final so don't need to make destructor virtual
-class XmlNodes final
+class XmlNodes
 {
     private:
 
@@ -57,7 +57,9 @@ class XmlNodes final
             XmlDocPtr p = parseXML (str);
             traverseNodes (p->first_node());
         }
-        ~XmlNodes ()
+
+        // APS make the dtor virtual since compiler support for "final" is limited
+        virtual ~XmlNodes ()
         {
           // APS m_nodes destructed here, no need to explicitly clear
         }

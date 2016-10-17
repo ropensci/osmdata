@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include "thirdparty/rapidxml.h"
+#include "rapidxml.h"
 
 // APS not good pratice to have all the headers included here, adds to compile time
 // better to #include as and where needed, ideally in source rather than headers,
