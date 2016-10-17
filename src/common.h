@@ -25,13 +25,16 @@
  *
  *  Dependencies:       none (rapidXML header included in osmdatar)
  *
- *  Compiler Options:   -std=c++11 
+ *  Compiler Options:   -std=c++11
  ***************************************************************************/
 
 #pragma once
 
-// APS TODO segregate this file to make it clear it's 3rdparty code and should not be modified
-#include "rapidxml.h"
+#include "thirdparty/rapidxml.h"
+
+// APS not good pratice to have all the headers included here, adds to compile time
+// better to #include as and where needed, ideally in source rather than headers,
+// and use fwd declarations wherever possible
 
 #include <limits>
 #include <memory>
@@ -40,7 +43,6 @@
 #include <vector>
 #include <map>
 #include <unordered_set>
-#include <unordered_map> // TODO: Delete are fixing get-lines
 #include <cstring>
 
 // APS uncomment to save xml input string to a file
@@ -53,8 +55,7 @@
 // make clear the id type
 typedef long long osmid_t;
 
-const float FLOAT_MAX = std::numeric_limits<float>::max ();
-const float FLOAT_MIN = std::numeric_limits<float>::min ();
+const float FLOAT_MAX =  std::numeric_limits<float>::max ();
 
 // Convenience typedefs for some rapidxml types
 typedef std::unique_ptr<rapidxml::xml_document<>> XmlDocPtr;
@@ -109,10 +110,10 @@ struct Relation
 };
 
 typedef std::vector <Relation> Relations;
-typedef std::map <long long, OneWay> Ways;
+typedef std::map <osmid_t, OneWay> Ways;
 
-// MP: the long long is Node.id, and thus repetitive, but traverseNode has to
+// MP: osmid_t (long long) is Node.id, and thus repetitive, but traverseNode has to
 // stored the ID in the Node struct first, before this can be used to make the
 // map of Nodes. TODO: Is there a better way?
-typedef std::map <long long, Node> Nodes;
+typedef std::map <osmid_t, Node> Nodes;
 

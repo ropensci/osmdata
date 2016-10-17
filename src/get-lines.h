@@ -25,7 +25,7 @@
  *
  *  Dependencies:       none (rapidXML header included in osmdatar)
  *
- *  Compiler Options:   -std=c++11 
+ *  Compiler Options:   -std=c++11
  ***************************************************************************/
 
 #pragma once
@@ -42,7 +42,8 @@
  ************************************************************************
  ************************************************************************/
 
-class XmlWays
+// APS make the class final so don't need to make destructor virtual
+class XmlWays final
 {
     private:
 
@@ -53,16 +54,14 @@ class XmlWays
 
         XmlWays (const std::string& str)
         {
-            m_nodes.clear ();
-            m_ways.clear ();
-            XmlDocPtr p = parseXML (str);
+          // APS empty m_nodes/m_ways constructed here, no need to explicitly clear
+          XmlDocPtr p = parseXML (str);
             traverseWays (p->first_node());
         }
 
         ~XmlWays ()
         {
-            m_nodes.clear ();
-            m_ways.clear ();
+          // APS m_nodes/m_ways destructed here, no need to explicitly clear
         }
 
         // Const accessors for members
@@ -93,7 +92,7 @@ inline void XmlWays::traverseWays (XmlNodePtr pt)
     OneWay way;
     Node node;
 
-    for (XmlNodePtr it = pt->first_node (); it != nullptr; 
+    for (XmlNodePtr it = pt->first_node (); it != nullptr;
             it = it->next_sibling())
     {
         if (!strcmp(it->name(), "node"))
@@ -157,7 +156,7 @@ inline void XmlWays::traverseWays (XmlNodePtr pt)
 
 inline void XmlWays::traverseWay (XmlNodePtr pt, RawWay& rway)
 {
-    for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; it = 
+    for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; it =
             it->next_attribute())
     {
         if (!strcmp(it->name(), "k"))
@@ -187,7 +186,7 @@ inline void XmlWays::traverseWay (XmlNodePtr pt, RawWay& rway)
 
 inline void XmlWays::traverseNode (XmlNodePtr pt, Node& node)
 {
-    for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; 
+    for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
         if (!strcmp(it->name(), "id"))
