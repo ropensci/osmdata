@@ -3,6 +3,8 @@
 
 #include <Rcpp.h>
 
+#include <algorithm> // for min_element/max_element
+
 // [[Rcpp::depends(sp)]]
 
 //' rcpp_get_polygons
@@ -26,8 +28,8 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
 
     XmlPolys xml (st);
 
-    const std::map <long long, Node>& nodes = xml.nodes ();
-    const std::map <long long, OneWay>& ways = xml.ways ();
+    const std::map <osmid_t, Node>& nodes = xml.nodes ();
+    const std::map <osmid_t, OneWay>& ways = xml.ways ();
     const std::vector <Relation>& rels = xml.relations ();
 
     int count = 0;
@@ -82,7 +84,7 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
         }
 
     // Step#2
-    //const std::map <long long, OneWay>& ways = xml.ways ();
+    //const std::map <osmid_t, OneWay>& ways = xml.ways ();
     for (auto it = ways.begin (); it != ways.end (); ++it)
     {
         if (the_ways.find ((*it).first) == the_ways.end ())
@@ -105,17 +107,17 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
     {
         auto itw = ways.find (*it);
         // Collect all unique keys
-        std::for_each (itw->second.key_val.begin (), 
+        std::for_each (itw->second.key_val.begin (),
                 itw->second.key_val.end (),
-                [&](const std::pair <std::string, std::string>& p) 
-                { 
-                    varnames.insert (p.first); 
+                [&](const std::pair <std::string, std::string>& p)
+                {
+                    varnames.insert (p.first);
                 });
 
         /*
          * The following lines check for duplicate way IDs -- which do very
          * occasionally occur -- and ensures unique values as required by 'sp'
-         * through appending decimal digits to <long long> OSM IDs.
+         * through appending decimal digits to <osmid_t> OSM IDs.
          */
         std::string id = std::to_string (itw->first);
         int tempi = 0;
@@ -136,7 +138,7 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
                 itn != itw->second.nodes.end (); ++itn)
         {
             // TODO: Propoer exception handler
-            assert (nodes.find (*itn) != nodes.end ()); 
+            assert (nodes.find (*itn) != nodes.end ());
             lons.push_back (nodes.find (*itn)->second.lon);
             lats.push_back (nodes.find (*itn)->second.lat);
             rownames.push_back (std::to_string (*itn));

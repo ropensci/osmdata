@@ -25,7 +25,7 @@
  *
  *  Dependencies:       none (rapidXML header included in osmdatar)
  *
- *  Compiler Options:   -std=c++11 
+ *  Compiler Options:   -std=c++11
  ***************************************************************************/
 
 #pragma once
@@ -42,6 +42,7 @@
  ************************************************************************
  ************************************************************************/
 
+// APS make the class final so don't need to make destructor virtual
 class XmlNodes
 {
     private:
@@ -52,13 +53,15 @@ class XmlNodes
 
         XmlNodes (const std::string& str)
         {
-            m_nodes.clear ();
+            // APS empty m_nodes constructed here, no need to explicitly clear
             XmlDocPtr p = parseXML (str);
             traverseNodes (p->first_node());
         }
-        ~XmlNodes ()
+
+        // APS make the dtor virtual since compiler support for "final" is limited
+        virtual ~XmlNodes ()
         {
-            m_nodes.clear ();
+          // APS m_nodes destructed here, no need to explicitly clear
         }
 
         const Nodes& nodes() const { return m_nodes; }
@@ -83,7 +86,7 @@ inline void XmlNodes::traverseNodes (XmlNodePtr pt)
     std::unordered_set <osmid_t> nodeIDs;
     Node node;
 
-    for (XmlNodePtr it = pt->first_node (); it != nullptr; 
+    for (XmlNodePtr it = pt->first_node (); it != nullptr;
             it = it->next_sibling())
     {
         if (!strcmp (it->name(), "node"))

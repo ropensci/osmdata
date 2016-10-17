@@ -3,7 +3,7 @@
 
 #include <Rcpp.h>
 
-#include <algorithm> // TODO: Really?
+#include <algorithm> // for min_element/max_element
 
 
 //' rcpp_get_lines
@@ -27,8 +27,8 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
 
     XmlWays xml (st);
 
-    const std::map <long long, Node>& nodes = xml.nodes ();
-    const std::map <long long, OneWay>& ways = xml.ways ();
+    const std::map <osmid_t, Node>& nodes = xml.nodes ();
+    const std::map <osmid_t, OneWay>& ways = xml.ways ();
 
     int count = 0;
     float xmin = FLOAT_MAX, xmax = -FLOAT_MAX,
@@ -76,7 +76,7 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
         /*
          * The following lines check for duplicate way IDs -- which do very
          * occasionally occur -- and ensures unique values as required by 'sp'
-         * through appending decimal digits to <long long> OSM IDs.
+         * through appending decimal digits to <osmid_t> OSM IDs.
          * TODO: This uses an unordered_set: check if it's faster with a simple
          * vector and std::find
          */
@@ -99,7 +99,7 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
                 ni != wi->second.nodes.end (); ++ni)
         {
             // TODO: Propoer exception handler
-            assert (nodes.find (*ni) != nodes.end ()); 
+            assert (nodes.find (*ni) != nodes.end ());
             lons.push_back (nodes.find (*ni)->second.lon);
             lats.push_back (nodes.find (*ni)->second.lat);
             rownames.push_back (std::to_string (*ni));
@@ -158,7 +158,7 @@ Rcpp::S4 rcpp_get_lines (const std::string& st)
         else
             kv_vec (onewaycoli * nrow + rowi) = "false";
 
-        for (auto kv_iter = wi->second.key_val.begin (); 
+        for (auto kv_iter = wi->second.key_val.begin ();
                 kv_iter != wi->second.key_val.end (); ++kv_iter)
         {
             const std::string& key = (*kv_iter).first;

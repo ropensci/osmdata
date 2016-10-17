@@ -3,6 +3,8 @@
 
 #include <Rcpp.h>
 
+#include <algorithm> // for min_element/max_element
+
 //' rcpp_get_points
 //'
 //' Extracts all nodes from an overpass API query
@@ -24,7 +26,7 @@ Rcpp::S4 rcpp_get_points (const std::string& st)
 
     XmlNodes xml (st);
 
-    const std::map <long long, Node>& nodes = xml.nodes ();
+    const std::map <osmid_t, Node>& nodes = xml.nodes ();
 
     float xmin = FLOAT_MAX, xmax = -FLOAT_MAX,
           ymin = FLOAT_MAX, ymax = -FLOAT_MAX;
@@ -67,7 +69,7 @@ Rcpp::S4 rcpp_get_points (const std::string& st)
     {
         //int rowi = ni - nodes.begin ();
         int rowi = std::distance (nodes.begin (), ni);
-        for (auto kv_iter = ni->second.key_val.begin (); 
+        for (auto kv_iter = ni->second.key_val.begin ();
                 kv_iter != ni->second.key_val.end (); ++kv_iter)
         {
             const std::string& key = (*kv_iter).first;

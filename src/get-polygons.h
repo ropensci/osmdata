@@ -25,7 +25,7 @@
  *
  *  Dependencies:       none (rapidXML header included in osmdatar)
  *
- *  Compiler Options:   -std=c++11 
+ *  Compiler Options:   -std=c++11
  ***************************************************************************/
 
 #pragma once
@@ -42,6 +42,7 @@
  ************************************************************************
  ************************************************************************/
 
+
 class XmlPolys
 {
     private:
@@ -54,16 +55,15 @@ class XmlPolys
 
         XmlPolys (const std::string& str)
         {
-            m_nodes.clear ();
-            m_ways.clear ();
+            // APS empty m_nodes/m_ways/m_relations constructed here, no need to explicitly clear
             XmlDocPtr p = parseXML (str);
             traverseWays (p->first_node ());
         }
 
-        ~XmlPolys ()
+        // APS make the dtor virtual since compiler support for "final" is limited
+        virtual ~XmlPolys ()
         {
-            m_nodes.clear ();
-            m_ways.clear ();
+          // APS m_nodes/m_ways/m_relations destructed here, no need to explicitly clear
         }
 
         // Const accessors for members
@@ -97,7 +97,7 @@ inline void XmlPolys::traverseWays (XmlNodePtr pt)
     OneWay way;
     Node node;
 
-    for (XmlNodePtr it = pt->first_node (); it != nullptr; 
+    for (XmlNodePtr it = pt->first_node (); it != nullptr;
             it = it->next_sibling())
     {
         if (!strcmp (it->name(), "node"))
@@ -172,7 +172,7 @@ inline void XmlPolys::traverseWays (XmlNodePtr pt)
 
 inline void XmlPolys::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
 {
-    for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; 
+    for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
         if (!strcmp(it->name(), "k"))
@@ -209,7 +209,7 @@ inline void XmlPolys::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
 
 inline void XmlPolys::traverseWay (XmlNodePtr pt, RawWay& rway)
 {
-    for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; 
+    for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
         if (!strcmp(it->name(), "k"))
@@ -239,7 +239,7 @@ inline void XmlPolys::traverseWay (XmlNodePtr pt, RawWay& rway)
 
 inline void XmlPolys::traverseNode (XmlNodePtr pt, Node& node)
 {
-    for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; 
+    for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
         if (!strcmp(it->name(), "id"))
