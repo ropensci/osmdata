@@ -1,0 +1,1278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API">
+<note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+<meta osm_base="2015-08-11T11:06:01Z"/>
+
+  <node id="30756278" lat="50.6930270" lon="7.0230103"/>
+  <node id="48837516" lat="50.6931298" lon="7.0230912"/>
+  <node id="257510608" lat="50.7721193" lon="7.2104840">
+    <tag k="addr:city" v="Sankt Augustin"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="4"/>
+    <tag k="addr:postcode" v="53757"/>
+    <tag k="addr:street" v="Schulstraße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Löschgruppe Niederpleis"/>
+    <tag k="operator" v="Freiwillige Feuerwehr Sankt Augustin"/>
+    <tag k="website" v="http://www.lgniederpleis.de/"/>
+  </node>
+  <node id="266631342" lat="50.7098284" lon="7.1697305">
+    <tag k="addr:city" v="Bonn"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="714"/>
+    <tag k="addr:street" v="Königswinterer Straße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Freiwillige Feuerwehr (Bonn-Oberkassel)"/>
+  </node>
+  <node id="273130506" lat="50.7846813" lon="7.2273910"/>
+  <node id="283120853" lat="50.6355251" lon="7.0949499">
+    <tag k="amenity" v="fire_station"/>
+  </node>
+  <node id="283233583" lat="50.6447550" lon="7.2040520">
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Feuerwehr Rolandswerth"/>
+  </node>
+  <node id="286670116" lat="50.6406094" lon="7.2272719">
+    <tag k="amenity" v="fire_station"/>
+  </node>
+  <node id="298386625" lat="50.6202860" lon="7.0256333">
+    <tag k="amenity" v="fire_station"/>
+    <tag k="created_by" v="Potlatch 0.10b"/>
+    <tag k="name" v="Freiwillige Feuerwehr"/>
+  </node>
+  <node id="298549488" lat="50.7162946" lon="7.0471580"/>
+  <node id="298549490" lat="50.7162838" lon="7.0477046"/>
+  <node id="298549493" lat="50.7161539" lon="7.0472608"/>
+  <node id="298549494" lat="50.7164245" lon="7.0476019"/>
+  <node id="316421536" lat="50.7429293" lon="7.0738620"/>
+  <node id="316421537" lat="50.7428254" lon="7.0739357"/>
+  <node id="316421538" lat="50.7430802" lon="7.0748321"/>
+  <node id="316421539" lat="50.7440606" lon="7.0741222"/>
+  <node id="316421540" lat="50.7439986" lon="7.0739040"/>
+  <node id="316421541" lat="50.7431188" lon="7.0745287"/>
+  <node id="316421590" lat="50.7429720" lon="7.0744515">
+    <tag k="barrier" v="lift_gate"/>
+  </node>
+  <node id="347626789" lat="50.6088080" lon="7.1606848">
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Freiwillige Feuerwehr"/>
+  </node>
+  <node id="369601781" lat="50.7845778" lon="7.1679373">
+    <tag k="addr:city" v="Sankt Augustin"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="131"/>
+    <tag k="addr:postcode" v="53757"/>
+    <tag k="addr:street" v="Siegstraße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="created_by" v="Potlatch 0.10f"/>
+    <tag k="name" v="Löschzug Menden"/>
+    <tag k="operator" v="Freiwillige Feuerwehr Sankt Augustin"/>
+    <tag k="phone" v="02241315388"/>
+    <tag k="website" v="www.lzmenden.de"/>
+  </node>
+  <node id="401572870" lat="50.6026398" lon="7.2533525">
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Bruchhausen"/>
+  </node>
+  <node id="430007012" lat="50.7767255" lon="7.1369004">
+    <tag k="addr:city" v="Sankt Augustin"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="27 a"/>
+    <tag k="addr:postcode" v="53757"/>
+    <tag k="addr:street" v="Liebfrauenstraße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Löschgruppe Meindorf"/>
+    <tag k="operator" v="Freiwillige Feuerwehr Sankt Augustin"/>
+  </node>
+  <node id="441917613" lat="50.7049930" lon="7.1152099">
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Freiwillige Feuerwehr Löschzug 32 (Bonn-Dottendorf)"/>
+    <tag k="ref" v="FF Dottendorf"/>
+  </node>
+  <node id="450578984" lat="50.6648551" lon="7.1708558"/>
+  <node id="450578986" lat="50.6647823" lon="7.1706988"/>
+  <node id="450578994" lat="50.6649948" lon="7.1706945"/>
+  <node id="473692861" lat="50.7606149" lon="7.0846609"/>
+  <node id="473692862" lat="50.7606673" lon="7.0845505"/>
+  <node id="473692863" lat="50.7605179" lon="7.0843737"/>
+  <node id="473692864" lat="50.7604656" lon="7.0844841"/>
+  <node id="477582032" lat="50.6016863" lon="7.1825920">
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Freiwillige Feuerwehr Unkelbach"/>
+  </node>
+  <node id="479746011" lat="50.7618990" lon="7.0496765">
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Freiwillige Feuerwehr (Bonn-Buschdorf)"/>
+  </node>
+  <node id="480164851" lat="50.7405913" lon="7.1302779">
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Freiwillige Feuerwehr (Bonn-Beuel)"/>
+    <tag k="ref" v="FF Beuel"/>
+  </node>
+  <node id="480194491" lat="50.7494194" lon="7.1750560"/>
+  <node id="481131090" lat="50.7137607" lon="7.1042868">
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Freiwillige Feuerwehr (Bonn-Kessenich)"/>
+    <tag k="ref" v="FF Kessenich"/>
+  </node>
+  <node id="524572165" lat="50.6953952" lon="7.1775820"/>
+  <node id="524572167" lat="50.6954799" lon="7.1778686"/>
+  <node id="524572169" lat="50.6956240" lon="7.1777624"/>
+  <node id="524572172" lat="50.6955934" lon="7.1776590"/>
+  <node id="524572174" lat="50.6955530" lon="7.1776888"/>
+  <node id="524572176" lat="50.6954989" lon="7.1775056"/>
+  <node id="550940140" lat="50.6900993" lon="7.1438149"/>
+  <node id="550940148" lat="50.6900370" lon="7.1440766"/>
+  <node id="550940210" lat="50.6906810" lon="7.1444586"/>
+  <node id="550940244" lat="50.6898167" lon="7.1442340"/>
+  <node id="550940258" lat="50.6899390" lon="7.1437199"/>
+  <node id="555528268" lat="50.6911445" lon="7.1448884"/>
+  <node id="558649066" lat="50.6910792" lon="7.1449680"/>
+  <node id="558649067" lat="50.6909993" lon="7.1448061"/>
+  <node id="560653652" lat="50.6906211" lon="7.1447106"/>
+  <node id="600329328" lat="50.7386970" lon="7.1074236">
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Liegeplatz Feuerlöschboot Bonn"/>
+  </node>
+  <node id="620862340" lat="50.6502006" lon="7.1102854">
+    <tag k="amenity" v="fire_station"/>
+  </node>
+  <node id="620864025" lat="50.6266287" lon="7.1329437">
+    <tag k="amenity" v="fire_station"/>
+  </node>
+  <node id="631604448" lat="50.7438154" lon="7.0742963"/>
+  <node id="631604451" lat="50.7436438" lon="7.0744319"/>
+  <node id="631604454" lat="50.7437510" lon="7.0748092"/>
+  <node id="631604455" lat="50.7439259" lon="7.0746850"/>
+  <node id="649942239" lat="50.7369275" lon="7.1316885"/>
+  <node id="649942242" lat="50.7367668" lon="7.1317737"/>
+  <node id="649942248" lat="50.7366616" lon="7.1312778"/>
+  <node id="649942260" lat="50.7368223" lon="7.1311927"/>
+  <node id="683449417" lat="50.7281676" lon="7.2702886">
+    <tag k="amenity" v="fire_station"/>
+    <tag k="description" v="Freiwillige Feuerwehr"/>
+    <tag k="name" v="Löschgruppe Uthweiler"/>
+    <tag k="website" v="http://www.feuerwehr-uthweiler.de/"/>
+  </node>
+  <node id="684355012" lat="50.6910657" lon="7.1447254"/>
+  <node id="684355036" lat="50.6900100" lon="7.1443485"/>
+  <node id="745820637" lat="50.7373238" lon="7.0800313"/>
+  <node id="978635887" lat="50.7744712" lon="7.2793842"/>
+  <node id="978635920" lat="50.7748141" lon="7.2790536"/>
+  <node id="978635953" lat="50.7742194" lon="7.2789022"/>
+  <node id="996347374" lat="50.6945019" lon="7.2410456"/>
+  <node id="996347427" lat="50.6943981" lon="7.2411198"/>
+  <node id="996347467" lat="50.6943150" lon="7.2411926"/>
+  <node id="996347473" lat="50.6943314" lon="7.2413753"/>
+  <node id="996347477" lat="50.6944276" lon="7.2414137"/>
+  <node id="996347484" lat="50.6945377" lon="7.2410824"/>
+  <node id="996347529" lat="50.6944223" lon="7.2413550"/>
+  <node id="996347548" lat="50.6944029" lon="7.2411730"/>
+  <node id="996347553" lat="50.6945646" lon="7.2413831"/>
+  <node id="996347555" lat="50.6944234" lon="7.2411141"/>
+  <node id="996347570" lat="50.6944190" lon="7.2410641"/>
+  <node id="1035426442" lat="50.6189175" lon="7.2270989"/>
+  <node id="1035426448" lat="50.6192189" lon="7.2270596"/>
+  <node id="1035426460" lat="50.6191745" lon="7.2272487"/>
+  <node id="1035426476" lat="50.6189619" lon="7.2269098"/>
+  <node id="1035581827" lat="50.7739006" lon="7.0923511">
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Freiwillige Feuerwehr Löschgruppe Bergheim"/>
+  </node>
+  <node id="1068434059" lat="50.6413161" lon="7.1770789"/>
+  <node id="1068434061" lat="50.6414002" lon="7.1771913"/>
+  <node id="1068434065" lat="50.6415388" lon="7.1769334"/>
+  <node id="1068434104" lat="50.6414547" lon="7.1768210"/>
+  <node id="1068444594" lat="50.6079413" lon="7.0880359">
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Feuerwehr Wachtberg Löschgruppe Arzdorf"/>
+  </node>
+  <node id="1072785359" lat="50.6931489" lon="7.0228151"/>
+  <node id="1072785399" lat="50.6930418" lon="7.0227965"/>
+  <node id="1072785518" lat="50.6931244" lon="7.0228108"/>
+  <node id="1072785527" lat="50.6930227" lon="7.0230728"/>
+  <node id="1100668021" lat="50.7745611" lon="7.2790255"/>
+  <node id="1100668042" lat="50.7745698" lon="7.2789654"/>
+  <node id="1152183097" lat="50.6590808" lon="7.1883188"/>
+  <node id="1152183306" lat="50.6592070" lon="7.1881458"/>
+  <node id="1152183352" lat="50.6591414" lon="7.1880266"/>
+  <node id="1152183595" lat="50.6590151" lon="7.1881997"/>
+  <node id="1177540310" lat="50.7804520" lon="7.1083855"/>
+  <node id="1177540461" lat="50.7804927" lon="7.1082188"/>
+  <node id="1177540884" lat="50.7805122" lon="7.1084221"/>
+  <node id="1233846221" lat="50.7365141" lon="7.0483076"/>
+  <node id="1233846234" lat="50.7364035" lon="7.0482410"/>
+  <node id="1233846244" lat="50.7364761" lon="7.0484649"/>
+  <node id="1245860332" lat="50.7308684" lon="7.1847026"/>
+  <node id="1245860335" lat="50.7307739" lon="7.1850401"/>
+  <node id="1245860352" lat="50.7309119" lon="7.1849075"/>
+  <node id="1245860356" lat="50.7307730" lon="7.1849342"/>
+  <node id="1245860363" lat="50.7308887" lon="7.1849480"/>
+  <node id="1245860366" lat="50.7308933" lon="7.1849527"/>
+  <node id="1245860370" lat="50.7309558" lon="7.1847923"/>
+  <node id="1245860371" lat="50.7309094" lon="7.1849049"/>
+  <node id="1245860381" lat="50.7308279" lon="7.1850957"/>
+  <node id="1246212014" lat="50.7308043" lon="7.1849663"/>
+  <node id="1269880334" lat="50.7228143" lon="7.0391314"/>
+  <node id="1269880339" lat="50.7228412" lon="7.0388619"/>
+  <node id="1269880341" lat="50.7229264" lon="7.0390017"/>
+  <node id="1269880374" lat="50.7227420" lon="7.0390126"/>
+  <node id="1269880436" lat="50.7227954" lon="7.0391003"/>
+  <node id="1271529245" lat="50.6789687" lon="7.0710097"/>
+  <node id="1271529247" lat="50.6790966" lon="7.0709620"/>
+  <node id="1271529251" lat="50.6790583" lon="7.0710813"/>
+  <node id="1271529252" lat="50.6790070" lon="7.0708905"/>
+  <node id="1277424233" lat="50.7794920" lon="7.0674803"/>
+  <node id="1277424262" lat="50.7795777" lon="7.0673737"/>
+  <node id="1277424282" lat="50.7796556" lon="7.0675303"/>
+  <node id="1277424370" lat="50.7795699" lon="7.0676369"/>
+  <node id="1327160049" lat="50.7897184" lon="7.1096282"/>
+  <node id="1327160050" lat="50.7897607" lon="7.1095687"/>
+  <node id="1327160051" lat="50.7898852" lon="7.1099243"/>
+  <node id="1327160052" lat="50.7899274" lon="7.1098648"/>
+  <node id="1377225294" lat="50.6649212" lon="7.1705351"/>
+  <node id="1472057649" lat="50.7280067" lon="7.2363823"/>
+  <node id="1472057650" lat="50.7280205" lon="7.2364775"/>
+  <node id="1472057651" lat="50.7280381" lon="7.2358128"/>
+  <node id="1472057652" lat="50.7280444" lon="7.2362811"/>
+  <node id="1472057653" lat="50.7280469" lon="7.2364319"/>
+  <node id="1472057654" lat="50.7280808" lon="7.2365470"/>
+  <node id="1472057655" lat="50.7281850" lon="7.2358009"/>
+  <node id="1472057656" lat="50.7282001" lon="7.2363505"/>
+  <node id="1476849704" lat="50.7747786" lon="7.2792982"/>
+  <node id="1485257816" lat="50.7436893" lon="7.0741255"/>
+  <node id="1485257817" lat="50.7436270" lon="7.0741672"/>
+  <node id="1555944782" lat="50.7433399" lon="7.0740515"/>
+  <node id="1555944787" lat="50.7433821" lon="7.0734860"/>
+  <node id="1555944790" lat="50.7432132" lon="7.0736059"/>
+  <node id="1555944795" lat="50.7435087" lon="7.0739316"/>
+  <node id="1584806417" lat="50.7741664" lon="7.2792715"/>
+  <node id="1644508132" lat="50.7333903" lon="7.0100560"/>
+  <node id="1644508133" lat="50.7334803" lon="7.0101939"/>
+  <node id="1644508134" lat="50.7334831" lon="7.0098980"/>
+  <node id="1644508135" lat="50.7335732" lon="7.0100427"/>
+  <node id="1657811587" lat="50.7430772" lon="7.0743823"/>
+  <node id="1715292123" lat="50.7991991" lon="7.2139097"/>
+  <node id="1715292141" lat="50.7993003" lon="7.2147870"/>
+  <node id="1715292176" lat="50.7992095" lon="7.2139070"/>
+  <node id="1715292225" lat="50.7991826" lon="7.2137493"/>
+  <node id="1715292236" lat="50.7993724" lon="7.2138648"/>
+  <node id="1715292240" lat="50.7994632" lon="7.2147450"/>
+  <node id="1715292314" lat="50.7994706" lon="7.2136749"/>
+  <node id="1715292355" lat="50.7994871" lon="7.2138352"/>
+  <node id="1734595196" lat="50.7847604" lon="7.2275094"/>
+  <node id="1734595207" lat="50.7847686" lon="7.2272451"/>
+  <node id="1734595249" lat="50.7848060" lon="7.2274331"/>
+  <node id="1734595334" lat="50.7848477" lon="7.2273635"/>
+  <node id="1740643144" lat="50.7373718" lon="7.0800228"/>
+  <node id="1764395648" lat="50.6789730" lon="7.0709964"/>
+  <node id="1798199028" lat="50.7032174" lon="7.1805450"/>
+  <node id="1798199029" lat="50.7031579" lon="7.1803551"/>
+  <node id="1798199031" lat="50.7032008" lon="7.1803182"/>
+  <node id="1798199033" lat="50.7031573" lon="7.1801820"/>
+  <node id="1798199034" lat="50.7029610" lon="7.1803358"/>
+  <node id="1798199036" lat="50.7030666" lon="7.1806592"/>
+  <node id="1809342208" lat="50.7992979" lon="7.2147639"/>
+  <node id="1809342226" lat="50.7994059" lon="7.2141891"/>
+  <node id="1809342228" lat="50.7994190" lon="7.2143162"/>
+  <node id="1809342235" lat="50.7994476" lon="7.2145934"/>
+  <node id="1897957028" lat="50.7228455" lon="7.0390840"/>
+  <node id="1897957034" lat="50.7228584" lon="7.0391051"/>
+  <node id="1910097313" lat="50.7140343" lon="7.0161876"/>
+  <node id="1910097320" lat="50.7140396" lon="7.0161947"/>
+  <node id="1910097380" lat="50.7140972" lon="7.0160706"/>
+  <node id="1910097478" lat="50.7141251" lon="7.0163088"/>
+  <node id="1910097507" lat="50.7141396" lon="7.0162819"/>
+  <node id="1910097609" lat="50.7141880" lon="7.0161918"/>
+  <node id="1952521056" lat="50.7711792" lon="7.0469800"/>
+  <node id="1952521069" lat="50.7712360" lon="7.0470945"/>
+  <node id="1952521120" lat="50.7713256" lon="7.0469820"/>
+  <node id="2232061839" lat="50.7805528" lon="7.1082555"/>
+  <node id="2240629721" lat="50.7710985" lon="7.0466992"/>
+  <node id="2240629727" lat="50.7711685" lon="7.0469593"/>
+  <node id="2240629730" lat="50.7712020" lon="7.0469137"/>
+  <node id="2240629733" lat="50.7712579" lon="7.0468494"/>
+  <node id="2240629736" lat="50.7712461" lon="7.0468628"/>
+  <node id="2240629738" lat="50.7711410" lon="7.0466482"/>
+  <node id="2283635358" lat="50.7429381" lon="7.0743402"/>
+  <node id="2311536283" lat="50.6324011" lon="7.0543598"/>
+  <node id="2311536286" lat="50.6324183" lon="7.0545323"/>
+  <node id="2311536305" lat="50.6324550" lon="7.0546695"/>
+  <node id="2311536306" lat="50.6325187" lon="7.0543308"/>
+  <node id="2311536308" lat="50.6325613" lon="7.0545095"/>
+  <node id="2311536309" lat="50.6325754" lon="7.0546360"/>
+  <node id="2327390682" lat="50.6142640" lon="7.0613270"/>
+  <node id="2327390687" lat="50.6143074" lon="7.0615812"/>
+  <node id="2327390712" lat="50.6143677" lon="7.0612829"/>
+  <node id="2327390730" lat="50.6144112" lon="7.0615372"/>
+  <node id="2357399729" lat="50.6811710" lon="7.2706213">
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Löschgruppe Ittenbach"/>
+  </node>
+  <node id="2450076445" lat="50.7495547" lon="7.1750730"/>
+  <node id="2450076446" lat="50.7495448" lon="7.1752707"/>
+  <node id="2450076447" lat="50.7494730" lon="7.1752617"/>
+  <node id="2450076448" lat="50.7494580" lon="7.1755603"/>
+  <node id="2450076449" lat="50.7493945" lon="7.1755523"/>
+  <node id="2463467374" lat="50.7430434" lon="7.0742638"/>
+  <node id="2463467376" lat="50.7434906" lon="7.0742647"/>
+  <node id="2463467377" lat="50.7435537" lon="7.0744959"/>
+  <node id="2535786718" lat="50.7746393" lon="7.2794490"/>
+  <node id="2535786720" lat="50.7746666" lon="7.2792581"/>
+  <node id="2559146598" lat="50.7373103" lon="7.0798410"/>
+  <node id="2559146671" lat="50.7373732" lon="7.0800407"/>
+  <node id="2559146715" lat="50.7374530" lon="7.0798169"/>
+  <node id="2559146721" lat="50.7374579" lon="7.0798798"/>
+  <node id="2559146734" lat="50.7374766" lon="7.0798764"/>
+  <node id="2559146735" lat="50.7374871" lon="7.0800204"/>
+  <node id="2560611171" lat="50.7248464" lon="7.0724383"/>
+  <node id="2560611185" lat="50.7248806" lon="7.0724931"/>
+  <node id="2560611186" lat="50.7248816" lon="7.0723838"/>
+  <node id="2560611188" lat="50.7249005" lon="7.0724312"/>
+  <node id="2560611190" lat="50.7249060" lon="7.0724230"/>
+  <node id="2560611192" lat="50.7249100" lon="7.0724475"/>
+  <node id="2566300740" lat="50.6945058" lon="7.2410895"/>
+  <node id="2571451544" lat="50.7097888" lon="7.0711476"/>
+  <node id="2571451558" lat="50.7098196" lon="7.0713060"/>
+  <node id="2571451690" lat="50.7099737" lon="7.0710583"/>
+  <node id="2571451714" lat="50.7100046" lon="7.0712167"/>
+  <node id="2581088419" lat="50.7608713" lon="7.1692616"/>
+  <node id="2581088420" lat="50.7609379" lon="7.1694163"/>
+  <node id="2581088425" lat="50.7609596" lon="7.1691669"/>
+  <node id="2581088428" lat="50.7609765" lon="7.1692057"/>
+  <node id="2581088435" lat="50.7610264" lon="7.1693214"/>
+  <node id="2586440885" lat="50.7528222" lon="7.0051087"/>
+  <node id="2586440896" lat="50.7529071" lon="7.0053017"/>
+  <node id="2586440897" lat="50.7529218" lon="7.0050030"/>
+  <node id="2586440942" lat="50.7530064" lon="7.0051982"/>
+  <node id="2650766339" lat="50.7928832" lon="7.0435625"/>
+  <node id="2650766345" lat="50.7929242" lon="7.0436856"/>
+  <node id="2650766352" lat="50.7929832" lon="7.0434797"/>
+  <node id="2650766354" lat="50.7929940" lon="7.0436278"/>
+  <node id="2650766355" lat="50.7929942" lon="7.0436287"/>
+  <node id="2650766359" lat="50.7930243" lon="7.0436038"/>
+  <node id="2663057684" lat="50.7568488" lon="7.1249841"/>
+  <node id="2663057691" lat="50.7568731" lon="7.1251242"/>
+  <node id="2663057700" lat="50.7569589" lon="7.1249367"/>
+  <node id="2663057702" lat="50.7569832" lon="7.1250768"/>
+  <node id="2663240968" lat="50.7790524" lon="7.1946371"/>
+  <node id="2663240969" lat="50.7791109" lon="7.1944729"/>
+  <node id="2663240970" lat="50.7791748" lon="7.1947461"/>
+  <node id="2663240976" lat="50.7792335" lon="7.1945820"/>
+  <node id="2705591946" lat="50.7085167" lon="7.0645516"/>
+  <node id="2713133138" lat="50.6792345" lon="7.1960491"/>
+  <node id="2713133139" lat="50.6792876" lon="7.1962183"/>
+  <node id="2713133148" lat="50.6794312" lon="7.1958953"/>
+  <node id="2713133149" lat="50.6794440" lon="7.1959336"/>
+  <node id="2713133152" lat="50.6795755" lon="7.1958328"/>
+  <node id="2713133154" lat="50.6796093" lon="7.1957873"/>
+  <node id="2713133155" lat="50.6796196" lon="7.1959597"/>
+  <node id="2713133157" lat="50.6796682" lon="7.1958941"/>
+  <node id="2835577998" lat="50.6476758" lon="7.0069668"/>
+  <node id="2835577999" lat="50.6477133" lon="7.0068907"/>
+  <node id="2835579301" lat="50.6477490" lon="7.0070645"/>
+  <node id="2835579302" lat="50.6477733" lon="7.0070967"/>
+  <node id="2835579303" lat="50.6478128" lon="7.0070233"/>
+  <node id="3043941388" lat="50.6588047" lon="7.2107289">
+    <tag k="amenity" v="fire_station"/>
+  </node>
+  <node id="3056939205" lat="50.7897952" lon="7.1096887">
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Löschgruppe Emschar"/>
+  </node>
+  <node id="3056965845" lat="50.7805008" lon="7.1083224">
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Löschgruppe Müllekoven"/>
+  </node>
+  <node id="3080462137" lat="50.7926279" lon="7.0266297"/>
+  <node id="3080462138" lat="50.7926281" lon="7.0266302"/>
+  <node id="3080462141" lat="50.7926697" lon="7.0266001"/>
+  <node id="3080462142" lat="50.7926704" lon="7.0267726"/>
+  <node id="3080462150" lat="50.7927000" lon="7.0267506"/>
+  <node id="3080462151" lat="50.7927118" lon="7.0267417"/>
+  <node id="3153359064" lat="50.7834787" lon="7.2311314"/>
+  <node id="3153359067" lat="50.7836114" lon="7.2313529"/>
+  <node id="3153359069" lat="50.7836857" lon="7.2308211"/>
+  <node id="3153359070" lat="50.7838184" lon="7.2310426"/>
+  <node id="3271161441" lat="50.6324392" lon="7.0545271"/>
+  <node id="3271161442" lat="50.6325372" lon="7.0545162"/>
+  <node id="3378721085" lat="50.7835154" lon="7.2310743">
+    <tag k="entrance" v="yes"/>
+  </node>
+  <node id="3395486728" lat="50.6195958" lon="7.2062453"/>
+  <node id="3395486729" lat="50.6196450" lon="7.2060590"/>
+  <node id="3395486730" lat="50.6198011" lon="7.2063801"/>
+  <node id="3395486731" lat="50.6198503" lon="7.2061938"/>
+  <node id="3413332687" lat="50.7084808" lon="7.0645516"/>
+  <node id="3413332688" lat="50.7084808" lon="7.0646084">
+    <tag k="entrance" v="yes"/>
+  </node>
+  <node id="3413332689" lat="50.7084810" lon="7.0648536"/>
+  <node id="3413332690" lat="50.7085945" lon="7.0645515"/>
+  <node id="3413332691" lat="50.7085947" lon="7.0648534"/>
+  <node id="3422200693" lat="50.7481252" lon="7.2736420"/>
+  <node id="3422200694" lat="50.7481351" lon="7.2735563"/>
+  <node id="3422200695" lat="50.7481456" lon="7.2735992"/>
+  <node id="3422200696" lat="50.7481528" lon="7.2736077"/>
+  <node id="3422200697" lat="50.7481620" lon="7.2735880"/>
+  <node id="3422200698" lat="50.7481928" lon="7.2734354"/>
+  <node id="3422200699" lat="50.7482197" lon="7.2734673"/>
+  <node id="3422200700" lat="50.7482202" lon="7.2738475"/>
+  <node id="3422200701" lat="50.7482218" lon="7.2737564"/>
+  <node id="3422200702" lat="50.7482219" lon="7.2734395"/>
+  <node id="3422200703" lat="50.7482289" lon="7.2734478"/>
+  <node id="3422200704" lat="50.7482423" lon="7.2733966"/>
+  <node id="3422200705" lat="50.7482487" lon="7.2737881"/>
+  <node id="3422200706" lat="50.7482644" lon="7.2738999"/>
+  <node id="3422200707" lat="50.7482734" lon="7.2737135"/>
+  <node id="3422200708" lat="50.7483020" lon="7.2735645"/>
+  <node id="3422200709" lat="50.7483112" lon="7.2735451"/>
+  <node id="3422200710" lat="50.7483182" lon="7.2735536"/>
+  <node id="3422200711" lat="50.7483241" lon="7.2737736"/>
+  <node id="3422200712" lat="50.7483290" lon="7.2735963"/>
+  <node id="3422200713" lat="50.7483388" lon="7.2735106"/>
+  <node id="3521886112" lat="50.7220959" lon="7.0139537"/>
+  <node id="3521886118" lat="50.7221384" lon="7.0138619"/>
+  <node id="3521886126" lat="50.7221913" lon="7.0140634"/>
+  <node id="3521886128" lat="50.7221985" lon="7.0137328"/>
+  <node id="3521886132" lat="50.7222459" lon="7.0139452"/>
+  <node id="3521886133" lat="50.7222500" lon="7.0137917"/>
+  <node id="3521886134" lat="50.7222553" lon="7.0137803"/>
+  <node id="3521886135" lat="50.7222642" lon="7.0139661"/>
+  <node id="3521886136" lat="50.7222652" lon="7.0139033"/>
+  <node id="3521886138" lat="50.7222712" lon="7.0138160"/>
+  <node id="3521886140" lat="50.7222765" lon="7.0138044"/>
+  <node id="3521886142" lat="50.7222835" lon="7.0139243"/>
+  <node id="3521886143" lat="50.7222937" lon="7.0138417"/>
+  <node id="3623370571" lat="50.6268859" lon="7.1327383"/>
+  <node id="3623370572" lat="50.6268163" lon="7.1331936"/>
+  <node id="3623370573" lat="50.6266508" lon="7.1328820"/>
+  <node id="3623370574" lat="50.6269761" lon="7.1328521"/>
+  <node id="3623370575" lat="50.6267466" lon="7.1331489"/>
+  <node id="3623370576" lat="50.6267580" lon="7.1331261"/>
+  <node id="3623370577" lat="50.6266491" lon="7.1330403"/>
+  <node id="3623370578" lat="50.6266066" lon="7.1329920"/>
+  <node id="3623370579" lat="50.6267512" lon="7.1330054"/>
+  <node id="3647720865" lat="50.7363655" lon="7.0484011"/>
+  <way id="27206810">
+    <nd ref="298549488"/>
+    <nd ref="298549493"/>
+    <nd ref="298549490"/>
+    <nd ref="298549494"/>
+    <nd ref="298549488"/>
+    <tag k="addr:city" v="Bonn"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="47-49"/>
+    <tag k="addr:postcode" v="53123"/>
+    <tag k="addr:street" v="Am Burgweiher"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Feuerwache 4"/>
+    <tag k="note" v="Bonn-Duisdorf;Freiwillige Feuerwehr (Bonn-Duisdorf);Offiziell Wache 41"/>
+    <tag k="operator" v="Freiwillige Feuerwehr Bonn-Duisdorf"/>
+    <tag k="ref" v="FW 4"/>
+  </way>
+  <way id="28776833">
+    <nd ref="631604448"/>
+    <nd ref="316421539"/>
+    <nd ref="316421540"/>
+    <nd ref="1485257816"/>
+    <nd ref="1485257817"/>
+    <nd ref="2463467376"/>
+    <nd ref="316421541"/>
+    <nd ref="1657811587"/>
+    <nd ref="2463467374"/>
+    <nd ref="316421536"/>
+    <nd ref="316421537"/>
+    <nd ref="2283635358"/>
+    <nd ref="316421590"/>
+    <nd ref="316421538"/>
+    <nd ref="2463467377"/>
+    <nd ref="631604451"/>
+    <nd ref="631604454"/>
+    <nd ref="631604455"/>
+    <nd ref="631604448"/>
+    <tag k="addr:city" v="Bonn"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="112"/>
+    <tag k="addr:postcode" v="53119"/>
+    <tag k="addr:street" v="Lievelingsweg"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Feuer- und Rettungswache 1 (Bonn)"/>
+    <tag k="ref" v="BF 1"/>
+  </way>
+  <way id="38231384">
+    <nd ref="450578984"/>
+    <nd ref="450578986"/>
+    <nd ref="1377225294"/>
+    <nd ref="450578994"/>
+    <nd ref="450578984"/>
+    <tag k="addr:city" v="Bonn"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="206"/>
+    <tag k="addr:postcode" v="53179"/>
+    <tag k="addr:street" v="Deutschherrenstraße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr Bonn-Lannesdorf"/>
+    <tag k="note" v="Löscheinheit 34: Lannesdorf"/>
+  </way>
+  <way id="39536652">
+    <nd ref="473692861"/>
+    <nd ref="473692862"/>
+    <nd ref="473692863"/>
+    <nd ref="473692864"/>
+    <nd ref="473692861"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr (Bonn-Rheindorf)"/>
+    <tag k="polling_station" v="2013"/>
+    <tag k="polling_station:city" v="Bonn"/>
+    <tag k="polling_station:ref" v="065"/>
+  </way>
+  <way id="42154341">
+    <nd ref="524572165"/>
+    <nd ref="524572167"/>
+    <nd ref="524572169"/>
+    <nd ref="524572172"/>
+    <nd ref="524572174"/>
+    <nd ref="524572176"/>
+    <nd ref="524572165"/>
+    <tag k="addr:city" v="Königswinter"/>
+    <tag k="addr:housenumber" v="79"/>
+    <tag k="addr:postcode" v="53639"/>
+    <tag k="addr:street" v="Hauptstraße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Freiwillige Feuerwehr Niederdollendorf"/>
+  </way>
+  <way id="43607906">
+    <nd ref="550940140"/>
+    <nd ref="550940148"/>
+    <nd ref="550940210"/>
+    <nd ref="560653652"/>
+    <nd ref="684355036"/>
+    <nd ref="550940244"/>
+    <nd ref="550940258"/>
+    <nd ref="550940140"/>
+    <tag k="addr:city" v="Bonn"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="160"/>
+    <tag k="addr:postcode" v="53175"/>
+    <tag k="addr:street" v="Friesdorfer Straße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Feuerwache- und Rettungswache 3 (Bonn-Bad Godesberg)"/>
+    <tag k="ref" v="BF 3"/>
+    <tag k="source" v="Bing"/>
+  </way>
+  <way id="50970154">
+    <nd ref="649942239"/>
+    <nd ref="649942242"/>
+    <nd ref="649942248"/>
+    <nd ref="649942260"/>
+    <nd ref="649942239"/>
+    <tag k="addr:city" v="Bonn"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="8-10"/>
+    <tag k="addr:postcode" v="53227"/>
+    <tag k="addr:street" v="Maarstraße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Feuerwache- und Rettungswache 2 (Bonn-Beuel)"/>
+    <tag k="ref" v="BF 2"/>
+    <tag k="source" v="Yahoo!Sat;knowledge;Bing"/>
+  </way>
+  <way id="52532528">
+    <nd ref="2663057700"/>
+    <nd ref="2663057684"/>
+    <nd ref="2663057691"/>
+    <nd ref="2663057702"/>
+    <nd ref="2663057700"/>
+    <tag k="addr:city" v="Bonn"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="31"/>
+    <tag k="addr:postcode" v="53225"/>
+    <tag k="addr:street" v="Liestraße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr (Bonn-Geislar)"/>
+  </way>
+  <way id="54266488">
+    <nd ref="555528268"/>
+    <nd ref="558649066"/>
+    <nd ref="558649067"/>
+    <nd ref="684355012"/>
+    <nd ref="555528268"/>
+    <tag k="addr:city" v="Bonn"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="55"/>
+    <tag k="addr:postcode" v="53175"/>
+    <tag k="addr:street" v="Sankt-Augustinus-Straße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr (Bonn-Bad Godesberg)"/>
+    <tag k="polling_station" v="2013"/>
+    <tag k="polling_station:city" v="Bonn"/>
+    <tag k="polling_station:ref" v="245"/>
+    <tag k="ref" v="FF Godesberg"/>
+    <tag k="source" v="Yahoo!Sat"/>
+  </way>
+  <way id="59993988">
+    <nd ref="2559146734"/>
+    <nd ref="2559146721"/>
+    <nd ref="2559146715"/>
+    <nd ref="2559146598"/>
+    <nd ref="745820637"/>
+    <nd ref="1740643144"/>
+    <nd ref="2559146671"/>
+    <nd ref="2559146735"/>
+    <nd ref="2559146734"/>
+    <tag k="addr:city" v="Bonn"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="11"/>
+    <tag k="addr:postcode" v="53119"/>
+    <tag k="addr:street" v="Spessartstraße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="building:levels" v="1"/>
+    <tag k="name" v="Freiwillige Feuerwehr (Bonn-Mitte)"/>
+  </way>
+  <way id="84115588">
+    <nd ref="1476849704"/>
+    <nd ref="978635920"/>
+    <nd ref="1100668042"/>
+    <nd ref="1100668021"/>
+    <nd ref="978635953"/>
+    <nd ref="1584806417"/>
+    <nd ref="978635887"/>
+    <nd ref="2535786718"/>
+    <nd ref="2535786720"/>
+    <nd ref="1476849704"/>
+    <tag k="addr:city" v="Hennef (Sieg)"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="5"/>
+    <tag k="addr:postcode" v="53773"/>
+    <tag k="addr:street" v="Theodor-Heuss-Allee"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="fax" v="+49 2242 968030"/>
+    <tag k="name" v="Feuerwache Hennef"/>
+    <tag k="phone" v="+49 2242 96800"/>
+    <tag k="website" v="http://www.feuerwehr-hennef.de/"/>
+  </way>
+  <way id="85835156">
+    <nd ref="996347473"/>
+    <nd ref="996347529"/>
+    <nd ref="996347477"/>
+    <nd ref="996347553"/>
+    <nd ref="996347484"/>
+    <nd ref="2566300740"/>
+    <nd ref="996347374"/>
+    <nd ref="996347570"/>
+    <nd ref="996347555"/>
+    <nd ref="996347427"/>
+    <nd ref="996347548"/>
+    <nd ref="996347467"/>
+    <nd ref="996347473"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr Thomasberg"/>
+  </way>
+  <way id="89211580">
+    <nd ref="1035426460"/>
+    <nd ref="1035426442"/>
+    <nd ref="1035426476"/>
+    <nd ref="1035426448"/>
+    <nd ref="1035426460"/>
+    <tag k="addr:city" v="Rheinbreitbach"/>
+    <tag k="addr:housenumber" v="22"/>
+    <tag k="addr:postcode" v="53619"/>
+    <tag k="addr:street" v="Rheinstraße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Gerätehaus Rheinbreitbach"/>
+  </way>
+  <way id="91962538">
+    <nd ref="1068434065"/>
+    <nd ref="1068434061"/>
+    <nd ref="1068434059"/>
+    <nd ref="1068434104"/>
+    <nd ref="1068434065"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="name" v="Freiwillige Feuerwehr Niederbachem"/>
+  </way>
+  <way id="92415352">
+    <nd ref="1072785399"/>
+    <nd ref="1072785518"/>
+    <nd ref="1072785359"/>
+    <nd ref="48837516"/>
+    <nd ref="1072785527"/>
+    <nd ref="30756278"/>
+    <nd ref="1072785399"/>
+    <tag k="addr:city" v="Alfter"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="7"/>
+    <tag k="addr:postcode" v="53347"/>
+    <tag k="addr:street" v="Ramelshovener Straße"/>
+    <tag k="addr:suburb" v="Witterschlick"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="building:levels" v="2"/>
+    <tag k="name" v="Freiwillige Feuerwehr Alfter Löschgruppe Witterschlick"/>
+    <tag k="ref" v="11.5 - FF Witterschlick"/>
+  </way>
+  <way id="99655487">
+    <nd ref="1152183306"/>
+    <nd ref="1152183097"/>
+    <nd ref="1152183595"/>
+    <nd ref="1152183352"/>
+    <nd ref="1152183306"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr (Bonn-Mehlem)"/>
+    <tag k="source" v="Bing"/>
+  </way>
+  <way id="102005963">
+    <nd ref="1177540461"/>
+    <nd ref="1177540310"/>
+    <nd ref="1177540884"/>
+    <nd ref="2232061839"/>
+    <nd ref="1177540461"/>
+    <tag k="addr:city" v="Troisdorf"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="65"/>
+    <tag k="addr:postcode" v="53844"/>
+    <tag k="addr:street" v="Lambertusstraße"/>
+    <tag k="addr:suburb" v="Müllekoven"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Löschgruppe Müllekoven"/>
+    <tag k="website" v="http://www.muellekoven.feuerwehr-troisdorf.de/"/>
+  </way>
+  <way id="107356344">
+    <nd ref="1233846244"/>
+    <nd ref="1233846221"/>
+    <nd ref="1233846234"/>
+    <nd ref="3647720865"/>
+    <nd ref="1233846244"/>
+    <tag k="addr:city" v="Bonn"/>
+    <tag k="addr:housenumber" v="248"/>
+    <tag k="addr:postcode" v="53121"/>
+    <tag k="addr:street" v="Siemensstraße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr (Bonn-Dransdorf)"/>
+  </way>
+  <way id="108633163">
+    <nd ref="1245860370"/>
+    <nd ref="1245860332"/>
+    <nd ref="1245860356"/>
+    <nd ref="1246212014"/>
+    <nd ref="1245860335"/>
+    <nd ref="1245860381"/>
+    <nd ref="1245860363"/>
+    <nd ref="1245860366"/>
+    <nd ref="1245860352"/>
+    <nd ref="1245860371"/>
+    <nd ref="1245860370"/>
+    <tag k="addr:city" v="Bonn"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="54"/>
+    <tag k="addr:postcode" v="53229"/>
+    <tag k="addr:street" v="Guardinistraße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr (Bonn-Holtorf)"/>
+    <tag k="polling_station" v="2013"/>
+    <tag k="polling_station:city" v="Bonn"/>
+    <tag k="polling_station:ref" v="331"/>
+  </way>
+  <way id="109588769">
+    <nd ref="2571451714"/>
+    <nd ref="2571451690"/>
+    <nd ref="2571451544"/>
+    <nd ref="2571451558"/>
+    <nd ref="2571451714"/>
+    <tag k="addr:city" v="Bonn"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="54"/>
+    <tag k="addr:postcode" v="53127"/>
+    <tag k="addr:street" v="Im Mühlenbach"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr (Bonn-Lengsdorf)"/>
+    <tag k="polling_station" v="2013"/>
+    <tag k="polling_station:city" v="Bonn"/>
+    <tag k="polling_station:ref" v="414"/>
+    <tag k="ref" v="FF Lengsdorf"/>
+  </way>
+  <way id="111459595">
+    <nd ref="1269880374"/>
+    <nd ref="1269880339"/>
+    <nd ref="1269880341"/>
+    <nd ref="1897957034"/>
+    <nd ref="1897957028"/>
+    <nd ref="1269880334"/>
+    <nd ref="1269880436"/>
+    <nd ref="1269880374"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr Lessenich"/>
+    <tag k="ref" v="FF Lessenich"/>
+  </way>
+  <way id="111653840">
+    <nd ref="1271529247"/>
+    <nd ref="1271529252"/>
+    <nd ref="1764395648"/>
+    <nd ref="1271529245"/>
+    <nd ref="1271529251"/>
+    <nd ref="1271529247"/>
+    <tag k="addr:city" v="Bonn"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="301"/>
+    <tag k="addr:postcode" v="53125"/>
+    <tag k="addr:street" v="Witterschlicker Allee"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr (Bonn-Röttgen)"/>
+  </way>
+  <way id="112382274">
+    <nd ref="1277424282"/>
+    <nd ref="1277424262"/>
+    <nd ref="1277424233"/>
+    <nd ref="1277424370"/>
+    <nd ref="1277424282"/>
+    <tag k="addr:city" v="Niederkassel"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="71"/>
+    <tag k="addr:postcode" v="53859"/>
+    <tag k="addr:street" v="Rheidter Straße"/>
+    <tag k="addr:suburb" v="Mondorf"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr Niederkassel, Löschgruppe Mondorf"/>
+    <tag k="website" v="http://www.feuerwehr-mondorf.de/"/>
+  </way>
+  <way id="114355827">
+    <nd ref="2560611188"/>
+    <nd ref="2560611190"/>
+    <nd ref="2560611186"/>
+    <nd ref="2560611171"/>
+    <nd ref="2560611185"/>
+    <nd ref="2560611192"/>
+    <nd ref="2560611188"/>
+    <tag k="addr:city" v="Bonn"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="18a"/>
+    <tag k="addr:postcode" v="53121"/>
+    <tag k="addr:street" v="Am Burggraben"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr (Bonn-Endenich)"/>
+    <tag k="ref" v="FF Endenich"/>
+  </way>
+  <way id="117375937">
+    <nd ref="3422200709"/>
+    <nd ref="3422200710"/>
+    <nd ref="3422200713"/>
+    <nd ref="3422200704"/>
+    <nd ref="3422200702"/>
+    <nd ref="3422200703"/>
+    <nd ref="3422200699"/>
+    <nd ref="3422200698"/>
+    <nd ref="3422200694"/>
+    <nd ref="3422200697"/>
+    <nd ref="3422200696"/>
+    <nd ref="3422200695"/>
+    <nd ref="3422200693"/>
+    <nd ref="3422200701"/>
+    <nd ref="3422200705"/>
+    <nd ref="3422200700"/>
+    <nd ref="3422200706"/>
+    <nd ref="3422200711"/>
+    <nd ref="3422200707"/>
+    <nd ref="3422200712"/>
+    <nd ref="3422200708"/>
+    <nd ref="3422200709"/>
+    <tag k="addr:city" v="Hennef (Sieg)"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="25"/>
+    <tag k="addr:postcode" v="53773"/>
+    <tag k="addr:street" v="Dambroicher Straße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Feuerwache Söven"/>
+    <tag k="source" v="Bing"/>
+  </way>
+  <way id="117907239">
+    <nd ref="1327160050"/>
+    <nd ref="1327160052"/>
+    <nd ref="1327160051"/>
+    <nd ref="1327160049"/>
+    <nd ref="1327160050"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Feuerwehrgerätehaus"/>
+    <tag k="source" v="HiRes aerial imagery"/>
+  </way>
+  <way id="133744663">
+    <nd ref="1472057655"/>
+    <nd ref="1472057656"/>
+    <nd ref="1472057654"/>
+    <nd ref="1472057650"/>
+    <nd ref="1472057653"/>
+    <nd ref="1472057649"/>
+    <nd ref="1472057652"/>
+    <nd ref="1472057651"/>
+    <nd ref="1472057655"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="LG Bockeroth"/>
+    <tag k="website" v="http://www.feuerwehr-bockeroth.de/"/>
+  </way>
+  <way id="136473412">
+    <nd ref="2586440897"/>
+    <nd ref="2586440885"/>
+    <nd ref="2586440896"/>
+    <nd ref="2586440942"/>
+    <nd ref="2586440897"/>
+    <tag k="addr:housenumber" v="2"/>
+    <tag k="addr:street" v="Siegesstraße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr Bornheim - Roisdorf"/>
+    <tag k="ref" v="BNH 1"/>
+    <tag k="website" v="http://www.feuerwehr-roisdorf.de/"/>
+  </way>
+  <way id="142163963">
+    <nd ref="1555944787"/>
+    <nd ref="1555944795"/>
+    <nd ref="1555944782"/>
+    <nd ref="1555944790"/>
+    <nd ref="1555944787"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="office"/>
+    <tag k="name" v="Leitstelle Bonn"/>
+    <tag k="ref" v="LST"/>
+  </way>
+  <way id="151621035">
+    <nd ref="3521886143"/>
+    <nd ref="3521886138"/>
+    <nd ref="3521886140"/>
+    <nd ref="3521886134"/>
+    <nd ref="3521886133"/>
+    <nd ref="3521886128"/>
+    <nd ref="3521886118"/>
+    <nd ref="3521886112"/>
+    <nd ref="3521886126"/>
+    <nd ref="3521886132"/>
+    <nd ref="3521886135"/>
+    <nd ref="3521886142"/>
+    <nd ref="3521886136"/>
+    <nd ref="3521886143"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr Alfter - Gielsdorf"/>
+    <tag k="ref" v="11.2 - FF Gielsdorf"/>
+  </way>
+  <way id="151621045">
+    <nd ref="1644508132"/>
+    <nd ref="1644508133"/>
+    <nd ref="1644508135"/>
+    <nd ref="1644508134"/>
+    <nd ref="1644508132"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr Alfter"/>
+    <tag k="ref" v="11.1 - FF Alfter"/>
+  </way>
+  <way id="159410222">
+    <nd ref="1715292225"/>
+    <nd ref="1715292314"/>
+    <nd ref="1715292355"/>
+    <nd ref="1715292236"/>
+    <nd ref="1809342226"/>
+    <nd ref="1809342228"/>
+    <nd ref="1809342235"/>
+    <nd ref="1715292240"/>
+    <nd ref="1715292141"/>
+    <nd ref="1809342208"/>
+    <nd ref="1715292176"/>
+    <nd ref="1715292123"/>
+    <nd ref="1715292225"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Feuer- und Rettungswache Siegburg"/>
+  </way>
+  <way id="161490067">
+    <nd ref="1734595334"/>
+    <nd ref="1734595249"/>
+    <nd ref="1734595196"/>
+    <nd ref="273130506"/>
+    <nd ref="1734595207"/>
+    <nd ref="1734595334"/>
+    <tag k="addr:city" v="Sankt Augustin"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="27"/>
+    <tag k="addr:postcode" v="53757"/>
+    <tag k="addr:street" v="Michaelsbergstraße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="email" v="http://www.lg-buisdorf.de/cms/index.php"/>
+    <tag k="name" v="Löschgruppe Buisdorf"/>
+    <tag k="operator" v="Freiwillige Feuerwehr Sankt Augustin"/>
+    <tag k="source" v="HiRes aerial imagery"/>
+  </way>
+  <way id="163501093">
+    <nd ref="2581088435"/>
+    <nd ref="2581088428"/>
+    <nd ref="2581088425"/>
+    <nd ref="2581088419"/>
+    <nd ref="2581088420"/>
+    <nd ref="2581088435"/>
+    <tag k="addr:city" v="Sankt Augustin"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="5"/>
+    <tag k="addr:postcode" v="53757"/>
+    <tag k="addr:street" v="Graf-Zeppelin-Straße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Löschgruppe Hangelar"/>
+    <tag k="operator" v="Freiwillige Feuerwehr Sankt Augustin"/>
+  </way>
+  <way id="168576442">
+    <nd ref="1798199028"/>
+    <nd ref="1798199029"/>
+    <nd ref="1798199031"/>
+    <nd ref="1798199033"/>
+    <nd ref="1798199034"/>
+    <nd ref="1798199036"/>
+    <nd ref="1798199028"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr Oberdollendorf"/>
+  </way>
+  <way id="170424045">
+    <nd ref="2650766359"/>
+    <nd ref="2650766352"/>
+    <nd ref="2650766339"/>
+    <nd ref="2650766345"/>
+    <nd ref="2650766354"/>
+    <nd ref="2650766355"/>
+    <nd ref="2650766359"/>
+    <tag k="addr:city" v="Niederkassel"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="5"/>
+    <tag k="addr:postcode" v="53859"/>
+    <tag k="addr:street" v="Mühlenstraße"/>
+    <tag k="addr:suburb" v="Rheidt"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr Niederkassel, Löschgruppe Rheidt"/>
+  </way>
+  <way id="180590838">
+    <nd ref="1910097313"/>
+    <nd ref="1910097380"/>
+    <nd ref="1910097609"/>
+    <nd ref="1910097507"/>
+    <nd ref="1910097478"/>
+    <nd ref="1910097320"/>
+    <nd ref="1910097313"/>
+    <tag k="addr:city" v="Alfter"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="3"/>
+    <tag k="addr:postcode" v="53347"/>
+    <tag k="addr:street" v="Unterdorf"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Feuerwehr Alfter, Löschgruppe Impekoven"/>
+  </way>
+  <way id="183964110">
+    <nd ref="3080462141"/>
+    <nd ref="3080462137"/>
+    <nd ref="3080462138"/>
+    <nd ref="3080462142"/>
+    <nd ref="3080462150"/>
+    <nd ref="3080462151"/>
+    <nd ref="3080462141"/>
+    <tag k="addr:city" v="Bornheim"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="67"/>
+    <tag k="addr:postcode" v="53332"/>
+    <tag k="addr:street" v="Römerstraße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr Bornheim - Widdig"/>
+    <tag k="ref" v="BNH 12"/>
+    <tag k="source" v="aerowest"/>
+  </way>
+  <way id="214536140">
+    <nd ref="2240629721"/>
+    <nd ref="2240629730"/>
+    <nd ref="2240629727"/>
+    <nd ref="1952521056"/>
+    <nd ref="1952521069"/>
+    <nd ref="1952521120"/>
+    <nd ref="2240629733"/>
+    <nd ref="2240629736"/>
+    <nd ref="2240629738"/>
+    <nd ref="2240629721"/>
+    <tag k="addr:housenumber" v="117"/>
+    <tag k="addr:street" v="Rheinstraße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr Bornheim - Hersel"/>
+    <tag k="ref" v="BNH 5"/>
+  </way>
+  <way id="222173095">
+    <nd ref="3271161441"/>
+    <nd ref="2311536286"/>
+    <nd ref="2311536283"/>
+    <nd ref="2311536306"/>
+    <nd ref="3271161442"/>
+    <nd ref="2311536308"/>
+    <nd ref="2311536309"/>
+    <nd ref="2311536305"/>
+    <nd ref="3271161441"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr Löschzug Merl"/>
+  </way>
+  <way id="223570216">
+    <nd ref="2835577999"/>
+    <nd ref="2835577998"/>
+    <nd ref="2835579301"/>
+    <nd ref="2835579302"/>
+    <nd ref="2835579303"/>
+    <nd ref="2835577999"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Löschgruppe Lüftelberg"/>
+  </way>
+  <way id="223884969">
+    <nd ref="2327390712"/>
+    <nd ref="2327390730"/>
+    <nd ref="2327390687"/>
+    <nd ref="2327390682"/>
+    <nd ref="2327390712"/>
+    <tag k="addr:city" v="Wachtberg"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="71"/>
+    <tag k="addr:postcode" v="53343"/>
+    <tag k="addr:street" v="Töpferstraße"/>
+    <tag k="addr:suburb" v="Adendorf"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+  </way>
+  <way id="237058977">
+    <nd ref="480194491"/>
+    <nd ref="2450076445"/>
+    <nd ref="2450076446"/>
+    <nd ref="2450076447"/>
+    <nd ref="2450076448"/>
+    <nd ref="2450076449"/>
+    <nd ref="480194491"/>
+    <tag k="addr:housenumber" v="3"/>
+    <tag k="addr:street" v="Kohlkauler Platz"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr (Bonn-Holzlar)"/>
+    <tag k="polling_station" v="2013"/>
+    <tag k="polling_station:city" v="Bonn"/>
+    <tag k="polling_station:ref" v="353"/>
+    <tag k="ref" v="FF Holzlar"/>
+  </way>
+  <way id="260764496">
+    <nd ref="2663240968"/>
+    <nd ref="2663240969"/>
+    <nd ref="2663240976"/>
+    <nd ref="2663240970"/>
+    <nd ref="2663240968"/>
+    <tag k="addr:city" v="Sankt Augustin"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="31"/>
+    <tag k="addr:postcode" v="53757"/>
+    <tag k="addr:street" v="Gartenstraße"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Löschzug Mülldorf"/>
+    <tag k="operator" v="Freiwillige Feuerwehr Sankt Augustin"/>
+  </way>
+  <way id="265690726">
+    <nd ref="2713133138"/>
+    <nd ref="2713133148"/>
+    <nd ref="2713133149"/>
+    <nd ref="2713133152"/>
+    <nd ref="2713133154"/>
+    <nd ref="2713133157"/>
+    <nd ref="2713133155"/>
+    <nd ref="2713133139"/>
+    <nd ref="2713133138"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Feuerwehr Königswinter Löschzug Altstadt"/>
+  </way>
+  <way id="309984872">
+    <nd ref="3153359069"/>
+    <nd ref="3153359070"/>
+    <nd ref="3153359067"/>
+    <nd ref="3153359064"/>
+    <nd ref="3378721085"/>
+    <nd ref="3153359069"/>
+    <tag k="addr:city" v="Sankt Augustin"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="64"/>
+    <tag k="addr:postcode" v="53757"/>
+    <tag k="addr:street" v="Frankfurter Straße"/>
+    <tag k="addr:suburb" v="Buisdorf"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr Buisdorf"/>
+  </way>
+  <way id="332421397">
+    <nd ref="3395486729"/>
+    <nd ref="3395486728"/>
+    <nd ref="3395486730"/>
+    <nd ref="3395486731"/>
+    <nd ref="3395486729"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+  </way>
+  <way id="334230564">
+    <nd ref="3413332690"/>
+    <nd ref="3413332691"/>
+    <nd ref="3413332689"/>
+    <nd ref="3413332688"/>
+    <nd ref="3413332687"/>
+    <nd ref="2705591946"/>
+    <nd ref="3413332690"/>
+    <tag k="addr:city" v="Bonn"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="4"/>
+    <tag k="addr:postcode" v="53127"/>
+    <tag k="addr:street" v="Auf dem Kirchbüchel"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Rettungswache 4"/>
+    <tag k="note" v="Neubau der Rettungswache 4"/>
+    <tag k="ref" v="FW4"/>
+  </way>
+  <way id="356938405">
+    <nd ref="3623370571"/>
+    <nd ref="3623370574"/>
+    <nd ref="3623370572"/>
+    <nd ref="3623370576"/>
+    <nd ref="3623370575"/>
+    <nd ref="3623370577"/>
+    <nd ref="3623370578"/>
+    <nd ref="620864025"/>
+    <nd ref="3623370573"/>
+    <nd ref="3623370579"/>
+    <nd ref="3623370571"/>
+    <tag k="amenity" v="fire_station"/>
+    <tag k="building" v="yes"/>
+    <tag k="name" v="Freiwillige Feuerwehr Wachtberg-Berkum"/>
+  </way>
+
+</osm>

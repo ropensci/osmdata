@@ -1,0 +1,9 @@
+[out:xml][timeout:25];
+(
+  node["ncn"="proposed"](49.16,-13.4,60.85,1.76);
+  way["ncn"="proposed"](49.16,-13.4,60.85,1.76);
+  relation["ncn"="proposed"](49.16,-13.4,60.85,1.76);
+);
+out body;
+>;
+out skel qt;

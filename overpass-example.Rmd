@@ -1,0 +1,71 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r pkgs}
+library(overpass)
+library(sp)
+library(htmltools)
+library(leaflet)
+```
+
+### Find all cinemas in Bonn which are at most 100m away from bus stops
+
+```{r bonn_data, cache=TRUE}
+bonn_bus_stops <- '[out:xml];
+area[name="Bonn"];
+node(area)[highway=bus_stop];
+node(around:100)[amenity=cinema];
+out;'
+
+bss <- overpass_query(bonn_bus_stops)
+```
+
+```{r bonn_leaflet, cache=FALSE}
+leaflet(bss) %>% 
+  addTiles() %>% 
+  addCircles(radius=50,
+             popup=sprintf("<b><a target='_blank' href='%s'>%s</a></b>%s<br/><hr noshade size='1'/>%s %s<br/>%s</b>",
+                           htmlEscape(bss@data$website),
+                           htmlEscape(bss@data$name),
+                           ifelse(tolower(bss@data$wheelchair) %in% c("yes", "limited"), 
+                                  "<span style='text-align:right'> [H]</span>", ""),
+                           htmlEscape(bss@data$addr.housenumber),
+                           htmlEscape(bss@data$addr.street),
+                           htmlEscape(bss@data$addr.city)))
+```
+
+### Find all counties in Hessen without fire station
+
+```{r hennen_data, cache=TRUE}
+
+hessen_fire <- '[out:xml];
+area[admin_level=4]["name"="Hessen"][boundary=administrative]->.boundaryarea;
+ 
+( node(area.boundaryarea)["amenity"="fire_station"];
+  way(area.boundaryarea)["amenity"="fire_station"];>;) ->.a;
+ 
+.a is_in -> .b; 
+area.b[admin_level=8] -> .bf; 
+ 
+rel(area.boundaryarea)[admin_level=8];
+map_to_area -> .bllf;
+ 
+(.bllf - .bf ) ; 
+rel(pivot); (._;>;); out;'
+```
+
+```{r hessen_leaflet, cache=FALSE}
+hfr <- overpass_query(hessen_fire)
+
+lf <- leaflet(hfr) %>% addTiles()
+for (i in 1:length(hfr@lines)) {
+  lf <- lf %>% addPolylines(data=hfr@lines[[i]], weight = 3) 
+}
+lf
+```
+

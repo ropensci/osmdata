@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 vignettes/*.html
 vignettes/*.pdf
 src/*.o
@@ -6,3 +7,12 @@ README.html
 
 inst/doc
 
+=======
+.Rproj.user
+.Rhistory
+.RData
+inst/doc
+rsconnect/
+README_cache/
+overpass-example_cache/
+>>>>>>> overpass/master
