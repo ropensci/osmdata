@@ -23,7 +23,9 @@
 #'         \code{relations}s are not handled yet.\cr\cr
 #' @export
 #' @examples
+#' \dontrun{
 #' mammoth <- read_osm(system.file("osm/mammoth.osm", package="overpass"))
+#' }
 read_osm <- function(osm_response, encoding = "") {
 
   doc <- xml2::read_xml(osm_response, encoding=encoding)

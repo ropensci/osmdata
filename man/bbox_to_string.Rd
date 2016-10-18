@@ -6,6 +6,9 @@
 \usage{
 bbox_to_string(bbox)
 }
+\arguments{
+\item{bbox}{bounding box}
+}
 \description{
 This function converts a bounding box into a string for use in web apis
 }

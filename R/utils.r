@@ -52,6 +52,9 @@ process_doc <- function(doc) {
 #' Convert a named matrix or a named vector (or an unnamed vector) return a string
 #'
 #' This function converts a bounding box into a string for use in web apis
+#' 
+#' @param bbox bounding box
+#'
 #' @export
 bbox_to_string <- function(bbox) {
   if (!is.null(bbox)) {

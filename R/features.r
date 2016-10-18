@@ -8,8 +8,8 @@
 #' available_features()
 available_features <- function() {
 
-  pg <- xml2::read_html("http://wiki.openstreetmap.org/wiki/Map_Features")
-  keys <- xml2::html_attr(rvest::html_nodes(pg, "a[href^='/wiki/Key']"), "title")
+  pg <- xml2::read_html ("http://wiki.openstreetmap.org/wiki/Map_Features")
+  keys <- xml2::xml_attr (rvest::html_nodes(pg, "a[href^='/wiki/Key']"), "title")
   unique(sort(gsub("^Key:", "", keys)))
 
 }
@@ -25,7 +25,7 @@ available_features <- function() {
 #' available_tags("aerialway")
 available_tags <- function(feature) {
   pg <- xml2::read_html("http://wiki.openstreetmap.org/wiki/Map_Features")
-  tags <- xml2::html_attr(rvest::html_nodes(pg, sprintf("a[title^='Tag:%s']", feature)), "title")
+  tags <- xml2::xml_attr(rvest::html_nodes(pg, sprintf("a[title^='Tag:%s']", feature)), "title")
   unique(sort(gsub(sprintf("Tag:%s=", feature), "", tags, fixed=TRUE)))
 }
 

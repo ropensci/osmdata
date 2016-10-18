@@ -18,7 +18,7 @@ an invisible list of whether the API is available along with the
 Retrieve status of the Overpass API
 }
 \author{
-Maëlle Salmon
+Maelle Salmon
 overpass_status()
 }
 

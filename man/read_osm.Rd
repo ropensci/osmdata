@@ -36,6 +36,8 @@ You can disable progress bars by calling \code{pbapply::pboptions(type="none")} 
       code. See \code{\link[pbapply]{pboptions}} for all the various progress bar settings.
 }
 \examples{
+\dontrun{
 mammoth <- read_osm(system.file("osm/mammoth.osm", package="overpass"))
+}
 }
 

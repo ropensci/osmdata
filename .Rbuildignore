@@ -1,23 +1,14 @@
-<<<<<<< HEAD
 ^\.travis\.yml$
 makefile$
 \.md$
+^README\.md$
 ^README\.Rmd$
 ^README\.html$
 ^figure/
+^osmdatar/
+^overpass/
 ^src/Makevars$
-=======
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^README\.Rmd$
-^README-.*\.png$
-^\.travis\.yml$
 ^CONDUCT\.md$
-^README\.md$
 ^NOTES\.md$
-README_cache/
-^overpass-example\.Rmd$
-^overpass-example\.html$
-overpass-example_cache/
-rsconnect/
->>>>>>> overpass/master
