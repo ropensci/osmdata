@@ -1,0 +1,7 @@
+^\.travis\.yml$
+makefile$
+\.md$
+^README\.Rmd$
+^README\.html$
+^figure/
+^src/Makevars$

@@ -1,0 +1,13 @@
+language: r
+warnings_are_errors: true
+sudo: required
+
+r:
+    #- devel
+    - release
+
+r_github_packages:
+      - jimhester/covr
+
+after_success:
+      - Rscript -e 'covr::codecov()'

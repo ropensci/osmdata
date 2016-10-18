@@ -1,0 +1,6 @@
+PKG_CXXFLAGS="-fprofile-arcs -ftest-coverage"
+PKG_LIBS="-lgcov"
+
+sed -e "s|@cflags@|$PKG_CXXFLAGS|" -e "s|@libs@|$PKG_LIBS|" src/Makevars.in > src/Makevars
+
+exit 0

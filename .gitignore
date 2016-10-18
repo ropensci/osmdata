@@ -1,0 +1,8 @@
+vignettes/*.html
+vignettes/*.pdf
+src/*.o
+src/*.so
+README.html
+
+inst/doc
+
