@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // rcpp_get_lines
 Rcpp::S4 rcpp_get_lines(const std::string& st);
-RcppExport SEXP osmdatar_rcpp_get_lines(SEXP stSEXP) {
+RcppExport SEXP osmdata_rcpp_get_lines(SEXP stSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -18,7 +18,7 @@ END_RCPP
 }
 // rcpp_get_points
 Rcpp::S4 rcpp_get_points(const std::string& st);
-RcppExport SEXP osmdatar_rcpp_get_points(SEXP stSEXP) {
+RcppExport SEXP osmdata_rcpp_get_points(SEXP stSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -29,7 +29,7 @@ END_RCPP
 }
 // rcpp_get_polygons
 Rcpp::S4 rcpp_get_polygons(const std::string& st);
-RcppExport SEXP osmdatar_rcpp_get_polygons(SEXP stSEXP) {
+RcppExport SEXP osmdata_rcpp_get_polygons(SEXP stSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;

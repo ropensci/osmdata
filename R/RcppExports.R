@@ -8,7 +8,7 @@
 #' @param st Text contents of an overpass API query
 #' @return A \code{SpatialLinesDataFrame} contains all ways and associated data
 rcpp_get_lines <- function(st) {
-    .Call('osmdatar_rcpp_get_lines', PACKAGE = 'osmdatar', st)
+    .Call('osmdata_rcpp_get_lines', PACKAGE = 'osmdata', st)
 }
 
 #' rcpp_get_points
@@ -18,7 +18,7 @@ rcpp_get_lines <- function(st) {
 #' @param st Text contents of an overpass API query
 #' @return A \code{SpatialPointsDataFrame} contains all nodes and associated data
 rcpp_get_points <- function(st) {
-    .Call('osmdatar_rcpp_get_points', PACKAGE = 'osmdatar', st)
+    .Call('osmdata_rcpp_get_points', PACKAGE = 'osmdata', st)
 }
 
 #' rcpp_get_polygons
@@ -28,6 +28,6 @@ rcpp_get_points <- function(st) {
 #' @param st Text contents of an overpass API query
 #' @return A \code{SpatialLinesDataFrame} contains all polygons and associated data
 rcpp_get_polygons <- function(st) {
-    .Call('osmdatar_rcpp_get_polygons', PACKAGE = 'osmdatar', st)
+    .Call('osmdata_rcpp_get_polygons', PACKAGE = 'osmdata', st)
 }
 
