@@ -16,7 +16,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-overpass is a packge with tools to work with the OpenStreetMap (OSM) [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API).
+
+[![Build Status](https://travis-ci.org/osmdatar/osmdata.svg?branch=master)](https://travis-ci.org/osmdatar/osmdata) [![codecov](https://codecov.io/gh/osmdatar/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/osmdatar/osmdata)
+
+`osmdata` is a packge with tools to work with the OpenStreetMap (OSM) [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API).
 To explore simple Overpass queries interactively, try [overpass turbo](http://overpass-turbo.eu/).
 
 Here's an [RPub](http://rpubs.com/hrbrmstr/overpass) for `overpass` that I'll continually update as this goes (that will eventually be a vignette).
@@ -44,21 +47,31 @@ The following functions are implemented:
 ### Installation
 
 ```{r install, eval=FALSE}
-devtools::install_github("hrbrmstr/overpass")
+devtools::install_github("osmdatar/osmdata")
 ```
 
 ### Usage
 
-```{r usage}
-library(overpass)
+```{r usage, eval=FALSE}
+library(osmdata)
 library(sp)
 library(ggmap)
-
-# current verison
-packageVersion("overpass")
+```
+```{r usage2, echo=FALSE}
+wd <- getwd ()
+while (length (grep ('osmdata', getwd ())) > 0) setwd ("..")
+devtools::load_all ("osmdata")
+setwd (wd)
+library(sp)
+library(ggmap)
 ```
 
-```{r csv, cache=TRUE}
+```{r}
+# current verison
+packageVersion("osmdata")
+```
+
+```{r csv, cache=TRUE, eval=FALSE}
 # CSV example
 osmcsv <- '[out:csv(::id,::type,"name")];
 area[name="Bonn"]->.a;
@@ -73,7 +86,7 @@ read.table(text = opq, sep="\t", header=TRUE,
 
 ```
 
-```{r only_nodes, cache=TRUE}
+```{r only_nodes, cache=TRUE, eval=FALSE}
 # just nodes
 only_nodes <- '[out:xml];
 node
@@ -87,7 +100,7 @@ pts <- overpass_query(only_nodes)
 plot(pts)
 ```
 
-```{r nodes_and_ways, cache=TRUE}
+```{r nodes_and_ways, cache=TRUE, eval=FALSE}
 # ways & nodes
 nodes_and_ways <- '[out:xml];
 (node["amenity"="fire_station"]
@@ -103,7 +116,7 @@ wys <- overpass_query(nodes_and_ways)
 plot(wys)
 ```
 
-```{r actual_ways, cache=TRUE}
+```{r actual_ways, cache=TRUE, eval=FALSE}
 # xml version of the query
 actual_ways <- '<osm-script output="xml">
   <query type="way">
@@ -145,17 +158,13 @@ gg
 ggsave("README-from_robin-1.png")
 ```
 
-![london](README-from_robin-1.png)
 
 ### Test Results
 
 ```{r test}
-library(overpass)
-library(testthat)
-
 date()
 
-test_dir("tests/")
+testthat::test_dir("tests/")
 ```
 
 ### Code of Conduct
