@@ -9,19 +9,28 @@
 #' overpass_status()
 overpass_status <- function(quiet=FALSE) {
 
-  status <- httr::GET("http://overpass-api.de/api/status")
-  status <- httr::content(status)
-  status_now <- strsplit(status, "\n")[[1]][3]
+  available <- FALSE
+  slot_time <- NULL
+  if (!curl::has_internet ())
+  {
+    status <- "No internet connection"
+    if (!quiet) message (status)
+  } else
+  {
+    status <- httr::GET("http://overpass-api.de/api/status")
+    status <- httr::content(status)
+    status_now <- strsplit(status, "\n")[[1]][3]
 
-  if (!quiet) message(status_now)
+    if (!quiet) message(status_now)
 
-  if (grepl("after", status_now)) {
-    available <- FALSE
-    slot_time <- lubridate::ymd_hms(gsub("Slot available after: ", "", status_now))
-    slot_time <- lubridate::force_tz(slot_time, tz = Sys.timezone())
-  } else {
-    available <- TRUE
-    slot_time <- Sys.time()
+    if (grepl("after", status_now)) {
+      available <- FALSE
+      slot_time <- lubridate::ymd_hms(gsub("Slot available after: ", "", status_now))
+      slot_time <- lubridate::force_tz(slot_time, tz = Sys.timezone())
+    } else {
+      available <- TRUE
+      slot_time <- Sys.time()
+    }
   }
 
   return(invisible(list(available=available, next_slot=slot_time, msg=status)))
@@ -50,27 +59,33 @@ make_query <- function(query, quiet=FALSE) {
 #' @param query OSM Overpass query. Please note that the function is in ALPHA
 #'        dev stage and needs YOU to specify that the output type is XML.
 #'        However, you can use Overpass XML or Overpass QL formats.
-#' @param quiet suppress status messages. OSM Overpass queries may not return quickly. The
-#'        package will display status messages by default showing when the query started/completed.
-#'        You can disable these messages by setting this value to \code{TRUE}.
-#' @param wait if \code{TRUE} and if there is a queue at the Overpass API server, should
-#'        this function wait and try again at the next available slot time or should it
-#'        throw a an exception?
-#' @param pad_wait if there is a queue and \code{wait} is \code{TRUE}, pad the next query
-#'        start time by \code{pad_wait} seconds (default = 5 seconds).
-#' @note wrap function with \code{httr::with_verbose} if you want to see the \code{httr}
-#'       query (useful for debugging connection issues).\cr
-#'       \cr
-#'       You can disable progress bars by calling \code{pbapply::pboptions(type="none")} in your
-#'       code. See \code{\link[pbapply]{pboptions}} for all the various progress bar settings.
-#' @return If the \code{query} result only has OSM \code{node}s then the function
-#'         will return a \code{SpatialPointsDataFrame} with the \code{node}s.\cr\cr
-#'         If the \code{query} result has OSM \code{way}s then the function
-#'         will return a \code{SpatialLinesDataFrame} with the \code{way}s\cr\cr
+#' @param quiet suppress status messages. OSM Overpass queries may not return
+#'        quickly. The package will display status messages by default showing
+#'        when the query started/completed.  You can disable these messages by
+#'        setting this value to \code{TRUE}.
+#' @param wait if \code{TRUE} and if there is a queue at the Overpass API
+#'        server, should this function wait and try again at the next available
+#'        slot time or should it throw a an exception?
+#' @param pad_wait if there is a queue and \code{wait} is \code{TRUE}, pad the
+#'        next query start time by \code{pad_wait} seconds (default = 5 seconds).
+#'
+#' @note wrap function with \code{httr::with_verbose} if you want to see the
+#'       \code{httr} query (useful for debugging connection issues).\cr \cr 
+#'       You can disable progress bars by calling
+#'       \code{pbapply::pboptions(type="none")} in your code. See
+#'       \code{\link[pbapply]{pboptions}} for all the various progress bar
+#'       settings.
+#'
+#' @return If the \code{query} result only has OSM \code{node}s then the
+#'         function will return a \code{SpatialPointsDataFrame} with the
+#'         \code{node}s.\cr\cr
+#'         If the \code{query} result has OSM \code{way}s then the function will
+#'         return a \code{SpatialLinesDataFrame} with the \code{way}s\cr\cr
 #'         \code{relations}s are not handled yet.\cr\cr
-#'         If you asked for a CSV, you will receive the text response back, suitable for
-#'         processing by \code{read.table(text=..., sep=..., header=TRUE, check.names=FALSE,
-#'         stringsAsFactors=FALSE)}.
+#'         If you asked for a CSV, you will receive the text response back,
+#'         suitable for processing by \code{read.table(text=..., sep=...,
+#'         header=TRUE, check.names=FALSE, stringsAsFactors=FALSE)}.
+#'
 #' @export
 #' @examples \dontrun{
 #' only_nodes <- '[out:xml];
@@ -85,6 +100,9 @@ make_query <- function(query, quiet=FALSE) {
 #' }
 overpass_query <- function(query, quiet=FALSE, wait=TRUE, pad_wait=5) {
 
+  if (!curl::has_internet ())
+      stop("Overpass query unavailable", call.=FALSE)
+    
   if (!quiet) message("Issuing query to OSM Overpass...")
 
   o_stat <- overpass_status(quiet)
@@ -93,8 +111,8 @@ overpass_query <- function(query, quiet=FALSE, wait=TRUE, pad_wait=5) {
     make_query(query, quiet)
   } else {
     if (wait) {
-       wait <- max(0, as.numeric(difftime(o_stat$next_slot, Sys.time(), units = "secs"))) +
-         pad_wait
+       wait <- max(0, as.numeric(difftime(o_stat$next_slot, Sys.time(), 
+                                          units = "secs"))) + pad_wait
        message(sprintf("Waiting %s seconds", wait))
        Sys.sleep(wait)
        make_query(query, quiet)

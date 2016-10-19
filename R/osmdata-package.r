@@ -23,20 +23,21 @@
 #' @importFrom rvest html_attr html_nodes
 #' @importFrom dplyr %>% select left_join filter arrange bind_rows mutate do group_by distinct data_frame
 #' @importFrom utils read.table
+#' @importFrom curl has_internet
 NULL
 
 
-#' overpass exported operators
+#' osmdata exported operators
 #'
 #' The following functions are imported and then re-exported
-#' from the overpass package to enable use of the magrittr/dplyr
+#' from the osmdata package to enable use of the magrittr/dplyr
 #' pipe operator with no additional library calls
 #'
-#' @name overpass-exports
+#' @name osmdata-exports
 NULL
 
 #' @importFrom dplyr %>%
 #' @name %>%
 #' @export
-#' @rdname overpass-exports
+#' @rdname osmdata-exports
 NULL

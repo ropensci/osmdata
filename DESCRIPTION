@@ -19,6 +19,7 @@ SystemRequirements: C++11
 NeedsCompilation: yes
 LazyData: true
 Imports:
+    curl,
     dplyr,
     fastmatch,
     httr,
