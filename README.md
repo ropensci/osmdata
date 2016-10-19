@@ -69,8 +69,8 @@ node
   (50.7,7.1,50.8,7.25);
 out body;'
 
-pts <- overpass_query(only_nodes)
-plot(pts)
+pts <- overpass_query(only_nodes)$osm_nodes
+sp::plot(pts)
 ```
 
 ``` r
@@ -86,7 +86,7 @@ nodes_and_ways <- '[out:xml];
 out;'
 
 wys <- overpass_query(nodes_and_ways)
-plot(wys)
+sp::plot(wys$osm_ways)
 ```
 
 ``` r
@@ -103,7 +103,7 @@ actual_ways <- '<osm-script output="xml">
 </osm-script>'
 
 awy <- overpass_query(actual_ways)
-plot(awy)
+sp::plot(awy$osm_ways)
 ```
 
 ``` r
@@ -119,23 +119,26 @@ out body;
 >;
 out skel qt;'
 
-frb <- overpass_query(from_robin)
+frb <- overpass_query(from_robin)$osm_ways
 
-gg <- ggplot()
-gg <- gg + geom_path(data=fortify(frb), 
-                     aes(x=long, y=lat, group=group),
+gg <- ggplot2::ggplot()
+gg <- gg + ggplot2::geom_path(data=ggplot2::fortify(frb), 
+                     ggplot2::aes(x=long, y=lat, group=group),
                      color="black", size=0.25)
-gg <- gg + coord_quickmap()
+gg <- gg + ggplot2::coord_quickmap()
 gg <- gg + ggthemes::theme_map()
 gg
-ggsave("README-from_robin-1.png")
+```
+
+``` r
+#ggsave("README-from_robin-1.png")
 ```
 
 ### Test Results
 
 ``` r
 date()
-#> [1] "Wed Oct 19 10:57:07 2016"
+#> [1] "Wed Oct 19 21:49:15 2016"
 
 testthat::test_dir("tests/")
 #> testthat results ===========================================================

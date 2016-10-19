@@ -102,7 +102,7 @@ make_query <- function(query, quiet=FALSE) {
 overpass_query <- function(query, quiet=FALSE, wait=TRUE, pad_wait=5) {
 
   if (!curl::has_internet ())
-      stop("Overpass query unavailable", call.=FALSE)
+      stop("Overpass query unavailable without internet", call.=FALSE)
     
   if (!quiet) message("Issuing query to OSM Overpass...")
 
