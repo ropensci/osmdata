@@ -18,35 +18,11 @@ has_xpath <- function(doc, xpath) {
 # process an OSM response document
 process_doc <- function(doc) {
 
-  # which types of OSM things do we have?
-  has_nodes <- has_xpath(doc, "//node")
-  has_ways <- has_xpath(doc, "//way")
-  has_relations <- has_xpath(doc, "//relation")
-
-  # start crunching
-  if (has_nodes) {
-    osm_nodes <- process_osm_nodes(doc)
-    # if we only have nodes return a SpatialPointsDataFrame
-    if (!has_ways) return(osm_nodes_to_sptsdf(osm_nodes))
-  }
-
-  if (has_ways) {
-    # gotta have nodes to make ways
-    if (!has_nodes) stop("Cannot make ways if query results do not have nodes", call.=FALSE)
-    osm_ways <- process_osm_ways(doc, osm_nodes)
-    # TODO if we have relations we need to do more things
-    return(osm_ways_to_spldf(doc, osm_ways))
-  }
-
-  if (has_relations) {
-
-    # this inherently has to return a list structure of some kind
-
-  }
-
-  # if we got here something is really wrong
-  return(NULL)
-
+  list (
+        osm_nodes=rcpp_get_points (doc),
+        osm_ways=rcpp_get_lines (doc),
+        osm_polygons=rcpp_get_polygons (doc)
+  )
 }
 
 #' Convert a named matrix or a named vector (or an unnamed vector) return a string

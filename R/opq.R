@@ -16,7 +16,7 @@
 #'   add_feature("amenity", "library") %>%
 #'   issue_query() -> reading_noms
 #'
-#' sp::plot(reading_noms)
+#' sp::plot(reading_noms$osm_nodes)
 opq <- function(bbox=NULL) {
   return(list(bbox=bbox_to_string(bbox),
               features=c("[out:xml][timeout:25];\n(\n")))

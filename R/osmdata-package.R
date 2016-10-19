@@ -24,6 +24,8 @@
 #' @importFrom dplyr %>% select left_join filter arrange bind_rows mutate do group_by distinct data_frame
 #' @importFrom utils read.table
 #' @importFrom curl has_internet
+#' @importFrom Rcpp evalCpp
+#' @useDynLib osmdata
 NULL
 
 

@@ -44,11 +44,12 @@ make_query <- function(query, quiet=FALSE) {
   httr::stop_for_status(res)
   if (!quiet) message("Query complete!")
 
-  if (res$headers$`content-type` == "text/csv") {
-    return(httr::content(res, as="text", encoding="UTF-8"))
-  }
+  #if (res$headers$`content-type` == "text/csv") {
+  #  return(httr::content(res, as="text", encoding="UTF-8"))
+  #}
 
-  doc <- xml2::read_xml(httr::content(res, as="text", encoding="UTF-8"))
+  #doc <- xml2::read_xml(httr::content(res, as="text", encoding="UTF-8"))
+  doc <- httr::content(res, as="text", encoding="UTF-8")
 
   process_doc(doc)
 
