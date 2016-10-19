@@ -12,4 +12,4 @@ open: $(LFILE).html
 	xdg-open $(LFILE).html &
 
 clean:
-	rm -f *.html
+	rm -rf *.html README_cache

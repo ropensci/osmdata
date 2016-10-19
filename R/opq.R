@@ -42,11 +42,11 @@ add_feature <- function(opq, key, value, exact=TRUE, bbox=NULL) {
 
   if (is.null(bbox)) bbox <- bbox_to_string(opq$bbox)
 
-  if (exact) bind <- "="
-  else bind <- "~"
-  paste0(sprintf(' node["%s%s%s"](%s);\n', key, bind, value, bbox),
-         sprintf('  way["%s%s%s"](%s);\n', key, bind, value, bbox),
-         sprintf('  relation["%s%s%s"](%s);\n\n', key, bind, value, bbox)) -> thing
+  if (exact) bind <- '='
+  else bind <- '~'
+  paste0(sprintf(' node["%s"%s"%s"](%s);\n', key, bind, value, bbox),
+         sprintf('  way["%s"%s"%s"](%s);\n', key, bind, value, bbox),
+         sprintf('  relation["%s"%s"%s"](%s);\n\n', key, bind, value, bbox)) -> thing
 
   opq$features <- c(opq$features, thing)
 
