@@ -70,7 +70,8 @@ bbox_to_string <- function(bbox) {
       }
     } else {
       if (length(bbox) > 1 & length(bbox) == 4) {
-        if (all(names(bbox) %in% c("left", "bottom", "right", "top"))) {
+        if (!is.null (names (bbox)) & 
+            all (names (bbox) %in% c("left", "bottom", "right", "top"))) {
           bbox <- paste0(bbox[c("bottom", "left", "top", "right")], collapse=",")
         } else {
           bbox <- paste0(bbox[c(2,1,4,3)], collapse=",")

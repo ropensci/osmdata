@@ -27,12 +27,14 @@ opq <- function(bbox=NULL) {
 #' @param opq Overpass query object
 #' @param key feature key
 #' @param value value for feature key
+#' @param exact If FALSE, \code{value} is not interpreted exactly; see
+#' \url{http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide#Non-exact_names}
 #' @param bbox optional bounding box for the feature query; must be set if no
 #'        opq query bbox has been set
 #' @return \code{opq} object
 #' @references \url{http://wiki.openstreetmap.org/wiki/Map_Features}
 #' @export
-add_feature <- function(opq, key, value, bbox=NULL) {
+add_feature <- function(opq, key, value, exact=TRUE, bbox=NULL) {
 
   if (is.null(bbox) & is.null(opq$bbox)) {
     stop("A base bounding box has to either be set in opq() or must be set here.", call.=FALSE)
@@ -40,9 +42,11 @@ add_feature <- function(opq, key, value, bbox=NULL) {
 
   if (is.null(bbox)) bbox <- bbox_to_string(opq$bbox)
 
-  paste0(sprintf(' node["%s"="%s"](%s);\n', key, value, bbox),
-         sprintf('  way["%s"="%s"](%s);\n', key, value, bbox),
-         sprintf('  relation["%s"="%s"](%s);\n\n', key, value, bbox)) -> thing
+  if (exact) bind <- "="
+  else bind <- "~"
+  paste0(sprintf(' node["%s%s%s"](%s);\n', key, bind, value, bbox),
+         sprintf('  way["%s%s%s"](%s);\n', key, bind, value, bbox),
+         sprintf('  relation["%s%s%s"](%s);\n\n', key, bind, value, bbox)) -> thing
 
   opq$features <- c(opq$features, thing)
 

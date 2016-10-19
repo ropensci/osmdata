@@ -4,7 +4,7 @@
 \alias{add_feature}
 \title{Add a feature to an Overpass query}
 \usage{
-add_feature(opq, key, value, bbox = NULL)
+add_feature(opq, key, value, exact = TRUE, bbox = NULL)
 }
 \arguments{
 \item{opq}{Overpass query object}
@@ -12,6 +12,9 @@ add_feature(opq, key, value, bbox = NULL)
 \item{key}{feature key}
 
 \item{value}{value for feature key}
+
+\item{exact}{If FALSE, \code{value} is not interpreted exactly; see
+\url{http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide#Non-exact_names}}
 
 \item{bbox}{optional bounding box for the feature query; must be set if no
 opq query bbox has been set}
