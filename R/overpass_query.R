@@ -41,6 +41,16 @@ make_query <- function(query, quiet=FALSE) {
 
   # make a query, get the result, parse xml
   res <- httr::POST(overpass_base_url, body=query)
+  # code#429 = "Too Many Requests (RFC 6585)"
+  count <- 0
+  while (res$status_code == 429 && count < 10)
+  {
+    message ("Too many requests; retrying ...")
+    res <- httr::POST(overpass_base_url, body=query)
+    count <- count + 1
+  }
+
+
   httr::stop_for_status(res)
   if (!quiet) message("Query complete!")
 
