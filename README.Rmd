@@ -19,6 +19,10 @@ knitr::opts_chunk$set(
 
 [![Build Status](https://travis-ci.org/osmdatar/osmdata.svg?branch=master)](https://travis-ci.org/osmdatar/osmdata) [![codecov](https://codecov.io/gh/osmdatar/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/osmdatar/osmdata)
 
+
+![](./fig/title.png)
+
+
 `osmdata` is a packge with tools to work with the OpenStreetMap (OSM) [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API).
 To explore simple Overpass queries interactively, try [overpass turbo](http://overpass-turbo.eu/).
 

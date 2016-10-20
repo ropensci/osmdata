@@ -1,6 +1,8 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Build Status](https://travis-ci.org/osmdatar/osmdata.svg?branch=master)](https://travis-ci.org/osmdatar/osmdata) [![codecov](https://codecov.io/gh/osmdatar/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/osmdatar/osmdata)
 
+![](./fig/title.png)
+
 `osmdata` is a packge with tools to work with the OpenStreetMap (OSM) [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API). To explore simple Overpass queries interactively, try [overpass turbo](http://overpass-turbo.eu/).
 
 Here's an [RPub](http://rpubs.com/hrbrmstr/overpass) for `overpass` that I'll continually update as this goes (that will eventually be a vignette).
@@ -138,7 +140,7 @@ gg
 
 ``` r
 date()
-#> [1] "Wed Oct 19 21:49:15 2016"
+#> [1] "Thu Oct 20 14:56:57 2016"
 
 testthat::test_dir("tests/")
 #> testthat results ===========================================================
