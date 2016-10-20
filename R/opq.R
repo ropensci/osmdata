@@ -42,11 +42,20 @@ add_feature <- function(opq, key, value, exact=TRUE, bbox=NULL) {
 
   if (is.null(bbox)) bbox <- bbox_to_string(opq$bbox)
 
-  if (exact) bind <- '='
-  else bind <- '~'
-  paste0(sprintf(' node["%s"%s"%s"](%s);\n', key, bind, value, bbox),
-         sprintf('  way["%s"%s"%s"](%s);\n', key, bind, value, bbox),
-         sprintf('  relation["%s"%s"%s"](%s);\n\n', key, bind, value, bbox)) -> thing
+  if (missing (value))
+  {
+      paste0(sprintf(' node["%s"](%s);\n', key, bbox),
+             sprintf('  way["%s"](%s);\n', key, bbox),
+             sprintf('  relation["%s"](%s);\n\n', key, bbox)) -> thing
+  } else
+  {
+      if (exact) bind <- '='
+      else bind <- '~'
+      paste0(sprintf(' node["%s"%s"%s"](%s);\n', key, bind, value, bbox),
+             sprintf('  way["%s"%s"%s"](%s);\n', key, bind, value, bbox),
+             sprintf('  relation["%s"%s"%s"](%s);\n\n', key, bind, 
+                     value, bbox)) -> thing
+  }
 
   opq$features <- c(opq$features, thing)
 
@@ -59,7 +68,14 @@ add_feature <- function(opq, key, value, exact=TRUE, bbox=NULL) {
 #' @param opq Overpass query object
 #' @export
 issue_query <- function(opq) {
-  opq$features <- c(opq$features, ");\nout body;\n>;\nout skel qt;")
-  overpass_query(paste0(opq$features))
+  #opq$features <- c(opq$features, ");\nout body;\n>;\nout skel qt;")
+  # MP: The default set "_" must be referenced ("._") to be correctly output:
+  # http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide#The_default_set_.22_.22_and_recalling_the_default_set_.22._.22
+  opq$features <- c(opq$features, ");\n(._;>);\nout qt body;")
+
+  #overpass_query(paste0(opq$features))
+  # MP: This is clearer and matches exactly what httr does - line#64 of
+  # https://github.com/hadley/httr/blob/master/R/body.R
+  overpass_query(paste0(opq$features, collapse="\n"))
 }
 

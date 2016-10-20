@@ -57,10 +57,13 @@ Rcpp::S4 rcpp_get_points (const std::string& st)
         rownames.push_back (std::to_string (ni->first));
     }
 
-    xmin = std::min (xmin, *std::min_element (lons.begin(), lons.end()));
-    xmax = std::max (xmax, *std::max_element (lons.begin(), lons.end()));
-    ymin = std::min (ymin, *std::min_element (lats.begin(), lats.end()));
-    ymax = std::max (ymax, *std::max_element (lats.begin(), lats.end()));
+    if (nodes.size () > 0)
+    {
+        xmin = std::min (xmin, *std::min_element (lons.begin(), lons.end()));
+        xmax = std::max (xmax, *std::max_element (lons.begin(), lons.end()));
+        ymin = std::min (ymin, *std::min_element (lats.begin(), lats.end()));
+        ymax = std::max (ymax, *std::max_element (lats.begin(), lats.end()));
+    }
 
     // Store all key-val pairs in one massive DF
     int nrow = nodes.size (), ncol = varnames.size ();

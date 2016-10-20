@@ -144,10 +144,13 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
             rownames.push_back (std::to_string (*itn));
         }
 
-        xmin = std::min (xmin, *std::min_element (lons.begin(), lons.end()));
-        xmax = std::max (xmax, *std::max_element (lons.begin(), lons.end()));
-        ymin = std::min (ymin, *std::min_element (lats.begin(), lats.end()));
-        ymax = std::max (ymax, *std::max_element (lats.begin(), lats.end()));
+        if (n > 0)
+        {
+            xmin = std::min (xmin, *std::min_element (lons.begin(), lons.end()));
+            xmax = std::max (xmax, *std::max_element (lons.begin(), lons.end()));
+            ymin = std::min (ymin, *std::min_element (lats.begin(), lats.end()));
+            ymax = std::max (ymax, *std::max_element (lats.begin(), lats.end()));
+        }
 
         nmat = Rcpp::NumericMatrix (Rcpp::Dimension (lons.size (), 2));
         std::copy (lons.begin (), lons.end (), nmat.begin ());
