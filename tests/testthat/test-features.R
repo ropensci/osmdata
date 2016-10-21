@@ -25,38 +25,48 @@ if (get_local)
 
 context ("features.R")
 test_that ("available_features", {
-             if (!has_internet) {
-               expect_message (available_features (), "No internet connection")
-             } else 
-             {
-               expect_error (available_features (1), "unused argument")
-               if (is_cran)
-               {
-                 with_mock (
-                            `curl::curl_fetch_memory` = function(...) {
-                              load("cfm_output_available_features.rda")
-                              cfm_output_available_features
-                            },
-                            available_features <- function (...)
-                            {
-                              af <- cfm_output_available_features$content
-                              res <- xml2::read_html (af)
-                              keys <- xml2::xml_attr (rvest::html_nodes (res,
-                                            "a[href^='/wiki/Key']"), "title")
-                              unique (sort (gsub ("^Key:", "", keys)))
-                            })
-               }
-               expect_is (available_features (), "character")
-             }
-      })
+  expect_error (available_features (1), "unused argument")
+  if (!has_internet) {
+    expect_message (available_features (), "No internet connection")
+  } else 
+  {
+    if (is_cran)
+    {
+      with_mock ( `available_features` <- function ()
+                 {
+                   load("cfm_output_available_features.rda")
+                   af <- cfm_output_available_features$content
+                   res <- xml2::read_html (af)
+                   keys <- xml2::xml_attr (rvest::html_nodes (res,
+                                "a[href^='/wiki/Key']"), "title")
+                   unique (sort (gsub ("^Key:", "", keys)))
+                 })
+    }
+    expect_is (available_features (), "character")
+  }
+})
 
 test_that ("available_tags", {
   expect_error (available_tags (), "Please specify feature")
+  expect_error (available_tags ("highway", 1), "unused argument")
   if (!has_internet) {
     expect_message (available_tags (), "No internet connection")
   } else {
+    if (is_cran)
+    {
+      with_mock ( `available_tags` <- function (feature)
+                 {
+                   load("cfm_output_available_features.rda")
+                   af <- cfm_output_available_features$content
+                   res <- xml2::read_html (af)
+                   tags <- xml2::xml_attr (rvest::html_nodes (res, 
+                                sprintf("a[title^='Tag:%s']", feature)),
+                                           "title")
+                   unique (sort (gsub (sprintf ("Tag:%s=", feature), "", 
+                                       tags, fixed=TRUE)))
+                 })
+    }
     expect_that (length (available_tags ("junk")), equals (0))
     expect_is (available_tags ("highway"), "character")
-    expect_error (available_tags ("highway", 1), "unused argument")
   }
 })
