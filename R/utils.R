@@ -29,30 +29,36 @@ process_doc <- function(doc) {
 #'
 #' This function converts a bounding box into a string for use in web apis
 #' 
-#' @param bbox bounding box
+#' @param bbox bounding box as matrix or vector. Unnamed vectors will be sorted
+#' appropriately and must merely be in the order (x, y, x, y).
 #'
 #' @export
 bbox_to_string <- function(bbox) {
-  if (!is.null(bbox)) {
-    if (inherits(bbox, "matrix")) {
-      if (all(rownames(bbox) %in% c("x", "y")    ) &
-          all(colnames(bbox) %in% c("min", "max"))) {
-        bbox <- c(bbox["x", "min"], bbox["y", "min"], bbox["x", "max"], bbox["y", "max"])
-        bbox <- paste0(bbox[c(2,1,4,3)], collapse=",")
-      } else if (all(rownames(bbox) %in% c("coords.x1", "coords.x2")) &
-                 all(colnames(bbox) %in% c("min", "max"))) {
-        bbox <- c(bbox["x", "coords.x1"], bbox["y", "coords.x1"], bbox["x", "coords.x2"], bbox["y", "coords.x2"])
-        bbox <- paste0(bbox[c(2,1,4,3)], collapse=",")
-      }
+
+  if (missing (bbox)) stop ("bbox must be provided")
+  if (!is.numeric (bbox)) stop ("bbox must be numeric")
+  if (length (bbox) < 4) stop ("bbox must contain four elements")
+  if (length (bbox) > 4) message ("only the first four elements of bbox used")
+
+  if (inherits(bbox, "matrix")) {
+    if (all (rownames (bbox) %in% c("x", "y")    ) &
+        all (colnames (bbox) %in% c("min", "max"))) {
+      bbox <- c(bbox["x", "min"], bbox["y", "min"], 
+                bbox["x", "max"], bbox["y", "max"])
+    } else if (all (rownames (bbox) %in% c("coords.x1", "coords.x2")) &
+               all (colnames (bbox) %in% c("min", "max"))) {
+      bbox <- c (bbox["x", "coords.x1"], bbox["y", "coords.x1"], 
+                 bbox["x", "coords.x2"], bbox["y", "coords.x2"])
+    }
+    bbox <- paste0 (bbox[c(2,1,4,3)], collapse=",")
+  } else {
+    if (!is.null (names (bbox)) & 
+        all (names (bbox) %in% c("left", "bottom", "right", "top"))) {
+      bbox <- paste0 (bbox[c ("bottom", "left", "top", "right")], collapse=",")
     } else {
-      if (length(bbox) > 1 & length(bbox) == 4) {
-        if (!is.null (names (bbox)) & 
-            all (names (bbox) %in% c("left", "bottom", "right", "top"))) {
-          bbox <- paste0(bbox[c("bottom", "left", "top", "right")], collapse=",")
-        } else {
-          bbox <- paste0(bbox[c(2,1,4,3)], collapse=",")
-        }
-      }
+      x <- sort (bbox [c (1, 3)])
+      y <- sort (bbox [c (2, 4)])
+      bbox <- paste0 (c (y [1], x[1], y [2], x [2]), collapse=",")
     }
   }
   return(bbox)

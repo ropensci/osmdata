@@ -25,7 +25,8 @@ overpass_status <- function(quiet=FALSE) {
 
     if (grepl("after", status_now)) {
       available <- FALSE
-      slot_time <- lubridate::ymd_hms(gsub("Slot available after: ", "", status_now))
+      slot_time <- lubridate::ymd_hms(gsub("Slot available after: ", "", 
+                                           status_now))
       slot_time <- lubridate::force_tz(slot_time, tz = Sys.timezone())
     } else {
       available <- TRUE

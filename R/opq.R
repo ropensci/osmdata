@@ -37,7 +37,8 @@ opq <- function(bbox=NULL) {
 add_feature <- function(opq, key, value, exact=TRUE, bbox=NULL) {
 
   if (is.null(bbox) & is.null(opq$bbox)) {
-    stop("A base bounding box has to either be set in opq() or must be set here.", call.=FALSE)
+    stop("A base bounding box has to either be set in opq() or must be set here.", 
+         call.=FALSE)
   }
 
   if (is.null(bbox)) bbox <- bbox_to_string(opq$bbox)
