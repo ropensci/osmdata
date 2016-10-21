@@ -10,11 +10,11 @@
 #' @return \code{opq} object
 #' @export
 #' @examples
-#' opq(bbox="43.0135509,-70.8229993,43.0996118,-70.7280563") %>%
-#'   add_feature("amenity", "pub", ) %>%
-#'   add_feature("amenity", "restaurant") %>%
-#'   add_feature("amenity", "library") %>%
-#'   issue_query() -> reading_noms
+#' opq(bbox=c(-70.8229993, 43.0135509, -70.7280563, 43.0996118)) %>%
+#'      add_feature("amenity", "pub", ) %>%
+#'      add_feature("amenity", "restaurant") %>%
+#'      add_feature("amenity", "library") %>%
+#' issue_query() -> reading_noms
 #'
 #' sp::plot(reading_noms$osm_nodes)
 opq <- function(bbox=NULL) {
@@ -41,7 +41,7 @@ add_feature <- function(opq, key, value, exact=TRUE, bbox=NULL) {
          call.=FALSE)
   }
 
-  if (is.null(bbox)) bbox <- bbox_to_string(opq$bbox)
+  if (is.null(bbox)) bbox <- opq$bbox
 
   if (missing (value))
   {

@@ -6,7 +6,7 @@
 #' @export
 #' @examples
 #' available_features()
-available_features <- function(...) {
+available_features <- function() {
 
   url_ftrs <- "http://wiki.openstreetmap.org/wiki/Map_Features"
   if (curl::has_internet ()) 
@@ -31,7 +31,7 @@ available_features <- function(...) {
 #' @export
 #' @examples
 #' available_tags("aerialway")
-available_tags <- function(feature, ...) {
+available_tags <- function(feature) {
   if (missing (feature)) 
     stop ("Please specify feature")
     

@@ -4,7 +4,7 @@ makefile$
 ^README\.md$
 ^README\.Rmd$
 ^README\.html$
-^figure/
+^fig/
 ^osmdatar/
 ^overpass/
 ^src/Makevars$

@@ -7,7 +7,8 @@
 bbox_to_string(bbox)
 }
 \arguments{
-\item{bbox}{bounding box}
+\item{bbox}{bounding box as matrix or vector. Unnamed vectors will be sorted
+appropriately and must merely be in the order (x, y, x, y).}
 }
 \description{
 This function converts a bounding box into a string for use in web apis

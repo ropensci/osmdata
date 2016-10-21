@@ -21,11 +21,11 @@ order.}
 Begin building an Overpass query
 }
 \examples{
-opq(bbox="43.0135509,-70.8229993,43.0996118,-70.7280563") \%>\%
-  add_feature("amenity", "pub", ) \%>\%
-  add_feature("amenity", "restaurant") \%>\%
-  add_feature("amenity", "library") \%>\%
-  issue_query() -> reading_noms
+opq(bbox=c(-70.8229993, 43.0135509, -70.7280563, 43.0996118)) \%>\%
+     add_feature("amenity", "pub", ) \%>\%
+     add_feature("amenity", "restaurant") \%>\%
+     add_feature("amenity", "library") \%>\%
+issue_query() -> reading_noms
 
 sp::plot(reading_noms$osm_nodes)
 }

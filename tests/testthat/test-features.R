@@ -4,6 +4,10 @@ is_travis <-  (identical(Sys.getenv("TRAVIS"), "true"))
 
 url_ftrs <- "http://wiki.openstreetmap.org/wiki/Map_Features"
 
+# Mock tests as discussed by Noam Ross here:
+# https://discuss.ropensci.org/t/best-practices-for-testing-api-packages/460
+# and demonstrated in detail by Gabor Csardi here:
+# https://github.com/MangoTheCat/blog-with-mock/blob/master/Blogpost1.md
 get_local <- FALSE
 if (get_local)
 {
@@ -25,6 +29,7 @@ test_that ("available_features", {
                expect_message (available_features (), "No internet connection")
              } else 
              {
+               expect_error (available_features (1), "unused argument")
                if (is_cran)
                {
                  with_mock (
@@ -42,7 +47,6 @@ test_that ("available_features", {
                             })
                }
                expect_is (available_features (), "character")
-               expect_is (available_features (1), "character")
              }
       })
 
@@ -53,6 +57,6 @@ test_that ("available_tags", {
   } else {
     expect_that (length (available_tags ("junk")), equals (0))
     expect_is (available_tags ("highway"), "character")
-    expect_is (available_tags ("highway", 1), "character")
+    expect_error (available_tags ("highway", 1), "unused argument")
   }
 })

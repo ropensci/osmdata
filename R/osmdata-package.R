@@ -19,8 +19,8 @@
 #' @section Functions:
 #' \tabular{ll}{
 #' \code{add_feature}\tab Add feature to an overpass API query\cr
-#' \code{available_features}\tab Obtain list all OpenStreetMap features
-#' \code{available_tags}\tab List all tags for a given OpenStreetMap feature
+#' \code{available_features}\tab Obtain list all OpenStreetMap features\cr
+#' \code{available_tags}\tab List all tags for a given OpenStreetMap feature\cr
 #' \code{bbox_to_string}\tab Convert matrix or vector to a bbox string to pass
 #' to overpass API\cr
 #' \code{issue_query}\tab Finalize and issue an Overpass query\cr
