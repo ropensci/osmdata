@@ -26,6 +26,9 @@ overpass-example_cache/
 
 # Output files from R CMD build
 /*.tar.gz
+src/Makevars
+src/*.gcda
+src/*.gcno
 
 # Output files from R CMD check
 /*.Rcheck/
