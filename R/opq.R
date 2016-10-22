@@ -1,4 +1,4 @@
-#' Begin building an Overpass query
+#' Build an Overpass query
 #'
 #' @param bbox base bounding box to use with the features. Must set the individual
 #'        feature bbox values if this value is not set. Can be a matrix (i.e. what
