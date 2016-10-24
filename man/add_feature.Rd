@@ -25,6 +25,10 @@ opq query bbox has been set}
 \description{
 Add a feature to an Overpass query
 }
+\note{
+The final query can be obtained from 
+\code{paste0 (c (query$features, query$suffix), collapse="\n")}
+}
 \references{
 \url{http://wiki.openstreetmap.org/wiki/Map_Features}
 }

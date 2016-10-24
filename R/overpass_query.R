@@ -38,34 +38,6 @@ overpass_status <- function(quiet=FALSE) {
 
 }
 
-make_query <- function(query, quiet=FALSE) {
-
-  # make a query, get the result, parse xml
-  res <- httr::POST(overpass_base_url, body=query)
-  # code#429 = "Too Many Requests (RFC 6585)"
-  count <- 0
-  while (res$status_code == 429 && count < 10)
-  {
-    message ("Too many requests; retrying ...")
-    res <- httr::POST(overpass_base_url, body=query)
-    count <- count + 1
-  }
-
-
-  httr::stop_for_status(res)
-  if (!quiet) message("Query complete!")
-
-  #if (res$headers$`content-type` == "text/csv") {
-  #  return(httr::content(res, as="text", encoding="UTF-8"))
-  #}
-
-  #doc <- xml2::read_xml(httr::content(res, as="text", encoding="UTF-8"))
-  doc <- httr::content(res, as="text", encoding="UTF-8")
-
-  process_doc(doc)
-
-}
-
 #' Issue OSM Overpass Query
 #'
 #' @param query OSM Overpass query. Please note that the function is in ALPHA
@@ -110,27 +82,57 @@ make_query <- function(query, quiet=FALSE) {
 #'
 #' pts <- overpass_query(only_nodes)
 #' }
-overpass_query <- function(query, quiet=FALSE, wait=TRUE, pad_wait=5) {
+overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5) {
+
+  if (missing (query))
+    stop ("query must be supplied", call.=FALSE)
+  if (!all (sapply (query, class) == "character"))
+  if (!is.character (query))
+    stop ("query must contain nothing but character strings", call.=FALSE)
+  if (!is.logical (quiet))
+    quiet <- FALSE
+  if (!is.logical (wait))
+    wait <- TRUE
+  if (!is.numeric (pad_wait))
+  {
+    message ("pad_wait must be numeric; setting to 5s")
+    pad_wait <- 5
+  }
+  if (pad_wait < 0)
+  {
+    warning ("pad_wait must be positive; setting to 5s")
+    pad_wait <- 5
+  }
 
   if (!curl::has_internet ())
       stop("Overpass query unavailable without internet", call.=FALSE)
     
   if (!quiet) message("Issuing query to OSM Overpass...")
 
-  o_stat <- overpass_status(quiet)
+  o_stat <- overpass_status (quiet)
+
+  query <- paste0 (c (query$features, query$suffix), collapse="\n")
 
   if (o_stat$available) {
-    make_query(query, quiet)
+    #make_query(query, quiet)
+    res <- httr::POST (overpass_base_url, body=query)
   } else {
     if (wait) {
        wait <- max(0, as.numeric(difftime(o_stat$next_slot, Sys.time(), 
                                           units = "secs"))) + pad_wait
-       message(sprintf("Waiting %s seconds", wait))
-       Sys.sleep(wait)
-       make_query(query, quiet)
+       message (sprintf ("Waiting %s seconds", wait))
+       Sys.sleep (wait)
+       #make_query (query, quiet)
+       res <- httr::POST (overpass_base_url, body=query)
     } else {
-      stop("Overpass query unavailable", call.=FALSE)
+      stop ("Overpass query unavailable", call.=FALSE)
     }
   }
 
+  httr::stop_for_status (res)
+  if (!quiet) message("Query complete!")
+
+  doc <- httr::content (res, as="text", encoding="UTF-8")
+
+  process_doc(doc)
 }
