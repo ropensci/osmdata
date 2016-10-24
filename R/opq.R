@@ -17,7 +17,6 @@
 #' q
 #' \dontrun{
 #' overpass_query(q) -> reading_noms
-#'
 #' sp::plot(reading_noms$osm_nodes)
 #' }
 opq <- function(bbox=NULL) {
