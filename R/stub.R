@@ -28,7 +28,7 @@ NULL
 #'        \code{what}.
 #' @param what Name of the function you want to stub out (a
 #'        \code{character} string).
-#' @param how Replacement function (also a \code{\link{mock}} function)
+#' @param how Replacement function (also a \code{mock} function)
 #'        or a return value for which a function will be created
 #'        automatically.
 #' 

@@ -1,6 +1,6 @@
 has_internet <- curl::has_internet ()
-is_cran <-  (identical(Sys.getenv("NOT_CRAN"), "false"))
-is_travis <-  (identical(Sys.getenv("TRAVIS"), "true"))
+is_cran <-  identical (Sys.getenv("NOT_CRAN"), "false")
+is_travis <-  identical (Sys.getenv("TRAVIS"), "true")
 
 url_ftrs <- "http://wiki.openstreetmap.org/wiki/Map_Features"
 
@@ -36,8 +36,8 @@ test_that ("available_features", {
     if (is_cran)
     {
       load("cfm_output_available_features.rda")
-      af <- cfm_output_available_features$content
-      stub (available_features, 'httr::GET', function (x) { af })
+      stub (available_features, 'httr::GET', function (x) 
+            cfm_output_available_features$content )
     }
     expect_is (available_features (), "character")
   }
@@ -52,8 +52,8 @@ test_that ("available_tags", {
     if (is_cran)
     {
       load("cfm_output_available_features.rda")
-      af <- cfm_output_available_features$content
-      stub (available_tags, 'httr::GET', function (x) { af })
+      stub (available_tags, 'httr::GET', function (x) 
+            cfm_output_available_features$content )
     }
     expect_that (length (available_tags ("junk")), equals (0))
     expect_is (available_tags ("highway"), "character")

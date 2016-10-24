@@ -8,8 +8,9 @@
 #'        order.
 #'
 #' @return \code{opq} object
+#' 
 #' @export
-#' @examples
+#' @examples \dontrun{
 #' opq(bbox=c(-70.8229993, 43.0135509, -70.7280563, 43.0996118)) %>%
 #'      add_feature("amenity", "pub", ) %>%
 #'      add_feature("amenity", "restaurant") %>%
@@ -17,6 +18,7 @@
 #' issue_query() -> reading_noms
 #'
 #' sp::plot(reading_noms$osm_nodes)
+#' }
 opq <- function(bbox=NULL) {
   return(list(bbox=bbox_to_string(bbox),
               features=c("[out:xml][timeout:25];\n(\n")))
@@ -32,6 +34,10 @@ opq <- function(bbox=NULL) {
 #' @param bbox optional bounding box for the feature query; must be set if no
 #'        opq query bbox has been set
 #' @return \code{opq} object
+#' 
+#' @note The final query can be obtained from 
+#' \code{paste0 (c (query$features, query$suffix), collapse="\n")}
+#'
 #' @references \url{http://wiki.openstreetmap.org/wiki/Map_Features}
 #' @export
 add_feature <- function(opq, key, value, exact=TRUE, bbox=NULL) {
@@ -60,23 +66,9 @@ add_feature <- function(opq, key, value, exact=TRUE, bbox=NULL) {
 
   opq$features <- c(opq$features, thing)
 
+  if (is.null (opq$suffix))
+    opq$suffix <- ");\n(._;>);\nout qt body;"
+
   opq
 
 }
-
-#' Finalize and issue an Overpass query
-#'
-#' @param opq Overpass query object
-#' @export
-issue_query <- function(opq) {
-  #opq$features <- c(opq$features, ");\nout body;\n>;\nout skel qt;")
-  # MP: The default set "_" must be referenced ("._") to be correctly output:
-  # http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide#The_default_set_.22_.22_and_recalling_the_default_set_.22._.22
-  opq$features <- c(opq$features, ");\n(._;>);\nout qt body;")
-
-  #overpass_query(paste0(opq$features))
-  # MP: This is clearer and matches exactly what httr does - line#64 of
-  # https://github.com/hadley/httr/blob/master/R/body.R
-  overpass_query(paste0(opq$features, collapse="\n"))
-}
-

@@ -21,6 +21,7 @@ order.}
 Begin building an Overpass query
 }
 \examples{
+\dontrun{
 opq(bbox=c(-70.8229993, 43.0135509, -70.7280563, 43.0996118)) \%>\%
      add_feature("amenity", "pub", ) \%>\%
      add_feature("amenity", "restaurant") \%>\%
@@ -28,5 +29,6 @@ opq(bbox=c(-70.8229993, 43.0135509, -70.7280563, 43.0996118)) \%>\%
 issue_query() -> reading_noms
 
 sp::plot(reading_noms$osm_nodes)
+}
 }
 
