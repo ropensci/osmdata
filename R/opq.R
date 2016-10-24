@@ -16,7 +16,7 @@
 #'      add_feature("amenity", "library")
 #' q
 #' \dontrun{
-#' issue_query(q) -> reading_noms
+#' overpass_query(q) -> reading_noms
 #'
 #' sp::plot(reading_noms$osm_nodes)
 #' }
