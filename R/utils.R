@@ -36,9 +36,9 @@ process_doc <- function(doc) {
 bbox_to_string <- function(bbox) {
 
   if (missing (bbox)) stop ("bbox must be provided")
-  if (is.character(bbox)) {
-    bbox <- tmap::bb (bbox)
-  }
+  #if (is.character(bbox)) {
+  #  bbox <- tmap::bb (bbox)
+  #}
   if (!is.numeric (bbox)) stop ("bbox must be numeric")
   if (length (bbox) < 4) stop ("bbox must contain four elements")
   if (length (bbox) > 4) message ("only the first four elements of bbox used")
