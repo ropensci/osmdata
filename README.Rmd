@@ -42,12 +42,11 @@ devtools::load_all ("osmdata")
 #devtools::document ("osmdata")
 #goodpractice::gp ("osmdata")
 setwd (wd)
-testthat::test_dir ("./tests/")
+#testthat::test_dir ("./tests/")
 ```
 Current verison:
 ```{r}
 packageVersion("osmdata")
-q <- opq(bbox="43.0135509,-70.8229993,43.0996118,-70.7280563")
 ```
 
 ### Usage
@@ -73,16 +72,27 @@ class (hs); sapply (hs, summary)
 ```{r junk}
 q1 <- opq (bbox=c(-0.12,51.51,-0.1,51.52)) 
 q1 <- add_feature (q1, key='building')
+b <- overpass_query (q1)
 summary (issue_query (q1))
 
-q2 <- opq (bbox=c(-0.12,51.51,-0.1,51.52)) 
-q2 <- add_feature (q2, key='highway', 'secondary')
-summary (issue_query (q2))
+q2 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) 
+q2 <- add_feature (q2, key='highway', value='primary')
+hs <- overpass_query (q2)
+summary (hs)
 
 q3 <- opq (bbox=c(-0.12,51.51,-0.1,51.52)) 
 q3 <- add_feature (q3, key='building')
 q3 <- add_feature (q3, key='highway', 'secondary')
 summary (issue_query (q3))
+```
+
+```{r junk2}
+require (sp)
+sldf <- new ("SpatialLinesDataFrame")
+sldf
+junk <- list (lines1=sldf, lines2=sldf)
+junk
+summary (junk)
 ```
 
 
