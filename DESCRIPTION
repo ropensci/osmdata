@@ -33,7 +33,6 @@ Imports:
     rvest,
     sp,
     tidyr,
-    tmap,
     utils,
     XML,
     xml2

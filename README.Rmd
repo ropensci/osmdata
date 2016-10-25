@@ -29,6 +29,13 @@ API (or OSM3S) is a read-only API that serves up custom selected
 parts of the OSM map data. Map data are returned as
 [`sp`](https://cran.r-project.org/package=sp) objects.
 
+https://github.com/mtennekes/tmap/blob/master/pkg/R/bb.R
+plus
+https://github.com/mtennekes/tmap/blob/master/pkg/R/end_of_the_world.R
+plus `maybe_longlat` from 
+https://github.com/mtennekes/tmap/blob/master/pkg/R/is_projected.R
+plus raster::extent, rgeos::gIntersection
+
 ### Installation
 
 ```{r install, eval=FALSE}
