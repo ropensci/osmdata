@@ -9,8 +9,9 @@ opq(bbox = NULL)
 \arguments{
 \item{bbox}{base bounding box to use with the features. Must set the individual
 feature bbox values if this value is not set. Can be a matrix (i.e. what
-\code{sp::bbox} returns), an string with values ("left,bottom,top,right"),
-a vector of length 4. If the vector is named, the names will be used,
+\code{sp::bbox} returns), a string with values ("left,bottom,top,right"),
+a vector of length 4, or (if tmap is installed) a character place name.
+If the vector is named, the names will be used,
 otherwise, you should ensure the vector is in \code{c(top, left, bottom, right)}
 order.}
 }
@@ -29,6 +30,9 @@ q
 \dontrun{
 overpass_query(q) -> reading_noms
 sp::plot(reading_noms$osm_nodes)
+p <- overpass_query(opq("Leeds") \%>\%
+  add_feature("leisure", "park"))
+sp::plot(p$osm_polygons[1,])
 }
 }
 
