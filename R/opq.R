@@ -3,7 +3,7 @@
 #' @param bbox base bounding box to use with the features. Must set the individual
 #'        feature bbox values if this value is not set. Can be a matrix (i.e. what
 #'        \code{sp::bbox} returns), a string with values ("left,bottom,top,right"),
-#'        a vector of length 4, or a character place name.
+#'        a vector of length 4, or (if tmap is installed) a character place name.
 #'        If the vector is named, the names will be used,
 #'        otherwise, you should ensure the vector is in \code{c(top, left, bottom, right)}
 #'        order.
