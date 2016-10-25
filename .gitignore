@@ -12,7 +12,6 @@ inst/doc
 inst/doc
 rsconnect/
 README_cache/
-overpass-example_cache/
 
 # History files
 .Rhistory
@@ -29,6 +28,11 @@ overpass-example_cache/
 src/Makevars
 src/*.gcda
 src/*.gcno
+
+# Non-exported man files
+man/rcpp_get_points.Rd
+man/rcpp_get_lines.Rd
+man/rcpp_get_polygons.Rd
 
 # Output files from R CMD check
 /*.Rcheck/
