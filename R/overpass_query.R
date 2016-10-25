@@ -111,11 +111,16 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5) {
 
   o_stat <- overpass_status (quiet)
 
+  obj <- osmdata () # uses class def
+  obj$bbox <- query$bbox
+
   query <- paste0 (c (query$features, query$suffix), collapse="\n")
+  obj$overpass_call <- query
 
   if (o_stat$available) {
     #make_query(query, quiet)
     res <- httr::POST (overpass_base_url, body=query)
+    obj$timestamp <- timestamp (quiet=TRUE, prefix="[ ", suffix=" ]")
   } else {
     if (wait) {
        wait <- max(0, as.numeric(difftime(o_stat$next_slot, Sys.time(), 
@@ -124,6 +129,7 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5) {
        Sys.sleep (wait)
        #make_query (query, quiet)
        res <- httr::POST (overpass_base_url, body=query)
+       obj$timestamp <- timestamp (quiet=TRUE, prefix="[ ", suffix=" ]")
     } else {
       stop ("Overpass query unavailable", call.=FALSE)
     }
@@ -134,5 +140,11 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5) {
 
   doc <- httr::content (res, as="text", encoding="UTF-8")
 
-  process_doc(doc)
+  res <- process_doc (doc)
+
+  obj$osm_points <- res$osm_nodes
+  obj$osm_lines <- res$osm_ways
+  obj$osm_polygons <- res$osm_polygons
+
+  return (obj)
 }

@@ -36,14 +36,8 @@ process_doc <- function(doc) {
 bbox_to_string <- function(bbox) {
 
   if (missing (bbox)) stop ("bbox must be provided")
-  if(is.character(bbox)) {
-    if("tmap" %in% installed.packages()){
-      require (tmap)
-      bbox <- bb(bbox)
-    }
-    else {
-      message("tmap package needed to convert place name to bounding box")
-    }
+  if (is.character(bbox)) {
+    bbox <- tmap::bb (bbox)
   }
   if (!is.numeric (bbox)) stop ("bbox must be numeric")
   if (length (bbox) < 4) stop ("bbox must contain four elements")

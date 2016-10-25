@@ -35,8 +35,9 @@
 #' @import fastmatch pbapply sp xml2 httr tidyr lubridate
 #' @importFrom rvest html_attr html_nodes
 #' @importFrom dplyr %>% select left_join filter arrange bind_rows mutate do group_by distinct data_frame
-#' @importFrom utils read.table installed.packages
+#' @importFrom utils read.table timestamp
 #' @importFrom curl has_internet
+#' @importFrom tmap bb
 #' @importFrom Rcpp evalCpp
 #' @useDynLib osmdata
 NULL
