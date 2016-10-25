@@ -38,7 +38,8 @@ bbox_to_string <- function(bbox) {
   if (missing (bbox)) stop ("bbox must be provided")
   if(is.character(bbox)) {
     if("tmap" %in% installed.packages()){
-      bbox <- tmap::bb(bbox)
+      require (tmap)
+      bbox <- bb(bbox)
     }
     else {
       message("tmap package needed to convert place name to bounding box")
