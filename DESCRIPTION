@@ -41,8 +41,7 @@ Suggests:
     knitr,
     rmarkdown,
     roxygen2,
-    testthat,
-    tmap
+    testthat
 LinkingTo: Rcpp
 URL: https://github.com/osmdatar/osmdatar
 BugReports: https://github.com/osmdatar/osmdatar/issues
