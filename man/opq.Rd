@@ -2,7 +2,7 @@
 % Please edit documentation in R/opq.R
 \name{opq}
 \alias{opq}
-\title{Begin building an Overpass query}
+\title{Build an Overpass query}
 \usage{
 opq(bbox = NULL)
 }
@@ -18,16 +18,16 @@ order.}
 \code{opq} object
 }
 \description{
-Begin building an Overpass query
+Build an Overpass query
 }
 \examples{
-\dontrun{
-opq(bbox=c(-70.8229993, 43.0135509, -70.7280563, 43.0996118)) \%>\%
+q <- opq(bbox=c(-70.8229993, 43.0135509, -70.7280563, 43.0996118)) \%>\%
      add_feature("amenity", "pub", ) \%>\%
      add_feature("amenity", "restaurant") \%>\%
-     add_feature("amenity", "library") \%>\%
-issue_query() -> reading_noms
-
+     add_feature("amenity", "library")
+q
+\dontrun{
+overpass_query(q) -> reading_noms
 sp::plot(reading_noms$osm_nodes)
 }
 }
