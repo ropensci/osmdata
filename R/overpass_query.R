@@ -134,11 +134,15 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5) {
       stop ("Overpass query unavailable", call.=FALSE)
     }
   }
-
-  httr::stop_for_status (res)
   if (!quiet) message("Query complete!")
 
-  doc <- httr::content (res, as="text", encoding="UTF-8")
+  if (class (res) == "result") # differs only for mock tests
+    httr::stop_for_status (res)
+
+  if (class (res) == "raw") # for mock tests
+    doc <- rawToChar (res)
+  else
+    doc <- httr::content (res, as="text", encoding="UTF-8")
 
   res <- process_doc (doc)
 

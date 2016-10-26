@@ -49,7 +49,7 @@ if (get_local)
   #names (cfm_output_make_query)
   untrace (curl::curl_fetch_memory)
   save (cfm_output_overpass_query, 
-        file="./tests/testthat/cfm_output_overpass_query")
+        file="./tests/testthat/cfm_output_overpass_query.rda")
 }
 
 context ("overpass query")
@@ -70,16 +70,13 @@ test_that ("make_query", {
   {
     if (is_cran)
     {
-      # NOTE: This will still issue a query for overpass_status
-      load("cfm_output_overpass_query")
+      load("cfm_output_overpass_query.rda")
       stub (overpass_query, 'httr::POST', 
-            function () cfm_output_overpass_query$content )
+            function (x, ...) cfm_output_overpass_query$content )
     } 
-    # TODO: Fix this for (is_cran)
-    #res <- overpass_query (qry)
-    #expect_is (res, "list")
-    #expect_true (length (res) == 3)
-    #expect_true (all (names (res) %in% c ("osm_nodes", "osm_ways", "osm_polygons")))
+    # NOTE: This still issues a query for overpass_status
+    res <- overpass_query (qry)
+    expect_s3_class (res, "osmdata")
   }
 })
 
