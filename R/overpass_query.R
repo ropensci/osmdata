@@ -86,7 +86,6 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5) {
 
   if (missing (query))
     stop ("query must be supplied", call.=FALSE)
-  if (!all (sapply (query, class) == "character"))
   if (!is.character (query))
     stop ("query must contain nothing but character strings", call.=FALSE)
   if (!is.logical (quiet))
