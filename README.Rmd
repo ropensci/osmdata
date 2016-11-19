@@ -41,6 +41,7 @@ plus raster::extent, rgeos::gIntersection
 ```{r install, eval=FALSE}
 devtools::install_github("osmdatar/osmdata")
 ```
+
 ```{r usage2, echo=FALSE}
 wd <- getwd ()
 while (length (grep ('osmdata', getwd ())) > 0) setwd ("..")
@@ -51,25 +52,30 @@ devtools::load_all ("osmdata")
 setwd (wd)
 #testthat::test_dir ("./tests/")
 ```
+
 Current verison:
+
 ```{r}
+library(osmdata)
 packageVersion("osmdata")
 ```
 
 ### Usage
 
-
 [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be
 built from a base query constructed with `opq` followed by `add_features`. The
 corresponding OSM objects are then downloaded and converted to `sp` objects with
 `overpass_query`. For example,
+
 ```{r query1}
 q0 <- opq (bbox=c(-0.12,51.11,-0.11,51.12)) # Central London, U.K.
 q1 <- add_feature (q0, key='building')
 bh <- overpass_query (q1)
 class (bh); sapply (bh, summary)
 ```
+
 or,
+
 ```{r query2}
 q2 <- add_feature (q0, key='highway', value='tertiary')
 hs <- overpass_query (q2)
@@ -91,22 +97,6 @@ q3 <- opq (bbox=c(-0.12,51.51,-0.1,51.52))
 q3 <- add_feature (q3, key='building')
 q3 <- add_feature (q3, key='highway', 'secondary')
 summary (overpass_query (q3))
-```
-
-```{r junk2}
-require (sp)
-sldf <- new ("SpatialLinesDataFrame")
-sldf
-junk <- list (lines1=sldf, lines2=sldf)
-junk
-summary (junk)
-```
-
-
-```{r usage, eval=FALSE}
-library(osmdata)
-library(sp)
-library(ggmap)
 ```
 
 It acts as a database over the web: the client sends
@@ -141,7 +131,6 @@ The following functions are implemented:
 
 ### Usage
 
-
 ```{r csv, cache=TRUE, eval=FALSE}
 # CSV example
 osmcsv <- '[out:csv(::id,::type,"name")];
@@ -151,8 +140,8 @@ area[name="Bonn"]->.a;
   rel(area.a)[railway=station]; );
 out;'
 
-opq <- overpass_query(osmcsv)
-read.table(text = opq, sep="\t", header=TRUE, 
+obj <- overpass_query(osmcsv)
+read.table(text = obj, sep="\t", header=TRUE, 
            check.names=FALSE, stringsAsFactors=FALSE)
 
 ```
