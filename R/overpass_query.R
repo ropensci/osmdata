@@ -82,12 +82,14 @@ overpass_status <- function(quiet=FALSE) {
 #'
 #' pts <- overpass_query(only_nodes)
 #' }
-overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5) {
+overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
+                            base_url="http://overpass-api.de/api/interpreter") {
 
   if (missing (query))
     stop ("query must be supplied", call.=FALSE)
-  if (!is.character (query))
-    stop ("query must contain nothing but character strings", call.=FALSE)
+  
+  if (!all (sapply (query, class) == "character"))
+    stop ("Elements in query must contain nothing but character strings", call.=FALSE)
   if (!is.logical (quiet))
     quiet <- FALSE
   if (!is.logical (wait))
@@ -111,14 +113,19 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5) {
   o_stat <- overpass_status (quiet)
 
   obj <- osmdata () # uses class def
-  obj$bbox <- query$bbox
+  
+  if(is.list(query)) {
+    
+    obj$bbox <- query$bbox
+    query <- paste0 (c (query$features, query$suffix), collapse="\n")
+    
+  }
 
-  query <- paste0 (c (query$features, query$suffix), collapse="\n")
   obj$overpass_call <- query
 
   if (o_stat$available) {
     #make_query(query, quiet)
-    res <- httr::POST (overpass_base_url, body=query)
+    res <- httr::POST (base_url, body=query)
     obj$timestamp <- timestamp (quiet=TRUE, prefix="[ ", suffix=" ]")
   } else {
     if (wait) {
@@ -127,7 +134,7 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5) {
        message (sprintf ("Waiting %s seconds", wait))
        Sys.sleep (wait)
        #make_query (query, quiet)
-       res <- httr::POST (overpass_base_url, body=query)
+       res <- httr::POST (base_url, body=query)
        obj$timestamp <- timestamp (quiet=TRUE, prefix="[ ", suffix=" ]")
     } else {
       stop ("Overpass query unavailable", call.=FALSE)
@@ -139,15 +146,18 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5) {
     httr::stop_for_status (res)
 
   if (class (res) == "raw") # for mock tests
-    doc <- rawToChar (res)
-  else
+    doc <- rawToChar (res)  else
     doc <- httr::content (res, as="text", encoding="UTF-8")
 
-  res <- process_doc (doc)
+  res <- osmdata:::process_doc (doc)
 
-  obj$osm_points <- res$osm_nodes
-  obj$osm_lines <- res$osm_ways
-  obj$osm_polygons <- res$osm_polygons
+  if (length(res$osm_nodes) != 0)
+    obj$osm_points <- res$osm_nodes
+  if (length(res$osm_ways) != 0)
+    obj$osm_lines <- res$osm_ways
+  if (length(res$osm_polygons) != 0)
+    obj$osm_polygons <- res$osm_polygons
 
   return (obj)
+  
 }
