@@ -146,7 +146,7 @@ read.table(text = obj, sep="\t", header=TRUE,
 
 ```
 
-```{r only_nodes, cache=TRUE, eval=TRUE}
+```{r only_nodes}
 # just nodes
 only_nodes <- '[out:xml];
 node
@@ -160,7 +160,7 @@ pts <- overpass_query(only_nodes)$osm_points
 sp::plot(pts)
 ```
 
-```{r nodes_and_ways, cache=TRUE, eval=TRUE}
+```{r nodes_and_ways}
 # ways & nodes
 nodes_and_ways <- '[out:xml];
 (node["amenity"="fire_station"]
@@ -176,7 +176,7 @@ wys <- overpass_query(nodes_and_ways)
 sp::plot(wys$osm_lines)
 ```
 
-```{r actual_ways, cache=TRUE, eval=TRUE}
+```{r actual_ways}
 # xml version of the query
 actual_ways <- '<osm-script output="xml">
   <query type="way">
@@ -194,7 +194,7 @@ sp::plot(awy$osm_lines)
 ```
 
 ```{r from_robin, eval=TRUE}
-# more complex example from Robin: motorways surrounding London
+# more complex example: motorways surrounding London
 # warning: may take a few minutes to run
 from_robin <- '[out:xml][timeout:100];
 (
@@ -210,7 +210,7 @@ res <- overpass_query(from_robin)
 frb <- res$osm_lines
 ```
 
-```{r}
+```{r london-motorways}
 library(tmap)
 qtm(frb)
 ```
