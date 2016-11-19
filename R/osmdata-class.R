@@ -1,3 +1,10 @@
+#' Create osmdata object
+#' 
+#' Initialise an empty or data-containing object of class \code{osmdata}
+#' 
+#' @inheritParams opq
+#' 
+#' @export
 osmdata <- function (bbox, overpass_call, 
                      osm_points, osm_lines, osm_polygons, timestamp, ...) 
 {
@@ -6,6 +13,7 @@ osmdata <- function (bbox, overpass_call,
   if (missing (osm_points)) osm_points <- NULL
   if (missing (osm_lines)) osm_lines <- NULL
   if (missing (osm_polygons)) osm_polygons <- NULL
+  if (missing (timestamp)) timestamp <- NULL
   if (missing (timestamp)) timestamp <- NULL
 
   obj <- list (
@@ -37,5 +45,6 @@ print.osmdata <- function (x, ...)
     message (paste ("  osm_polygons  : 'sp' SpatialPolygonsDataFrame with",
                     length (x$osm_polygons), "polygons"))
   if (!is.null (x$overpass_call))
+    message ("  overpass_call : The call submitted to the overpass API")
     message ("  overpass_call : The call submitted to the overpass API")
 }
