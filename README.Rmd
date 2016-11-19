@@ -190,7 +190,7 @@ actual_ways <- '<osm-script output="xml">
 </osm-script>'
 
 awy <- overpass_query(actual_ways)
-sp::plot(awy$osm_ways)
+sp::plot(awy$osm_lines)
 ```
 
 ```{r from_robin, eval=TRUE}
@@ -206,16 +206,13 @@ out body;
 >;
 out skel qt;'
 
-frb <- overpass_query(from_robin)$osm_ways
+res <- overpass_query(from_robin)
+frb <- res$osm_lines
+```
 
-gg <- ggplot2::ggplot()
-gg <- gg + ggplot2::geom_path(data=ggplot2::fortify(frb), 
-                     ggplot2::aes(x=long, y=lat, group=group),
-                     color="black", size=0.25)
-gg <- gg + ggplot2::coord_quickmap()
-gg <- gg + ggthemes::theme_map()
-gg
-#ggsave("README-from_robin-1.png")
+```{r}
+library(tmap)
+qtm(frb)
 ```
 
 
