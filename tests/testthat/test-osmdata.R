@@ -45,7 +45,7 @@ if (get_local)
         curl::curl_fetch_memory,
         exit = function() { cfm_output_overpass_query <<- returnValue() }
         )
-  res <- httr::POST (overpass_base_url, body=qry)
+  res <- httr::POST (base_url, body=qry)
   #names (cfm_output_make_query)
   untrace (curl::curl_fetch_memory)
   save (cfm_output_overpass_query, 

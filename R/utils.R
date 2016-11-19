@@ -1,8 +1,6 @@
 # for CRAN checks until I switch to underscore versions of dplyr stuff
 . <- k <- v <- way_id <- id <- lon <- lat <- NULL
 
-overpass_base_url <- "http://overpass-api.de/api/interpreter"
-
 # "fastmatch" version of %in%
 "%fmin%" <- function(x, table) { fmatch(x, table, nomatch = 0) > 0 }
 
@@ -15,7 +13,10 @@ has_xpath <- function(doc, xpath) {
 
 }
 
-# process an OSM response document
+#' process an OSM response document
+#' 
+#' @param doc Lines of data
+#' @export
 process_doc <- function(doc) {
 
   list (

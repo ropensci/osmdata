@@ -4,7 +4,8 @@
 \alias{overpass_query}
 \title{Issue OSM Overpass Query}
 \usage{
-overpass_query(query, quiet = FALSE, wait = TRUE, pad_wait = 5)
+overpass_query(query, quiet = FALSE, wait = TRUE, pad_wait = 5,
+  base_url = "http://overpass-api.de/api/interpreter")
 }
 \arguments{
 \item{query}{OSM Overpass query. Please note that the function is in ALPHA
