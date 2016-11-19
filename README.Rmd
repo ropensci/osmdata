@@ -62,7 +62,7 @@ packageVersion("osmdata")
 [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be
 built from a base query constructed with `opq` followed by `add_features`. The
 corresponding OSM objects are then downloaded and converted to `sp` objects with
-`issue_query`. For example,
+`overpass_query`. For example,
 ```{r query1}
 q0 <- opq (bbox=c(-0.12,51.11,-0.11,51.12)) # Central London, U.K.
 q1 <- add_feature (q0, key='building')
@@ -72,7 +72,7 @@ class (bh); sapply (bh, summary)
 or,
 ```{r query2}
 q2 <- add_feature (q0, key='highway', value='tertiary')
-hs <- issue_query (q2)
+hs <- overpass_query (q2)
 class (hs); sapply (hs, summary)
 ```
 
@@ -80,7 +80,7 @@ class (hs); sapply (hs, summary)
 q1 <- opq (bbox=c(-0.12,51.51,-0.1,51.52)) 
 q1 <- add_feature (q1, key='building')
 b <- overpass_query (q1)
-summary (issue_query (q1))
+summary (overpass_query (q1))
 
 q2 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) 
 q2 <- add_feature (q2, key='highway', value='primary')
@@ -90,7 +90,7 @@ summary (hs)
 q3 <- opq (bbox=c(-0.12,51.51,-0.1,51.52)) 
 q3 <- add_feature (q3, key='building')
 q3 <- add_feature (q3, key='highway', 'secondary')
-summary (issue_query (q3))
+summary (overpass_query (q3))
 ```
 
 ```{r junk2}
@@ -134,7 +134,6 @@ The following functions are implemented:
 - `available_features`:	List recognized features in OSM Overpass
 - `available_tags`:	List tags associated with a feature
 - `bbox_to_string`:	Convert a named matrix or a named vector (or an unnamed vector) return a string
-- `issue_query`:	Finalize and issue an Overpass query
 - `opq`:	Begin building an Overpass query
 - `overpass_query`:	Issue OSM Overpass Query
 - `overpass_status`:	Retrieve status of the Overpass API
