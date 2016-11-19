@@ -173,7 +173,7 @@ nodes_and_ways <- '[out:xml];
 out;'
 
 wys <- overpass_query(nodes_and_ways)
-sp::plot(wys$osm_ways)
+sp::plot(wys$osm_lines)
 ```
 
 ```{r actual_ways, cache=TRUE, eval=TRUE}
