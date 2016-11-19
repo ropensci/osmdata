@@ -156,7 +156,7 @@ node
   (50.7,7.1,50.8,7.25);
 out body;'
 
-pts <- overpass_query(only_nodes)$osm_nodes
+pts <- overpass_query(only_nodes)$osm_points
 sp::plot(pts)
 ```
 
