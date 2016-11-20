@@ -3,8 +3,6 @@
 #' Initialise an empty or data-containing object of class \code{osmdata}
 #' 
 #' @inheritParams opq
-#' 
-#' @export
 osmdata <- function (bbox, overpass_call, 
                      osm_points, osm_lines, osm_polygons, timestamp, ...) 
 {
