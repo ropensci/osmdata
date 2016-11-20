@@ -41,6 +41,7 @@ plus raster::extent, rgeos::gIntersection
 ```{r install, eval=FALSE}
 devtools::install_github("osmdatar/osmdata")
 ```
+
 ```{r usage2, echo=FALSE}
 wd <- getwd ()
 while (length (grep ('osmdata', getwd ())) > 0) setwd ("..")
@@ -51,28 +52,33 @@ devtools::load_all ("osmdata")
 setwd (wd)
 #testthat::test_dir ("./tests/")
 ```
+
 Current verison:
+
 ```{r}
+library(osmdata)
 packageVersion("osmdata")
 ```
 
 ### Usage
 
-
 [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be
 built from a base query constructed with `opq` followed by `add_features`. The
 corresponding OSM objects are then downloaded and converted to `sp` objects with
-`issue_query`. For example,
+`overpass_query`. For example,
+
 ```{r query1}
 q0 <- opq (bbox=c(-0.12,51.11,-0.11,51.12)) # Central London, U.K.
 q1 <- add_feature (q0, key='building')
 bh <- overpass_query (q1)
 class (bh); sapply (bh, summary)
 ```
+
 or,
+
 ```{r query2}
 q2 <- add_feature (q0, key='highway', value='tertiary')
-hs <- issue_query (q2)
+hs <- overpass_query (q2)
 class (hs); sapply (hs, summary)
 ```
 
@@ -80,7 +86,7 @@ class (hs); sapply (hs, summary)
 q1 <- opq (bbox=c(-0.12,51.51,-0.1,51.52)) 
 q1 <- add_feature (q1, key='building')
 b <- overpass_query (q1)
-summary (issue_query (q1))
+summary (overpass_query (q1))
 
 q2 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) 
 q2 <- add_feature (q2, key='highway', value='primary')
@@ -90,23 +96,7 @@ summary (hs)
 q3 <- opq (bbox=c(-0.12,51.51,-0.1,51.52)) 
 q3 <- add_feature (q3, key='building')
 q3 <- add_feature (q3, key='highway', 'secondary')
-summary (issue_query (q3))
-```
-
-```{r junk2}
-require (sp)
-sldf <- new ("SpatialLinesDataFrame")
-sldf
-junk <- list (lines1=sldf, lines2=sldf)
-junk
-summary (junk)
-```
-
-
-```{r usage, eval=FALSE}
-library(osmdata)
-library(sp)
-library(ggmap)
+summary (overpass_query (q3))
 ```
 
 It acts as a database over the web: the client sends
@@ -134,14 +124,12 @@ The following functions are implemented:
 - `available_features`:	List recognized features in OSM Overpass
 - `available_tags`:	List tags associated with a feature
 - `bbox_to_string`:	Convert a named matrix or a named vector (or an unnamed vector) return a string
-- `issue_query`:	Finalize and issue an Overpass query
 - `opq`:	Begin building an Overpass query
 - `overpass_query`:	Issue OSM Overpass Query
 - `overpass_status`:	Retrieve status of the Overpass API
 - `read_osm`:	Read an XML OSM Overpass response from path
 
 ### Usage
-
 
 ```{r csv, cache=TRUE, eval=FALSE}
 # CSV example
@@ -152,13 +140,13 @@ area[name="Bonn"]->.a;
   rel(area.a)[railway=station]; );
 out;'
 
-opq <- overpass_query(osmcsv)
-read.table(text = opq, sep="\t", header=TRUE, 
+obj <- overpass_query(osmcsv)
+read.table(text = obj, sep="\t", header=TRUE, 
            check.names=FALSE, stringsAsFactors=FALSE)
 
 ```
 
-```{r only_nodes, cache=TRUE, eval=TRUE}
+```{r only_nodes}
 # just nodes
 only_nodes <- '[out:xml];
 node
@@ -168,11 +156,11 @@ node
   (50.7,7.1,50.8,7.25);
 out body;'
 
-pts <- overpass_query(only_nodes)$osm_nodes
+pts <- overpass_query(only_nodes)$osm_points
 sp::plot(pts)
 ```
 
-```{r nodes_and_ways, cache=TRUE, eval=TRUE}
+```{r nodes_and_ways}
 # ways & nodes
 nodes_and_ways <- '[out:xml];
 (node["amenity"="fire_station"]
@@ -185,10 +173,10 @@ nodes_and_ways <- '[out:xml];
 out;'
 
 wys <- overpass_query(nodes_and_ways)
-sp::plot(wys$osm_ways)
+sp::plot(wys$osm_lines)
 ```
 
-```{r actual_ways, cache=TRUE, eval=TRUE}
+```{r actual_ways}
 # xml version of the query
 actual_ways <- '<osm-script output="xml">
   <query type="way">
@@ -202,11 +190,11 @@ actual_ways <- '<osm-script output="xml">
 </osm-script>'
 
 awy <- overpass_query(actual_ways)
-sp::plot(awy$osm_ways)
+sp::plot(awy$osm_lines)
 ```
 
 ```{r from_robin, eval=TRUE}
-# more complex example from Robin: motorways surrounding London
+# more complex example: motorways surrounding London
 # warning: may take a few minutes to run
 from_robin <- '[out:xml][timeout:100];
 (
@@ -218,16 +206,13 @@ out body;
 >;
 out skel qt;'
 
-frb <- overpass_query(from_robin)$osm_ways
+res <- overpass_query(from_robin)
+frb <- res$osm_lines
+```
 
-gg <- ggplot2::ggplot()
-gg <- gg + ggplot2::geom_path(data=ggplot2::fortify(frb), 
-                     ggplot2::aes(x=long, y=lat, group=group),
-                     color="black", size=0.25)
-gg <- gg + ggplot2::coord_quickmap()
-gg <- gg + ggthemes::theme_map()
-gg
-#ggsave("README-from_robin-1.png")
+```{r london-motorways}
+library(tmap)
+qtm(frb)
 ```
 
 
