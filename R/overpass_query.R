@@ -151,7 +151,7 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
     doc <- rawToChar (res)  else
     doc <- httr::content (res, as="text", encoding="UTF-8")
 
-  res <- osmdata:::process_doc (doc)
+  res <- process_doc (doc)
 
   if (length(res$osm_nodes) != 0)
     obj$osm_points <- res$osm_nodes
