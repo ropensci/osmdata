@@ -52,6 +52,8 @@ overpass_status <- function(quiet=FALSE) {
 #'        slot time or should it throw a an exception?
 #' @param pad_wait if there is a queue and \code{wait} is \code{TRUE}, pad the
 #'        next query start time by \code{pad_wait} seconds (default = 5 seconds).
+#' @param base_url the url of the server running overpass to be queried, set to
+#'        \url{http://overpass-api.de/api/interpreter} by default.
 #'
 #' @note wrap function with \code{httr::with_verbose} if you want to see the
 #'       \code{httr} query (useful for debugging connection issues).\cr \cr 
