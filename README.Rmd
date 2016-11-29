@@ -29,12 +29,6 @@ API (or OSM3S) is a read-only API that serves up custom selected
 parts of the OSM map data. Map data are returned as
 [`sp`](https://cran.r-project.org/package=sp) objects.
 
-https://github.com/mtennekes/tmap/blob/master/pkg/R/bb.R
-plus
-https://github.com/mtennekes/tmap/blob/master/pkg/R/end_of_the_world.R
-plus `maybe_longlat` from 
-https://github.com/mtennekes/tmap/blob/master/pkg/R/is_projected.R
-plus raster::extent, rgeos::gIntersection
 
 ### Installation
 
@@ -146,7 +140,7 @@ read.table(text = obj, sep="\t", header=TRUE,
 
 ```
 
-```{r only_nodes}
+```{r only_nodes, eval=FALSE}
 # just nodes
 only_nodes <- '[out:xml];
 node
@@ -159,8 +153,9 @@ out body;'
 pts <- overpass_query(only_nodes)$osm_points
 sp::plot(pts)
 ```
+![](./fig/README-only_nodes.png)
 
-```{r nodes_and_ways}
+```{r nodes_and_ways, eval=FALSE}
 # ways & nodes
 nodes_and_ways <- '[out:xml];
 (node["amenity"="fire_station"]
@@ -175,8 +170,9 @@ out;'
 wys <- overpass_query(nodes_and_ways)
 sp::plot(wys$osm_lines)
 ```
+![](./fig/README-nodes_and_ways.png)
 
-```{r actual_ways}
+```{r actual_ways, eval=FALSE}
 # xml version of the query
 actual_ways <- '<osm-script output="xml">
   <query type="way">
@@ -192,8 +188,9 @@ actual_ways <- '<osm-script output="xml">
 awy <- overpass_query(actual_ways)
 sp::plot(awy$osm_lines)
 ```
+![](./fig/README-actual_ways.png)
 
-```{r from_robin, eval=TRUE}
+```{r london-motorways, eval=FALSE}
 # more complex example: motorways surrounding London
 # warning: may take a few minutes to run
 from_robin <- '[out:xml][timeout:100];
@@ -209,11 +206,7 @@ out skel qt;'
 res <- overpass_query(from_robin)
 frb <- res$osm_lines
 ```
-
-```{r london-motorways}
-library(tmap)
-qtm(frb)
-```
+![](./fig/README-london-motorways.png)
 
 
 ### Test Results

@@ -1,12 +1,9 @@
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Build Status](https://travis-ci.org/osmdatar/osmdata.svg?branch=master)](https://travis-ci.org/osmdatar/osmdata) [![codecov](https://codecov.io/gh/osmdatar/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/osmdatar/osmdata)
 
 ![](./fig/title.png)
 
 `osmdata` is an R package for accessing OpenStreetMap (OSM) data using the [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API). The Overpass API (or OSM3S) is a read-only API that serves up custom selected parts of the OSM map data. Map data are returned as [`sp`](https://cran.r-project.org/package=sp) objects.
-
-<https://github.com/mtennekes/tmap/blob/master/pkg/R/bb.R> plus <https://github.com/mtennekes/tmap/blob/master/pkg/R/end_of_the_world.R> plus `maybe_longlat` from <https://github.com/mtennekes/tmap/blob/master/pkg/R/is_projected.R> plus raster::extent, rgeos::gIntersection
 
 ### Installation
 
@@ -148,7 +145,7 @@ pts <- overpass_query(only_nodes)$osm_points
 sp::plot(pts)
 ```
 
-<img src="./fig/README-only_nodes.png" width="672" />
+![](./fig/README-only_nodes.png)
 
 ``` r
 # ways & nodes
@@ -166,7 +163,7 @@ wys <- overpass_query(nodes_and_ways)
 sp::plot(wys$osm_lines)
 ```
 
-<img src="./fig/README-nodes_and_ways.png" width="672" />
+![](./fig/README-nodes_and_ways.png)
 
 ``` r
 # xml version of the query
@@ -185,10 +182,10 @@ awy <- overpass_query(actual_ways)
 sp::plot(awy$osm_lines)
 ```
 
-<img src="./fig/README-actual_ways.png" width="672" />
+![](./fig/README-actual_ways.png)
 
 ``` r
-# more complex example from Robin: motorways surrounding London
+# more complex example: motorways surrounding London
 # warning: may take a few minutes to run
 from_robin <- '[out:xml][timeout:100];
 (
@@ -204,18 +201,13 @@ res <- overpass_query(from_robin)
 frb <- res$osm_lines
 ```
 
-``` r
-library(tmap)
-qtm(frb)
-```
-
-<img src="./fig/README-london-motorways.png" width="672" />
+![](./fig/README-london-motorways.png)
 
 ### Test Results
 
 ``` r
 date()
-#> [1] "Sat Nov 19 08:53:33 2016"
+#> [1] "Tue Nov 29 13:17:22 2016"
 
 testthat::test_dir("tests/")
 #> testthat results ===========================================================
