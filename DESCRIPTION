@@ -32,7 +32,6 @@ Imports:
     rvest,
     sp,
     utils,
-    XML,
     xml2
 Suggests:
     devtools,

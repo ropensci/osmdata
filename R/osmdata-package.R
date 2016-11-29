@@ -36,11 +36,11 @@
 #' @importFrom curl has_internet
 #' @importFrom dplyr %>% select left_join filter arrange bind_rows mutate do group_by distinct data_frame
 #' @importFrom httr content GET POST stop_for_status
-#' @importFrom lubridate ymd_hms force_tz
+#' @importFrom lubridate force_tz ymd_hms 
 #' @importFrom Rcpp evalCpp
 #' @importFrom rvest html_attr html_nodes
-#' @importFrom xml2 read_html read_xml  xml_attr
 #' @importFrom utils read.table timestamp
+#' @importFrom xml2 read_html read_xml xml_attr
 #' @useDynLib osmdata
 NULL
 
