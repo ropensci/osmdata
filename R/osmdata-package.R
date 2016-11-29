@@ -32,12 +32,13 @@
 #' @name osmdata
 #' @docType package
 #' @author Bob Rudis, Robin Lovelace, Maëlle Salmon, Mark Padgham
-#' @import sp httr 
+#' @import sp 
 #' @importFrom rvest html_attr html_nodes
 #' @importFrom xml2 read_html read_xml  xml_attr
 #' @importFrom dplyr %>% select left_join filter arrange bind_rows mutate do group_by distinct data_frame
 #' @importFrom utils read.table timestamp
 #' @importFrom curl has_internet
+#' @importFrom httr content GET POST stop_for_status
 #' @importFrom Rcpp evalCpp
 #' @importFrom lubridate ymd_hms force_tz
 #' @useDynLib osmdata
