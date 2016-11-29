@@ -3,8 +3,9 @@ Version: 0.0.0
 Authors@R: c(
     person("Mark", "Padgham", email="mark.padgham@email.com", role=c("aut", "cre")),
     person("Bob", "Rubin", role="aut"),
+    person("Robin", "Lovelace", role="aut"), 
+    person("Maelle", "Salmon", role="aut"),
     person("Andrew", "Smith", role="ctb"),
-    person("Robin", "Lovelace", email="rob00x@gmail.com", role="ctb"), 
     person("Marcin", "Kalicinski", role=c("ctb", "cph"),
         comment="Author of included RapidXML code"),
     person("Finkelstein", "Noam", role=c("ctb","cph"),
@@ -25,7 +26,6 @@ LazyData: true
 Imports:
     curl,
     dplyr,
-    fastmatch,
     httr,
     lubridate,
     pbapply,

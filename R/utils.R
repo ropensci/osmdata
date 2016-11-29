@@ -1,9 +1,6 @@
 # for CRAN checks until I switch to underscore versions of dplyr stuff
 . <- k <- v <- way_id <- id <- lon <- lat <- NULL
 
-# "fastmatch" version of %in%
-"%fmin%" <- function(x, table) { fmatch(x, table, nomatch = 0) > 0 }
-
 # test if a given xpath exists in doc
 has_xpath <- function(doc, xpath) {
 
