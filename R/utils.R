@@ -1,15 +1,6 @@
 # for CRAN checks until I switch to underscore versions of dplyr stuff
 . <- k <- v <- way_id <- id <- lon <- lat <- NULL
 
-# test if a given xpath exists in doc
-has_xpath <- function(doc, xpath) {
-
-  tryCatch(length(xml2::xml_find_all(doc, xpath)) > 0,
-           error=function(err) { return(FALSE) },
-           warning=function(wrn) { message(wrn$message) ; return(TRUE); })
-
-}
-
 #' process an OSM response document
 #' 
 #' @param doc Lines of data
