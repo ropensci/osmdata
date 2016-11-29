@@ -41,9 +41,10 @@ wd <- getwd ()
 while (length (grep ('osmdata', getwd ())) > 0) setwd ("..")
 devtools::load_all ("osmdata")
 #devtools::load_all ("osmdata", recompile=TRUE)
-#devtools::document ("osmdata")
+devtools::document ("osmdata")
 #goodpractice::gp ("osmdata")
 setwd (wd)
+devtools::check (".")
 #testthat::test_dir ("./tests/")
 ```
 

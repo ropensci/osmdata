@@ -32,7 +32,7 @@
 #' @name osmdata
 #' @docType package
 #' @author Bob Rudis, Robin Lovelace, Maëlle Salmon, Mark Padgham
-#' @import sp httr tidyr lubridate
+#' @import sp httr lubridate
 #' @importFrom rvest html_attr html_nodes
 #' @importFrom xml2 read_html read_xml  xml_attr
 #' @importFrom dplyr %>% select left_join filter arrange bind_rows mutate do group_by distinct data_frame

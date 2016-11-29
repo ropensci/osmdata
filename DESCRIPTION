@@ -31,7 +31,6 @@ Imports:
     Rcpp (>= 0.12.4),
     rvest,
     sp,
-    tidyr,
     utils,
     XML,
     xml2
