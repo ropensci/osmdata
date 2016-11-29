@@ -43,11 +43,7 @@ Issue OSM Overpass Query
 }
 \note{
 wrap function with \code{httr::with_verbose} if you want to see the
-      \code{httr} query (useful for debugging connection issues).\cr \cr 
-      You can disable progress bars by calling
-      \code{pbapply::pboptions(type="none")} in your code. See
-      \code{\link[pbapply]{pboptions}} for all the various progress bar
-      settings.
+      \code{httr} query (useful for debugging connection issues).\cr \cr
 }
 \examples{
 \dontrun{

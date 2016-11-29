@@ -55,10 +55,6 @@ overpass_status <- function(quiet=FALSE) {
 #'
 #' @note wrap function with \code{httr::with_verbose} if you want to see the
 #'       \code{httr} query (useful for debugging connection issues).\cr \cr 
-#'       You can disable progress bars by calling
-#'       \code{pbapply::pboptions(type="none")} in your code. See
-#'       \code{\link[pbapply]{pboptions}} for all the various progress bar
-#'       settings.
 #'
 #' @return If the \code{query} result only has OSM \code{node}s then the
 #'         function will return a \code{SpatialPointsDataFrame} with the

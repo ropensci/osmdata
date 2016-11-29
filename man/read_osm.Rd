@@ -31,10 +31,6 @@ If the \code{query} result only has OSM \code{node}s then the function
 Read an (XML format) OSM Overpass response from a string, a connection,
 or a raw vector.
 }
-\note{
-You can disable progress bars by calling \code{pbapply::pboptions(type="none")} in your
-      code. See \code{\link[pbapply]{pboptions}} for all the various progress bar settings.
-}
 \examples{
 \dontrun{
 mammoth <- read_osm(system.file("osm/mammoth.osm", package="overpass"))
