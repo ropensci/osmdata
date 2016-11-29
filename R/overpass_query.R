@@ -5,8 +5,6 @@
 #'         text of the message from Overpass and the timestamp of the
 #'         next avaialble slot
 #' @export
-#' @author Maelle Salmon
-#' overpass_status()
 overpass_status <- function(quiet=FALSE) {
 
   available <- FALSE

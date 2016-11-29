@@ -38,6 +38,6 @@ to overpass API\cr
 }
 }
 \author{
-Bob Rudis, Robin Lovelace, Maelle Salmon, Mark Padgham
+Bob Rudis, Robin Lovelace, Maëlle Salmon, Mark Padgham
 }
 

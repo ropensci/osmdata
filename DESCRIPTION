@@ -4,7 +4,7 @@ Authors@R: c(
     person("Mark", "Padgham", email="mark.padgham@email.com", role=c("aut", "cre")),
     person("Bob", "Rubin", role="aut"),
     person("Robin", "Lovelace", role="aut"), 
-    person("Maelle", "Salmon", role="aut"),
+    person("Maëlle", "Salmon", role="aut"),
     person("Andrew", "Smith", role="ctb"),
     person("Marcin", "Kalicinski", role=c("ctb", "cph"),
         comment="Author of included RapidXML code"),
@@ -45,4 +45,5 @@ Suggests:
 LinkingTo: Rcpp
 URL: https://github.com/osmdatar/osmdatar
 BugReports: https://github.com/osmdatar/osmdatar/issues
+Encoding: UTF-8
 RoxygenNote: 5.0.1

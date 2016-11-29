@@ -17,8 +17,4 @@ an invisible list of whether the API is available along with the
 \description{
 Retrieve status of the Overpass API
 }
-\author{
-Maelle Salmon
-overpass_status()
-}
 
