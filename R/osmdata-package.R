@@ -34,7 +34,7 @@
 #' @author Bob Rudis, Robin Lovelace, Maëlle Salmon, Mark Padgham
 #' @import sp
 #' @importFrom curl has_internet
-#' @importFrom dplyr %>% select left_join filter arrange bind_rows mutate do group_by distinct data_frame
+#' @importFrom dplyr %>% 
 #' @importFrom httr content GET POST stop_for_status
 #' @importFrom lubridate force_tz ymd_hms 
 #' @importFrom Rcpp evalCpp
