@@ -148,7 +148,7 @@ pts <- overpass_query(only_nodes)$osm_points
 sp::plot(pts)
 ```
 
-<img src="README-only_nodes-1.png" width="672" />
+<img src="./fig/README-only_nodes.png" width="672" />
 
 ``` r
 # ways & nodes
@@ -166,7 +166,7 @@ wys <- overpass_query(nodes_and_ways)
 sp::plot(wys$osm_lines)
 ```
 
-<img src="README-nodes_and_ways-1.png" width="672" />
+<img src="./fig/README-nodes_and_ways.png" width="672" />
 
 ``` r
 # xml version of the query
@@ -185,7 +185,7 @@ awy <- overpass_query(actual_ways)
 sp::plot(awy$osm_lines)
 ```
 
-<img src="README-actual_ways-1.png" width="672" />
+<img src="./fig/README-actual_ways.png" width="672" />
 
 ``` r
 # more complex example from Robin: motorways surrounding London
@@ -209,7 +209,7 @@ library(tmap)
 qtm(frb)
 ```
 
-<img src="README-london-motorways-1.png" width="672" />
+<img src="./fig/README-london-motorways.png" width="672" />
 
 ### Test Results
 
