@@ -1,3 +1,16 @@
+#' osmdata class def
+#'
+#' @param bbox bounding box
+#' @param overpass_call overpass_call
+#' @param osm_points sp::SpatialPointsDataFrame of points
+#' @param osm_lines sp::SpatialLinesDataFrame of lines
+#' @param osm_polygons sp::SpatialPolygonsDataFrame of polygons
+#' @param timestamp timestamp
+#'
+#' @note Class constructor should never be used directly, and is only exported
+#' to provide access to the print method
+#'
+#' @export
 osmdata <- function (bbox, overpass_call, 
                      osm_points, osm_lines, osm_polygons, timestamp, ...) 
 {
@@ -20,12 +33,17 @@ osmdata <- function (bbox, overpass_call,
   return (obj)
 }
 
+
+
+#' @export
 print.osmdata <- function (x, ...)
 {
   if (!all (sapply (x, is.null)))
     message ("Object of class 'osmdata' with:")
   if (!is.null (x$bbox)) 
     message (paste ("  $bbox          :", x$bbox))
+  if (!is.null (x$overpass_call))
+    message ("  $overpass_call : The call submitted to the overpass API")
   if (!is.null (x$timestamp)) 
     message (paste ("  $timestamp     :", x$timestamp))
   if (is.null (x$osm_points)) 
@@ -43,6 +61,6 @@ print.osmdata <- function (x, ...)
   else
     message (paste ("  $osm_polygons  : 'sp' SpatialPolygonsDataFrame with",
                     length (x$osm_polygons), "polygons"))
-  if (!is.null (x$overpass_call))
-    message ("  $overpass_call : The call submitted to the overpass API")
+  #invisible (x)
 }
+

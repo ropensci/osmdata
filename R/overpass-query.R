@@ -142,8 +142,9 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
     httr::stop_for_status (res)
 
   if (class (res) == "raw") # for mock tests
-    doc <- rawToChar (res)  else
-    doc <- httr::content (res, as="text", encoding="UTF-8")
+      doc <- rawToChar (res)  
+  else
+      doc <- httr::content (res, as="text", encoding="UTF-8")
 
   res <- process_doc (doc)
 
@@ -157,5 +158,4 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
     obj$osm_polygons <- res$osm_polygons
 
   return (obj)
-  
 }
