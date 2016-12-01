@@ -1,5 +1,5 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Build Status](https://travis-ci.org/osmdatar/osmdata.svg?branch=master)](https://travis-ci.org/osmdatar/osmdata) [![codecov](https://codecov.io/gh/osmdatar/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/osmdatar/osmdata)
+[![Build Status](https://travis-ci.org/osmdatar/osmdata.svg?branch=master)](https://travis-ci.org/osmdatar/osmdata) [![codecov](https://codecov.io/gh/osmdatar/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/osmdatar/osmdata) [![Project Status: WIP](http://www.repostatus.org/badges/0.1.0/wip.svg)](http://www.repostatus.org/#wip) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/osmdata)](http://cran.r-project.org/web/packages/osmdata)
 
 ![](./fig/title.png)
 
@@ -36,11 +36,11 @@ bu <- overpass_query (q1)
 bu
 #> Object of class 'osmdata' with:
 #>   $bbox          : 51.51,-0.12,51.52,-0.11
-#>   $timestamp     : [ Thu Dec  1 11:52:33 2016 ]
+#>   $overpass_call : The call submitted to the overpass API
+#>   $timestamp     : [ Thu Dec  1 17:45:14 2016 ]
 #>   $osm_points    : 'sp' SpatialPointsDataFrame   with 5071 points
 #>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 578 lines
 #>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 34 polygons
-#>   $overpass_call : The call submitted to the overpass API
 ```
 
 or,
@@ -55,11 +55,11 @@ hs <- overpass_query (q2)
 hs
 #> Object of class 'osmdata' with:
 #>   $bbox          : 51.51,-0.12,51.52,-0.11
-#>   $timestamp     : [ Thu Dec  1 11:52:36 2016 ]
+#>   $overpass_call : The call submitted to the overpass API
+#>   $timestamp     : [ Thu Dec  1 17:45:16 2016 ]
 #>   $osm_points    : 'sp' SpatialPointsDataFrame   with 1984 points
 #>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 575 lines
 #>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 8 polygons
-#>   $overpass_call : The call submitted to the overpass API
 ```
 
 Plotting with `sp`:
@@ -179,7 +179,7 @@ frb <- res$osm_lines
 
 ``` r
 date()
-#> [1] "Thu Dec  1 11:52:36 2016"
+#> [1] "Thu Dec  1 17:45:17 2016"
 
 testthat::test_dir("tests/")
 #> testthat results ===========================================================
