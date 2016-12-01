@@ -11,6 +11,9 @@
 devtools::install_github("osmdatar/osmdata")
 ```
 
+    #> Loading osmdata
+    #> Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
+
 Current verison:
 
 ``` r
@@ -21,100 +24,69 @@ packageVersion("osmdata")
 
 ### Usage
 
-[Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be built from a base query constructed with `opq` followed by `add_features`. The corresponding OSM objects are then downloaded and converted to `sp` objects with `overpass_query`. For example,
+[Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be built from a base query constructed with `opq` followed by `add_feature`. The corresponding OSM objects are then downloaded and converted to `sp` objects with `overpass_query`. For example,
 
 ``` r
-q0 <- opq (bbox=c(-0.12,51.11,-0.11,51.12)) # Central London, U.K.
+q0 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) # Central London, U.K.
 q1 <- add_feature (q0, key='building')
-bh <- overpass_query (q1)
-class (bh); sapply (bh, summary)
-#> [1] "list"    "osmdata"
-#>        bbox        overpass_call osm_points              
-#> Length "1"         "1"           "48"                    
-#> Class  "character" "character"   "SpatialPointsDataFrame"
-#> Mode   "character" "character"   "S4"                    
-#>        osm_lines               osm_polygons timestamp  
-#> Length "9"                     "0"          "1"        
-#> Class  "SpatialLinesDataFrame" "NULL"       "character"
-#> Mode   "S4"                    "NULL"       "character"
+bu <- overpass_query (q1)
+#> Issuing query to OSM Overpass...
+#> Rate limit: 2
+#> Query complete!
+bu
+#> Object of class 'osmdata' with:
+#>   $bbox          : 51.51,-0.12,51.52,-0.11
+#>   $timestamp     : [ Thu Dec  1 11:52:33 2016 ]
+#>   $osm_points    : 'sp' SpatialPointsDataFrame   with 5071 points
+#>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 578 lines
+#>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 34 polygons
+#>   $overpass_call : The call submitted to the overpass API
 ```
 
 or,
 
 ``` r
-q2 <- add_feature (q0, key='highway', value='tertiary')
+q2 <- add_feature (q0, key='highway', value='secondary')
+q2 <- add_feature (q0, key='highway')
 hs <- overpass_query (q2)
-class (hs); sapply (hs, summary)
-#> [1] "list"    "osmdata"
-#>        bbox        overpass_call osm_points              
-#> Length "1"         "1"           "43"                    
-#> Class  "character" "character"   "SpatialPointsDataFrame"
-#> Mode   "character" "character"   "S4"                    
-#>        osm_lines               osm_polygons timestamp  
-#> Length "2"                     "0"          "1"        
-#> Class  "SpatialLinesDataFrame" "NULL"       "character"
-#> Mode   "S4"                    "NULL"       "character"
+#> Issuing query to OSM Overpass...
+#> Rate limit: 2
+#> Query complete!
+hs
+#> Object of class 'osmdata' with:
+#>   $bbox          : 51.51,-0.12,51.52,-0.11
+#>   $timestamp     : [ Thu Dec  1 11:52:36 2016 ]
+#>   $osm_points    : 'sp' SpatialPointsDataFrame   with 1984 points
+#>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 575 lines
+#>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 8 polygons
+#>   $overpass_call : The call submitted to the overpass API
 ```
+
+Plotting with `sp`:
 
 ``` r
-q1 <- opq (bbox=c(-0.12,51.51,-0.1,51.52)) 
-q1 <- add_feature (q1, key='building')
-b <- overpass_query (q1)
-summary (overpass_query (q1))
-#>               Length Class                    Mode     
-#> bbox             1   -none-                   character
-#> overpass_call    1   -none-                   character
-#> osm_points    9272   SpatialPointsDataFrame   S4       
-#> osm_lines     1095   SpatialLinesDataFrame    S4       
-#> osm_polygons    45   SpatialPolygonsDataFrame S4       
-#> timestamp        1   -none-                   character
-
-q2 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) 
-q2 <- add_feature (q2, key='highway', value='primary')
-hs <- overpass_query (q2)
-summary (hs)
-#>               Length Class                  Mode     
-#> bbox            1    -none-                 character
-#> overpass_call   1    -none-                 character
-#> osm_points    364    SpatialPointsDataFrame S4       
-#> osm_lines      77    SpatialLinesDataFrame  S4       
-#> osm_polygons    0    -none-                 NULL     
-#> timestamp       1    -none-                 character
-
-q3 <- opq (bbox=c(-0.12,51.51,-0.1,51.52)) 
-q3 <- add_feature (q3, key='building')
-q3 <- add_feature (q3, key='highway', 'secondary')
-summary (overpass_query (q3))
-#>               Length Class                    Mode     
-#> bbox             1   -none-                   character
-#> overpass_call    1   -none-                   character
-#> osm_points    9348   SpatialPointsDataFrame   S4       
-#> osm_lines     1112   SpatialLinesDataFrame    S4       
-#> osm_polygons    45   SpatialPolygonsDataFrame S4       
-#> timestamp        1   -none-                   character
+sp::plot (bu$osm_lines)
+lines (hs$osm_lines, col="red")
 ```
 
-It acts as a database over the web: the client sends a query to the API and gets back the data set that corresponds to the query. To explore simple Overpass queries interactively, try [overpass turbo](http://overpass-turbo.eu/).
+![](./fig/README-plot1.png)
 
-Here's an [RPub](http://rpubs.com/hrbrmstr/overpass) for `overpass` that I'll continually update as this goes (that will eventually be a vignette).
+The [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) provides access to OSM elements selected by search criteria such as location, types of objects, tag properties, proximity, or combinations of these.
 
-Unlike the main API, which is optimized for editing, Overpass API is optimized for data consumers that need a few elements within a glimpse or up to roughly 100 million elements in some minutes, both selected by search criteria like e.g. location, type of objects, tag properties, proximity, or combinations of them.
+To explore simple Overpass queries interactively, try [overpass turbo](http://overpass-turbo.eu/), and to find out more about building queries see the [Language Guide](http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide) or the more comprehensive [Language Reference](http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL).
 
-Overpass API has a powerful query language (language guide, language reference, an IDE) beyond XAPI, but also has a compatibility layer to allow a smooth transition from XAPI.
-
-This package pairs nicely with [nominatim](http://github.com/hrbrmstr/nominatim).
-
+<!--
 The following functions are implemented:
 
--   `add_feature`: Add a feature to an Overpass query
--   `available_features`: List recognized features in OSM Overpass
--   `available_tags`: List tags associated with a feature
--   `bbox_to_string`: Convert a named matrix or a named vector (or an unnamed vector) return a string
--   `opq`: Begin building an Overpass query
--   `overpass_query`: Issue OSM Overpass Query
--   `overpass_status`: Retrieve status of the Overpass API
--   `read_osm`: Read an XML OSM Overpass response from path
-
+- `add_feature`:    Add a feature to an Overpass query
+- `available_features`: List recognized features in OSM Overpass
+- `available_tags`: List tags associated with a feature
+- `bbox_to_string`: Convert a named matrix or a named vector (or an unnamed vector) return a string
+- `opq`:    Begin building an Overpass query
+- `overpass_query`: Issue OSM Overpass Query
+- `overpass_status`:    Retrieve status of the Overpass API
+- `read_osm`:   Read an XML OSM Overpass response from path
+-->
 ### Usage
 
 ``` r
@@ -207,7 +179,7 @@ frb <- res$osm_lines
 
 ``` r
 date()
-#> [1] "Tue Nov 29 13:17:22 2016"
+#> [1] "Thu Dec  1 11:52:36 2016"
 
 testthat::test_dir("tests/")
 #> testthat results ===========================================================

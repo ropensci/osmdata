@@ -7,8 +7,8 @@ output: rmarkdown::github_document
 ```{r opts, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  warning = FALSE,
-  message = FALSE,
+  warning = TRUE,
+  message = TRUE,
   width = 120,
   comment = "#>",
   fig.retina = 2,
@@ -41,10 +41,10 @@ wd <- getwd ()
 while (length (grep ('osmdata', getwd ())) > 0) setwd ("..")
 devtools::load_all ("osmdata")
 #devtools::load_all ("osmdata", recompile=TRUE)
-devtools::document ("osmdata")
+#devtools::document ("osmdata")
 #goodpractice::gp ("osmdata")
 setwd (wd)
-devtools::check (".")
+#devtools::check (".")
 #testthat::test_dir ("./tests/")
 ```
 
@@ -58,61 +58,45 @@ packageVersion("osmdata")
 ### Usage
 
 [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be
-built from a base query constructed with `opq` followed by `add_features`. The
+built from a base query constructed with `opq` followed by `add_feature`. The
 corresponding OSM objects are then downloaded and converted to `sp` objects with
 `overpass_query`. For example,
 
 ```{r query1}
-q0 <- opq (bbox=c(-0.12,51.11,-0.11,51.12)) # Central London, U.K.
+q0 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) # Central London, U.K.
 q1 <- add_feature (q0, key='building')
-bh <- overpass_query (q1)
-class (bh); sapply (bh, summary)
+bu <- overpass_query (q1)
+bu
 ```
 
 or,
 
 ```{r query2}
-q2 <- add_feature (q0, key='highway', value='tertiary')
+q2 <- add_feature (q0, key='highway', value='secondary')
+q2 <- add_feature (q0, key='highway')
 hs <- overpass_query (q2)
-class (hs); sapply (hs, summary)
+hs
 ```
 
-```{r junk}
-q1 <- opq (bbox=c(-0.12,51.51,-0.1,51.52)) 
-q1 <- add_feature (q1, key='building')
-b <- overpass_query (q1)
-summary (overpass_query (q1))
-
-q2 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) 
-q2 <- add_feature (q2, key='highway', value='primary')
-hs <- overpass_query (q2)
-summary (hs)
-
-q3 <- opq (bbox=c(-0.12,51.51,-0.1,51.52)) 
-q3 <- add_feature (q3, key='building')
-q3 <- add_feature (q3, key='highway', 'secondary')
-summary (overpass_query (q3))
+Plotting with `sp`:
+```{r plot1, eval=FALSE}
+sp::plot (bu$osm_lines)
+lines (hs$osm_lines, col="red")
 ```
+![](./fig/README-plot1.png)
 
-It acts as a database over the web: the client sends
-a query to the API and gets back the data set that corresponds to the query.  To
-explore simple Overpass queries interactively, try [overpass
-turbo](http://overpass-turbo.eu/).
+The [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) provides
+access to OSM elements selected by search criteria such as location, types of
+objects, tag properties, proximity, or combinations of these.
 
-Here's an [RPub](http://rpubs.com/hrbrmstr/overpass) for `overpass` that I'll
-continually update as this goes (that will eventually be a vignette).
+To explore simple Overpass queries interactively, try 
+[overpass turbo](http://overpass-turbo.eu/), and to find out more about building
+queries see the 
+[Language Guide](http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide)
+or the more comprehensive
+[Language Reference](http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL).
 
-Unlike the main API, which is optimized for editing, Overpass API is optimized
-for data consumers that need a few elements within a glimpse or up to roughly
-100 million elements in some minutes, both selected by search criteria like e.g.
-location, type of objects, tag properties, proximity, or combinations of them.
-
-Overpass API has a powerful query language (language guide, language reference,
-an IDE) beyond XAPI, but also has a compatibility layer to allow a smooth
-transition from XAPI.
-
-This package pairs nicely with [nominatim](http://github.com/hrbrmstr/nominatim).
-
+<!--
 The following functions are implemented:
 
 - `add_feature`:	Add a feature to an Overpass query
@@ -123,6 +107,8 @@ The following functions are implemented:
 - `overpass_query`:	Issue OSM Overpass Query
 - `overpass_status`:	Retrieve status of the Overpass API
 - `read_osm`:	Read an XML OSM Overpass response from path
+-->
+
 
 ### Usage
 
