@@ -147,6 +147,8 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
 
   res <- process_doc (doc)
 
+  obj$osm_points <- obj$osm_lines <- obj$osm_polygons <- NULL
+
   if (length(res$osm_nodes) != 0)
     obj$osm_points <- res$osm_nodes
   if (length(res$osm_ways) != 0)
