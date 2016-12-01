@@ -71,7 +71,10 @@ add_feature <- function(opq, key, value, exact=TRUE, bbox=NULL) {
   opq$features <- c(opq$features, thing)
 
   if (is.null (opq$suffix))
-    opq$suffix <- ");\n(._;>);\nout qt body;"
+    opq$suffix <- ");\n(._;>);\nout body;"
+    #opq$suffix <- ");\n(._;>);\nout qt body;"
+  # qt option is not compatible with sf because GDAL requires nodes to be
+  # numerically sorted
 
   opq
 
