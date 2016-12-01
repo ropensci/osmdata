@@ -25,7 +25,6 @@ NeedsCompilation: yes
 LazyData: true
 Imports:
     curl,
-    dplyr,
     httr,
     lubridate,
     Rcpp (>= 0.12.4),

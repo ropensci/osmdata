@@ -34,7 +34,6 @@
 #' @author Bob Rudis, Robin Lovelace, Maëlle Salmon, Mark Padgham
 #' @import sp
 #' @importFrom curl has_internet
-#' @importFrom dplyr %>% 
 #' @importFrom httr content GET POST stop_for_status
 #' @importFrom lubridate force_tz ymd_hms 
 #' @importFrom Rcpp evalCpp
@@ -42,20 +41,4 @@
 #' @importFrom utils read.table timestamp
 #' @importFrom xml2 read_html read_xml xml_attr
 #' @useDynLib osmdata
-NULL
-
-
-#' osmdata exported operators
-#'
-#' The following functions are imported and then re-exported
-#' from the osmdata package to enable use of the magrittr/dplyr
-#' pipe operator with no additional library calls
-#'
-#' @name osmdata-exports
-NULL
-
-#' @importFrom dplyr %>%
-#' @name %>%
-#' @export
-#' @rdname osmdata-exports
 NULL
