@@ -21,6 +21,8 @@ osmdata(bbox, overpass_call, osm_points, osm_lines, osm_polygons, timestamp,
 \item{osm_polygons}{sp::SpatialPolygonsDataFrame of polygons}
 
 \item{timestamp}{timestamp}
+
+\item{...}{other options ignored}
 }
 \description{
 osmdata class def

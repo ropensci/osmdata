@@ -6,6 +6,7 @@
 #' @param osm_lines sp::SpatialLinesDataFrame of lines
 #' @param osm_polygons sp::SpatialPolygonsDataFrame of polygons
 #' @param timestamp timestamp
+#' @param ... other options ignored
 #'
 #' @note Class constructor should never be used directly, and is only exported
 #' to provide access to the print method
