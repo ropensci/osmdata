@@ -11,16 +11,6 @@ rcpp_get_lines <- function(st) {
     .Call('osmdata_rcpp_get_lines', PACKAGE = 'osmdata', st)
 }
 
-#' rcpp_get_points
-#'
-#' Extracts all nodes from an overpass API query
-#'
-#' @param st Text contents of an overpass API query
-#' @return A \code{SpatialPointsDataFrame} contains all nodes and associated data
-rcpp_get_points <- function(st) {
-    .Call('osmdata_rcpp_get_points', PACKAGE = 'osmdata', st)
-}
-
 #' rcpp_get_polygons
 #'
 #' Extracts all polygons from an overpass API query
@@ -29,5 +19,15 @@ rcpp_get_points <- function(st) {
 #' @return A \code{SpatialLinesDataFrame} contains all polygons and associated data
 rcpp_get_polygons <- function(st) {
     .Call('osmdata_rcpp_get_polygons', PACKAGE = 'osmdata', st)
+}
+
+#' rcpp_get_points
+#'
+#' Extracts all nodes from an overpass API query
+#'
+#' @param st Text contents of an overpass API query
+#' @return A \code{SpatialPointsDataFrame} contains all nodes and associated data
+rcpp_get_points <- function(st) {
+    .Call('osmdata_rcpp_get_points', PACKAGE = 'osmdata', st)
 }
 

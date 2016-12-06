@@ -1,4 +1,34 @@
-#include "get-polygons.h"
+/***************************************************************************
+ *  Project:    osmdatar
+ *  File:       get-osmdata.cpp
+ *  Language:   C++
+ *
+ *  osmdatar is free software: you can redistribute it and/or modify it under
+ *  the terms of the GNU General Public License as published by the Free
+ *  Software Foundation, either version 3 of the License, or (at your option)
+ *  any later version.
+ *
+ *  osmdatar is distributed in the hope that it will be useful, but WITHOUT ANY
+ *  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ *  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ *  details.
+ *
+ *  You should have received a copy of the GNU General Public License along with
+ *  osm-router.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Author:     Mark Padgham / Andrew Smith
+ *  E-Mail:     mark.padgham@email.com / andrew@casacazaz.net
+ *
+ *  Description:    Class definition of XmlData
+ *
+ *  Limitations:
+ *
+ *  Dependencies:       none (rapidXML header included in osmdatar)
+ *
+ *  Compiler Options:   -std=c++11
+ ***************************************************************************/
+
+#include "get-osmdata.h"
 #include "get-bbox.h"
 
 #include <Rcpp.h>
@@ -26,7 +56,7 @@ Rcpp::List rcpp_get_polygons (const std::string& st)
     }
 #endif
 
-    XmlPolys xml (st);
+    XmlData xml (st);
 
     const std::map <osmid_t, Node>& nodes = xml.nodes ();
     const std::map <osmid_t, OneWay>& ways = xml.ways ();
@@ -64,7 +94,7 @@ Rcpp::List rcpp_get_polygons (const std::string& st)
     std::set <osmid_t> poly_ways, non_poly_ways;
 
     /*
-     * Polygons are extracted from the XmlPolys class in three setps:
+     * Polygons are extracted from the XmlData class in three setps:
      *  1. Get the names of all polygons that are part of multipolygon relations
      *  2. Get the names of any remaining ways that are polygonal (start == end)
      *  3. From the resultant list, extract the actual polygonal ways

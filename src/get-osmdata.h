@@ -1,6 +1,6 @@
 /***************************************************************************
  *  Project:    osmdatar
- *  File:       get-polygons.h
+ *  File:       get-osmdata.h
  *  Language:   C++
  *
  *  osmdatar is free software: you can redistribute it and/or modify it under
@@ -19,7 +19,7 @@
  *  Author:     Mark Padgham / Andrew Smith
  *  E-Mail:     mark.padgham@email.com / andrew@casacazaz.net
  *
- *  Description:    Class definition of XmlPolys
+ *  Description:    Class definition of XmlData
  *
  *  Limitations:
  *
@@ -37,13 +37,13 @@
 /************************************************************************
  ************************************************************************
  **                                                                    **
- **                          CLASS::XMLPOLYS                           **
+ **                          CLASS::XMLDATA                            **
  **                                                                    **
  ************************************************************************
  ************************************************************************/
 
 
-class XmlPolys
+class XmlData
 {
     private:
 
@@ -53,7 +53,7 @@ class XmlPolys
 
     public:
 
-        XmlPolys (const std::string& str)
+        XmlData (const std::string& str)
         {
             // APS empty m_nodes/m_ways/m_relations constructed here, no need to explicitly clear
             XmlDocPtr p = parseXML (str);
@@ -61,7 +61,7 @@ class XmlPolys
         }
 
         // APS make the dtor virtual since compiler support for "final" is limited
-        virtual ~XmlPolys ()
+        virtual ~XmlData ()
         {
           // APS m_nodes/m_ways/m_relations destructed here, no need to explicitly clear
         }
@@ -78,7 +78,7 @@ class XmlPolys
         void traverseWay (XmlNodePtr pt, RawWay& rway);
         void traverseNode (XmlNodePtr pt, Node& node);
 
-}; // end Class::XmlPolys
+}; // end Class::XmlData
 
 
 /************************************************************************
@@ -89,7 +89,7 @@ class XmlPolys
  ************************************************************************
  ************************************************************************/
 
-inline void XmlPolys::traverseWays (XmlNodePtr pt)
+inline void XmlData::traverseWays (XmlNodePtr pt)
 {
     RawRelation rrel;
     RawWay rway;
@@ -159,7 +159,7 @@ inline void XmlPolys::traverseWays (XmlNodePtr pt)
         }
     }
 
-} // end function XmlPolys::traverseWays
+} // end function XmlData::traverseWays
 
 
 /************************************************************************
@@ -170,7 +170,7 @@ inline void XmlPolys::traverseWays (XmlNodePtr pt)
  ************************************************************************
  ************************************************************************/
 
-inline void XmlPolys::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
+inline void XmlData::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
 {
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
@@ -196,7 +196,7 @@ inline void XmlPolys::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
     {
         traverseRelation (it, rrel);
     }
-} // end function XmlPolys::traverseRelation
+} // end function XmlData::traverseRelation
 
 
 /************************************************************************
@@ -207,7 +207,7 @@ inline void XmlPolys::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
  ************************************************************************
  ************************************************************************/
 
-inline void XmlPolys::traverseWay (XmlNodePtr pt, RawWay& rway)
+inline void XmlData::traverseWay (XmlNodePtr pt, RawWay& rway)
 {
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
@@ -226,7 +226,7 @@ inline void XmlPolys::traverseWay (XmlNodePtr pt, RawWay& rway)
     {
         traverseWay (it, rway);
     }
-} // end function XmlNodes::traverseWay
+} // end function XmlData::traverseWay
 
 
 /************************************************************************
@@ -237,7 +237,7 @@ inline void XmlPolys::traverseWay (XmlNodePtr pt, RawWay& rway)
  ************************************************************************
  ************************************************************************/
 
-inline void XmlPolys::traverseNode (XmlNodePtr pt, Node& node)
+inline void XmlData::traverseNode (XmlNodePtr pt, Node& node)
 {
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
@@ -254,5 +254,5 @@ inline void XmlPolys::traverseNode (XmlNodePtr pt, Node& node)
     {
         traverseNode (it, node);
     }
-} // end function XmlNodes::traverseNode
+} // end function XmlData::traverseNode
 
