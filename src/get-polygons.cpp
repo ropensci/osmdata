@@ -91,9 +91,10 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
     for (auto it = ways.begin (); it != ways.end (); ++it)
     {
         if (the_ways.find ((*it).first) == the_ways.end ())
-            if ((*it).second.nodes.begin () == (*it).second.nodes.end ())
+            if ((*it).second.nodes.front () == (*it).second.nodes.back ())
                 the_ways.insert ((*it).first);
     }
+
     // Step#2b - Erase any ways that contain no data (should not happen).
     for (auto it = the_ways.begin (); it != the_ways.end (); )
     {
