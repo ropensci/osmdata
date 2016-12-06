@@ -533,6 +533,9 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
     sp_points.slot ("proj4string") = crs;
 
     ret [2] = sp_points;
+
+    std::vector <std::string> retnames {"polygons", "lnes", "points"};
+    ret.attr ("names") = retnames;
     
     return ret;
 }
