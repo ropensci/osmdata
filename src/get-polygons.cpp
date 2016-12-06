@@ -35,6 +35,7 @@ Rcpp::List rcpp_get_polygons (const std::string& st)
     int count = 0;
     float xmin = FLOAT_MAX, xmax = -FLOAT_MAX,
           ymin = FLOAT_MAX, ymax = -FLOAT_MAX;
+    // TODO: Calculate these from nodes only
     std::vector <float> lons, lats;
     std::unordered_set <std::string> idset; // see TODO below
     std::vector <std::string> colnames, rownames, polynames;
@@ -58,11 +59,6 @@ Rcpp::List rcpp_get_polygons (const std::string& st)
      * this does *NOT* make the routine any faster, and so the current version
      * which more safely uses iterators is kept instead.
      */
-
-    Rcpp::Environment sp_env = Rcpp::Environment::namespace_env ("sp");
-    Rcpp::Function Polygon = sp_env ["Polygon"];
-    Rcpp::Language polygons_call ("new", "Polygons");
-    Rcpp::S4 polygons;
 
     // non_poly_ways are returned as line objects
     std::set <osmid_t> poly_ways, non_poly_ways;
@@ -132,6 +128,11 @@ Rcpp::List rcpp_get_polygons (const std::string& st)
      **                                                                    **
      ************************************************************************
      ************************************************************************/
+
+    Rcpp::Environment sp_env = Rcpp::Environment::namespace_env ("sp");
+    Rcpp::Function Polygon = sp_env ["Polygon"];
+    Rcpp::Language polygons_call ("new", "Polygons");
+    Rcpp::S4 polygons;
 
     Rcpp::List polyList (poly_ways.size ());
     polynames.reserve (poly_ways.size ());
@@ -250,7 +251,7 @@ Rcpp::List rcpp_get_polygons (const std::string& st)
     kv_df.attr ("names") = varnames;
     sp_polys.slot ("data") = kv_df;
 
-    Rcpp::List ret (2);
+    Rcpp::List ret (3);
     ret [0] = sp_polys;
 
     /************************************************************************
@@ -280,6 +281,7 @@ Rcpp::List rcpp_get_polygons (const std::string& st)
     Rcpp::NumericMatrix nmat2 (Rcpp::Dimension (0, 0)); 
     // TODO: Things to delete and replace with resize:
     // nmat2, kv_vec2, kv_mat2, kv_df2
+    // nmat3, kv_vec3, kv_mat3, kv_df3
 
     Rcpp::Language line_call ("new", "Line");
     Rcpp::Language lines_call ("new", "Lines");
@@ -408,6 +410,99 @@ Rcpp::List rcpp_get_polygons (const std::string& st)
     sp_lines.slot ("data") = kv_df2;
 
     ret [1] = sp_lines;
+    
+    /************************************************************************
+     ************************************************************************
+     **                                                                    **
+     **                          STEP#3C: POINTS                           **
+     **                                                                    **
+     ************************************************************************
+     ************************************************************************/
+
+    Rcpp::List pointList (nodes.size ());
+    std::vector <std::string> nodenames;
+    nodenames.reserve (nodes.size());
+
+    colnames.resize (0);
+    colnames.push_back ("lon");
+    colnames.push_back ("lat");
+    varnames.clear ();
+
+    count = 0;
+
+    dimnames.erase (0, dimnames.size());
+    Rcpp::NumericMatrix nmat3 (Rcpp::Dimension (0, 0)); 
+
+    lons.clear ();
+    lats.clear ();
+    lons.reserve (nodes.size ());
+    lats.reserve (nodes.size ());
+    rownames.clear ();
+    rownames.reserve (nodes.size ());
+
+    for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
+    {
+        // Collect all unique keys
+        std::for_each (ni->second.key_val.begin (),
+                ni->second.key_val.end (),
+                [&](const std::pair <std::string, std::string>& p)
+                {
+                    varnames.insert (p.first);
+                });
+
+        lons.push_back (ni->second.lon);
+        lats.push_back (ni->second.lat);
+        rownames.push_back (std::to_string (ni->first));
+    }
+
+    if (nodes.size () > 0)
+    {
+        xmin = std::min (xmin, *std::min_element (lons.begin(), lons.end()));
+        xmax = std::max (xmax, *std::max_element (lons.begin(), lons.end()));
+        ymin = std::min (ymin, *std::min_element (lats.begin(), lats.end()));
+        ymax = std::max (ymax, *std::max_element (lats.begin(), lats.end()));
+    }
+
+
+    // Store all key-val pairs in one massive DF
+    nrow = nodes.size (); 
+    ncol = varnames.size ();
+    Rcpp::CharacterVector kv_vec3 (nrow * ncol, Rcpp::CharacterVector::get_na ());
+    for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
+    {
+        int rowi = std::distance (nodes.begin (), ni);
+        for (auto kv_iter = ni->second.key_val.begin ();
+                kv_iter != ni->second.key_val.end (); ++kv_iter)
+        {
+            const std::string& key = (*kv_iter).first;
+            auto it = varnames.find (key); // key must exist in varnames!
+            int coli = std::distance (varnames.begin (), it);
+            kv_vec3 (coli * nrow + rowi) = (*kv_iter).second;
+        }
+    }
+
+    nmat3 = Rcpp::NumericMatrix (Rcpp::Dimension (lons.size (), 2));
+    std::copy (lons.begin (), lons.end (), nmat3.begin ());
+    std::copy (lats.begin (), lats.end (), nmat3.begin () + lons.size ());
+    dimnames.push_back (rownames);
+    dimnames.push_back (colnames);
+    nmat3.attr ("dimnames") = dimnames;
+    dimnames.erase (0, dimnames.size());
+
+    Rcpp::CharacterMatrix kv_mat3 (nrow, ncol, kv_vec.begin());
+    Rcpp::DataFrame kv_df3 = kv_mat3;
+    kv_df3.attr ("names") = varnames;
+
+    Rcpp::Language points_call ("new", "SpatialPoints");
+    Rcpp::Language sp_points_call ("new", "SpatialPointsDataFrame");
+    Rcpp::S4 sp_points;
+    sp_points = sp_points_call.eval ();
+    sp_points.slot ("data") = kv_df3;
+    sp_points.slot ("coords") = nmat3;
+    sp_points.slot ("bbox") = rcpp_get_bbox (xmin, xmax, ymin, ymax);
+    sp_points.slot ("proj4string") = crs;
+
+    ret [2] = sp_points;
     
     return ret;
 }
