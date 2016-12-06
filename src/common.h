@@ -64,10 +64,16 @@ typedef const rapidxml::xml_attribute<>* XmlAttrPtr;
 
 XmlDocPtr parseXML (const std::string& xmlString);
 
+struct RawNode
+{
+    osmid_t id;
+    std::vector <std::string> key, value;
+    float lat, lon;
+};
+
 struct Node
 {
     osmid_t id;
-    std::string key, value;
     std::map <std::string, std::string> key_val;
     float lat, lon;
 };
@@ -79,7 +85,6 @@ struct Node
 struct RawWay
 {
     osmid_t id;
-    // TODO: APS would (key,value) be better in a std::map?
     std::vector <std::string> key, value;
     std::vector <osmid_t> nodes;
 };
@@ -112,8 +117,8 @@ struct Relation
 typedef std::vector <Relation> Relations;
 typedef std::map <osmid_t, OneWay> Ways;
 
-// MP: osmid_t (long long) is Node.id, and thus repetitive, but traverseNode has to
-// stored the ID in the Node struct first, before this can be used to make the
+// MP: osmid_t (long long) is Node.id, and thus repetitive, but traverseNode has
+// to store the ID in the Node struct first, before this can be used to make the
 // map of Nodes. TODO: Is there a better way?
 typedef std::map <osmid_t, Node> Nodes;
 

@@ -76,7 +76,7 @@ class XmlData
         void traverseWays (XmlNodePtr pt);
         void traverseRelation (XmlNodePtr pt, RawRelation& rrel);
         void traverseWay (XmlNodePtr pt, RawWay& rway);
-        void traverseNode (XmlNodePtr pt, Node& node);
+        void traverseNode (XmlNodePtr pt, RawNode& rnode);
 
 }; // end Class::XmlData
 
@@ -95,6 +95,7 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
     RawWay rway;
     Relation relation;
     OneWay way;
+    RawNode rnode;
     Node node;
 
     for (XmlNodePtr it = pt->first_node (); it != nullptr;
@@ -102,7 +103,16 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
     {
         if (!strcmp (it->name(), "node"))
         {
-            traverseNode (it, node);
+            traverseNode (it, rnode);
+            assert (rnode.key.size () == rnode.val.size ());
+
+            node.id = rnode.id;
+            node.lat = rnode.lat;
+            node.lon = rnode.lon;
+            node.key_val.clear ();
+            for (size_t i=0; i<rnode.key.size (); i++)
+                node.key_val.insert (std::make_pair
+                        (rnode.key [i], rnode.value [i]));
             m_nodes.insert (std::make_pair (node.id, node));
         }
         else if (!strcmp (it->name(), "way"))
@@ -237,22 +247,26 @@ inline void XmlData::traverseWay (XmlNodePtr pt, RawWay& rway)
  ************************************************************************
  ************************************************************************/
 
-inline void XmlData::traverseNode (XmlNodePtr pt, Node& node)
+inline void XmlData::traverseNode (XmlNodePtr pt, RawNode& rnode)
 {
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
         if (!strcmp (it->name(), "id"))
-            node.id = std::stoll(it->value());
+            rnode.id = std::stoll(it->value());
         else if (!strcmp (it->name(), "lat"))
-            node.lat = std::stof(it->value());
+            rnode.lat = std::stof(it->value());
         else if (!strcmp (it->name(), "lon"))
-            node.lon = std::stof(it->value());
+            rnode.lon = std::stof(it->value());
+        else if (!strcmp (it->name(), "k"))
+            rnode.key.push_back (it->value ());
+        else if (!strcmp (it->name(), "v"))
+            rnode.value.push_back (it->value ());
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
     {
-        traverseNode (it, node);
+        traverseNode (it, rnode);
     }
 } // end function XmlData::traverseNode
 

@@ -486,7 +486,7 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
     nmat3.attr ("dimnames") = dimnames;
     dimnames.erase (0, dimnames.size());
 
-    Rcpp::CharacterMatrix kv_mat3 (nrow, ncol, kv_vec.begin());
+    Rcpp::CharacterMatrix kv_mat3 (nrow, ncol, kv_vec3.begin());
     Rcpp::DataFrame kv_df3 = kv_mat3;
     kv_df3.attr ("names") = varnames;
 
