@@ -404,7 +404,7 @@ Rcpp::List rcpp_get_polygons (const std::string& st)
 
     Rcpp::CharacterMatrix kv_mat2 (nrow, ncol, kv_vec2.begin());
     Rcpp::DataFrame kv_df2 = kv_mat2;
-    kv_df.attr ("names") = varnames;
+    kv_df2.attr ("names") = varnames;
     sp_lines.slot ("data") = kv_df2;
 
     ret [1] = sp_lines;
