@@ -28,7 +28,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_get_polygons
-Rcpp::S4 rcpp_get_polygons(const std::string& st);
+Rcpp::List rcpp_get_polygons(const std::string& st);
 RcppExport SEXP osmdata_rcpp_get_polygons(SEXP stSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
