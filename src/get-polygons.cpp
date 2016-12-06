@@ -32,6 +32,9 @@ Rcpp::S4 rcpp_get_polygons (const std::string& st)
     const std::map <osmid_t, OneWay>& ways = xml.ways ();
     const std::vector <Relation>& rels = xml.relations ();
 
+    Rcpp::Rcout << "****#[nodes, ways, rels] = [" << nodes.size () << ", " << 
+        ways.size () << ", " << rels.size () << "]" << std::endl;
+
     int count = 0;
     float xmin = FLOAT_MAX, xmax = -FLOAT_MAX,
           ymin = FLOAT_MAX, ymax = -FLOAT_MAX;

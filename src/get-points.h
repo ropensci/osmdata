@@ -122,15 +122,15 @@ inline void XmlNodes::traverseNode (XmlNodePtr pt,
 {
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; it = it->next_attribute())
     {
-        if (!strcmp(it->name(), "id"))
+        if (!strcmp (it->name(), "id"))
             node.id = std::stoll(it->value());
-        else if (!strcmp(it->name(), "lat"))
+        else if (!strcmp (it->name(), "lat"))
             node.lat = std::stof(it->value());
-        else if (!strcmp(it->name(), "lon"))
+        else if (!strcmp (it->name(), "lon"))
             node.lon = std::stof(it->value());
-        else if (!strcmp(it->name(), "k"))
+        else if (!strcmp (it->name(), "k"))
             node.key = it->value();
-        else if (!strcmp(it->name(), "v"))
+        else if (!strcmp (it->name(), "v"))
         {
             // Note that values sometimes exist without keys, but the following
             // still inserts the pair because values **always** come after keys.

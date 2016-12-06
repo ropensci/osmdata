@@ -175,17 +175,17 @@ inline void XmlPolys::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
-        if (!strcmp(it->name(), "k"))
+        if (!strcmp (it->name(), "k"))
             rrel.key.push_back (it->value());
-        else if (!strcmp(it->name(), "v"))
+        else if (!strcmp (it->name(), "v"))
             rrel.value.push_back (it->value());
-        else if (!strcmp(it->name(), "id"))
+        else if (!strcmp (it->name(), "id"))
             rrel.id = std::stoll(it->value());
-        else if (!strcmp(it->name(), "ref"))
+        else if (!strcmp (it->name(), "ref"))
             rrel.ways.push_back (std::stoll(it->value()));
-        else if (!strcmp(it->name(), "role"))
+        else if (!strcmp (it->name(), "role"))
         {
-            if (!strcmp(it->value(), "outer"))
+            if (!strcmp (it->value(), "outer"))
                 rrel.outer.push_back (true);
             else
                 rrel.outer.push_back (false);
@@ -212,13 +212,13 @@ inline void XmlPolys::traverseWay (XmlNodePtr pt, RawWay& rway)
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
-        if (!strcmp(it->name(), "k"))
+        if (!strcmp (it->name(), "k"))
             rway.key.push_back (it->value());
-        else if (!strcmp(it->name(), "v"))
+        else if (!strcmp (it->name(), "v"))
             rway.value.push_back (it->value());
-        else if (!strcmp(it->name(), "id"))
+        else if (!strcmp (it->name(), "id"))
             rway.id = std::stoll(it->value());
-        else if (!strcmp(it->name(), "ref"))
+        else if (!strcmp (it->name(), "ref"))
             rway.nodes.push_back (std::stoll(it->value()));
     }
     // allows for >1 child nodes
@@ -242,11 +242,11 @@ inline void XmlPolys::traverseNode (XmlNodePtr pt, Node& node)
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
-        if (!strcmp(it->name(), "id"))
+        if (!strcmp (it->name(), "id"))
             node.id = std::stoll(it->value());
-        else if (!strcmp(it->name(), "lat"))
+        else if (!strcmp (it->name(), "lat"))
             node.lat = std::stof(it->value());
-        else if (!strcmp(it->name(), "lon"))
+        else if (!strcmp (it->name(), "lon"))
             node.lon = std::stof(it->value());
     }
     // allows for >1 child nodes

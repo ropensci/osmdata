@@ -96,12 +96,12 @@ inline void XmlWays::traverseWays (XmlNodePtr pt)
     for (XmlNodePtr it = pt->first_node (); it != nullptr;
             it = it->next_sibling())
     {
-        if (!strcmp(it->name(), "node"))
+        if (!strcmp (it->name(), "node"))
         {
             traverseNode (it, node);
             m_nodes.insert (std::make_pair (node.id, node));
         }
-        else if (!strcmp(it->name(), "way"))
+        else if (!strcmp (it->name(), "way"))
         {
             rway.key.clear();
             rway.value.clear();
@@ -160,13 +160,13 @@ inline void XmlWays::traverseWay (XmlNodePtr pt, RawWay& rway)
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr; it =
             it->next_attribute())
     {
-        if (!strcmp(it->name(), "k"))
+        if (!strcmp (it->name(), "k"))
             rway.key.push_back (it->value());
-        else if (!strcmp(it->name(), "v"))
+        else if (!strcmp (it->name(), "v"))
             rway.value.push_back (it->value());
-        else if (!strcmp(it->name(), "id"))
+        else if (!strcmp (it->name(), "id"))
             rway.id = std::stoll(it->value());
-        else if (!strcmp(it->name(), "ref"))
+        else if (!strcmp (it->name(), "ref"))
             rway.nodes.push_back (std::stoll(it->value()));
     }
     // allows for >1 child nodes
@@ -190,11 +190,11 @@ inline void XmlWays::traverseNode (XmlNodePtr pt, Node& node)
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
-        if (!strcmp(it->name(), "id"))
+        if (!strcmp (it->name(), "id"))
             node.id = std::stoll(it->value());
-        else if (!strcmp(it->name(), "lat"))
+        else if (!strcmp (it->name(), "lat"))
             node.lat = std::stof(it->value());
-        else if (!strcmp(it->name(), "lon"))
+        else if (!strcmp (it->name(), "lon"))
             node.lon = std::stof(it->value());
     }
     // allows for >1 child nodes
