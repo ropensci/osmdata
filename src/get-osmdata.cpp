@@ -534,7 +534,7 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
 
     ret [2] = sp_points;
 
-    std::vector <std::string> retnames {"polygons", "lnes", "points"};
+    std::vector <std::string> retnames {"polygons", "lines", "points"};
     ret.attr ("names") = retnames;
     
     return ret;
