@@ -6,13 +6,9 @@
 #' @param doc Lines of data
 #' @export
 process_doc <- function(doc) {
-
-  list (
-        osm_nodes=rcpp_get_points (doc),
-        osm_ways=rcpp_get_lines (doc),
-        osm_polygons=rcpp_get_polygons (doc)
-  )
+    rcpp_get_osmdata (doc)
 }
+
 
 #' Convert a named matrix or a named vector (or an unnamed vector) return a string
 #'

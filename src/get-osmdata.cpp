@@ -37,14 +37,14 @@
 
 // [[Rcpp::depends(sp)]]
 
-//' rcpp_get_polygons
+//' rcpp_get_osmdata
 //'
 //' Extracts all polygons from an overpass API query
 //'
 //' @param st Text contents of an overpass API query
 //' @return A \code{SpatialLinesDataFrame} contains all polygons and associated data
 // [[Rcpp::export]]
-Rcpp::List rcpp_get_polygons (const std::string& st)
+Rcpp::List rcpp_get_osmdata (const std::string& st)
 {
 #ifdef DUMP_INPUT
     {
