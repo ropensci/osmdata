@@ -19,7 +19,8 @@
  *  Author:     Mark Padgham / Andrew Smith
  *  E-Mail:     mark.padgham@email.com / andrew@casacazaz.net
  *
- *  Description:    Class definition of XmlData
+ *  Description:    Main file to extract OSM data from an object of class
+ *                  XmlData.
  *
  *  Limitations:
  *
@@ -63,9 +64,6 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
     const std::vector <Relation>& rels = xml.relations ();
 
     int count = 0;
-    float xmin = FLOAT_MAX, xmax = -FLOAT_MAX,
-          ymin = FLOAT_MAX, ymax = -FLOAT_MAX;
-    // TODO: Calculate these from nodes only
     std::vector <float> lons, lats;
     std::unordered_set <std::string> idset; // see TODO below
     std::vector <std::string> colnames, rownames, polynames;
@@ -207,14 +205,6 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
             rownames.push_back (std::to_string (*itn));
         }
 
-        if (n > 0)
-        {
-            xmin = std::min (xmin, *std::min_element (lons.begin(), lons.end()));
-            xmax = std::max (xmax, *std::max_element (lons.begin(), lons.end()));
-            ymin = std::min (ymin, *std::min_element (lats.begin(), lats.end()));
-            ymax = std::max (ymax, *std::max_element (lats.begin(), lats.end()));
-        }
-
         nmat = Rcpp::NumericMatrix (Rcpp::Dimension (lons.size (), 2));
         std::copy (lons.begin (), lons.end (), nmat.begin ());
         std::copy (lats.begin (), lats.end (), nmat.begin () + lons.size ());
@@ -269,20 +259,10 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
     Rcpp::S4 sp_polys = sp_polys_call.eval ();
     sp_polys.slot ("polygons") = polyList;
 
-    sp_polys.slot ("bbox") = rcpp_get_bbox (xmin, xmax, ymin, ymax);
-
-    Rcpp::Language crs_call ("new", "CRS");
-    Rcpp::S4 crs = crs_call.eval ();
-    crs.slot ("projargs") = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0";
-    sp_polys.slot ("proj4string") = crs;
-
     Rcpp::CharacterMatrix kv_mat (nrow, ncol, kv_vec.begin());
     Rcpp::DataFrame kv_df = kv_mat;
     kv_df.attr ("names") = varnames;
     sp_polys.slot ("data") = kv_df;
-
-    Rcpp::List ret (3);
-    ret [0] = sp_polys;
 
     /************************************************************************
      ************************************************************************
@@ -359,14 +339,6 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
             rownames.push_back (std::to_string (*itn));
         }
 
-        if (n > 0)
-        {
-            xmin = std::min (xmin, *std::min_element (lons.begin(), lons.end()));
-            xmax = std::max (xmax, *std::max_element (lons.begin(), lons.end()));
-            ymin = std::min (ymin, *std::min_element (lats.begin(), lats.end()));
-            ymax = std::max (ymax, *std::max_element (lats.begin(), lats.end()));
-        }
-
         nmat2 = Rcpp::NumericMatrix (Rcpp::Dimension (lons.size (), 2));
         std::copy (lons.begin (), lons.end (), nmat2.begin ());
         std::copy (lats.begin (), lats.end (), nmat2.begin () + lons.size ());
@@ -431,16 +403,11 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
     sp_lines = sp_lines_call.eval ();
     sp_lines.slot ("lines") = lineList;
 
-    sp_lines.slot ("bbox") = rcpp_get_bbox (xmin, xmax, ymin, ymax);
-    sp_lines.slot ("proj4string") = crs; // already defined for polys
-
     Rcpp::CharacterMatrix kv_mat2 (nrow, ncol, kv_vec2.begin());
     Rcpp::DataFrame kv_df2 = kv_mat2;
     kv_df2.attr ("names") = varnames;
     sp_lines.slot ("data") = kv_df2;
 
-    ret [1] = sp_lines;
-    
     /************************************************************************
      ************************************************************************
      **                                                                    **
@@ -485,6 +452,7 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
         rownames.push_back (std::to_string (ni->first));
     }
 
+    float xmin, xmax, ymin, ymax;
     if (nodes.size () > 0)
     {
         xmin = std::min (xmin, *std::min_element (lons.begin(), lons.end()));
@@ -492,7 +460,6 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
         ymin = std::min (ymin, *std::min_element (lats.begin(), lats.end()));
         ymax = std::max (ymax, *std::max_element (lats.begin(), lats.end()));
     }
-
 
     // Store all key-val pairs in one massive DF
     nrow = nodes.size (); 
@@ -529,12 +496,25 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
     sp_points = sp_points_call.eval ();
     sp_points.slot ("data") = kv_df3;
     sp_points.slot ("coords") = nmat3;
-    sp_points.slot ("bbox") = rcpp_get_bbox (xmin, xmax, ymin, ymax);
+
+    Rcpp::NumericMatrix bbox = rcpp_get_bbox (xmin, xmax, ymin, ymax);
+    sp_points.slot ("bbox") = bbox;
+    sp_lines.slot ("bbox") = bbox;
+    sp_polys.slot ("bbox") = bbox;
+
+    Rcpp::Language crs_call ("new", "CRS");
+    Rcpp::S4 crs = crs_call.eval ();
+    crs.slot ("projargs") = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0";
     sp_points.slot ("proj4string") = crs;
+    sp_lines.slot ("proj4string") = crs; // already defined for polys
+    sp_polys.slot ("proj4string") = crs;
 
-    ret [2] = sp_points;
+    Rcpp::List ret (3);
+    ret [0] = sp_points;
+    ret [1] = sp_lines;
+    ret [2] = sp_polys;
 
-    std::vector <std::string> retnames {"polygons", "lines", "points"};
+    std::vector <std::string> retnames {"points", "lines", "polygons"};
     ret.attr ("names") = retnames;
     
     return ret;
