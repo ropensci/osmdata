@@ -462,7 +462,7 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
         rownames.push_back (std::to_string (ni->first));
     }
 
-    float xmin, xmax, ymin, ymax;
+    float xmin=FLOAT_MAX, xmax=-FLOAT_MAX, ymin=FLOAT_MAX, ymax=-FLOAT_MAX;
     if (nodes.size () > 0)
     {
         xmin = std::min (xmin, *std::min_element (lons.begin(), lons.end()));
@@ -470,6 +470,9 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
         ymin = std::min (ymin, *std::min_element (lats.begin(), lats.end()));
         ymax = std::max (ymax, *std::max_element (lats.begin(), lats.end()));
     }
+    if (fabs (xmin) == FLOAT_MAX || fabs (xmax) == FLOAT_MAX ||
+            fabs (ymin) == FLOAT_MAX || fabs (ymax) == FLOAT_MAX)
+        throw std::runtime_error ("No bounding box able to be determined");
 
     // Store all key-val pairs in one massive DF
     nrow = nodes.size (); 
