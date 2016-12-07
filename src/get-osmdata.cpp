@@ -217,10 +217,15 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
 
         //Rcpp::S4 poly = Rcpp::Language ("Polygon", nmat).eval ();
         Rcpp::S4 poly = Polygon (nmat);
+        poly.slot ("hole") = false;
+        poly.slot ("ringDir") = (int) 1;
         dummy_list.push_back (poly);
         polygons = polygons_call.eval ();
         polygons.slot ("Polygons") = dummy_list;
         polygons.slot ("ID") = id;
+        polygons.slot ("plotOrder") = (int) 1;
+        polygons.slot ("labpt") = poly.slot ("labpt");
+        polygons.slot ("area") = poly.slot ("area");
         polyList [count++] = polygons;
 
         dummy_list.erase (0);
@@ -258,6 +263,11 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
     Rcpp::Language sp_polys_call ("new", "SpatialPolygonsDataFrame");
     Rcpp::S4 sp_polys = sp_polys_call.eval ();
     sp_polys.slot ("polygons") = polyList;
+    // Fill plotOrder slot with numeric vector
+    std::vector <int> plord;
+    for (int i=0; i<nrow; i++) plord.push_back (i + 1);
+    sp_polys.slot ("plotOrder") = plord;
+    plord.clear ();
 
     Rcpp::CharacterMatrix kv_mat (nrow, ncol, kv_vec.begin());
     Rcpp::DataFrame kv_df = kv_mat;
@@ -460,6 +470,8 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
         ymin = std::min (ymin, *std::min_element (lats.begin(), lats.end()));
         ymax = std::max (ymax, *std::max_element (lats.begin(), lats.end()));
     }
+    Rcpp::Rcout << "X(min, max) = (" << xmin << ", " << xmax <<
+        "); Y(min, max) = (" << ymin << ", " << ymax << ")" << std::endl;
 
     // Store all key-val pairs in one massive DF
     nrow = nodes.size (); 

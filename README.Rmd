@@ -42,7 +42,7 @@ devtools::install_github("osmdatar/osmdata")
 wd <- getwd ()
 while (length (grep ('osmdata', getwd ())) > 0) setwd ("..")
 devtools::load_all ("osmdata")
-devtools::load_all ("osmdata", recompile=TRUE)
+#devtools::load_all ("osmdata", recompile=TRUE)
 #devtools::document ("osmdata")
 #goodpractice::gp ("osmdata")
 setwd (wd)
@@ -63,14 +63,8 @@ packageVersion("osmdata")
 ```{r}
 doc <- xml2::read_xml ("export.osm", encoding="UTF-8")
 res <- process_doc (as (doc, "character"))
-summary (res$osm_polygons)
-df <- slot (res$osm_polygons [[1]], "data")
-indx <- as.numeric (which (apply (df, 2, function (i) 
-                                  length (table (i, useNA="always")) > 1)))
-names (df) [indx]
-names (df) [which (!seq (ncol (df)) %in% indx)]
-indx2 <- which (!seq (ncol (df)) %in% indx)
-slot (res$osm_polygons [[1]], "data") <- df [,indx]
+df <- slot (res$polygons, "data")
+df <- slot (res$points, "data")
 ```
 
 [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be
