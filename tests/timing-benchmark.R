@@ -14,17 +14,17 @@ benchmark <- function ()
 
     objs <- c ("points", "lines", "multipolygons", "other_relations")
     mt_sf <- size_sf <- NULL
-    for (i in seq (objs))
-    {
-        mb <- microbenchmark::microbenchmark (
-           dat <- sf::st_read ("export.osm", layer=objs [i], quiet=TRUE) , times=10L)
-        size_sf <- c (size_sf, object.size (dat))
-        mt_sf <- c (mt_sf, median (mb$time))
-        cat ("\r", i, " / ", length (objs))
-    }
-    mt_sf <- mt_sf / 1e6 # nano-seconds to milli-seconds
-    cat ("\rSF: Median times (in ms) for (", paste (objs), "):\n")
-    cat ("\t(", mt_sf, "); total = ", sum (mt_sf), "\n")
+    #for (i in seq (objs))
+    #{
+    #    mb <- microbenchmark::microbenchmark (
+    #       dat <- sf::st_read ("export.osm", layer=objs [i], quiet=TRUE) , times=10L)
+    #    size_sf <- c (size_sf, object.size (dat))
+    #    mt_sf <- c (mt_sf, median (mb$time))
+    #    cat ("\r", i, " / ", length (objs))
+    #}
+    #mt_sf <- mt_sf / 1e6 # nano-seconds to milli-seconds
+    #cat ("\rSF: Median times (in ms) for (", paste (objs), "):\n")
+    #cat ("\t(", mt_sf, "); total = ", sum (mt_sf), "\n")
 
     # Code from overpass_query
     # TODO: modify overpass_query to pre-downloaded data can be passed
