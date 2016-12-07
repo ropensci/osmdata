@@ -50,6 +50,10 @@ setwd (wd)
 #testthat::test_dir ("./tests/")
 #Rcpp::compileAttributes()
 ```
+```{r cachegrind, echo=FALSE, eval=FALSE}
+R -d "valgrind --tool=callgrind" -f test.R
+kcachegrind callgrind.out.<pid>
+```
 
 Current verison:
 
@@ -60,13 +64,6 @@ packageVersion("osmdata")
 
 ### Usage
 
-```{r}
-doc <- xml2::read_xml ("export.osm", encoding="UTF-8")
-res <- process_doc (as (doc, "character"))
-df <- slot (res$polygons, "data")
-df <- slot (res$points, "data")
-```
-
 [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be
 built from a base query constructed with `opq` followed by `add_feature`. The
 corresponding OSM objects are then downloaded and converted to `sp` objects with
@@ -75,7 +72,7 @@ corresponding OSM objects are then downloaded and converted to `sp` objects with
 ```{r query1}
 q0 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) # Central London, U.K.
 q1 <- add_feature (q0, key='building')
-bu <- overpass_query (q1)
+bu <- overpass_query (q1, quiet=TRUE)
 bu
 ```
 
@@ -84,13 +81,13 @@ or,
 ```{r query2}
 q2 <- add_feature (q0, key='highway', value='secondary')
 q2 <- add_feature (q0, key='highway')
-hs <- overpass_query (q2)
+hs <- overpass_query (q2, quiet=TRUE)
 hs
 ```
 
 Plotting with `sp`:
 ```{r plot1, eval=FALSE}
-sp::plot (bu$osm_lines)
+sp::plot (bu$osm_polygons)
 lines (hs$osm_lines, col="red")
 ```
 ![](./fig/README-plot1.png)

@@ -1,3 +1,5 @@
+zR--- output: rmarkdown::github\_document ---
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Build Status](https://travis-ci.org/osmdatar/osmdata.svg?branch=master)](https://travis-ci.org/osmdatar/osmdata) [![codecov](https://codecov.io/gh/osmdatar/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/osmdatar/osmdata) [![Project Status: WIP](http://www.repostatus.org/badges/0.1.0/wip.svg)](http://www.repostatus.org/#wip) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/osmdata)](http://cran.r-project.org/web/packages/osmdata)
 
@@ -29,18 +31,15 @@ packageVersion("osmdata")
 ``` r
 q0 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) # Central London, U.K.
 q1 <- add_feature (q0, key='building')
-bu <- overpass_query (q1)
-#> Issuing query to OSM Overpass...
-#> Rate limit: 2
-#> Query complete!
+bu <- overpass_query (q1, quiet=TRUE)
 bu
 #> Object of class 'osmdata' with:
 #>   $bbox          : 51.51,-0.12,51.52,-0.11
 #>   $overpass_call : The call submitted to the overpass API
-#>   $timestamp     : [ Thu Dec  1 17:45:14 2016 ]
+#>   $timestamp     : [ Wed Dec  7 20:04:25 2016 ]
 #>   $osm_points    : 'sp' SpatialPointsDataFrame   with 5071 points
-#>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 578 lines
-#>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 34 polygons
+#>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 14 lines
+#>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 578 polygons
 ```
 
 or,
@@ -48,24 +47,21 @@ or,
 ``` r
 q2 <- add_feature (q0, key='highway', value='secondary')
 q2 <- add_feature (q0, key='highway')
-hs <- overpass_query (q2)
-#> Issuing query to OSM Overpass...
-#> Rate limit: 2
-#> Query complete!
+hs <- overpass_query (q2, quiet=TRUE)
 hs
 #> Object of class 'osmdata' with:
 #>   $bbox          : 51.51,-0.12,51.52,-0.11
 #>   $overpass_call : The call submitted to the overpass API
-#>   $timestamp     : [ Thu Dec  1 17:45:16 2016 ]
+#>   $timestamp     : [ Wed Dec  7 20:04:27 2016 ]
 #>   $osm_points    : 'sp' SpatialPointsDataFrame   with 1984 points
-#>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 575 lines
-#>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 8 polygons
+#>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 545 lines
+#>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 34 polygons
 ```
 
 Plotting with `sp`:
 
 ``` r
-sp::plot (bu$osm_lines)
+sp::plot (bu$osm_polygons)
 lines (hs$osm_lines, col="red")
 ```
 
@@ -179,7 +175,7 @@ frb <- res$osm_lines
 
 ``` r
 date()
-#> [1] "Thu Dec  1 17:45:17 2016"
+#> [1] "Wed Dec  7 20:04:27 2016"
 
 testthat::test_dir("tests/")
 #> testthat results ===========================================================
