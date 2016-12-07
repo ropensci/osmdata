@@ -146,16 +146,11 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
   else
       doc <- httr::content (res, as="text", encoding="UTF-8")
 
-  res <- process_doc (doc)
+  res <- rcpp_get_osmdata (doc)
 
-  obj$osm_points <- obj$osm_lines <- obj$osm_polygons <- NULL
-
-  if (length(res$osm_nodes) != 0)
-    obj$osm_points <- res$osm_nodes
-  if (length(res$osm_ways) != 0)
-    obj$osm_lines <- res$osm_ways
-  if (length(res$osm_polygons) != 0)
-    obj$osm_polygons <- res$osm_polygons
+  obj$osm_points <- res$points
+  obj$osm_lines <- res$lines
+  obj$osm_polygons <- res$polygons
 
   return (obj)
 }

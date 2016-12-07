@@ -1,14 +1,6 @@
 # for CRAN checks until I switch to underscore versions of dplyr stuff
 . <- k <- v <- way_id <- id <- lon <- lat <- NULL
-
-#' process an OSM response document
-#' 
-#' @param doc Lines of data
-#' @export
-process_doc <- function(doc) {
-    rcpp_get_osmdata (doc)
-}
-
+# MP: TODO: Delete those?
 
 #' Convert a named matrix or a named vector (or an unnamed vector) return a string
 #'
