@@ -28,6 +28,7 @@ read_osm <- function(osm_response, encoding = "") {
 
   doc <- xml2::read_xml(osm_response, encoding=encoding)
 
-  process_doc(doc)
+  #process_doc(doc)
+  rcpp_get_osmdata (doc)
 
 }

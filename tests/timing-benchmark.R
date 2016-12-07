@@ -17,7 +17,7 @@ benchmark <- function ()
     for (i in seq (objs))
     {
         mb <- microbenchmark::microbenchmark (
-           dat <- sf:::st_read ("export.osm", layer=objs [i], quiet=TRUE) , times=10L)
+           dat <- sf::st_read ("export.osm", layer=objs [i], quiet=TRUE) , times=10L)
         size_sf <- c (size_sf, object.size (dat))
         mt_sf <- c (mt_sf, median (mb$time))
         cat ("\r", i, " / ", length (objs))
