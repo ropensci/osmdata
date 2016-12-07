@@ -519,7 +519,7 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
     Rcpp::S4 crs = crs_call.eval ();
     crs.slot ("projargs") = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0";
     sp_points.slot ("proj4string") = crs;
-    sp_lines.slot ("proj4string") = crs; // already defined for polys
+    sp_lines.slot ("proj4string") = crs; 
     sp_polys.slot ("proj4string") = crs;
 
     Rcpp::List ret (3);

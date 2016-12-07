@@ -8,8 +8,8 @@ benchmark <- function ()
     query <- paste0 (c (q1$features, q1$suffix), collapse="\n")
 
     base_url <- "http://overpass-api.de/api/interpreter"
-    dat <- httr::POST (base_url, body=query)
-    doc_xml <- xml2::read_xml (httr::content (dat, as="text", encoding="UTF-8"))
+    doc <- httr::POST (base_url, body=query)
+    doc_xml <- xml2::read_xml (httr::content (doc, as="text", encoding="UTF-8"))
     xml2::write_xml (doc_xml, file="export.osm")
 
     objs <- c ("points", "lines", "multipolygons", "other_relations")
@@ -28,8 +28,7 @@ benchmark <- function ()
 
     # Code from overpass_query
     # TODO: modify overpass_query to pre-downloaded data can be passed
-    res <- httr::POST (base_url, body=query)
-    doc <- httr::content (res, as="text", encoding="UTF-8")
+    doc <- httr::content (doc, as="text", encoding="UTF-8")
 
     f <- function ()
     {
