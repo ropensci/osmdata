@@ -470,8 +470,6 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
         ymin = std::min (ymin, *std::min_element (lats.begin(), lats.end()));
         ymax = std::max (ymax, *std::max_element (lats.begin(), lats.end()));
     }
-    Rcpp::Rcout << "X(min, max) = (" << xmin << ", " << xmax <<
-        "); Y(min, max) = (" << ymin << ", " << ymax << ")" << std::endl;
 
     // Store all key-val pairs in one massive DF
     nrow = nodes.size (); 
