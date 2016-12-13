@@ -34,7 +34,7 @@ bu
 #> Object of class 'osmdata' with:
 #>   $bbox          : 51.51,-0.12,51.52,-0.11
 #>   $overpass_call : The call submitted to the overpass API
-#>   $timestamp     : [ Tue Dec 13 15:11:49 2016 ]
+#>   $timestamp     : [ Tue Dec 13 15:33:04 2016 ]
 #>   $osm_points    : 'sp' SpatialPointsDataFrame   with 5071 points
 #>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 14 lines
 #>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 578 polygons
@@ -50,7 +50,7 @@ hs
 #> Object of class 'osmdata' with:
 #>   $bbox          : 51.51,-0.12,51.52,-0.11
 #>   $overpass_call : The call submitted to the overpass API
-#>   $timestamp     : [ Tue Dec 13 15:11:52 2016 ]
+#>   $timestamp     : [ Tue Dec 13 15:33:05 2016 ]
 #>   $osm_points    : 'sp' SpatialPointsDataFrame   with 1984 points
 #>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 545 lines
 #>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 34 polygons
@@ -81,90 +81,37 @@ The following functions are implemented:
 - `overpass_status`:    Retrieve status of the Overpass API
 - `read_osm`:   Read an XML OSM Overpass response from path
 -->
-### Usage
+### Further examples
 
 ``` r
-# CSV example
-osmcsv <- '[out:csv(::id,::type,"name")];
-area[name="Bonn"]->.a;
-( node(area.a)[railway=station];
-  way(area.a)[railway=station];
-  rel(area.a)[railway=station]; );
-out;'
-
-obj <- overpass_query(osmcsv)
-read.table(text = obj, sep="\t", header=TRUE, 
-           check.names=FALSE, stringsAsFactors=FALSE)
+q0 <- opq (bbox=getbb ("Bonn")) # Bonn, Germany
+q1 <- add_feature (q0, key="railway", value="station")
+overpass_query (q1, quiet=TRUE)
+#> Object of class 'osmdata' with:
+#>   $bbox          : 50.575851,6.94066,50.895851,7.26066
+#>   $overpass_call : The call submitted to the overpass API
+#>   $timestamp     : [ Tue Dec 13 15:33:09 2016 ]
+#>   $osm_points    : 'sp' SpatialPointsDataFrame   with 43 points
+#>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 0 lines
+#>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 1 polygons
 ```
 
 ``` r
-# just nodes
-only_nodes <- '[out:xml];
-node
-  ["highway"="bus_stop"]
-  ["shelter"]
-  ["shelter"!~"no"]
-  (50.7,7.1,50.8,7.25);
-out body;'
-
-pts <- overpass_query(only_nodes)$osm_points
-sp::plot(pts)
+q0 <- opq (bbox=c(7.1,50.7,7.25,50.8))
+q1 <- add_feature (q0, key="highway", value="bus_stop")
+q1 <- add_feature (q1, key="shelter")
+q1 <- add_feature (q1, key="shelter", value="!no")
+pts <- overpass_query (q1, quiet=TRUE)
+sp::plot (pts$osm_points)
 ```
 
 ![](./fig/README-only_nodes.png)
 
 ``` r
-# ways & nodes
-nodes_and_ways <- '[out:xml];
-(node["amenity"="fire_station"]
-    (50.6,7.0,50.8,7.3);
-  way["amenity"="fire_station"]
-    (50.6,7.0,50.8,7.3);
-  rel["amenity"="fire_station"]
-    (50.6,7.0,50.8,7.3););
-(._;>;);
-out;'
-
-wys <- overpass_query(nodes_and_ways)
-sp::plot(wys$osm_lines)
-```
-
-![](./fig/README-nodes_and_ways.png)
-
-``` r
-# xml version of the query
-actual_ways <- '<osm-script output="xml">
-  <query type="way">
-    <bbox-query e="7.157" n="50.748" s="50.746" w="7.154"/>
-  </query>
-  <union>
-    <item/>
-    <recurse type="down"/>
-  </union>
-  <print/>
-</osm-script>'
-
-awy <- overpass_query(actual_ways)
-sp::plot(awy$osm_lines)
-```
-
-![](./fig/README-actual_ways.png)
-
-``` r
-# more complex example: motorways surrounding London
-# warning: may take a few minutes to run
-from_robin <- '[out:xml][timeout:100];
-(
-  node["highway"="motorway"](51.24,-0.61,51.73,0.41);
-  way["highway"="motorway"](51.24,-0.61,51.73,0.41);
-  relation["highway"="motorway"](51.24,-0.61,51.73,0.41);
-);
-out body;
->;
-out skel qt;'
-
-res <- overpass_query(from_robin)
-frb <- res$osm_lines
+q0 <- opq (bbox=getbb ("London, UK"))
+q1 <- add_feature (q0, key="highway", value="motorway")
+lon <- overpass_query (q1, quiet=TRUE)
+sp::plot (lon$osm_lines)
 ```
 
 ![](./fig/README-london-motorways.png)
@@ -173,7 +120,7 @@ frb <- res$osm_lines
 
 ``` r
 date()
-#> [1] "Tue Dec 13 15:11:52 2016"
+#> [1] "Tue Dec 13 15:33:09 2016"
 
 testthat::test_dir("tests/")
 #> testthat results ===========================================================

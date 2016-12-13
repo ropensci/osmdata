@@ -39,13 +39,10 @@ devtools::install_github("osmdatar/osmdata")
 ```
 
 ```{r usage2, echo=FALSE}
-wd <- getwd ()
-while (length (grep ('osmdata', getwd ())) > 0) setwd ("..")
-devtools::load_all ("osmdata")
-#devtools::load_all ("osmdata", recompile=TRUE)
-#devtools::document ("osmdata")
-#goodpractice::gp ("osmdata")
-setwd (wd)
+devtools::load_all (".")
+#devtools::load_all (".", recompile=TRUE)
+#devtools::document (".")
+#goodpractice::gp (".")
 #devtools::check (".")
 #testthat::test_dir ("./tests/")
 #Rcpp::compileAttributes()
@@ -117,88 +114,35 @@ The following functions are implemented:
 -->
 
 
-### Usage
+### Further examples
 
-```{r csv, cache=TRUE, eval=FALSE}
-# CSV example
-osmcsv <- '[out:csv(::id,::type,"name")];
-area[name="Bonn"]->.a;
-( node(area.a)[railway=station];
-  way(area.a)[railway=station];
-  rel(area.a)[railway=station]; );
-out;'
-
-obj <- overpass_query(osmcsv)
-read.table(text = obj, sep="\t", header=TRUE, 
-           check.names=FALSE, stringsAsFactors=FALSE)
-
+```{r bonn-example, eval=TRUE}
+q0 <- opq (bbox=getbb ("Bonn")) # Bonn, Germany
+q1 <- add_feature (q0, key="railway", value="station")
+overpass_query (q1, quiet=TRUE)
 ```
 
-```{r only_nodes, eval=FALSE}
-# just nodes
-only_nodes <- '[out:xml];
-node
-  ["highway"="bus_stop"]
-  ["shelter"]
-  ["shelter"!~"no"]
-  (50.7,7.1,50.8,7.25);
-out body;'
-
-pts <- overpass_query(only_nodes)$osm_points
-sp::plot(pts)
+```{r} bus-stop-example, eval=FALSE}
+q0 <- opq (bbox=c(7.1,50.7,7.25,50.8))
+q1 <- add_feature (q0, key="highway", value="bus_stop")
+q1 <- add_feature (q1, key="shelter")
+q1 <- add_feature (q1, key="shelter", value="!no")
+pts <- overpass_query (q1, quiet=TRUE)
+sp::plot (pts$osm_points)
 ```
+
 ![](./fig/README-only_nodes.png)
 
-```{r nodes_and_ways, eval=FALSE}
-# ways & nodes
-nodes_and_ways <- '[out:xml];
-(node["amenity"="fire_station"]
-    (50.6,7.0,50.8,7.3);
-  way["amenity"="fire_station"]
-    (50.6,7.0,50.8,7.3);
-  rel["amenity"="fire_station"]
-    (50.6,7.0,50.8,7.3););
-(._;>;);
-out;'
-
-wys <- overpass_query(nodes_and_ways)
-sp::plot(wys$osm_lines)
+```{r, echo=FALSE}
+# Note that the following generates a slightly smaller bb than the manual one
+# used for # the figure of (-0.61,51.24,0.41,51.73)
 ```
-![](./fig/README-nodes_and_ways.png)
-
-```{r actual_ways, eval=FALSE}
-# xml version of the query
-actual_ways <- '<osm-script output="xml">
-  <query type="way">
-    <bbox-query e="7.157" n="50.748" s="50.746" w="7.154"/>
-  </query>
-  <union>
-    <item/>
-    <recurse type="down"/>
-  </union>
-  <print/>
-</osm-script>'
-
-awy <- overpass_query(actual_ways)
-sp::plot(awy$osm_lines)
-```
-![](./fig/README-actual_ways.png)
 
 ```{r london-motorways, eval=FALSE}
-# more complex example: motorways surrounding London
-# warning: may take a few minutes to run
-from_robin <- '[out:xml][timeout:100];
-(
-  node["highway"="motorway"](51.24,-0.61,51.73,0.41);
-  way["highway"="motorway"](51.24,-0.61,51.73,0.41);
-  relation["highway"="motorway"](51.24,-0.61,51.73,0.41);
-);
-out body;
->;
-out skel qt;'
-
-res <- overpass_query(from_robin)
-frb <- res$osm_lines
+q0 <- opq (bbox=getbb ("London, UK"))
+q1 <- add_feature (q0, key="highway", value="motorway")
+lon <- overpass_query (q1, quiet=TRUE)
+sp::plot (lon$osm_lines)
 ```
 ![](./fig/README-london-motorways.png)
 
