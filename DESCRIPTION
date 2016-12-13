@@ -29,6 +29,7 @@ Imports:
     lubridate,
     Rcpp (>= 0.12.4),
     rvest,
+    jsonlite,
     sp,
     utils,
     xml2
