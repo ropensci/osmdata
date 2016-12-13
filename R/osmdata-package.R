@@ -41,4 +41,5 @@
 #' @importFrom utils read.table timestamp
 #' @importFrom xml2 read_html read_xml xml_attr
 #' @useDynLib osmdata
+#' @importFrom jsonlite fromJSON
 NULL
