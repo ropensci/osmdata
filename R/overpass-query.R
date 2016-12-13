@@ -120,7 +120,6 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
   obj$overpass_call <- query
 
   if (o_stat$available) {
-    #make_query(query, quiet)
     res <- httr::POST (base_url, body=query)
     obj$timestamp <- timestamp (quiet=TRUE, prefix="[ ", suffix=" ]")
   } else {
