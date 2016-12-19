@@ -12,7 +12,6 @@ makefile$
 ^CONDUCT\.md$
 
 # Non-exported man files
-man/rcpp_get_points.Rd
-man/rcpp_get_lines.Rd
-man/rcpp_get_polygons.Rd
+man/rcpp_get_osmdata.Rd
+man/stub.Rd
 

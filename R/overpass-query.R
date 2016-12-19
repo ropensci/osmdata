@@ -143,12 +143,5 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
   # TODO: Just return the direct httr::POST result here and convert in the
   # subsequent functions (`osmdata_xml/csv/sp/sf`).
 
-  #res <- rcpp_get_osmdata (doc)
-
-  #obj$osm_points <- res$points
-  #obj$osm_lines <- res$lines
-  #obj$osm_polygons <- res$polygons
-
-  #return (obj)
   return (doc)
 }
