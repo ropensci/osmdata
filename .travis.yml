@@ -1,14 +1,21 @@
 language: r
 warnings_are_errors: true
-sudo: required
+sudo: false
 
-r:
-    #- devel
-    - release
-
-#env:
-# global:
-#   - CRAN: http://cran.rstudio.com
+matrix:
+    include:
+        - r: release
+          env: DEPS=cran
+          os: linux
+        - r: release
+          env: DEPS=cran
+          os: osx
+        - r: oldrel
+          env: DEPS=cran
+          os: linux
+        - r: oldrel
+          env: DEPS=cran
+          os: osx
 
 notifications:
   email:
