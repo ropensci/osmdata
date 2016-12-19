@@ -39,9 +39,10 @@ devtools::install_github("osmdatar/osmdata")
 ```
 
 ```{r usage2, echo=FALSE}
-devtools::load_all (".")
+#devtools::load_all (".")
+devtools::load_all (".", export_all=FALSE)
 #devtools::load_all (".", recompile=TRUE)
-#devtools::document (".")
+devtools::document (".")
 #goodpractice::gp (".")
 #devtools::check (".")
 #testthat::test_dir ("./tests/")
@@ -70,6 +71,7 @@ corresponding OSM objects are then downloaded and converted to `sp` objects with
 q0 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) # Central London, U.K.
 q1 <- add_feature (q0, key='building')
 bu <- overpass_query (q1, quiet=TRUE)
+bu <- osm_to_sp (q1, quiet=FALSE)
 bu
 ```
 

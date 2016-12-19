@@ -24,8 +24,11 @@
 #' sp::plot(p$osm_polygons[1,])
 #' }
 opq <- function(bbox=NULL) {
-  return(list(bbox=bbox_to_string(bbox),
-              features=c("[out:xml][timeout:25];\n(\n")))
+    # TODO: Do we really need these [out:xml][timeout] specifiers?
+    res <- list(bbox=bbox_to_string(bbox),
+              features=c("[out:xml][timeout:25];\n(\n"))
+    class (res) <- c (class (res), "overpass_query")
+    return (res)
 }
 
 #' Add a feature to an Overpass query
