@@ -14,4 +14,4 @@ makefile$
 # Non-exported man files
 man/rcpp_get_osmdata.Rd
 man/stub.Rd
-
+^appveyor\.yml$
