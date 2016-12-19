@@ -16,6 +16,12 @@ matrix:
         - r: oldrel
           env: DEPS=cran
           os: osx
+        - r: devel
+          env: DEPS=cran
+          os: linux
+        - r: devel
+          env: DEPS=cran
+          os: osx
 
 notifications:
   email:
