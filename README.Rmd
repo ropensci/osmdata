@@ -42,7 +42,7 @@ devtools::install_github("osmdatar/osmdata")
 #devtools::load_all (".")
 devtools::load_all (".", export_all=FALSE)
 #devtools::load_all (".", recompile=TRUE)
-devtools::document (".")
+#devtools::document (".")
 #goodpractice::gp (".")
 #devtools::check (".")
 #testthat::test_dir ("./tests/")
@@ -65,13 +65,12 @@ packageVersion("osmdata")
 [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be
 built from a base query constructed with `opq` followed by `add_feature`. The
 corresponding OSM objects are then downloaded and converted to `sp` objects with
-`overpass_query`. For example,
+`osmdata_sp`. For example,
 
 ```{r query1}
 q0 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) # Central London, U.K.
 q1 <- add_feature (q0, key='building')
-bu <- overpass_query (q1, quiet=TRUE)
-bu <- osm_to_sp (q1, quiet=FALSE)
+bu <- osmdata_sp (q1)
 bu
 ```
 
@@ -80,7 +79,7 @@ or,
 ```{r query2}
 q2 <- add_feature (q0, key='highway', value='secondary')
 q2 <- add_feature (q0, key='highway')
-hs <- overpass_query (q2, quiet=TRUE)
+hs <- osmdata_sp (q2)
 hs
 ```
 
@@ -90,6 +89,13 @@ sp::plot (bu$osm_polygons)
 lines (hs$osm_lines, col="red")
 ```
 ![](./fig/README-plot1.png)
+
+OSM data can also be downloaded in OSM XML format with `osmdata_xml` and saved
+for use with other software.
+```{r query3, eval=FALSE}
+bu_xml <- osmdata_xml (q1)
+xml2::write_xml (bu_xml, file="buildings.osm")
+```
 
 The [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) provides
 access to OSM elements selected by search criteria such as location, types of

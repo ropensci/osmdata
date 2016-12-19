@@ -35,11 +35,11 @@
 #' @import sp
 #' @importFrom curl has_internet
 #' @importFrom httr content GET POST stop_for_status
-#' @importFrom lubridate force_tz ymd_hms 
+#' @importFrom lubridate force_tz ymd_hms wday day month year
 #' @importFrom Rcpp evalCpp
 #' @importFrom rvest html_attr html_nodes
 #' @importFrom utils read.table timestamp
-#' @importFrom xml2 read_html read_xml xml_attr
+#' @importFrom xml2 read_html read_xml xml_attr xml_text xml_find_all
 #' @useDynLib osmdata
 #' @importFrom jsonlite fromJSON
 NULL

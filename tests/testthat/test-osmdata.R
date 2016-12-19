@@ -75,8 +75,13 @@ test_that ("make_query", {
             function (x, ...) cfm_output_overpass_query$content )
     } 
     # NOTE: This still issues a query for overpass_status
-    res <- overpass_query (qry)
+    res <- osmdata_xml (qry)
+    expect_true (is (res, "xml_document"))
+    res <- osmdata_sp (qry)
     expect_s3_class (res, "osmdata")
+    expect_named (res, expected=c ("bbox", "overpass_call", "timestamp",
+                                   "osm_points", "osm_lines", "osm_polygons"),
+                  ignore.order=FALSE)
   }
 })
 

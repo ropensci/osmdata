@@ -5,7 +5,7 @@
 \title{Issue OSM Overpass Query}
 \usage{
 overpass_query(query, quiet = FALSE, wait = TRUE, pad_wait = 5,
-  base_url = "http://overpass-api.de/api/interpreter")
+  base_url = "http://overpass-api.de/api/interpreter", encoding)
 }
 \arguments{
 \item{query}{OSM Overpass query. Please note that the function is in ALPHA
@@ -26,6 +26,10 @@ next query start time by \code{pad_wait} seconds (default = 5 seconds).}
 
 \item{base_url}{the url of the server running overpass to be queried, set to
 \url{http://overpass-api.de/api/interpreter} by default.}
+
+\item{encoding}{Unless otherwise specified XML documents are assumed to be
+encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
+an explicit encoding directive, this allows you to supply a default.}
 }
 \value{
 If the \code{query} result only has OSM \code{node}s then the

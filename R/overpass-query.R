@@ -52,6 +52,9 @@ overpass_status <- function(quiet=FALSE) {
 #'        next query start time by \code{pad_wait} seconds (default = 5 seconds).
 #' @param base_url the url of the server running overpass to be queried, set to
 #'        \url{http://overpass-api.de/api/interpreter} by default.
+#' @param encoding Unless otherwise specified XML documents are assumed to be
+#'        encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
+#'        an explicit encoding directive, this allows you to supply a default.
 #'
 #' @note wrap function with \code{httr::with_verbose} if you want to see the
 #'       \code{httr} query (useful for debugging connection issues).\cr \cr 
@@ -79,10 +82,13 @@ overpass_status <- function(quiet=FALSE) {
 #' pts <- overpass_query(only_nodes)
 #' }
 overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
-                            base_url="http://overpass-api.de/api/interpreter") {
+                            base_url="http://overpass-api.de/api/interpreter",
+                            encoding) {
 
   if (missing (query))
     stop ("query must be supplied", call.=FALSE)
+  if (missing (encoding)) # TODO: Delete that once this function is no longer exported
+    encoding <- 'UTF-8'
   
   if (!all (sapply (query, class) == "character"))
     stop ("Elements in query must contain nothing but character strings", call.=FALSE)
@@ -108,20 +114,11 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
 
   o_stat <- overpass_status (quiet)
 
-  obj <- osmdata () # uses class def
-  
-  if(is.list(query)) {
-    
-    obj$bbox <- query$bbox
+  if(is.list(query)) 
     query <- paste0 (c (query$features, query$suffix), collapse="\n")
-    
-  }
-
-  obj$overpass_call <- query
 
   if (o_stat$available) {
     res <- httr::POST (base_url, body=query)
-    obj$timestamp <- timestamp (quiet=TRUE, prefix="[ ", suffix=" ]")
   } else {
     if (wait) {
        wait <- max(0, as.numeric(difftime(o_stat$next_slot, Sys.time(), 
@@ -130,7 +127,6 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
        Sys.sleep (wait)
        #make_query (query, quiet)
        res <- httr::POST (base_url, body=query)
-       obj$timestamp <- timestamp (quiet=TRUE, prefix="[ ", suffix=" ]")
     } else {
       stop ("Overpass query unavailable", call.=FALSE)
     }
@@ -144,12 +140,15 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
       doc <- rawToChar (res)  
   else
       doc <- httr::content (res, as="text", encoding="UTF-8")
+  # TODO: Just return the direct httr::POST result here and convert in the
+  # subsequent functions (`osmdata_xml/csv/sp/sf`).
 
-  res <- rcpp_get_osmdata (doc)
+  #res <- rcpp_get_osmdata (doc)
 
-  obj$osm_points <- res$points
-  obj$osm_lines <- res$lines
-  obj$osm_polygons <- res$polygons
+  #obj$osm_points <- res$points
+  #obj$osm_lines <- res$lines
+  #obj$osm_polygons <- res$polygons
 
-  return (obj)
+  #return (obj)
+  return (doc)
 }
