@@ -30,9 +30,9 @@ if(curl::has_internet()){
   getbb("Salzburg")
   # refine the search to the USA
   place_name = "Hereford"
-  getbb(place_name)
-  bb_usa = getbb("United States")
-  viewbox = bbox_to_string(bb_usa)
+  getbb(place_name, silent = FALSE)
+  bb_usa <- getbb("United States")
+  viewbox <- bbox_to_string(bb_usa)
   getbb(place_name, viewbox, silent = FALSE) # not working
 }
 
