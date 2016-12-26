@@ -1,3 +1,4 @@
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Build Status](https://travis-ci.org/osmdatar/osmdata.svg?branch=master)](https://travis-ci.org/osmdatar/osmdata) [![Build status](https://ci.appveyor.com/api/projects/status/github/osmdatar/osmdata?svg=true)](https://ci.appveyor.com/project/mpadge/osmdata) [![codecov](https://codecov.io/gh/osmdatar/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/osmdatar/osmdata) [![Project Status: WIP](http://www.repostatus.org/badges/0.1.0/wip.svg)](http://www.repostatus.org/#wip) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/osmdata)](http://cran.r-project.org/web/packages/osmdata)
 
@@ -34,7 +35,7 @@ bu
 #> Object of class 'osmdata' with:
 #>   $bbox          : 51.51,-0.12,51.52,-0.11
 #>   $overpass_call : The call submitted to the overpass API
-#>   $timestamp     : [ Mon Dec 19 15:38:02 2016 ]
+#>   $timestamp     : [ Mon Dec 26 11:19:36 2016 ]
 #>   $osm_points    : 'sp' SpatialPointsDataFrame   with 5071 points
 #>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 14 lines
 #>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 578 polygons
@@ -50,7 +51,7 @@ hs
 #> Object of class 'osmdata' with:
 #>   $bbox          : 51.51,-0.12,51.52,-0.11
 #>   $overpass_call : The call submitted to the overpass API
-#>   $timestamp     : [ Mon Dec 19 15:38:04 2016 ]
+#>   $timestamp     : [ Mon Dec 26 11:19:38 2016 ]
 #>   $osm_points    : 'sp' SpatialPointsDataFrame   with 1985 points
 #>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 545 lines
 #>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 34 polygons
@@ -97,8 +98,8 @@ osmdata_sp (q1, quiet=TRUE)
 #> Object of class 'osmdata' with:
 #>   $bbox          : 50.575851,6.94066,50.895851,7.26066
 #>   $overpass_call : The call submitted to the overpass API
-#>   $timestamp     : [ Mon Dec 19 15:38:13 2016 ]
-#>   $osm_points    : 'sp' SpatialPointsDataFrame   with 43 points
+#>   $timestamp     : [ Mon Dec 26 11:19:41 2016 ]
+#>   $osm_points    : 'sp' SpatialPointsDataFrame   with 42 points
 #>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 0 lines
 #>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 1 polygons
 ```
@@ -127,7 +128,7 @@ sp::plot (lon$osm_lines)
 
 ``` r
 date()
-#> [1] "Mon Dec 19 15:38:13 2016"
+#> [1] "Mon Dec 26 11:19:41 2016"
 
 testthat::test_dir("tests/")
 #> testthat results ===========================================================
