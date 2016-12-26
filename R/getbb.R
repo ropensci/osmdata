@@ -45,6 +45,8 @@ bbox_to_string <- function(bbox) {
 #' Uses online services to convert a text string into a bounding box
 #' 
 #' @param place_name The name of the place you're searching for
+#' @param display_name_contains Text string to match with display_name field returned by
+#' \url{http://wiki.openstreetmap.org/wiki/Nominatim}
 #' @param viewbox The bounds in which you're searching
 #' @param format_out Character string indicating output format: matrix (default - see \code{\link{bbox}})
 #' or string (see \code{\link{bbox_to_string}})
@@ -55,16 +57,18 @@ bbox_to_string <- function(bbox) {
 #' @examples
 #' if(curl::has_internet()){
 #'   getbb("Salzburg")
-#'   # refine the search to the USA
 #'   place_name = "Hereford"
 #'   getbb(place_name, silent = FALSE)
-#'   bb_usa <- getbb("United States")
-#'   viewbox <- bbox_to_string(bb_usa)
-#'   getbb(place_name, viewbox, silent = FALSE) # not working
+#'   # return bbs whose display_name contain text string "United States"
+#'   getbb(place_name, display_name_contains = "United States", silent = FALSE) 
 #' }
 #' 
-getbb <- function(place_name, viewbox = NULL, format_out = "matrix",
-                  base_url = "https://nominatim.openstreetmap.org", featuretype = "settlement",
+getbb <- function(place_name,
+                  display_name_contains = NULL,
+                  viewbox = NULL,
+                  format_out = "matrix",
+                  base_url = "https://nominatim.openstreetmap.org",
+                  featuretype = "settlement",
                   silent = TRUE) {
   
   query <- list(q = place_name,
@@ -72,14 +76,19 @@ getbb <- function(place_name, viewbox = NULL, format_out = "matrix",
                 format = 'json',
                 featuretype = featuretype,
                 # bounded = 1,
-                limit = 50)
+                limit = 10)
+  
   if(!silent)
     print(httr::modify_url(base_url, query = query))
+  
   res <- httr::GET(base_url, query = query)
   txt <- httr::content(res, as = "text", encoding = "UTF-8")
   obj <- jsonlite::fromJSON(txt)
   
   # Code optionally select more things stored in obj...
+  if(!is.null(display_name_contains)) {
+    obj <- obj[grepl(display_name_contains, obj$display_name),]
+  }
   
   bn = as.numeric(obj$boundingbox[[1]])
   bb_mat = matrix(c(bn[3:4], bn[1:2]), nrow = 2, byrow = TRUE)

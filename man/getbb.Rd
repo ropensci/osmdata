@@ -4,12 +4,15 @@
 \alias{getbb}
 \title{Get bounding box for a given place name}
 \usage{
-getbb(place_name, viewbox = NULL, format_out = "matrix",
-  base_url = "https://nominatim.openstreetmap.org",
+getbb(place_name, display_name_contains = NULL, viewbox = NULL,
+  format_out = "matrix", base_url = "https://nominatim.openstreetmap.org",
   featuretype = "settlement", silent = TRUE)
 }
 \arguments{
 \item{place_name}{The name of the place you're searching for}
+
+\item{display_name_contains}{Text string to match with display_name field returned by
+\url{http://wiki.openstreetmap.org/wiki/Nominatim}}
 
 \item{viewbox}{The bounds in which you're searching}
 
@@ -28,12 +31,10 @@ Uses online services to convert a text string into a bounding box
 \examples{
 if(curl::has_internet()){
   getbb("Salzburg")
-  # refine the search to the USA
   place_name = "Hereford"
   getbb(place_name, silent = FALSE)
-  bb_usa <- getbb("United States")
-  viewbox <- bbox_to_string(bb_usa)
-  getbb(place_name, viewbox, silent = FALSE) # not working
+  # return bbs whose display_name contain text string "United States"
+  getbb(place_name, display_name_contains = "United States", silent = FALSE) 
 }
 
 }
