@@ -22,7 +22,7 @@ city <- "Leeds"
 
 Now we can construct a query for **osmdata** to download all the relevant parks, as follows:
 
-```{r}
+```{r, eval=FALSE}
 library(osmdata)
 library(sp)
 bb <- getbb(place_name = city)
