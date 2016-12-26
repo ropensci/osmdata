@@ -4,7 +4,7 @@
 \alias{getbb}
 \title{Get bounding box for a given place name}
 \usage{
-getbb(place_name, viewbox = NULL, format_out = "matrix",
+getbb(place_name, viewbox = NULL, format_out = c("matrix", "string"),
   base_url = "https://nominatim.openstreetmap.org",
   featuretype = "settlement", silent = TRUE)
 }
@@ -13,7 +13,8 @@ getbb(place_name, viewbox = NULL, format_out = "matrix",
 
 \item{viewbox}{The bounds in which you're searching}
 
-\item{format_out}{The format of the output (a bbox matrix, as used by sp, by default)}
+\item{format_out}{Character string indicating output format: matrix (default - see \code{\link{bbox}})
+or string (see \code{\link{bbox_to_string}})}
 
 \item{base_url}{Base website from where data is queried}
 

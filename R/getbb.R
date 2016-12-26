@@ -46,7 +46,8 @@ bbox_to_string <- function(bbox) {
 #' 
 #' @param place_name The name of the place you're searching for
 #' @param viewbox The bounds in which you're searching
-#' @param format_out The format of the output (a bbox matrix, as used by sp, by default)
+#' @param format_out Character string indicating output format: matrix (default - see \code{\link{bbox}})
+#' or string (see \code{\link{bbox_to_string}})
 #' @param base_url Base website from where data is queried
 #' @param featuretype The type of OSM feature (settlement is default)
 #' @param silent Should the API be printed to screen? FALSE by default
@@ -62,7 +63,7 @@ bbox_to_string <- function(bbox) {
 #'   getbb(place_name, viewbox, silent = FALSE) # not working
 #' }
 #' 
-getbb <- function(place_name, viewbox = NULL, format_out = "matrix",
+getbb <- function(place_name, viewbox = NULL, format_out = c("matrix", "string"),
                   base_url = "https://nominatim.openstreetmap.org", featuretype = "settlement",
                   silent = TRUE) {
   
@@ -85,7 +86,7 @@ getbb <- function(place_name, viewbox = NULL, format_out = "matrix",
   dimnames(bb_mat) = list(c("x", "y"), c("min", "max"))
   if(format_out == "matrix") {
     return(bb_mat)
-  } else {
+  } else if(format_out == "string") {
     bb_string = osmdata::bbox_to_string(bbox = bb_mat)
     return(bb_string)
   }
