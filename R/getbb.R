@@ -57,7 +57,7 @@ bbox_to_string <- function(bbox) {
 #'   getbb("Salzburg")
 #'   # refine the search to the USA
 #'   place_name = "Hereford"
-#'   getbb(place_name)
+#'   getbb(place_name, silent = FALSE)
 #'   bb_usa = getbb("United States")
 #'   viewbox = bbox_to_string(bb_usa)
 #'   getbb(place_name, viewbox, silent = FALSE) # not working
@@ -72,7 +72,7 @@ getbb <- function(place_name, viewbox = NULL, format_out = "matrix",
                 format = 'json',
                 featuretype = featuretype,
                 # bounded = 1,
-                limit=50)
+                limit = 50)
   if(!silent)
     print(httr::modify_url(base_url, query = query))
   res <- httr::GET(base_url, query = query)
