@@ -83,10 +83,10 @@ getbb <- function(place_name, viewbox = NULL, format_out = "matrix",
   bn = as.numeric(obj$boundingbox[[1]])
   bb_mat = matrix(c(bn[3:4], bn[1:2]), nrow = 2, byrow = TRUE)
   dimnames(bb_mat) = list(c("x", "y"), c("min", "max"))
-  bb_string = osmdata::bbox_to_string(bbox = bb_mat)
   if(format_out == "matrix") {
     return(bb_mat)
   } else {
+    bb_string = osmdata::bbox_to_string(bbox = bb_mat)
     return(bb_string)
   }
 }
