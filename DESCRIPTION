@@ -45,3 +45,4 @@ URL: https://github.com/osmdatar/osmdatar
 BugReports: https://github.com/osmdatar/osmdatar/issues
 Encoding: UTF-8
 RoxygenNote: 5.0.1
+VignetteBuilder: knitr
