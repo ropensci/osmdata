@@ -63,7 +63,7 @@ bbox_to_string <- function(bbox) {
 #'   getbb(place_name, viewbox, silent = FALSE) # not working
 #' }
 #' 
-getbb <- function(place_name, viewbox = NULL, format_out = c("matrix", "string"),
+getbb <- function(place_name, viewbox = NULL, format_out = "matrix",
                   base_url = "https://nominatim.openstreetmap.org", featuretype = "settlement",
                   silent = TRUE) {
   
