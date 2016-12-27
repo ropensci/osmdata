@@ -40,9 +40,18 @@ bbox_to_string <- function(bbox) {
   return(bbox)
 }
 
-#' Get bounding box for a given place name
+#' Get bounding box for a given place name.
 #' 
-#' Uses online services to convert a text string into a bounding box
+#' This function uses the free Nominatim API provided by OpenStreetMap to find
+#' the bounding box (bb) associated with place names.
+#' 
+#' It was inspired by the functions
+#' \code{bbox} from the \textbf{sp} package,
+#' \code{bb} from the \textbf{tmaptools} package and
+#' \code{bb_lookup} from the github package \textbf{nominatim} package,
+#' which can be found at \url{https://github.com/hrbrmstr/nominatim}.
+#' 
+#' See \url{http://wiki.openstreetmap.org/wiki/Nominatim} for details.
 #' 
 #' @param place_name The name of the place you're searching for
 #' @param display_name_contains Text string to match with display_name field returned by
@@ -65,7 +74,6 @@ bbox_to_string <- function(bbox) {
 #'   # top 3 matches as data frame
 #'   getbb(place_name, format_out = "data.frame", limit = 3)
 #' }
-#' 
 getbb <- function(place_name,
                   display_name_contains = NULL,
                   viewbox = NULL,

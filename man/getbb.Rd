@@ -2,7 +2,7 @@
 % Please edit documentation in R/getbb.R
 \name{getbb}
 \alias{getbb}
-\title{Get bounding box for a given place name}
+\title{Get bounding box for a given place name.}
 \usage{
 getbb(place_name, display_name_contains = NULL, viewbox = NULL,
   format_out = "matrix", base_url = "https://nominatim.openstreetmap.org",
@@ -28,7 +28,17 @@ string (see \code{\link{bbox_to_string}}) or data.frame (all 'hits' returned by 
 \item{silent}{Should the API be printed to screen? FALSE by default}
 }
 \description{
-Uses online services to convert a text string into a bounding box
+This function uses the free Nominatim API provided by OpenStreetMap to find
+the bounding box (bb) associated with place names.
+}
+\details{
+It was inspired by the functions
+\code{bbox} from the \textbf{sp} package,
+\code{bb} from the \textbf{tmaptools} package and
+\code{bb_lookup} from the github package \textbf{nominatim} package,
+which can be found at \url{https://github.com/hrbrmstr/nominatim}.
+
+See \url{http://wiki.openstreetmap.org/wiki/Nominatim} for details.
 }
 \examples{
 if(curl::has_internet()){
@@ -40,6 +50,5 @@ if(curl::has_internet()){
   # top 3 matches as data frame
   getbb(place_name, format_out = "data.frame", limit = 3)
 }
-
 }
 
