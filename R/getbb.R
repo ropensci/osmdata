@@ -48,8 +48,8 @@ bbox_to_string <- function(bbox) {
 #' @param display_name_contains Text string to match with display_name field returned by
 #' \url{http://wiki.openstreetmap.org/wiki/Nominatim}
 #' @param viewbox The bounds in which you're searching
-#' @param format_out Character string indicating output format: matrix (default - see \code{\link{bbox}})
-#' or string (see \code{\link{bbox_to_string}})
+#' @param format_out Character string indicating output format: matrix (default - see \code{\link{bbox}}),
+#' string (see \code{\link{bbox_to_string}}) or data.frame (all 'hits' returned by Nominatim)
 #' @param base_url Base website from where data is queried
 #' @param featuretype The type of OSM feature (settlement is default)
 #' @param limit How many results should the API return?
@@ -60,8 +60,10 @@ bbox_to_string <- function(bbox) {
 #'   getbb("Salzburg")
 #'   place_name = "Hereford"
 #'   getbb(place_name, silent = FALSE)
-#'   # return bbs whose display_name contain text string "United States"
-#'   getbb(place_name, display_name_contains = "United States", silent = FALSE) 
+#'   # return bb whose display_name contain text string "United States"
+#'   getbb(place_name, display_name_contains = "United States", silent = FALSE)
+#'   # top 3 matches as data frame
+#'   getbb(place_name, format_out = "data.frame", limit = 3)
 #' }
 #' 
 getbb <- function(place_name,
@@ -91,6 +93,10 @@ getbb <- function(place_name,
   if(!is.null(display_name_contains)) {
     obj <- obj[grepl(display_name_contains, obj$display_name),]
   }
+  
+  if(format_out == "data.frame") {
+    return(obj)
+  } 
   
   bn = as.numeric(obj$boundingbox[[1]])
   bb_mat = matrix(c(bn[3:4], bn[1:2]), nrow = 2, byrow = TRUE)

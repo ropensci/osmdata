@@ -16,8 +16,8 @@ getbb(place_name, display_name_contains = NULL, viewbox = NULL,
 
 \item{viewbox}{The bounds in which you're searching}
 
-\item{format_out}{Character string indicating output format: matrix (default - see \code{\link{bbox}})
-or string (see \code{\link{bbox_to_string}})}
+\item{format_out}{Character string indicating output format: matrix (default - see \code{\link{bbox}}),
+string (see \code{\link{bbox_to_string}}) or data.frame (all 'hits' returned by Nominatim)}
 
 \item{base_url}{Base website from where data is queried}
 
@@ -35,8 +35,10 @@ if(curl::has_internet()){
   getbb("Salzburg")
   place_name = "Hereford"
   getbb(place_name, silent = FALSE)
-  # return bbs whose display_name contain text string "United States"
-  getbb(place_name, display_name_contains = "United States", silent = FALSE) 
+  # return bb whose display_name contain text string "United States"
+  getbb(place_name, display_name_contains = "United States", silent = FALSE)
+  # top 3 matches as data frame
+  getbb(place_name, format_out = "data.frame", limit = 3)
 }
 
 }
