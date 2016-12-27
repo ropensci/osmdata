@@ -6,7 +6,7 @@
 \usage{
 getbb(place_name, display_name_contains = NULL, viewbox = NULL,
   format_out = "matrix", base_url = "https://nominatim.openstreetmap.org",
-  featuretype = "settlement", silent = TRUE)
+  featuretype = "settlement", limit = 10, silent = TRUE)
 }
 \arguments{
 \item{place_name}{The name of the place you're searching for}
@@ -22,6 +22,8 @@ or string (see \code{\link{bbox_to_string}})}
 \item{base_url}{Base website from where data is queried}
 
 \item{featuretype}{The type of OSM feature (settlement is default)}
+
+\item{limit}{How many results should the API return?}
 
 \item{silent}{Should the API be printed to screen? FALSE by default}
 }

@@ -52,6 +52,7 @@ bbox_to_string <- function(bbox) {
 #' or string (see \code{\link{bbox_to_string}})
 #' @param base_url Base website from where data is queried
 #' @param featuretype The type of OSM feature (settlement is default)
+#' @param limit How many results should the API return?
 #' @param silent Should the API be printed to screen? FALSE by default
 #' @export
 #' @examples
@@ -69,14 +70,15 @@ getbb <- function(place_name,
                   format_out = "matrix",
                   base_url = "https://nominatim.openstreetmap.org",
                   featuretype = "settlement",
+                  limit = 10,
                   silent = TRUE) {
   
   query <- list(q = place_name,
                 viewbox = viewbox,
                 format = 'json',
                 featuretype = featuretype,
-                # bounded = 1,
-                limit = 10)
+                # bounded = 1, # seemingly not working
+                limit = limit)
   
   if(!silent)
     print(httr::modify_url(base_url, query = query))
