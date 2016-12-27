@@ -62,6 +62,7 @@ bbox_to_string <- function(bbox) {
 #' @param base_url Base website from where data is queried
 #' @param featuretype The type of OSM feature (settlement is default)
 #' @param limit How many results should the API return?
+#' @param key The API key to use for services that require it
 #' @param silent Should the API be printed to screen? FALSE by default
 #' @export
 #' @examples
@@ -73,6 +74,11 @@ bbox_to_string <- function(bbox) {
 #'   getbb(place_name, display_name_contains = "United States", silent = FALSE)
 #'   # top 3 matches as data frame
 #'   getbb(place_name, format_out = "data.frame", limit = 3)
+#'   # using an alternative service (locationiq requires an API key)
+#'   key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
+#'   if(nchar(key) ==  32) {
+#'     getbb(place_name, base_url = "http://locationiq.org/v1/search.php", key = key)
+#'   }
 #' }
 getbb <- function(place_name,
                   display_name_contains = NULL,
@@ -81,12 +87,14 @@ getbb <- function(place_name,
                   base_url = "https://nominatim.openstreetmap.org",
                   featuretype = "settlement",
                   limit = 10,
+                  key = NULL,
                   silent = TRUE) {
   
   query <- list(q = place_name,
                 viewbox = viewbox,
                 format = 'json',
                 featuretype = featuretype,
+                key = key,
                 # bounded = 1, # seemingly not working
                 limit = limit)
   

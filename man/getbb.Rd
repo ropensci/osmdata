@@ -6,7 +6,7 @@
 \usage{
 getbb(place_name, display_name_contains = NULL, viewbox = NULL,
   format_out = "matrix", base_url = "https://nominatim.openstreetmap.org",
-  featuretype = "settlement", limit = 10, silent = TRUE)
+  featuretype = "settlement", limit = 10, key = NULL, silent = TRUE)
 }
 \arguments{
 \item{place_name}{The name of the place you're searching for}
@@ -24,6 +24,8 @@ string (see \code{\link{bbox_to_string}}) or data.frame (all 'hits' returned by 
 \item{featuretype}{The type of OSM feature (settlement is default)}
 
 \item{limit}{How many results should the API return?}
+
+\item{key}{The API key to use for services that require it}
 
 \item{silent}{Should the API be printed to screen? FALSE by default}
 }
@@ -49,6 +51,11 @@ if(curl::has_internet()){
   getbb(place_name, display_name_contains = "United States", silent = FALSE)
   # top 3 matches as data frame
   getbb(place_name, format_out = "data.frame", limit = 3)
+  # using an alternative service (locationiq requires an API key)
+  key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
+  if(nchar(key) ==  32) {
+    getbb(place_name, base_url = "http://locationiq.org/v1/search.php", key = key)
+  }
 }
 }
 
