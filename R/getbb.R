@@ -26,15 +26,15 @@ bbox_to_string <- function(bbox) {
       bbox <- c (bbox["x", "coords.x1"], bbox["y", "coords.x1"], 
                  bbox["x", "coords.x2"], bbox["y", "coords.x2"])
     }
-    bbox <- paste0 (bbox[c(2,1,4,3)], collapse=",")
+    bbox <- paste0 (bbox[c(2, 1, 4, 3)], collapse = ",")
   } else {
     if (!is.null (names (bbox)) & 
         all (names (bbox) %in% c("left", "bottom", "right", "top"))) {
-      bbox <- paste0 (bbox[c ("bottom", "left", "top", "right")], collapse=",")
+      bbox <- paste0 (bbox[c ("bottom", "left", "top", "right")], collapse = ",")
     } else {
       x <- sort (bbox [c (1, 3)])
       y <- sort (bbox [c (2, 4)])
-      bbox <- paste0 (c (y [1], x[1], y [2], x [2]), collapse=",")
+      bbox <- paste0 (c (y [1], x[1], y [2], x [2]), collapse = ",")
     }
   }
   return(bbox)
@@ -58,7 +58,7 @@ bbox_to_string <- function(bbox) {
 #' @examples
 #' if(curl::has_internet()){
 #'   getbb("Salzburg")
-#'   place_name = "Hereford"
+#'   place_name <- "Hereford"
 #'   getbb(place_name, silent = FALSE)
 #'   # return bb whose display_name contain text string "United States"
 #'   getbb(place_name, display_name_contains = "United States", silent = FALSE)
@@ -98,13 +98,13 @@ getbb <- function(place_name,
     return(obj)
   } 
   
-  bn = as.numeric(obj$boundingbox[[1]])
-  bb_mat = matrix(c(bn[3:4], bn[1:2]), nrow = 2, byrow = TRUE)
-  dimnames(bb_mat) = list(c("x", "y"), c("min", "max"))
+  bn <- as.numeric(obj$boundingbox[[1]])
+  bb_mat <- matrix(c(bn[3:4], bn[1:2]), nrow = 2, byrow = TRUE)
+  dimnames(bb_mat) <- list(c("x", "y"), c("min", "max"))
   if(format_out == "matrix") {
     return(bb_mat)
   } else if(format_out == "string") {
-    bb_string = osmdata::bbox_to_string(bbox = bb_mat)
+    bb_string <- osmdata::bbox_to_string(bbox = bb_mat)
     return(bb_string)
   }
 }

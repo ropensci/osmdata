@@ -33,7 +33,7 @@ Uses online services to convert a text string into a bounding box
 \examples{
 if(curl::has_internet()){
   getbb("Salzburg")
-  place_name = "Hereford"
+  place_name <- "Hereford"
   getbb(place_name, silent = FALSE)
   # return bb whose display_name contain text string "United States"
   getbb(place_name, display_name_contains = "United States", silent = FALSE)
