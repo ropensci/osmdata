@@ -1,8 +1,3 @@
-vignettes/*.html
-vignettes/*.pdf
-src/*.o
-src/*.so
-README.html
 makefile
 
 .Rproj.user
@@ -19,18 +14,11 @@ inst/doc
 
 # Output files from R CMD build
 /*.tar.gz
-src/Makevars
-src/*.gcda
-src/*.gcno
 
 # Non-exported man files
 man/rcpp_get_points.Rd
 man/rcpp_get_lines.Rd
 man/rcpp_get_polygons.Rd
-
-# produced vignettes
-vignettes/*.html
-vignettes/*.pdf
 
 # vim files
 .*.un~

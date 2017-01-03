@@ -65,6 +65,8 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
         obj$timestamp <- timestamp (paste (wday, mon, day, hms, year))
     }
 
+    if (!quiet)
+        message ('convertig OSM data to sp format')
     res <- rcpp_get_osmdata (doc)
     obj$osm_points <- res$points
     obj$osm_lines <- res$lines

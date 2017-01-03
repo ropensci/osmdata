@@ -463,7 +463,9 @@ Rcpp::List rcpp_get_osmdata (const std::string& st)
     }
 
     float xmin=FLOAT_MAX, xmax=-FLOAT_MAX, ymin=FLOAT_MAX, ymax=-FLOAT_MAX;
-    if (nodes.size () > 0)
+    if (nodes.size () == 0)
+        throw std::runtime_error ("Query returned no data");
+    else
     {
         xmin = std::min (xmin, *std::min_element (lons.begin(), lons.end()));
         xmax = std::max (xmax, *std::max_element (lons.begin(), lons.end()));
