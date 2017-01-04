@@ -39,6 +39,7 @@ Suggests:
     microbenchmark,
     rmarkdown,
     roxygen2,
+    sf,
     testthat
 LinkingTo: Rcpp
 URL: https://github.com/osmdatar/osmdatar
