@@ -2,6 +2,28 @@ language: r
 warnings_are_errors: true
 sudo: required
 
+matrix:
+    include:
+        - r: release
+          os: linux
+          dist: trusty # 14.04; default
+          env: R_CODECOV=true
+        - r: release
+          os: osx
+          brew_packages: gdal2
+          #- r: oldrel
+          #env: DEPS=cran
+          #os: linux
+          #- r: oldrel
+          #env: DEPS=cran
+          #os: osx
+          #- r: devel
+          #env: DEPS=cran
+          #os: linux
+          #- r: devel
+          #env: DEPS=cran
+          #os: osx
+
 addons:
     apt:
         packages:
@@ -9,35 +31,13 @@ addons:
               #- libproj-dev
 
 before_install:
-    - sudo apt-get install libgeos++-dev
+    #- sudo apt-get install libgeos++-dev
     - wget http://download.osgeo.org/gdal/2.1.0/gdal-2.1.0.tar.gz
     - tar zxf gdal-2.1.0.tar.gz
     - cd gdal-2.1.0
     - ./configure
     - make
     - sudo make install
-    - cd
-
-matrix:
-    include:
-        - r: release
-          env: DEPS=cran
-          os: linux
-        - r: release
-          env: DEPS=cran
-          os: osx
-          #- r: oldrel
-          #env: DEPS=cran
-          #os: linux
-          #- r: oldrel
-          #env: DEPS=cran
-          #os: osx
-          #- r: devel
-          #env: DEPS=cran
-          #os: linux
-          #- r: devel
-          #env: DEPS=cran
-          #os: osx
 
 notifications:
   email:
