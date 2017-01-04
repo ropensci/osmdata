@@ -1,6 +1,22 @@
 language: r
 warnings_are_errors: true
-sudo: false
+sudo: required
+
+addons:
+    apt:
+        packages:
+            - libgeos++-dev
+              #- libproj-dev
+
+before_install:
+    - sudo apt-get install libgeos++-dev
+    - wget http://download.osgeo.org/gdal/2.1.0/gdal-2.1.0.tar.gz
+    - tar zxf gdal-2.1.0.tar.gz
+    - cd gdal-2.1.0
+    - ./configure
+    - make
+    - sudo make install
+    - cd
 
 matrix:
     include:
@@ -10,12 +26,12 @@ matrix:
         - r: release
           env: DEPS=cran
           os: osx
-        - r: oldrel
-          env: DEPS=cran
-          os: linux
-        - r: oldrel
-          env: DEPS=cran
-          os: osx
+          #- r: oldrel
+          #env: DEPS=cran
+          #os: linux
+          #- r: oldrel
+          #env: DEPS=cran
+          #os: osx
           #- r: devel
           #env: DEPS=cran
           #os: linux
