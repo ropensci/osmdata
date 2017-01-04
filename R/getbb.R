@@ -46,9 +46,9 @@ bbox_to_string <- function(bbox) {
 #' the bounding box (bb) associated with place names.
 #' 
 #' It was inspired by the functions
-#' \code{bbox} from the \textbf{sp} package,
-#' \code{bb} from the \textbf{tmaptools} package and
-#' \code{bb_lookup} from the github package \textbf{nominatim} package,
+#' \code{bbox} from the \code{sp} package,
+#' \code{bb} from the \code{tmaptools} package and
+#' \code{bb_lookup} from the github package \code{nominatim} package,
 #' which can be found at \url{https://github.com/hrbrmstr/nominatim}.
 #' 
 #' See \url{http://wiki.openstreetmap.org/wiki/Nominatim} for details.
@@ -101,7 +101,7 @@ getbb <- function(place_name,
   if(!silent)
     print(httr::modify_url(base_url, query = query))
   
-  res <- httr::GET(base_url, query = query)
+  res <- httr::POST(base_url, query = query)
   txt <- httr::content(res, as = "text", encoding = "UTF-8")
   obj <- jsonlite::fromJSON(txt)
   

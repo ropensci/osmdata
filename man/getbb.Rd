@@ -35,9 +35,9 @@ the bounding box (bb) associated with place names.
 }
 \details{
 It was inspired by the functions
-\code{bbox} from the \textbf{sp} package,
-\code{bb} from the \textbf{tmaptools} package and
-\code{bb_lookup} from the github package \textbf{nominatim} package,
+\code{bbox} from the \code{sp} package,
+\code{bb} from the \code{tmaptools} package and
+\code{bb_lookup} from the github package \code{nominatim} package,
 which can be found at \url{https://github.com/hrbrmstr/nominatim}.
 
 See \url{http://wiki.openstreetmap.org/wiki/Nominatim} for details.
