@@ -2,38 +2,60 @@
 % Please edit documentation in R/getbb.R
 \name{getbb}
 \alias{getbb}
-\title{Get bounding box for a given place name}
+\title{Get bounding box for a given place name.}
 \usage{
-getbb(place_name, viewbox = NULL, format_out = "matrix",
-  base_url = "https://nominatim.openstreetmap.org",
-  featuretype = "settlement", silent = TRUE)
+getbb(place_name, display_name_contains = NULL, viewbox = NULL,
+  format_out = "matrix", base_url = "https://nominatim.openstreetmap.org",
+  featuretype = "settlement", limit = 10, key = NULL, silent = TRUE)
 }
 \arguments{
 \item{place_name}{The name of the place you're searching for}
 
+\item{display_name_contains}{Text string to match with display_name field returned by
+\url{http://wiki.openstreetmap.org/wiki/Nominatim}}
+
 \item{viewbox}{The bounds in which you're searching}
 
-\item{format_out}{The format of the output (a bbox matrix, as used by sp, by default)}
+\item{format_out}{Character string indicating output format: matrix (default - see \code{\link{bbox}}),
+string (see \code{\link{bbox_to_string}}) or data.frame (all 'hits' returned by Nominatim)}
 
 \item{base_url}{Base website from where data is queried}
 
 \item{featuretype}{The type of OSM feature (settlement is default)}
 
+\item{limit}{How many results should the API return?}
+
+\item{key}{The API key to use for services that require it}
+
 \item{silent}{Should the API be printed to screen? FALSE by default}
 }
 \description{
-Uses online services to convert a text string into a bounding box
+This function uses the free Nominatim API provided by OpenStreetMap to find
+the bounding box (bb) associated with place names.
+}
+\details{
+It was inspired by the functions
+\code{bbox} from the \textbf{sp} package,
+\code{bb} from the \textbf{tmaptools} package and
+\code{bb_lookup} from the github package \textbf{nominatim} package,
+which can be found at \url{https://github.com/hrbrmstr/nominatim}.
+
+See \url{http://wiki.openstreetmap.org/wiki/Nominatim} for details.
 }
 \examples{
 if(curl::has_internet()){
   getbb("Salzburg")
-  # refine the search to the USA
-  place_name = "Hereford"
-  getbb(place_name)
-  bb_usa = getbb("United States")
-  viewbox = bbox_to_string(bb_usa)
-  getbb(place_name, viewbox, silent = FALSE) # not working
+  place_name <- "Hereford"
+  getbb(place_name, silent = FALSE)
+  # return bb whose display_name contain text string "United States"
+  getbb(place_name, display_name_contains = "United States", silent = FALSE)
+  # top 3 matches as data frame
+  getbb(place_name, format_out = "data.frame", limit = 3)
+  # using an alternative service (locationiq requires an API key)
+  key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
+  if(nchar(key) ==  32) {
+    getbb(place_name, base_url = "http://locationiq.org/v1/search.php", key = key)
+  }
 }
-
 }
 

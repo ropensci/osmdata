@@ -1,0 +1,43 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Downloading all the parks in a city of your choice
+
+In the next use case, you want to explore all the parks in your local city.
+We'll set that as follows:
+
+```{r}
+city <- "Leeds"
+```
+
+Now we can construct a query for **osmdata** to download all the relevant parks, as follows:
+
+```{r, eval=FALSE}
+library(osmdata)
+library(sp)
+bb <- getbb(place_name = city)
+q <- opq(bbox = bb)
+q <- add_feature(q, "amenity", "park")
+res <- osmdata_sp(q = q, quiet = FALSE)
+names(res)
+plot(res$osm_polygons)
+```
+
+```{r, eval=FALSE}
+# plot with tmap
+library(tmap)
+tmap_mode("view")
+qtm(res$osm_polygons)
+```
+
+

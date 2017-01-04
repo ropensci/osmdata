@@ -30,6 +30,7 @@ notifications:
 
 r_github_packages:
       - jimhester/covr
+      - ropenscilabs/vcr
 
 after_success:
       - Rscript -e 'covr::codecov()'
