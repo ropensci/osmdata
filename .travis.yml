@@ -4,13 +4,21 @@ sudo: required
 
 matrix:
     include:
-        - r: release
-          os: linux
+        - os: linux
+          r: release
           dist: trusty # 14.04; default
           env: R_CODECOV=true
-          #- r: release
-          #os: osx
-          #brew_packages: gdal2
+          before_install:
+              - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
+              - sudo apt-get --yes --force-yes update -qq
+              - sudo apt-get install --yes libproj-dev libgeos-dev libgdal-dev libudunits2-dev
+          r_build_args: '--no-build-vignettes'
+          r_check_args: '--ignore-vignettes'
+        - os: osx
+          r: release
+          brew_packages: gdal2
+          r_build_args: '--no-build-vignettes'
+          r_check_args: '--ignore-vignettes'
           #- r: oldrel
           #env: DEPS=cran
           #os: linux
@@ -24,10 +32,6 @@ matrix:
           #env: DEPS=cran
           #os: osx
 
-before_install:
-    - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
-    - sudo apt-get --yes --force-yes update -qq
-    - sudo apt-get install --yes libproj-dev libgeos-dev libgdal-dev libudunits2-dev
 
 notifications:
   email:
