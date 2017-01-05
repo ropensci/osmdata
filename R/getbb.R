@@ -46,9 +46,9 @@ bbox_to_string <- function(bbox) {
 #' the bounding box (bb) associated with place names.
 #' 
 #' It was inspired by the functions
-#' \code{bbox} from the \code{sp} package,
-#' \code{bb} from the \code{tmaptools} package and
-#' \code{bb_lookup} from the github package \code{nominatim} package,
+#' \code{bbox} from the \pkg{sp} package,
+#' \code{bb} from the \pkg{tmaptools} package and
+#' \code{bb_lookup} from the github package \pkg{nominatim} package,
 #' which can be found at \url{https://github.com/hrbrmstr/nominatim}.
 #' 
 #' See \url{http://wiki.openstreetmap.org/wiki/Nominatim} for details.
