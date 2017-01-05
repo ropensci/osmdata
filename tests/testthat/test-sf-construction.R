@@ -89,3 +89,30 @@ test_that ("sf-single-point-with-fields", {
                expect_identical (x0, x1)
 })
 
+# sf::LINESTRINGs need this function:
+Mtrx <- function(x, dim = "XYZ", type) {
+    stopifnot(is.matrix(x) && is.numeric(x))
+    structure(x, class = getClassDim(x, ncol(x), dim, type))
+}
+
+test_that ("sfc-single-line", {
+               x <- make_sfc (cbind (1:4,5:8), "LINESTRING")
+               x1 <- sf::st_sfc (sf::st_linestring (cbind (1:4, 5:8)))
+               expect_identical (x, x1)
+})
+
+test_that ("sf-single-line", {
+               x <- make_sfc (cbind (1:4,5:8), "LINESTRING")
+               x1 <- make_sf (x)
+               x <- sf::st_sfc (sf::st_linestring (cbind (1:4, 5:8)))
+               x2 <- sf::st_sf (x)
+               expect_identical (x1, x2)
+})
+
+test_that ("sf-single-line-with-fields", {
+               x <- make_sfc (cbind (1:4,5:8), "LINESTRING")
+               x1 <- make_sf (x, a=3, b="blah")
+               x <- sf::st_sfc (sf::st_linestring (cbind (1:4, 5:8)))
+               x2 <- sf::st_sf (x, a=3, b="blah")
+               expect_identical (x1, x1)
+})

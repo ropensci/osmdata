@@ -1,4 +1,5 @@
-LFILE = README
+LFILE = sf
+#LFILE = README
 
 all: knith open 
 
