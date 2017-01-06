@@ -1,37 +1,30 @@
 language: r
 warnings_are_errors: true
 sudo: required
+cache: packages
+
+# precise fails because unmet deps in libgdal-dev can not be insalled
 
 matrix:
+    #allow_failures:
+    #    -os: osx
     include:
         - os: linux
           r: release
-          dist: trusty # 14.04; default
+          dist: trusty # 14.04
           env: R_CODECOV=true
-          before_install:
-              - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
-              - sudo apt-get --yes --force-yes update -qq
-              - sudo apt-get install --yes libproj-dev libgeos-dev libgdal-dev libudunits2-dev
-          r_build_args: '--no-build-vignettes'
-          r_check_args: '--ignore-vignettes'
+        - os: linux
+          r: devel
+          dist: trusty
         - os: osx
           r: release
-          brew_packages: gdal2
-          r_build_args: '--no-build-vignettes'
-          r_check_args: '--ignore-vignettes'
-          #- r: oldrel
-          #env: DEPS=cran
-          #os: linux
-          #- r: oldrel
-          #env: DEPS=cran
-          #os: osx
-          #- r: devel
-          #env: DEPS=cran
-          #os: linux
-          #- r: devel
-          #env: DEPS=cran
-          #os: osx
+          before_install: ''
+          disable_homebrew: true
 
+before_install:
+    - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
+    - sudo apt-get --yes --force-yes update -qq
+    - sudo apt-get install --yes libproj-dev libgeos-dev libgdal-dev libudunits2-dev
 
 notifications:
   email:
