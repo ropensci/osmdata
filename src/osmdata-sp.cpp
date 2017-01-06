@@ -1,14 +1,14 @@
 /***************************************************************************
- *  Project:    osmdatar
- *  File:       get-osmdata.cpp
+ *  Project:    osmdata
+ *  File:       osmdata-sp.cpp
  *  Language:   C++
  *
- *  osmdatar is free software: you can redistribute it and/or modify it under
+ *  osmdata is free software: you can redistribute it and/or modify it under
  *  the terms of the GNU General Public License as published by the Free
  *  Software Foundation, either version 3 of the License, or (at your option)
  *  any later version.
  *
- *  osmdatar is distributed in the hope that it will be useful, but WITHOUT ANY
+ *  osmdata is distributed in the hope that it will be useful, but WITHOUT ANY
  *  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  *  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  *  details.
@@ -29,7 +29,7 @@
  *  Compiler Options:   -std=c++11
  ***************************************************************************/
 
-#include "get-osmdata.h"
+#include "osmdata.h"
 #include "get-bbox.h"
 
 #include <Rcpp.h>
@@ -45,11 +45,11 @@
 //' @param st Text contents of an overpass API query
 //' @return A \code{SpatialLinesDataFrame} contains all polygons and associated data
 // [[Rcpp::export]]
-Rcpp::List rcpp_get_osmdata (const std::string& st)
+Rcpp::List rcpp_osmdata_sp (const std::string& st)
 {
 #ifdef DUMP_INPUT
     {
-        std::ofstream dump ("./get-polygons.xml");
+        std::ofstream dump ("./osmdata-sp.xml");
         if (dump.is_open())
         {
             dump.write (st.c_str(), st.size());

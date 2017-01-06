@@ -36,7 +36,7 @@ benchmark <- function ()
         obj$bbox <- q1$bbox
         obj$overpass_call <- query
         obj$timestamp <- timestamp (quiet=TRUE, prefix="[ ", suffix=" ]")
-        res <- rcpp_get_osmdata (doc)
+        res <- rcpp_osmdata_sp (doc)
         obj$osm_points <- res$points
         obj$osm_lines <- res$lines
         obj$osm_polygons <- res$polygons

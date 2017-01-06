@@ -20,7 +20,7 @@ osmdata_xml <- function(q, quiet=TRUE, encoding) {
         encoding <- 'UTF-8'
 
     #doc <- xml2::read_xml(osm_response, encoding=encoding)
-    #rcpp_get_osmdata (doc)
+    #rcpp_osmdata_sp (doc)
     doc <- overpass_query (q, quiet=quiet, encoding=encoding)
     xml2::read_xml (doc)
 }
@@ -67,7 +67,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
 
     if (!quiet)
         message ('convertig OSM data to sp format')
-    res <- rcpp_get_osmdata (doc)
+    res <- rcpp_osmdata_sp (doc)
     obj$osm_points <- res$points
     obj$osm_lines <- res$lines
     obj$osm_polygons <- res$polygons

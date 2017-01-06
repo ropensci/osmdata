@@ -7,7 +7,7 @@
 #'
 #' @param st Text contents of an overpass API query
 #' @return A \code{SpatialLinesDataFrame} contains all polygons and associated data
-rcpp_get_osmdata <- function(st) {
-    .Call('osmdata_rcpp_get_osmdata', PACKAGE = 'osmdata', st)
+rcpp_osmdata_sp <- function(st) {
+    .Call('osmdata_rcpp_osmdata_sp', PACKAGE = 'osmdata', st)
 }
 
