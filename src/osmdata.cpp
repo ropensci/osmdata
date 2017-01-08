@@ -66,7 +66,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     std::unordered_set <std::string> idset; // see TODO below
     std::vector <std::string> colnames, rownames, polynames;
     std::set <std::string> varnames;
-    Rcpp::List dimnames (0), dummy_list (0);
+    Rcpp::List dimnames (0);
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
 
     idset.clear ();
@@ -150,15 +150,10 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     /************************************************************************
      ************************************************************************
      **                                                                    **
-     **                       STEP#3A: POLYGONAL WAYS                      **
+     **                         STEP#3A: POLYGONS                          **
      **                                                                    **
      ************************************************************************
      ************************************************************************/
-
-    Rcpp::Environment sp_env = Rcpp::Environment::namespace_env ("sp");
-    Rcpp::Function Polygon = sp_env ["Polygon"];
-    Rcpp::Language polygons_call ("new", "Polygons");
-    Rcpp::S4 polygons;
 
     Rcpp::List polyList (poly_ways.size ());
     polynames.reserve (poly_ways.size ());
@@ -213,26 +208,13 @@ Rcpp::List rcpp_osmdata (const std::string& st)
         nmat.attr ("dimnames") = dimnames;
         dimnames.erase (0, dimnames.size());
 
-        //Rcpp::S4 poly = Rcpp::Language ("Polygon", nmat).eval ();
-        Rcpp::S4 poly = Polygon (nmat);
-        poly.slot ("hole") = false;
-        poly.slot ("ringDir") = (int) 1;
-        dummy_list.push_back (poly);
-        polygons = polygons_call.eval ();
-        polygons.slot ("Polygons") = dummy_list;
-        polygons.slot ("ID") = id;
-        polygons.slot ("plotOrder") = (int) 1;
-        polygons.slot ("labpt") = poly.slot ("labpt");
-        polygons.slot ("area") = poly.slot ("area");
-        polyList [count++] = polygons;
-
-        dummy_list.erase (0);
+        polyList [count++] = nmat;
     } // end for it over poly_ways
     polyList.attr ("names") = polynames;
 
     // Store all key-val pairs in one massive DF
     int nrow = poly_ways.size (), ncol = varnames.size ();
-    Rcpp::CharacterVector kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na ());
+    Rcpp::CharacterVector poly_kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na ());
     int namecoli = std::distance (varnames.begin (), varnames.find ("name"));
     int typecoli = std::distance (varnames.begin (), varnames.find ("type"));
     int onewaycoli = std::distance (varnames.begin (), varnames.find ("oneway"));
@@ -240,13 +222,13 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     {
         int rowi = std::distance (poly_ways.begin (), it);
         auto itw = ways.find (*it);
-        kv_vec (namecoli * nrow + rowi) = itw->second.name;
-        kv_vec (typecoli * nrow + rowi) = itw->second.type;
+        poly_kv_vec (namecoli * nrow + rowi) = itw->second.name;
+        poly_kv_vec (typecoli * nrow + rowi) = itw->second.type;
 
         if (itw->second.oneway)
-            kv_vec (onewaycoli * nrow + rowi) = "true";
+            poly_kv_vec (onewaycoli * nrow + rowi) = "true";
         else
-            kv_vec (onewaycoli * nrow + rowi) = "false";
+            poly_kv_vec (onewaycoli * nrow + rowi) = "false";
 
         for (auto kv_iter = itw->second.key_val.begin ();
                 kv_iter != itw->second.key_val.end (); ++kv_iter)
@@ -254,28 +236,18 @@ Rcpp::List rcpp_osmdata (const std::string& st)
             const std::string& key = (*kv_iter).first;
             auto ni = varnames.find (key); // key must exist in varnames!
             int coli = std::distance (varnames.begin (), ni);
-            kv_vec (coli * nrow + rowi) = (*kv_iter).second;
+            poly_kv_vec (coli * nrow + rowi) = (*kv_iter).second;
         }
     }
 
-    Rcpp::Language sp_polys_call ("new", "SpatialPolygonsDataFrame");
-    Rcpp::S4 sp_polys = sp_polys_call.eval ();
-    sp_polys.slot ("polygons") = polyList;
-    // Fill plotOrder slot with numeric vector
-    std::vector <int> plord;
-    for (int i=0; i<nrow; i++) plord.push_back (i + 1);
-    sp_polys.slot ("plotOrder") = plord;
-    plord.clear ();
-
-    Rcpp::CharacterMatrix kv_mat (nrow, ncol, kv_vec.begin());
-    Rcpp::DataFrame kv_df = kv_mat;
-    kv_df.attr ("names") = varnames;
-    sp_polys.slot ("data") = kv_df;
+    Rcpp::CharacterMatrix poly_kv_mat (nrow, ncol, poly_kv_vec.begin());
+    Rcpp::DataFrame poly_kv_df = poly_kv_mat;
+    poly_kv_df.attr ("names") = varnames;
 
     /************************************************************************
      ************************************************************************
      **                                                                    **
-     **                     STEP#3B: NON-POLYGONAL WAYS                    **
+     **                           STEP#3B: LINES                           **
      **                                                                    **
      ************************************************************************
      ************************************************************************/
@@ -300,11 +272,6 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     // TODO: Things to delete and replace with resize:
     // nmat2, kv_vec2, kv_mat2, kv_df2
     // nmat3, kv_vec3, kv_mat3, kv_df3
-
-    Rcpp::Language line_call ("new", "Line");
-    Rcpp::Language lines_call ("new", "Lines");
-    Rcpp::S4 line;
-    Rcpp::S4 lines;
 
     for (auto it = non_poly_ways.begin (); it != non_poly_ways.end (); ++it)
     {
@@ -357,28 +324,14 @@ Rcpp::List rcpp_osmdata (const std::string& st)
         nmat2.attr ("dimnames") = dimnames;
         dimnames.erase (0, dimnames.size());
 
-        // sp::Line and sp::Lines objects can be constructed directly from the
-        // data with the following two lines, but this is *enormously* slower:
-        //Rcpp::S4 line = Rcpp::Language ("Line", nmat).eval ();
-        //Rcpp::S4 lines = Rcpp::Language ("Lines", line, id).eval ();
-        // This way of constructing "new" objects and feeding slots is much
-        // faster:
-        line = line_call.eval ();
-        line.slot ("coords") = nmat2;
-        dummy_list.push_back (line);
-        lines = lines_call.eval ();
-        lines.slot ("Lines") = dummy_list;
-        lines.slot ("ID") = id;
-        lineList [count++] = lines;
-
-        dummy_list.erase (0);
+        lineList [count++] = nmat2;
     } // end for it over non_poly_ways
     lineList.attr ("names") = linenames;
 
     // Store all key-val pairs in one massive DF
     nrow = non_poly_ways.size (); 
     ncol = varnames.size ();
-    Rcpp::CharacterVector kv_vec2 (nrow * ncol, Rcpp::CharacterVector::get_na ());
+    Rcpp::CharacterVector line_kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na ());
     namecoli = std::distance (varnames.begin (), varnames.find ("name"));
     typecoli = std::distance (varnames.begin (), varnames.find ("type"));
     onewaycoli = std::distance (varnames.begin (), varnames.find ("oneway"));
@@ -386,15 +339,13 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     {
         int rowi = std::distance (non_poly_ways.begin (), it);
         auto itw = ways.find (*it);
-        kv_vec2 (namecoli * nrow + rowi) = itw->second.name;
-        kv_vec2 (typecoli * nrow + rowi) = itw->second.type;
-        //rowi = std::distance (non_poly_ways.begin (), it);
-        //kv_vec2 (namecoli * nrow + rowi) = it->second.name;
+        line_kv_vec (namecoli * nrow + rowi) = itw->second.name;
+        line_kv_vec (typecoli * nrow + rowi) = itw->second.type;
 
         if (itw->second.oneway)
-            kv_vec2 (onewaycoli * nrow + rowi) = "true";
+            line_kv_vec (onewaycoli * nrow + rowi) = "true";
         else
-            kv_vec2 (onewaycoli * nrow + rowi) = "false";
+            line_kv_vec (onewaycoli * nrow + rowi) = "false";
 
         for (auto kv_iter = itw->second.key_val.begin ();
                 kv_iter != itw->second.key_val.end (); ++kv_iter)
@@ -402,19 +353,13 @@ Rcpp::List rcpp_osmdata (const std::string& st)
             const std::string& key = (*kv_iter).first;
             auto ni = varnames.find (key); // key must exist in varnames!
             int coli = std::distance (varnames.begin (), ni);
-            kv_vec2 (coli * nrow + rowi) = (*kv_iter).second;
+            line_kv_vec (coli * nrow + rowi) = (*kv_iter).second;
         }
     }
 
-    Rcpp::Language sp_lines_call ("new", "SpatialLinesDataFrame");
-    Rcpp::S4 sp_lines;
-    sp_lines = sp_lines_call.eval ();
-    sp_lines.slot ("lines") = lineList;
-
-    Rcpp::CharacterMatrix kv_mat2 (nrow, ncol, kv_vec2.begin());
-    Rcpp::DataFrame kv_df2 = kv_mat2;
-    kv_df2.attr ("names") = varnames;
-    sp_lines.slot ("data") = kv_df2;
+    Rcpp::CharacterMatrix line_kv_mat (nrow, ncol, line_kv_vec.begin());
+    Rcpp::DataFrame line_kv_df = line_kv_mat;
+    line_kv_df.attr ("names") = varnames;
 
     /************************************************************************
      ************************************************************************
@@ -477,7 +422,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     // Store all key-val pairs in one massive DF
     nrow = nodes.size (); 
     ncol = varnames.size ();
-    Rcpp::CharacterVector kv_vec3 (nrow * ncol, Rcpp::CharacterVector::get_na ());
+    Rcpp::CharacterVector point_kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na ());
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
         int rowi = std::distance (nodes.begin (), ni);
@@ -487,7 +432,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
             const std::string& key = (*kv_iter).first;
             auto it = varnames.find (key); // key must exist in varnames!
             int coli = std::distance (varnames.begin (), it);
-            kv_vec3 (coli * nrow + rowi) = (*kv_iter).second;
+            point_kv_vec (coli * nrow + rowi) = (*kv_iter).second;
         }
     }
 
@@ -499,35 +444,28 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     nmat3.attr ("dimnames") = dimnames;
     dimnames.erase (0, dimnames.size());
 
-    Rcpp::CharacterMatrix kv_mat3 (nrow, ncol, kv_vec3.begin());
-    Rcpp::DataFrame kv_df3 = kv_mat3;
-    kv_df3.attr ("names") = varnames;
-
-    Rcpp::Language points_call ("new", "SpatialPoints");
-    Rcpp::Language sp_points_call ("new", "SpatialPointsDataFrame");
-    Rcpp::S4 sp_points;
-    sp_points = sp_points_call.eval ();
-    sp_points.slot ("data") = kv_df3;
-    sp_points.slot ("coords") = nmat3;
+    Rcpp::CharacterMatrix point_kv_mat (nrow, ncol, point_kv_vec.begin());
+    Rcpp::DataFrame point_kv_df = point_kv_mat;
+    point_kv_df.attr ("names") = varnames;
+    // points are in nmat3
 
     Rcpp::NumericMatrix bbox = rcpp_get_bbox (xmin, xmax, ymin, ymax);
-    sp_points.slot ("bbox") = bbox;
-    sp_lines.slot ("bbox") = bbox;
-    sp_polys.slot ("bbox") = bbox;
 
-    Rcpp::Language crs_call ("new", "CRS");
-    Rcpp::S4 crs = crs_call.eval ();
-    crs.slot ("projargs") = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0";
-    sp_points.slot ("proj4string") = crs;
-    sp_lines.slot ("proj4string") = crs; 
-    sp_polys.slot ("proj4string") = crs;
+    //Rcpp::Language crs_call ("new", "CRS"); // sp
+    //Rcpp::S4 crs = crs_call.eval ();
+    //crs.slot ("projargs") = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0";
 
-    Rcpp::List ret (3);
-    ret [0] = sp_points;
-    ret [1] = sp_lines;
-    ret [2] = sp_polys;
+    Rcpp::List ret (7);
+    ret [0] = bbox;
+    ret [1] = nmat3;
+    ret [2] = point_kv_df;
+    ret [3] = lineList;
+    ret [4] = line_kv_df;
+    ret [5] = polyList;
+    ret [6] = poly_kv_df;
 
-    std::vector <std::string> retnames {"points", "lines", "polygons"};
+    std::vector <std::string> retnames {"bbox", "points", "points_kv",
+        "lines", "lines_kv", "polygons", "polygons_kv"};
     ret.attr ("names") = retnames;
     
     return ret;
