@@ -32,8 +32,6 @@
 
 #include "common.h"
 
-// TODO: Implement Rcpp error control for asserts
-
 /************************************************************************
  ************************************************************************
  **                                                                    **
@@ -104,7 +102,8 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
         if (!strcmp (it->name(), "node"))
         {
             traverseNode (it, rnode);
-            assert (rnode.key.size () == rnode.val.size ());
+            if (rnode.key.size () != rnode.val.size ())
+                throw std::runtime_error ("key and values have different sizes");
 
             node.id = rnode.id;
             node.lat = rnode.lat;
@@ -122,7 +121,8 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
             rway.nodes.clear();
 
             traverseWay (it, rway);
-            assert (rway.key.size () == rway.value.size ());
+            if (rway.key.size () != rway.val.size ())
+                throw std::runtime_error ("key and values have different sizes");
 
             // This is much easier as explicit loop than with an iterator
             way.id = rway.id;
@@ -149,8 +149,10 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
             rrel.outer.clear();
 
             traverseRelation (it, rrel);
-            assert (rrel.key.size () == rrel.value.size ());
-            assert (rrel.ways.size () == rrel.outer.size ());
+            if (rrel.key.size () != rrel.value.size ())
+                throw std::runtime_error ("key and values have different sizes");
+            if (rrel.ways.size () == rrel.outer.size ())
+                throw std::runtime_error ("key and values have different sizes");
 
             relation.id = rrel.id;
             relation.key_val.clear();
