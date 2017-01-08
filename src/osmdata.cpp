@@ -1,6 +1,6 @@
 /***************************************************************************
  *  Project:    osmdata
- *  File:       osmdata-sp.cpp
+ *  File:       osmdata.cpp
  *  Language:   C++
  *
  *  osmdata is free software: you can redistribute it and/or modify it under
@@ -20,7 +20,7 @@
  *  E-Mail:     mark.padgham@email.com / andrew@casacazaz.net
  *
  *  Description:    Extract OSM data from an object of class XmlData and return
- *                  it in R 'sp' format.
+ *                  it in Rcpp::List format.
  *
  *  Limitations:
  *
@@ -36,16 +36,14 @@
 
 #include <algorithm> // for min_element/max_element
 
-// [[Rcpp::depends(sp)]]
-
-//' rcpp_osmdata_sp
+//' rcpp_osmdata
 //'
 //' Extracts all polygons from an overpass API query
 //'
 //' @param st Text contents of an overpass API query
-//' @return A \code{SpatialLinesDataFrame} contains all polygons and associated data
+//' @return Rcpp::List objects of OSM data
 // [[Rcpp::export]]
-Rcpp::List rcpp_osmdata_sp (const std::string& st)
+Rcpp::List rcpp_osmdata (const std::string& st)
 {
 #ifdef DUMP_INPUT
     {

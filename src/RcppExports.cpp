@@ -5,6 +5,17 @@
 
 using namespace Rcpp;
 
+// rcpp_osmdata
+Rcpp::List rcpp_osmdata(const std::string& st);
+RcppExport SEXP osmdata_rcpp_osmdata(SEXP stSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string& >::type st(stSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_osmdata(st));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_osmdata_sp
 Rcpp::List rcpp_osmdata_sp(const std::string& st);
 RcppExport SEXP osmdata_rcpp_osmdata_sp(SEXP stSEXP) {
