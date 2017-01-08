@@ -102,8 +102,8 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
         if (!strcmp (it->name(), "node"))
         {
             traverseNode (it, rnode);
-            if (rnode.key.size () != rnode.val.size ())
-                throw std::runtime_error ("key and values have different sizes");
+            if (rnode.key.size () != rnode.value.size ())
+                throw std::runtime_error ("sizes of keys and values differ");
 
             node.id = rnode.id;
             node.lat = rnode.lat;
@@ -121,8 +121,8 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
             rway.nodes.clear();
 
             traverseWay (it, rway);
-            if (rway.key.size () != rway.val.size ())
-                throw std::runtime_error ("key and values have different sizes");
+            if (rway.key.size () != rway.value.size ())
+                throw std::runtime_error ("sizes of keys and values differ");
 
             // This is much easier as explicit loop than with an iterator
             way.id = rway.id;
@@ -150,9 +150,8 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
 
             traverseRelation (it, rrel);
             if (rrel.key.size () != rrel.value.size ())
-                throw std::runtime_error ("key and values have different sizes");
-            if (rrel.ways.size () == rrel.outer.size ())
-                throw std::runtime_error ("key and values have different sizes");
+                throw std::runtime_error ("sizes of keys and values differ");
+            assert (rrel.ways.size () == rrel.outer.size ());
 
             relation.id = rrel.id;
             relation.key_val.clear();
