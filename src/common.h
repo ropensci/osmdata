@@ -67,7 +67,7 @@ XmlDocPtr parseXML (const std::string& xmlString);
 
 struct UniqueKeys
 {
-    std::set <std::string> k_node, k_way, k_rel;
+    std::unordered_set <std::string> k_point, k_line, k_poly;
 };
 
 struct RawNode

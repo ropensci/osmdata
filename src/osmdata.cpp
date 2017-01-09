@@ -307,6 +307,14 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     for (auto i=varnames.begin (); i != varnames.end (); ++i)
         varnames_vec.push_back (*i);
 
+    /*
+    Rcpp::Rcout << "LINES: varnames.size = " << varnames_vec.size () <<
+        "; k_lines.size = " << keys.k_line.size () << std::endl;
+    for (auto i = varnames_vec.begin (); i != varnames_vec.end (); ++i)
+        Rcpp::Rcout << "V: " << (*i) << std::endl;
+    for (const auto& i: keys.k_line)
+        Rcpp::Rcout << "K: " << i << std::endl;
+    */
 
     for (auto it = non_poly_ways.begin (); it != non_poly_ways.end (); ++it)
     {
@@ -387,8 +395,8 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     varnames_vec.resize (0);
     varnames_vec.push_back ("lon");
     varnames_vec.push_back ("lat");
-    for (auto i=keys.k_node.begin (); i != keys.k_node.end (); ++i)
-        varnames_vec.push_back (*i);
+    for (const auto& i: keys.k_point)
+        varnames_vec.push_back (i);
 
     Rcpp::List onePointNull (varnames_vec.size ()); // lon-lat
     for (int i=0; i<(varnames_vec.size ()); i++)
@@ -409,8 +417,8 @@ Rcpp::List rcpp_osmdata (const std::string& st)
                 kv_iter != ni->second.key_val.end (); ++kv_iter)
         {
             const std::string& key = (*kv_iter).first;
-            auto it = keys.k_node.find (key);
-            int ni = std::distance (keys.k_node.begin (), it);
+            auto it = keys.k_point.find (key);
+            int ni = std::distance (keys.k_point.begin (), it);
             onePoint (ni + 2) = (*kv_iter).second;
         }
         onePoint.attr ("n_empty") = 0;
