@@ -32,6 +32,8 @@
 
 #include "common.h"
 
+const std::string crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0";
+
 /************************************************************************
  ************************************************************************
  **                                                                    **
@@ -101,6 +103,9 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
     {
         if (!strcmp (it->name(), "node"))
         {
+            rnode.key.clear ();
+            rnode.value.clear ();
+
             traverseNode (it, rnode);
             if (rnode.key.size () != rnode.value.size ())
                 throw std::runtime_error ("sizes of keys and values differ");
@@ -116,9 +121,9 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
         }
         else if (!strcmp (it->name(), "way"))
         {
-            rway.key.clear();
-            rway.value.clear();
-            rway.nodes.clear();
+            rway.key.clear ();
+            rway.value.clear ();
+            rway.nodes.clear ();
 
             traverseWay (it, rway);
             if (rway.key.size () != rway.value.size ())
