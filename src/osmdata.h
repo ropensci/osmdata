@@ -162,7 +162,8 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
             traverseRelation (it, rrel);
             if (rrel.key.size () != rrel.value.size ())
                 throw std::runtime_error ("sizes of keys and values differ");
-            assert (rrel.ways.size () == rrel.outer.size ());
+            if (rrel.ways.size () != rrel.outer.size ())
+                throw std::runtime_error ("size of ways and outer differ");
 
             relation.id = rrel.id;
             relation.key_val.clear();

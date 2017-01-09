@@ -115,7 +115,8 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     for (auto it = rels.begin (); it != rels.end (); ++it)
         for (auto itw = (*it).ways.begin (); itw != (*it).ways.end (); ++itw)
         {
-            assert (ways.find (itw->first) != ways.end ());
+            if (ways.find (itw->first) == ways.end ())
+                throw std::runtime_error ("way can not be found");
             poly_ways.insert (itw->first);
         }
 
@@ -193,8 +194,8 @@ Rcpp::List rcpp_osmdata (const std::string& st)
         for (auto itn = itw->second.nodes.begin ();
                 itn != itw->second.nodes.end (); ++itn)
         {
-            // TODO: Propoer exception handler
-            assert (nodes.find (*itn) != nodes.end ());
+            if (nodes.find (*itn) == nodes.end ())
+                throw std::runtime_error ("node can not be found");
             lons.push_back (nodes.find (*itn)->second.lon);
             lats.push_back (nodes.find (*itn)->second.lat);
             rownames.push_back (std::to_string (*itn));
@@ -321,8 +322,8 @@ Rcpp::List rcpp_osmdata (const std::string& st)
         for (auto itn = itw->second.nodes.begin ();
                 itn != itw->second.nodes.end (); ++itn)
         {
-            // TODO: Propoer exception handler
-            assert (nodes.find (*itn) != nodes.end ());
+            if (nodes.find (*itn) == nodes.end ())
+                throw std::runtime_error ("node can not be found");
             lons.push_back (nodes.find (*itn)->second.lon);
             lats.push_back (nodes.find (*itn)->second.lat);
             rownames.push_back (std::to_string (*itn));
