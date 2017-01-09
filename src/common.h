@@ -42,6 +42,7 @@
 
 #include <vector>
 #include <map>
+#include <set>
 #include <unordered_set>
 #include <cstring>
 
@@ -63,6 +64,11 @@ typedef const rapidxml::xml_node<>* XmlNodePtr;
 typedef const rapidxml::xml_attribute<>* XmlAttrPtr;
 
 XmlDocPtr parseXML (const std::string& xmlString);
+
+struct UniqueKeys
+{
+    std::set <std::string> k_node, k_way, k_rel;
+};
 
 struct RawNode
 {

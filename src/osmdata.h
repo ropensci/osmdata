@@ -50,6 +50,7 @@ class XmlData
         Nodes m_nodes;
         Ways m_ways;
         Relations m_relations;
+        UniqueKeys m_keys;
 
     public:
 
@@ -70,6 +71,7 @@ class XmlData
         const Nodes& nodes() const { return m_nodes; }
         const Ways& ways() const { return m_ways; }
         const Relations& relations() const { return m_relations; }
+        const UniqueKeys& keys() const { return m_keys; }
 
     private:
 
@@ -115,8 +117,11 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
             node.lon = rnode.lon;
             node.key_val.clear ();
             for (size_t i=0; i<rnode.key.size (); i++)
+            {
                 node.key_val.insert (std::make_pair
                         (rnode.key [i], rnode.value [i]));
+                m_keys.k_node.insert (rnode.key [i]); // only inserts unique keys
+            }
             m_nodes.insert (std::make_pair (node.id, node));
         }
         else if (!strcmp (it->name(), "way"))
@@ -141,6 +146,7 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                 else
                     way.key_val.insert (std::make_pair
                             (rway.key [i], rway.value [i]));
+                m_keys.k_way.insert (rway.key [i]);
             }
             // Then copy nodes from rway to way.
             way.nodes.swap (rway.nodes);
@@ -162,8 +168,11 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
             relation.key_val.clear();
             relation.ways.clear();
             for (size_t i=0; i<rrel.key.size (); i++)
+            {
                 relation.key_val.insert (std::make_pair (rrel.key [i],
                             rrel.value [i]));
+                m_keys.k_rel.insert (rrel.key [i]);
+            }
             for (size_t i=0; i<rrel.ways.size (); i++)
                 relation.ways.push_back (std::make_pair (rrel.ways [i],
                             rrel.outer [i]));

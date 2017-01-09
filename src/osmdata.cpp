@@ -60,12 +60,14 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     const std::map <osmid_t, Node>& nodes = xml.nodes ();
     const std::map <osmid_t, OneWay>& ways = xml.ways ();
     const std::vector <Relation>& rels = xml.relations ();
+    const UniqueKeys keys = xml.keys ();
 
     int count = 0;
     std::vector <float> lons, lats;
     std::unordered_set <std::string> idset; // see TODO below
     std::vector <std::string> colnames, rownames, polynames;
     std::set <std::string> varnames;
+    std::vector <std::string> varnames_vec;
     Rcpp::List dimnames (0);
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
 
@@ -295,7 +297,19 @@ Rcpp::List rcpp_osmdata (const std::string& st)
             id = std::to_string (itw->first) + "." + std::to_string (tempi++);
         idset.insert (id);
         linenames.push_back (id);
+    }
 
+    // Construct the vector of varnames
+    varnames_vec.resize (0);
+    varnames_vec.push_back ("lon");
+    varnames_vec.push_back ("lat");
+    for (auto i=varnames.begin (); i != varnames.end (); ++i)
+        varnames_vec.push_back (*i);
+
+
+    for (auto it = non_poly_ways.begin (); it != non_poly_ways.end (); ++it)
+    {
+        auto itw = ways.find (*it);
         // Then iterate over nodes of that way and store all lat-lons
         size_t n = itw->second.nodes.size ();
         lons.clear ();
@@ -369,44 +383,17 @@ Rcpp::List rcpp_osmdata (const std::string& st)
      ************************************************************************
      ************************************************************************/
 
-    std::vector <std::string> nodenames;
-    nodenames.reserve (nodes.size());
+    varnames_vec.resize (0);
+    varnames_vec.push_back ("lon");
+    varnames_vec.push_back ("lat");
+    for (auto i=keys.k_node.begin (); i != keys.k_node.end (); ++i)
+        varnames_vec.push_back (*i);
 
-    colnames.resize (0);
-    colnames.push_back ("lon");
-    colnames.push_back ("lat");
-    varnames.clear ();
-
-    dimnames.erase (0, dimnames.size());
-    Rcpp::NumericMatrix nmat3 (Rcpp::Dimension (0, 0)); 
-
-    lons.clear ();
-    lats.clear ();
-    lons.reserve (nodes.size ());
-    lats.reserve (nodes.size ());
-    rownames.clear ();
-    rownames.reserve (nodes.size ());
-
-    // Collect all unique keys
-    for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
-    {
-        std::for_each (ni->second.key_val.begin (),
-                ni->second.key_val.end (),
-                [&](const std::pair <std::string, std::string>& p)
-                {
-                    varnames.insert (p.first);
-                });
-    }
-    std::vector <std::string> varnames_pts;
-    varnames_pts.push_back ("lon");
-    varnames_pts.push_back ("lat");
-    Rcpp::List onePointNull (varnames.size () + 2); // lon-lat
-    for (int i=0; i<(varnames.size () + 2); i++)
+    Rcpp::List onePointNull (varnames_vec.size ()); // lon-lat
+    for (int i=0; i<(varnames_vec.size ()); i++)
         onePointNull (i) = "";
     //    onePointNull (i) = R_NilValue; // can't unlist that
-    for (auto i=varnames.begin (); i != varnames.end (); ++i)
-        varnames_pts.push_back (*i);
-    onePointNull.attr ("names") = varnames_pts;
+    onePointNull.attr ("names") = varnames_vec;
 
     // Then make Rcpp::List objects for each node
     Rcpp::List pointList (nodes.size ());
@@ -421,8 +408,8 @@ Rcpp::List rcpp_osmdata (const std::string& st)
                 kv_iter != ni->second.key_val.end (); ++kv_iter)
         {
             const std::string& key = (*kv_iter).first;
-            auto it = varnames.find (key); // key must exist in varnames!
-            int ni = std::distance (varnames.begin (), it);
+            auto it = keys.k_node.find (key);
+            int ni = std::distance (keys.k_node.begin (), it);
             onePoint (ni + 2) = (*kv_iter).second;
         }
         onePoint.attr ("n_empty") = 0;
@@ -431,6 +418,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
         onePoint.attr ("crs") = "crs";
         pointList (count++) = onePoint;
     }
+    onePointNull = R_NilValue;
 
     /************************************************************************
      ************************************************************************
