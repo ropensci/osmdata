@@ -120,7 +120,7 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
             {
                 node.key_val.insert (std::make_pair
                         (rnode.key [i], rnode.value [i]));
-                m_keys.k_node.insert (rnode.key [i]); // only inserts unique keys
+                m_keys.k_point.insert (rnode.key [i]); // only inserts unique keys
             }
             m_nodes.insert (std::make_pair (node.id, node));
         }
@@ -139,6 +139,9 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
             way.name = way.type = "";
             way.key_val.clear();
             way.nodes.clear();
+            bool isWayPoly = false;
+            if (rway.nodes.front () == rway.nodes.back ())
+                isWayPoly = true;
             for (size_t i=0; i<rway.key.size (); i++)
             {
                 if (rway.key [i] == "name")
@@ -146,7 +149,10 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                 else
                     way.key_val.insert (std::make_pair
                             (rway.key [i], rway.value [i]));
-                m_keys.k_way.insert (rway.key [i]);
+                if (!isWayPoly)
+                    m_keys.k_line.insert (rway.key [i]);
+                else
+                    m_keys.k_poly.insert (rway.key [i]);
             }
             // Then copy nodes from rway to way.
             way.nodes.swap (rway.nodes);
@@ -172,7 +178,7 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
             {
                 relation.key_val.insert (std::make_pair (rrel.key [i],
                             rrel.value [i]));
-                m_keys.k_rel.insert (rrel.key [i]);
+                m_keys.k_poly.insert (rrel.key [i]);
             }
             for (size_t i=0; i<rrel.ways.size (); i++)
                 relation.ways.push_back (std::make_pair (rrel.ways [i],
