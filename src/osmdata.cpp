@@ -369,7 +369,6 @@ Rcpp::List rcpp_osmdata (const std::string& st)
      ************************************************************************
      ************************************************************************/
 
-    Rcpp::List pointList (nodes.size ());
     std::vector <std::string> nodenames;
     nodenames.reserve (nodes.size());
 
@@ -377,8 +376,6 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     colnames.push_back ("lon");
     colnames.push_back ("lat");
     varnames.clear ();
-
-    count = 0;
 
     dimnames.erase (0, dimnames.size());
     Rcpp::NumericMatrix nmat3 (Rcpp::Dimension (0, 0)); 
@@ -390,81 +387,72 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     rownames.clear ();
     rownames.reserve (nodes.size ());
 
+    // Collect all unique keys
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
-        // Collect all unique keys
         std::for_each (ni->second.key_val.begin (),
                 ni->second.key_val.end (),
                 [&](const std::pair <std::string, std::string>& p)
                 {
                     varnames.insert (p.first);
                 });
-
-        lons.push_back (ni->second.lon);
-        lats.push_back (ni->second.lat);
-        rownames.push_back (std::to_string (ni->first));
     }
+    std::vector <std::string> varnames_pts;
+    varnames_pts.push_back ("lon");
+    varnames_pts.push_back ("lat");
+    Rcpp::List onePointNull (varnames.size () + 2); // lon-lat
+    for (int i=0; i<(varnames.size () + 2); i++)
+        onePointNull (i) = "";
+    //    onePointNull (i) = R_NilValue; // can't unlist that
+    for (auto i=varnames.begin (); i != varnames.end (); ++i)
+        varnames_pts.push_back (*i);
+    onePointNull.attr ("names") = varnames_pts;
 
-    float xmin=FLOAT_MAX, xmax=-FLOAT_MAX, ymin=FLOAT_MAX, ymax=-FLOAT_MAX;
-    if (nodes.size () == 0)
-        throw std::runtime_error ("Query returned no data");
-    else
-    {
-        xmin = std::min (xmin, *std::min_element (lons.begin(), lons.end()));
-        xmax = std::max (xmax, *std::max_element (lons.begin(), lons.end()));
-        ymin = std::min (ymin, *std::min_element (lats.begin(), lats.end()));
-        ymax = std::max (ymax, *std::max_element (lats.begin(), lats.end()));
-    }
-    if (fabs (xmin) == FLOAT_MAX || fabs (xmax) == FLOAT_MAX ||
-            fabs (ymin) == FLOAT_MAX || fabs (ymax) == FLOAT_MAX)
-        throw std::runtime_error ("No bounding box able to be determined");
-
-    // Store all key-val pairs in one massive DF
-    nrow = nodes.size (); 
-    ncol = varnames.size ();
-    Rcpp::CharacterVector point_kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na ());
+    // Then make Rcpp::List objects for each node
+    Rcpp::List pointList (nodes.size ());
+    count = 0;
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
-        int rowi = std::distance (nodes.begin (), ni);
+        Rcpp::List onePoint = clone (onePointNull);
+        onePoint.attr ("name") = std::to_string (ni->first);
+        onePoint (0) = ni->second.lon;
+        onePoint (1) = ni->second.lat;
         for (auto kv_iter = ni->second.key_val.begin ();
                 kv_iter != ni->second.key_val.end (); ++kv_iter)
         {
             const std::string& key = (*kv_iter).first;
             auto it = varnames.find (key); // key must exist in varnames!
-            int coli = std::distance (varnames.begin (), it);
-            point_kv_vec (coli * nrow + rowi) = (*kv_iter).second;
+            int ni = std::distance (varnames.begin (), it);
+            onePoint (ni + 2) = (*kv_iter).second;
         }
+        onePoint.attr ("n_empty") = 0;
+        onePoint.attr ("precision") = 0.0;
+        onePoint.attr ("class") = "sfc";
+        onePoint.attr ("crs") = "crs";
+        pointList (count++) = onePoint;
     }
 
-    nmat3 = Rcpp::NumericMatrix (Rcpp::Dimension (lons.size (), 2));
-    std::copy (lons.begin (), lons.end (), nmat3.begin ());
-    std::copy (lats.begin (), lats.end (), nmat3.begin () + lons.size ());
-    dimnames.push_back (rownames);
-    dimnames.push_back (colnames);
-    nmat3.attr ("dimnames") = dimnames;
-    dimnames.erase (0, dimnames.size());
+    /************************************************************************
+     ************************************************************************
+     **                                                                    **
+     **                      STEP#4: COLLATE ALL DATA                      **
+     **                                                                    **
+     ************************************************************************
+     ************************************************************************/
 
-    Rcpp::CharacterMatrix point_kv_mat (nrow, ncol, point_kv_vec.begin());
-    Rcpp::DataFrame point_kv_df = point_kv_mat;
-    point_kv_df.attr ("names") = varnames;
-    // points are in nmat3
+    //Rcpp::NumericMatrix bbox = rcpp_get_bbox (xmin, xmax, ymin, ymax);
 
-    Rcpp::NumericMatrix bbox = rcpp_get_bbox (xmin, xmax, ymin, ymax);
+    Rcpp::List ret (5);
+    //ret [0] = bbox;
+    ret [0] = pointList;
+    ret [1] = lineList;
+    ret [2] = line_kv_df;
+    ret [3] = polyList;
+    ret [4] = poly_kv_df;
 
-    //Rcpp::Language crs_call ("new", "CRS"); // sp
-    //Rcpp::S4 crs = crs_call.eval ();
-    //crs.slot ("projargs") = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0";
-
-    Rcpp::List ret (7);
-    ret [0] = bbox;
-    ret [1] = nmat3;
-    ret [2] = point_kv_df;
-    ret [3] = lineList;
-    ret [4] = line_kv_df;
-    ret [5] = polyList;
-    ret [6] = poly_kv_df;
-
-    std::vector <std::string> retnames {"bbox", "points", "points_kv",
+    //std::vector <std::string> retnames {"bbox", "points", 
+    //    "lines", "lines_kv", "polygons", "polygons_kv"};
+    std::vector <std::string> retnames {"points", 
         "lines", "lines_kv", "polygons", "polygons_kv"};
     ret.attr ("names") = retnames;
     
