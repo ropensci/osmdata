@@ -260,11 +260,12 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     count = 0;
     // Store all key-val pairs in one massive DF
     nrow = non_poly_ways.size (); 
-    ncol = varnames.size ();
+    ncol = unique_vals.k_line.size ();
     Rcpp::CharacterVector line_kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na ());
     for (auto it = non_poly_ways.begin (); it != non_poly_ways.end (); ++it)
     {
         auto itw = ways.find (*it);
+        linenames.push_back (std::to_string (itw->first));
         // Then iterate over nodes of that way and store all lat-lons
         size_t n = itw->second.nodes.size ();
         lons.clear ();
@@ -289,7 +290,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
 
         // This only works with push_back, not with direct re-allocation
         dimnames.push_back (rownames);
-        dimnames.push_back (varnames_vec);
+        dimnames.push_back (colnames);
         nmat2.attr ("dimnames") = dimnames;
         dimnames.erase (0, dimnames.size());
 
@@ -300,8 +301,8 @@ Rcpp::List rcpp_osmdata (const std::string& st)
                 kv_iter != itw->second.key_val.end (); ++kv_iter)
         {
             const std::string& key = (*kv_iter).first;
-            auto ni = varnames.find (key); // key must exist in varnames!
-            int coli = std::distance (varnames.begin (), ni);
+            auto ni = unique_vals.k_line.find (key); // key must exist!
+            int coli = std::distance (unique_vals.k_line.begin (), ni);
             line_kv_vec (coli * nrow + rowi) = (*kv_iter).second;
         }
     } // end for it over non_poly_ways
@@ -309,7 +310,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
 
     Rcpp::CharacterMatrix line_kv_mat (nrow, ncol, line_kv_vec.begin());
     Rcpp::DataFrame line_kv_df = line_kv_mat;
-    line_kv_df.attr ("names") = varnames;
+    line_kv_df.attr ("names") = unique_vals.k_line;
 
     /************************************************************************
      ************************************************************************

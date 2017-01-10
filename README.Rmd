@@ -75,7 +75,7 @@ bu <- osmdata_sp (q1)
 bu
 ```
 
-```{r test-points}
+```{r test-points, eval=FALSE}
 devtools::load_all (".", export_all=FALSE)
 q0 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) # Central London, U.K.
 q1 <- add_feature (q0, key='building')
@@ -86,11 +86,15 @@ pts <- data.frame (apply (pts, 2, unlist))
 rownames (pts) <- ptnames
 ```
 
-```{r test-lines}
+```{r test-lines, eval=FALSE}
 devtools::load_all (".", export_all=FALSE)
 q0 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) # Central London, U.K.
 q1 <- add_feature (q0, key='highway')
-hw <- osmdata_sf (q1)
+doc <- osmdata_xml (q1)
+hw <- osmdata_sf (q1, doc)
+hw <- osmdata_sp (q1, doc)
+microbenchmark::microbenchmark (hw <- osmdata_sf (q1, doc), times=100L)
+microbenchmark::microbenchmark (hw <- osmdata_sp (q1, doc), times=100L)
 lnnames <- sapply (hw$lines, function (i) attr (i, "name"))
 lns <- do.call (rbind, hw$lines)
 lns <- data.frame (apply (lns, 2, unlist))
