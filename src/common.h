@@ -65,10 +65,17 @@ typedef const rapidxml::xml_attribute<>* XmlAttrPtr;
 
 XmlDocPtr parseXML (const std::string& xmlString);
 
-struct UniqueKeys
+struct UniqueVals
 {
-    //std::unordered_set <std::string> k_point, k_line, k_poly;
-    // std::set is slower, but it is useful to have keys alphabetically ordered.
+    // OSM IDs are sometimes duplicated, even though they ought not be. Unique
+    // IDs are stored in the following sets, ensuring that only the first
+    // instance of any given ID will be extracted.
+    // NOTE: Previous code converted <osmid_t> IDs to std::string and added
+    // decimal places to generate unique IDs. This could be re-instated?
+    std::set <osmid_t> id_node, id_way, id_line;
+    // Unique keys are also stored to provide column names.  Although std::set
+    // is slower than an unordered_set, it is useful to have keys alphabetically
+    // ordered.
     std::set <std::string> k_point, k_line, k_poly;
 };
 
