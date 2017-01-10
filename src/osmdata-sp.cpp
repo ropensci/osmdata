@@ -75,10 +75,6 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
 
     colnames.push_back ("lon");
     colnames.push_back ("lat");
-    varnames.insert ("name");
-    varnames.insert ("type");
-    varnames.insert ("oneway");
-    // other varnames added below
 
     /*
      * NOTE: Nodes are first loaded into the 2 vectors of (lon, lat), and these
@@ -236,20 +232,10 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
     // Store all key-val pairs in one massive DF
     int nrow = poly_ways.size (), ncol = varnames.size ();
     Rcpp::CharacterVector kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na ());
-    int namecoli = std::distance (varnames.begin (), varnames.find ("name"));
-    int typecoli = std::distance (varnames.begin (), varnames.find ("type"));
-    int onewaycoli = std::distance (varnames.begin (), varnames.find ("oneway"));
     for (auto it = poly_ways.begin (); it != poly_ways.end (); ++it)
     {
         int rowi = std::distance (poly_ways.begin (), it);
         auto itw = ways.find (*it);
-        kv_vec (namecoli * nrow + rowi) = itw->second.name;
-        kv_vec (typecoli * nrow + rowi) = itw->second.type;
-
-        if (itw->second.oneway)
-            kv_vec (onewaycoli * nrow + rowi) = "true";
-        else
-            kv_vec (onewaycoli * nrow + rowi) = "false";
 
         for (auto kv_iter = itw->second.key_val.begin ();
                 kv_iter != itw->second.key_val.end (); ++kv_iter)
@@ -291,9 +277,6 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
     colnames.push_back ("lon");
     colnames.push_back ("lat");
     varnames.clear ();
-    varnames.insert ("name");
-    varnames.insert ("type");
-    varnames.insert ("oneway");
 
     count = 0;
 
@@ -382,22 +365,10 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
     nrow = non_poly_ways.size (); 
     ncol = varnames.size ();
     Rcpp::CharacterVector kv_vec2 (nrow * ncol, Rcpp::CharacterVector::get_na ());
-    namecoli = std::distance (varnames.begin (), varnames.find ("name"));
-    typecoli = std::distance (varnames.begin (), varnames.find ("type"));
-    onewaycoli = std::distance (varnames.begin (), varnames.find ("oneway"));
     for (auto it = non_poly_ways.begin (); it != non_poly_ways.end (); ++it)
     {
         int rowi = std::distance (non_poly_ways.begin (), it);
         auto itw = ways.find (*it);
-        kv_vec2 (namecoli * nrow + rowi) = itw->second.name;
-        kv_vec2 (typecoli * nrow + rowi) = itw->second.type;
-        //rowi = std::distance (non_poly_ways.begin (), it);
-        //kv_vec2 (namecoli * nrow + rowi) = it->second.name;
-
-        if (itw->second.oneway)
-            kv_vec2 (onewaycoli * nrow + rowi) = "true";
-        else
-            kv_vec2 (onewaycoli * nrow + rowi) = "false";
 
         for (auto kv_iter = itw->second.key_val.begin ();
                 kv_iter != itw->second.key_val.end (); ++kv_iter)

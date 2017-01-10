@@ -67,7 +67,9 @@ XmlDocPtr parseXML (const std::string& xmlString);
 
 struct UniqueKeys
 {
-    std::unordered_set <std::string> k_point, k_line, k_poly;
+    //std::unordered_set <std::string> k_point, k_line, k_poly;
+    // std::set is slower, but it is useful to have keys alphabetically ordered.
+    std::set <std::string> k_point, k_line, k_poly;
 };
 
 struct RawNode
@@ -97,9 +99,7 @@ struct RawWay
 
 struct OneWay
 {
-    bool oneway;
     osmid_t id;
-    std::string type, name;
     std::map <std::string, std::string> key_val;
     std::vector <osmid_t> nodes;
 };

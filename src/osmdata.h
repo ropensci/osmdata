@@ -136,7 +136,6 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
 
             // This is much easier as explicit loop than with an iterator
             way.id = rway.id;
-            way.name = way.type = "";
             way.key_val.clear();
             way.nodes.clear();
             bool isWayPoly = false;
@@ -144,9 +143,9 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                 isWayPoly = true;
             for (size_t i=0; i<rway.key.size (); i++)
             {
-                if (rway.key [i] == "name")
-                    way.name = rway.value [i];
-                else
+                //if (rway.key [i] == "name")
+                //    way.name = rway.value [i];
+                //else
                     way.key_val.insert (std::make_pair
                             (rway.key [i], rway.value [i]));
                 if (!isWayPoly)
