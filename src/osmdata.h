@@ -112,17 +112,22 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
             if (rnode.key.size () != rnode.value.size ())
                 throw std::runtime_error ("sizes of keys and values differ");
 
-            node.id = rnode.id;
-            node.lat = rnode.lat;
-            node.lon = rnode.lon;
-            node.key_val.clear ();
-            for (size_t i=0; i<rnode.key.size (); i++)
+            // Only insert unique nodes
+            if (m_unique.id_node.find (rnode.id) == m_unique.id_node.end ())
             {
-                node.key_val.insert (std::make_pair
-                        (rnode.key [i], rnode.value [i]));
-                m_unique.k_point.insert (rnode.key [i]); // only inserts unique keys
+                m_unique.id_node.insert (rnode.id);
+                node.id = rnode.id;
+                node.lat = rnode.lat;
+                node.lon = rnode.lon;
+                node.key_val.clear ();
+                for (size_t i=0; i<rnode.key.size (); i++)
+                {
+                    node.key_val.insert (std::make_pair
+                            (rnode.key [i], rnode.value [i]));
+                    m_unique.k_point.insert (rnode.key [i]); // only inserts unique keys
+                }
+                m_nodes.insert (std::make_pair (node.id, node));
             }
-            m_nodes.insert (std::make_pair (node.id, node));
         }
         else if (!strcmp (it->name(), "way"))
         {
@@ -134,22 +139,25 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
             if (rway.key.size () != rway.value.size ())
                 throw std::runtime_error ("sizes of keys and values differ");
 
-            // This is much easier as explicit loop than with an iterator
-            way.id = rway.id;
-            way.key_val.clear();
-            way.nodes.clear();
-            for (size_t i=0; i<rway.key.size (); i++)
+            if (m_unique.id_way.find (rway.id) == m_unique.id_way.end ())
             {
-                way.key_val.insert (std::make_pair
-                        (rway.key [i], rway.value [i]));
-                if (rway.nodes.front () == rway.nodes.back ())
-                    m_unique.k_poly.insert (rway.key [i]);
-                else
-                    m_unique.k_line.insert (rway.key [i]);
+                m_unique.id_way.insert (rway.id);
+                way.id = rway.id;
+                way.key_val.clear();
+                way.nodes.clear();
+                for (size_t i=0; i<rway.key.size (); i++)
+                {
+                    way.key_val.insert (std::make_pair
+                            (rway.key [i], rway.value [i]));
+                    if (rway.nodes.front () == rway.nodes.back ())
+                        m_unique.k_poly.insert (rway.key [i]);
+                    else
+                        m_unique.k_line.insert (rway.key [i]);
+                }
+                // Then copy nodes from rway to way.
+                way.nodes.swap (rway.nodes);
+                m_ways.insert (std::make_pair (way.id, way));
             }
-            // Then copy nodes from rway to way.
-            way.nodes.swap (rway.nodes);
-            m_ways.insert (std::make_pair (way.id, way));
         }
         else if (!strcmp (it->name(), "relation"))
         {
@@ -164,19 +172,23 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
             if (rrel.ways.size () != rrel.outer.size ())
                 throw std::runtime_error ("size of ways and outer differ");
 
-            relation.id = rrel.id;
-            relation.key_val.clear();
-            relation.ways.clear();
-            for (size_t i=0; i<rrel.key.size (); i++)
+            if (m_unique.id_rel.find (rrel.id) == m_unique.id_rel.end ())
             {
-                relation.key_val.insert (std::make_pair (rrel.key [i],
-                            rrel.value [i]));
-                m_unique.k_poly.insert (rrel.key [i]);
+                m_unique.id_rel.insert (rrel.id);
+                relation.id = rrel.id;
+                relation.key_val.clear();
+                relation.ways.clear();
+                for (size_t i=0; i<rrel.key.size (); i++)
+                {
+                    relation.key_val.insert (std::make_pair (rrel.key [i],
+                                rrel.value [i]));
+                    m_unique.k_poly.insert (rrel.key [i]);
+                }
+                for (size_t i=0; i<rrel.ways.size (); i++)
+                    relation.ways.push_back (std::make_pair (rrel.ways [i],
+                                rrel.outer [i]));
+                m_relations.push_back (relation);
             }
-            for (size_t i=0; i<rrel.ways.size (); i++)
-                relation.ways.push_back (std::make_pair (rrel.ways [i],
-                            rrel.outer [i]));
-            m_relations.push_back (relation);
         }
         else
         {

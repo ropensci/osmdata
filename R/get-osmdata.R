@@ -62,7 +62,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
         # TODO: Get this reges to **exclude** 'T' and 'Z'
         hms <- regmatches (tstmp, regexpr ('T(.*?)Z', tstmp))
         hms <- substring (hms, 2, nchar (hms) - 1)
-        obj$timestamp <- timestamp (paste (wday, mon, day, hms, year))
+        obj$timestamp <- timestamp (paste (wday, mon, day, hms, year), quiet=TRUE)
         doc <- as.character (doc)
     }
 
@@ -113,7 +113,7 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
         # TODO: Get this reges to **exclude** 'T' and 'Z'
         hms <- regmatches (tstmp, regexpr ('T(.*?)Z', tstmp))
         hms <- substring (hms, 2, nchar (hms) - 1)
-        obj$timestamp <- timestamp (paste (wday, mon, day, hms, year))
+        obj$timestamp <- timestamp (paste (wday, mon, day, hms, year), quiet=TRUE)
         doc <- as.character (doc)
     }
 

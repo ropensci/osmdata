@@ -107,7 +107,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
      ************************************************************************
      ************************************************************************/
 
-    // Step#1
+    // Step#1: insert all rels into poly_ways
     for (auto it = rels.begin (); it != rels.end (); ++it)
         for (auto itw = (*it).ways.begin (); itw != (*it).ways.end (); ++itw)
         {
@@ -116,8 +116,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
             poly_ways.insert (itw->first);
         }
 
-    // Step#2
-    //const std::map <osmid_t, OneWay>& ways = xml.ways ();
+    // Step#2: identify and store poly and non_poly ways
     for (auto it = ways.begin (); it != ways.end (); ++it)
     {
         if ((*it).second.nodes.front () == (*it).second.nodes.back ())
@@ -245,12 +244,11 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     std::vector <std::string> linenames;
     linenames.reserve (non_poly_ways.size());
 
-    colnames.resize (0);
-    colnames.push_back ("lon");
-    colnames.push_back ("lat");
-    varnames.clear ();
-
-    count = 0;
+    varnames_vec.resize (0);
+    varnames_vec.push_back ("lon");
+    varnames_vec.push_back ("lat");
+    for (const auto& i: unique_vals.k_line)
+        varnames_vec.push_back (i);
 
     idset.clear ();
     dimnames.erase (0, dimnames.size());
@@ -259,44 +257,11 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     // nmat2, kv_vec2, kv_mat2, kv_df2
     // nmat3, kv_vec3, kv_mat3, kv_df3
 
-    for (auto it = non_poly_ways.begin (); it != non_poly_ways.end (); ++it)
-    {
-        auto itw = ways.find (*it);
-        // Collect all unique keys
-        std::for_each (itw->second.key_val.begin (),
-                itw->second.key_val.end (),
-                [&](const std::pair <std::string, std::string>& p)
-                {
-                    varnames.insert (p.first);
-                });
-
-        /*
-         * The following lines check for duplicate way IDs -- which do very
-         * occasionally occur -- and ensures unique values as required by 'sp'
-         * through appending decimal digits to <osmid_t> OSM IDs.
-         */
-        std::string id = std::to_string (itw->first);
-        int tempi = 0;
-        while (idset.find (id) != idset.end ())
-            id = std::to_string (itw->first) + "." + std::to_string (tempi++);
-        idset.insert (id);
-        linenames.push_back (id);
-    }
-
-    // Construct the vector of varnames
-    varnames_vec.resize (0);
-    varnames_vec.push_back ("lon");
-    varnames_vec.push_back ("lat");
-    for (auto i=varnames.begin (); i != varnames.end (); ++i)
-        varnames_vec.push_back (*i);
-
-    Rcpp::Rcout << "LINES: varnames.size = " << varnames_vec.size () <<
-        "; k_lines.size = " << unique_vals.k_line.size () << std::endl;
-    for (auto i = varnames_vec.begin (); i != varnames_vec.end (); ++i)
-        Rcpp::Rcout << "V: " << (*i) << std::endl;
-    for (const auto& i: unique_vals.k_line)
-        Rcpp::Rcout << "K: " << i << std::endl;
-
+    count = 0;
+    // Store all key-val pairs in one massive DF
+    nrow = non_poly_ways.size (); 
+    ncol = varnames.size ();
+    Rcpp::CharacterVector line_kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na ());
     for (auto it = non_poly_ways.begin (); it != non_poly_ways.end (); ++it)
     {
         auto itw = ways.find (*it);
@@ -324,23 +289,13 @@ Rcpp::List rcpp_osmdata (const std::string& st)
 
         // This only works with push_back, not with direct re-allocation
         dimnames.push_back (rownames);
-        dimnames.push_back (colnames);
+        dimnames.push_back (varnames_vec);
         nmat2.attr ("dimnames") = dimnames;
         dimnames.erase (0, dimnames.size());
 
         lineList [count++] = nmat2;
-    } // end for it over non_poly_ways
-    lineList.attr ("names") = linenames;
 
-    // Store all key-val pairs in one massive DF
-    nrow = non_poly_ways.size (); 
-    ncol = varnames.size ();
-    Rcpp::CharacterVector line_kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na ());
-    for (auto it = non_poly_ways.begin (); it != non_poly_ways.end (); ++it)
-    {
         int rowi = std::distance (non_poly_ways.begin (), it);
-        auto itw = ways.find (*it);
-
         for (auto kv_iter = itw->second.key_val.begin ();
                 kv_iter != itw->second.key_val.end (); ++kv_iter)
         {
@@ -349,7 +304,8 @@ Rcpp::List rcpp_osmdata (const std::string& st)
             int coli = std::distance (varnames.begin (), ni);
             line_kv_vec (coli * nrow + rowi) = (*kv_iter).second;
         }
-    }
+    } // end for it over non_poly_ways
+    lineList.attr ("names") = linenames;
 
     Rcpp::CharacterMatrix line_kv_mat (nrow, ncol, line_kv_vec.begin());
     Rcpp::DataFrame line_kv_df = line_kv_mat;

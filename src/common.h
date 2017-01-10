@@ -69,10 +69,11 @@ struct UniqueVals
 {
     // OSM IDs are sometimes duplicated, even though they ought not be. Unique
     // IDs are stored in the following sets, ensuring that only the first
-    // instance of any given ID will be extracted.
+    // instance of any given ID will be extracted. Using set.find in constructed
+    // takes 45ms for trial code; time without these finds = 60ms - HUH?
     // NOTE: Previous code converted <osmid_t> IDs to std::string and added
     // decimal places to generate unique IDs. This could be re-instated?
-    std::set <osmid_t> id_node, id_way, id_line;
+    std::set <osmid_t> id_node, id_way, id_rel;
     // Unique keys are also stored to provide column names.  Although std::set
     // is slower than an unordered_set, it is useful to have keys alphabetically
     // ordered.
