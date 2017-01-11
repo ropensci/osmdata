@@ -1,0 +1,3 @@
+#!/bin/sh
+
+rm -f src/Makevars src/*.gcno src/*.gcda src/*.o src/*.so
