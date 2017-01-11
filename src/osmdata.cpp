@@ -76,16 +76,12 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     colnames.push_back ("lon");
     colnames.push_back ("lat");
 
-    /*
-     * NOTE: Nodes are first loaded into the 2 vectors of (lon, lat), and these
-     * are then copied into nmat. This intermediate can be avoided by loading
-     * directly into nmat using direct indexing rather than iterators, however
-     * this does *NOT* make the routine any faster, and so the current version
-     * which more safely uses iterators is kept instead.
-     */
-
     // non_poly_ways are returned as line objects
     std::set <osmid_t> poly_ways, non_poly_ways;
+
+    Rcpp::List crs = Rcpp::List::create ((int) 4326, p4s);
+    crs.attr ("class") = "crs";
+    crs.attr ("names") = Rcpp::CharacterVector::create ("epsg", "proj4string");
 
     /*
      * Polygons are extracted from the XmlData class in three setps:
@@ -144,6 +140,9 @@ Rcpp::List rcpp_osmdata (const std::string& st)
         else
             ++it;
     }
+
+    Rcpp::NumericVector bbox = rcpp_get_bbox_sf (xml.x_min (), xml.x_max (), 
+                                              xml.y_min (), xml.y_max ());
 
     /************************************************************************
      ************************************************************************
@@ -326,36 +325,43 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     for (const auto& i: unique_vals.k_point)
         varnames_vec.push_back (i);
 
-    Rcpp::List onePointNull (varnames_vec.size ()); // lon-lat
-    for (int i=0; i<(varnames_vec.size ()); i++)
-        onePointNull (i) = "";
-    //    onePointNull (i) = R_NilValue; // can't unlist that
-    onePointNull.attr ("names") = varnames_vec;
+    Rcpp::NumericVector ptxy = Rcpp::NumericVector::create (NA_REAL, NA_REAL);
+    Rcpp::List onePoint = Rcpp::List::create (ptxy);
+    onePoint.attr ("class") = Rcpp::CharacterVector::create ("XY", "POINT", "sfg");
 
-    // Then make Rcpp::List objects for each node
+    Rcpp::CharacterMatrix kv_mat_points (Rcpp::Dimension (nodes.size (),
+                unique_vals.k_point.size ()));
+    std::fill (kv_mat_points.begin (), kv_mat_points.end (), "");
+
     Rcpp::List pointList (nodes.size ());
+    std::vector <std::string> ptnames;
+    ptnames.reserve (nodes.size ());
     count = 0;
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
-        Rcpp::List onePoint = clone (onePointNull);
-        onePoint.attr ("name") = std::to_string (ni->first);
-        onePoint (0) = ni->second.lon;
-        onePoint (1) = ni->second.lat;
+        ptxy (0) = ni->second.lon;
+        ptxy (1) = ni->second.lat;
+        onePoint (0) = ptxy;
+        pointList (count++) = onePoint;
+        ptnames.push_back (std::to_string (ni->first));
         for (auto kv_iter = ni->second.key_val.begin ();
                 kv_iter != ni->second.key_val.end (); ++kv_iter)
         {
             const std::string& key = (*kv_iter).first;
             auto it = unique_vals.k_point.find (key);
             int ni = std::distance (unique_vals.k_point.begin (), it);
-            onePoint (ni + 2) = (*kv_iter).second;
+            kv_mat_points (count, ni) = (*kv_iter).second;
         }
-        onePoint.attr ("n_empty") = 0;
-        onePoint.attr ("precision") = 0.0;
-        onePoint.attr ("class") = "sfc";
-        onePoint.attr ("crs") = "crs";
-        pointList (count++) = onePoint;
     }
-    onePointNull = R_NilValue;
+    kv_mat_points.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
+    pointList.attr ("names") = ptnames;
+    ptnames.clear ();
+    pointList.attr ("n_empty") = 0;
+    pointList.attr ("precision") = 0.0;
+    pointList.attr ("class") = "sfc";
+    pointList.attr ("crs") = crs;
+    pointList.attr ("bbox") = bbox;
+    onePoint = R_NilValue;
 
     /************************************************************************
      ************************************************************************
@@ -365,20 +371,19 @@ Rcpp::List rcpp_osmdata (const std::string& st)
      ************************************************************************
      ************************************************************************/
 
-    Rcpp::NumericVector bbox = rcpp_get_bbox_sf (xml.x_min (), xml.x_max (), 
-                                              xml.y_min (), xml.y_max ());
 
-    Rcpp::List ret (5);
+    Rcpp::List ret (6);
     //ret [0] = bbox;
     ret [0] = pointList;
-    ret [1] = lineList;
-    ret [2] = line_kv_df;
-    ret [3] = polyList;
-    ret [4] = poly_kv_df;
+    ret [1] = kv_mat_points;
+    ret [2] = lineList;
+    ret [3] = line_kv_df;
+    ret [4] = polyList;
+    ret [5] = poly_kv_df;
 
     //std::vector <std::string> retnames {"bbox", "points", 
     //    "lines", "lines_kv", "polygons", "polygons_kv"};
-    std::vector <std::string> retnames {"points", 
+    std::vector <std::string> retnames {"points", "points_kv",
         "lines", "lines_kv", "polygons", "polygons_kv"};
     ret.attr ("names") = retnames;
     

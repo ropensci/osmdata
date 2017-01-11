@@ -6,6 +6,7 @@ makefile$
 ^README\.html$
 ^fig/
 ^overpass/
+^doc/
 ^src/Makevars$
 ^.*\.Rproj$
 ^\.Rproj\.user$

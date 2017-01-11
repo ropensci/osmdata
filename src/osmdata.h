@@ -32,7 +32,8 @@
 
 #include "common.h"
 
-const std::string crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0";
+//const std::string crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0";
+const std::string p4s = "+proj=longlat +datum=WGS84 +no_defs";
 
 /************************************************************************
  ************************************************************************
