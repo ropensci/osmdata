@@ -148,8 +148,27 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     if (!quiet)
         message ('convertig OSM data to sp format')
     res <- rcpp_osmdata (doc)
-    xy <- res$points # sf geometry will then be labelled "xy"
-    sf_points <- make_sf (xy, res$points_kv)
+
+    # Make sf points:
+    geometry <- res$points
+    # Remove key columns with no values
+    indx <- which (apply (res$points_kv, 2, function (i) length (unique (i))) > 1)
+    res$points_kv <- res$points_kv [,indx]
+    # Move name column to 2nd position, as GDAL does
+    ni <- which (colnames (points_kv) == "name")
+    if (length (ni) > 0) # should always happen
+    {
+        nms <- points_kv [,ni]
+        indx <- which (!colnames (points_kv) %in% "name")
+        ptnames <- colnames (points_kv) [indx]
+        points_kv <- cbind (nms, points_kv [,indx])
+        colnames (points_kv) <- c ("name", ptnames)
+    }
+    # And cbind rownames = osm_id as first column
+    points_kv <- cbind (rownames (res$points_kv), res$points_kv)
+    colnames (points_kv) <- c ("osm_id", colnames (res$points_kv))
+    sf_points <- make_sf (geometry, points_kv)
+
     obj$osm_points <- sf_points
     #obj$osm_lines <- res$lines
     #obj$osm_polygons <- res$polygons

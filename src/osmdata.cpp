@@ -319,19 +319,9 @@ Rcpp::List rcpp_osmdata (const std::string& st)
      ************************************************************************
      ************************************************************************/
 
-    varnames_vec.resize (0);
-    varnames_vec.push_back ("lon");
-    varnames_vec.push_back ("lat");
-    for (const auto& i: unique_vals.k_point)
-        varnames_vec.push_back (i);
-
-    Rcpp::NumericVector ptxy = Rcpp::NumericVector::create (NA_REAL, NA_REAL);
-    Rcpp::List onePoint = Rcpp::List::create (ptxy);
-    onePoint.attr ("class") = Rcpp::CharacterVector::create ("XY", "POINT", "sfg");
-
     Rcpp::CharacterMatrix kv_mat_points (Rcpp::Dimension (nodes.size (),
                 unique_vals.k_point.size ()));
-    std::fill (kv_mat_points.begin (), kv_mat_points.end (), "");
+    std::fill (kv_mat_points.begin (), kv_mat_points.end (), NA_STRING);
 
     Rcpp::List pointList (nodes.size ());
     std::vector <std::string> ptnames;
@@ -339,10 +329,11 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     count = 0;
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
+        Rcpp::NumericVector ptxy = Rcpp::NumericVector::create (NA_REAL, NA_REAL);
+        ptxy.attr ("class") = Rcpp::CharacterVector::create ("XY", "POINT", "sfg");
         ptxy (0) = ni->second.lon;
         ptxy (1) = ni->second.lat;
-        onePoint (0) = ptxy;
-        pointList (count++) = onePoint;
+        pointList (count++) = ptxy;
         ptnames.push_back (std::to_string (ni->first));
         for (auto kv_iter = ni->second.key_val.begin ();
                 kv_iter != ni->second.key_val.end (); ++kv_iter)
@@ -354,14 +345,14 @@ Rcpp::List rcpp_osmdata (const std::string& st)
         }
     }
     kv_mat_points.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
+
     pointList.attr ("names") = ptnames;
     ptnames.clear ();
     pointList.attr ("n_empty") = 0;
+    pointList.attr ("class") = Rcpp::CharacterVector::create ("sfc_POINT", "sfc");
     pointList.attr ("precision") = 0.0;
-    pointList.attr ("class") = "sfc";
-    pointList.attr ("crs") = crs;
     pointList.attr ("bbox") = bbox;
-    onePoint = R_NilValue;
+    pointList.attr ("crs") = crs;
 
     /************************************************************************
      ************************************************************************
