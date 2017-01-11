@@ -4,9 +4,9 @@ Construction of `sf` objects
 This document demonstrates construction of the three types of `sf` objects returned by the GDAL OSM driver: `POINTS`, `LINESTRING`s, AND `MULTIPOLYGON`s, read with `sf` like this:
 
 ``` r
-pts <- sf::st_read ("export.osm",layer="points")
-lns <- sf::st_read ("export.osm",layer="lines")
-ply <- sf::st_read ("export.osm",layer="multipolygons")
+pts <- sf::st_read ("../export.osm",layer="points")
+lns <- sf::st_read ("../export.osm",layer="lines")
+ply <- sf::st_read ("../export.osm",layer="multipolygons")
 ```
 
 This document directly reflects the code of `tests/testthat/test-sf-construction.R`, and exists just to add a few explanatory comments on the importance of those tests. The code is translated into `Rcpp` code to enable `osmdata` to directly return `sf` objects, and teh tests ensure that the `sf` objects returned by `osmdata` are consistent with those returned by `sf`.
@@ -100,6 +100,29 @@ make_sf <- function (...)
     return (df)
 }
 ```
+
+Note in `make_sfc` that non-NA `crs` is more complex:
+
+``` r
+pts <- sf::st_read ("../export.osm",layer="points")
+```
+
+    ## Reading layer `points' from data source `/data/Dropbox/mark/code/repos/osmdata/export.osm' using driver `OSM'
+    ## Simple feature collection with 137 features and 10 fields
+    ## geometry type:  POINT
+    ## dimension:      XY
+    ## bbox:           xmin: -0.1205772 ymin: 51.51014 xmax: -0.1093308 ymax: 51.51979
+    ## epsg (SRID):    4326
+    ## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+
+``` r
+crs0 <- attr (pts [1,]$geometry, "crs")
+crs <- list ("epsg"=4326L, "proj4string"="+proj=longlat +datum=WGS84 +no_defs")
+class (crs) <- "crs"
+identical (crs0, crs)
+```
+
+    ## [1] TRUE
 
 ------------------------------------------------------------------------
 

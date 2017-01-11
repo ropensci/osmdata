@@ -4,9 +4,9 @@ This document demonstrates construction of the three types of `sf` objects
 returned by the GDAL OSM driver: `POINTS`, `LINESTRING`s, AND `MULTIPOLYGON`s,
 read with `sf` like this:
 ```{r, eval=FALSE}
-pts <- sf::st_read ("export.osm",layer="points")
-lns <- sf::st_read ("export.osm",layer="lines")
-ply <- sf::st_read ("export.osm",layer="multipolygons")
+pts <- sf::st_read ("../export.osm",layer="points")
+lns <- sf::st_read ("../export.osm",layer="lines")
+ply <- sf::st_read ("../export.osm",layer="multipolygons")
 ```
 This document directly reflects the code of
 `tests/testthat/test-sf-construction.R`, and exists just to add a few
@@ -108,7 +108,7 @@ make_sf <- function (...)
 ```
 Note in `make_sfc` that non-NA `crs` is more complex:
 ```{r}
-pts <- sf::st_read ("export.osm",layer="points")
+pts <- sf::st_read ("../export.osm",layer="points")
 crs0 <- attr (pts [1,]$geometry, "crs")
 crs <- list ("epsg"=4326L, "proj4string"="+proj=longlat +datum=WGS84 +no_defs")
 class (crs) <- "crs"
