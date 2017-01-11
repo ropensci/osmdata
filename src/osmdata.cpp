@@ -365,7 +365,8 @@ Rcpp::List rcpp_osmdata (const std::string& st)
      ************************************************************************
      ************************************************************************/
 
-    //Rcpp::NumericMatrix bbox = rcpp_get_bbox (xmin, xmax, ymin, ymax);
+    Rcpp::NumericVector bbox = rcpp_get_bbox_sf (xml.x_min (), xml.x_max (), 
+                                              xml.y_min (), xml.y_max ());
 
     Rcpp::List ret (5);
     //ret [0] = bbox;

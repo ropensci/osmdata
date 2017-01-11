@@ -51,6 +51,7 @@ class XmlData
         Ways m_ways;
         Relations m_relations;
         UniqueVals m_unique;
+        float xmin=FLOAT_MAX, xmax=-FLOAT_MAX, ymin=FLOAT_MAX, ymax=-FLOAT_MAX;
 
     public:
 
@@ -72,6 +73,10 @@ class XmlData
         const Ways& ways() const { return m_ways; }
         const Relations& relations() const { return m_relations; }
         const UniqueVals& unique_vals() const { return m_unique; }
+        const float x_min() { return xmin;  }
+        const float x_max() { return xmax;  }
+        const float y_min() { return ymin;  }
+        const float y_max() { return ymax;  }
 
     private:
 
@@ -115,6 +120,10 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
             // Only insert unique nodes
             if (m_unique.id_node.find (rnode.id) == m_unique.id_node.end ())
             {
+                if (rnode.lon < xmin) xmin = rnode.lon;
+                if (rnode.lon > xmax) xmax = rnode.lon;
+                if (rnode.lat < ymin) ymin = rnode.lat;
+                if (rnode.lat > ymax) ymax = rnode.lat;
                 m_unique.id_node.insert (rnode.id);
                 node.id = rnode.id;
                 node.lat = rnode.lat;
