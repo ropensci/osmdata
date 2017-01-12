@@ -253,54 +253,58 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     // kv_vec2, kv_mat2, kv_df2
     // nmat3, kv_vec3, kv_mat3, kv_df3
 
-    count = 0;
     // Store all key-val pairs in one massive DF
     nrow = non_poly_ways.size (); 
     ncol = unique_vals.k_line.size ();
-    Rcpp::CharacterVector line_kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na ());
-    for (auto it = non_poly_ways.begin (); it != non_poly_ways.end (); ++it)
+    Rcpp::CharacterMatrix kv_mat_lines (Rcpp::Dimension (nrow, ncol));
+    std::fill (kv_mat_lines.begin (), kv_mat_lines.end (), NA_STRING);
+    count = 0;
+    for (auto wi = non_poly_ways.begin (); wi != non_poly_ways.end (); ++wi)
     {
-        auto itw = ways.find (*it);
-        linenames.push_back (std::to_string (itw->first));
+        auto wj = ways.find (*wi);
+        linenames.push_back (std::to_string (wj->first));
         // Then iterate over nodes of that way and store all lat-lons
-        size_t n = itw->second.nodes.size ();
+        size_t n = wj->second.nodes.size ();
         rownames.clear ();
         rownames.reserve (n);
         Rcpp::NumericMatrix lineMat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
         int tempi = 0;
-        for (auto itn = itw->second.nodes.begin ();
-                itn != itw->second.nodes.end (); ++itn)
+        for (auto nj = wj->second.nodes.begin ();
+                nj != wj->second.nodes.end (); ++nj)
         {
-            if (nodes.find (*itn) == nodes.end ())
+            if (nodes.find (*nj) == nodes.end ())
                 throw std::runtime_error ("node can not be found");
-            rownames.push_back (std::to_string (*itn));
-            lineMat (tempi, 0) = nodes.find (*itn)->second.lon;
-            lineMat (tempi++, 1) = nodes.find (*itn)->second.lat;
+            rownames.push_back (std::to_string (*nj));
+            lineMat (tempi, 0) = nodes.find (*nj)->second.lon;
+            lineMat (tempi++, 1) = nodes.find (*nj)->second.lat;
         }
 
         // This only works with push_back, not with direct re-allocation
         dimnames.push_back (rownames);
         dimnames.push_back (colnames);
         lineMat.attr ("dimnames") = dimnames;
+        lineMat.attr ("class") = Rcpp::CharacterVector::create ("XY", "LINESTRING", "sfg");
         dimnames.erase (0, dimnames.size());
 
-        lineList [count++] = lineMat;
+        lineList (count++) = lineMat;
 
-        int rowi = std::distance (non_poly_ways.begin (), it);
-        for (auto kv_iter = itw->second.key_val.begin ();
-                kv_iter != itw->second.key_val.end (); ++kv_iter)
+        int rowi = std::distance (non_poly_ways.begin (), wi);
+        for (auto kv_iter = wj->second.key_val.begin ();
+                kv_iter != wj->second.key_val.end (); ++kv_iter)
         {
             const std::string& key = (*kv_iter).first;
             auto ni = unique_vals.k_line.find (key); // key must exist!
             int coli = std::distance (unique_vals.k_line.begin (), ni);
-            line_kv_vec (coli * nrow + rowi) = (*kv_iter).second;
+            kv_mat_lines (rowi, coli) = (*kv_iter).second;
         }
-    } // end for it over non_poly_ways
+    } // end for wi over non_poly_ways
     lineList.attr ("names") = linenames;
-
-    Rcpp::CharacterMatrix line_kv_mat (nrow, ncol, line_kv_vec.begin());
-    Rcpp::DataFrame line_kv_df = line_kv_mat;
-    line_kv_df.attr ("names") = unique_vals.k_line;
+    lineList.attr ("n_empty") = 0;
+    lineList.attr ("class") = Rcpp::CharacterVector::create ("sfc_LINESTRING", "sfc");
+    lineList.attr ("precision") = 0.0;
+    lineList.attr ("bbox") = bbox;
+    lineList.attr ("crs") = crs;
+    kv_mat_lines.attr ("dimnames") = Rcpp::List::create (linenames, unique_vals.k_line);
 
     /************************************************************************
      ************************************************************************
@@ -359,7 +363,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     ret [0] = pointList;
     ret [1] = kv_mat_points;
     ret [2] = lineList;
-    ret [3] = line_kv_df;
+    ret [3] = kv_mat_lines;
     ret [4] = polyList;
     ret [5] = poly_kv_df;
 

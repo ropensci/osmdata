@@ -76,6 +76,11 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
     return (obj)
 }
 
+#' Make an 'sf' object from an 'sfc' list and associated data matrix returned
+#' from 'rcpp_osmdata_sf'
+#'
+#' @param ... list of objects, at least on of which must be of class 'sfc'
+#' @return An object of class `sf` 
 make_sf <- function (...)
 {
     x <- list (...)
@@ -102,6 +107,33 @@ make_sf <- function (...)
     attr(df, "relation_to_geometry") = f
     class(df) = c("sf", class(df))
     return (df)
+}
+
+#' Restructure data matrix returned from 'rcpp_osmdata'
+#'
+#' @param dat A data matrix of OSM key-value pairs
+#' @return Equivalent data matrix with added row of 'osm_id' and 'name' as
+#' second column (equivalent to GDAL output)
+order_data_mat <- function (dat)
+{
+    # Remove key columns with no values
+    indx <- which (apply (dat, 2, function (i) length (unique (i))) > 1)
+    dat <- dat [,indx]
+    # Move name column to 2nd position, as GDAL does
+    ni <- which (colnames (dat) == "name")
+    if (length (ni) > 0) # should always happen
+    {
+        nms <- dat [,ni]
+        indx <- which (!colnames (dat) %in% "name")
+        nms1 <- colnames (dat) [indx]
+        dat <- cbind (nms, dat [,indx])
+        colnames (dat) <- c ("name", nms1)
+    }
+    # And cbind rownames = osm_id as first column
+    cnames <- c ("osm_id", colnames (dat))
+    dat <- cbind (rownames (dat), dat)
+    colnames (dat) <- cnames
+    return (dat)
 }
 
 #' Return an OSM Overpass query as an \code{osmdata} object in \code{sf} format.
@@ -151,29 +183,18 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
 
     # Make sf points:
     geometry <- res$points
-    # Remove key columns with no values
-    indx <- which (apply (res$points_kv, 2, function (i) length (unique (i))) > 1)
-    res$points_kv <- res$points_kv [,indx]
-    # Move name column to 2nd position, as GDAL does
-    ni <- which (colnames (res$points_kv) == "name")
-    if (length (ni) > 0) # should always happen
-    {
-        nms <- res$points_kv [,ni]
-        indx <- which (!colnames (res$points_kv) %in% "name")
-        ptnames <- colnames (res$points_kv) [indx]
-        points_kv <- cbind (nms, res$points_kv [,indx])
-        colnames (points_kv) <- c ("name", ptnames)
-    }
-    # And cbind rownames = osm_id as first column
-    points_kv <- cbind (rownames (res$points_kv), res$points_kv)
-    colnames (points_kv) <- c ("osm_id", colnames (res$points_kv))
+    points_kv <- order_data_mat (res$points_kv)
     sf_points <- make_sf (geometry, points_kv)
 
+    # make sf lines:
+    geometry <- res$lines
+    lines_kv <- order_data_mat (res$lines_kv)
+    sf_lines <- make_sf (geometry, lines_kv)
+
     obj$osm_points <- sf_points
-    #obj$osm_lines <- res$lines
-    #obj$osm_polygons <- res$polygons
-    obj$lines <- res$lines
-    obj$lines_kv <- res$lines_kv
+    #obj$lines <- res$lines
+    #obj$lines_kv <- res$lines_kv
+    obj$osm_lines <- sf_lines
     obj$polygons <- res$polygons
     obj$polygons_kv <- res$polygons_kv
 
