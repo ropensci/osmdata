@@ -93,13 +93,13 @@ Rcpp::List rcpp_test_points () {
 //' rcpp_test_lines
 //'
 //' Reproduces code used in src/osmdata.cpp to compare Rcpp construction of
-//' sfg::POINT' objects in ' osmdata with equivalent construction in sf
+//' sfg::LINESTRING' objects in ' osmdata with equivalent construction in sf
 //' generated with this code:
 //' l1 <- sf::st_linestring (cbind (c(1.0,2.0,3.0,4.0), c(5.0,6.0,7.0,8.0)))
 //' l2 <- sf::st_linestring (cbind (c(11.0,12.0,13.0), c(14.0,15.0,16.0)))
 //' y <- sf::st_sfc (a=l1, b=l2)
 //'
-//' @return An sf Simple Features Collection object of 'sfg::POINT' objects
+//' @return An sf Simple Features Collection object of 'sfg::LINESTRING' objects
 // [[Rcpp::export]]
 Rcpp::List rcpp_test_lines () {
     Rcpp::List crs = Rcpp::List::create (NA_INTEGER, 
@@ -158,4 +158,84 @@ Rcpp::List rcpp_test_lines () {
     lineList.attr ("bbox") = bbox;
     lineList.attr ("crs") = crs;
     return lineList;
+}
+
+//' rcpp_test_polygons
+//'
+//' Reproduces code used in src/osmdata.cpp to compare Rcpp construction of
+//' sfg::MULTIPOLYGON' objects in ' osmdata with equivalent construction in sf '
+//' generated with this code:
+//' l1 <- cbind (c(1.0,2.0,3.0,4.0,1.0), c(5.0,6.0,7.0,8.0,5.0))
+//' l2 <- cbind (c(11.0,12.0,13.0,11.0), c(14.0,15.0,16.0,14.0))
+//' l1 <- sf::st_multipolygon (list (list (l1)))
+//' l2 <- sf::st_multipolygon (list (list (l2)))
+//' y <- sf::st_sfc (a=l1, b=l2)
+//'
+//' @return An sf Simple Features Collection object of 'sfg::MULTIPOLYGON' objects
+// [[Rcpp::export]]
+Rcpp::List rcpp_test_polygons () {
+    Rcpp::List crs = Rcpp::List::create (NA_INTEGER, 
+            Rcpp::CharacterVector::create (NA_STRING));
+    crs.attr ("class") = "crs";
+    crs.attr ("names") = Rcpp::CharacterVector::create ("epsg", "proj4string");
+
+    std::vector <std::string> names;
+    names.push_back ("xmin");
+    names.push_back ("ymin");
+    names.push_back ("xmax");
+    names.push_back ("ymax");
+    Rcpp::NumericVector bbox (4, NA_REAL);
+    bbox (0) = 1;
+    bbox (1) = 5;
+    bbox (2) = 13;
+    bbox (3) = 16;
+    bbox.attr ("names") = names;
+
+    Rcpp::List polyList (2);
+
+    // Just for this test
+    Rcpp::CharacterVector ptnms = Rcpp::CharacterVector::create ("a", "b");
+    // Actual code from rcpp_osmdata_sf:
+    //std::vector <std::string> ptnames;
+    //ptnames.reserve (2);
+
+    Rcpp::NumericMatrix polyxy1 (Rcpp::Dimension (5, 2));
+    std::fill (polyxy1.begin (), polyxy1.end (), NA_REAL);
+    polyxy1 (0, 0) = 1;
+    polyxy1 (1, 0) = 2;
+    polyxy1 (2, 0) = 3;
+    polyxy1 (3, 0) = 4;
+    polyxy1 (4, 0) = 1;
+    polyxy1 (0, 1) = 5;
+    polyxy1 (1, 1) = 6;
+    polyxy1 (2, 1) = 7;
+    polyxy1 (3, 1) = 8;
+    polyxy1 (4, 1) = 5;
+    Rcpp::List polyl1 (1);
+    polyl1 (0) = Rcpp::List::create (polyxy1);
+    polyl1.attr ("class") = Rcpp::CharacterVector::create ("XY", "MULTIPOLYGON", "sfg");
+    polyList (0) = polyl1;
+
+    Rcpp::NumericMatrix polyxy2 (Rcpp::Dimension (4, 2));
+    std::fill (polyxy2.begin (), polyxy2.end (), NA_REAL);
+    polyxy2 (0, 0) = 11;
+    polyxy2 (1, 0) = 12;
+    polyxy2 (2, 0) = 13;
+    polyxy2 (3, 0) = 11;
+    polyxy2 (0, 1) = 14;
+    polyxy2 (1, 1) = 15;
+    polyxy2 (2, 1) = 16;
+    polyxy2 (3, 1) = 14;
+    Rcpp::List polyl2 (1);
+    polyl2 (0) = Rcpp::List::create (polyxy2);
+    polyl2.attr ("class") = Rcpp::CharacterVector::create ("XY", "MULTIPOLYGON", "sfg");
+    polyList (1) = polyl2;
+
+    polyList.attr ("names") = ptnms;
+    polyList.attr ("n_empty") = 0;
+    polyList.attr ("class") = Rcpp::CharacterVector::create ("sfc_MULTIPOLYGON", "sfc");
+    polyList.attr ("precision") = 0.0;
+    polyList.attr ("bbox") = bbox;
+    polyList.attr ("crs") = crs;
+    return polyList;
 }

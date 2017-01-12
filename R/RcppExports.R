@@ -36,14 +36,30 @@ rcpp_test_points <- function() {
 #' rcpp_test_lines
 #'
 #' Reproduces code used in src/osmdata.cpp to compare Rcpp construction of
-#' sfg::POINT' objects in ' osmdata with equivalent construction in sf
+#' sfg::LINESTRING' objects in ' osmdata with equivalent construction in sf
 #' generated with this code:
 #' l1 <- sf::st_linestring (cbind (c(1.0,2.0,3.0,4.0), c(5.0,6.0,7.0,8.0)))
 #' l2 <- sf::st_linestring (cbind (c(11.0,12.0,13.0), c(14.0,15.0,16.0)))
 #' y <- sf::st_sfc (a=l1, b=l2)
 #'
-#' @return An sf Simple Features Collection object of 'sfg::POINT' objects
+#' @return An sf Simple Features Collection object of 'sfg::LINESTRING' objects
 rcpp_test_lines <- function() {
     .Call('osmdata_rcpp_test_lines', PACKAGE = 'osmdata')
+}
+
+#' rcpp_test_polygons
+#'
+#' Reproduces code used in src/osmdata.cpp to compare Rcpp construction of
+#' sfg::MULTIPOLYGON' objects in ' osmdata with equivalent construction in sf '
+#' generated with this code:
+#' l1 <- cbind (c(1.0,2.0,3.0,4.0,1.0), c(5.0,6.0,7.0,8.0,5.0))
+#' l2 <- cbind (c(11.0,12.0,13.0,11.0), c(14.0,15.0,16.0,14.0))
+#' l1 <- sf::st_multipolygon (list (list (l1)))
+#' l2 <- sf::st_multipolygon (list (list (l2)))
+#' y <- sf::st_sfc (a=l1, b=l2)
+#'
+#' @return An sf Simple Features Collection object of 'sfg::MULTIPOLYGON' objects
+rcpp_test_polygons <- function() {
+    .Call('osmdata_rcpp_test_polygons', PACKAGE = 'osmdata')
 }
 
