@@ -6,3 +6,11 @@ test_that ("sf-rcpp-points", {
                expect_identical (x, y)
 })
 
+test_that ("sf-rcpp-lines", {
+               x <- rcpp_test_lines ()
+               l1 <- sf::st_linestring (cbind (c(1.0,2.0,3.0,4.0), c(5.0,6.0,7.0,8.0)))
+               l2 <- sf::st_linestring (cbind (c(11.0,12.0,13.0), c(14.0,15.0,16.0)))
+               y <- sf::st_sfc (a=l1, b=l2)
+               expect_identical (x, y)
+})
+

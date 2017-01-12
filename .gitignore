@@ -17,6 +17,7 @@ inst/doc
 man/rcpp_osmdata.Rd
 man/rcpp_osmdata_sp.Rd
 man/rcpp_test_points.Rd
+man/rcpp_test_lines.Rd
 
 # vim files
 .*.un~
