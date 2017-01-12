@@ -79,7 +79,11 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     // non_poly_ways are returned as line objects
     std::set <osmid_t> poly_ways, non_poly_ways;
 
-    Rcpp::List crs = Rcpp::List::create ((int) 4326, p4s);
+    Rcpp::List crs = Rcpp::List::create (NA_INTEGER, 
+            Rcpp::CharacterVector::create (NA_STRING));
+    crs (0) = 4326;
+    crs (1) = p4s;
+    //Rcpp::List crs = Rcpp::List::create ((int) 4326, p4s);
     crs.attr ("class") = "crs";
     crs.attr ("names") = Rcpp::CharacterVector::create ("epsg", "proj4string");
 
