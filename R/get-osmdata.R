@@ -155,13 +155,13 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     indx <- which (apply (res$points_kv, 2, function (i) length (unique (i))) > 1)
     res$points_kv <- res$points_kv [,indx]
     # Move name column to 2nd position, as GDAL does
-    ni <- which (colnames (points_kv) == "name")
+    ni <- which (colnames (res$points_kv) == "name")
     if (length (ni) > 0) # should always happen
     {
-        nms <- points_kv [,ni]
-        indx <- which (!colnames (points_kv) %in% "name")
-        ptnames <- colnames (points_kv) [indx]
-        points_kv <- cbind (nms, points_kv [,indx])
+        nms <- res$points_kv [,ni]
+        indx <- which (!colnames (res$points_kv) %in% "name")
+        ptnames <- colnames (res$points_kv) [indx]
+        points_kv <- cbind (nms, res$points_kv [,indx])
         colnames (points_kv) <- c ("name", ptnames)
     }
     # And cbind rownames = osm_id as first column

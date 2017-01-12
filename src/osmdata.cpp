@@ -247,17 +247,10 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     std::vector <std::string> linenames;
     linenames.reserve (non_poly_ways.size());
 
-    varnames_vec.resize (0);
-    varnames_vec.push_back ("lon");
-    varnames_vec.push_back ("lat");
-    for (const auto& i: unique_vals.k_line)
-        varnames_vec.push_back (i);
-
     idset.clear ();
     dimnames.erase (0, dimnames.size());
-    Rcpp::NumericMatrix nmat2 (Rcpp::Dimension (0, 0)); 
     // TODO: Things to delete and replace with resize:
-    // nmat2, kv_vec2, kv_mat2, kv_df2
+    // kv_vec2, kv_mat2, kv_df2
     // nmat3, kv_vec3, kv_mat3, kv_df3
 
     count = 0;
@@ -271,33 +264,27 @@ Rcpp::List rcpp_osmdata (const std::string& st)
         linenames.push_back (std::to_string (itw->first));
         // Then iterate over nodes of that way and store all lat-lons
         size_t n = itw->second.nodes.size ();
-        lons.clear ();
-        lats.clear ();
         rownames.clear ();
-        lons.reserve (n);
-        lats.reserve (n);
         rownames.reserve (n);
+        Rcpp::NumericMatrix lineMat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
+        int tempi = 0;
         for (auto itn = itw->second.nodes.begin ();
                 itn != itw->second.nodes.end (); ++itn)
         {
             if (nodes.find (*itn) == nodes.end ())
                 throw std::runtime_error ("node can not be found");
-            lons.push_back (nodes.find (*itn)->second.lon);
-            lats.push_back (nodes.find (*itn)->second.lat);
             rownames.push_back (std::to_string (*itn));
+            lineMat (tempi, 0) = nodes.find (*itn)->second.lon;
+            lineMat (tempi++, 1) = nodes.find (*itn)->second.lat;
         }
-
-        nmat2 = Rcpp::NumericMatrix (Rcpp::Dimension (lons.size (), 2));
-        std::copy (lons.begin (), lons.end (), nmat2.begin ());
-        std::copy (lats.begin (), lats.end (), nmat2.begin () + lons.size ());
 
         // This only works with push_back, not with direct re-allocation
         dimnames.push_back (rownames);
         dimnames.push_back (colnames);
-        nmat2.attr ("dimnames") = dimnames;
+        lineMat.attr ("dimnames") = dimnames;
         dimnames.erase (0, dimnames.size());
 
-        lineList [count++] = nmat2;
+        lineList [count++] = lineMat;
 
         int rowi = std::distance (non_poly_ways.begin (), it);
         for (auto kv_iter = itw->second.key_val.begin ();
