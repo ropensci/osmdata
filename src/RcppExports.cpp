@@ -27,3 +27,13 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcpp_test_points
+Rcpp::List rcpp_test_points();
+RcppExport SEXP osmdata_rcpp_test_points() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(rcpp_test_points());
+    return rcpp_result_gen;
+END_RCPP
+}

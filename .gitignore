@@ -16,6 +16,7 @@ inst/doc
 # Non-exported man files
 man/rcpp_osmdata.Rd
 man/rcpp_osmdata_sp.Rd
+man/rcpp_test_points.Rd
 
 # vim files
 .*.un~

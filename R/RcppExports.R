@@ -21,3 +21,18 @@ rcpp_osmdata_sp <- function(st) {
     .Call('osmdata_rcpp_osmdata_sp', PACKAGE = 'osmdata', st)
 }
 
+#' rcpp_test_points
+#'
+#' Reproduces code used in src/osmdata.cpp to compare Rcpp construction in
+#' osmdata with equivalent construction in sf. The results of 'sf::st_read()'
+#' can not be directly compared with the results of 'omsdata', because GDAL does
+#' not return all key-value pairs, whereas 'osmdata' does, and the two will never
+#' be identical. The 'Rcpp' construction of 'sf' objects can thus only be checked
+#' in highly simplified examples like this. This function is only used in
+#' 'tests/testthat/test-sf-rcpp.R'.
+#'
+#' @return An sf Simple Features Collection object
+rcpp_test_points <- function() {
+    .Call('osmdata_rcpp_test_points', PACKAGE = 'osmdata')
+}
+
