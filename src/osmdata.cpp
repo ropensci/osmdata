@@ -214,6 +214,8 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     polyList.attr ("names") = polynames;
 
     // Store all key-val pairs in one massive DF
+    Rcpp::Rcout << "varnames, uv.k_poly = [" << varnames.size () << ", " <<
+        unique_vals.k_poly.size () << "]" << std::endl;
     int nrow = poly_ways.size (), ncol = varnames.size ();
     Rcpp::CharacterVector poly_kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na ());
     for (auto it = poly_ways.begin (); it != poly_ways.end (); ++it)
@@ -249,11 +251,8 @@ Rcpp::List rcpp_osmdata (const std::string& st)
 
     idset.clear ();
     dimnames.erase (0, dimnames.size());
-    // TODO: Things to delete and replace with resize:
-    // kv_vec2, kv_mat2, kv_df2
-    // nmat3, kv_vec3, kv_mat3, kv_df3
 
-    // Store all key-val pairs in one massive DF
+    // Store all key-val pairs in one massive CharacterMatrix
     nrow = non_poly_ways.size (); 
     ncol = unique_vals.k_line.size ();
     Rcpp::CharacterMatrix kv_mat_lines (Rcpp::Dimension (nrow, ncol));
@@ -286,18 +285,19 @@ Rcpp::List rcpp_osmdata (const std::string& st)
         lineMat.attr ("class") = Rcpp::CharacterVector::create ("XY", "LINESTRING", "sfg");
         dimnames.erase (0, dimnames.size());
 
-        lineList (count++) = lineMat;
+        lineList (count) = lineMat;
 
-        int rowi = std::distance (non_poly_ways.begin (), wi);
         for (auto kv_iter = wj->second.key_val.begin ();
                 kv_iter != wj->second.key_val.end (); ++kv_iter)
         {
             const std::string& key = (*kv_iter).first;
             auto ni = unique_vals.k_line.find (key); // key must exist!
             int coli = std::distance (unique_vals.k_line.begin (), ni);
-            kv_mat_lines (rowi, coli) = (*kv_iter).second;
+            kv_mat_lines (count, coli) = (*kv_iter).second;
         }
+        count++;
     } // end for wi over non_poly_ways
+
     lineList.attr ("names") = linenames;
     lineList.attr ("n_empty") = 0;
     lineList.attr ("class") = Rcpp::CharacterVector::create ("sfc_LINESTRING", "sfc");
@@ -314,8 +314,9 @@ Rcpp::List rcpp_osmdata (const std::string& st)
      ************************************************************************
      ************************************************************************/
 
-    Rcpp::CharacterMatrix kv_mat_points (Rcpp::Dimension (nodes.size (),
-                unique_vals.k_point.size ()));
+    nrow = nodes.size ();
+    ncol = unique_vals.k_point.size ();
+    Rcpp::CharacterMatrix kv_mat_points (Rcpp::Dimension (nrow, ncol));
     std::fill (kv_mat_points.begin (), kv_mat_points.end (), NA_STRING);
 
     Rcpp::List pointList (nodes.size ());
@@ -328,7 +329,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
         ptxy.attr ("class") = Rcpp::CharacterVector::create ("XY", "POINT", "sfg");
         ptxy (0) = ni->second.lon;
         ptxy (1) = ni->second.lat;
-        pointList (count++) = ptxy;
+        pointList (count) = ptxy;
         ptnames.push_back (std::to_string (ni->first));
         for (auto kv_iter = ni->second.key_val.begin ();
                 kv_iter != ni->second.key_val.end (); ++kv_iter)
@@ -338,6 +339,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
             int ni = std::distance (unique_vals.k_point.begin (), it);
             kv_mat_points (count, ni) = (*kv_iter).second;
         }
+        count++;
     }
     kv_mat_points.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
 

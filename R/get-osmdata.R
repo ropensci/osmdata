@@ -51,8 +51,14 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
     {
         doc <- overpass_query (q, quiet=quiet, encoding=encoding)
         obj$timestamp <- timestamp (quiet=TRUE, prefix="[ ", suffix=" ]")
-    } else
+    } else 
     {
+        if (is.character (doc))
+        {
+            if (!file.exists (doc))
+                stop ("file ", doc, " does not exist")
+            doc <- xml2::read_xml (doc)
+        }
         # Convert XML timestamp to `date()` format:
         tstmp <- xml2::xml_text (xml2::xml_find_all (doc, "//meta/@osm_base"))
         wday <- lubridate::wday (tstmp, label=TRUE)
@@ -64,7 +70,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
         hms <- substring (hms, 2, nchar (hms) - 1)
         obj$timestamp <- timestamp (paste (wday, mon, day, hms, year), quiet=TRUE)
         doc <- as.character (doc)
-    }
+    } 
 
     if (!quiet)
         message ('convertig OSM data to sp format')
@@ -164,6 +170,12 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
         obj$timestamp <- timestamp (quiet=TRUE, prefix="[ ", suffix=" ]")
     } else
     {
+        if (is.character (doc))
+        {
+            if (!file.exists (doc))
+                stop ("file ", doc, " does not exist")
+            doc <- xml2::read_xml (doc)
+        }
         # Convert XML timestamp to `date()` format:
         tstmp <- xml2::xml_text (xml2::xml_find_all (doc, "//meta/@osm_base"))
         wday <- lubridate::wday (tstmp, label=TRUE)
