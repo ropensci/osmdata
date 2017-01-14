@@ -4,6 +4,7 @@
 #'
 #' @param q An object of class `overpass_query` constructed with \code{opq} and
 #'        \code{add_feature}.
+#' @param filename If given, OSM data are saved to the named file
 #' @param quiet suppress status messages. 
 #' @param encoding Unless otherwise specified XML documents are assumed to be
 #'        encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
@@ -15,23 +16,25 @@
 #' \code{.osm} files with code{xml2::write_xml}.
 #'
 #' @export
-osmdata_xml <- function(q, quiet=TRUE, encoding) {
+osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
     if (missing (encoding))
         encoding <- 'UTF-8'
 
     #doc <- xml2::read_xml(osm_response, encoding=encoding)
     #rcpp_osmdata_sp (doc)
     doc <- overpass_query (q, quiet=quiet, encoding=encoding)
-    xml2::read_xml (doc)
+    if (!missing (filename))
+        xml2::write_xml (doc, file=filename)
+    invisible (xml2::read_xml (doc))
 }
 
 #' Return an OSM Overpass query as an \code{osmdata} object in \code{sp} format.
 #'
 #' @param q An object of class `overpass_query` constructed with \code{opq} and
 #'        \code{add_feature}.
-#' @param doc An object of class \code{XML} returned from \code{osmdata_xml}. If
-#'        missing, \code{doc} is obtained by issuing the overpass query,
-#'        \code{q}.  
+#' @param doc If missing, \code{doc} is obtained by issuing the overpass query,
+#'        \code{q}, otherwise either the name of a file from which to read data,
+#'        or an object of class \code{XML} returned from \code{osmdata_xml}. 
 #' @param quiet suppress status messages. 
 #' @param encoding Unless otherwise specified XML documents are assumed to be
 #'        encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
@@ -146,9 +149,9 @@ order_data_mat <- function (dat)
 #'
 #' @param q An object of class `overpass_query` constructed with \code{opq} and
 #'        \code{add_feature}.
-#' @param doc An object of class \code{XML} returned from \code{osmdata_xml}. If
-#'        missing, \code{doc} is obtained by issuing the overpass query,
-#'        \code{q}.  
+#' @param doc If missing, \code{doc} is obtained by issuing the overpass query,
+#'        \code{q}, otherwise either the name of a file from which to read data,
+#'        or an object of class \code{XML} returned from \code{osmdata_xml}. 
 #' @param quiet suppress status messages. 
 #' @param encoding Unless otherwise specified XML documents are assumed to be
 #'        encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks

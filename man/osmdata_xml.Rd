@@ -6,11 +6,13 @@
 Read an (XML format) OSM Overpass response from a string, a connection,
 or a raw vector.}
 \usage{
-osmdata_xml(q, quiet = TRUE, encoding)
+osmdata_xml(q, filename, quiet = TRUE, encoding)
 }
 \arguments{
 \item{q}{An object of class `overpass_query` constructed with \code{opq} and
 \code{add_feature}.}
+
+\item{filename}{If given, OSM data are saved to the named file}
 
 \item{quiet}{suppress status messages.}
 

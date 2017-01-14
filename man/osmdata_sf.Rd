@@ -10,9 +10,9 @@ osmdata_sf(q, doc, quiet = TRUE, encoding)
 \item{q}{An object of class `overpass_query` constructed with \code{opq} and
 \code{add_feature}.}
 
-\item{doc}{An object of class \code{XML} returned from \code{osmdata_xml}. If
-missing, \code{doc} is obtained by issuing the overpass query,
-\code{q}.}
+\item{doc}{If missing, \code{doc} is obtained by issuing the overpass query,
+\code{q}, otherwise either the name of a file from which to read data,
+or an object of class \code{XML} returned from \code{osmdata_xml}.}
 
 \item{quiet}{suppress status messages.}
 
