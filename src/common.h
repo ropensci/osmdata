@@ -115,17 +115,19 @@ struct OneWay
 struct RawRelation
 {
     osmid_t id;
+    std::string member_type;
     // APS would (key,value) be better in a std::map?
-    std::vector <std::string> key, value;
+    std::vector <std::string> key, value, role_node, role_way;
+    std::vector <osmid_t> nodes;
     std::vector <osmid_t> ways;
-    std::vector <bool> outer;
 };
 
 struct Relation
 {
     osmid_t id;
-    std::map<std::string, std::string> key_val;
-    std::vector <std::pair <osmid_t, bool> > ways; // bool flags inner/outer
+    std::map <std::string, std::string> key_val;
+    std::vector <std::pair <osmid_t, std::string> > nodes; // str = type
+    std::vector <std::pair <osmid_t, std::string> > ways; // str = type
 };
 
 typedef std::vector <Relation> Relations;

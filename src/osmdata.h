@@ -173,14 +173,19 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
         {
             rrel.key.clear();
             rrel.value.clear();
+            rrel.role_way.clear();
+            rrel.role_node.clear();
             rrel.ways.clear();
-            rrel.outer.clear();
+            rrel.nodes.clear();
+            rrel.member_type = "";
 
             traverseRelation (it, rrel);
             if (rrel.key.size () != rrel.value.size ())
                 throw std::runtime_error ("sizes of keys and values differ");
-            if (rrel.ways.size () != rrel.outer.size ())
-                throw std::runtime_error ("size of ways and outer differ");
+            if (rrel.ways.size () != rrel.role_way.size ())
+                throw std::runtime_error ("size of ways and roles differ");
+            if (rrel.nodes.size () != rrel.role_node.size ())
+                throw std::runtime_error ("size of nodes and roles differ");
 
             if (m_unique.id_rel.find (rrel.id) == m_unique.id_rel.end ())
             {
@@ -196,7 +201,10 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                 }
                 for (size_t i=0; i<rrel.ways.size (); i++)
                     relation.ways.push_back (std::make_pair (rrel.ways [i],
-                                rrel.outer [i]));
+                                rrel.role_way [i]));
+                for (size_t i=0; i<rrel.nodes.size (); i++)
+                    relation.nodes.push_back (std::make_pair (rrel.nodes [i],
+                                rrel.role_node [i]));
                 m_relations.push_back (relation);
             }
         }
@@ -228,15 +236,23 @@ inline void XmlData::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
             rrel.value.push_back (it->value());
         else if (!strcmp (it->name(), "id"))
             rrel.id = std::stoll(it->value());
+        else if (!strcmp (it->name(), "type"))
+            rrel.member_type = it->value ();
         else if (!strcmp (it->name(), "ref"))
-            rrel.ways.push_back (std::stoll(it->value()));
-        else if (!strcmp (it->name(), "role"))
         {
-            if (!strcmp (it->value(), "outer"))
-                rrel.outer.push_back (true);
+            if (rrel.member_type == "node")
+                rrel.nodes.push_back (std::stoll (it->value ()));
+            else if (rrel.member_type == "way")
+                rrel.ways.push_back (std::stoll (it->value ()));
             else
-                rrel.outer.push_back (false);
-        }
+                throw std::runtime_error ("unknown member_type");
+        } else if (!strcmp (it->name(), "role"))
+            if (rrel.member_type == "node")
+                rrel.role_node.push_back (it->value ());
+            else if (rrel.member_type == "way")
+                rrel.role_way.push_back (it->value ());
+            else
+                throw std::runtime_error ("unknown member_type");
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
