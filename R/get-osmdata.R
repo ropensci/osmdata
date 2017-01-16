@@ -23,9 +23,10 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
     #doc <- xml2::read_xml(osm_response, encoding=encoding)
     #rcpp_osmdata_sp (doc)
     doc <- overpass_query (q, quiet=quiet, encoding=encoding)
+    doc <- xml2::read_xml (doc)
     if (!missing (filename))
         xml2::write_xml (doc, file=filename)
-    invisible (xml2::read_xml (doc))
+    invisible (doc)
 }
 
 #' Return an OSM Overpass query as an \code{osmdata} object in \code{sp} format.
