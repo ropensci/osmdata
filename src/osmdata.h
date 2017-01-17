@@ -178,6 +178,7 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
             rrel.ways.clear();
             rrel.nodes.clear();
             rrel.member_type = "";
+            rrel.ispoly = false;
 
             traverseRelation (it, rrel);
             if (rrel.key.size () != rrel.value.size ())
@@ -193,11 +194,14 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                 relation.id = rrel.id;
                 relation.key_val.clear();
                 relation.ways.clear();
+                relation.ispoly = rrel.ispoly;
                 for (size_t i=0; i<rrel.key.size (); i++)
                 {
                     relation.key_val.insert (std::make_pair (rrel.key [i],
                                 rrel.value [i]));
                     m_unique.k_poly.insert (rrel.key [i]);
+                    if (rrel.key [i] == "type")
+                        relation.rel_type = rrel.value [i];
                 }
                 for (size_t i=0; i<rrel.ways.size (); i++)
                     relation.ways.push_back (std::make_pair (rrel.ways [i],
@@ -247,12 +251,20 @@ inline void XmlData::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
             else
                 throw std::runtime_error ("unknown member_type");
         } else if (!strcmp (it->name(), "role"))
+        {
             if (rrel.member_type == "node")
                 rrel.role_node.push_back (it->value ());
             else if (rrel.member_type == "way")
                 rrel.role_way.push_back (it->value ());
             else
                 throw std::runtime_error ("unknown member_type");
+            // Not all OSM Multipolygons have (key="type",
+            // value="multipolygon"): For example, (key="type",
+            // value="boundary") are often multipolygons. The things they all
+            // have are "inner" and "outer" roles.
+            if (!strcmp (it->value(), "inner") || !strcmp (it->value(), "outer"))
+                rrel.ispoly = true;
+        }
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())

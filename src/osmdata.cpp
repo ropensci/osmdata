@@ -66,8 +66,6 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     std::vector <float> lons, lats;
     std::unordered_set <std::string> idset; // see TODO below
     std::vector <std::string> colnames, rownames, polynames;
-    std::set <std::string> varnames;
-    std::vector <std::string> varnames_vec;
     Rcpp::List dimnames (0);
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
 
@@ -102,47 +100,239 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     /************************************************************************
      ************************************************************************
      **                                                                    **
+     **                           OSM RELATIONS                            **
+     **                                                                    **
+     ************************************************************************
+     ************************************************************************/
+
+    /* Trace all multipolygon relations. These are the only OSM types where
+     * sizes are not known before, so lat-lons and node names are stored in
+     * dynamic vectors. These are 3D monsters: #1 for relation, #2 for polygon
+     * in relation, and #3 for data. There are also associated 2D vector<vector>
+     * objects for IDs and roles. */
+    std::vector <std::vector <float> > lat_vec, lon_vec;
+    std::vector <std::vector <std::vector <float> > > lat_arr, lon_arr;
+    std::vector <std::vector <std::string> > rowname_vec;
+    std::vector <std::vector <std::vector <std::string> > > rowname_arr;
+    std::vector <std::vector <osmid_t> > id_arr;
+    std::vector <std::pair <osmid_t, std::string> > relation_ways;
+    std::vector <std::pair <osmid_t, std::string> >::pointer rw_ptr;
+    std::set <osmid_t> relation_ways1;
+    //osmid_t this_way, node0, first_node, last_node;
+    osmid_t node0, first_node, last_node;
+    int this_way;
+    bool closed;
+    std::string this_role;
+    for (auto itr = rels.begin (); itr != rels.end (); ++itr)
+    {
+        if (itr->ispoly) // itr->second can only be "outer" or "inner"
+        {
+            // Store all ways in that relation and their associated roles
+            relation_ways.clear ();
+            for (auto itw = (*itr).ways.begin (); itw != (*itr).ways.end (); ++itw)
+                relation_ways.push_back (std::make_pair (itw->first, itw->second));
+            // Then trace through all those ways and store associated data
+            while (relation_ways.size () > 0)
+            {
+                node0 = 0, first_node = 0, last_node = 0;
+                lats.clear (); // These can't be reserved here
+                lons.clear ();
+                rownames.clear ();
+
+                auto rwi = relation_ways.front ();
+                relation_ways.erase (relation_ways.begin() + 0);
+                this_role = rwi.second;
+                auto wayi = ways.find (rwi.first);
+                if (wayi == ways.end ())
+                        throw std::runtime_error ("way can not be found");
+
+                // Get first way of relation, and starting node
+                node0 = first_node = wayi->second.nodes.front ();
+                last_node = wayi->second.nodes.back ();
+                for (auto ni = wayi->second.nodes.begin ();
+                        ni != wayi->second.nodes.end (); ++ni)
+                {
+                    if (nodes.find (*ni) == nodes.end ())
+                        throw std::runtime_error ("node can not be found");
+                    lons.push_back (nodes.find (*ni)->second.lon);
+                    lats.push_back (nodes.find (*ni)->second.lat);
+                    rownames.push_back (std::to_string (*ni));
+                }
+                closed = false;
+                if (last_node == node0)
+                    closed = true;
+                while (!closed)
+                {
+                    for (auto rwi = relation_ways.begin ();
+                            rwi != relation_ways.end (); ++rwi)
+                    {
+                        if (rwi->second == this_role)
+                        {
+                            auto wayi = ways.find (rwi->first);
+                            if (wayi == ways.end ())
+                                throw std::runtime_error ("way can not be found");
+                            if (wayi->second.nodes.front () == last_node)
+                            {
+                                // trace forwards through way
+                                first_node = last_node;
+                                this_way = std::distance (relation_ways.begin (),
+                                        rwi);
+                                for (auto ni = wayi->second.nodes.begin ();
+                                        ni != wayi->second.nodes.end (); ++ni)
+                                {
+                                    lons.push_back (nodes.find (*ni)->second.lon);
+                                    lats.push_back (nodes.find (*ni)->second.lat);
+                                    rownames.push_back (std::to_string (*ni));
+                                }
+                                last_node = wayi->second.nodes.back ();
+                                break;
+                            } else if (wayi->second.nodes.back () == last_node)
+                            {
+                                // trace backwards through way
+                                first_node = last_node;
+                                this_way = std::distance (relation_ways.begin (),
+                                        rwi);
+                                for (auto ni = wayi->second.nodes.end ();
+                                        ni != wayi->second.nodes.begin (); --ni)
+                                {
+                                    lons.push_back (nodes.find (*ni)->second.lon);
+                                    lats.push_back (nodes.find (*ni)->second.lat);
+                                    rownames.push_back (std::to_string (*ni));
+                                }
+                                last_node = wayi->second.nodes.front ();
+                                break;
+                            }
+                        }
+                    } // end for rwi over relation_ways
+                    relation_ways.erase (relation_ways.begin () + this_way);
+                    if (last_node == node0 || relation_ways.size () == 0)
+                        closed = true;
+                } // end while !closed
+                if (last_node == node0)
+                {
+                    lon_vec.push_back (lons);
+                    lat_vec.push_back (lats);
+                    rowname_vec.push_back (rownames);
+                } else
+                {
+                    Rcpp::Rcout << "ERROR: rel#" << itr->id << "; way#" <<
+                        relation_ways [this_way].first << " = " <<
+                        last_node << "; node0 = " << node0 << std::endl;
+                    throw std::runtime_error ("last node != node0");
+                }
+            } // end while relation_ways.size == 0 - done one relation
+            lon_arr.push_back (lon_vec);
+            lat_arr.push_back (lat_vec);
+            rowname_arr.push_back (rowname_vec);
+        } else // store as multilinestring
+        {
+        }
+    }
+
+    // Then store the lon-lat and rowname vector<vector> objects as Rcpp::List
+    if (lon_arr.size () != lat_arr.size () ||
+            lon_arr.size () != rowname_arr.size ())
+        throw std::runtime_error ("lons, lats, and rownames differ in size");
+    for (int i=0; i<lon_arr.size (); i++)
+    {
+        if (lon_arr [i].size () != lat_arr [i].size () ||
+                lon_arr [i].size () != rowname_arr [i].size ())
+            throw std::runtime_error ("lons, lats, and rownames differ in size");
+        for (int j=0; j<lon_arr [i].size (); j++)
+            if (lon_arr [i][j].size () != lat_arr [i][j].size () ||
+                    lon_arr [i][j].size () != rowname_arr [i][j].size ())
+                throw std::runtime_error ("lons, lats, and rownames differ in size");
+    }
+
+    Rcpp::List polygonList (lon_arr.size ());
+    count = 0;
+    Rcpp::Rcout << "(lon,lat,rowname).size = (" << lon_arr.size () << ", " <<
+        lat_vec.size () << ", " << rowname_vec.size () << ")" << std::endl;
+    /*
+    for (int i=0; i<lat_vec.size (); i++)
+    {
+        nmat = Rcpp::NumericMatrix (Rcpp::Dimension (lat_vec [i].size (), 2));
+        std::copy (lon_vec [i].begin (), lon_vec [i].end (), nmat.begin ());
+        std::copy (lon_vec [i].begin (), lon_vec [i].end (), 
+                nmat.begin () + lon_vec [i].size ());
+        dimnames.push_back (rowname_vecs [i]);
+        dimnames.push_back (colnames);
+        nmat.attr ("dimnames") = dimnames;
+        dimnames.erase (0, dimnames.size ());
+        polygonList [count++] = nmat;
+    }
+    //polygonList.attr ("names") = polynames;
+    */
+
+    // ****** clean up arrays *****
+
+    for (int i=0; i<lon_arr.size (); i++)
+    {
+        for (int j=0; j<lon_arr [i].size (); j++)
+        {
+            lon_arr [i] [j].clear ();
+            lat_arr [i] [j].clear ();
+            rowname_arr [i] [j].clear ();
+        }
+        lon_arr [i].clear ();
+        lat_arr [i].clear ();
+        rowname_arr [i].clear ();
+    }
+    lon_arr.clear ();
+    lat_arr.clear ();
+    rowname_arr.clear ();
+
+    for (int i=0; i<id_arr.size (); i++)
+        id_arr [i].clear ();
+    id_arr.clear ();
+
+
+    /************************************************************************
+     ************************************************************************
+     **                                                                    **
      **                           PRE-PROCESSING                           **
      **                                                                    **
      ************************************************************************
      ************************************************************************/
 
     // Step#1: insert all rels into poly_ways
-    for (auto it = rels.begin (); it != rels.end (); ++it)
-        for (auto itw = (*it).ways.begin (); itw != (*it).ways.end (); ++itw)
+    for (auto itr = rels.begin (); itr != rels.end (); ++itr)
+    {
+        for (auto itw = (*itr).ways.begin (); itw != (*itr).ways.end (); ++itw)
         {
             if (ways.find (itw->first) == ways.end ())
                 throw std::runtime_error ("way can not be found");
             poly_ways.insert (itw->first);
         }
+    }
 
     // Step#2: identify and store poly and non_poly ways
-    for (auto it = ways.begin (); it != ways.end (); ++it)
+    for (auto itw = ways.begin (); itw != ways.end (); ++itw)
     {
-        if ((*it).second.nodes.front () == (*it).second.nodes.back ())
+        if ((*itw).second.nodes.front () == (*itw).second.nodes.back ())
         {
-            if (poly_ways.find ((*it).first) == poly_ways.end ())
-                poly_ways.insert ((*it).first);
-        } else if (non_poly_ways.find ((*it).first) == non_poly_ways.end ())
-            non_poly_ways.insert ((*it).first);
+            if (poly_ways.find ((*itw).first) == poly_ways.end ())
+                poly_ways.insert ((*itw).first);
+        } else if (non_poly_ways.find ((*itw).first) == non_poly_ways.end ())
+            non_poly_ways.insert ((*itw).first);
     }
 
     // Step#2b - Erase any ways that contain no data (should not happen).
-    for (auto it = poly_ways.begin (); it != poly_ways.end (); )
+    for (auto itp = poly_ways.begin (); itp != poly_ways.end (); )
     {
-        auto itw = ways.find (*it);
+        auto itw = ways.find (*itp);
         if (itw->second.nodes.size () == 0)
-            it = poly_ways.erase (it);
+            itp = poly_ways.erase (itp);
         else
-            ++it;
+            ++itp;
     }
-    for (auto it = non_poly_ways.begin (); it != non_poly_ways.end (); )
+    for (auto itnp = non_poly_ways.begin (); itnp != non_poly_ways.end (); )
     {
-        auto itw = ways.find (*it);
+        auto itw = ways.find (*itnp);
         if (itw->second.nodes.size () == 0)
-            it = non_poly_ways.erase (it);
+            itnp = non_poly_ways.erase (itnp);
         else
-            ++it;
+            ++itnp;
     }
 
     Rcpp::NumericVector bbox = rcpp_get_bbox_sf (xml.x_min (), xml.x_max (), 
@@ -156,47 +346,39 @@ Rcpp::List rcpp_osmdata (const std::string& st)
      ************************************************************************
      ************************************************************************/
 
+    std::set <std::string> varnames;
+    std::vector <std::string> varnames_vec;
     Rcpp::List polyList (poly_ways.size ());
     polynames.reserve (poly_ways.size ());
-    for (auto it = poly_ways.begin (); it != poly_ways.end (); ++it)
+    count = 0;
+    for (auto pi = poly_ways.begin (); pi != poly_ways.end (); ++pi)
     {
-        auto itw = ways.find (*it);
+        auto pj = ways.find (*pi);
+        polynames.push_back (std::to_string (pj->first));
         // Collect all unique keys
-        std::for_each (itw->second.key_val.begin (),
-                itw->second.key_val.end (),
+        std::for_each (pj->second.key_val.begin (),
+                pj->second.key_val.end (),
                 [&](const std::pair <std::string, std::string>& p)
                 {
                     varnames.insert (p.first);
                 });
 
-        /*
-         * The following lines check for duplicate way IDs -- which do very
-         * occasionally occur -- and ensures unique values as required by 'sp'
-         * through appending decimal digits to <osmid_t> OSM IDs.
-         */
-        std::string id = std::to_string (itw->first);
-        int tempi = 0;
-        while (idset.find (id) != idset.end ())
-            id = std::to_string (itw->first) + "." + std::to_string (tempi++);
-        idset.insert (id);
-        polynames.push_back (id);
-
         // Then iterate over nodes of that way and store all lat-lons
-        size_t n = itw->second.nodes.size ();
+        size_t n = pj->second.nodes.size ();
         lons.clear ();
         lats.clear ();
         rownames.clear ();
         lons.reserve (n);
         lats.reserve (n);
         rownames.reserve (n);
-        for (auto itn = itw->second.nodes.begin ();
-                itn != itw->second.nodes.end (); ++itn)
+        for (auto nj = pj->second.nodes.begin ();
+                nj != pj->second.nodes.end (); ++nj)
         {
-            if (nodes.find (*itn) == nodes.end ())
+            if (nodes.find (*nj) == nodes.end ())
                 throw std::runtime_error ("node can not be found");
-            lons.push_back (nodes.find (*itn)->second.lon);
-            lats.push_back (nodes.find (*itn)->second.lat);
-            rownames.push_back (std::to_string (*itn));
+            lons.push_back (nodes.find (*nj)->second.lon);
+            lats.push_back (nodes.find (*nj)->second.lat);
+            rownames.push_back (std::to_string (*nj));
         }
 
         nmat = Rcpp::NumericMatrix (Rcpp::Dimension (lons.size (), 2));
@@ -218,13 +400,13 @@ Rcpp::List rcpp_osmdata (const std::string& st)
         unique_vals.k_poly.size () << "]" << std::endl;
     int nrow = poly_ways.size (), ncol = varnames.size ();
     Rcpp::CharacterVector poly_kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na ());
-    for (auto it = poly_ways.begin (); it != poly_ways.end (); ++it)
+    for (auto pi = poly_ways.begin (); pi != poly_ways.end (); ++pi)
     {
-        int rowi = std::distance (poly_ways.begin (), it);
-        auto itw = ways.find (*it);
+        int rowi = std::distance (poly_ways.begin (), pi);
+        auto pj = ways.find (*pi);
 
-        for (auto kv_iter = itw->second.key_val.begin ();
-                kv_iter != itw->second.key_val.end (); ++kv_iter)
+        for (auto kv_iter = pj->second.key_val.begin ();
+                kv_iter != pj->second.key_val.end (); ++kv_iter)
         {
             const std::string& key = (*kv_iter).first;
             auto ni = varnames.find (key); // key must exist in varnames!
