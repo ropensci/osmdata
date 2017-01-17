@@ -114,11 +114,11 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     std::vector <std::vector <std::vector <float> > > lat_arr, lon_arr;
     std::vector <std::vector <std::string> > rowname_vec;
     std::vector <std::vector <std::vector <std::string> > > rowname_arr;
-    std::vector <std::vector <osmid_t> > id_arr;
     std::vector <std::pair <osmid_t, std::string> > relation_ways;
-    std::vector <std::pair <osmid_t, std::string> >::pointer rw_ptr;
-    std::set <osmid_t> relation_ways1;
-    //osmid_t this_way, node0, first_node, last_node;
+    std::vector <osmid_t> ids, rel_id; 
+    // ids and the id_ arrays hold ids of constituent ways
+    std::vector <std::vector <osmid_t> > id_vec; 
+    std::vector <std::vector <std::vector <osmid_t> > > id_arr;
     osmid_t node0, first_node, last_node;
     int this_way;
     bool closed;
@@ -135,9 +135,6 @@ Rcpp::List rcpp_osmdata (const std::string& st)
             while (relation_ways.size () > 0)
             {
                 node0 = 0, first_node = 0, last_node = 0;
-                lats.clear (); // These can't be reserved here
-                lons.clear ();
-                rownames.clear ();
 
                 auto rwi = relation_ways.front ();
                 relation_ways.erase (relation_ways.begin() + 0);
@@ -147,6 +144,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
                         throw std::runtime_error ("way can not be found");
 
                 // Get first way of relation, and starting node
+                ids.push_back (wayi->first);
                 node0 = first_node = wayi->second.nodes.front ();
                 last_node = wayi->second.nodes.back ();
                 for (auto ni = wayi->second.nodes.begin ();
@@ -174,6 +172,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
                             if (wayi->second.nodes.front () == last_node)
                             {
                                 // trace forwards through way
+                                ids.push_back (wayi->first);
                                 first_node = last_node;
                                 this_way = std::distance (relation_ways.begin (),
                                         rwi);
@@ -189,6 +188,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
                             } else if (wayi->second.nodes.back () == last_node)
                             {
                                 // trace backwards through way
+                                ids.push_back (wayi->first);
                                 first_node = last_node;
                                 this_way = std::distance (relation_ways.begin (),
                                         rwi);
@@ -213,6 +213,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
                     lon_vec.push_back (lons);
                     lat_vec.push_back (lats);
                     rowname_vec.push_back (rownames);
+                    id_vec.push_back (ids);
                 } else
                 {
                     Rcpp::Rcout << "ERROR: rel#" << itr->id << "; way#" <<
@@ -220,19 +221,39 @@ Rcpp::List rcpp_osmdata (const std::string& st)
                         last_node << "; node0 = " << node0 << std::endl;
                     throw std::runtime_error ("last node != node0");
                 }
+                lats.clear (); // These can't be reserved here
+                lons.clear ();
+                rownames.clear ();
+                ids.clear ();
             } // end while relation_ways.size == 0 - done one relation
+            rel_id.push_back (itr->id);
             lon_arr.push_back (lon_vec);
             lat_arr.push_back (lat_vec);
             rowname_arr.push_back (rowname_vec);
+            id_arr.push_back (id_vec);
+            for (int i=0; i<lon_vec.size (); i++)
+            {
+                lon_vec [i].clear ();
+                lat_vec [i].clear ();
+                rowname_vec [i].clear ();
+                id_vec [i].clear ();
+            }
+            lon_vec.clear ();
+            lat_vec.clear ();
+            rowname_vec.clear ();
+            id_vec.clear ();
         } else // store as multilinestring
         {
         }
     }
 
     // Then store the lon-lat and rowname vector<vector> objects as Rcpp::List
+    // First a sanity check
     if (lon_arr.size () != lat_arr.size () ||
             lon_arr.size () != rowname_arr.size ())
         throw std::runtime_error ("lons, lats, and rownames differ in size");
+    Rcpp::Rcout << "size (lon, id) = (" << lon_arr.size () << ", " <<
+        id_arr.size () << ")" << std::endl;
     for (int i=0; i<lon_arr.size (); i++)
     {
         if (lon_arr [i].size () != lat_arr [i].size () ||
@@ -243,26 +264,64 @@ Rcpp::List rcpp_osmdata (const std::string& st)
                     lon_arr [i][j].size () != rowname_arr [i][j].size ())
                 throw std::runtime_error ("lons, lats, and rownames differ in size");
     }
+    if (lon_arr.size () != id_arr.size ())
+        throw std::runtime_error ("ids and geometries differ in size");
+    // NOTE: Other dimensions of id_vec differ, because they hold IDs of all
+    // component ways, whereas lon_arr etc only hold (single) concatenated
+    // coordinates.
 
-    Rcpp::List polygonList (lon_arr.size ());
     count = 0;
     Rcpp::Rcout << "(lon,lat,rowname).size = (" << lon_arr.size () << ", " <<
-        lat_vec.size () << ", " << rowname_vec.size () << ")" << std::endl;
-    /*
-    for (int i=0; i<lat_vec.size (); i++)
+        lat_arr.size () << ", " << rowname_arr.size () << "); id_arr = " << 
+        id_arr.size () << std::endl;
+    for (int i=0; i<lon_arr.size (); i++)
     {
-        nmat = Rcpp::NumericMatrix (Rcpp::Dimension (lat_vec [i].size (), 2));
-        std::copy (lon_vec [i].begin (), lon_vec [i].end (), nmat.begin ());
-        std::copy (lon_vec [i].begin (), lon_vec [i].end (), 
-                nmat.begin () + lon_vec [i].size ());
-        dimnames.push_back (rowname_vecs [i]);
-        dimnames.push_back (colnames);
-        nmat.attr ("dimnames") = dimnames;
-        dimnames.erase (0, dimnames.size ());
-        polygonList [count++] = nmat;
+        Rcpp::Rcout << "(lon,lat,rowname)[" << i << "].size = " <<
+            lat_arr [i].size () << ", " << lon_arr [i].size () << ", " <<
+            rowname_arr [i].size () << "; id_arr = " <<
+            id_arr [i].size () << std::endl;
+        for (int j=0; j<lon_arr[i].size (); j++)
+            Rcpp::Rcout << "(lon,lat,rowname)[" << i << "," << j << "].size = " <<
+                lat_arr [i][j].size () << ", " << lon_arr [i][j].size () << ", " <<
+                rowname_arr [i][j].size () << "; id_arr = " <<
+                id_arr [i][j].size () << std::endl;
+        Rcpp::Rcout << "----------" << std::endl;
     }
-    //polygonList.attr ("names") = polynames;
-    */
+    // Then actual storage
+    Rcpp::List polygonList (lon_arr.size ()), idList (lon_arr.size ());
+    polynames.reserve (lon_arr.size ());
+    std::vector <osmid_t> id_vec_fl;
+    for (int i=0; i<lon_arr.size (); i++) // over all relations
+    {
+        Rcpp::List polystList_i (lon_arr [i].size ()), 
+            idList_i (lon_arr [i].size ());
+        for (int j=0; j<lon_arr [i].size (); j++) // over all ways
+        {
+            int n = lon_arr [i][j].size ();
+            nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
+            std::copy (lon_arr [i][j].begin (), lon_arr [i][j].end (),
+                    nmat.begin ());
+            std::copy (lon_arr [i][j].begin (), lon_arr [i][j].end (),
+                    nmat.begin () + n);
+            dimnames.push_back (rowname_arr [i][j]);
+            dimnames.push_back (colnames);
+            nmat.attr ("dimnames") = dimnames;
+            dimnames.erase (0, dimnames.size ());
+            polystList_i [j] = nmat;
+            id_vec_fl.clear ();
+            id_vec_fl.reserve (id_arr [i][j].size ());
+            std::copy (id_arr [i][j].begin (), id_arr [i][j].end (),
+                    id_vec_fl.begin ());
+            idList_i [j] = id_vec_fl;
+        }
+        polygonList [i] = polystList_i;
+        polynames.push_back (std::to_string (rel_id [i]));
+        idList [i] = idList_i;
+        idList_i = polystList_i = R_NilValue; // Probably not necessary?
+    }
+    polygonList.attr ("names") = polynames;
+    polynames.clear ();
+    idList.attr ("names") = polynames; // needs to be combined in df at end
 
     // ****** clean up arrays *****
 
@@ -273,17 +332,17 @@ Rcpp::List rcpp_osmdata (const std::string& st)
             lon_arr [i] [j].clear ();
             lat_arr [i] [j].clear ();
             rowname_arr [i] [j].clear ();
+            id_arr [i] [j].clear ();
         }
         lon_arr [i].clear ();
         lat_arr [i].clear ();
         rowname_arr [i].clear ();
+        id_arr [i].clear ();
     }
     lon_arr.clear ();
     lat_arr.clear ();
     rowname_arr.clear ();
-
-    for (int i=0; i<id_arr.size (); i++)
-        id_arr [i].clear ();
+    rel_id.clear ();
     id_arr.clear ();
 
 
