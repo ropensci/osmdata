@@ -36,6 +36,232 @@
 
 #include <algorithm> // for min_element/max_element
 
+// Note: roxygen attempts to import doxygen-style comments, even without
+// [[Rcpp::Export]]
+
+/* trace_relation
+ *
+ * Traces a single relation 
+ *
+ * @param itr_rel iterator to XmlData::Relations structure
+ * @param &ways pointer to Ways structure
+ * @param &nodes pointer to Nodes structure
+ * @param &lon_vec pointer to 2D array of longitudes
+ * @param &lat_vec pointer to 2D array of latitutdes
+ * @param &rowname_vec pointer to 2D array of rownames for each node.
+ * @param &id_vec pointer to 2D array of OSM IDs for each way in relation
+ */
+void trace_relation (Relations::const_iterator itr_rel, const Ways &ways,
+        const Nodes &nodes, float_arr2 &lon_vec, float_arr2 &lat_vec,
+        string_arr2 &rowname_vec, osmt_arr2 &id_vec)
+{
+    bool closed;
+    int this_way;
+    osmid_t node0, first_node, last_node;
+    std::string this_role;
+    std::vector <float> lons, lats;
+    std::vector <std::string> rownames;
+    std::vector <osmid_t> ids;
+
+    std::vector <std::pair <osmid_t, std::string> > relation_ways;
+    for (auto itw = itr_rel->ways.begin (); itw != itr_rel->ways.end (); ++itw)
+        relation_ways.push_back (std::make_pair (itw->first, itw->second));
+
+    // Then trace through all those ways and store associated data
+    while (relation_ways.size () > 0)
+    {
+        auto rwi = relation_ways.front ();
+        relation_ways.erase (relation_ways.begin() + 0);
+        this_role = rwi.second;
+        auto wayi = ways.find (rwi.first);
+        if (wayi == ways.end ())
+            throw std::runtime_error ("way can not be found");
+
+        // Get first way of relation, and starting node
+        node0 = wayi->second.nodes.front ();
+        last_node = trace_way (ways, nodes, node0,
+                wayi->first, ids, lons, lats, rownames);
+        closed = false;
+        if (last_node == node0)
+            closed = true;
+        while (!closed)
+        {
+            first_node = last_node;
+            for (auto rwi = relation_ways.begin ();
+                    rwi != relation_ways.end (); ++rwi)
+            {
+                if (rwi->second == this_role)
+                {
+                    auto wayi = ways.find (rwi->first);
+                    if (wayi == ways.end ())
+                        throw std::runtime_error ("way can not be found");
+                    last_node = trace_way (ways, nodes, first_node,
+                            wayi->first, ids, lons, lats, rownames);
+                    if (last_node >= 0)
+                    {
+                        first_node = last_node;
+                        this_way = std::distance (relation_ways.begin (),
+                                rwi);
+                        break;
+                    }
+                }
+            } // end for rwi over relation_ways
+            relation_ways.erase (relation_ways.begin () + this_way);
+            if (last_node == node0 || relation_ways.size () == 0)
+                closed = true;
+        } // end while !closed
+        if (last_node == node0)
+        {
+            lon_vec.push_back (lons);
+            lat_vec.push_back (lats);
+            rowname_vec.push_back (rownames);
+            id_vec.push_back (ids);
+        } else
+        {
+            throw std::runtime_error ("last node != node0");
+        }
+        lats.clear (); // These can't be reserved here
+        lons.clear ();
+        rownames.clear ();
+        ids.clear ();
+    } // end while relation_ways.size == 0 - finished tracing relation
+}
+
+/* trace_way
+ * 
+ * Traces a single way and adds (lon,lat,rownames) to corresponding vectors
+ * 
+ * @param &ways pointer to Ways structure
+ * @param &nodes pointer to Nodes structure
+ * @param first_node Last node of previous way to find in current
+ * @param &wayi_id pointer to ID of current way
+ * @param &ids pointer to vector of osm IDs for ways within a single
+ * multipolygon relation
+ * @param &lons pointer to vector of longitudes
+ * @param &lats pointer to vector of latitutdes
+ * @param &rownames pointer to vector of rownames for each node.
+ * 
+ * @return ID of final node in way, or a negative number if first_node does not
+ * exist within wayi_id
+ */
+osmid_t trace_way (const Ways &ways, const Nodes &nodes, 
+        osmid_t first_node, const osmid_t &wayi_id, std::vector <osmid_t> &ids,
+        std::vector <float> &lons, std::vector <float> &lats,
+        std::vector <std::string> &rownames)
+{
+    osmid_t last_node = -1;
+    auto wayi = ways.find (wayi_id);
+    std::vector <osmid_t>::const_iterator it_node_begin, it_node_end;
+
+    // Alternative to the following is to pass iterators as .begin() or
+    // .rbegin() to a std::for_each, but const Ways and Nodes cannot then
+    // (easily) be passed to lambdas. TODO: Find a way
+    if (wayi->second.nodes.front () == first_node)
+    {
+        ids.push_back (wayi->first);
+        for (auto ni = wayi->second.nodes.begin ();
+                ni != wayi->second.nodes.end (); ++ni)
+        {
+            if (nodes.find (*ni) == nodes.end ())
+                throw std::runtime_error ("node can not be found");
+            lons.push_back (nodes.find (*ni)->second.lon);
+            lats.push_back (nodes.find (*ni)->second.lat);
+            rownames.push_back (std::to_string (*ni));
+        }
+        last_node = wayi->second.nodes.back ();
+    } else if (wayi->second.nodes.back () == first_node)
+    {
+        ids.push_back (wayi->first);
+        for (auto ni = wayi->second.nodes.rbegin ();
+                ni != wayi->second.nodes.rend (); ++ni)
+        {
+            if (nodes.find (*ni) == nodes.end ())
+                throw std::runtime_error ("node can not be found");
+            lons.push_back (nodes.find (*ni)->second.lon);
+            lats.push_back (nodes.find (*ni)->second.lat);
+            rownames.push_back (std::to_string (*ni));
+        }
+        last_node = wayi->second.nodes.front ();
+    }
+
+    return last_node;
+}
+
+/* check_geom_arrs
+ * 
+ * Sanity check to ensure all 3D geometry arrays have same sizes
+ */
+void check_geom_arrs (float_arr3 &lon_arr, float_arr3 &lat_arr,
+        string_arr3 &rowname_arr, osmt_arr3 id_arr)
+{
+    if (lon_arr.size () != lat_arr.size () ||
+            lon_arr.size () != rowname_arr.size ())
+        throw std::runtime_error ("lons, lats, and rownames differ in size");
+    for (int i=0; i<lon_arr.size (); i++)
+    {
+        if (lon_arr [i].size () != lat_arr [i].size () ||
+                lon_arr [i].size () != rowname_arr [i].size ())
+            throw std::runtime_error ("lons, lats, and rownames differ in size");
+        for (int j=0; j<lon_arr [i].size (); j++)
+            if (lon_arr [i][j].size () != lat_arr [i][j].size () ||
+                    lon_arr [i][j].size () != rowname_arr [i][j].size ())
+                throw std::runtime_error ("lons, lats, and rownames differ in size");
+    }
+    if (lon_arr.size () != id_arr.size ())
+        throw std::runtime_error ("ids and geometries differ in size");
+    // NOTE: Other dimensions of id_vec differ, because they hold IDs of all
+    // component ways, whereas lon_arr etc only hold (single) concatenated
+    // coordinates.
+}
+
+/* check_geom_vecs
+ * 
+ * Clean all 2D geometry arrays 
+ */
+void clean_geom_vecs (float_arr2 &lon_vec, float_arr2 &lat_vec,
+        string_arr2 &rowname_vec, osmt_arr2 id_vec)
+{
+    for (int i=0; i<lon_vec.size (); i++)
+    {
+        lon_vec [i].clear ();
+        lat_vec [i].clear ();
+        rowname_vec [i].clear ();
+        id_vec [i].clear ();
+    }
+    lon_vec.clear ();
+    lat_vec.clear ();
+    rowname_vec.clear ();
+    id_vec.clear ();
+}
+
+/* clean_geom_arrs
+ * 
+ * Clean all 3D geometry arrays 
+ */
+void clean_geom_arrs (float_arr3 &lon_arr, float_arr3 &lat_arr,
+        string_arr3 &rowname_arr, osmt_arr3 id_arr)
+{
+    for (int i=0; i<lon_arr.size (); i++)
+    {
+        for (int j=0; j<lon_arr [i].size (); j++)
+        {
+            lon_arr [i] [j].clear ();
+            lat_arr [i] [j].clear ();
+            rowname_arr [i] [j].clear ();
+            id_arr [i] [j].clear ();
+        }
+        lon_arr [i].clear ();
+        lat_arr [i].clear ();
+        rowname_arr [i].clear ();
+        id_arr [i].clear ();
+    }
+    lon_arr.clear ();
+    lat_arr.clear ();
+    rowname_arr.clear ();
+    id_arr.clear ();
+}
+
+
 //' rcpp_osmdata
 //'
 //' Extracts all polygons from an overpass API query
@@ -110,165 +336,33 @@ Rcpp::List rcpp_osmdata (const std::string& st)
      * dynamic vectors. These are 3D monsters: #1 for relation, #2 for polygon
      * in relation, and #3 for data. There are also associated 2D vector<vector>
      * objects for IDs and roles. */
-    std::vector <std::vector <float> > lat_vec, lon_vec;
-    std::vector <std::vector <std::vector <float> > > lat_arr, lon_arr;
-    std::vector <std::vector <std::string> > rowname_vec;
-    std::vector <std::vector <std::vector <std::string> > > rowname_arr;
-    std::vector <std::pair <osmid_t, std::string> > relation_ways;
-    std::vector <osmid_t> ids, rel_id; 
-    // ids and the id_ arrays hold ids of constituent ways
+    float_arr2 lat_vec, lon_vec;
+    float_arr3 lat_arr, lon_arr;
+    string_arr2 rowname_vec;
+    string_arr3 rowname_arr;
+    std::vector <osmid_t> rel_id; 
     std::vector <std::vector <osmid_t> > id_vec; 
     std::vector <std::vector <std::vector <osmid_t> > > id_arr;
-    osmid_t node0, first_node, last_node;
-    int this_way;
-    bool closed;
-    std::string this_role;
     for (auto itr = rels.begin (); itr != rels.end (); ++itr)
     {
         if (itr->ispoly) // itr->second can only be "outer" or "inner"
         {
+            trace_relation (itr, ways, nodes, lon_vec, lat_vec,
+                    rowname_vec, id_vec);
             // Store all ways in that relation and their associated roles
-            relation_ways.clear ();
-            for (auto itw = (*itr).ways.begin (); itw != (*itr).ways.end (); ++itw)
-                relation_ways.push_back (std::make_pair (itw->first, itw->second));
-            // Then trace through all those ways and store associated data
-            while (relation_ways.size () > 0)
-            {
-                node0 = 0, first_node = 0, last_node = 0;
-
-                auto rwi = relation_ways.front ();
-                relation_ways.erase (relation_ways.begin() + 0);
-                this_role = rwi.second;
-                auto wayi = ways.find (rwi.first);
-                if (wayi == ways.end ())
-                        throw std::runtime_error ("way can not be found");
-
-                // Get first way of relation, and starting node
-                ids.push_back (wayi->first);
-                node0 = first_node = wayi->second.nodes.front ();
-                last_node = wayi->second.nodes.back ();
-                for (auto ni = wayi->second.nodes.begin ();
-                        ni != wayi->second.nodes.end (); ++ni)
-                {
-                    if (nodes.find (*ni) == nodes.end ())
-                        throw std::runtime_error ("node can not be found");
-                    lons.push_back (nodes.find (*ni)->second.lon);
-                    lats.push_back (nodes.find (*ni)->second.lat);
-                    rownames.push_back (std::to_string (*ni));
-                }
-                closed = false;
-                if (last_node == node0)
-                    closed = true;
-                while (!closed)
-                {
-                    for (auto rwi = relation_ways.begin ();
-                            rwi != relation_ways.end (); ++rwi)
-                    {
-                        if (rwi->second == this_role)
-                        {
-                            auto wayi = ways.find (rwi->first);
-                            if (wayi == ways.end ())
-                                throw std::runtime_error ("way can not be found");
-                            if (wayi->second.nodes.front () == last_node)
-                            {
-                                // trace forwards through way
-                                ids.push_back (wayi->first);
-                                first_node = last_node;
-                                this_way = std::distance (relation_ways.begin (),
-                                        rwi);
-                                for (auto ni = wayi->second.nodes.begin ();
-                                        ni != wayi->second.nodes.end (); ++ni)
-                                {
-                                    lons.push_back (nodes.find (*ni)->second.lon);
-                                    lats.push_back (nodes.find (*ni)->second.lat);
-                                    rownames.push_back (std::to_string (*ni));
-                                }
-                                last_node = wayi->second.nodes.back ();
-                                break;
-                            } else if (wayi->second.nodes.back () == last_node)
-                            {
-                                // trace backwards through way
-                                ids.push_back (wayi->first);
-                                first_node = last_node;
-                                this_way = std::distance (relation_ways.begin (),
-                                        rwi);
-                                for (auto ni = wayi->second.nodes.end ();
-                                        ni != wayi->second.nodes.begin (); --ni)
-                                {
-                                    lons.push_back (nodes.find (*ni)->second.lon);
-                                    lats.push_back (nodes.find (*ni)->second.lat);
-                                    rownames.push_back (std::to_string (*ni));
-                                }
-                                last_node = wayi->second.nodes.front ();
-                                break;
-                            }
-                        }
-                    } // end for rwi over relation_ways
-                    relation_ways.erase (relation_ways.begin () + this_way);
-                    if (last_node == node0 || relation_ways.size () == 0)
-                        closed = true;
-                } // end while !closed
-                if (last_node == node0)
-                {
-                    lon_vec.push_back (lons);
-                    lat_vec.push_back (lats);
-                    rowname_vec.push_back (rownames);
-                    id_vec.push_back (ids);
-                } else
-                {
-                    Rcpp::Rcout << "ERROR: rel#" << itr->id << "; way#" <<
-                        relation_ways [this_way].first << " = " <<
-                        last_node << "; node0 = " << node0 << std::endl;
-                    throw std::runtime_error ("last node != node0");
-                }
-                lats.clear (); // These can't be reserved here
-                lons.clear ();
-                rownames.clear ();
-                ids.clear ();
-            } // end while relation_ways.size == 0 - done one relation
             rel_id.push_back (itr->id);
             lon_arr.push_back (lon_vec);
             lat_arr.push_back (lat_vec);
             rowname_arr.push_back (rowname_vec);
             id_arr.push_back (id_vec);
-            for (int i=0; i<lon_vec.size (); i++)
-            {
-                lon_vec [i].clear ();
-                lat_vec [i].clear ();
-                rowname_vec [i].clear ();
-                id_vec [i].clear ();
-            }
-            lon_vec.clear ();
-            lat_vec.clear ();
-            rowname_vec.clear ();
-            id_vec.clear ();
+            clean_geom_vecs (lon_vec, lat_vec, rowname_vec, id_vec);
         } else // store as multilinestring
         {
         }
     }
 
+    check_geom_arrs (lon_arr, lat_arr, rowname_arr, id_arr);
     // Then store the lon-lat and rowname vector<vector> objects as Rcpp::List
-    // First a sanity check
-    if (lon_arr.size () != lat_arr.size () ||
-            lon_arr.size () != rowname_arr.size ())
-        throw std::runtime_error ("lons, lats, and rownames differ in size");
-    Rcpp::Rcout << "size (lon, id) = (" << lon_arr.size () << ", " <<
-        id_arr.size () << ")" << std::endl;
-    for (int i=0; i<lon_arr.size (); i++)
-    {
-        if (lon_arr [i].size () != lat_arr [i].size () ||
-                lon_arr [i].size () != rowname_arr [i].size ())
-            throw std::runtime_error ("lons, lats, and rownames differ in size");
-        for (int j=0; j<lon_arr [i].size (); j++)
-            if (lon_arr [i][j].size () != lat_arr [i][j].size () ||
-                    lon_arr [i][j].size () != rowname_arr [i][j].size ())
-                throw std::runtime_error ("lons, lats, and rownames differ in size");
-    }
-    if (lon_arr.size () != id_arr.size ())
-        throw std::runtime_error ("ids and geometries differ in size");
-    // NOTE: Other dimensions of id_vec differ, because they hold IDs of all
-    // component ways, whereas lon_arr etc only hold (single) concatenated
-    // coordinates.
 
     count = 0;
     Rcpp::Rcout << "(lon,lat,rowname).size = (" << lon_arr.size () << ", " <<
@@ -324,26 +418,8 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     idList.attr ("names") = polynames; // needs to be combined in df at end
 
     // ****** clean up arrays *****
-
-    for (int i=0; i<lon_arr.size (); i++)
-    {
-        for (int j=0; j<lon_arr [i].size (); j++)
-        {
-            lon_arr [i] [j].clear ();
-            lat_arr [i] [j].clear ();
-            rowname_arr [i] [j].clear ();
-            id_arr [i] [j].clear ();
-        }
-        lon_arr [i].clear ();
-        lat_arr [i].clear ();
-        rowname_arr [i].clear ();
-        id_arr [i].clear ();
-    }
-    lon_arr.clear ();
-    lat_arr.clear ();
-    rowname_arr.clear ();
+    clean_geom_arrs (lon_arr, lat_arr, rowname_arr, id_arr);
     rel_id.clear ();
-    id_arr.clear ();
 
 
     /************************************************************************

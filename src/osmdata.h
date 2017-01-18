@@ -35,6 +35,13 @@
 //const std::string crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0";
 const std::string p4s = "+proj=longlat +datum=WGS84 +no_defs";
 
+typedef std::vector <std::vector <float> > float_arr2;
+typedef std::vector <std::vector <std::vector <float> > > float_arr3;
+typedef std::vector <std::vector <std::string> > string_arr2;
+typedef std::vector <std::vector <std::vector <std::string> > > string_arr3;
+typedef std::vector <std::vector <osmid_t> > osmt_arr2;
+typedef std::vector <std::vector <std::vector <osmid_t> > > osmt_arr3;
+
 /************************************************************************
  ************************************************************************
  **                                                                    **
@@ -335,3 +342,29 @@ inline void XmlData::traverseNode (XmlNodePtr pt, RawNode& rnode)
     }
 } // end function XmlData::traverseNode
 
+
+/************************************************************************
+ ************************************************************************
+ **                                                                    **
+ **                          OTHER FUNCTIONS                           **
+ **                                                                    **
+ ************************************************************************
+ ************************************************************************/
+
+void trace_relation (Relations::const_iterator itr_rel, const Ways &ways,
+        const Nodes &nodes, float_arr2 &lon_vec, float_arr2 &lat_vec,
+        string_arr2 &rowname_vec, osmt_arr2 &id_vec);
+
+osmid_t trace_way (const Ways &ways, const Nodes &nodes, 
+        osmid_t last_node, const osmid_t &wayi_id, std::vector <osmid_t> &ids,
+        std::vector <float> &lons, std::vector <float> &lats,
+        std::vector <std::string> &rownames);
+
+void check_geom_arrs (float_arr3 &lon_arr, float_arr3 &lat_arr,
+        string_arr3 &rowname_arr, osmt_arr3 id_arr);
+
+void clean_geom_arrs (float_arr3 &lon_arr, float_arr3 &lat_arr,
+        string_arr3 &rowname_arr, osmt_arr3 id_arr);
+
+void clean_geom_vecs (float_arr2 &lon_vec, float_arr2 &lat_vec,
+        string_arr2 &rowname_vec, osmt_arr2 id_vec);
