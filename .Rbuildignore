@@ -11,6 +11,7 @@ makefile$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^CONDUCT\.md$
+^vignettes/makefile$
 
 # Non-exported man files
 man/rcpp_get_osmdata.Rd

@@ -1,0 +1,158 @@
+---
+title: "Translation of OSM to Simple Features"
+author: "Mark Padgham"
+date: "`r Sys.Date()`"
+output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## 1. OpenStreetMap Data Structure
+
+OpenStreetMap (OSM) data has a unique structure that is not directly
+reconcilable with other modes of representing spatial data, notably including
+Simple Features. OSM data is represented in the three primary spatial structures
+of
+
+1. `nodes`, which are directly translatable to spatial points
+
+2. `ways`, which may be closed, in which case they form polygons, or unclosed,
+   in which case they are (non-polygonal) lines.
+
+3. `relations` which are higher-level objects used to specify relationships
+   between collections of ways. While there are several recognised categories of
+   `relations`, in spatial terms these may be reduced to a binary distinction
+   between:
+   a.   `multipolygon` relations, which specify relationships between an
+   exterior polygon (through specifying `role='outer'`) and possible inner
+   polygons (`role='inner'`). These may or may not be specified with
+   `type=multipolygon`. Political boundaries, for example, often have
+   `type=boundary` instead. All OSM `multipolygonal` relations are nevertheless
+   assumed by `osmdata` to be comprised of members having `role=outer` or
+   `role=inner`.
+   b. In the absence of `inner` and `outer` roles, an OSM relation is assumed
+   not to be polygonal.
+
+## 2. Simple Features Data Structure
+
+The representation of spatial objects as Simple Features is described elsewhere,
+with this document merely reviewing relevant aspects. The Simple Features system
+assumes that spatial features can be represented in one of (13?) distinct
+classes, which by convention are referred to in all capital letters. Relevant
+classes for OSM data are:
+
+1. POINTS
+2. MULTIPOINTS
+3. LINESTRINGS
+4. MULTILINESTRINGS
+5. POLYGONS
+6. MULTIPOLYGONS
+
+A 'Simple Feature' consists of a sequence of spatial coordinates, which for OSM
+data are only ever `XY` coordinates represented by a stringg of `X` coordinates
+contained within a bracket, followed by a string of `Y` coordinates. Any number
+of additional data may then be appended to these spatial coordinates to form a
+
+
+## 3. `osmdata` Translation of OSM into Simple Features
+
+### 3.1. OSM Nodes
+
+OSM nodes translate directly into `SF::POINT` objects.
+
+### 3.2. OSM Ways
+
+OSM ways may be either polygons or (non-polygonal) lines. `osmdata` translates
+these into `SF::LINESTRING` and `SF::POLYGON` objects, respectively.
+
+### 3.3 OSM Relations
+
+OSM relations comprising members with `role=outer` or `role=inner` are
+translated into `SF::MULTIPOLYGON` objects; otherwise they form
+`SF::MULTILINESTRING` objects.
+
+#### 3.3(a) Multipolygon Relations
+
+An OSM multipolygon is translated by `osmdata` into a single `SF::MULTIPOLYGON`
+object which has an additional column specifying `num_members`. The `SF`
+geometry thus consists of a list (an `R::List` object) of this number of
+polygons, the first of which is the `outer` polygon, with all subsequent members
+forming closed inner rings.
+
+Each of these inner rings are represented as OSM `ways`, and contain associated
+data **not** able to be represented in the single multipolygon representation.
+Each inner polygon is therefore additionally stored in the `sf` `data.frame`
+along with all associated data. Thus the row containing a multipolygon of
+`num_polygon` polygons is followed by `num_polygon - 1` rows containing the data
+for each `inner` polygon.
+
+
+#### 3.3(b) Multilinestring Relations
+
+OSM `relations` that are not `multipolygons` are translated into
+`SF::MULTILINESTRING` objects. Each member of any OSM relation is attributed a
+`role`, which may be empty. `osmdata` collates all ways within a relation
+according to their `role`s. Thus, unlike multipolygon relations which are always
+translated into a single `sf::MULTIPOLYGON` object, multilinestring relations
+are translated by `omsdata` into potentially several `sf::MULTILINESTRING`
+objects, one for each unique role.
+
+These multilinestring objects also have a column specifying `num_members`, as
+for multipolygons, with the primary member followed by `num_members - 1` rows,
+one for each member of the multilinestring.
+
+## 4. `GDAL` Translation of OSM into Simple Features
+
+The `R` package [`sf`](https://cran.r-project.org/package=sf) is an
+implementation of Spatial Features, and provides a wrapper around the GDAL
+(Graphical Data Abstraction Library) for reading geospatial data. `GDAL`
+provides a `driver` to read OSM data, and thus `sf` can also be used to read
+`OSM` data in `R`. The `GDAL` translation of OSM data differs, however, in
+several important ways from the `osmdata` translation.
+
+The primary difference is that GDAL only returns *unique* objects of each
+spatial (SF) type. Thus `SF::POINT` objects consist of only those points that
+are not otherwise members of some 'higher' object (lines, polygons, relations).
+Although a given set of OSM data may actually contain a great many points,
+attempting to load these with
+```{r, eval=FALSE}
+sf::st_read (file, layer='points')
+```
+will generally return surprisingly few points.
+
+### 4.1. OSM Nodes
+
+`osmdata` returns an `sf::POINTS` structure containing **all** nodes within a
+given set of OSM data---this will generally represent far more data than retuned
+by `sf::st_read (file, layer='points')`. In addition to this difference, the
+representation of points remains identical, with `osmdata` merely differing in
+retaining all `key-value` pairs, whereas `GDAL` only retains a select few of
+these.
+
+### 4.2. OSM Ways
+
+As for points, `sf` only returns those ways that are not represented or
+contained in 'higher' objects (OSM relations interpreted as `SF::MULTIPOLYGON`
+or `SF::MULTILINESTRING` objects). `osmdata` returns all ways, and thus enables,
+for example, examination of the full attributes of any member of a multigeometry
+object. This is not possible with the `GDAL/sf` translation.
+
+As for points, the only additional difference between `osmdata` adn `GDAL/sf`
+is that `osmdata` retains all `key-value` pairs, whereas `GDAL` retains only a
+select few.
+
+### 4.3 OSM Relations
+
+Translation of OSM relations into Simple Features differs more significantly
+between `osmdata` and `GDAL/sf`.
+
+#### 4.3(a) Multipolygon Relations
+
+As indicated above, multipolygon relations are translated in broadly comparable
+ways by both `osmdata` and `sf/GDAL`.
+
+#### 4.3(b) Multilinestring Relations
