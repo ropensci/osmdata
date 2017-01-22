@@ -40,7 +40,8 @@ typedef std::vector <std::vector <std::vector <float> > > float_arr3;
 typedef std::vector <std::vector <std::string> > string_arr2;
 typedef std::vector <std::vector <std::vector <std::string> > > string_arr3;
 typedef std::vector <std::vector <osmid_t> > osmt_arr2;
-typedef std::vector <std::vector <std::vector <osmid_t> > > osmt_arr3;
+typedef std::vector <std::pair <osmid_t, std::string> > osm_str_vec;
+typedef std::vector <std::pair <osmid_t, std::string> >::iterator it_osm_str_vec;
 
 /************************************************************************
  ************************************************************************
@@ -351,20 +352,32 @@ inline void XmlData::traverseNode (XmlNodePtr pt, RawNode& rnode)
  ************************************************************************
  ************************************************************************/
 
-void trace_relation (Relations::const_iterator itr_rel, const Ways &ways,
+void trace_multipolygon (Relations::const_iterator itr_rel, const Ways &ways,
         const Nodes &nodes, float_arr2 &lon_vec, float_arr2 &lat_vec,
-        string_arr2 &rowname_vec, osmt_arr2 &id_vec);
+        string_arr2 &rowname_vec, std::vector <std::string> &ids);
 
-osmid_t trace_way (const Ways &ways, const Nodes &nodes, 
-        osmid_t last_node, const osmid_t &wayi_id, std::vector <osmid_t> &ids,
-        std::vector <float> &lons, std::vector <float> &lats,
-        std::vector <std::string> &rownames);
+void trace_multilinestring (Relations::const_iterator itr_rel, const std::string role,
+        const Ways &ways, const Nodes &nodes, float_arr2 &lon_vec, 
+        float_arr2 &lat_vec, string_arr2 &rowname_vec, std::vector <osmid_t> &ids);
 
-void check_geom_arrs (float_arr3 &lon_arr, float_arr3 &lat_arr,
-        string_arr3 &rowname_arr, osmt_arr3 id_arr);
+osmid_t trace_way (const Ways &ways, const Nodes &nodes, osmid_t first_node,
+        const osmid_t &wayi_id, std::vector <float> &lons, 
+        std::vector <float> &lats, std::vector <std::string> &rownames);
+
+void get_value_vec (Relations::const_iterator itr, 
+        const std::set <std::string> keyset, std::vector <std::string> &value_vec);
+
+void check_geom_arrs (const float_arr3 &lon_arr, const float_arr3 &lat_arr,
+        const string_arr3 &rowname_arr);
 
 void clean_geom_arrs (float_arr3 &lon_arr, float_arr3 &lat_arr,
-        string_arr3 &rowname_arr, osmt_arr3 id_arr);
+        string_arr3 &rowname_arr);
+
+void clear_id_vecs (std::vector <std::vector <osmid_t> > &id_vec_ls, 
+    std::vector <std::vector <std::string> > &id_vec_mp);
+
+void clean_kv_arrs (std::vector <std::vector <std::string> > &value_arr_mp,
+        std::vector <std::vector <std::string> > &value_arr_ls);
 
 void clean_geom_vecs (float_arr2 &lon_vec, float_arr2 &lat_vec,
-        string_arr2 &rowname_vec, osmt_arr2 id_vec);
+        string_arr2 &rowname_vec);

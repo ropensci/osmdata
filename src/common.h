@@ -130,8 +130,8 @@ struct Relation
     std::string rel_type;
     std::map <std::string, std::string> key_val;
     // Relations may have nodes as members, but these are not used here.
-    std::vector <std::pair <osmid_t, std::string> > nodes; // str = type
-    std::vector <std::pair <osmid_t, std::string> > ways; // str = type
+    std::vector <std::pair <osmid_t, std::string> > nodes; // str = role
+    std::vector <std::pair <osmid_t, std::string> > ways; // str = role
 };
 
 typedef std::vector <Relation> Relations;
