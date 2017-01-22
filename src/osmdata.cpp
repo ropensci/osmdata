@@ -174,7 +174,7 @@ void trace_multilinestring (Relations::const_iterator itr_rel, const std::string
             relation_ways.push_back (std::make_pair (itw->first, itw->second));
 
     if (relation_ways.size () == 0)
-        std::cout << "ERROR: no ways for REL#" << itr_rel->id << 
+        Rcpp::Rcout << "ERROR: no ways for REL#" << itr_rel->id << 
             " with role = " << role << std::endl;
 
     // Then trace through all those ways and store associated data
@@ -364,6 +364,38 @@ void clear_id_vecs (std::vector <std::vector <osmid_t> > &id_vec_ls,
  ************************************************************************
  ************************************************************************/
 
+// ***UP TO HERE*** write a template for id_vec to accept <osmid_t> and <string>
+Rcpp::List convert_poly_linestring_to_Rcpp (float_arr3 lon_arr, float_arr3 lat_arr,
+        string_arr3 rowname_arr, std::vector <std::vector <osmid_t> > id_vec, 
+        std::vector <osmid_t> rel_id)
+{
+    Rcpp::List outList (lon_arr.size ()); 
+    Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
+    Rcpp::List dimnames (0);
+    std::vector <std::string> colnames = {"lat", "lon"};
+    for (int i=0; i<lon_arr.size (); i++) // over all relations
+    {
+        Rcpp::List outList_i (lon_arr [i].size ()); 
+        for (int j=0; j<lon_arr [i].size (); j++) // over all ways
+        {
+            int n = lon_arr [i][j].size ();
+            nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
+            std::copy (lon_arr [i][j].begin (), lon_arr [i][j].end (),
+                    nmat.begin ());
+            std::copy (lat_arr [i][j].begin (), lat_arr [i][j].end (),
+                    nmat.begin () + n);
+            dimnames.push_back (rowname_arr [i][j]);
+            dimnames.push_back (colnames);
+            nmat.attr ("dimnames") = dimnames;
+            dimnames.erase (0, dimnames.size ());
+            outList_i [j] = nmat;
+        }
+        outList_i.attr ("names") = id_vec [i];
+        outList [i] = outList_i;
+    }
+    outList.attr ("names") = rel_id;
+}
+    
 /* get_osm_relations
  *
  * Return a dual Rcpp::List containing all OSM relations, the firmt element of
