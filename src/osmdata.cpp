@@ -39,6 +39,14 @@
 // Note: roxygen attempts to import doxygen-style comments, even without the
 // doubule-square-bracket Rcpp::Export
 
+/************************************************************************
+ ************************************************************************
+ **                                                                    **
+ **           PRIMARY FUNCTIONS TO TRACE WAYS AND RELATIONS            **
+ **                                                                    **
+ ************************************************************************
+ ************************************************************************/
+
 
 /* Traces a single multipolygon relation 
  * 
@@ -249,6 +257,7 @@ osmid_t trace_way (const Ways &ways, const Nodes &nodes, osmid_t first_node,
     return last_node;
 }
 
+// Extract vector of values from key-value pairs for a given relation
 void get_value_vec (Relations::const_iterator itr, 
         const std::set <std::string> keyset, std::vector <std::string> &value_vec)
 {
@@ -258,6 +267,14 @@ void get_value_vec (Relations::const_iterator itr,
         value_vec [kv_pos] = v->second;
     }
 }
+
+/************************************************************************
+ ************************************************************************
+ **                                                                    **
+ **               FUNCTIONS TO CHECK AND CLEAN C++ ARRAYS              **
+ **                                                                    **
+ ************************************************************************
+ ************************************************************************/
 
 // Sanity check to ensure all 3D geometry arrays have same sizes
 void check_geom_arrs (const float_arr3 &lon_arr, const float_arr3 &lat_arr,
@@ -339,79 +356,43 @@ void clear_id_vecs (std::vector <std::vector <osmid_t> > &id_vec_ls,
     id_vec_ls.clear ();
 }
 
+/************************************************************************
+ ************************************************************************
+ **                                                                    **
+ **       FUNCTIONS TO CONVERT C++ OBJECTS TO Rcpp::List OBJECTS       **
+ **                                                                    **
+ ************************************************************************
+ ************************************************************************/
 
-//' rcpp_osmdata
-//'
-//' Extracts all polygons from an overpass API query
-//'
-//' @param st Text contents of an overpass API query
-//' @return Rcpp::List objects of OSM data
-// [[Rcpp::export]]
-Rcpp::List rcpp_osmdata (const std::string& st)
+/* get_osm_relations
+ *
+ * Return a dual Rcpp::List containing all OSM relations, the firmt element of
+ * which holds `multipolygon` relations, while the second holds all others,
+ * which are stored as `multilinestring` objects.
+ *
+ * @param rels Pointer to the vector of Relation objects
+ * @param nodes Pointer to the vector of node objects
+ * @param ways Pointer to the vector of way objects
+ * @param unique_vals Pointer to a UniqueVals object containing std::sets of all
+ *        unique IDs and keys for each kind of OSM object (nodes, ways, rels).
+ *
+ * @return A dual Rcpp::List, the first of which contains the multipolygon
+ *         relations; the second the multilinestring relations.
+ */
+Rcpp::List get_osm_relations (const Relations &rels, 
+        const std::map <osmid_t, Node> &nodes,
+        const std::map <osmid_t, OneWay> &ways, const UniqueVals &unique_vals)
 {
-#ifdef DUMP_INPUT
-    {
-        std::ofstream dump ("./osmdata-sp.xml");
-        if (dump.is_open())
-        {
-            dump.write (st.c_str(), st.size());
-        }
-    }
-#endif
-
-    XmlData xml (st);
-
-    const std::map <osmid_t, Node>& nodes = xml.nodes ();
-    const std::map <osmid_t, OneWay>& ways = xml.ways ();
-    const std::vector <Relation>& rels = xml.relations ();
-    const UniqueVals unique_vals = xml.unique_vals ();
-
-    int count = 0;
-    std::vector <float> lons, lats;
-    std::vector <std::string> colnames, rownames, polynames;
-    std::set <std::string> keyset; // must be ordered!
-    Rcpp::List dimnames (0);
-    Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
-
-    colnames.push_back ("lon");
-    colnames.push_back ("lat");
-
-    Rcpp::NumericVector bbox = rcpp_get_bbox_sf (xml.x_min (), xml.x_max (), 
-                                              xml.y_min (), xml.y_max ());
-
-    Rcpp::List crs = Rcpp::List::create (NA_INTEGER, 
-            Rcpp::CharacterVector::create (NA_STRING));
-    crs (0) = 4326;
-    crs (1) = p4s;
-    //Rcpp::List crs = Rcpp::List::create ((int) 4326, p4s);
-    crs.attr ("class") = "crs";
-    crs.attr ("names") = Rcpp::CharacterVector::create ("epsg", "proj4string");
-
-    /*
-     * Polygons are extracted from the XmlData class in three setps:
-     *  1. Get the names of all polygons that are part of multipolygon relations
-     *  2. Get the names of any remaining ways that are polygonal (start == end)
-     *  3. From the resultant list, extract the actual polygonal ways
-     *
-     * NOTE: OSM polygons are stored as ways, and thus all objects in the class
-     * xmlPolys are rightly referred to as ways. Here within this Rcpp function,
-     * these are referred to as Polygons, but the iteration is over the actual
-     * polygonal ways.
-     */
-
-    /************************************************************************
-     ************************************************************************
-     **                                                                    **
-     **                           OSM RELATIONS                            **
-     **                                                                    **
-     ************************************************************************
-     ************************************************************************/
-
     /* Trace all multipolygon relations. These are the only OSM types where
      * sizes are not known before, so lat-lons and node names are stored in
      * dynamic vectors. These are 3D monsters: #1 for relation, #2 for polygon
      * in relation, and #3 for data. There are also associated 2D vector<vector>
      * objects for IDs and multilinestring roles. */
+    std::set <std::string> keyset; // must be ordered!
+    std::vector <std::string> colnames = {"lat", "lon"}, rownames;
+    Rcpp::List dimnames (0);
+    Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
+
     float_arr2 lat_vec, lon_vec;
     float_arr3 lat_arr_mp, lon_arr_mp, lon_arr_ls, lat_arr_ls;
     string_arr2 rowname_vec;
@@ -495,24 +476,13 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     if (lon_arr_ls.size () != id_vec_ls.size () |
             lon_arr_mp.size () != id_vec_mp.size ())
         throw std::runtime_error ("ids and geometries differ in size");
-    // Then store the lon-lat and rowname vector<vector> objects as Rcpp::List
-    // ... TODO insert Rcpp code here
-    clean_geom_arrs (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
-    clean_geom_arrs (lon_arr_ls, lat_arr_ls, rowname_arr_ls);
-    clean_kv_arrs (value_arr_mp, value_arr_ls);
-    rel_id_mp.clear ();
-    rel_id_ls.clear ();
-    roles_ls.clear ();
-    keyset.clear ();
 
-    // Then actual storage
-    Rcpp::List polygonList (lon_arr_mp.size ()), idList (lon_arr_mp.size ());
-    polynames.reserve (lon_arr_mp.size ());
+    // Then store the lon-lat and rowname vector<vector> objects as Rcpp::List
+    Rcpp::List polygonList (lon_arr_mp.size ()); 
     std::vector <osmid_t> id_vec_fl;
     for (int i=0; i<lon_arr_mp.size (); i++) // over all relations
     {
-        Rcpp::List polystList_i (lon_arr_mp [i].size ()), 
-            idList_i (lon_arr_mp [i].size ());
+        Rcpp::List polystList_i (lon_arr_mp [i].size ()); 
         for (int j=0; j<lon_arr_mp [i].size (); j++) // over all ways
         {
             int n = lon_arr_mp [i][j].size ();
@@ -526,24 +496,13 @@ Rcpp::List rcpp_osmdata (const std::string& st)
             nmat.attr ("dimnames") = dimnames;
             dimnames.erase (0, dimnames.size ());
             polystList_i [j] = nmat;
-            // UP TO HERE: TODO: IDs as names of list attributes
-            //id_vec_fl.clear ();
-            //id_vec_fl.reserve (id_arr [i][j].size ());
-            //std::copy (id_arr [i][j].begin (), id_arr [i][j].end (),
-            //        id_vec_fl.begin ());
-            //idList_i [j] = id_vec_fl;
         }
+        polystList_i.attr ("names") = id_vec_mp [i];
         polygonList [i] = polystList_i;
-        // TDOD: And insert proper relation names here
-        //polynames.push_back (std::to_string (rel_id [i]));
-        idList [i] = idList_i;
-        idList_i = polystList_i = R_NilValue; // Probably not necessary?
     }
-    polygonList.attr ("names") = polynames;
-    polynames.clear ();
-    idList.attr ("names") = polynames; // needs to be combined in df at end
+    polygonList.attr ("names") = rel_id_mp;
 
-    // ****** clean up arrays *****
+    // ****** clean up *****
     clean_geom_arrs (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
     clean_geom_arrs (lon_arr_ls, lat_arr_ls, rowname_arr_ls);
     clean_kv_arrs (value_arr_mp, value_arr_ls);
@@ -551,6 +510,67 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     rel_id_ls.clear ();
     roles_ls.clear ();
     keyset.clear ();
+
+    return polygonList;
+}
+
+
+/************************************************************************
+ ************************************************************************
+ **                                                                    **
+ **            THE FINAL RCPP FUNCTION CALLED BY osmdata_sf            **
+ **                                                                    **
+ ************************************************************************
+ ************************************************************************/
+
+//' rcpp_osmdata
+//'
+//' Extracts all polygons from an overpass API query
+//'
+//' @param st Text contents of an overpass API query
+//' @return Rcpp::List objects of OSM data
+// [[Rcpp::export]]
+Rcpp::List rcpp_osmdata (const std::string& st)
+{
+#ifdef DUMP_INPUT
+    {
+        std::ofstream dump ("./osmdata-sp.xml");
+        if (dump.is_open())
+        {
+            dump.write (st.c_str(), st.size());
+        }
+    }
+#endif
+
+    XmlData xml (st);
+
+    const std::map <osmid_t, Node>& nodes = xml.nodes ();
+    const std::map <osmid_t, OneWay>& ways = xml.ways ();
+    const std::vector <Relation>& rels = xml.relations ();
+    const UniqueVals unique_vals = xml.unique_vals ();
+
+    int count = 0;
+    std::vector <float> lons, lats;
+    std::vector <std::string> colnames, rownames, polynames;
+    std::set <std::string> keyset; // must be ordered!
+    Rcpp::List dimnames (0);
+    Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
+
+    colnames.push_back ("lon");
+    colnames.push_back ("lat");
+
+    Rcpp::NumericVector bbox = rcpp_get_bbox_sf (xml.x_min (), xml.x_max (), 
+                                              xml.y_min (), xml.y_max ());
+
+    Rcpp::List crs = Rcpp::List::create (NA_INTEGER, 
+            Rcpp::CharacterVector::create (NA_STRING));
+    crs (0) = 4326;
+    crs (1) = p4s;
+    //Rcpp::List crs = Rcpp::List::create ((int) 4326, p4s);
+    crs.attr ("class") = "crs";
+    crs.attr ("names") = Rcpp::CharacterVector::create ("epsg", "proj4string");
+
+    Rcpp::List polyList = get_osm_relations (rels, nodes, ways, unique_vals);
 
 
     /************************************************************************
@@ -581,7 +601,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
      ************************************************************************
      ************************************************************************/
 
-    Rcpp::List polyList (poly_ways.size ());
+    Rcpp::List polyList2 (poly_ways.size ());
     polynames.reserve (poly_ways.size ());
     count = 0;
     // Collect all unique keys
@@ -627,9 +647,9 @@ Rcpp::List rcpp_osmdata (const std::string& st)
         nmat.attr ("dimnames") = dimnames;
         dimnames.erase (0, dimnames.size());
 
-        polyList [count++] = nmat;
+        polyList2 [count++] = nmat;
     } // end for it over poly_ways
-    polyList.attr ("names") = polynames;
+    polyList2.attr ("names") = polynames;
 
     // Store all key-val pairs in one massive DF
     Rcpp::Rcout << "varnames, uv.k_poly = [" << keyset.size () << ", " <<
@@ -671,7 +691,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
 
     // Store all key-val pairs in one massive CharacterMatrix
     nrow = non_poly_ways.size (); 
-    ncol = unique_vals.k_line.size ();
+    ncol = unique_vals.k_way.size ();
     Rcpp::CharacterMatrix kv_mat_lines (Rcpp::Dimension (nrow, ncol));
     std::fill (kv_mat_lines.begin (), kv_mat_lines.end (), NA_STRING);
     count = 0;
@@ -708,8 +728,8 @@ Rcpp::List rcpp_osmdata (const std::string& st)
                 kv_iter != wj->second.key_val.end (); ++kv_iter)
         {
             const std::string& key = (*kv_iter).first;
-            auto ni = unique_vals.k_line.find (key); // key must exist!
-            int coli = std::distance (unique_vals.k_line.begin (), ni);
+            auto ni = unique_vals.k_way.find (key); // key must exist!
+            int coli = std::distance (unique_vals.k_way.begin (), ni);
             kv_mat_lines (count, coli) = (*kv_iter).second;
         }
         count++;
@@ -721,7 +741,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     lineList.attr ("precision") = 0.0;
     lineList.attr ("bbox") = bbox;
     lineList.attr ("crs") = crs;
-    kv_mat_lines.attr ("dimnames") = Rcpp::List::create (linenames, unique_vals.k_line);
+    kv_mat_lines.attr ("dimnames") = Rcpp::List::create (linenames, unique_vals.k_way);
 
     /************************************************************************
      ************************************************************************
@@ -777,7 +797,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
      ************************************************************************/
 
 
-    Rcpp::List ret (6);
+    Rcpp::List ret (7);
     //ret [0] = bbox;
     ret [0] = pointList;
     ret [1] = kv_mat_points;

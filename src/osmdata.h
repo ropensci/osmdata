@@ -170,7 +170,7 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                     if (rway.nodes.front () == rway.nodes.back ())
                         m_unique.k_poly.insert (rway.key [i]);
                     else
-                        m_unique.k_line.insert (rway.key [i]);
+                        m_unique.k_way.insert (rway.key [i]);
                 }
                 // Then copy nodes from rway to way.
                 way.nodes.swap (rway.nodes);
