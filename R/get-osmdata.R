@@ -211,8 +211,9 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     #obj$lines <- res$lines
     #obj$lines_kv <- res$lines_kv
     obj$osm_lines <- sf_lines
-    obj$polygons <- res$polygons
+    obj$multipolygons <- res$multipolygons
     obj$polygons_kv <- res$polygons_kv
+    obj$multilinestrings <- res$multilinestrings
 
     return (obj)
 }

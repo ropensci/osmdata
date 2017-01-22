@@ -479,10 +479,9 @@ Rcpp::List get_osm_relations (const Relations &rels,
 
     // Then store the lon-lat and rowname vector<vector> objects as Rcpp::List
     Rcpp::List polygonList (lon_arr_mp.size ()); 
-    std::vector <osmid_t> id_vec_fl;
     for (int i=0; i<lon_arr_mp.size (); i++) // over all relations
     {
-        Rcpp::List polystList_i (lon_arr_mp [i].size ()); 
+        Rcpp::List polygonList_i (lon_arr_mp [i].size ()); 
         for (int j=0; j<lon_arr_mp [i].size (); j++) // over all ways
         {
             int n = lon_arr_mp [i][j].size ();
@@ -495,12 +494,35 @@ Rcpp::List get_osm_relations (const Relations &rels,
             dimnames.push_back (colnames);
             nmat.attr ("dimnames") = dimnames;
             dimnames.erase (0, dimnames.size ());
-            polystList_i [j] = nmat;
+            polygonList_i [j] = nmat;
         }
-        polystList_i.attr ("names") = id_vec_mp [i];
-        polygonList [i] = polystList_i;
+        polygonList_i.attr ("names") = id_vec_mp [i];
+        polygonList [i] = polygonList_i;
     }
     polygonList.attr ("names") = rel_id_mp;
+    
+    Rcpp::List linestringList (lon_arr_ls.size ()); 
+    for (int i=0; i<lon_arr_ls.size (); i++) // over all relations
+    {
+        Rcpp::List linestringList_i (lon_arr_ls [i].size ()); 
+        for (int j=0; j<lon_arr_ls [i].size (); j++) // over all ways
+        {
+            int n = lon_arr_ls [i][j].size ();
+            nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
+            std::copy (lon_arr_ls [i][j].begin (), lon_arr_ls [i][j].end (),
+                    nmat.begin ());
+            std::copy (lat_arr_ls [i][j].begin (), lat_arr_ls [i][j].end (),
+                    nmat.begin () + n);
+            dimnames.push_back (rowname_arr_ls [i][j]);
+            dimnames.push_back (colnames);
+            nmat.attr ("dimnames") = dimnames;
+            dimnames.erase (0, dimnames.size ());
+            linestringList_i [j] = nmat;
+        }
+        linestringList_i.attr ("names") = id_vec_ls [i];
+        linestringList [i] = linestringList_i;
+    }
+    linestringList.attr ("names") = rel_id_ls;
 
     // ****** clean up *****
     clean_geom_arrs (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
@@ -511,7 +533,10 @@ Rcpp::List get_osm_relations (const Relations &rels,
     roles_ls.clear ();
     keyset.clear ();
 
-    return polygonList;
+    Rcpp::List ret (2);
+    ret [0] = polygonList;
+    ret [1] = linestringList;
+    return ret;
 }
 
 
@@ -570,7 +595,9 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     crs.attr ("class") = "crs";
     crs.attr ("names") = Rcpp::CharacterVector::create ("epsg", "proj4string");
 
-    Rcpp::List polyList = get_osm_relations (rels, nodes, ways, unique_vals);
+    Rcpp::List tempList = get_osm_relations (rels, nodes, ways, unique_vals);
+    Rcpp::List multipolygons = tempList [0];
+    Rcpp::List multilinestrings = tempList [1];
 
 
     /************************************************************************
@@ -803,13 +830,14 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     ret [1] = kv_mat_points;
     ret [2] = lineList;
     ret [3] = kv_mat_lines;
-    ret [4] = polyList;
+    ret [4] = multipolygons;
     ret [5] = poly_kv_df;
+    ret [6] = multilinestrings;
 
     //std::vector <std::string> retnames {"bbox", "points", 
     //    "lines", "lines_kv", "polygons", "polygons_kv"};
     std::vector <std::string> retnames {"points", "points_kv",
-        "lines", "lines_kv", "polygons", "polygons_kv"};
+        "lines", "lines_kv", "multipolygons", "polygons_kv", "multilinestrings"};
     ret.attr ("names") = retnames;
     
     return ret;
