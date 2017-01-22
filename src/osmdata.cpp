@@ -189,7 +189,7 @@ void trace_multilinestring (Relations::const_iterator itr_rel, const std::string
             throw std::runtime_error ("way can not be found");
 
         osmid_t first_node = wayi->second.nodes.front ();
-        osmid_t last_node = trace_way (ways, nodes, first_node, 
+        first_node = trace_way (ways, nodes, first_node, 
                 wayi->first, lons, lats, rownames);
 
         lon_vec.push_back (lons);
