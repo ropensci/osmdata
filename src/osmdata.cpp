@@ -781,8 +781,12 @@ Rcpp::List get_osm_relations (const Relations &rels,
     // Then store the lon-lat and rowname vector<vector> objects as Rcpp::List
     Rcpp::List polygonList = convert_poly_linestring_to_Rcpp <std::string>
         (lon_arr_mp, lat_arr_mp, rowname_arr_mp, id_vec_mp, rel_id_mp);
+    polygonList.attr ("class") = 
+        Rcpp::CharacterVector::create ("sfc_POLYGON", "sfc");
     Rcpp::List linestringList = convert_poly_linestring_to_Rcpp <osmid_t>
         (lon_arr_ls, lat_arr_ls, rowname_arr_ls, id_vec_ls, rel_id_ls);
+    linestringList.attr ("class") = 
+        Rcpp::CharacterVector::create ("sfc_LINESTRING", "sfc");
     // And convert kv matrices to data.frames
     kv_mat_ls.attr ("names") = unique_vals.k_rel;
     kv_mat_ls.attr ("dimnames") = Rcpp::List::create (rel_id_ls, unique_vals.k_rel);

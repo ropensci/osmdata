@@ -94,7 +94,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
 make_sf <- function (...)
 {
     x <- list (...)
-    sf = sapply(x, function(i) inherits(i, "sfc"))
+    sf <- sapply (x, function(i) inherits(i, "sfc"))
     sf_column <- which (sf)
     row.names <- seq_along (x [[sf_column]])
     df <- if (length(x) == 1) # ONLY sfc
@@ -171,24 +171,11 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
         message ('convertig OSM data to sp format')
     res <- rcpp_osmdata (doc)
 
-    # Make sf points:
-    geometry <- res$points
-    #points_kv <- order_data_mat (res$points_kv)
-    sf_points <- make_sf (geometry, res$points_kv)
-
-    # make sf lines:
-    geometry <- res$lines
-    #lines_kv <- order_data_mat (res$lines_kv)
-    sf_lines <- make_sf (geometry, res$lines_kv)
-
-    obj$osm_points <- sf_points
-    obj$osm_lines <- sf_lines
-    obj$polygons <- res$polygons
-    obj$polygons_kv <- res$polygons_kv
-    obj$multipolygons <- res$multipolygons
-    obj$multipolygons_kv <- res$multipolygons_kv
-    obj$multilinestrings <- res$multilinestrings
-    obj$multilinestrings_kv <- res$multilinestrings_kv
+    obj$osm_points <- make_sf (res$points, res$points_kv)
+    obj$osm_linestrings <- make_sf (res$lines, res$lines_kv)
+    obj$osm_polygons <- make_sf (res$polygons, res$polygons_kv)
+    obj$osm_multipolygons <- make_sf (res$multipolygons, res$multipolygons_kv)
+    obj$osm_multilinestrings <- make_sf (res$multilinestrings, res$multilinestrings_kv)
 
     return (obj)
 }
