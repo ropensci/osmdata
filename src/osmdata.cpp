@@ -42,7 +42,61 @@
 /************************************************************************
  ************************************************************************
  **                                                                    **
- **           PRIMARY FUNCTIONS TO TRACE WAYS AND RELATIONS            **
+ **                       STRUCTURE OF THIS FILE                       **
+ **                                                                    **
+ ************************************************************************
+ ************************************************************************
+ *
+ * 1. Primary functions to trace ways and relations
+ *      1a. trace_multipolygon ()
+ *      1b. trace_multilinestring ()
+ *      1c. trace_way ()
+ *      1d. trace_way_nmat ()
+ *      1e. get_value_matrix ()
+ *      1f. get_value_vec ()
+ * 2. Functions to check and clean C++ arrays
+ *      2a. reserve_arrs ()
+ *      2b. check_geom_arrs ()
+ *      2c. check_id_arr ()
+ *      2d. clean_vec ()
+ *      2e. clear_arr ()
+ *      2f. clean_vecs ()
+ *      2g. clean_arrs ()
+ * 3. Functions to convert C++ objects to Rcpp::List objects
+ *      3a. convert_poly_linestring_to_Rcpp ()
+ *      3b. get_osm_relations ()
+ *      3c. get_osm_ways ()
+ *      3d. get_osm_nodes ()
+ * 4. The final Rcpp function called by osmdata_sf
+ *      4a. rcpp_osmdata ()
+ *
+ * ----------------------------------------------------------------------
+ *
+ *  The calling hierarchy extends generally from bottom to top as follows:
+ *  rcpp_osmdata () {
+ *      -> get_osm_relations ()
+ *      {
+ *          -> trace_multipolygon ()
+ *              -> trace_way ()
+ *          -> trace_multilinestring ()
+ *              -> trace_way ()
+ *          -> get_value_vec ()
+ *          -> convert_poly_linestring_to_Rcpp ()
+ *          -> [... most check and clean functions ...]
+ *      }
+ *      -> get_osm_ways ()
+ *      {
+ *          -> trace_way_nmat ()
+ *          -> get_value_matrix ()
+ *      }
+ *      -> get_osm_nodes ()
+ *  }
+ */
+
+/************************************************************************
+ ************************************************************************
+ **                                                                    **
+ **          1. PRIMARY FUNCTIONS TO TRACE WAYS AND RELATIONS          **
  **                                                                    **
  ************************************************************************
  ************************************************************************/
@@ -74,11 +128,17 @@ void trace_multipolygon (Relations::const_iterator itr_rel, const Ways &ways,
         relation_ways.push_back (std::make_pair (itw->first, itw->second));
     it_osm_str_vec itr_rw;
 
+    bool done_outer = false;
     // Then trace through all those ways and store associated data
     while (relation_ways.size () > 0)
     {
         auto rwi = relation_ways.begin ();
-        //ids.push_back (rwi->first);
+        if (!done_outer) // "outer" role first 
+        {
+            while (rwi->second != "outer")
+                std::advance (rwi, 1);
+            done_outer = true;
+        }
         relation_ways.erase (rwi);
         this_role = rwi->second;
         auto wayi = ways.find (rwi->first);
@@ -91,7 +151,6 @@ void trace_multipolygon (Relations::const_iterator itr_rel, const Ways &ways,
         node0 = wayi->second.nodes.front ();
         last_node = trace_way (ways, nodes, node0,
                 wayi->first, lons, lats, rownames);
-        //ids.push_back (wayi->first);
         closed = false;
         if (last_node == node0)
             closed = true;
@@ -109,7 +168,6 @@ void trace_multipolygon (Relations::const_iterator itr_rel, const Ways &ways,
                         throw std::runtime_error ("way can not be found");
                     last_node = trace_way (ways, nodes, first_node,
                             wayi->first, lons, lats, rownames);
-                    //ids.push_back (wayi->first);
                     this_way << "-" << std::to_string (wayi->first);
                     if (last_node >= 0)
                     {
@@ -201,20 +259,23 @@ void trace_multilinestring (Relations::const_iterator itr_rel, const std::string
     } // end while relation_ways.size > 0
 }
 
-/* Traces a single way and adds (lon,lat,rownames) to corresponding vectors
+/* trace_way
+ *
+ * Traces a single way and adds (lon,lat,rownames) to corresponding vectors.
+ * This is used only for tracing ways in OSM relations. Direct tracing of ways
+ * stored as 'LINESTRING' or 'POLYGON' objects is done with 'trace_way_nmat ()',
+ * which dumps the results directly to an 'Rcpp::NumericMatrix'.
  *
  * @param &ways pointer to Ways structure
  * @param &nodes pointer to Nodes structure
  * @param first_node Last node of previous way to find in current
  * @param &wayi_id pointer to ID of current way
- * @param &ids pointer to vector of osm IDs for ways within a single
- *        multipolygon relation
- *        &lons pointer to vector of longitudes
- *        &lats pointer to vector of latitutdes
- *        &rownames pointer to vector of rownames for each node.
+ * @lons pointer to vector of longitudes
+ * @lats pointer to vector of latitutdes
+ * @rownames pointer to vector of rownames for each node.
  *       
- *       n ID of final node in way, or a negative number if first_node does not
- *       within wayi_id
+ * @returnn ID of final node in way, or a negative number if first_node does not
+ *          within wayi_id
  */
 osmid_t trace_way (const Ways &ways, const Nodes &nodes, osmid_t first_node,
         const osmid_t &wayi_id, std::vector <float> &lons, 
@@ -227,7 +288,7 @@ osmid_t trace_way (const Ways &ways, const Nodes &nodes, osmid_t first_node,
     // Alternative to the following is to pass iterators as .begin() or
     // .rbegin() to a std::for_each, but const Ways and Nodes cannot then
     // (easily) be passed to lambdas. TODO: Find a way
-    if (wayi->second.nodes.front () == first_node)
+    if (first_node < 0 || wayi->second.nodes.front () == first_node)
     {
         for (auto ni = wayi->second.nodes.begin ();
                 ni != wayi->second.nodes.end (); ++ni)
@@ -256,13 +317,96 @@ osmid_t trace_way (const Ways &ways, const Nodes &nodes, osmid_t first_node,
     return last_node;
 }
 
-// Extract vector of values from key-value pairs for a given relation
-void get_value_vec (Relations::const_iterator itr, 
-        const std::set <std::string> keyset, std::vector <std::string> &value_vec)
+/* Traces a single way and adds (lon,lat,rownames) to an Rcpp::NumericMatrix
+ *
+ * @param &ways pointer to Ways structure
+ * @param &nodes pointer to Nodes structure
+ * @param first_node Last node of previous way to find in current
+ * @param &wayi_id pointer to ID of current way
+ * @lons pointer to vector of longitudes
+ * @lats pointer to vector of latitutdes
+ * @rownames pointer to vector of rownames for each node.
+ * @nmat Rcpp::NumericMatrix to store lons, lats, and rownames
+ */
+void trace_way_nmat (const Ways &ways, const Nodes &nodes, 
+        const osmid_t &wayi_id, Rcpp::NumericMatrix &nmat)
 {
+    osmid_t last_node;
+    auto wayi = ways.find (wayi_id);
+    std::vector <std::string> rownames;
+    rownames.clear ();
+    int n = wayi->second.nodes.size ();
+    rownames.reserve (n);
+    nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
+
+    int tempi = 0;
+    for (auto ni = wayi->second.nodes.begin ();
+            ni != wayi->second.nodes.end (); ++ni)
+    {
+        rownames.push_back (std::to_string (*ni));
+        nmat (tempi, 0) = nodes.find (*ni)->second.lon;
+        nmat (tempi++, 1) = nodes.find (*ni)->second.lat;
+    }
+
+    std::vector <std::string> colnames = {"lon", "lat"};
+    Rcpp::List dimnames (0);
+    dimnames.push_back (rownames);
+    dimnames.push_back (colnames);
+    nmat.attr ("dimnames") = dimnames;
+    dimnames.erase (0, dimnames.size ());
+}
+
+/* get_value_matrix
+ *
+ * Extract key-value pairs for a given relation and fill Rcpp::CharacterMatrix
+ *
+ * @param wayi Constant iterator to one OSM way
+ * @param Ways Pointer to the std::vector of all ways
+ * @param unique_vals Pointer to the UniqueVals structure
+ * @param value_arr Pointer to the Rcpp::CharacterMatrix of values to be filled
+ *        by tracing the key-val pairs of the relation 'itr'
+ * @param rowi Integer value for the key-val pairs for wayi
+ */
+// TODO: Is it faster to use a std::vector <std::string> instead of
+// Rcpp::CharacterMatrix and then simply
+// Rcpp::CharacterMatrix mat (nrow, ncol, value_vec.begin ()); ?
+void get_value_matrix (Ways::const_iterator wayi, const Ways &ways,
+        const UniqueVals &unique_vals, Rcpp::CharacterMatrix &value_arr, int rowi)
+{
+    for (auto kv_iter = wayi->second.key_val.begin ();
+            kv_iter != wayi->second.key_val.end (); ++kv_iter)
+    {
+        const std::string &key = kv_iter->first;
+        int coli = std::distance (unique_vals.k_way.begin (),
+                unique_vals.k_way.find (key));
+        if (coli < value_arr.ncol ())
+            value_arr (rowi, coli) = kv_iter->second;
+        else
+            Rcpp::Rcout << "ERROR: key = " << key << " = col#" << coli << " / " <<
+                value_arr.ncol () << std::endl;
+    }
+}
+
+/* get_value_vec
+ *
+ * Extract vector of values from key-value pairs for a given relation
+ *
+ * @param itr Constant iterator to one OSM relation
+ * @param keyset Set of unique keys for OSM relations
+ * @param value_vec Pointer to the vector of values to be filled by tracing the
+ *        key-val pairs of the relation 'itr'
+ */
+void get_value_vec (Relations::const_iterator itr, 
+        const UniqueVals &unique_vals, std::vector <std::string> &value_vec)
+{
+    value_vec.clear ();
+    value_vec.reserve (unique_vals.k_rel.size ());
+    for (int i=0; i<unique_vals.k_rel.size (); i++)
+        value_vec.push_back ("");
     for (auto v = itr->key_val.begin (); v != itr->key_val.end (); ++v)
     {
-        int kv_pos = std::distance (keyset.begin (), keyset.find (v->first));
+        int kv_pos = std::distance (unique_vals.k_rel.begin (),
+                unique_vals.k_rel.find (v->first));
         value_vec [kv_pos] = v->second;
     }
 }
@@ -274,6 +418,17 @@ void get_value_vec (Relations::const_iterator itr,
  **                                                                    **
  ************************************************************************
  ************************************************************************/
+
+void reserve_arrs (std::vector <float> &lats, std::vector <float> &lons,
+        std::vector <std::string> &rownames, int n)
+{
+        lons.clear ();
+        lats.clear ();
+        rownames.clear ();
+        lons.reserve (n);
+        lats.reserve (n);
+        rownames.reserve (n);
+}
 
 // Sanity check to ensure all 3D geometry arrays have same sizes
 void check_geom_arrs (const float_arr3 &lon_arr, const float_arr3 &lat_arr,
@@ -363,6 +518,20 @@ void clean_arrs (std::vector <std::vector <std::vector <T1> > > & arr3_1,
  ************************************************************************
  ************************************************************************/
 
+/* convert_poly_linestring_to_Rcpp
+ *
+ * Converts the data contained in all the arguments into an Rcpp::List object
+ * to be used as the geometry column of a Simple Features Colletion
+ *
+ * @param lon_arr 3D array of longitudinal coordinates
+ * @param lat_arr 3D array of latgitudinal coordinates
+ * @param rowname_arr 3D array of <osmid_t> IDs for nodes of all (lon,lat)
+ * @param id_vec 2D array of either <std::string> or <osmid_t> IDs for all ways
+ *        used in the geometry.
+ * @param rel_id Vector of <osmid_t> IDs for each relation.
+ *
+ * @return An Rcpp::List object of [relation][way][node/geom] data.
+ */
 // TODO: Replace return value with pointer to List as argument?
 template <typename T, typename A> // std::vector of osmid_t or std::string
 Rcpp::List convert_poly_linestring_to_Rcpp (const float_arr3 lon_arr, 
@@ -430,33 +599,19 @@ Rcpp::List get_osm_relations (const Relations &rels,
 
     float_arr2 lat_vec, lon_vec;
     float_arr3 lat_arr_mp, lon_arr_mp, lon_arr_ls, lat_arr_ls;
-    string_arr2 rowname_vec;
+    string_arr2 rowname_vec, id_vec_mp, roles_ls; 
     string_arr3 rowname_arr_mp, rowname_arr_ls;
-    // TODO: Replace these with typedefs
     std::vector <osmid_t> rel_id_mp, rel_id_ls, ids_ls; 
     std::vector <std::string> ids_mp; 
-    std::vector <std::vector <osmid_t> > id_vec_ls; 
-    std::vector <std::vector <std::string> > id_vec_mp; 
+    osmt_arr2 id_vec_ls;
     std::vector <std::string> roles;
-    std::vector <std::vector <std::string> > roles_ls;
 
-    // Start by collecting all unique keys.  TODO: Is it worth doing this
-    // separately for multipolygons and multilinestrings?
-    for (auto itr = rels.begin (); itr != rels.end (); ++itr)
-        std::for_each (itr->key_val.begin (),
-                itr->key_val.end (),
-                [&](const std::pair <std::string, std::string>& p)
-                {
-                    keyset.insert (p.first);
-                });
     std::vector <std::vector <std::string> > value_arr_mp, value_arr_ls;
     std::vector <std::string> value_vec;
-    value_vec.reserve (keyset.size ());
+    value_vec.reserve (unique_vals.k_rel.size ());
 
     for (auto itr = rels.begin (); itr != rels.end (); ++itr)
     {
-        for (int i=0; i<keyset.size (); i++)
-            value_vec.push_back ("");
         if (itr->ispoly) // itr->second can only be "outer" or "inner"
         {
             trace_multipolygon (itr, ways, nodes, lon_vec, lat_vec,
@@ -469,7 +624,7 @@ Rcpp::List get_osm_relations (const Relations &rels,
             id_vec_mp.push_back (ids_mp);
             clean_vecs <float, float, std::string> (lon_vec, lat_vec, rowname_vec);
             ids_mp.clear ();
-            get_value_vec (itr, keyset, value_vec);
+            get_value_vec (itr, unique_vals, value_vec);
             value_arr_mp.push_back (value_vec);
         } else // store as multilinestring
         {
@@ -496,12 +651,11 @@ Rcpp::List get_osm_relations (const Relations &rels,
             }
             roles_ls.push_back (roles);
             roles.clear ();
-            get_value_vec (itr, keyset, value_vec);
+            get_value_vec (itr, unique_vals, value_vec);
             value_arr_ls.push_back (value_vec);
         }
-        value_vec.clear ();
-        value_vec.reserve (keyset.size ());
     }
+    value_vec.clear ();
 
     check_geom_arrs (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
     check_geom_arrs (lon_arr_ls, lat_arr_ls, rowname_arr_ls);
@@ -530,6 +684,121 @@ Rcpp::List get_osm_relations (const Relations &rels,
     return ret;
 }
 
+/* get_osm_ways
+ *
+ * Store OSM ways as `sf::LINESTRING` or `sf::POLYGON` objects.
+ *
+ * @param wayList Pointer to Rcpp::List to hold the resultant geometries
+ * @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
+ * @param way_ids Vector of <osmid_t> IDs of ways to trace
+ * @param ways Pointer to all ways in data set
+ * @param nodes Pointer to all nodes in data set
+ * @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
+ * @param geom_type Character string specifying "POLYGON" or "LINESTRING"
+ * @param bbox Pointer to the bbox needed for `sf` construction
+ * @param crs Pointer to the crs needed for `sf` construction
+ */
+void get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
+        const std::set <osmid_t> way_ids, const Ways &ways, const Nodes &nodes,
+        const UniqueVals &unique_vals, const std::string &geom_type,
+        const Rcpp::NumericVector &bbox, const Rcpp::List &crs)
+{
+    if (!(geom_type == "POLYGON" || geom_type == "LINESTRING"))
+        throw std::runtime_error ("geom_type must be POLYGON or LINESTRING");
+    if (wayList.size () != way_ids.size ())
+        throw std::runtime_error ("ways and IDs must have same lengths");
+
+    int nrow = way_ids.size (), ncol = unique_vals.k_way.size ();
+    std::vector <std::string> waynames;
+    waynames.reserve (way_ids.size ());
+
+    Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
+    std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
+    int count = 0;
+    for (auto wi = way_ids.begin (); wi != way_ids.end (); ++wi)
+    {
+        waynames.push_back (std::to_string (*wi));
+        Rcpp::NumericMatrix nmat;
+        trace_way_nmat (ways, nodes, (*wi), nmat);
+        nmat.attr ("class") = Rcpp::CharacterVector::create ("XY", geom_type, "sfg");
+        wayList [count] = nmat;
+        auto wj = ways.find (*wi);
+        get_value_matrix (wj, ways, unique_vals, kv_mat, count++);
+    } // end for it over poly_ways
+
+    wayList.attr ("names") = waynames;
+    wayList.attr ("n_empty") = 0;
+    std::stringstream ss;
+    ss.str ("");
+    ss << "sfc_" << geom_type;
+    std::string sfc_type = ss.str ();
+    wayList.attr ("class") = Rcpp::CharacterVector::create (sfc_type, "sfc");
+    //wayList.attr ("class") = Rcpp::CharacterVector::create ("sfc_POLYGON", "sfc");
+    wayList.attr ("precision") = 0.0;
+    wayList.attr ("bbox") = bbox;
+    wayList.attr ("crs") = crs;
+
+    kv_mat.attr ("names") = unique_vals.k_way;
+    kv_mat.attr ("dimnames") = Rcpp::List::create (waynames, unique_vals.k_way);
+    kv_df = kv_mat;
+    kv_df.attr ("names") = unique_vals.k_way;
+}
+
+/* get_osm_nodes
+ *
+ * Store OSM nodes as `sf::POINT` objects
+ *
+ * @param ptxy Pointer to Rcpp::List to hold the resultant geometries
+ * @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
+ * @param nodes Pointer to all nodes in data set
+ * @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
+ * @param bbox Pointer to the bbox needed for `sf` construction
+ * @param crs Pointer to the crs needed for `sf` construction
+ */
+void get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
+        const Nodes &nodes, const UniqueVals &unique_vals, 
+        const Rcpp::NumericVector &bbox, const Rcpp::List &crs)
+{
+    int nrow = nodes.size (), ncol = unique_vals.k_point.size ();
+
+    if (ptList.size () != nrow)
+        throw std::runtime_error ("points must have same size as nodes");
+
+    Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
+    std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
+
+    std::vector <std::string> ptnames;
+    ptnames.reserve (nodes.size ());
+    int count = 0;
+    for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
+    {
+        Rcpp::NumericVector ptxy = Rcpp::NumericVector::create (NA_REAL, NA_REAL);
+        ptxy.attr ("class") = Rcpp::CharacterVector::create ("XY", "POINTS", "sfg");
+        ptxy (0) = ni->second.lon;
+        ptxy (1) = ni->second.lat;
+        ptList (count) = ptxy;
+        ptnames.push_back (std::to_string (ni->first));
+        for (auto kv_iter = ni->second.key_val.begin ();
+                kv_iter != ni->second.key_val.end (); ++kv_iter)
+        {
+            const std::string &key = kv_iter->first;
+            int ni = std::distance (unique_vals.k_point.begin (),
+                    unique_vals.k_point.find (key));
+            kv_mat (count, ni) = kv_iter->second;
+        }
+        count++;
+    }
+    kv_mat.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
+    kv_df = kv_mat;
+
+    ptList.attr ("names") = ptnames;
+    ptnames.clear ();
+    ptList.attr ("n_empty") = 0;
+    ptList.attr ("class") = Rcpp::CharacterVector::create ("sfc_POINT", "sfc");
+    ptList.attr ("precision") = 0.0;
+    ptList.attr ("bbox") = bbox;
+    ptList.attr ("crs") = crs;
+}
 
 /************************************************************************
  ************************************************************************
@@ -567,11 +836,15 @@ Rcpp::List rcpp_osmdata (const std::string& st)
 
     int count = 0;
     std::vector <float> lons, lats;
-    std::vector <std::string> colnames, rownames, polynames;
     std::set <std::string> keyset; // must be ordered!
     Rcpp::List dimnames (0);
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
 
+    /* --------------------------------------------------------------
+     * 1. Set up bbox and crs
+     * --------------------------------------------------------------*/
+
+    std::vector <std::string> colnames, rownames;
     colnames.push_back ("lon");
     colnames.push_back ("lat");
 
@@ -586,20 +859,19 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     crs.attr ("class") = "crs";
     crs.attr ("names") = Rcpp::CharacterVector::create ("epsg", "proj4string");
 
+    /* --------------------------------------------------------------
+     * 2. Extract OSM Relations
+     * --------------------------------------------------------------*/
+
     Rcpp::List tempList = get_osm_relations (rels, nodes, ways, unique_vals);
     Rcpp::List multipolygons = tempList [0];
     Rcpp::List multilinestrings = tempList [1];
 
+    /* --------------------------------------------------------------
+     * 3. Extract OSM ways
+     * --------------------------------------------------------------*/
 
-    /************************************************************************
-     ************************************************************************
-     **                                                                    **
-     **                            2. OSM WAYS                             **
-     **                                                                    **
-     ************************************************************************
-     ************************************************************************/
-
-    // identify and store poly and non_poly way IDs
+    // first divide into polygonal and non-polygonal
     std::set <osmid_t> poly_ways, non_poly_ways;
     for (auto itw = ways.begin (); itw != ways.end (); ++itw)
     {
@@ -611,224 +883,44 @@ Rcpp::List rcpp_osmdata (const std::string& st)
             non_poly_ways.insert ((*itw).first);
     }
 
-    /************************************************************************
-     ************************************************************************
-     **                                                                    **
-     **                        2A: WAYS AS POLYGONS                        **
-     **                                                                    **
-     ************************************************************************
-     ************************************************************************/
-
-    Rcpp::List polyList2 (poly_ways.size ());
-    polynames.reserve (poly_ways.size ());
-    count = 0;
-    // Collect all unique keys
-    for (auto pi = poly_ways.begin (); pi != poly_ways.end (); ++pi)
-        std::for_each (ways.find (*pi)->second.key_val.begin (),
-                ways.find (*pi)->second.key_val.end (),
-                [&](const std::pair <std::string, std::string>& p)
-                {
-                    keyset.insert (p.first);
-                });
-    // key-value pairs are then inserted in the Rcpp::matrix using code given
-    // below. TODO: incorporate that code within this for loop
-    for (auto pi = poly_ways.begin (); pi != poly_ways.end (); ++pi)
-    {
-        auto pj = ways.find (*pi);
-        polynames.push_back (std::to_string (pj->first));
-
-        // Then iterate over nodes of that way and store all lat-lons
-        size_t n = pj->second.nodes.size ();
-        lons.clear ();
-        lats.clear ();
-        rownames.clear ();
-        lons.reserve (n);
-        lats.reserve (n);
-        rownames.reserve (n);
-        for (auto nj = pj->second.nodes.begin ();
-                nj != pj->second.nodes.end (); ++nj)
-        {
-            if (nodes.find (*nj) == nodes.end ())
-                throw std::runtime_error ("node can not be found");
-            lons.push_back (nodes.find (*nj)->second.lon);
-            lats.push_back (nodes.find (*nj)->second.lat);
-            rownames.push_back (std::to_string (*nj));
-        }
-
-        nmat = Rcpp::NumericMatrix (Rcpp::Dimension (lons.size (), 2));
-        std::copy (lons.begin (), lons.end (), nmat.begin ());
-        std::copy (lats.begin (), lats.end (), nmat.begin () + lons.size ());
-
-        // This only works with push_back, not with direct re-allocation
-        dimnames.push_back (rownames);
-        dimnames.push_back (colnames);
-        nmat.attr ("dimnames") = dimnames;
-        dimnames.erase (0, dimnames.size());
-
-        polyList2 [count++] = nmat;
-    } // end for it over poly_ways
-    polyList2.attr ("names") = polynames;
-
-    // Store all key-val pairs in one massive DF
-    Rcpp::Rcout << "varnames, uv.k_poly = [" << keyset.size () << ", " <<
-        unique_vals.k_poly.size () << "]" << std::endl;
-    int nrow = poly_ways.size (), ncol = keyset.size ();
-    Rcpp::CharacterVector poly_kv_vec (nrow * ncol, Rcpp::CharacterVector::get_na ());
-    for (auto pi = poly_ways.begin (); pi != poly_ways.end (); ++pi)
-    {
-        int rowi = std::distance (poly_ways.begin (), pi);
-        auto pj = ways.find (*pi);
-
-        for (auto kv_iter = pj->second.key_val.begin ();
-                kv_iter != pj->second.key_val.end (); ++kv_iter)
-        {
-            const std::string& key = (*kv_iter).first;
-            auto ni = keyset.find (key); // key must exist in keyset!
-            int coli = std::distance (keyset.begin (), ni);
-            poly_kv_vec (coli * nrow + rowi) = (*kv_iter).second;
-        }
-    }
-
-    Rcpp::CharacterMatrix poly_kv_mat (nrow, ncol, poly_kv_vec.begin());
-    Rcpp::DataFrame poly_kv_df = poly_kv_mat;
-    poly_kv_df.attr ("names") = keyset;
-
-    /************************************************************************
-     ************************************************************************
-     **                                                                    **
-     **                           STEP#3B: LINES                           **
-     **                                                                    **
-     ************************************************************************
-     ************************************************************************/
+    Rcpp::List polyList (poly_ways.size ());
+    Rcpp::DataFrame kv_df_polys;
+    get_osm_ways (polyList, kv_df_polys, poly_ways, ways, nodes, unique_vals,
+            "POLYGON", bbox, crs);
 
     Rcpp::List lineList (non_poly_ways.size ());
-    std::vector <std::string> linenames;
-    linenames.reserve (non_poly_ways.size());
+    Rcpp::DataFrame kv_df_lines;
+    get_osm_ways (lineList, kv_df_lines, non_poly_ways, ways, nodes, unique_vals,
+            "LINESTRING", bbox, crs);
 
-    dimnames.erase (0, dimnames.size());
-
-    // Store all key-val pairs in one massive CharacterMatrix
-    nrow = non_poly_ways.size (); 
-    ncol = unique_vals.k_way.size ();
-    Rcpp::CharacterMatrix kv_mat_lines (Rcpp::Dimension (nrow, ncol));
-    std::fill (kv_mat_lines.begin (), kv_mat_lines.end (), NA_STRING);
-    count = 0;
-    for (auto wi = non_poly_ways.begin (); wi != non_poly_ways.end (); ++wi)
-    {
-        auto wj = ways.find (*wi);
-        linenames.push_back (std::to_string (wj->first));
-        // Then iterate over nodes of that way and store all lat-lons
-        size_t n = wj->second.nodes.size ();
-        rownames.clear ();
-        rownames.reserve (n);
-        Rcpp::NumericMatrix lineMat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
-        int tempi = 0;
-        for (auto nj = wj->second.nodes.begin ();
-                nj != wj->second.nodes.end (); ++nj)
-        {
-            if (nodes.find (*nj) == nodes.end ())
-                throw std::runtime_error ("node can not be found");
-            rownames.push_back (std::to_string (*nj));
-            lineMat (tempi, 0) = nodes.find (*nj)->second.lon;
-            lineMat (tempi++, 1) = nodes.find (*nj)->second.lat;
-        }
-
-        // This only works with push_back, not with direct re-allocation
-        dimnames.push_back (rownames);
-        dimnames.push_back (colnames);
-        lineMat.attr ("dimnames") = dimnames;
-        lineMat.attr ("class") = Rcpp::CharacterVector::create ("XY", "LINESTRING", "sfg");
-        dimnames.erase (0, dimnames.size());
-
-        lineList (count) = lineMat;
-
-        for (auto kv_iter = wj->second.key_val.begin ();
-                kv_iter != wj->second.key_val.end (); ++kv_iter)
-        {
-            const std::string& key = (*kv_iter).first;
-            auto ni = unique_vals.k_way.find (key); // key must exist!
-            int coli = std::distance (unique_vals.k_way.begin (), ni);
-            kv_mat_lines (count, coli) = (*kv_iter).second;
-        }
-        count++;
-    } // end for wi over non_poly_ways
-
-    lineList.attr ("names") = linenames;
-    lineList.attr ("n_empty") = 0;
-    lineList.attr ("class") = Rcpp::CharacterVector::create ("sfc_LINESTRING", "sfc");
-    lineList.attr ("precision") = 0.0;
-    lineList.attr ("bbox") = bbox;
-    lineList.attr ("crs") = crs;
-    kv_mat_lines.attr ("dimnames") = Rcpp::List::create (linenames, unique_vals.k_way);
-
-    /************************************************************************
-     ************************************************************************
-     **                                                                    **
-     **                          STEP#3C: POINTS                           **
-     **                                                                    **
-     ************************************************************************
-     ************************************************************************/
-
-    nrow = nodes.size ();
-    ncol = unique_vals.k_point.size ();
-    Rcpp::CharacterMatrix kv_mat_points (Rcpp::Dimension (nrow, ncol));
-    std::fill (kv_mat_points.begin (), kv_mat_points.end (), NA_STRING);
+    /* --------------------------------------------------------------
+     * 3. Extract OSM nodes
+     * --------------------------------------------------------------*/
 
     Rcpp::List pointList (nodes.size ());
-    std::vector <std::string> ptnames;
-    ptnames.reserve (nodes.size ());
-    count = 0;
-    for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
-    {
-        Rcpp::NumericVector ptxy = Rcpp::NumericVector::create (NA_REAL, NA_REAL);
-        ptxy.attr ("class") = Rcpp::CharacterVector::create ("XY", "POINT", "sfg");
-        ptxy (0) = ni->second.lon;
-        ptxy (1) = ni->second.lat;
-        pointList (count) = ptxy;
-        ptnames.push_back (std::to_string (ni->first));
-        for (auto kv_iter = ni->second.key_val.begin ();
-                kv_iter != ni->second.key_val.end (); ++kv_iter)
-        {
-            const std::string& key = (*kv_iter).first;
-            auto it = unique_vals.k_point.find (key);
-            int ni = std::distance (unique_vals.k_point.begin (), it);
-            kv_mat_points (count, ni) = (*kv_iter).second;
-        }
-        count++;
-    }
-    kv_mat_points.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
-
-    pointList.attr ("names") = ptnames;
-    ptnames.clear ();
-    pointList.attr ("n_empty") = 0;
-    pointList.attr ("class") = Rcpp::CharacterVector::create ("sfc_POINT", "sfc");
-    pointList.attr ("precision") = 0.0;
-    pointList.attr ("bbox") = bbox;
-    pointList.attr ("crs") = crs;
-
-    /************************************************************************
-     ************************************************************************
-     **                                                                    **
-     **                      STEP#4: COLLATE ALL DATA                      **
-     **                                                                    **
-     ************************************************************************
-     ************************************************************************/
+    Rcpp::DataFrame kv_df_points;
+    get_osm_nodes (pointList, kv_df_points, nodes, unique_vals, bbox, crs);
 
 
-    Rcpp::List ret (7);
+    /* --------------------------------------------------------------
+     * 5. Collate all data
+     * --------------------------------------------------------------*/
+
+    Rcpp::List ret (9);
     //ret [0] = bbox;
     ret [0] = pointList;
-    ret [1] = kv_mat_points;
+    ret [1] = kv_df_points;
     ret [2] = lineList;
-    ret [3] = kv_mat_lines;
-    ret [4] = multipolygons;
-    ret [5] = poly_kv_df;
-    ret [6] = multilinestrings;
+    ret [3] = kv_df_lines;
+    ret [4] = polyList;
+    ret [5] = kv_df_polys;
+    ret [6] = multipolygons;
+    ret [7] = kv_df_polys;
+    ret [8] = multilinestrings;
 
-    //std::vector <std::string> retnames {"bbox", "points", 
-    //    "lines", "lines_kv", "polygons", "polygons_kv"};
     std::vector <std::string> retnames {"points", "points_kv",
-        "lines", "lines_kv", "multipolygons", "polygons_kv", "multilinestrings"};
+        "lines", "lines_kv", "polygons", "polygons_kv",
+        "multipolygons", "multipolygons_kv", "multilinestrings"};
     ret.attr ("names") = retnames;
     
     return ret;

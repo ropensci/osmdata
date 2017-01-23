@@ -167,10 +167,7 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                 {
                     way.key_val.insert (std::make_pair
                             (rway.key [i], rway.value [i]));
-                    if (rway.nodes.front () == rway.nodes.back ())
-                        m_unique.k_poly.insert (rway.key [i]);
-                    else
-                        m_unique.k_way.insert (rway.key [i]);
+                    m_unique.k_way.insert (rway.key [i]);
                 }
                 // Then copy nodes from rway to way.
                 way.nodes.swap (rway.nodes);
@@ -207,7 +204,7 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                 {
                     relation.key_val.insert (std::make_pair (rrel.key [i],
                                 rrel.value [i]));
-                    m_unique.k_poly.insert (rrel.key [i]);
+                    m_unique.k_rel.insert (rrel.key [i]);
                     if (rrel.key [i] == "type")
                         relation.rel_type = rrel.value [i];
                 }
@@ -365,7 +362,7 @@ osmid_t trace_way (const Ways &ways, const Nodes &nodes, osmid_t first_node,
         std::vector <float> &lats, std::vector <std::string> &rownames);
 
 void get_value_vec (Relations::const_iterator itr, 
-        const std::set <std::string> keyset, std::vector <std::string> &value_vec);
+        const std::set <std::string> &keyset, std::vector <std::string> &value_vec);
 
 void check_geom_arrs (const float_arr3 &lon_arr, const float_arr3 &lat_arr,
         const string_arr3 &rowname_arr);

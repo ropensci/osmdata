@@ -77,7 +77,7 @@ struct UniqueVals
     // Unique keys are also stored to provide column names.  Although std::set
     // is slower than an unordered_set, it is useful to have keys alphabetically
     // ordered.
-    std::set <std::string> k_point, k_way, k_poly;
+    std::set <std::string> k_point, k_way, k_rel;
 };
 
 struct RawNode

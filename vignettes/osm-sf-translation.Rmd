@@ -130,13 +130,20 @@ pairs stored in additional `data.frame` columns.
 ### <a name="3.2 OSM ways"></a>3.2. OSM Ways
 
 OSM ways may be either polygons or (non-polygonal) lines. `osmdata` translates
-these into `SF::LINESTRING` and `SF::POLYGON` objects, respectively.
+these into `SF::LINESTRING` and `SF::POLYGON` objects, respectively. Although
+polygonal and non-polygonal ways may have systematically different `key` fields,
+they are conflated here to the single set of `key` values common to all `way`
+objects regardless of shape. This enables direct comparison and uniform
+operation on both `SF::LINESTRING` and `SF::POLYGON` objects.
 
 ### <a name="3.3 OSM relations"></a>3.3 OSM Relations
 
 OSM relations comprising members with `role=outer` or `role=inner` are
 translated into `SF::MULTIPOLYGON` objects; otherwise they form
-`SF::MULTILINESTRING` objects.
+`SF::MULTILINESTRING` objects. As for OSM ways, potentially systematic
+differences between OSM `key` fields for `multipolygon` and other `relation`
+objects are ignored in favour of returning identical `key` fields in both cases,
+whether or not `value` fields for those `key`s exist.
 
 #### <a name="3.3(a) Multipolygon relations"></a>3.3(a) Multipolygon Relations
 
