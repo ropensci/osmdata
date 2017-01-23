@@ -336,7 +336,6 @@ osmid_t trace_way (const Ways &ways, const Nodes &nodes, osmid_t first_node,
 void trace_way_nmat (const Ways &ways, const Nodes &nodes, 
         const osmid_t &wayi_id, Rcpp::NumericMatrix &nmat)
 {
-    osmid_t last_node;
     auto wayi = ways.find (wayi_id);
     std::vector <std::string> rownames;
     rownames.clear ();
@@ -599,11 +598,11 @@ Rcpp::List convert_poly_linestring_to_Rcpp (const float_arr3 lon_arr,
  * inserting a first column containing "osm_id" and moving the "name" column to
  * second position.
  *
- * @param df Pointer to the data.frame to be restructured
- * @param colnames Pointer to the colnames taken from the appropriate vector of
- *        unique_vals
+ * @param kv Pointer to the key-value matrix to be restructured
+ * @param ls true only for multilinestrings, which have compound rownames which
+ *        include roles
  */
-Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv)
+Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls=false)
 {
     // The following has to be done in 2 lines:
     std::vector <std::vector <std::string> > dims = kv.attr ("dimnames");
@@ -612,23 +611,43 @@ Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv)
 
     int ni = std::distance (varnames.begin (),
             std::find (varnames.begin (), varnames.end (), "name"));
+    int add_lines = 1;
+    if (ls)
+        add_lines++;
 
     if (ni < varnames.size ())
     {
         Rcpp::CharacterVector name_vals = kv.column (ni);
+        Rcpp::CharacterVector roles; // only for ls, but has to be defined here
         // convert ids to CharacterVector - direct allocation doesn't work
         Rcpp::CharacterVector ids_rcpp (ids.size ());
-        for (int i=0; i<ids.size (); i++)
-            ids_rcpp (i) = ids [i];
+        if (!ls)
+            for (int i=0; i<ids.size (); i++)
+                ids_rcpp (i) = ids [i];
+        else
+        { // extract way roles for multilinestring kev-val matrices
+            roles = Rcpp::CharacterVector (ids.size ());
+            for (int i=0; i<ids.size (); i++)
+            {
+                int ipos = ids [i].find ("-", 0);
+                ids_rcpp (i) = ids [i].substr (0, ipos).c_str ();
+                roles (i) = ids [i].substr (ipos + 1, ids[i].length () - ipos);
+            }
+        }
 
-        kv_out = Rcpp::CharacterMatrix (Rcpp::Dimension (kv.nrow (),
-                    kv.ncol () + 1));
-        kv_out.column (0) = ids_rcpp;
-        kv_out.column (1) = name_vals;
-        varnames_new.reserve (kv.ncol () + 1);
+        varnames_new.reserve (kv.ncol () + add_lines);
         varnames_new.push_back ("osm_id");
         varnames_new.push_back ("name");
-        int count = 2;
+        kv_out = Rcpp::CharacterMatrix (Rcpp::Dimension (kv.nrow (),
+                    kv.ncol () + add_lines));
+        kv_out.column (0) = ids_rcpp;
+        kv_out.column (1) = name_vals;
+        if (ls)
+        {
+            varnames_new.push_back ("role");
+            kv_out.column (2) = roles;
+        }
+        int count = 1 + add_lines;
         for (int i=0; i<kv.ncol (); i++)
             if (i != ni)
             {
@@ -767,11 +786,11 @@ Rcpp::List get_osm_relations (const Relations &rels,
     // And convert kv matrices to data.frames
     kv_mat_ls.attr ("names") = unique_vals.k_rel;
     kv_mat_ls.attr ("dimnames") = Rcpp::List::create (rel_id_ls, unique_vals.k_rel);
-    Rcpp::DataFrame kv_df_ls = restructure_kv_mat (kv_mat_ls);
+    Rcpp::DataFrame kv_df_ls = restructure_kv_mat (kv_mat_ls, true);
 
     kv_mat_mp.attr ("names") = unique_vals.k_rel;
     kv_mat_mp.attr ("dimnames") = Rcpp::List::create (rel_id_mp, unique_vals.k_rel);
-    Rcpp::DataFrame kv_df_mp = restructure_kv_mat (kv_mat_mp);
+    Rcpp::DataFrame kv_df_mp = restructure_kv_mat (kv_mat_mp, false);
 
     // ****** clean up *****
     clean_arrs <float, float, std::string> (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
@@ -846,7 +865,7 @@ void get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
 
     kv_mat.attr ("names") = unique_vals.k_way;
     kv_mat.attr ("dimnames") = Rcpp::List::create (waynames, unique_vals.k_way);
-    kv_df = restructure_kv_mat (kv_mat);
+    kv_df = restructure_kv_mat (kv_mat, false);
 }
 
 /* get_osm_nodes
@@ -894,7 +913,7 @@ void get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
         count++;
     }
     kv_mat.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
-    kv_df = restructure_kv_mat (kv_mat);
+    kv_df = restructure_kv_mat (kv_mat, false);
     //kv_df = kv_mat;
 
     ptList.attr ("names") = ptnames;
@@ -972,9 +991,13 @@ Rcpp::List rcpp_osmdata (const std::string& st)
 
     Rcpp::List tempList = get_osm_relations (rels, nodes, ways, unique_vals);
     Rcpp::List multipolygons = tempList [0];
-    Rcpp::DataFrame kv_df_mp = tempList [1];
+    // the followin line errors because of ambiguous conversion
+    //Rcpp::DataFrame kv_df_mp = tempList [1]; 
+    Rcpp::List kv_df_mp = tempList [1];
+    kv_df_mp.attr ("class") = "data.frame";
     Rcpp::List multilinestrings = tempList [2];
-    Rcpp::DataFrame kv_df_ls = tempList [3];
+    Rcpp::List kv_df_ls = tempList [3];
+    kv_df_ls.attr ("class") = "data.frame";
 
     /* --------------------------------------------------------------
      * 3. Extract OSM ways
