@@ -163,7 +163,6 @@ void trace_multilinestring (Relations::const_iterator itr_rel, const std::string
         const Ways &ways, const Nodes &nodes, float_arr2 &lon_vec, 
         float_arr2 &lat_vec, string_arr2 &rowname_vec, std::vector <osmid_t> &ids)
 {
-    osmid_t first_node, last_node;
     std::vector <float> lons, lats;
     std::vector <std::string> rownames;
 
@@ -295,66 +294,66 @@ void check_geom_arrs (const float_arr3 &lon_arr, const float_arr3 &lat_arr,
     }
 }
 
-// Clean all 2D geometry arrays 
-void clean_geom_vecs (float_arr2 &lon_vec, float_arr2 &lat_vec,
-        string_arr2 &rowname_vec)
-{
-    for (int i=0; i<lon_vec.size (); i++)
-    {
-        lon_vec [i].clear ();
-        lat_vec [i].clear ();
-        rowname_vec [i].clear ();
-    }
-    lon_vec.clear ();
-    lat_vec.clear ();
-    rowname_vec.clear ();
-}
-
-// Clean all 3D geometry arrays 
-void clean_geom_arrs (float_arr3 &lon_arr, float_arr3 &lat_arr,
-        string_arr3 &rowname_arr)
+template <typename T>
+void check_id_arr (const float_arr3 lon_arr, 
+        const std::vector <std::vector <T> > &arr)
 {
     for (int i=0; i<lon_arr.size (); i++)
-    {
-        for (int j=0; j<lon_arr [i].size (); j++)
-        {
-            lon_arr [i] [j].clear ();
-            lat_arr [i] [j].clear ();
-            rowname_arr [i] [j].clear ();
-        }
-        lon_arr [i].clear ();
-        lat_arr [i].clear ();
-        rowname_arr [i].clear ();
-    }
-    lon_arr.clear ();
-    lat_arr.clear ();
-    rowname_arr.clear ();
+        if (lon_arr [i].size () != arr [i].size ())
+            throw std::runtime_error ("geoms and way IDs differ in size");
 }
 
-// Clean all key-value arrays
-void clean_kv_arrs (std::vector <std::vector <std::string> > &value_arr_mp,
-        std::vector <std::vector <std::string> > &value_arr_ls)
+template <typename T>
+void clean_vec (std::vector <std::vector <T> > &arr2)
 {
-    for (int i=0; i<value_arr_mp.size (); i++)
-        value_arr_mp [i].clear ();
-    for (int i=0; i<value_arr_ls.size (); i++)
-        value_arr_ls [i].clear ();
-    value_arr_mp.clear ();
-    value_arr_ls.clear ();
+    for (int i=0; i<arr2.size (); i++)
+        arr2 [i].clear ();
+    arr2.clear ();
+}
+template <typename T>
+void clean_arr (std::vector <std::vector <std::vector <T> > > &arr3)
+{
+    for (int i=0; i<arr3.size (); i++)
+    {
+        for (int j=0; j<arr3[i].size (); j++)
+            arr3 [i][j].clear ();
+        arr3 [i].clear ();
+    }
+    arr3.clear ();
+}
+template <typename T1, typename T2>
+void clean_vecs (std::vector <std::vector <T1> > & arr2_1,
+        std::vector <std::vector <T2> > & arr2_2)
+{
+    clean_vec (arr2_1);
+    clean_vec (arr2_2);
+}
+template <typename T1, typename T2, typename T3>
+void clean_vecs (std::vector <std::vector <T1> > & arr2_1,
+        std::vector <std::vector <T2> > & arr2_2,
+        std::vector <std::vector <T3> > & arr2_3)
+{
+    clean_vec (arr2_1);
+    clean_vec (arr2_2);
+    clean_vec (arr2_3);
+}
+template <typename T1, typename T2>
+void clean_arrs (std::vector <std::vector <std::vector <T1> > > & arr3_1,
+        std::vector <std::vector <std::vector <T2> > > & arr3_2)
+{
+    clean_arr (arr3_1);
+    clean_arr (arr3_2);
+}
+template <typename T1, typename T2, typename T3>
+void clean_arrs (std::vector <std::vector <std::vector <T1> > > & arr3_1,
+        std::vector <std::vector <std::vector <T2> > > & arr3_2,
+        std::vector <std::vector <std::vector <T3> > > & arr3_3)
+{
+    clean_arr (arr3_1);
+    clean_arr (arr3_2);
+    clean_arr (arr3_3);
 }
 
-// Clean all arrays holding OSM IDs
-void clear_id_vecs (std::vector <std::vector <osmid_t> > &id_vec_ls, 
-    std::vector <std::vector <std::string> > &id_vec_mp)
-{
-    for (int i=0; i<id_vec_mp.size (); i++)
-    {
-        id_vec_mp [i].clear ();
-        id_vec_ls [i].clear ();
-    }
-    id_vec_mp.clear ();
-    id_vec_ls.clear ();
-}
 
 /************************************************************************
  ************************************************************************
@@ -364,10 +363,12 @@ void clear_id_vecs (std::vector <std::vector <osmid_t> > &id_vec_ls,
  ************************************************************************
  ************************************************************************/
 
-// ***UP TO HERE*** write a template for id_vec to accept <osmid_t> and <string>
-Rcpp::List convert_poly_linestring_to_Rcpp (float_arr3 lon_arr, float_arr3 lat_arr,
-        string_arr3 rowname_arr, std::vector <std::vector <osmid_t> > id_vec, 
-        std::vector <osmid_t> rel_id)
+// TODO: Replace return value with pointer to List as argument?
+template <typename T, typename A> // std::vector of osmid_t or std::string
+Rcpp::List convert_poly_linestring_to_Rcpp (const float_arr3 lon_arr, 
+        const float_arr3 lat_arr, const string_arr3 rowname_arr, 
+        const std::vector <std::vector <T,A> > &id_vec, 
+        const std::vector <osmid_t> rel_id)
 {
     Rcpp::List outList (lon_arr.size ()); 
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
@@ -394,8 +395,10 @@ Rcpp::List convert_poly_linestring_to_Rcpp (float_arr3 lon_arr, float_arr3 lat_a
         outList [i] = outList_i;
     }
     outList.attr ("names") = rel_id;
+
+    return outList;
 }
-    
+
 /* get_osm_relations
  *
  * Return a dual Rcpp::List containing all OSM relations, the firmt element of
@@ -429,6 +432,7 @@ Rcpp::List get_osm_relations (const Relations &rels,
     float_arr3 lat_arr_mp, lon_arr_mp, lon_arr_ls, lat_arr_ls;
     string_arr2 rowname_vec;
     string_arr3 rowname_arr_mp, rowname_arr_ls;
+    // TODO: Replace these with typedefs
     std::vector <osmid_t> rel_id_mp, rel_id_ls, ids_ls; 
     std::vector <std::string> ids_mp; 
     std::vector <std::vector <osmid_t> > id_vec_ls; 
@@ -463,7 +467,7 @@ Rcpp::List get_osm_relations (const Relations &rels,
             lat_arr_mp.push_back (lat_vec);
             rowname_arr_mp.push_back (rowname_vec);
             id_vec_mp.push_back (ids_mp);
-            clean_geom_vecs (lon_vec, lat_vec, rowname_vec);
+            clean_vecs <float, float, std::string> (lon_vec, lat_vec, rowname_vec);
             ids_mp.clear ();
             get_value_vec (itr, keyset, value_vec);
             value_arr_mp.push_back (value_vec);
@@ -487,7 +491,7 @@ Rcpp::List get_osm_relations (const Relations &rels,
                 lat_arr_ls.push_back (lat_vec);
                 rowname_arr_ls.push_back (rowname_vec);
                 id_vec_ls.push_back (ids_ls);
-                clean_geom_vecs (lon_vec, lat_vec, rowname_vec);
+                clean_vecs <float, float, std::string> (lon_vec, lat_vec, rowname_vec);
                 ids_ls.clear ();
             }
             roles_ls.push_back (roles);
@@ -501,65 +505,20 @@ Rcpp::List get_osm_relations (const Relations &rels,
 
     check_geom_arrs (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
     check_geom_arrs (lon_arr_ls, lat_arr_ls, rowname_arr_ls);
-    // Manually check the ID arrs, which are <osmid_t> for mp and <string> for ls
-    for (int i=0; i<lon_arr_ls.size (); i++)
-        if (lon_arr_ls [i].size () != id_vec_ls [i].size ())
-            throw std::runtime_error ("geoms and way ids differ in size");
-    if (lon_arr_ls.size () != id_vec_ls.size () |
-            lon_arr_mp.size () != id_vec_mp.size ())
-        throw std::runtime_error ("ids and geometries differ in size");
+    check_id_arr <osmid_t> (lon_arr_ls, id_vec_ls);
+    check_id_arr <std::string> (lon_arr_mp, id_vec_mp);
 
     // Then store the lon-lat and rowname vector<vector> objects as Rcpp::List
-    Rcpp::List polygonList (lon_arr_mp.size ()); 
-    for (int i=0; i<lon_arr_mp.size (); i++) // over all relations
-    {
-        Rcpp::List polygonList_i (lon_arr_mp [i].size ()); 
-        for (int j=0; j<lon_arr_mp [i].size (); j++) // over all ways
-        {
-            int n = lon_arr_mp [i][j].size ();
-            nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
-            std::copy (lon_arr_mp [i][j].begin (), lon_arr_mp [i][j].end (),
-                    nmat.begin ());
-            std::copy (lat_arr_mp [i][j].begin (), lat_arr_mp [i][j].end (),
-                    nmat.begin () + n);
-            dimnames.push_back (rowname_arr_mp [i][j]);
-            dimnames.push_back (colnames);
-            nmat.attr ("dimnames") = dimnames;
-            dimnames.erase (0, dimnames.size ());
-            polygonList_i [j] = nmat;
-        }
-        polygonList_i.attr ("names") = id_vec_mp [i];
-        polygonList [i] = polygonList_i;
-    }
-    polygonList.attr ("names") = rel_id_mp;
-    
-    Rcpp::List linestringList (lon_arr_ls.size ()); 
-    for (int i=0; i<lon_arr_ls.size (); i++) // over all relations
-    {
-        Rcpp::List linestringList_i (lon_arr_ls [i].size ()); 
-        for (int j=0; j<lon_arr_ls [i].size (); j++) // over all ways
-        {
-            int n = lon_arr_ls [i][j].size ();
-            nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
-            std::copy (lon_arr_ls [i][j].begin (), lon_arr_ls [i][j].end (),
-                    nmat.begin ());
-            std::copy (lat_arr_ls [i][j].begin (), lat_arr_ls [i][j].end (),
-                    nmat.begin () + n);
-            dimnames.push_back (rowname_arr_ls [i][j]);
-            dimnames.push_back (colnames);
-            nmat.attr ("dimnames") = dimnames;
-            dimnames.erase (0, dimnames.size ());
-            linestringList_i [j] = nmat;
-        }
-        linestringList_i.attr ("names") = id_vec_ls [i];
-        linestringList [i] = linestringList_i;
-    }
-    linestringList.attr ("names") = rel_id_ls;
+    Rcpp::List polygonList = convert_poly_linestring_to_Rcpp <std::string>
+        (lon_arr_mp, lat_arr_mp, rowname_arr_mp, id_vec_mp, rel_id_mp);
+    Rcpp::List linestringList = convert_poly_linestring_to_Rcpp <osmid_t>
+        (lon_arr_ls, lat_arr_ls, rowname_arr_ls, id_vec_ls, rel_id_ls);
 
     // ****** clean up *****
-    clean_geom_arrs (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
-    clean_geom_arrs (lon_arr_ls, lat_arr_ls, rowname_arr_ls);
-    clean_kv_arrs (value_arr_mp, value_arr_ls);
+    clean_arrs <float, float, std::string> (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
+    clean_arrs <float, float, std::string> (lon_arr_ls, lat_arr_ls, rowname_arr_ls);
+    clean_vecs <std::string, std::string> (value_arr_mp, value_arr_ls);
+    clean_vecs <std::string, osmid_t> (id_vec_mp, id_vec_ls);
     rel_id_mp.clear ();
     rel_id_ls.clear ();
     roles_ls.clear ();
