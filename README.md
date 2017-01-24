@@ -1,4 +1,3 @@
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Build Status](https://travis-ci.org/osmdatar/osmdata.svg?branch=master)](https://travis-ci.org/osmdatar/osmdata) [![Build status](https://ci.appveyor.com/api/projects/status/github/osmdatar/osmdata?svg=true)](https://ci.appveyor.com/project/mpadge/osmdata) [![codecov](https://codecov.io/gh/osmdatar/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/osmdatar/osmdata) [![Project Status: WIP](http://www.repostatus.org/badges/0.1.0/wip.svg)](http://www.repostatus.org/#wip) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/osmdata)](http://cran.r-project.org/web/packages/osmdata)
 
@@ -25,7 +24,24 @@ packageVersion("osmdata")
 
 ### Usage
 
-[Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be built from a base query constructed with `opq` followed by `add_feature`. The corresponding OSM objects are then downloaded and converted to `sp` objects with `osmdata_sp`. For example,
+[Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be built from a base query constructed with `opq` followed by `add_feature`. The corresponding OSM objects are then downloaded and converted to `sf` objects with `osmdata_sf` or to `sp` objects with `osmdata_sp`. For example,
+
+``` r
+q0 <- opq (bbox=c(-0.27,51.47,-0.20,51.50)) # Central London, U.K.
+q1 <- add_feature (q0, key='name', value="Thames", exact=FALSE)
+doc <- osmdata_xml (q1) # returns raw xml document
+x <- osmdata_sf (q1, doc)
+x
+#> Object of class 'osmdata' with:
+#>                  $bbox : 51.47,-0.27,51.5,-0.2
+#>         $overpass_call : The call submitted to the overpass API
+#>             $timestamp : ##------ Tues Jan 24 21:28:03 2017 ------##
+#>            $osm_points : 'sf' Simple Features Collection with 21226 points
+#>       $osm_linestrings : 'sf' Simple Features Collection with 1865 linestrings
+#>          $osm_polygons : 'sf' Simple Features Collection with 22 polygons
+#>  $osm_multilinestrings : 'sf' Simple Features Collection with 5 multilinestrings
+#>     $osm_multipolygons : 'sf' Simple Features Collection with 3 multipolygons
+```
 
 ``` r
 q0 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) # Central London, U.K.
@@ -33,12 +49,14 @@ q1 <- add_feature (q0, key='building')
 bu <- osmdata_sp (q1)
 bu
 #> Object of class 'osmdata' with:
-#>   $bbox          : 51.51,-0.12,51.52,-0.11
-#>   $overpass_call : The call submitted to the overpass API
-#>   $timestamp     : [ Mon Dec 26 11:19:36 2016 ]
-#>   $osm_points    : 'sp' SpatialPointsDataFrame   with 5071 points
-#>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 14 lines
-#>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 578 polygons
+#>                  $bbox : 51.51,-0.12,51.52,-0.11
+#>         $overpass_call : The call submitted to the overpass API
+#>             $timestamp : [ Tue Jan 24 22:30:15 2017 ]
+#>   $osm_points           : 'sp' SpatialPointsDataFrame   with 5072 points
+#>   $osm_linestrings      : 'sp' SpatialLinesDataFrame    with 14 linestrings
+#>   $osm_polygons         : 'sp' SpatialPolygonsDataFrame with 578 polygons
+#>   $osm_multilinestrings : NULL
+#>   $osm_multipolygons  : NULL
 ```
 
 or,
@@ -49,12 +67,14 @@ q2 <- add_feature (q0, key='highway')
 hs <- osmdata_sp (q2)
 hs
 #> Object of class 'osmdata' with:
-#>   $bbox          : 51.51,-0.12,51.52,-0.11
-#>   $overpass_call : The call submitted to the overpass API
-#>   $timestamp     : [ Mon Dec 26 11:19:38 2016 ]
-#>   $osm_points    : 'sp' SpatialPointsDataFrame   with 1985 points
-#>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 545 lines
-#>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 34 polygons
+#>                  $bbox : 51.51,-0.12,51.52,-0.11
+#>         $overpass_call : The call submitted to the overpass API
+#>             $timestamp : [ Tue Jan 24 22:30:22 2017 ]
+#>   $osm_points           : 'sp' SpatialPointsDataFrame   with 1987 points
+#>   $osm_linestrings      : 'sp' SpatialLinesDataFrame    with 545 linestrings
+#>   $osm_polygons         : 'sp' SpatialPolygonsDataFrame with 34 polygons
+#>   $osm_multilinestrings : NULL
+#>   $osm_multipolygons  : NULL
 ```
 
 Plotting with `sp`:
@@ -96,12 +116,14 @@ q0 <- opq (bbox=getbb ("Bonn")) # Bonn, Germany
 q1 <- add_feature (q0, key="railway", value="station")
 osmdata_sp (q1, quiet=TRUE)
 #> Object of class 'osmdata' with:
-#>   $bbox          : 50.575851,6.94066,50.895851,7.26066
-#>   $overpass_call : The call submitted to the overpass API
-#>   $timestamp     : [ Mon Dec 26 11:19:41 2016 ]
-#>   $osm_points    : 'sp' SpatialPointsDataFrame   with 42 points
-#>   $osm_lines     : 'sp' SpatialLinesDataFrame    with 0 lines
-#>   $osm_polygons  : 'sp' SpatialPolygonsDataFrame with 1 polygons
+#>                  $bbox : 50.575851,6.94066,50.895851,7.26066
+#>         $overpass_call : The call submitted to the overpass API
+#>             $timestamp : [ Tue Jan 24 22:30:32 2017 ]
+#>   $osm_points           : 'sp' SpatialPointsDataFrame   with 34 points
+#>   $osm_linestrings      : 'sp' SpatialLinesDataFrame    with 0 linestrings
+#>   $osm_polygons         : 'sp' SpatialPolygonsDataFrame with 0 polygons
+#>   $osm_multilinestrings : NULL
+#>   $osm_multipolygons  : NULL
 ```
 
 ``` r
@@ -128,11 +150,11 @@ sp::plot (lon$osm_lines)
 
 ``` r
 date()
-#> [1] "Mon Dec 26 11:19:41 2016"
+#> [1] "Tue Jan 24 22:30:32 2017"
 
 testthat::test_dir("tests/")
 #> testthat results ===========================================================
-#> OK: 14 SKIPPED: 0 FAILED: 0
+#> OK: 57 SKIPPED: 0 FAILED: 0
 #> 
 #> DONE ======================================================================
 ```

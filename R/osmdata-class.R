@@ -42,18 +42,29 @@ osmdata <- function (bbox, overpass_call,
 }
 
 
-
 #' @export
 print.osmdata <- function (x, ...)
 {
+    # TODO: tidy this mess!
   if (!all (sapply (x, is.null)))
     message ("Object of class 'osmdata' with:")
   if (!is.null (x$bbox)) 
-    message (paste ("  $bbox          :", x$bbox))
+  {
+      nm <- c (rep (" ", 17), "$bbox")
+      message (nm, " : ", x$bbox)
+  }
   if (!is.null (x$overpass_call))
-    message ("  $overpass_call : The call submitted to the overpass API")
+  {
+      nm <- "overpass_call"
+      nm <- c (rep (" ", 21 - nchar (nm)), "$", nm)
+      message (nm, " : The call submitted to the overpass API")
+  }
   if (!is.null (x$timestamp)) 
-    message (paste ("  $timestamp     :", x$timestamp))
+  {
+      nm <- "timestamp"
+      nm <- c (rep (" ", 21 - nchar (nm)), "$", nm)
+      message (nm, " : ", x$timestamp)
+  }
 
   indx <- which (grepl ("osm", names (x)))
   sf <- any (grep ("sf", sapply (x, class)))
@@ -61,7 +72,13 @@ print.osmdata <- function (x, ...)
   {
       for (i in names (x) [indx])
       {
-          xi <- x [i]
+          xi <- x [[i]]
+          nm <- c (rep (" ", 21 - nchar (i)), "$", i)
+          if (is.null (xi))
+              message (nm, " : NULL")
+          else
+              message (nm, " : 'sf' Simple Features Collection with ",
+                       nrow (xi), " ", strsplit (i, "osm_")[[1]][2])
       }
   } else
   {

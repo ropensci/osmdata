@@ -43,9 +43,9 @@ devtools::install_github("osmdatar/osmdata")
 #devtools::load_all (".")
 devtools::load_all (".", export_all=FALSE)
 #devtools::load_all (".", recompile=TRUE)
-devtools::document (".")
+#devtools::document (".")
 #goodpractice::gp (".")
-devtools::check (".")
+#devtools::check (".")
 #testthat::test_dir ("./tests/")
 #Rcpp::compileAttributes()
 ```
@@ -65,40 +65,22 @@ packageVersion("osmdata")
 
 [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be
 built from a base query constructed with `opq` followed by `add_feature`. The
-corresponding OSM objects are then downloaded and converted to `sp` objects with
-`osmdata_sp`. For example,
+corresponding OSM objects are then downloaded and converted to `sf` objects with
+`osmdata_sf` or to `sp` objects with `osmdata_sp`. For example,
+
+```{r query-thames}
+q0 <- opq (bbox=c(-0.27,51.47,-0.20,51.50)) # Central London, U.K.
+q1 <- add_feature (q0, key='name', value="Thames", exact=FALSE)
+doc <- osmdata_xml (q1) # returns raw xml document
+x <- osmdata_sf (q1, doc)
+x
+```
 
 ```{r query1}
 q0 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) # Central London, U.K.
 q1 <- add_feature (q0, key='building')
 bu <- osmdata_sp (q1)
 bu
-```
-
-```{r test-points, eval=FALSE}
-devtools::load_all (".", export_all=FALSE)
-q0 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) # Central London, U.K.
-q1 <- add_feature (q0, key='building')
-bu <- osmdata_sf (q1)
-ptnames <- sapply (bu$points, function (i) attr (i, "name"))
-pts <- do.call (rbind, bu$points)
-pts <- data.frame (apply (pts, 2, unlist))
-rownames (pts) <- ptnames
-```
-
-```{r test-lines, eval=FALSE}
-devtools::load_all (".", export_all=FALSE)
-q0 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) # Central London, U.K.
-q1 <- add_feature (q0, key='highway')
-doc <- osmdata_xml (q1)
-hw <- osmdata_sf (q1, doc)
-hw <- osmdata_sp (q1, doc)
-microbenchmark::microbenchmark (hw <- osmdata_sf (q1, doc), times=100L)
-microbenchmark::microbenchmark (hw <- osmdata_sp (q1, doc), times=100L)
-lnnames <- sapply (hw$lines, function (i) attr (i, "name"))
-lns <- do.call (rbind, hw$lines)
-lns <- data.frame (apply (lns, 2, unlist))
-rownames (lns) <- lnnames
 ```
 
 or,
