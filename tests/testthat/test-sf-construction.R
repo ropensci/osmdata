@@ -3,13 +3,15 @@ context ("sf-construction")
 make_sfc <- function (x, type) {
     if (!is.list (x)) x <- list (x)
     type <- toupper (type)
-    stopifnot (type %in% c ("POINT", "LINESTRING", "MULTIPOLYGON"))
+    stopifnot (type %in% c ("POINT", "LINESTRING", "POLYGON",
+                            "MULTILINESTRING", "MULTIPOLYGON"))
     xy <- do.call (rbind, x)
     xvals <- xy [,1]
     yvals <- xy [,2]
     bb <- structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax"))
     bb [1:4] <- c (min (xvals), min (yvals), max (xvals), max (yvals))
-    if (type == "MULTIPOLYGON") x <- lapply (x, function (i) list (list (i)))
+    if (type == "POLYGON") x <- lapply (x, function (i) list (i))
+    else if (type == "MULTIPOLYGON") x <- lapply (x, function (i) list (list (i)))
     x <- lapply (x, function (i) structure (i, class = c ("XY", type, "sfg")))
     attr (x, "n_empty") = sum(sapply(x, function(x) length(x) == 0))
     class(x) = c(paste0("sfc_", class(x[[1L]])[2L]), "sfc")
@@ -25,7 +27,10 @@ make_sf <- function (...)
     x <- list (...)
     sf = sapply(x, function(i) inherits(i, "sfc"))
     sf_column <- which (sf)
-    row.names <- seq_along (x [[sf_column]])
+    if (!is.null (names (x [[sf_column]])))
+        row.names <- names (x [[sf_column]])
+    else
+        row.names <- seq_along (x [[sf_column]])
     df <- if (length(x) == 1) # ONLY sfc
                 data.frame(row.names = row.names)
             else # create a data.frame from list:
@@ -167,6 +172,76 @@ test_that ("sf-multiple-lines-with-fields", {
 
 # **********************************************************
 # ***                      POLYGONS                      ***
+# **********************************************************
+
+test_that ("sfg-polygon", {
+               # NOTE: polygons are lists; linestrings are not!
+               xy <- list (cbind (c (1:4,1), c(5:8,5)))
+               x <- structure (xy, class=c("XY", "POLYGON", "sfg"))
+               expect_identical (x, sf::st_polygon (xy))
+})
+
+test_that ("sfc-polygon", {
+               xy <- cbind (c (1:4,1), c(5:8,5))
+               x <- make_sfc (xy, "POLYGON")
+               y <- sf::st_sfc (sf::st_polygon (list (xy)))
+               expect_identical (x, y)
+})
+
+test_that ("sf-polygon", {
+               xy <- cbind (c (1:4,1), c(5:8,5))
+               x <- make_sfc (xy, "POLYGON")
+               y <- sf::st_sf (x)
+               x <- make_sf (x)
+               expect_identical (x, y)
+})
+
+test_that ("sf-polygon-with-fields", {
+               xy <- cbind (c (1:4,1), c(5:8,5))
+               x <- make_sfc (xy, "POLYGON")
+               y <- sf::st_sf (x, a=3, b="blah")
+               x <- make_sf (x, a=3, b="blah")
+               expect_identical (x, y)
+})
+
+test_that ("sfc-multiple-polygons", {
+               xy1 <- cbind (c (1:4,1), c(5:8,5))
+               xy2 <- cbind (c (11:14,11), c(15:18,15))
+               x <- make_sfc (list (xy1, xy2), type="POLYGON")
+               y <- sf::st_sfc (sf::st_polygon (list (xy1)), 
+                                sf::st_polygon (list (xy2)))
+               expect_identical (x, y)
+})
+
+test_that ("sf-multiple-polygons", {
+               xy1 <- cbind (c (1:4,1), c(5:8,5))
+               xy2 <- cbind (c (11:14,11), c(15:18,15))
+               x <- make_sfc (list (xy1, xy2), type="POLYGON")
+               y <- sf::st_sf (x) 
+               x <- make_sf (x)
+               expect_identical (x, y)
+})
+
+test_that ("sf-multiple-polygons-with-fields", {
+               xy1 <- cbind (c (1:4,1), c(5:8,5))
+               xy2 <- cbind (c (11:14,11), c(15:18,15))
+               x <- sf::st_sfc (sf::st_polygon (list (xy1)), 
+                                sf::st_polygon (list (xy2)))
+               y <- sf::st_sf (x, a=1:2, b="blah")
+               x <- make_sfc (list (xy1, xy2), type="POLYGON")
+               x <- make_sf (x, a=1:2, b="blah")
+               expect_identical (x, y)
+               x <- sf::st_sfc (sf::st_polygon (list (xy1)), 
+                                sf::st_polygon (list (xy2)))
+               dat <- data.frame (a=1:2, b=c("blah", "junk"), c=c (TRUE, FALSE))
+               y <- sf::st_sf (x, dat)
+               x <- make_sfc (list (xy1, xy2), type="POLYGON")
+               x <- make_sf (x, dat)
+               expect_identical (x, y)
+})
+
+# **********************************************************
+# ***                   MULTIPOLYGONS                    ***
 # **********************************************************
 
 test_that ("sfg-multipolygon", {

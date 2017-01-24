@@ -849,8 +849,19 @@ void get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
         waynames.push_back (std::to_string (*wi));
         Rcpp::NumericMatrix nmat;
         trace_way_nmat (ways, nodes, (*wi), nmat);
-        nmat.attr ("class") = Rcpp::CharacterVector::create ("XY", geom_type, "sfg");
-        wayList [count] = nmat;
+        if (geom_type == "LINESTRING")
+        {
+            nmat.attr ("class") = 
+                Rcpp::CharacterVector::create ("XY", geom_type, "sfg");
+            wayList [count] = nmat;
+        } else // polygons are lists
+        {
+            Rcpp::List polyList_temp = Rcpp::List (1);
+            polyList_temp (0) = nmat;
+            polyList_temp.attr ("class") = 
+                Rcpp::CharacterVector::create ("XY", geom_type, "sfg");
+            wayList [count] = polyList_temp;
+        }
         auto wj = ways.find (*wi);
         get_value_mat_way (wj, ways, unique_vals, kv_mat, count++);
     } // end for it over poly_ways
@@ -901,7 +912,7 @@ void get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
         Rcpp::NumericVector ptxy = Rcpp::NumericVector::create (NA_REAL, NA_REAL);
-        ptxy.attr ("class") = Rcpp::CharacterVector::create ("XY", "POINTS", "sfg");
+        ptxy.attr ("class") = Rcpp::CharacterVector::create ("XY", "POINT", "sfg");
         ptxy (0) = ni->second.lon;
         ptxy (1) = ni->second.lat;
         ptList (count) = ptxy;
@@ -986,8 +997,8 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     crs (0) = 4326;
     crs (1) = p4s;
     //Rcpp::List crs = Rcpp::List::create ((int) 4326, p4s);
-    crs.attr ("class") = "crs";
     crs.attr ("names") = Rcpp::CharacterVector::create ("epsg", "proj4string");
+    crs.attr ("class") = "crs";
 
     /* --------------------------------------------------------------
      * 2. Extract OSM Relations
@@ -1056,7 +1067,7 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     ret [9] = kv_df_ls;
 
     std::vector <std::string> retnames {"points", "points_kv",
-        "lines", "lines_kv", "polygons", "polygons_kv",
+        "linestrings", "linestrings_kv", "polygons", "polygons_kv",
         "multipolygons", "multipolygons_kv", 
         "multilinestrings", "multilinestrings_kv"};
     ret.attr ("names") = retnames;

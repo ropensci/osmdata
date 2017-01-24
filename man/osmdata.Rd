@@ -6,19 +6,23 @@
 \alias{osmdata-package}
 \title{osmdata class def}
 \usage{
-osmdata(bbox, overpass_call, osm_points, osm_lines, osm_polygons, timestamp,
-  ...)
+osmdata(bbox, overpass_call, osm_points, osm_linestrings, osm_polygons,
+  osm_multilinestrings, osm_multipolygons, timestamp, ...)
 }
 \arguments{
 \item{bbox}{bounding box}
 
 \item{overpass_call}{overpass_call}
 
-\item{osm_points}{sp::SpatialPointsDataFrame of points}
+\item{osm_points}{\code{sf} Simple Features Collection of points}
 
-\item{osm_lines}{sp::SpatialLinesDataFrame of lines}
+\item{osm_linestrings}{\code{sf} Simple Features Collection of multilinestrings}
 
-\item{osm_polygons}{sp::SpatialPolygonsDataFrame of polygons}
+\item{osm_polygons}{\code{sf} Simple Features Collection of polygons}
+
+\item{osm_multilinestrings}{\code{sf} Simple Features Collection of multilinestrings}
+
+\item{osm_multipolygons}{\code{sf} Simple Features Collection of multipolygons}
 
 \item{timestamp}{timestamp}
 

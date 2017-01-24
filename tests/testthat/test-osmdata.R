@@ -79,9 +79,10 @@ test_that ("make_query", {
     expect_true (is (res, "xml_document"))
     res <- osmdata_sp (qry)
     expect_s3_class (res, "osmdata")
-    expect_named (res, expected=c ("bbox", "overpass_call", "timestamp",
-                                   "osm_points", "osm_lines", "osm_polygons"),
-                  ignore.order=FALSE)
+    nms <- c ("bbox", "overpass_call", "timestamp", "osm_points",
+              "osm_linestrings", "osm_polygons", "osm_multilinestrings",
+              "osm_multipolygons")
+    expect_named (res, expected=nms, ignore.order=FALSE)
   }
 })
 

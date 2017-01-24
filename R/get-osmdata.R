@@ -80,7 +80,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
         message ('convertig OSM data to sp format')
     res <- rcpp_osmdata_sp (doc)
     obj$osm_points <- res$points
-    obj$osm_lines <- res$lines
+    obj$osm_linestrings <- res$lines
     obj$osm_polygons <- res$polygons
 
     return (obj)
@@ -96,7 +96,10 @@ make_sf <- function (...)
     x <- list (...)
     sf <- sapply (x, function(i) inherits(i, "sfc"))
     sf_column <- which (sf)
-    row.names <- seq_along (x [[sf_column]])
+    if (!is.null (names (x [[sf_column]])))
+        row.names <- names (x [[sf_column]])
+    else
+        row.names <- seq_along (x [[sf_column]])
     df <- if (length(x) == 1) # ONLY sfc
                 data.frame(row.names = row.names)
             else # create a data.frame from list:
@@ -171,11 +174,17 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
         message ('convertig OSM data to sp format')
     res <- rcpp_osmdata (doc)
 
-    obj$osm_points <- make_sf (res$points, res$points_kv)
-    obj$osm_linestrings <- make_sf (res$lines, res$lines_kv)
-    obj$osm_polygons <- make_sf (res$polygons, res$polygons_kv)
-    obj$osm_multipolygons <- make_sf (res$multipolygons, res$multipolygons_kv)
-    obj$osm_multilinestrings <- make_sf (res$multilinestrings, res$multilinestrings_kv)
+    points <- res$points # sf uses these names
+    obj$osm_points <- make_sf (points, res$points_kv)
+    linestrings <- res$linestrings
+    obj$osm_linestrings <- make_sf (linestrings, res$linestrings_kv)
+    polygons <- res$polygons
+    obj$osm_polygons <- make_sf (polygons, res$polygons_kv)
+    multipolygons <- res$multipolygons
+    obj$osm_multipolygons <- make_sf (multipolygons, res$multipolygons_kv)
+    multilinestrings <- res$multilinestrings
+    obj$osm_multilinestrings <- make_sf (multilinestrings, res$multilinestrings_kv)
 
     return (obj)
+    #return (list (poly=res$polygons, line=res$linestrings))
 }
