@@ -5,14 +5,23 @@ make_sfc <- function (x, type) {
     type <- toupper (type)
     stopifnot (type %in% c ("POINT", "LINESTRING", "POLYGON",
                             "MULTILINESTRING", "MULTIPOLYGON"))
-    xy <- do.call (rbind, x)
+    if (is.list (x [[1]]))
+        xy <- do.call (rbind, do.call ("c", x))
+    else
+        xy <- do.call (rbind, x)
     xvals <- xy [,1]
     yvals <- xy [,2]
     bb <- structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax"))
     bb [1:4] <- c (min (xvals), min (yvals), max (xvals), max (yvals))
-    if (type == "POLYGON") x <- lapply (x, function (i) list (i))
-    else if (type == "MULTIPOLYGON") x <- lapply (x, function (i) list (list (i)))
-    x <- lapply (x, function (i) structure (i, class = c ("XY", type, "sfg")))
+    if (type == "POLYGON")
+        x <- lapply (x, function (i) list (i))
+    else if (grepl ("MULTI", type) & !is.list (x [[1]]))
+        x <- list (x)
+    if (type != "MULTIPOLYGON")
+        x <- lapply (x, function (i) structure (i, class = c ("XY", type, "sfg")))
+    else
+        x <- lapply (x, function (i) structure (list (i), 
+                                                class = c ("XY", type, "sfg")))
     attr (x, "n_empty") = sum(sapply(x, function(x) length(x) == 0))
     class(x) = c(paste0("sfc_", class(x[[1L]])[2L]), "sfc")
     attr(x, "precision") = 0.0
@@ -241,6 +250,76 @@ test_that ("sf-multiple-polygons-with-fields", {
 })
 
 # **********************************************************
+# ***                  MULTILINESTRINGS                  ***
+# **********************************************************
+
+test_that ("sfg-multilinestring", {
+               x <- cbind (c (1:4, 1), c (5:8, 5))
+               y <- sf::st_multilinestring (list (x))
+               x <- structure (list (x), class=c ("XY", "MULTILINESTRING", "sfg"))
+               expect_identical (x, y)
+})
+
+test_that ("sfc-multilinestring", {
+               x <- cbind (c (1:4, 1), c (5:8, 5))
+               y <- sf::st_sfc (sf::st_multilinestring (list (x)))
+               x <- make_sfc (x, type="MULTILINESTRING")
+               expect_identical (x, y)
+})
+
+test_that ("sf-multilinestring", {
+               x <- make_sfc (cbind (c (1:4, 1), c (5:8, 5)), type="MULTILINESTRING")
+               y <- sf::st_sf (x) 
+               x <- make_sf (x)
+               expect_identical (x, y)
+})
+
+test_that ("sfc-multiple-multilinestring1", {
+               x1 <- cbind (c (1:4, 1), c (5:8, 5))
+               x2 <- cbind (c (11:13, 11), c (25:27, 25))
+               x <- make_sfc (list (x1, x2), type="MULTILINESTRING")
+               y <- sf::st_sfc (sf::st_multilinestring (list (x1, x2)))
+               expect_identical (x, y)
+})
+
+test_that ("sfc-multiple-multilinestring2", {
+               x1 <- cbind (c (1:4, 1), c (5:8, 5))
+               x2 <- cbind (c (11:13, 11), c (25:27, 25))
+               x <- make_sfc (list (list (x1, x2), list (x1, x2)), 
+                              type="MULTILINESTRING")
+               y <- sf::st_sfc (sf::st_multilinestring (list (x1, x2)),
+                                sf::st_multilinestring (list (x1, x2)))
+               expect_identical (x, y)
+})
+
+test_that ("sf-multiple-multilinestring", {
+               x1 <- cbind (c (1:4, 1), c (5:8, 5))
+               x2 <- cbind (c (11:13, 11), c (25:27, 25))
+               x <- make_sfc (list (x1, x2), type="MULTILINESTRING")
+               y <- sf::st_sf (x)
+               x <- make_sf (x)
+               expect_identical (x, y)
+})
+
+test_that ("sf-multilinestring-with-fields", {
+               x1 <- cbind (c (1:4, 1), c (5:8, 5))
+               x2 <- cbind (c (11:13, 11), c (25:27, 25))
+               x0 <- make_sfc (list (x1, x2), type="MULTILINESTRING")
+               dat <- data.frame (a=1:2, b=c("blah", "junk"))
+               y <- sf::st_sf (x0, dat)
+               x <- make_sf (x0, dat)
+               expect_identical (x, y)
+               # The following will be possible with next version of sf:
+               #y <- sf::st_sf (dat, x0)
+               #x <- make_sf (x0, dat)
+               #expect_identical (x, y)
+               #y <- sf::st_sf (x0, dat)
+               #x <- make_sf (dat, x0)
+               #expect_identical (x, y)
+})
+
+
+# **********************************************************
 # ***                   MULTIPOLYGONS                    ***
 # **********************************************************
 
@@ -265,12 +344,21 @@ test_that ("sf-multipolygon", {
                expect_identical (x, y)
 })
 
-test_that ("sfc-multiple-multipolygons", {
+test_that ("sfc-multiple-multipolygons1", {
                x1 <- cbind (c (1:4, 1), c (5:8, 5))
                x2 <- cbind (c (11:13, 11), c (25:27, 25))
                x <- make_sfc (list (x1, x2), type="MULTIPOLYGON")
-               y <- sf::st_sfc (sf::st_multipolygon (list (list (x1))), 
-                                sf::st_multipolygon (list (list (x2))))
+               y <- sf::st_sfc (sf::st_multipolygon (list (list (x1, x2))))
+               expect_identical (x, y)
+})
+
+test_that ("sfc-multiple-multipolygons2", {
+               x1 <- cbind (c (1:4, 1), c (5:8, 5))
+               x2 <- cbind (c (11:13, 11), c (25:27, 25))
+               x <- make_sfc (list (list (x1, x2), list (x1, x2)), 
+                              type="MULTIPOLYGON")
+               y <- sf::st_sfc (sf::st_multipolygon (list (list (x1, x2))),
+                                sf::st_multipolygon (list (list (x1, x2))))
                expect_identical (x, y)
 })
 

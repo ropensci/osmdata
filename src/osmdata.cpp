@@ -561,8 +561,10 @@ template <typename T, typename A> // std::vector of osmid_t or std::string
 Rcpp::List convert_poly_linestring_to_Rcpp (const float_arr3 lon_arr, 
         const float_arr3 lat_arr, const string_arr3 rowname_arr, 
         const std::vector <std::vector <T,A> > &id_vec, 
-        const std::vector <std::string> &rel_id)
+        const std::vector <std::string> &rel_id, const std::string type)
 {
+    if (!(type == "MULTILINESTRING" || type == "MULTIPOLYGON"))
+        throw std::runtime_error ("type must be multilinestring/polygon");
     Rcpp::List outList (lon_arr.size ()); 
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
     Rcpp::List dimnames (0);
@@ -585,7 +587,17 @@ Rcpp::List convert_poly_linestring_to_Rcpp (const float_arr3 lon_arr,
             outList_i [j] = nmat;
         }
         outList_i.attr ("names") = id_vec [i];
-        outList [i] = outList_i;
+        if (type == "MULTIPOLYGON")
+        {
+            Rcpp::List tempList (1);
+            tempList (0) = outList_i;
+            tempList.attr ("class") = Rcpp::CharacterVector::create ("XY", type, "sfg");
+            outList [i] = tempList;
+        } else
+        {
+            outList_i.attr ("class") = Rcpp::CharacterVector::create ("XY", type, "sfg");
+            outList [i] = outList_i;
+        }
     }
     outList.attr ("names") = rel_id;
 
@@ -678,7 +690,8 @@ Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls=fal
  */
 Rcpp::List get_osm_relations (const Relations &rels, 
         const std::map <osmid_t, Node> &nodes,
-        const std::map <osmid_t, OneWay> &ways, const UniqueVals &unique_vals)
+        const std::map <osmid_t, OneWay> &ways, const UniqueVals &unique_vals,
+        const Rcpp::NumericVector &bbox, const Rcpp::List &crs)
 {
     /* Trace all multipolygon relations. These are the only OSM types where
      * sizes are not known before, so lat-lons and node names are stored in
@@ -778,15 +791,39 @@ Rcpp::List get_osm_relations (const Relations &rels,
     check_id_arr <osmid_t> (lon_arr_ls, id_vec_ls);
     check_id_arr <std::string> (lon_arr_mp, id_vec_mp);
 
-    // Then store the lon-lat and rowname vector<vector> objects as Rcpp::List
     Rcpp::List polygonList = convert_poly_linestring_to_Rcpp <std::string>
-        (lon_arr_mp, lat_arr_mp, rowname_arr_mp, id_vec_mp, rel_id_mp);
+        (lon_arr_mp, lat_arr_mp, rowname_arr_mp, id_vec_mp, rel_id_mp,
+         "MULTIPOLYGON");
+    // Each multipolygon has to be converted to a double Rcpp::List (Rcpp::List
+    /*
+    Rcpp::List polygonList (polygonList0.size ());
+    for (int i=0; i<polygonList0.size (); i++)
+    {
+        Rcpp::List tempList0 = Rcpp::List (1), tempList1 = Rcpp::List (1);
+        tempList0 (0) = polygonList0 (i);
+        tempList1 (0) = tempList0 (0);
+        polygonList (i) = tempList1;
+    }
+    */
+    polygonList.attr ("n_empty") = 0;
     polygonList.attr ("class") = 
-        Rcpp::CharacterVector::create ("sfc_POLYGON", "sfc");
+        Rcpp::CharacterVector::create ("sfc_MULTIPOLYGON", "sfc");
+    polygonList.attr ("precision") = 0.0;
+    polygonList.attr ("bbox") = bbox;
+    polygonList.attr ("crs") = crs;
+
     Rcpp::List linestringList = convert_poly_linestring_to_Rcpp <osmid_t>
-        (lon_arr_ls, lat_arr_ls, rowname_arr_ls, id_vec_ls, rel_id_ls);
+        (lon_arr_ls, lat_arr_ls, rowname_arr_ls, id_vec_ls, rel_id_ls,
+         "MULTILINESTRING");
+    // TODO: linenames just as in ways?
+    // linestringList.attr ("names") = ?
+    linestringList.attr ("n_empty") = 0;
     linestringList.attr ("class") = 
-        Rcpp::CharacterVector::create ("sfc_LINESTRING", "sfc");
+        Rcpp::CharacterVector::create ("sfc_MULTILINESTRING", "sfc");
+    linestringList.attr ("precision") = 0.0;
+    linestringList.attr ("bbox") = bbox;
+    linestringList.attr ("crs") = crs;
+
     // And convert kv matrices to data.frames
     kv_mat_ls.attr ("names") = unique_vals.k_rel;
     kv_mat_ls.attr ("dimnames") = Rcpp::List::create (rel_id_ls, unique_vals.k_rel);
@@ -975,7 +1012,6 @@ Rcpp::List rcpp_osmdata (const std::string& st)
     const std::vector <Relation>& rels = xml.relations ();
     const UniqueVals unique_vals = xml.unique_vals ();
 
-    int count = 0;
     std::vector <float> lons, lats;
     std::set <std::string> keyset; // must be ordered!
     Rcpp::List dimnames (0);
@@ -1004,7 +1040,8 @@ Rcpp::List rcpp_osmdata (const std::string& st)
      * 2. Extract OSM Relations
      * --------------------------------------------------------------*/
 
-    Rcpp::List tempList = get_osm_relations (rels, nodes, ways, unique_vals);
+    Rcpp::List tempList = get_osm_relations (rels, nodes, ways, unique_vals,
+            bbox, crs);
     Rcpp::List multipolygons = tempList [0];
     // the followin line errors because of ambiguous conversion
     //Rcpp::DataFrame kv_df_mp = tempList [1]; 
