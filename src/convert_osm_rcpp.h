@@ -29,6 +29,8 @@
  *  Compiler Options:   -std=c++11
  ***************************************************************************/
 
+#pragma once
+
 #include "common.h"
 
 #include <Rcpp.h>

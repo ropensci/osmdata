@@ -30,10 +30,8 @@
  ***************************************************************************/
 
 #include "osmdata.h"
-#include "trace_osm.h"
 #include "convert_osm_rcpp.h"
 #include "cleanup.h"
-#include "get-bbox.h"
 
 #include <Rcpp.h>
 
