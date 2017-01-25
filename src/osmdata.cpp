@@ -133,7 +133,7 @@ void trace_multipolygon (Relations::const_iterator itr_rel, const Ways &ways,
         relation_ways.push_back (std::make_pair (itw->first, itw->second));
     it_osm_str_vec itr_rw;
 
-    bool done_outer = false;
+    bool done_outer = false, way_okay = true;
     // Then trace through all those ways and store associated data
     while (relation_ways.size () > 0)
     {
@@ -144,9 +144,9 @@ void trace_multipolygon (Relations::const_iterator itr_rel, const Ways &ways,
                 std::advance (rwi, 1);
             done_outer = true;
         }
-        relation_ways.erase (rwi);
         this_role = rwi->second;
         auto wayi = ways.find (rwi->first);
+        relation_ways.erase (rwi);
         if (wayi == ways.end ())
             throw std::runtime_error ("way can not be found");
         this_way.str ("");
@@ -186,22 +186,26 @@ void trace_multipolygon (Relations::const_iterator itr_rel, const Ways &ways,
             if (ptr_check)
                 relation_ways.erase (itr_rw);
             else
-                throw std::runtime_error ("pointer not assigned");
+            {
+                // not all OSM multipolygons join up
+                way_okay = false;
+                break;
+                //throw std::runtime_error ("pointer not assigned");
+            }
             if (last_node == node0 || relation_ways.size () == 0)
                 closed = true;
         } // end while !closed
-        if (last_node == node0)
+        if (way_okay && last_node == node0)
         {
             lon_vec.push_back (lons);
             lat_vec.push_back (lats);
             rowname_vec.push_back (rownames);
             wayname_vec.push_back (this_way.str ());
-        } else
-            throw std::runtime_error ("last node != node0");
+            ids.push_back (this_way.str ());
+        } 
         lats.clear (); // These can't be reserved here
         lons.clear ();
         rownames.clear ();
-        ids.push_back (this_way.str ());
     } // end while relation_ways.size == 0 - finished tracing relation
     wayname_vec.clear ();
 }
@@ -824,14 +828,23 @@ Rcpp::List get_osm_relations (const Relations &rels,
     linestringList.attr ("bbox") = bbox;
     linestringList.attr ("crs") = crs;
 
-    // And convert kv matrices to data.frames
-    kv_mat_ls.attr ("names") = unique_vals.k_rel;
-    kv_mat_ls.attr ("dimnames") = Rcpp::List::create (rel_id_ls, unique_vals.k_rel);
-    Rcpp::DataFrame kv_df_ls = restructure_kv_mat (kv_mat_ls, true);
+    Rcpp::DataFrame kv_df_ls;
+    if (rel_id_ls.size () > 0) // only if there are linestrings
+    {
+        kv_mat_ls.attr ("names") = unique_vals.k_rel;
+        kv_mat_ls.attr ("dimnames") = Rcpp::List::create (rel_id_ls, unique_vals.k_rel);
+        kv_df_ls = restructure_kv_mat (kv_mat_ls, true);
+    } else
+        kv_df_ls = R_NilValue;
 
-    kv_mat_mp.attr ("names") = unique_vals.k_rel;
-    kv_mat_mp.attr ("dimnames") = Rcpp::List::create (rel_id_mp, unique_vals.k_rel);
-    Rcpp::DataFrame kv_df_mp = restructure_kv_mat (kv_mat_mp, false);
+    Rcpp::DataFrame kv_df_mp;
+    if (rel_id_mp.size () > 0)
+    {
+        kv_mat_mp.attr ("names") = unique_vals.k_rel;
+        kv_mat_mp.attr ("dimnames") = Rcpp::List::create (rel_id_mp, unique_vals.k_rel);
+        kv_df_mp = restructure_kv_mat (kv_mat_mp, false);
+    } else
+        kv_df_mp = R_NilValue;
 
     // ****** clean up *****
     clean_arrs <float, float, std::string> (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
