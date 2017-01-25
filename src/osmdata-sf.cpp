@@ -1,6 +1,6 @@
 /***************************************************************************
  *  Project:    osmdata
- *  File:       osmdata.cpp
+ *  File:       osmdata-sf.cpp
  *  Language:   C++
  *
  *  osmdata is free software: you can redistribute it and/or modify it under
@@ -32,8 +32,6 @@
 #include "osmdata.h"
 
 #include <Rcpp.h>
-
-#include <algorithm> // for min_element/max_element
 
 // Note: roxygen attempts to import doxygen-style comments, even without the
 // doubule-square-bracket Rcpp::Export
