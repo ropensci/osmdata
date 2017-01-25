@@ -14,9 +14,8 @@ inst/doc
 /*.tar.gz
 
 # Non-exported man files
-man/order_data_mat.Rd
 man/make_sf.Rd
-man/rcpp_osmdata.Rd
+man/rcpp_osmdata_sf.Rd
 man/rcpp_osmdata_sp.Rd
 man/rcpp_test_points.Rd
 man/rcpp_test_lines.Rd

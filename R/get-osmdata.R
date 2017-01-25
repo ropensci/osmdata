@@ -172,7 +172,7 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
 
     if (!quiet)
         message ('convertig OSM data to sp format')
-    res <- rcpp_osmdata (doc)
+    res <- rcpp_osmdata_sf (doc)
 
     points <- res$points # sf uses these names
     obj$osm_points <- make_sf (points, res$points_kv)

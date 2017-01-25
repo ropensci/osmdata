@@ -50,29 +50,30 @@
  ************************************************************************
  ************************************************************************
  *
- * 1. trace_osm.h = Primary functions to trace ways and relations (pure C++)
- *      1a. trace_multipolygon ()
- *      1b. trace_multilinestring ()
- *      1c. trace_way ()
- *      1d. trace_way_nmat ()
- *      1e. get_value_mat_way ()
- *      1f. get_value_vec ()
- * 2. cleanup.h = Functions to check and clean C++ arrays
- *      2a. reserve_arrs ()
- *      2b. check_geom_arrs ()
- *      2c. check_id_arr ()
- *      2d. clean_vec ()
- *      2e. clear_arr ()
- *      2f. clean_vecs ()
- *      2g. clean_arrs ()
+ * 1. osmdata.h = Class definition of XmlData that reads initial XML structure
+ * 2. trace_osm.h = Primary functions to trace ways and relations (pure C++)
+ *      2a. trace_multipolygon ()
+ *      2b. trace_multilinestring ()
+ *      2c. trace_way ()
  * 3. convert_osm_rcpp.h = Functions to convert C++ objects to Rcpp::List objects
- *      3a. restructure_kv_mat ()
- *      3b. convert_poly_linestring_to_Rcpp ()
+ *      3a. trace_way_nmat () (here coz it uses Rcpp)
+ *      3b. get_value_mat_way ()
+ *      3c. get_value_mat_rel ()
+ *      3d. convert_poly_linestring_to_Rcpp ()
+ *      3e. restructure_kv_mat ()
+ * 4. cleanup.h = Functions to check and clean C++ arrays
+ *      4a. reserve_arrs ()
+ *      4b. check_geom_arrs ()
+ *      4c. check_id_arr ()
+ *      4d. clean_vec ()
+ *      4e. clear_arr ()
+ *      4f. clean_vecs ()
+ *      4g. clean_arrs ()
+ * 4. osmdata.h/cpp
  *      3c. get_osm_relations ()
  *      3d. get_osm_ways ()
  *      3e. get_osm_nodes ()
- * 4. The final Rcpp function called by osmdata_sf
- *      4a. rcpp_osmdata ()
+ *      4a. rcpp_osmdata () - The final Rcpp function called by osmdata_sf
  *
  * ----------------------------------------------------------------------
  *
@@ -432,14 +433,14 @@ void get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
  ************************************************************************
  ************************************************************************/
 
-//' rcpp_osmdata
+//' rcpp_osmdata_sf
 //'
-//' Extracts all polygons from an overpass API query
+//' Return OSM data in Simple Features format
 //'
 //' @param st Text contents of an overpass API query
 //' @return Rcpp::List objects of OSM data
 // [[Rcpp::export]]
-Rcpp::List rcpp_osmdata (const std::string& st)
+Rcpp::List rcpp_osmdata_sf (const std::string& st)
 {
 #ifdef DUMP_INPUT
     {
