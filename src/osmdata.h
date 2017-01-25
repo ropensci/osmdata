@@ -331,28 +331,3 @@ inline void XmlData::traverseNode (XmlNodePtr pt, RawNode& rnode)
         traverseNode (it, rnode);
     }
 } // end function XmlData::traverseNode
-
-
-/************************************************************************
- ************************************************************************
- **                                                                    **
- **                          OTHER FUNCTIONS                           **
- **                                                                    **
- ************************************************************************
- ************************************************************************/
-
-void trace_multipolygon (Relations::const_iterator itr_rel, const Ways &ways,
-        const Nodes &nodes, float_arr2 &lon_vec, float_arr2 &lat_vec,
-        string_arr2 &rowname_vec, std::vector <std::string> &ids);
-
-void trace_multilinestring (Relations::const_iterator itr_rel, const std::string role,
-        const Ways &ways, const Nodes &nodes, float_arr2 &lon_vec, 
-        float_arr2 &lat_vec, string_arr2 &rowname_vec, std::vector <std::string> &ids);
-
-osmid_t trace_way (const Ways &ways, const Nodes &nodes, osmid_t first_node,
-        const osmid_t &wayi_id, std::vector <float> &lons, 
-        std::vector <float> &lats, std::vector <std::string> &rownames);
-
-void get_value_vec (Relations::const_iterator itr, 
-        const std::set <std::string> &keyset, std::vector <std::string> &value_vec);
-

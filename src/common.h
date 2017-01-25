@@ -45,6 +45,7 @@
 #include <set>
 #include <unordered_set>
 #include <cstring>
+#include <sstream>
 
 // APS uncomment to save xml input string to a file
 //#define DUMP_INPUT
