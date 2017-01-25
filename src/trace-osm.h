@@ -1,6 +1,6 @@
 /***************************************************************************
  *  Project:    osmdata
- *  File:       trace_osm.h
+ *  File:       trace-osm.h
  *  Language:   C++
  *
  *  osmdata is free software: you can redistribute it and/or modify it under

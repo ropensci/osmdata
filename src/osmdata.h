@@ -32,8 +32,8 @@
 
 #include "common.h"
 #include "get-bbox.h"
-#include "trace_osm.h"
-#include "convert_osm_rcpp.h"
+#include "trace-osm.h"
+#include "convert-osm-rcpp.h"
 #include "cleanup.h"
 
 //const std::string crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0";

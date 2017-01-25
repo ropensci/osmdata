@@ -1,6 +1,6 @@
 /***************************************************************************
  *  Project:    osmdata
- *  File:       trace_osm.cpp
+ *  File:       trace-osm.cpp
  *  Language:   C++
  *
  *  osmdata is free software: you can redistribute it and/or modify it under
@@ -29,7 +29,7 @@
  *  Compiler Options:   -std=c++11
  ***************************************************************************/
 
-#include "trace_osm.h"
+#include "trace-osm.h"
 
 /* Traces a single multipolygon relation 
  * 
