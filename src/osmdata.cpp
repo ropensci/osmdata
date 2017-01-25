@@ -30,7 +30,6 @@
  ***************************************************************************/
 
 #include "osmdata.h"
-#include "convert_osm_rcpp.h"
 #include "cleanup.h"
 
 #include <Rcpp.h>
