@@ -353,14 +353,8 @@ osmid_t trace_way (const Ways &ways, const Nodes &nodes, osmid_t first_node,
         const osmid_t &wayi_id, std::vector <float> &lons, 
         std::vector <float> &lats, std::vector <std::string> &rownames);
 
-void reserve_arrs (std::vector <float> &lats, std::vector <float> &lons,
-        std::vector <std::string> &rownames, int n);
-
 void get_value_vec (Relations::const_iterator itr, 
         const std::set <std::string> &keyset, std::vector <std::string> &value_vec);
-
-void check_geom_arrs (const float_arr3 &lon_arr, const float_arr3 &lat_arr,
-        const string_arr3 &rowname_arr);
 
 template <typename T1, typename T2>
 void clean_vecs (std::vector <std::vector <T1> > & arr2_1,
@@ -380,14 +374,3 @@ void clean_arrs (std::vector <std::vector <std::vector <T1> > > & arr3_1,
         std::vector <std::vector <std::vector <T2> > > & arr3_2,
         std::vector <std::vector <std::vector <T3> > > & arr3_3);
 
-void clean_geom_arrs (float_arr3 &lon_arr, float_arr3 &lat_arr,
-        string_arr3 &rowname_arr);
-
-void clear_id_vecs (std::vector <std::vector <osmid_t> > &id_vec_ls, 
-    std::vector <std::vector <std::string> > &id_vec_mp);
-
-void clean_kv_arrs (std::vector <std::vector <std::string> > &value_arr_mp,
-        std::vector <std::vector <std::string> > &value_arr_ls);
-
-void clean_geom_vecs (float_arr2 &lon_vec, float_arr2 &lat_vec,
-        string_arr2 &rowname_vec);
