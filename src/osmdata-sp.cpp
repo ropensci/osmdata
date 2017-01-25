@@ -36,6 +36,55 @@
 
 #include <algorithm> // for min_element/max_element
 
+/* get_osm_nodes
+ *
+ * Store OSM nodes as `sf::POINT` objects
+ *
+ * @param ptxy Pointer to Rcpp::List to hold the resultant geometries
+ * @param kv_mat Pointer to Rcpp::DataFrame to hold key-value pairs
+ * @param nodes Pointer to all nodes in data set
+ * @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
+ * @param bbox Pointer to the bbox needed for `sf` construction
+ * @param crs Pointer to the crs needed for `sf` construction
+ */
+void get_osm_nodes (Rcpp::NumericMatrix &ptxy, Rcpp::CharacterMatrix &kv_mat,
+        const Nodes &nodes, const UniqueVals &unique_vals)
+{
+    int nrow = nodes.size (), ncol = unique_vals.k_point.size ();
+
+    kv_mat = Rcpp::CharacterMatrix (Rcpp::Dimension (nrow, ncol));
+    std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
+
+    ptxy = Rcpp::NumericMatrix (Rcpp::Dimension (nrow, 2));
+    std::vector <std::string> ptnames;
+    ptnames.reserve (nodes.size ());
+    for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
+    {
+        int pos = std::distance (nodes.begin (), ni);
+        ptxy (pos, 0) = ni->second.lon;
+        ptxy (pos, 1) = ni->second.lat;
+        ptnames.push_back (std::to_string (ni->first));
+        for (auto kv_iter = ni->second.key_val.begin ();
+                kv_iter != ni->second.key_val.end (); ++kv_iter)
+        {
+            const std::string &key = kv_iter->first;
+            int ni = std::distance (unique_vals.k_point.begin (),
+                    unique_vals.k_point.find (key));
+            kv_mat (pos, ni) = kv_iter->second;
+        }
+    }
+    std::vector <std::string> colnames = {"lon", "lat"};
+    Rcpp::List dimnames (0);
+    dimnames.push_back (ptnames);
+    dimnames.push_back (colnames);
+    ptxy.attr ("dimnames") = dimnames;
+    dimnames.erase (0, dimnames.size ());
+
+    kv_mat.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
+}
+
+
+
 // [[Rcpp::depends(sp)]]
 
 //' rcpp_osmdata_sp
@@ -62,6 +111,7 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
     const std::map <osmid_t, Node>& nodes = xml.nodes ();
     const std::map <osmid_t, OneWay>& ways = xml.ways ();
     const std::vector <Relation>& rels = xml.relations ();
+    const UniqueVals unique_vals = xml.unique_vals ();
 
     int count = 0;
     std::vector <float> lons, lats;
@@ -398,41 +448,28 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
      ************************************************************************
      ************************************************************************/
 
-    Rcpp::List pointList (nodes.size ());
-    std::vector <std::string> nodenames;
-    nodenames.reserve (nodes.size());
+    Rcpp::NumericMatrix ptxy;
+    Rcpp::CharacterMatrix kv_mat_points;
+    get_osm_nodes (ptxy, kv_mat_points, nodes, unique_vals);
 
-    colnames.resize (0);
-    colnames.push_back ("lon");
-    colnames.push_back ("lat");
-    varnames.clear ();
+    Rcpp::DataFrame kv_df_points = kv_mat_points;
+    kv_df_points.attr ("names") = unique_vals.k_point;
 
-    count = 0;
+    Rcpp::Language points_call ("new", "SpatialPoints");
+    Rcpp::Language sp_points_call ("new", "SpatialPointsDataFrame");
+    Rcpp::S4 sp_points;
+    sp_points = sp_points_call.eval ();
+    sp_points.slot ("data") = kv_df_points;
+    sp_points.slot ("coords") = ptxy;
 
-    dimnames.erase (0, dimnames.size());
-    Rcpp::NumericMatrix nmat3 (Rcpp::Dimension (0, 0)); 
 
-    lons.clear ();
-    lats.clear ();
-    lons.reserve (nodes.size ());
-    lats.reserve (nodes.size ());
-    rownames.clear ();
-    rownames.reserve (nodes.size ());
-
-    for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
-    {
-        // Collect all unique keys
-        std::for_each (ni->second.key_val.begin (),
-                ni->second.key_val.end (),
-                [&](const std::pair <std::string, std::string>& p)
-                {
-                    varnames.insert (p.first);
-                });
-
-        lons.push_back (ni->second.lon);
-        lats.push_back (ni->second.lat);
-        rownames.push_back (std::to_string (ni->first));
-    }
+    /************************************************************************
+     ************************************************************************
+     **                                                                    **
+     **                            BBOX AND CRS                            **
+     **                                                                    **
+     ************************************************************************
+     ************************************************************************/
 
     float xmin=FLOAT_MAX, xmax=-FLOAT_MAX, ymin=FLOAT_MAX, ymax=-FLOAT_MAX;
     if (nodes.size () == 0)
@@ -447,42 +484,6 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
     if (fabs (xmin) == FLOAT_MAX || fabs (xmax) == FLOAT_MAX ||
             fabs (ymin) == FLOAT_MAX || fabs (ymax) == FLOAT_MAX)
         throw std::runtime_error ("No bounding box able to be determined");
-
-    // Store all key-val pairs in one massive DF
-    nrow = nodes.size (); 
-    ncol = varnames.size ();
-    Rcpp::CharacterVector kv_vec3 (nrow * ncol, Rcpp::CharacterVector::get_na ());
-    for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
-    {
-        int rowi = std::distance (nodes.begin (), ni);
-        for (auto kv_iter = ni->second.key_val.begin ();
-                kv_iter != ni->second.key_val.end (); ++kv_iter)
-        {
-            const std::string& key = (*kv_iter).first;
-            auto it = varnames.find (key); // key must exist in varnames!
-            int coli = std::distance (varnames.begin (), it);
-            kv_vec3 (coli * nrow + rowi) = (*kv_iter).second;
-        }
-    }
-
-    nmat3 = Rcpp::NumericMatrix (Rcpp::Dimension (lons.size (), 2));
-    std::copy (lons.begin (), lons.end (), nmat3.begin ());
-    std::copy (lats.begin (), lats.end (), nmat3.begin () + lons.size ());
-    dimnames.push_back (rownames);
-    dimnames.push_back (colnames);
-    nmat3.attr ("dimnames") = dimnames;
-    dimnames.erase (0, dimnames.size());
-
-    Rcpp::CharacterMatrix kv_mat3 (nrow, ncol, kv_vec3.begin());
-    Rcpp::DataFrame kv_df3 = kv_mat3;
-    kv_df3.attr ("names") = varnames;
-
-    Rcpp::Language points_call ("new", "SpatialPoints");
-    Rcpp::Language sp_points_call ("new", "SpatialPointsDataFrame");
-    Rcpp::S4 sp_points;
-    sp_points = sp_points_call.eval ();
-    sp_points.slot ("data") = kv_df3;
-    sp_points.slot ("coords") = nmat3;
 
     Rcpp::NumericMatrix bbox = rcpp_get_bbox (xmin, xmax, ymin, ymax);
     sp_points.slot ("bbox") = bbox;

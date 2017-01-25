@@ -392,6 +392,7 @@ void get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
 
     std::vector <std::string> ptnames;
     ptnames.reserve (nodes.size ());
+    // TODO: Repalce count with std::distance
     int count = 0;
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
