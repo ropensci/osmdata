@@ -105,7 +105,7 @@
  ************************************************************************/
 
 
-/* get_osm_relations
+/* get_osm_relations_sf
  *
  * Return a dual Rcpp::List containing all OSM relations, the firmt element of
  * which holds `multipolygon` relations, while the second holds all others,
@@ -120,7 +120,7 @@
  * @return A dual Rcpp::List, the first of which contains the multipolygon
  *         relations; the second the multilinestring relations.
  */
-Rcpp::List get_osm_relations (const Relations &rels, 
+Rcpp::List get_osm_relations_sf (const Relations &rels, 
         const std::map <osmid_t, Node> &nodes,
         const std::map <osmid_t, OneWay> &ways, const UniqueVals &unique_vals,
         const Rcpp::NumericVector &bbox, const Rcpp::List &crs)
@@ -226,17 +226,6 @@ Rcpp::List get_osm_relations (const Relations &rels,
     Rcpp::List polygonList = convert_poly_linestring_to_Rcpp <std::string>
         (lon_arr_mp, lat_arr_mp, rowname_arr_mp, id_vec_mp, rel_id_mp,
          "MULTIPOLYGON");
-    // Each multipolygon has to be converted to a double Rcpp::List (Rcpp::List
-    /*
-    Rcpp::List polygonList (polygonList0.size ());
-    for (int i=0; i<polygonList0.size (); i++)
-    {
-        Rcpp::List tempList0 = Rcpp::List (1), tempList1 = Rcpp::List (1);
-        tempList0 (0) = polygonList0 (i);
-        tempList1 (0) = tempList0 (0);
-        polygonList (i) = tempList1;
-    }
-    */
     polygonList.attr ("n_empty") = 0;
     polygonList.attr ("class") = 
         Rcpp::CharacterVector::create ("sfc_MULTIPOLYGON", "sfc");
@@ -489,7 +478,7 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st)
      * 2. Extract OSM Relations
      * --------------------------------------------------------------*/
 
-    Rcpp::List tempList = get_osm_relations (rels, nodes, ways, unique_vals,
+    Rcpp::List tempList = get_osm_relations_sf (rels, nodes, ways, unique_vals,
             bbox, crs);
     Rcpp::List multipolygons = tempList [0];
     // the followin line errors because of ambiguous conversion

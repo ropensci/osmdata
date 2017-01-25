@@ -199,3 +199,74 @@ Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls=fal
     return kv_out;
 }
 
+/* convert_poly_linestring_to_Rcpp
+ *
+ * Converts the data contained in all the arguments into an Rcpp::List object
+ * to be used as the geometry column of a Simple Features Colletion
+ *
+ * @param lon_arr 3D array of longitudinal coordinates
+ * @param lat_arr 3D array of latgitudinal coordinates
+ * @param rowname_arr 3D array of <osmid_t> IDs for nodes of all (lon,lat)
+ * @param id_vec 2D array of either <std::string> or <osmid_t> IDs for all ways
+ *        used in the geometry.
+ * @param rel_id Vector of <osmid_t> IDs for each relation.
+ *
+ * @return An Rcpp::List object of [relation][way][node/geom] data.
+ */
+// TODO: Replace return value with pointer to List as argument?
+template <typename T> Rcpp::List convert_poly_linestring_to_Rcpp (
+        const float_arr3 lon_arr, const float_arr3 lat_arr, 
+        const string_arr3 rowname_arr, 
+        const std::vector <std::vector <T> > &id_vec, 
+        const std::vector <std::string> &rel_id, const std::string type)
+{
+    if (!(type == "MULTILINESTRING" || type == "MULTIPOLYGON"))
+        throw std::runtime_error ("type must be multilinestring/polygon");
+    Rcpp::List outList (lon_arr.size ()); 
+    Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
+    Rcpp::List dimnames (0);
+    std::vector <std::string> colnames = {"lat", "lon"};
+    for (int i=0; i<lon_arr.size (); i++) // over all relations
+    {
+        Rcpp::List outList_i (lon_arr [i].size ()); 
+        for (int j=0; j<lon_arr [i].size (); j++) // over all ways
+        {
+            int n = lon_arr [i][j].size ();
+            nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
+            std::copy (lon_arr [i][j].begin (), lon_arr [i][j].end (),
+                    nmat.begin ());
+            std::copy (lat_arr [i][j].begin (), lat_arr [i][j].end (),
+                    nmat.begin () + n);
+            dimnames.push_back (rowname_arr [i][j]);
+            dimnames.push_back (colnames);
+            nmat.attr ("dimnames") = dimnames;
+            dimnames.erase (0, dimnames.size ());
+            outList_i [j] = nmat;
+        }
+        outList_i.attr ("names") = id_vec [i];
+        if (type == "MULTIPOLYGON")
+        {
+            Rcpp::List tempList (1);
+            tempList (0) = outList_i;
+            tempList.attr ("class") = Rcpp::CharacterVector::create ("XY", type, "sfg");
+            outList [i] = tempList;
+        } else
+        {
+            outList_i.attr ("class") = Rcpp::CharacterVector::create ("XY", type, "sfg");
+            outList [i] = outList_i;
+        }
+    }
+    outList.attr ("names") = rel_id;
+
+    return outList;
+}
+template Rcpp::List convert_poly_linestring_to_Rcpp <osmid_t> (
+        const float_arr3 lon_arr, const float_arr3 lat_arr, 
+        const string_arr3 rowname_arr, 
+        const std::vector <std::vector <osmid_t> > &id_vec, 
+        const std::vector <std::string> &rel_id, const std::string type);
+template Rcpp::List convert_poly_linestring_to_Rcpp <std::string> (
+        const float_arr3 lon_arr, const float_arr3 lat_arr, 
+        const string_arr3 rowname_arr, 
+        const std::vector <std::vector <std::string> > &id_vec, 
+        const std::vector <std::string> &rel_id, const std::string type);
