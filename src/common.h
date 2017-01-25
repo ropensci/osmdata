@@ -56,6 +56,14 @@
 // make clear the id type
 typedef long long osmid_t;
 
+typedef std::vector <std::vector <float> > float_arr2;
+typedef std::vector <std::vector <std::vector <float> > > float_arr3;
+typedef std::vector <std::vector <std::string> > string_arr2;
+typedef std::vector <std::vector <std::vector <std::string> > > string_arr3;
+typedef std::vector <std::vector <osmid_t> > osmt_arr2;
+typedef std::vector <std::pair <osmid_t, std::string> > osm_str_vec;
+typedef std::vector <std::pair <osmid_t, std::string> >::iterator it_osm_str_vec;
+
 const float FLOAT_MAX =  std::numeric_limits<float>::max ();
 
 // Convenience typedefs for some rapidxml types

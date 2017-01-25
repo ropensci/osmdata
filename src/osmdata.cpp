@@ -493,6 +493,7 @@ void clean_vec (std::vector <std::vector <T> > &arr2)
         arr2 [i].clear ();
     arr2.clear ();
 }
+
 template <typename T>
 void clean_arr (std::vector <std::vector <std::vector <T> > > &arr3)
 {
@@ -504,6 +505,7 @@ void clean_arr (std::vector <std::vector <std::vector <T> > > &arr3)
     }
     arr3.clear ();
 }
+
 template <typename T1, typename T2>
 void clean_vecs (std::vector <std::vector <T1> > & arr2_1,
         std::vector <std::vector <T2> > & arr2_2)
@@ -511,6 +513,7 @@ void clean_vecs (std::vector <std::vector <T1> > & arr2_1,
     clean_vec (arr2_1);
     clean_vec (arr2_2);
 }
+
 template <typename T1, typename T2, typename T3>
 void clean_vecs (std::vector <std::vector <T1> > & arr2_1,
         std::vector <std::vector <T2> > & arr2_2,
@@ -520,6 +523,7 @@ void clean_vecs (std::vector <std::vector <T1> > & arr2_1,
     clean_vec (arr2_2);
     clean_vec (arr2_3);
 }
+
 template <typename T1, typename T2>
 void clean_arrs (std::vector <std::vector <std::vector <T1> > > & arr3_1,
         std::vector <std::vector <std::vector <T2> > > & arr3_2)
@@ -527,6 +531,7 @@ void clean_arrs (std::vector <std::vector <std::vector <T1> > > & arr3_1,
     clean_arr (arr3_1);
     clean_arr (arr3_2);
 }
+
 template <typename T1, typename T2, typename T3>
 void clean_arrs (std::vector <std::vector <std::vector <T1> > > & arr3_1,
         std::vector <std::vector <std::vector <T2> > > & arr3_2,
