@@ -30,10 +30,6 @@
  ***************************************************************************/
 
 #include "osmdata.h"
-#include "trace_osm.h"
-#include "convert_osm_rcpp.h"
-#include "cleanup.h"
-#include "get-bbox.h"
 
 #include <Rcpp.h>
 
@@ -392,6 +388,7 @@ void get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
 
     std::vector <std::string> ptnames;
     ptnames.reserve (nodes.size ());
+    // TODO: Repalce count with std::distance
     int count = 0;
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
