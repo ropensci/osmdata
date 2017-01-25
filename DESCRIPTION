@@ -2,7 +2,7 @@ Package: osmdata
 Version: 0.0.0
 Authors@R: c(
     person("Mark", "Padgham", email="mark.padgham@email.com", role=c("aut", "cre")),
-    person("Bob", "Rubin", role="aut"),
+    person("Bob", "Rudis", role="aut"),
     person("Robin", "Lovelace", role="aut"), 
     person("Maëlle", "Salmon", role="aut"),
     person("Andrew", "Smith", role="ctb"),
