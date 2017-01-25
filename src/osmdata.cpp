@@ -293,7 +293,7 @@ Rcpp::List get_osm_relations (const Relations &rels,
     return ret;
 }
 
-/* get_osm_ways
+/* get_osm_ways_sf
  *
  * Store OSM ways as `sf::LINESTRING` or `sf::POLYGON` objects.
  *
@@ -307,7 +307,7 @@ Rcpp::List get_osm_relations (const Relations &rels,
  * @param bbox Pointer to the bbox needed for `sf` construction
  * @param crs Pointer to the crs needed for `sf` construction
  */
-void get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
+void get_osm_ways_sf (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
         const std::set <osmid_t> way_ids, const Ways &ways, const Nodes &nodes,
         const UniqueVals &unique_vals, const std::string &geom_type,
         const Rcpp::NumericVector &bbox, const Rcpp::List &crs)
@@ -363,7 +363,7 @@ void get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
     kv_df = restructure_kv_mat (kv_mat, false);
 }
 
-/* get_osm_nodes
+/* get_osm_nodes_sf
  *
  * Store OSM nodes as `sf::POINT` objects
  *
@@ -374,7 +374,7 @@ void get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
  * @param bbox Pointer to the bbox needed for `sf` construction
  * @param crs Pointer to the crs needed for `sf` construction
  */
-void get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
+void get_osm_nodes_sf (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
         const Nodes &nodes, const UniqueVals &unique_vals, 
         const Rcpp::NumericVector &bbox, const Rcpp::List &crs)
 {
@@ -513,12 +513,12 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st)
 
     Rcpp::List polyList (poly_ways.size ());
     Rcpp::DataFrame kv_df_polys;
-    get_osm_ways (polyList, kv_df_polys, poly_ways, ways, nodes, unique_vals,
+    get_osm_ways_sf (polyList, kv_df_polys, poly_ways, ways, nodes, unique_vals,
             "POLYGON", bbox, crs);
 
     Rcpp::List lineList (non_poly_ways.size ());
     Rcpp::DataFrame kv_df_lines;
-    get_osm_ways (lineList, kv_df_lines, non_poly_ways, ways, nodes, unique_vals,
+    get_osm_ways_sf (lineList, kv_df_lines, non_poly_ways, ways, nodes, unique_vals,
             "LINESTRING", bbox, crs);
 
     /* --------------------------------------------------------------
@@ -527,7 +527,7 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st)
 
     Rcpp::List pointList (nodes.size ());
     Rcpp::DataFrame kv_df_points;
-    get_osm_nodes (pointList, kv_df_points, nodes, unique_vals, bbox, crs);
+    get_osm_nodes_sf (pointList, kv_df_points, nodes, unique_vals, bbox, crs);
 
 
     /* --------------------------------------------------------------
