@@ -77,7 +77,15 @@ test_that ("make_query", {
     # NOTE: This still issues a query for overpass_status
     res <- osmdata_xml (qry)
     expect_true (is (res, "xml_document"))
+
     res <- osmdata_sp (qry)
+    expect_s3_class (res, "osmdata")
+    nms <- c ("bbox", "overpass_call", "timestamp", "osm_points",
+              "osm_linestrings", "osm_polygons", "osm_multilinestrings",
+              "osm_multipolygons")
+    expect_named (res, expected=nms, ignore.order=FALSE)
+
+    res <- osmdata_sf (qry)
     expect_s3_class (res, "osmdata")
     nms <- c ("bbox", "overpass_call", "timestamp", "osm_points",
               "osm_linestrings", "osm_polygons", "osm_multilinestrings",

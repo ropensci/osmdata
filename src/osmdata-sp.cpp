@@ -173,10 +173,16 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
     } // end for it over poly_ways
     wayList.attr ("names") = waynames;
 
-    kv_mat.attr ("names") = unique_vals.k_way;
-    kv_mat.attr ("dimnames") = Rcpp::List::create (waynames, unique_vals.k_way);
-    Rcpp::DataFrame kv_df = kv_mat;
-    kv_df.attr ("names") = unique_vals.k_way;
+    Rcpp::DataFrame kv_df;
+    if (way_ids.size () > 0)
+    {
+        kv_mat.attr ("names") = unique_vals.k_way;
+        kv_mat.attr ("dimnames") = Rcpp::List::create (waynames, unique_vals.k_way);
+        kv_df = kv_mat;
+        // TODO: Can names be assigned to R_NilValue?
+        kv_df.attr ("names") = unique_vals.k_way;
+    } else
+        kv_df = R_NilValue;
 
     if (geom_type == "line")
     {

@@ -358,9 +358,13 @@ void get_osm_ways_sf (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
     wayList.attr ("bbox") = bbox;
     wayList.attr ("crs") = crs;
 
-    kv_mat.attr ("names") = unique_vals.k_way;
-    kv_mat.attr ("dimnames") = Rcpp::List::create (waynames, unique_vals.k_way);
-    kv_df = restructure_kv_mat (kv_mat, false);
+    if (way_ids.size () > 0)
+    {
+        kv_mat.attr ("names") = unique_vals.k_way;
+        kv_mat.attr ("dimnames") = Rcpp::List::create (waynames, unique_vals.k_way);
+        kv_df = restructure_kv_mat (kv_mat, false);
+    } else
+        kv_df = R_NilValue;
 }
 
 /* get_osm_nodes_sf
@@ -408,9 +412,12 @@ void get_osm_nodes_sf (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
         }
         count++;
     }
-    kv_mat.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
-    kv_df = restructure_kv_mat (kv_mat, false);
-    //kv_df = kv_mat;
+    if (unique_vals.k_point.size () > 0)
+    {
+        kv_mat.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
+        kv_df = restructure_kv_mat (kv_mat, false);
+    } else
+        kv_df = R_NilValue;
 
     ptList.attr ("names") = ptnames;
     ptnames.clear ();

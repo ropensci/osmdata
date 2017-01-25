@@ -174,17 +174,38 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
         message ('convertig OSM data to sp format')
     res <- rcpp_osmdata_sf (doc)
 
+    # This is repetitive, but sf uses the allocated names, so get and assign can
+    # not be used.
+    # TODO: Find a way to loop this
     points <- res$points # sf uses these names
-    obj$osm_points <- make_sf (points, res$points_kv)
+    if (length (res$points_kv) > 0)
+        obj$osm_points <- make_sf (points, res$points_kv)
+    else
+        obj$osm_points <- make_sf (points)
+
     linestrings <- res$linestrings
-    obj$osm_linestrings <- make_sf (linestrings, res$linestrings_kv)
+    if (length (res$linestrings_kv) > 0)
+        obj$osm_linestrings <- make_sf (linestrings, res$linestrings_kv)
+    else
+        obj$osm_linestrings <- make_sf (linestrings)
+
     polygons <- res$polygons
-    obj$osm_polygons <- make_sf (polygons, res$polygons_kv)
+    if (length (res$polygons_kv) > 0)
+        obj$osm_polygons <- make_sf (polygons, res$polygons_kv)
+    else
+        obj$osm_polygons <- make_sf (polygons)
+
     multipolygons <- res$multipolygons
-    obj$osm_multipolygons <- make_sf (multipolygons, res$multipolygons_kv)
+    if (length (res$multipolygons_kv) > 0)
+        obj$osm_multipolygons <- make_sf (multipolygons, res$multipolygons_kv)
+    else
+        obj$osm_multipolygons <- make_sf (multipolygons)
+
     multilinestrings <- res$multilinestrings
-    obj$osm_multilinestrings <- make_sf (multilinestrings, res$multilinestrings_kv)
+    if (length (res$multilinestrings_kv) > 0)
+        obj$osm_multilinestrings <- make_sf (multilinestrings, res$multilinestrings_kv)
+    else
+        obj$osm_multilinestrings <- make_sf (multilinestrings)
 
     return (obj)
-    #return (list (poly=res$polygons, line=res$linestrings))
 }
