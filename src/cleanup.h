@@ -33,22 +33,98 @@
 #include "common.h"
 
 void reserve_arrs (std::vector <float> &lats, std::vector <float> &lons,
-        std::vector <std::string> &rownames, int n);
+        std::vector <std::string> &rownames, int n)
+{
+        lons.clear ();
+        lats.clear ();
+        rownames.clear ();
+        lons.reserve (n);
+        lats.reserve (n);
+        rownames.reserve (n);
+}
 
+// Sanity check to ensure all 3D geometry arrays have same sizes
 void check_geom_arrs (const float_arr3 &lon_arr, const float_arr3 &lat_arr,
-        const string_arr3 &rowname_arr);
+        const string_arr3 &rowname_arr)
+{
+    if (lon_arr.size () != lat_arr.size () ||
+            lon_arr.size () != rowname_arr.size ())
+        throw std::runtime_error ("lons, lats, and rownames differ in size");
+    for (int i=0; i<lon_arr.size (); i++)
+    {
+        if (lon_arr [i].size () != lat_arr [i].size () ||
+                lon_arr [i].size () != rowname_arr [i].size ())
+            throw std::runtime_error ("lons, lats, and rownames differ in size");
+        for (int j=0; j<lon_arr [i].size (); j++)
+            if (lon_arr [i][j].size () != lat_arr [i][j].size () ||
+                    lon_arr [i][j].size () != rowname_arr [i][j].size ())
+                throw std::runtime_error ("lons, lats, and rownames differ in size");
+    }
+}
 
-/*
- * TODO: check that all dynamic arrays are properly de-allocated - valgrind
-void clean_geom_arrs (float_arr3 &lon_arr, float_arr3 &lat_arr,
-        string_arr3 &rowname_arr);
 
-void clear_id_vecs (std::vector <std::vector <osmid_t> > &id_vec_ls, 
-    std::vector <std::vector <std::string> > &id_vec_mp);
+template <typename T>
+void check_id_arr (const float_arr3 lon_arr, 
+        const std::vector <std::vector <T> > &arr)
+{
+    for (int i=0; i<lon_arr.size (); i++)
+        if (lon_arr [i].size () != arr [i].size ())
+            throw std::runtime_error ("geoms and way IDs differ in size");
+}
 
-void clean_kv_arrs (std::vector <std::vector <std::string> > &value_arr_mp,
-        std::vector <std::vector <std::string> > &value_arr_ls);
+template <typename T>
+void clean_vec (std::vector <std::vector <T> > &arr2)
+{
+    for (int i=0; i<arr2.size (); i++)
+        arr2 [i].clear ();
+    arr2.clear ();
+}
 
-void clean_geom_vecs (float_arr2 &lon_vec, float_arr2 &lat_vec,
-        string_arr2 &rowname_vec);
- */
+template <typename T1, typename T2>
+void clean_vecs (std::vector <std::vector <T1> > & arr2_1,
+        std::vector <std::vector <T2> > & arr2_2)
+{
+    clean_vec (arr2_1);
+    clean_vec (arr2_2);
+}
+
+template <typename T1, typename T2, typename T3>
+void clean_vecs (std::vector <std::vector <T1> > & arr2_1,
+        std::vector <std::vector <T2> > & arr2_2,
+        std::vector <std::vector <T3> > & arr2_3)
+{
+    clean_vec (arr2_1);
+    clean_vec (arr2_2);
+    clean_vec (arr2_3);
+}
+
+template <typename T>
+void clean_arr (std::vector <std::vector <std::vector <T> > > &arr3)
+{
+    for (int i=0; i<arr3.size (); i++)
+    {
+        for (int j=0; j<arr3[i].size (); j++)
+            arr3 [i][j].clear ();
+        arr3 [i].clear ();
+    }
+    arr3.clear ();
+}
+
+template <typename T1, typename T2>
+void clean_arrs (std::vector <std::vector <std::vector <T1> > > & arr3_1,
+        std::vector <std::vector <std::vector <T2> > > & arr3_2)
+{
+    clean_arr (arr3_1);
+    clean_arr (arr3_2);
+}
+
+template <typename T1, typename T2, typename T3>
+void clean_arrs (std::vector <std::vector <std::vector <T1> > > & arr3_1,
+        std::vector <std::vector <std::vector <T2> > > & arr3_2,
+        std::vector <std::vector <std::vector <T3> > > & arr3_3)
+{
+    clean_arr (arr3_1);
+    clean_arr (arr3_2);
+    clean_arr (arr3_3);
+}
+

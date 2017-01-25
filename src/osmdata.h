@@ -356,21 +356,3 @@ osmid_t trace_way (const Ways &ways, const Nodes &nodes, osmid_t first_node,
 void get_value_vec (Relations::const_iterator itr, 
         const std::set <std::string> &keyset, std::vector <std::string> &value_vec);
 
-template <typename T1, typename T2>
-void clean_vecs (std::vector <std::vector <T1> > & arr2_1,
-        std::vector <std::vector <T2> > & arr2_2);
-
-template <typename T1, typename T2, typename T3>
-void clean_vecs (std::vector <std::vector <T1> > & arr2_1,
-        std::vector <std::vector <T2> > & arr2_2,
-        std::vector <std::vector <T3> > & arr2_3);
-
-template <typename T1, typename T2>
-void clean_arrs (std::vector <std::vector <std::vector <T1> > > & arr3_1,
-        std::vector <std::vector <std::vector <T2> > > & arr3_2);
-
-template <typename T1, typename T2, typename T3>
-void clean_arrs (std::vector <std::vector <std::vector <T1> > > & arr3_1,
-        std::vector <std::vector <std::vector <T2> > > & arr3_2,
-        std::vector <std::vector <std::vector <T3> > > & arr3_3);
-
