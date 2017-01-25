@@ -32,6 +32,7 @@ NULL
 #'        or a return value for which a function will be created
 #'        automatically.
 #' 
+#' @export
 #' @rdname stub
 #' 
 #' @examples
