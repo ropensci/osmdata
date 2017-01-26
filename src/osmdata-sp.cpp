@@ -220,8 +220,8 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
  * @return A dual Rcpp::List, the first of which contains the multipolygon
  *         relations; the second the multilinestring relations.
  */
-void get_osm_relations_sp (Rcpp::S4 &multipolygons, const Relations &rels, 
-        const std::map <osmid_t, Node> &nodes,
+void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons, 
+        const Relations &rels, const std::map <osmid_t, Node> &nodes,
         const std::map <osmid_t, OneWay> &ways, const UniqueVals &unique_vals)
 {
     /* Trace all multipolygon relations. These are the only OSM types where
@@ -324,6 +324,8 @@ void get_osm_relations_sp (Rcpp::S4 &multipolygons, const Relations &rels,
 
     convert_multipoly_to_sp (multipolygons, rels, lon_arr_mp, lat_arr_mp, 
         rowname_arr_mp, id_vec_mp, unique_vals);
+    convert_multiline_to_sp (multilines, rels, lon_arr_ls, lat_arr_ls, 
+        rowname_arr_ls, id_vec_ls, unique_vals);
 
     // ****** clean up *****
     clean_arrs <float, float, std::string> (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
@@ -423,11 +425,12 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
      ************************************************************************/
 
     // The actual routines to extract the OSM data and store in sp objects
-    Rcpp::S4 sp_points, sp_lines, sp_polygons, sp_multipolygons;
+    Rcpp::S4 sp_points, sp_lines, sp_polygons, sp_multilines, sp_multipolygons;
     get_osm_ways_sp (sp_polygons, poly_ways, ways, nodes, unique_vals, "polygon");
     get_osm_ways_sp (sp_lines, poly_ways, ways, nodes, unique_vals, "line");
     get_osm_nodes_sp (sp_points, nodes, unique_vals);
-    get_osm_relations_sp (sp_multipolygons, rels, nodes, ways, unique_vals);
+    get_osm_relations_sp (sp_multilines, sp_multipolygons, 
+            rels, nodes, ways, unique_vals);
 
     // Add bbox and crs to each sp object
     Rcpp::NumericMatrix bbox = rcpp_get_bbox (xml.x_min (), xml.x_max (), 
@@ -435,6 +438,7 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
     sp_points.slot ("bbox") = bbox;
     sp_lines.slot ("bbox") = bbox;
     sp_polygons.slot ("bbox") = bbox;
+    sp_multilines.slot ("bbox") = bbox;
     sp_multipolygons.slot ("bbox") = bbox;
 
     Rcpp::Language crs_call ("new", "CRS");
@@ -443,16 +447,18 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
     sp_points.slot ("proj4string") = crs;
     sp_lines.slot ("proj4string") = crs; 
     sp_polygons.slot ("proj4string") = crs;
+    sp_multilines.slot ("proj4string") = crs;
     sp_multipolygons.slot ("proj4string") = crs;
 
-    Rcpp::List ret (4);
+    Rcpp::List ret (5);
     ret [0] = sp_points;
     ret [1] = sp_lines;
     ret [2] = sp_polygons;
-    ret [3] = sp_multipolygons;
+    ret [3] = sp_multilines;
+    ret [4] = sp_multipolygons;
 
     std::vector <std::string> retnames {"points", "lines", "polygons",
-        "multipolygons"};
+        "multilines", "multipolygons"};
     ret.attr ("names") = retnames;
     
     return ret;
