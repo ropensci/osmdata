@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return an OSM Overpass query in XML format 
- — osmdata_xml â€¢ osmdata</title>
+<title>rcpp_test_polygons — rcpp_test_polygons â€¢ osmdata</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -78,53 +77,33 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return an OSM Overpass query in XML format 
-</h1>
+    <h1>rcpp_test_polygons</h1>
     </div>
 
     
-    <p>Return an OSM Overpass query in XML format 
-Read an (XML format) OSM Overpass response from a string, a connection,
-or a raw vector.</p>
+    <p>Reproduces code used in src/osmdata.cpp to compare Rcpp construction of
+sfg::MULTIPOLYGON&#39; objects in &#39; osmdata with equivalent construction in sf &#39;
+generated with this code:
+l1 &lt;- cbind (c(1.0,2.0,3.0,4.0,1.0), c(5.0,6.0,7.0,8.0,5.0))
+l2 &lt;- cbind (c(11.0,12.0,13.0,11.0), c(14.0,15.0,16.0,14.0))
+l1 &lt;- sf::st_multipolygon (list (list (l1)))
+l2 &lt;- sf::st_multipolygon (list (list (l2)))
+y &lt;- sf::st_sfc (a=l1, b=l2)</p>
     
 
-    <pre><span class='fu'>osmdata_xml</span>(<span class='no'>q</span>, <span class='no'>filename</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>encoding</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>q</dt>
-      <dd>An object of class `overpass_query` constructed with <code>opq</code> and
-<code>add_feature</code>.</dd>
-      <dt>filename</dt>
-      <dd>If given, OSM data are saved to the named file</dd>
-      <dt>quiet</dt>
-      <dd>suppress status messages.</dd>
-      <dt>encoding</dt>
-      <dd>Unless otherwise specified XML documents are assumed to be
-encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
-an explicit encoding directive, this allows you to supply a default.</dd>
-    </dl>
-    
+    <pre><span class='fu'>rcpp_test_polygons</span>()</pre>
+        
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class `XML::xml_document` containing the result of the
-        overpass API query.</p>
-    
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>Objects of class <code>xml_document</code> can be saved as <code>.xml</code> or
-<code>.osm</code> files with codexml2::write_xml.</p>
+    <p>An sf Simple Features Collection object of &#39;sfg::MULTIPOLYGON&#39; objects</p>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#note">Note</a></li>
           </ul>
 
   </div>
