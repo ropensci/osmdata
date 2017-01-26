@@ -44,5 +44,6 @@ void trace_multilinestring (Relations::const_iterator &itr_rel,
 
 osmid_t trace_way (const Ways &ways, const Nodes &nodes, osmid_t first_node,
         const osmid_t &wayi_id, std::vector <float> &lons, 
-        std::vector <float> &lats, std::vector <std::string> &rownames);
+        std::vector <float> &lats, std::vector <std::string> &rownames,
+        const bool append);
 

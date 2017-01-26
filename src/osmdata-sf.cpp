@@ -463,8 +463,8 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st)
     colnames.push_back ("lon");
     colnames.push_back ("lat");
 
-    Rcpp::NumericVector bbox = rcpp_get_bbox_sf (xml.x_min (), xml.x_max (), 
-                                              xml.y_min (), xml.y_max ());
+    Rcpp::NumericVector bbox = rcpp_get_bbox_sf (xml.x_min (), xml.y_min (), 
+                                              xml.x_max (), xml.y_max ());
 
     Rcpp::List crs = Rcpp::List::create (NA_INTEGER, 
             Rcpp::CharacterVector::create (NA_STRING));
@@ -528,20 +528,20 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st)
      * 5. Collate all data
      * --------------------------------------------------------------*/
 
-    Rcpp::List ret (10);
-    //ret [0] = bbox;
-    ret [0] = pointList;
-    ret [1] = kv_df_points;
-    ret [2] = lineList;
-    ret [3] = kv_df_lines;
-    ret [4] = polyList;
-    ret [5] = kv_df_polys;
-    ret [6] = multipolygons;
-    ret [7] = kv_df_mp;
-    ret [8] = multilinestrings;
-    ret [9] = kv_df_ls;
+    Rcpp::List ret (11);
+    ret [0] = bbox;
+    ret [1] = pointList;
+    ret [2] = kv_df_points;
+    ret [3] = lineList;
+    ret [4] = kv_df_lines;
+    ret [5] = polyList;
+    ret [6] = kv_df_polys;
+    ret [7] = multipolygons;
+    ret [8] = kv_df_mp;
+    ret [9] = multilinestrings;
+    ret [10] = kv_df_ls;
 
-    std::vector <std::string> retnames {"points", "points_kv",
+    std::vector <std::string> retnames {"bbox", "points", "points_kv",
         "lines", "lines_kv", "polygons", "polygons_kv",
         "multipolygons", "multipolygons_kv", 
         "multilines", "multilines_kv"};

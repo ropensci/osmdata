@@ -79,7 +79,7 @@ void trace_multipolygon (Relations::const_iterator &itr_rel, const Ways &ways,
         // Get first way of relation, and starting node
         node0 = wayi->second.nodes.front ();
         last_node = trace_way (ways, nodes, node0,
-                wayi->first, lons, lats, rownames);
+                wayi->first, lons, lats, rownames, false);
         closed = false;
         if (last_node == node0)
             closed = true;
@@ -96,7 +96,7 @@ void trace_multipolygon (Relations::const_iterator &itr_rel, const Ways &ways,
                     if (wayi == ways.end ())
                         throw std::runtime_error ("way can not be found");
                     last_node = trace_way (ways, nodes, first_node,
-                            wayi->first, lons, lats, rownames);
+                            wayi->first, lons, lats, rownames, true);
                     this_way << "-" << std::to_string (wayi->first);
                     if (last_node >= 0)
                     {
@@ -170,7 +170,6 @@ void trace_multilinestring (Relations::const_iterator &itr_rel,
     {
         auto rwi = relation_ways.begin ();
         ids.push_back (rwi->first);
-        relation_ways.erase (rwi);
         std::string this_role = rwi->second;
         auto wayi = ways.find (rwi->first);
         if (wayi == ways.end ())
@@ -178,7 +177,7 @@ void trace_multilinestring (Relations::const_iterator &itr_rel,
 
         osmid_t first_node = wayi->second.nodes.front ();
         first_node = trace_way (ways, nodes, first_node, 
-                wayi->first, lons, lats, rownames);
+                wayi->first, lons, lats, rownames, false);
 
         lon_vec.push_back (lons);
         lat_vec.push_back (lats);
@@ -187,6 +186,7 @@ void trace_multilinestring (Relations::const_iterator &itr_rel,
         lons.clear ();
         lats.clear ();
         rownames.clear ();
+        relation_ways.erase (rwi);
     } // end while relation_ways.size > 0
 }
 
@@ -211,11 +211,15 @@ void trace_multilinestring (Relations::const_iterator &itr_rel,
  */
 osmid_t trace_way (const Ways &ways, const Nodes &nodes, osmid_t first_node,
         const osmid_t &wayi_id, std::vector <float> &lons, 
-        std::vector <float> &lats, std::vector <std::string> &rownames)
+        std::vector <float> &lats, std::vector <std::string> &rownames,
+        const bool append)
 {
     osmid_t last_node = -1;
     auto wayi = ways.find (wayi_id);
     std::vector <osmid_t>::const_iterator it_node_begin, it_node_end;
+    bool add_node = true;
+    if (append)
+        add_node = false;
 
     // Alternative to the following is to pass iterators as .begin() or
     // .rbegin() to a std::for_each, but const Ways and Nodes cannot then
@@ -227,9 +231,14 @@ osmid_t trace_way (const Ways &ways, const Nodes &nodes, osmid_t first_node,
         {
             if (nodes.find (*ni) == nodes.end ())
                 throw std::runtime_error ("node can not be found");
-            lons.push_back (nodes.find (*ni)->second.lon);
-            lats.push_back (nodes.find (*ni)->second.lat);
-            rownames.push_back (std::to_string (*ni));
+            if (!add_node)
+                add_node = true;
+            else
+            { 
+                lons.push_back (nodes.find (*ni)->second.lon);
+                lats.push_back (nodes.find (*ni)->second.lat);
+                rownames.push_back (std::to_string (*ni));
+            }
         }
         last_node = wayi->second.nodes.back ();
     } else if (wayi->second.nodes.back () == first_node)
@@ -239,9 +248,14 @@ osmid_t trace_way (const Ways &ways, const Nodes &nodes, osmid_t first_node,
         {
             if (nodes.find (*ni) == nodes.end ())
                 throw std::runtime_error ("node can not be found");
-            lons.push_back (nodes.find (*ni)->second.lon);
-            lats.push_back (nodes.find (*ni)->second.lat);
-            rownames.push_back (std::to_string (*ni));
+            if (!add_node)
+                add_node = true;
+            else
+            {
+                lons.push_back (nodes.find (*ni)->second.lon);
+                lats.push_back (nodes.find (*ni)->second.lat);
+                rownames.push_back (std::to_string (*ni));
+            }
         }
         last_node = wayi->second.nodes.front ();
     }

@@ -450,14 +450,15 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
     sp_multilines.slot ("proj4string") = crs;
     sp_multipolygons.slot ("proj4string") = crs;
 
-    Rcpp::List ret (5);
-    ret [0] = sp_points;
-    ret [1] = sp_lines;
-    ret [2] = sp_polygons;
-    ret [3] = sp_multilines;
-    ret [4] = sp_multipolygons;
+    Rcpp::List ret (6);
+    ret [0] = bbox;
+    ret [1] = sp_points;
+    ret [2] = sp_lines;
+    ret [3] = sp_polygons;
+    ret [4] = sp_multilines;
+    ret [5] = sp_multipolygons;
 
-    std::vector <std::string> retnames {"points", "lines", "polygons",
+    std::vector <std::string> retnames {"bbox", "points", "lines", "polygons",
         "multilines", "multipolygons"};
     ret.attr ("names") = retnames;
     

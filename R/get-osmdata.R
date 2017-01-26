@@ -108,13 +108,15 @@ make_sf <- function (...)
                     data.frame(x[-sf_column], row.names = row.names, 
                            stringsAsFactors = TRUE)
 
-    object <- as.list(substitute(list(...)))[-1L] 
-    arg_nm <- sapply(object, function(x) deparse(x))
-    sfc_name <- make.names(arg_nm[sf_column])
+    #object <- as.list(substitute(list(...)))[-1L] 
+    #arg_nm <- sapply(object, function(x) deparse(x))
+    #sfc_name <- make.names(arg_nm[sf_column])
+    sfc_name <- "geometry"
     df [[sfc_name]] <- x [[sf_column]]
     attr(df, "sf_column") <- sfc_name
     f <- factor(rep(NA_character_, length.out = ncol(df) - 1), 
-               levels = c ("constant", "aggregate", "identity"))
+               levels = c ("field", "lattice", "entity"))
+               #levels = c ("constant", "aggregate", "identity"))
     # The right way to do it - not yet in "sf"!
     names(f) <- names(df)[-ncol (df)]
     # The current, wrong way as done in sf:
@@ -144,7 +146,7 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
         encoding <- 'UTF-8'
 
     obj <- osmdata () # uses class def
-    obj$bbox <- q$bbox
+    #obj$bbox <- q$bbox
     obj$overpass_call <- q
 
     if (missing (doc))
@@ -175,39 +177,37 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     if (!quiet)
         message ('convertig OSM data to sp format')
     res <- rcpp_osmdata_sf (doc)
+    obj$bbox <- res$bbox
 
+    nms <- c ("points", "lines", "polygons", "multilines", "multipolygons")
     # This is repetitive, but sf uses the allocated names, so get and assign can
     # not be used.
     # TODO: Find a way to loop this
-    points <- res$points # sf uses these names
+    # nms <- c ("points", "lines", "polygons", "multilines", "multipolygons")
     if (length (res$points_kv) > 0)
-        obj$osm_points <- make_sf (points, res$points_kv)
+        obj$osm_points <- make_sf (res$points, res$points_kv)
     else
-        obj$osm_points <- make_sf (points)
+        obj$osm_points <- make_sf (res$points)
 
-    lines <- res$lines
     if (length (res$lines_kv) > 0)
-        obj$osm_lines <- make_sf (lines, res$lines_kv)
+        obj$osm_lines <- make_sf (res$lines, res$lines_kv)
     else
-        obj$osm_lines <- make_sf (lines)
+        obj$osm_lines <- make_sf (res$lines)
 
-    polygons <- res$polygons
     if (length (res$polygons_kv) > 0)
-        obj$osm_polygons <- make_sf (polygons, res$polygons_kv)
+        obj$osm_polygons <- make_sf (res$polygons, res$polygons_kv)
     else
-        obj$osm_polygons <- make_sf (polygons)
+        obj$osm_polygons <- make_sf (res$polygons)
 
-    multipolygons <- res$multipolygons
     if (length (res$multipolygons_kv) > 0)
-        obj$osm_multipolygons <- make_sf (multipolygons, res$multipolygons_kv)
+        obj$osm_multipolygons <- make_sf (res$multipolygons, res$multipolygons_kv)
     else
-        obj$osm_multipolygons <- make_sf (multipolygons)
+        obj$osm_multipolygons <- make_sf (res$multipolygons)
 
-    multilines <- res$multilines
     if (length (res$multilines_kv) > 0)
-        obj$osm_multilines <- make_sf (multilines, res$multilines_kv)
+        obj$osm_multilines <- make_sf (res$multilines, res$multilines_kv)
     else
-        obj$osm_multilines <- make_sf (multilines)
+        obj$osm_multilines <- make_sf (res$multilines)
 
     return (obj)
 }

@@ -32,7 +32,6 @@ osmdata <- function (bbox, overpass_call,
     if (missing (osm_multilines)) osm_multilines <- NULL
     if (missing (osm_multipolygons)) osm_multipolygons <- NULL
     if (missing (timestamp)) timestamp <- NULL
-    if (missing (timestamp)) timestamp <- NULL
 
     obj <- list (
                  bbox = bbox,
@@ -56,6 +55,7 @@ print.osmdata <- function (x, ...)
         message ("Object of class 'osmdata' with:")
     objs <- c ("bbox", "overpass_call", "timestamp")
     prnts <- c (x$bbox, "The call submitted to the overpass API", x$timestamp)
+    # TODO: Fix up bbox printing!
     for (i in 1:3)
         if (!is.null (x [objs [i]]))
         {
