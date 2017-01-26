@@ -16,8 +16,8 @@
  *  You should have received a copy of the GNU General Public License along with
  *  osm-router.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Author:     Mark Padgham / Andrew Smith
- *  E-Mail:     mark.padgham@email.com / andrew@casacazaz.net
+ *  Author:     Mark Padgham 
+ *  E-Mail:     mark.padgham@email.com 
  *
  *  Description:    Extract OSM data from an object of class XmlData and return
  *                  it in R 'sp' format.
@@ -205,6 +205,137 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
 }
 
 
+/* get_osm_relations_sp
+ *
+ * Return a dual Rcpp::List containing all OSM relations, the firmt element of
+ * which holds `multipolygon` relations, while the second holds all others,
+ * which are stored as `multilinestring` objects.
+ *
+ * @param rels Pointer to the vector of Relation objects
+ * @param nodes Pointer to the vector of node objects
+ * @param ways Pointer to the vector of way objects
+ * @param unique_vals Pointer to a UniqueVals object containing std::sets of all
+ *        unique IDs and keys for each kind of OSM object (nodes, ways, rels).
+ *
+ * @return A dual Rcpp::List, the first of which contains the multipolygon
+ *         relations; the second the multilinestring relations.
+ */
+void get_osm_relations_sp (Rcpp::S4 &multipolygons, const Relations &rels, 
+        const std::map <osmid_t, Node> &nodes,
+        const std::map <osmid_t, OneWay> &ways, const UniqueVals &unique_vals)
+{
+    /* Trace all multipolygon relations. These are the only OSM types where
+     * sizes are not known before, so lat-lons and node names are stored in
+     * dynamic vectors. These are 3D monsters: #1 for relation, #2 for polygon
+     * in relation, and #3 for data. There are also associated 2D vector<vector>
+     * objects for IDs and multilinestring roles. */
+    std::set <std::string> keyset; // must be ordered!
+    std::vector <std::string> colnames = {"lat", "lon"}, rownames;
+    Rcpp::List dimnames (0);
+    Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
+
+    float_arr2 lat_vec, lon_vec;
+    float_arr3 lat_arr_mp, lon_arr_mp, lon_arr_ls, lat_arr_ls;
+    string_arr2 rowname_vec, id_vec_mp, roles_ls; 
+    string_arr3 rowname_arr_mp, rowname_arr_ls;
+    std::vector <osmid_t> ids_ls; 
+    std::vector <std::string> ids_mp, rel_id_mp, rel_id_ls; 
+    osmt_arr2 id_vec_ls;
+    std::vector <std::string> roles;
+
+    int nmp = 0, nls = 0; // number of multipolygon and multilinestringrelations
+    for (auto itr = rels.begin (); itr != rels.end (); ++itr)
+    {
+        if (itr->ispoly) 
+            nmp++;
+        else
+        {
+            // TODO: Store these as std::vector <std::set <>> to avoid
+            // repetition below
+            std::set <std::string> roles_set;
+            for (auto itw = itr->ways.begin (); itw != itr->ways.end (); ++itw)
+                roles_set.insert (itw->second);
+            nls += roles_set.size ();
+        }
+    }
+
+    int ncol = unique_vals.k_rel.size ();
+    rel_id_mp.reserve (nmp);
+    rel_id_ls.reserve (nls);
+
+    Rcpp::CharacterMatrix kv_mat_mp (Rcpp::Dimension (nmp, ncol)),
+        kv_mat_ls (Rcpp::Dimension (nls, ncol));
+    int count_mp = 0, count_ls = 0;
+
+    for (auto itr = rels.begin (); itr != rels.end (); ++itr)
+    {
+        if (itr->ispoly) // itr->second can only be "outer" or "inner"
+        {
+            trace_multipolygon (itr, ways, nodes, lon_vec, lat_vec,
+                    rowname_vec, ids_mp);
+            // Store all ways in that relation and their associated roles
+            rel_id_mp.push_back (std::to_string (itr->id));
+            lon_arr_mp.push_back (lon_vec);
+            lat_arr_mp.push_back (lat_vec);
+            rowname_arr_mp.push_back (rowname_vec);
+            id_vec_mp.push_back (ids_mp);
+            clean_vecs <float, float, std::string> (lon_vec, lat_vec, rowname_vec);
+            ids_mp.clear ();
+            get_value_mat_rel (itr, rels, unique_vals, kv_mat_mp, count_mp++);
+        } else // store as multilinestring
+        {
+            // multistrings are grouped here by roles, unlike GDAL which just
+            // dumps all of them.
+            std::set <std::string> roles_set;
+            for (auto itw = itr->ways.begin (); itw != itr->ways.end (); ++itw)
+                roles_set.insert (itw->second);
+            roles.reserve (roles_set.size ());
+            for (auto it = roles_set.begin (); it != roles_set.end (); ++it)
+                roles.push_back (*it);
+            roles_set.clear ();
+            for (std::string role: roles)
+            {
+                trace_multilinestring (itr, role, ways, nodes, 
+                        lon_vec, lat_vec, rowname_vec, ids_ls);
+                std::stringstream ss;
+                ss.str ("");
+                if (role == "")
+                    ss << std::to_string (itr->id) << "-(no role)";
+                else
+                    ss << std::to_string (itr->id) << "-" << role;
+                rel_id_ls.push_back (ss.str ());
+                lon_arr_ls.push_back (lon_vec);
+                lat_arr_ls.push_back (lat_vec);
+                rowname_arr_ls.push_back (rowname_vec);
+                id_vec_ls.push_back (ids_ls);
+                clean_vecs <float, float, std::string> (lon_vec, lat_vec, rowname_vec);
+                ids_ls.clear ();
+                get_value_mat_rel (itr, rels, unique_vals, kv_mat_ls, count_ls++);
+            }
+            roles_ls.push_back (roles);
+            roles.clear ();
+        }
+    }
+
+    check_geom_arrs (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
+    check_geom_arrs (lon_arr_ls, lat_arr_ls, rowname_arr_ls);
+    check_id_arr <osmid_t> (lon_arr_ls, id_vec_ls);
+    check_id_arr <std::string> (lon_arr_mp, id_vec_mp);
+
+    convert_multipoly_to_sp (multipolygons, rels, lon_arr_mp, lat_arr_mp, 
+        rowname_arr_mp, id_vec_mp, unique_vals);
+
+    // ****** clean up *****
+    clean_arrs <float, float, std::string> (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
+    clean_arrs <float, float, std::string> (lon_arr_ls, lat_arr_ls, rowname_arr_ls);
+    clean_vecs <std::string, osmid_t> (id_vec_mp, id_vec_ls);
+    rel_id_mp.clear ();
+    rel_id_ls.clear ();
+    roles_ls.clear ();
+    keyset.clear ();
+}
+
+
 // [[Rcpp::depends(sp)]]
 
 //' rcpp_osmdata_sp
@@ -292,31 +423,36 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
      ************************************************************************/
 
     // The actual routines to extract the OSM data and store in sp objects
-    Rcpp::S4 sp_points, sp_lines, sp_polys;
-    get_osm_ways_sp (sp_polys, poly_ways, ways, nodes, unique_vals, "polygon");
+    Rcpp::S4 sp_points, sp_lines, sp_polygons, sp_multipolygons;
+    get_osm_ways_sp (sp_polygons, poly_ways, ways, nodes, unique_vals, "polygon");
     get_osm_ways_sp (sp_lines, poly_ways, ways, nodes, unique_vals, "line");
     get_osm_nodes_sp (sp_points, nodes, unique_vals);
+    get_osm_relations_sp (sp_multipolygons, rels, nodes, ways, unique_vals);
 
     // Add bbox and crs to each sp object
     Rcpp::NumericMatrix bbox = rcpp_get_bbox (xml.x_min (), xml.x_max (), 
                                               xml.y_min (), xml.y_max ());
     sp_points.slot ("bbox") = bbox;
     sp_lines.slot ("bbox") = bbox;
-    sp_polys.slot ("bbox") = bbox;
+    sp_polygons.slot ("bbox") = bbox;
+    sp_multipolygons.slot ("bbox") = bbox;
 
     Rcpp::Language crs_call ("new", "CRS");
     Rcpp::S4 crs = crs_call.eval ();
     crs.slot ("projargs") = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0";
     sp_points.slot ("proj4string") = crs;
     sp_lines.slot ("proj4string") = crs; 
-    sp_polys.slot ("proj4string") = crs;
+    sp_polygons.slot ("proj4string") = crs;
+    sp_multipolygons.slot ("proj4string") = crs;
 
-    Rcpp::List ret (3);
+    Rcpp::List ret (4);
     ret [0] = sp_points;
     ret [1] = sp_lines;
-    ret [2] = sp_polys;
+    ret [2] = sp_polygons;
+    ret [3] = sp_multipolygons;
 
-    std::vector <std::string> retnames {"points", "lines", "polygons"};
+    std::vector <std::string> retnames {"points", "lines", "polygons",
+        "multipolygons"};
     ret.attr ("names") = retnames;
     
     return ret;

@@ -270,3 +270,106 @@ template Rcpp::List convert_poly_linestring_to_sf <std::string> (
         const string_arr3 &rowname_arr, 
         const std::vector <std::vector <std::string> > &id_vec, 
         const std::vector <std::string> &rel_id, const std::string type);
+
+/* convert_multipoly_to_sp
+ *
+ * Converts the data contained in all the arguments into an sp object
+ *
+ * @param lon_arr 3D array of longitudinal coordinates
+ * @param lat_arr 3D array of latgitudinal coordinates
+ * @param rowname_arr 3D array of <osmid_t> IDs for nodes of all (lon,lat)
+ * @param id_vec 2D array of either <std::string> or <osmid_t> IDs for all ways
+ *        used in the geometry.
+ * @param rel_id Vector of <osmid_t> IDs for each relation.
+ *
+ * @return Object pointed to by 'polygons' is constructed.
+ */
+void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
+        const float_arr3 &lon_arr, const float_arr3 &lat_arr, 
+        const string_arr3 &rowname_arr, const string_arr2 &id_vec,
+        const UniqueVals &unique_vals)
+{
+
+    Rcpp::Environment sp_env = Rcpp::Environment::namespace_env ("sp");
+    Rcpp::Function Polygon = sp_env ["Polygon"];
+    Rcpp::Language polygons_call ("new", "Polygons");
+
+    int nrow = lon_arr.size (), ncol = unique_vals.k_rel.size ();
+    Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
+    std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
+
+    Rcpp::List outList (lon_arr.size ()); 
+    Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
+    Rcpp::List dimnames (0);
+    std::vector <std::string> colnames = {"lat", "lon"}, rel_id;
+
+    int npolys = 0;
+    for (auto itr = rels.begin (); itr != rels.end (); itr++)
+        if (itr->ispoly)
+            npolys++;
+    if (npolys != lon_arr.size ())
+        throw std::runtime_error ("polygons must be same size as geometries");
+    rel_id.reserve (npolys);
+
+    int i = 0;
+    for (auto itr = rels.begin (); itr != rels.end (); itr++)
+        if (itr->ispoly)
+        {
+            Rcpp::List outList_i (lon_arr [i].size ()); 
+            // j over all ways, with outer always first followed by inner
+            bool outer = true;
+            for (int j=0; j<lon_arr [i].size (); j++) 
+            {
+                int n = lon_arr [i][j].size ();
+                nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
+                std::copy (lon_arr [i][j].begin (), lon_arr [i][j].end (),
+                        nmat.begin ());
+                std::copy (lat_arr [i][j].begin (), lat_arr [i][j].end (),
+                        nmat.begin () + n);
+                dimnames.push_back (rowname_arr [i][j]);
+                dimnames.push_back (colnames);
+                nmat.attr ("dimnames") = dimnames;
+                dimnames.erase (0, dimnames.size ());
+
+                Rcpp::S4 poly = Polygon (nmat);
+                poly.slot ("hole") = !outer;
+                if (outer)
+                    outer = false;
+                poly.slot ("ringDir") = (int) 1; // TODO: Check this!
+                outList_i [j] = poly;
+            }
+            outList_i.attr ("names") = id_vec [i];
+
+            Rcpp::S4 polygons = polygons_call.eval ();
+            polygons.slot ("Polygons") = outList_i;
+            polygons.slot ("ID") = id_vec [i];
+            polygons.slot ("plotOrder") = (int) 1; // TODO: Check this!
+            //polygons.slot ("labpt") = poly.slot ("labpt");
+            //polygons.slot ("area") = poly.slot ("area");
+            outList [i] = polygons;
+            rel_id.push_back (std::to_string (itr->id));
+
+            get_value_mat_rel (itr, rels, unique_vals, kv_mat, i++);
+        } // end if ispoly & for i
+    outList.attr ("names") = rel_id;
+
+    Rcpp::Language sp_polys_call ("new", "SpatialPolygonsDataFrame");
+    multipolygons = sp_polys_call.eval ();
+    multipolygons.slot ("polygons") = outList;
+    // fill plotOrder with numeric vector
+    std::vector <int> plotord;
+    for (int i=0; i<rels.size (); i++) plotord.push_back (i + 1);
+    multipolygons.slot ("plotOrder") = plotord;
+    plotord.clear ();
+
+    Rcpp::DataFrame kv_df;
+    if (rel_id.size () > 0)
+    {
+        kv_mat.attr ("names") = unique_vals.k_rel;
+        kv_mat.attr ("dimnames") = Rcpp::List::create (rel_id, unique_vals.k_rel);
+        kv_df = kv_mat;
+        kv_df.attr ("names") = unique_vals.k_rel;
+        multipolygons.slot ("data") = kv_df;
+    }
+    rel_id.clear ();
+}

@@ -82,6 +82,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
     obj$osm_points <- res$points
     obj$osm_linestrings <- res$lines
     obj$osm_polygons <- res$polygons
+    obj$osm_multipolygons <- res$multipolygons
 
     return (obj)
 }

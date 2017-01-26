@@ -16,8 +16,8 @@
  *  You should have received a copy of the GNU General Public License along with
  *  osm-router.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Author:     Mark Padgham / Andrew Smith
- *  E-Mail:     mark.padgham@email.com / andrew@casacazaz.net
+ *  Author:     Mark Padgham 
+ *  E-Mail:     mark.padgham@email.com 
  *
  *  Description:    Functions only used in tests/testthat/test-sf-rcpp.R to
  *                  compare construction of 'sf' objects in 'osmdata' with

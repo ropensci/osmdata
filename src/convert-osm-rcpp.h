@@ -51,3 +51,8 @@ template <typename T> Rcpp::List convert_poly_linestring_to_sf (
         const string_arr3 &rowname_arr, 
         const std::vector <std::vector <T> > &id_vec, 
         const std::vector <std::string> &rel_id, const std::string type);
+
+void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
+        const float_arr3 &lon_arr, const float_arr3 &lat_arr, 
+        const string_arr3 &rowname_arr, const string_arr2 &id_vec,
+        const UniqueVals &unique_vals);
