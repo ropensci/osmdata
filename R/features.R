@@ -41,8 +41,8 @@ available_tags <- function(feature) {
     #pg <- xml2::read_html(url_ftrs)
     # MP: Using httr::GET allows call to be traced
     pg <- xml2::read_html (httr::GET (url_ftrs))
-    tags <- xml2::xml_attr (rvest::html_nodes (pg, sprintf("a[title^='Tag:%s']", 
-                                                           feature)), "title")
+    tags <- xml2::xml_attr (rvest::html_nodes (pg, 
+                sprintf("a[title^='Tag:%s']", feature)), "title")
     unique (sort (gsub (sprintf ("Tag:%s=", feature), "", tags, fixed=TRUE)))
   } else {
     message ("No internet connection")

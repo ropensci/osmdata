@@ -7,6 +7,7 @@ makefile$
 ^fig/
 ^overpass/
 ^doc/
+^docs/
 ^src/Makevars$
 ^.*\.Rproj$
 ^\.Rproj\.user$

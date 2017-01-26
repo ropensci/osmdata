@@ -22,12 +22,12 @@ make_sfc <- function (x, type) {
     else
         x <- lapply (x, function (i) structure (list (i), 
                                                 class = c ("XY", type, "sfg")))
-    attr (x, "n_empty") = sum(sapply(x, function(x) length(x) == 0))
-    class(x) = c(paste0("sfc_", class(x[[1L]])[2L]), "sfc")
+    attr (x, "n_empty") <- sum(sapply(x, function(x) length(x) == 0))
+    class(x) <- c(paste0("sfc_", class(x[[1L]])[2L]), "sfc")
     attr(x, "precision") = 0.0
-    attr(x, "bbox") = bb
-    NA_crs_ = structure(list(epsg = NA_integer_, proj4string = NA_character_), class = "crs")
-    attr(x, "crs") = NA_crs_
+    attr(x, "bbox") <- bb
+    NA_crs_ <- structure(list(epsg = NA_integer_, proj4string = NA_character_), class = "crs")
+    attr(x, "crs") <- NA_crs_
     x
 }
 
@@ -46,12 +46,12 @@ make_sf <- function (...)
                     data.frame(x[-sf_column], row.names = row.names, 
                            stringsAsFactors = TRUE)
 
-    object = as.list(substitute(list(...)))[-1L] 
-    arg_nm = sapply(object, function(x) deparse(x))
+    object <- as.list(substitute(list(...)))[-1L] 
+    arg_nm <- sapply(object, function(x) deparse(x))
     sfc_name <- make.names(arg_nm[sf_column])
     df [[sfc_name]] <- x [[sf_column]]
-    attr(df, "sf_column") = sfc_name
-    f = factor(rep(NA_character_, length.out = ncol(df) - 1), 
+    attr(df, "sf_column") <- sfc_name
+    f <- factor(rep(NA_character_, length.out = ncol(df) - 1), 
                levels = c ("field", "lattice", "entity"))
     # Next version of sf:
     #f = factor(rep(NA_character_, length.out = ncol(df) - 1), 
@@ -59,9 +59,9 @@ make_sf <- function (...)
     # The right way to do it - not yet in "sf"!
     #names(f) = names(df)[-ncol (df)]
     # The current, wrong way as done in sf:
-    names(f) = names(df)[-sf_column]
-    attr(df, "relation_to_geometry") = f
-    class(df) = c("sf", class(df))
+    names(f) <- names(df)[-sf_column]
+    attr(df, "relation_to_geometry") <- f
+    class(df) <- c("sf", class(df))
     return (df)
 }
 

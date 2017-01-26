@@ -106,19 +106,19 @@ make_sf <- function (...)
                     data.frame(x[-sf_column], row.names = row.names, 
                            stringsAsFactors = TRUE)
 
-    object = as.list(substitute(list(...)))[-1L] 
-    arg_nm = sapply(object, function(x) deparse(x))
+    object <- as.list(substitute(list(...)))[-1L] 
+    arg_nm <- sapply(object, function(x) deparse(x))
     sfc_name <- make.names(arg_nm[sf_column])
     df [[sfc_name]] <- x [[sf_column]]
-    attr(df, "sf_column") = sfc_name
-    f = factor(rep(NA_character_, length.out = ncol(df) - 1), 
+    attr(df, "sf_column") <- sfc_name
+    f <- factor(rep(NA_character_, length.out = ncol(df) - 1), 
                levels = c ("constant", "aggregate", "identity"))
     # The right way to do it - not yet in "sf"!
-    names(f) = names(df)[-ncol (df)]
+    names(f) <- names(df)[-ncol (df)]
     # The current, wrong way as done in sf:
     #names(f) = names(df)[-sf_column]
-    attr(df, "relation_to_geometry") = f
-    class(df) = c("sf", class(df))
+    attr(df, "relation_to_geometry") <- f
+    class(df) <- c("sf", class(df))
     return (df)
 }
 
@@ -203,7 +203,8 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
 
     multilinestrings <- res$multilinestrings
     if (length (res$multilinestrings_kv) > 0)
-        obj$osm_multilinestrings <- make_sf (multilinestrings, res$multilinestrings_kv)
+        obj$osm_multilinestrings <- make_sf (multilinestrings, 
+                                             res$multilinestrings_kv)
     else
         obj$osm_multilinestrings <- make_sf (multilinestrings)
 
