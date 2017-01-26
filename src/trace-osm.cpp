@@ -41,7 +41,7 @@
  * @param &rowname_vec pointer to 2D array of rownames for each node.
  * @param &id_vec pointer to 2D array of OSM IDs for each way in relation
  */
-void trace_multipolygon (Relations::const_iterator itr_rel, const Ways &ways,
+void trace_multipolygon (Relations::const_iterator &itr_rel, const Ways &ways,
         const Nodes &nodes, float_arr2 &lon_vec, float_arr2 &lat_vec,
         string_arr2 &rowname_vec, std::vector <std::string> &ids)
 {
@@ -151,9 +151,10 @@ void trace_multipolygon (Relations::const_iterator itr_rel, const Ways &ways,
  * @param &rowname_vec pointer to 2D array of rownames for each node.
  * @param &id_vec pointer to 2D array of OSM IDs for each way in relation
  */
-void trace_multilinestring (Relations::const_iterator itr_rel, const std::string role,
-        const Ways &ways, const Nodes &nodes, float_arr2 &lon_vec, 
-        float_arr2 &lat_vec, string_arr2 &rowname_vec, std::vector <osmid_t> &ids)
+void trace_multilinestring (Relations::const_iterator &itr_rel, 
+        const std::string role, const Ways &ways, const Nodes &nodes, 
+        float_arr2 &lon_vec, float_arr2 &lat_vec, string_arr2 &rowname_vec,
+        std::vector <osmid_t> &ids)
 {
     std::vector <float> lons, lats;
     std::vector <std::string> rownames;

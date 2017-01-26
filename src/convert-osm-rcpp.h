@@ -1,6 +1,6 @@
 /***************************************************************************
  *  Project:    osmdata
- *  File:       convert_osm_rcpp.cpp
+ *  File:       convert_osm_rcpp.h
  *  Language:   C++
  *
  *  osmdata is free software: you can redistribute it and/or modify it under
@@ -41,13 +41,13 @@ void trace_way_nmat (const Ways &ways, const Nodes &nodes,
 void get_value_mat_way (Ways::const_iterator wayi, const Ways &ways,
         const UniqueVals &unique_vals, Rcpp::CharacterMatrix &value_arr, int rowi);
 
-void get_value_mat_rel (Relations::const_iterator reli, const Relations &rels,
+void get_value_mat_rel (Relations::const_iterator &reli, const Relations &rels,
         const UniqueVals &unique_vals, Rcpp::CharacterMatrix &value_arr, int rowi);
 
 Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls);
 
 template <typename T> Rcpp::List convert_poly_linestring_to_sf (
-        const float_arr3 lon_arr, const float_arr3 lat_arr, 
-        const string_arr3 rowname_arr, 
+        const float_arr3 &lon_arr, const float_arr3 &lat_arr, 
+        const string_arr3 &rowname_arr, 
         const std::vector <std::vector <T> > &id_vec, 
         const std::vector <std::string> &rel_id, const std::string type);

@@ -62,16 +62,16 @@ void check_geom_arrs (const float_arr3 &lon_arr, const float_arr3 &lat_arr,
 
 
 // ----- check_id_arr
-template <typename T> void check_id_arr (const float_arr3 lon_arr, 
+template <typename T> void check_id_arr (const float_arr3 &lon_arr, 
         const std::vector <std::vector <T> > &arr)
 {
     for (int i=0; i<lon_arr.size (); i++)
         if (lon_arr [i].size () != arr [i].size ())
             throw std::runtime_error ("geoms and way IDs differ in size");
 }
-template void check_id_arr <osmid_t> (const float_arr3 lon_arr, 
+template void check_id_arr <osmid_t> (const float_arr3 &lon_arr, 
         const std::vector <std::vector <osmid_t> > &arr);
-template void check_id_arr<std::string> (const float_arr3 lon_arr, 
+template void check_id_arr<std::string> (const float_arr3 &lon_arr, 
         const std::vector <std::vector <std::string> > &arr);
 
 // ----- clean_vec

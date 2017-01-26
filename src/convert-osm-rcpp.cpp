@@ -116,7 +116,7 @@ void get_value_mat_way (Ways::const_iterator wayi, const Ways &ways,
  *        by tracing the key-val pairs of the relation 'reli'
  * @param rowi Integer value for the key-val pairs for reli
  */
-void get_value_mat_rel (Relations::const_iterator reli, const Relations &rels,
+void get_value_mat_rel (Relations::const_iterator &reli, const Relations &rels,
         const UniqueVals &unique_vals, Rcpp::CharacterMatrix &value_arr, int rowi)
 {
     for (auto kv_iter = reli->key_val.begin (); kv_iter != reli->key_val.end ();
@@ -215,8 +215,8 @@ Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls=fal
  */
 // TODO: Replace return value with pointer to List as argument?
 template <typename T> Rcpp::List convert_poly_linestring_to_sf (
-        const float_arr3 lon_arr, const float_arr3 lat_arr, 
-        const string_arr3 rowname_arr, 
+        const float_arr3 &lon_arr, const float_arr3 &lat_arr, 
+        const string_arr3 &rowname_arr, 
         const std::vector <std::vector <T> > &id_vec, 
         const std::vector <std::string> &rel_id, const std::string type)
 {
@@ -261,12 +261,12 @@ template <typename T> Rcpp::List convert_poly_linestring_to_sf (
     return outList;
 }
 template Rcpp::List convert_poly_linestring_to_sf <osmid_t> (
-        const float_arr3 lon_arr, const float_arr3 lat_arr, 
-        const string_arr3 rowname_arr, 
+        const float_arr3 &lon_arr, const float_arr3 &lat_arr, 
+        const string_arr3 &rowname_arr, 
         const std::vector <std::vector <osmid_t> > &id_vec, 
         const std::vector <std::string> &rel_id, const std::string type);
 template Rcpp::List convert_poly_linestring_to_sf <std::string> (
-        const float_arr3 lon_arr, const float_arr3 lat_arr, 
-        const string_arr3 rowname_arr, 
+        const float_arr3 &lon_arr, const float_arr3 &lat_arr, 
+        const string_arr3 &rowname_arr, 
         const std::vector <std::vector <std::string> > &id_vec, 
         const std::vector <std::string> &rel_id, const std::string type);
