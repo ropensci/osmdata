@@ -542,9 +542,9 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st)
     ret [9] = kv_df_ls;
 
     std::vector <std::string> retnames {"points", "points_kv",
-        "linestrings", "linestrings_kv", "polygons", "polygons_kv",
+        "lines", "lines_kv", "polygons", "polygons_kv",
         "multipolygons", "multipolygons_kv", 
-        "multilinestrings", "multilinestrings_kv"};
+        "multilines", "multilines_kv"};
     ret.attr ("names") = retnames;
     
     return ret;

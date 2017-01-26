@@ -3,9 +3,9 @@
 #' @param bbox bounding box
 #' @param overpass_call overpass_call
 #' @param osm_points \code{sf} Simple Features Collection of points
-#' @param osm_linestrings \code{sf} Simple Features Collection of multilinestrings
+#' @param osm_lines \code{sf} Simple Features Collection of linestrings
 #' @param osm_polygons \code{sf} Simple Features Collection of polygons
-#' @param osm_multilinestrings \code{sf} Simple Features Collection of multilinestrings
+#' @param osm_multilines \code{sf} Simple Features Collection of multilinestrings
 #' @param osm_multipolygons \code{sf} Simple Features Collection of multipolygons
 #' @param timestamp timestamp
 #' @param ... other options ignored
@@ -15,103 +15,81 @@
 #'
 #' @export
 osmdata <- function (bbox, overpass_call, 
-                     osm_points, osm_linestrings, osm_polygons, 
-                     osm_multilinestrings, osm_multipolygons, timestamp, ...) 
+                     osm_points, osm_lines, osm_polygons, 
+                     osm_multilines, osm_multipolygons, timestamp, ...) 
 {
-  if (missing (bbox)) bbox <- NULL
-  if (missing (overpass_call)) overpass_call <- NULL
-  if (missing (osm_points)) osm_points <- NULL
-  if (missing (osm_linestrings)) osm_linestrings <- NULL
-  if (missing (osm_polygons)) osm_polygons <- NULL
-  if (missing (osm_multilinestrings)) osm_multilinestrings <- NULL
-  if (missing (osm_multipolygons)) osm_multipolygons <- NULL
-  if (missing (timestamp)) timestamp <- NULL
-  if (missing (timestamp)) timestamp <- NULL
+    if (missing (bbox)) bbox <- NULL
+    if (missing (overpass_call)) overpass_call <- NULL
+    if (missing (osm_points)) osm_points <- NULL
+    if (missing (osm_lines)) osm_lines <- NULL
+    if (missing (osm_polygons)) osm_polygons <- NULL
+    if (missing (osm_multilines)) osm_multilines <- NULL
+    if (missing (osm_multipolygons)) osm_multipolygons <- NULL
+    if (missing (timestamp)) timestamp <- NULL
+    if (missing (timestamp)) timestamp <- NULL
 
-  obj <- list (
-               bbox = bbox,
-               overpass_call = overpass_call,
-               timestamp = timestamp,
-               osm_points = osm_points,
-               osm_linestrings = osm_linestrings,
-               osm_polygons = osm_polygons,
-               osm_multilinestrings = osm_multilinestrings,
-               osm_multipolygons = osm_multipolygons)
-  class (obj) <- append (class (obj), "osmdata")
-  return (obj)
+    obj <- list (
+                 bbox = bbox,
+                 overpass_call = overpass_call,
+                 timestamp = timestamp,
+                 osm_points = osm_points,
+                 osm_lines = osm_lines,
+                 osm_polygons = osm_polygons,
+                 osm_multilines = osm_multilines,
+                 osm_multipolygons = osm_multipolygons)
+    class (obj) <- append (class (obj), "osmdata")
+    return (obj)
 }
 
 
 #' @export
 print.osmdata <- function (x, ...)
 {
-    # TODO: tidy this mess!
-  if (!all (sapply (x, is.null)))
-    message ("Object of class 'osmdata' with:")
-  if (!is.null (x$bbox)) 
-  {
-      nm <- c (rep (" ", 17), "$bbox")
-      message (nm, " : ", x$bbox)
-  }
-  if (!is.null (x$overpass_call))
-  {
-      nm <- "overpass_call"
-      nm <- c (rep (" ", 21 - nchar (nm)), "$", nm)
-      message (nm, " : The call submitted to the overpass API")
-  }
-  if (!is.null (x$timestamp)) 
-  {
-      nm <- "timestamp"
-      nm <- c (rep (" ", 21 - nchar (nm)), "$", nm)
-      message (nm, " : ", x$timestamp)
-  }
+    # print meta-data
+    if (!all (sapply (x, is.null)))
+        message ("Object of class 'osmdata' with:")
+    objs <- c ("bbox", "overpass_call", "timestamp")
+    prnts <- c (x$bbox, "The call submitted to the overpass API", x$timestamp)
+    for (i in 1:3)
+        if (!is.null (x [objs [i]]))
+        {
+            nm <- c (rep (" ", 21 - nchar (objs [i])), "$", objs [i])
+            message (nm, " : ", prnts [i])
+        }
 
-  indx <- which (grepl ("osm", names (x)))
-  sf <- any (grep ("sf", sapply (x, class)))
-  if (sf)
-  {
-      for (i in names (x) [indx])
-      {
-          xi <- x [[i]]
-          nm <- c (rep (" ", 21 - nchar (i)), "$", i)
-          if (is.null (xi))
-              message (nm, " : NULL")
-          else
-              message (nm, " : 'sf' Simple Features Collection with ",
-                       nrow (xi), " ", strsplit (i, "osm_")[[1]][2])
-      }
-  } else
-  {
-      if (is.null (x$osm_points)) 
-        message (       "  $osm_points           : NULL")
-      else
-        message (paste ("  $osm_points           : 'sp' SpatialPointsDataFrame   with",
-                        nrow (x$osm_points), "points"))
+    # print geometry data
+    indx <- which (grepl ("osm", names (x)))
 
-      if (is.null (x$osm_linestrings)) 
-        message (       "  $osm_linestrings      : NULL")
-      else
-        message (paste ("  $osm_linestrings      : 'sp' SpatialLinesDataFrame    with",
-                        nrow (x$osm_linestrings), "linestrings"))
-
-      if (is.null (x$osm_polygons)) 
-        message (       "  $osm_polygons         : NULL")
-      else
-        message (paste ("  $osm_polygons         : 'sp' SpatialPolygonsDataFrame with",
-                        nrow (x$osm_polygons), "polygons"))
-
-      if (is.null (x$osm_multilinestrings)) 
-        message (       "  $osm_multilinestrings : NULL")
-      else
-        message (paste ("  $osm_multilinestrings : 'sp' SpatialLinesDataFrame    with",
-                        nrow (x$osm_multilinestrings), "multilinestrings"))
-
-      if (is.null (x$osm_multipolygons)) 
-        message ("  $osm_multipolygons  : NULL")
-      else
-        message (paste ("  $osm_multipolygons    : 'sp' SpatialPolygonsDataFrame with",
-                        nrow (x$osm_multipolygons), "multipolygons"))
-  }
-  #invisible (x)
+    sf <- any (grep ("sf", sapply (x, class)))
+    if (sf)
+    {
+        for (i in names (x) [indx])
+        {
+            xi <- x [[i]]
+            nm <- c (rep (" ", 21 - nchar (i)), "$", i)
+            if (is.null (xi))
+                message (nm, " : NULL")
+            else if (grepl ("line", i)) # sf "lines" -> "linestrings"
+                message (nm, " : 'sf' Simple Features Collection with ",
+                         nrow (xi), " ", strsplit (i, "osm_")[[1]][2], "trings")
+            else
+                message (nm, " : 'sf' Simple Features Collection with ",
+                         nrow (xi), " ", strsplit (i, "osm_")[[1]][2])
+        }
+    } else
+    {
+        for (i in names (x) [indx])
+        {
+            xi <- x [[i]]
+            nm <- c (rep (" ", 21 - nchar (i)), "$", i)
+            if (is.null (xi))
+                message (nm, " : NULL")
+            else
+                message (nm, " : 'sp' Spatial", strsplit (i, "osm_")[[1]][2],
+                         "DataFrame with ", nrow (xi), " ", 
+                         strsplit (i, "osm_")[[1]][2])
+        }
+    }
+    #invisible (x)
 }
 

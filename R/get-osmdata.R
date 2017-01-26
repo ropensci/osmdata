@@ -80,9 +80,9 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
         message ('convertig OSM data to sp format')
     res <- rcpp_osmdata_sp (doc)
     obj$osm_points <- res$points
-    obj$osm_linestrings <- res$lines
+    obj$osm_lines <- res$lines
     obj$osm_polygons <- res$polygons
-    obj$osm_multilinestrings <- res$multilines
+    obj$osm_multilines <- res$multilines
     obj$osm_multipolygons <- res$multipolygons
 
     return (obj)
@@ -185,11 +185,11 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     else
         obj$osm_points <- make_sf (points)
 
-    linestrings <- res$linestrings
-    if (length (res$linestrings_kv) > 0)
-        obj$osm_linestrings <- make_sf (linestrings, res$linestrings_kv)
+    lines <- res$lines
+    if (length (res$lines_kv) > 0)
+        obj$osm_lines <- make_sf (lines, res$lines_kv)
     else
-        obj$osm_linestrings <- make_sf (linestrings)
+        obj$osm_lines <- make_sf (lines)
 
     polygons <- res$polygons
     if (length (res$polygons_kv) > 0)
@@ -203,12 +203,11 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     else
         obj$osm_multipolygons <- make_sf (multipolygons)
 
-    multilinestrings <- res$multilinestrings
-    if (length (res$multilinestrings_kv) > 0)
-        obj$osm_multilinestrings <- make_sf (multilinestrings, 
-                                             res$multilinestrings_kv)
+    multilines <- res$multilines
+    if (length (res$multilines_kv) > 0)
+        obj$osm_multilines <- make_sf (multilines, res$multilines_kv)
     else
-        obj$osm_multilinestrings <- make_sf (multilinestrings)
+        obj$osm_multilines <- make_sf (multilines)
 
     return (obj)
 }
