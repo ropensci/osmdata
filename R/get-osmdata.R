@@ -183,31 +183,15 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     # This is repetitive, but sf uses the allocated names, so get and assign can
     # not be used.
     # TODO: Find a way to loop this
-    # nms <- c ("points", "lines", "polygons", "multilines", "multipolygons")
-    if (length (res$points_kv) > 0)
-        obj$osm_points <- make_sf (res$points, res$points_kv)
-    else
-        obj$osm_points <- make_sf (res$points)
-
-    if (length (res$lines_kv) > 0)
-        obj$osm_lines <- make_sf (res$lines, res$lines_kv)
-    else
-        obj$osm_lines <- make_sf (res$lines)
-
-    if (length (res$polygons_kv) > 0)
-        obj$osm_polygons <- make_sf (res$polygons, res$polygons_kv)
-    else
-        obj$osm_polygons <- make_sf (res$polygons)
-
-    if (length (res$multipolygons_kv) > 0)
-        obj$osm_multipolygons <- make_sf (res$multipolygons, res$multipolygons_kv)
-    else
-        obj$osm_multipolygons <- make_sf (res$multipolygons)
-
-    if (length (res$multilines_kv) > 0)
-        obj$osm_multilines <- make_sf (res$multilines, res$multilines_kv)
-    else
-        obj$osm_multilines <- make_sf (res$multilines)
+    nms <- c ("points", "lines", "polygons", "multilines", "multipolygons")
+    for (n in nms)
+    {
+        onm <- paste0 ("osm_", n)
+        if (length (res [[paste0 (n, "_kv")]]) > 0)
+            obj [[onm]] <- make_sf (res [[n]], res [[paste0 (n, "_kv")]])
+        else
+            obj [[onm]] <- make_sf (res [[n]])
+    }
 
     return (obj)
 }
