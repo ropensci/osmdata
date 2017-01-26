@@ -3,7 +3,7 @@
 #' @param quiet if \code{FALSE} display a status message
 #' @return an invisible list of whether the API is available along with the
 #'         text of the message from Overpass and the timestamp of the
-#'         next avaialble slot
+#'         next available slot
 #' @export
 overpass_status <- function(quiet=FALSE) {
 

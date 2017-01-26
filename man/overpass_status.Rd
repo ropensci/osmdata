@@ -12,7 +12,7 @@ overpass_status(quiet = FALSE)
 \value{
 an invisible list of whether the API is available along with the
         text of the message from Overpass and the timestamp of the
-        next avaialble slot
+        next available slot
 }
 \description{
 Retrieve status of the Overpass API
