@@ -53,10 +53,14 @@ print.osmdata <- function (x, ...)
     # print meta-data
     if (!all (sapply (x, is.null)))
         message ("Object of class 'osmdata' with:")
-    objs <- c ("bbox", "overpass_call", "timestamp")
-    prnts <- c (x$bbox, "The call submitted to the overpass API", x$timestamp)
-    # TODO: Fix up bbox printing!
-    for (i in 1:3)
+
+    nm <- c (rep (" ", 17), "$bbox")
+    message (nm, " : ", sapply (x$bbox, function (i) 
+                                paste (formatC (i, format="f", digits=2), " ")))
+
+    objs <- c ("overpass_call", "timestamp")
+    prnts <- c ("The call submitted to the overpass API", x$timestamp)
+    for (i in seq (objs))
         if (!is.null (x [objs [i]]))
         {
             nm <- c (rep (" ", 21 - nchar (objs [i])), "$", objs [i])
