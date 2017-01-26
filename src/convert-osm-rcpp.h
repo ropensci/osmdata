@@ -46,7 +46,7 @@ void get_value_mat_rel (Relations::const_iterator reli, const Relations &rels,
 
 Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls);
 
-template <typename T> Rcpp::List convert_poly_linestring_to_Rcpp (
+template <typename T> Rcpp::List convert_poly_linestring_to_sf (
         const float_arr3 lon_arr, const float_arr3 lat_arr, 
         const string_arr3 rowname_arr, 
         const std::vector <std::vector <T> > &id_vec, 

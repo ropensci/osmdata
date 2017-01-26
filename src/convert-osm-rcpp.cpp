@@ -199,7 +199,7 @@ Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls=fal
     return kv_out;
 }
 
-/* convert_poly_linestring_to_Rcpp
+/* convert_poly_linestring_to_sf
  *
  * Converts the data contained in all the arguments into an Rcpp::List object
  * to be used as the geometry column of a Simple Features Colletion
@@ -214,7 +214,7 @@ Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls=fal
  * @return An Rcpp::List object of [relation][way][node/geom] data.
  */
 // TODO: Replace return value with pointer to List as argument?
-template <typename T> Rcpp::List convert_poly_linestring_to_Rcpp (
+template <typename T> Rcpp::List convert_poly_linestring_to_sf (
         const float_arr3 lon_arr, const float_arr3 lat_arr, 
         const string_arr3 rowname_arr, 
         const std::vector <std::vector <T> > &id_vec, 
@@ -260,12 +260,12 @@ template <typename T> Rcpp::List convert_poly_linestring_to_Rcpp (
 
     return outList;
 }
-template Rcpp::List convert_poly_linestring_to_Rcpp <osmid_t> (
+template Rcpp::List convert_poly_linestring_to_sf <osmid_t> (
         const float_arr3 lon_arr, const float_arr3 lat_arr, 
         const string_arr3 rowname_arr, 
         const std::vector <std::vector <osmid_t> > &id_vec, 
         const std::vector <std::string> &rel_id, const std::string type);
-template Rcpp::List convert_poly_linestring_to_Rcpp <std::string> (
+template Rcpp::List convert_poly_linestring_to_sf <std::string> (
         const float_arr3 lon_arr, const float_arr3 lat_arr, 
         const string_arr3 rowname_arr, 
         const std::vector <std::vector <std::string> > &id_vec, 

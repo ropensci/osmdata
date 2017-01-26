@@ -223,7 +223,7 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
     check_id_arr <osmid_t> (lon_arr_ls, id_vec_ls);
     check_id_arr <std::string> (lon_arr_mp, id_vec_mp);
 
-    Rcpp::List polygonList = convert_poly_linestring_to_Rcpp <std::string>
+    Rcpp::List polygonList = convert_poly_linestring_to_sf <std::string>
         (lon_arr_mp, lat_arr_mp, rowname_arr_mp, id_vec_mp, rel_id_mp,
          "MULTIPOLYGON");
     polygonList.attr ("n_empty") = 0;
@@ -233,7 +233,7 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
     polygonList.attr ("bbox") = bbox;
     polygonList.attr ("crs") = crs;
 
-    Rcpp::List linestringList = convert_poly_linestring_to_Rcpp <osmid_t>
+    Rcpp::List linestringList = convert_poly_linestring_to_sf <osmid_t>
         (lon_arr_ls, lat_arr_ls, rowname_arr_ls, id_vec_ls, rel_id_ls,
          "MULTILINESTRING");
     // TODO: linenames just as in ways?
