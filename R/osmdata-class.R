@@ -2,12 +2,18 @@
 #'
 #' @param bbox bounding box
 #' @param overpass_call overpass_call
-#' @param osm_points \code{sf} Simple Features Collection of points
-#' @param osm_lines \code{sf} Simple Features Collection of linestrings
-#' @param osm_polygons \code{sf} Simple Features Collection of polygons
-#' @param osm_multilines \code{sf} Simple Features Collection of multilinestrings
-#' @param osm_multipolygons \code{sf} Simple Features Collection of multipolygons
-#' @param timestamp timestamp
+#' @param osm_points OSM nodes as \code{sf} Simple Features Collection of points
+#'                   or \code{sp} SpatialPointsDataFrame
+#' @param osm_lines OSM ways \code{sf} Simple Features Collection of linestrings
+#'                  or \code{sp} SpatialLinesDataFrame
+#' @param osm_polygons OSM ways as \code{sf} Simple Features Collection of
+#'                     polygons or \code{sp} SpatialPolygonsDataFrame
+#' @param osm_multilines OSM relations as \code{sf} Simple Features Collection
+#'                       of multilinestrings or \code{sp} SpatialLinesDataFrame
+#' @param osm_multipolygons OSM relations as \code{sf} Simple Features
+#'                          Collection of multipolygons or \code{sp}
+#'                          SpatialPolygonsDataFrame 
+#' @param timestamp timestamp of OSM query
 #' @param ... other options ignored
 #'
 #' @note Class constructor should never be used directly, and is only exported
