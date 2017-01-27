@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API">
+  <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+  <meta osm_base="2017-01-25T10:52:05Z"/>
+  <node id="1" lat="1" lon="1"/>
+  <node id="2" lat="1" lon="2"/>
+  <node id="3" lat="1" lon="3"/>
+  <node id="4" lat="1" lon="4"/>
+  <node id="5" lat="1" lon="5"/>
+  <node id="6" lat="2" lon="1"/>
+  <node id="7" lat="2" lon="2"/>
+  <node id="8" lat="2" lon="3"/>
+  <node id="9" lat="2" lon="4"/>
+  <node id="10" lat="2" lon="5"/>
+  <node id="11" lat="3" lon="1">
+    <tag k="stuff" v="yes"/>
+    <tag k="junk" v="some"/>
+  </node>
+  <node id="12" lat="3" lon="2"/>
+  <node id="13" lat="3" lon="3"/>
+  <node id="14" lat="3" lon="4"/>
+  <node id="15" lat="3" lon="5"/>
+  <node id="16" lat="4" lon="1"/>
+  <node id="17" lat="4" lon="2"/>
+  <node id="18" lat="4" lon="3">
+    <tag k="stuff" v="nope"/>
+    <tag k="like" v="lots"/>
+  </node>
+  <node id="19" lat="4" lon="4"/>
+  <node id="20" lat="4" lon="5"/>
+  <node id="21" lat="5" lon="1"/>
+  <node id="22" lat="5" lon="2"/>
+  <node id="23" lat="5" lon="3"/>
+  <node id="24" lat="5" lon="4"/>
+  <node id="25" lat="5" lon="5"/>
+  <way id="100">
+    <nd ref="1"/>
+    <nd ref="2"/>
+    <nd ref="3"/>
+    <nd ref="4"/>
+    <tag k="highway" v="footway"/>
+    <tag k="layer" v="0"/>
+  </way>
+  <way id="101">
+    <nd ref="4"/>
+    <nd ref="10"/>
+    <nd ref="15"/>
+    <nd ref="19"/>
+    <tag k="highway" v="maybe"/>
+    <tag k="name" v="blue"/>
+  </way>
+  <way id="102">
+    <nd ref="19"/>
+    <nd ref="18"/>
+    <nd ref="22"/>
+    <nd ref="16"/>
+    <tag k="boat" v="yes"/>
+    <tag k="name" v="River Thames"/>
+  </way>
+  <way id="103">
+    <nd ref="16"/>
+    <nd ref="11"/>
+    <nd ref="7"/>
+    <nd ref="1"/>
+    <tag k="foot" v="yes"/>
+    <tag k="highway" v="cycleway"/>
+  </way>
+  <way id="104">
+    <nd ref="8"/>
+    <nd ref="9"/>
+    <nd ref="14"/>
+    <nd ref="13"/>
+    <tag k="highway" v="cycleway"/>
+  </way>
+</osm>

@@ -40,3 +40,21 @@ test_that ("multilinestring", {
                names (x$geometry) <- NULL
                expect_identical (x, x_sf)
 })
+
+test_that ("ways", {
+               x_sf <- sf::st_read ("../osm-ways.osm", layer="lines", quiet=TRUE)
+               q0 <- opq (bbox=c(1,1,5,5)) 
+               x <- osmdata_sf (q0, "../osm-ways.osm")$osm_lines
+               x <- x [, which (names (x) %in% names (x_sf))]
+               x_sf <- x_sf [, which (names (x_sf) %in% names (x))]
+               rownames (x_sf) <- rownames (x)
+               names (x$geometry) <- NULL
+               for (i in seq (x$geometry))
+                   dimnames (x$geometry [[i]]) <- NULL
+               # Then names also need to be removed from each non-sfc column
+               for (i in 1:(ncol (x) - 1))
+                   names (x [[names (x)[i] ]]) <- NULL
+               # These last lines change the order of attributes, # so they are reset here
+               attributes (x) <- attributes (x) [match (attributes (x_sf), attributes (x))]
+               expect_identical (x, x_sf)
+})
