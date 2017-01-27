@@ -1,5 +1,5 @@
 ---
-title: "Vignette Title"
+title: "Some examples"
 author: "Vignette Author"
 date: "`r Sys.Date()`"
 output:

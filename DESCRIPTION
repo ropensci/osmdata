@@ -42,8 +42,8 @@ Suggests:
     sf,
     testthat
 LinkingTo: Rcpp
-URL: https://github.com/osmdatar/osmdatar
-BugReports: https://github.com/osmdatar/osmdatar/issues
+URL: https://github.com/osmdatar/osmdata
+BugReports: https://github.com/osmdatar/osmdata/issues
 Encoding: UTF-8
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr

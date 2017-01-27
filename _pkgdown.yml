@@ -1,0 +1,52 @@
+title: osmdata
+
+templates:
+  params:
+    bootswatch: cerulean
+
+reference:
+  - title: Package doc and class
+    contents:
+    - osmdata
+    - osmdata-package
+  - title: Prepare a query string
+    contents:
+    - opq
+    - add_feature
+    - getbb
+  - title: Get additional OSM info
+    contents:
+    - available_features
+    - available_tags
+  - title: Manage queries
+    contents:
+    - overpass_query
+    - osmdata_sp
+    - osmdata_sf
+    - osmdata_xml
+    - overpass_status
+  - title: Misc
+    contents:
+    - stub
+    
+articles:
+  - title: Short intro
+    contents:
+    - osm-examples
+  - title: More details
+    contents:
+    - osm-sf-translation
+
+navbar:
+  title: osmdata
+  type: default
+  left:
+  - text: Home
+    href: index.html
+  - text: Overview
+    href: articles/index.html
+  - text: Reference
+    href: reference/index.html
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/osmdatar/osmdata

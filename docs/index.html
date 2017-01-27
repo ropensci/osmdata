@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Download OpenStreetMap Data with the Overpass API • osmdata</title>
-<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><!-- mathjax --><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -29,18 +29,18 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="articles/index.html">Overview</a>
+</li>
+<li>
   <a href="reference/index.html">Reference</a>
-</li>
-<li>
-  <a href="articles/index.html">Articles</a>
-</li>
-<li>
-  <a href="news/index.html">News</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/osmdatar/osmdatar">
+  <a href="https://github.com/osmdatar/osmdata">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -83,7 +83,7 @@ x
 <span class="co">#&gt; Object of class 'osmdata' with:</span>
 <span class="co">#&gt;                  $bbox : 51.47,-0.27,51.5,-0.2</span>
 <span class="co">#&gt;         $overpass_call : The call submitted to the overpass API</span>
-<span class="co">#&gt;             $timestamp : ##------ Wed Jan 25 13:50:02 2017 ------##</span>
+<span class="co">#&gt;             $timestamp : ##------ Thurs Jan 26 14:37:02 2017 ------##</span>
 <span class="co">#&gt;            $osm_points : 'sf' Simple Features Collection with 21231 points</span>
 <span class="co">#&gt;       $osm_linestrings : 'sf' Simple Features Collection with 1865 linestrings</span>
 <span class="co">#&gt;          $osm_polygons : 'sf' Simple Features Collection with 22 polygons</span>
@@ -96,10 +96,10 @@ bu
 <span class="co">#&gt; Object of class 'osmdata' with:</span>
 <span class="co">#&gt;                  $bbox : 51.51,-0.12,51.52,-0.11</span>
 <span class="co">#&gt;         $overpass_call : The call submitted to the overpass API</span>
-<span class="co">#&gt;             $timestamp : [ Wed Jan 25 14:52:15 2017 ]</span>
-<span class="co">#&gt;   $osm_points           : 'sp' SpatialPointsDataFrame   with 5072 points</span>
-<span class="co">#&gt;   $osm_linestrings      : 'sp' SpatialLinesDataFrame    with 14 linestrings</span>
-<span class="co">#&gt;   $osm_polygons         : 'sp' SpatialPolygonsDataFrame with 578 polygons</span>
+<span class="co">#&gt;             $timestamp : [ Thu Jan 26 15:41:32 2017 ]</span>
+<span class="co">#&gt;   $osm_points           : 'sp' SpatialPointsDataFrame   with 5070 points</span>
+<span class="co">#&gt;   $osm_linestrings      : 'sp' SpatialLinesDataFrame    with 576 linestrings</span>
+<span class="co">#&gt;   $osm_polygons         : 'sp' SpatialPolygonsDataFrame with 576 polygons</span>
 <span class="co">#&gt;   $osm_multilinestrings : NULL</span>
 <span class="co">#&gt;   $osm_multipolygons  : NULL</span></code></pre></div>
 <p>or,</p>
@@ -110,9 +110,9 @@ hs
 <span class="co">#&gt; Object of class 'osmdata' with:</span>
 <span class="co">#&gt;                  $bbox : 51.51,-0.12,51.52,-0.11</span>
 <span class="co">#&gt;         $overpass_call : The call submitted to the overpass API</span>
-<span class="co">#&gt;             $timestamp : [ Wed Jan 25 14:52:17 2017 ]</span>
-<span class="co">#&gt;   $osm_points           : 'sp' SpatialPointsDataFrame   with 1987 points</span>
-<span class="co">#&gt;   $osm_linestrings      : 'sp' SpatialLinesDataFrame    with 545 linestrings</span>
+<span class="co">#&gt;             $timestamp : [ Thu Jan 26 15:41:36 2017 ]</span>
+<span class="co">#&gt;   $osm_points           : 'sp' SpatialPointsDataFrame   with 1985 points</span>
+<span class="co">#&gt;   $osm_linestrings      : 'sp' SpatialLinesDataFrame    with 34 linestrings</span>
 <span class="co">#&gt;   $osm_polygons         : 'sp' SpatialPolygonsDataFrame with 34 polygons</span>
 <span class="co">#&gt;   $osm_multilinestrings : NULL</span>
 <span class="co">#&gt;   $osm_multipolygons  : NULL</span></code></pre></div>
@@ -147,7 +147,7 @@ q1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_feature
 <span class="co">#&gt; Object of class 'osmdata' with:</span>
 <span class="co">#&gt;                  $bbox : 50.575851,6.94066,50.895851,7.26066</span>
 <span class="co">#&gt;         $overpass_call : The call submitted to the overpass API</span>
-<span class="co">#&gt;             $timestamp : [ Wed Jan 25 14:52:24 2017 ]</span>
+<span class="co">#&gt;             $timestamp : [ Thu Jan 26 15:41:43 2017 ]</span>
 <span class="co">#&gt;   $osm_points           : 'sp' SpatialPointsDataFrame   with 34 points</span>
 <span class="co">#&gt;   $osm_linestrings      : 'sp' SpatialLinesDataFrame    with 0 linestrings</span>
 <span class="co">#&gt;   $osm_polygons         : 'sp' SpatialPolygonsDataFrame with 0 polygons</span>
@@ -170,11 +170,11 @@ sp::<span class="kw">plot</span> (lon$osm_lines)</code></pre></div>
 <h3 class="hasAnchor">
 <a href="#test-results" class="anchor"> </a>Test Results</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">date</span>()
-<span class="co">#&gt; [1] "Wed Jan 25 14:52:24 2017"</span>
+<span class="co">#&gt; [1] "Thu Jan 26 15:41:43 2017"</span>
 
 testthat::<span class="kw">test_dir</span>(<span class="st">"tests/"</span>)
 <span class="co">#&gt; testthat results ===========================================================</span>
-<span class="co">#&gt; OK: 57 SKIPPED: 0 FAILED: 0</span>
+<span class="co">#&gt; OK: 59 SKIPPED: 0 FAILED: 0</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; DONE ======================================================================</span></code></pre></div>
 </div>
@@ -189,9 +189,9 @@ testthat::<span class="kw">test_dir</span>(<span class="st">"tests/"</span>)
   <div class="col-md-3" id="sidebar">
     <h2>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/osmdatar/osmdatar">https://​github.com/​osmdatar/​osmdatar</a>
+<li>Browse source code at <br><a href="https://github.com/osmdatar/osmdata">https://​github.com/​osmdatar/​osmdata</a>
 </li>
-<li>Report a bug at <br><a href="https://github.com/osmdatar/osmdatar/issues">https://​github.com/​osmdatar/​osmdatar/​issues</a>
+<li>Report a bug at <br><a href="https://github.com/osmdatar/osmdata/issues">https://​github.com/​osmdatar/​osmdata/​issues</a>
 </li>
 </ul>
 <h2>License</h2>

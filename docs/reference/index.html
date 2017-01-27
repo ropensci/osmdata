@@ -11,8 +11,8 @@
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -49,19 +49,19 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">Home</a>
+</li>
+<li>
+  <a href="../articles/index.html">Overview</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
-</li>
-<li>
-  <a href="../articles/index.html">Articles</a>
-</li>
-<li>
-  <a href="../news/index.html">News</a>
 </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/osmdatar/osmdatar">
+  <a href="https://github.com/osmdatar/osmdata">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -82,28 +82,21 @@
     </div>
 
     <div class="contents">
-      <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+      <h2 id="section-package-doc-and-class" class="hasAnchor"><a href="#section-package-doc-and-class" class="anchor"></a>Package doc and class</h2>
+      <p class="section-desc"></p>
+
+      
+      <p><a href="osmdata.html">osmdata class def</a></p>
+      <ul>
+        <li><code><a href="osmdata.html">osmdata</a></code></li><li><code><a href="osmdata.html">osmdata-package</a></code></li>
+      </ul>
+          <h2 id="section-prepare-a-query-string" class="hasAnchor"><a href="#section-prepare-a-query-string" class="anchor"></a>Prepare a query string</h2>
       <p class="section-desc"></p>
 
       
       <p><a href="add_feature.html">Add a feature to an Overpass query</a></p>
       <ul>
         <li><code><a href="add_feature.html">add_feature</a></code></li>
-      </ul>
-      
-      <p><a href="available_features.html">List recognized features in OSM Overpass</a></p>
-      <ul>
-        <li><code><a href="available_features.html">available_features</a></code></li>
-      </ul>
-      
-      <p><a href="available_tags.html">List tags associated with a feature</a></p>
-      <ul>
-        <li><code><a href="available_tags.html">available_tags</a></code></li>
-      </ul>
-      
-      <p><a href="bbox_to_string.html">Convert a named matrix or a named vector (or an unnamed vector) return a string</a></p>
-      <ul>
-        <li><code><a href="bbox_to_string.html">bbox_to_string</a></code></li>
       </ul>
       
       <p><a href="getbb.html">Get bounding box for a given place name.</a></p>
@@ -115,11 +108,22 @@
       <ul>
         <li><code><a href="opq.html">opq</a></code></li>
       </ul>
+          <h2 id="section-get-additional-osm-info" class="hasAnchor"><a href="#section-get-additional-osm-info" class="anchor"></a>Get additional OSM info</h2>
+      <p class="section-desc"></p>
+
       
-      <p><a href="osmdata.html">osmdata class def</a></p>
+      <p><a href="available_features.html">List recognized features in OSM Overpass</a></p>
       <ul>
-        <li><code><a href="osmdata.html">osmdata</a></code></li><li><code><a href="osmdata.html">osmdata-package</a></code></li>
+        <li><code><a href="available_features.html">available_features</a></code></li>
       </ul>
+      
+      <p><a href="available_tags.html">List tags associated with a feature</a></p>
+      <ul>
+        <li><code><a href="available_tags.html">available_tags</a></code></li>
+      </ul>
+          <h2 id="section-manage-queries" class="hasAnchor"><a href="#section-manage-queries" class="anchor"></a>Manage queries</h2>
+      <p class="section-desc"></p>
+
       
       <p><a href="osmdata_sf.html">Return an OSM Overpass query as an </a></p>
       <ul>
@@ -146,11 +150,9 @@
       <ul>
         <li><code><a href="overpass_status.html">overpass_status</a></code></li>
       </ul>
-      
-      <p><a href="rcpp_osmdata_sp.html">rcpp_osmdata_sp</a></p>
-      <ul>
-        <li><code><a href="rcpp_osmdata_sp.html">rcpp_osmdata_sp</a></code></li>
-      </ul>
+          <h2 id="section-misc" class="hasAnchor"><a href="#section-misc" class="anchor"></a>Misc</h2>
+      <p class="section-desc"></p>
+
       
       <p><a href="stub.html">Replace a function with a stub.</a></p>
       <ul>
@@ -163,7 +165,11 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#section-package-doc-and-class">Package doc and class</a></li>
+      <li><a href="#section-prepare-a-query-string">Prepare a query string</a></li>
+      <li><a href="#section-get-additional-osm-info">Get additional OSM info</a></li>
+      <li><a href="#section-manage-queries">Manage queries</a></li>
+      <li><a href="#section-misc">Misc</a></li>
     </ul>
   </div>
 </div>
