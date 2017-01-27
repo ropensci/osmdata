@@ -81,14 +81,14 @@ test_that ("make_query", {
     res <- osmdata_sp (qry)
     expect_s3_class (res, "osmdata")
     nms <- c ("bbox", "overpass_call", "timestamp", "osm_points",
-              "osm_linestrings", "osm_polygons", "osm_multilinestrings",
+              "osm_lines", "osm_polygons", "osm_multilines",
               "osm_multipolygons")
     expect_named (res, expected=nms, ignore.order=FALSE)
 
     res <- osmdata_sf (qry)
     expect_s3_class (res, "osmdata")
     nms <- c ("bbox", "overpass_call", "timestamp", "osm_points",
-              "osm_linestrings", "osm_polygons", "osm_multilinestrings",
+              "osm_lines", "osm_polygons", "osm_multilines",
               "osm_multipolygons")
     expect_named (res, expected=nms, ignore.order=FALSE)
   }

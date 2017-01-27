@@ -340,7 +340,6 @@ void get_osm_ways_sf (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
     ss << "sfc_" << geom_type;
     std::string sfc_type = ss.str ();
     wayList.attr ("class") = Rcpp::CharacterVector::create (sfc_type, "sfc");
-    //wayList.attr ("class") = Rcpp::CharacterVector::create ("sfc_POLYGON", "sfc");
     wayList.attr ("precision") = 0.0;
     wayList.attr ("bbox") = bbox;
     wayList.attr ("crs") = crs;

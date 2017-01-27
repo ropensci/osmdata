@@ -27,33 +27,3 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rcpp_test_points
-Rcpp::List rcpp_test_points();
-RcppExport SEXP osmdata_rcpp_test_points() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpp_test_points());
-    return rcpp_result_gen;
-END_RCPP
-}
-// rcpp_test_lines
-Rcpp::List rcpp_test_lines();
-RcppExport SEXP osmdata_rcpp_test_lines() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpp_test_lines());
-    return rcpp_result_gen;
-END_RCPP
-}
-// rcpp_test_polygons
-Rcpp::List rcpp_test_polygons();
-RcppExport SEXP osmdata_rcpp_test_polygons() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpp_test_polygons());
-    return rcpp_result_gen;
-END_RCPP
-}

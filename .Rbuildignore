@@ -1,4 +1,5 @@
 ^\.travis\.yml$
+^_pkgdown.yml$
 makefile$
 \.md$
 ^README\.md$
