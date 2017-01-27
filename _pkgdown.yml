@@ -11,20 +11,20 @@ reference:
     - osmdata-package
   - title: Prepare a query string
     contents:
+    - getbb
     - opq
     - add_feature
-    - getbb
   - title: Get additional OSM info
     contents:
     - available_features
     - available_tags
   - title: Manage queries
     contents:
-    - overpass_query
-    - osmdata_sp
-    - osmdata_sf
-    - osmdata_xml
     - overpass_status
+    - overpass_query
+    - osmdata_xml
+    - osmdata_sf
+    - osmdata_sp
   - title: Misc
     contents:
     - stub
