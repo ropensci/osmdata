@@ -281,7 +281,8 @@ void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
             id_vec_mp.push_back (ids_mp);
             clean_vecs <float, float, std::string> (lon_vec, lat_vec, rowname_vec);
             ids_mp.clear ();
-            get_value_mat_rel (itr, rels, unique_vals, kv_mat_mp, count_mp++);
+            if (nmp > 0)
+                get_value_mat_rel (itr, rels, unique_vals, kv_mat_mp, count_mp++);
         } else // store as multilinestring
         {
             // multistrings are grouped here by roles, unlike GDAL which just
@@ -310,7 +311,8 @@ void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
                 id_vec_ls.push_back (ids_ls);
                 clean_vecs <float, float, std::string> (lon_vec, lat_vec, rowname_vec);
                 ids_ls.clear ();
-                get_value_mat_rel (itr, rels, unique_vals, kv_mat_ls, count_ls++);
+                if (nls > 0)
+                    get_value_mat_rel (itr, rels, unique_vals, kv_mat_ls, count_ls++);
             }
             roles_ls.push_back (roles);
             roles.clear ();

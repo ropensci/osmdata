@@ -42,6 +42,66 @@ const std::string p4s = "+proj=longlat +datum=WGS84 +no_defs";
 /************************************************************************
  ************************************************************************
  **                                                                    **
+ **                      STRUCTURE OF THESE FILES                      **
+ **                                                                    **
+ ************************************************************************
+ ************************************************************************
+ *
+ * 1. osmdata.h = Class definition of XmlData that reads initial XML structure
+ * 2. trace_osm.h = Primary functions to trace ways and relations (pure C++)
+ *      2a. trace_multipolygon ()
+ *      2b. trace_multilinestring ()
+ *      2c. trace_way ()
+ * 3. convert_osm_rcpp.h = Functions to convert C++ objects to Rcpp::List objects
+ *      3a. trace_way_nmat () (here coz it uses Rcpp)
+ *      3b. get_value_mat_way ()
+ *      3c. get_value_mat_rel ()
+ *      3d. convert_poly_linestring_to_Rcpp ()
+ *      3e. restructure_kv_mat ()
+ * 4. cleanup.h = Functions to check and clean C++ arrays
+ *      4a. reserve_arrs ()
+ *      4b. check_geom_arrs ()
+ *      4c. check_id_arr ()
+ *      4d. clean_vec ()
+ *      4e. clear_arr ()
+ *      4f. clean_vecs ()
+ *      4g. clean_arrs ()
+ * 4. osmdatacpp
+ *      3c. get_osm_relations ()
+ *      3d. get_osm_ways ()
+ *      3e. get_osm_nodes ()
+ *      4a. rcpp_osmdata () - The final Rcpp function called by osmdata_sf
+ *
+ * ----------------------------------------------------------------------
+ *
+ *  The calling hierarchy extends generally from bottom to top as follows:
+ *  rcpp_osmdata () {
+ *      -> get_osm_relations ()
+ *      {
+ *          -> trace_multipolygon ()
+ *              -> trace_way ()
+ *              -> restructure_kv_mat
+ *          -> trace_multilinestring ()
+ *              -> trace_way ()
+ *              -> restructure_kv_mat
+ *          -> get_value_vec ()
+ *          -> convert_poly_linestring_to_Rcpp ()
+ *          -> [... most check and clean functions ...]
+ *      }
+ *      -> get_osm_ways ()
+ *      {
+ *          -> trace_way_nmat ()
+ *          -> get_value_mat_way ()
+ *          -> restructure_kv_mat
+ *      }
+ *      -> get_osm_nodes ()
+ *          -> restructure_kv_mat
+ *  }
+ */
+
+/************************************************************************
+ ************************************************************************
+ **                                                                    **
  **                          CLASS::XMLDATA                            **
  **                                                                    **
  ************************************************************************
