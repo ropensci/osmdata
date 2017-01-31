@@ -368,8 +368,6 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
     const std::vector <Relation>& rels = xml.relations ();
     const UniqueVals unique_vals = xml.unique_vals ();
 
-    std::set <osmid_t> poly_ways, non_poly_ways;
-
 
     /************************************************************************
      ************************************************************************
@@ -379,43 +377,16 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
      ************************************************************************
      ************************************************************************/
 
-    // Step#1
-    for (auto it = rels.begin (); it != rels.end (); ++it)
-        for (auto itw = (*it).ways.begin (); itw != (*it).ways.end (); ++itw)
-        {
-            if (ways.find (itw->first) == ways.end ())
-                throw std::runtime_error ("way can not be found");
-            poly_ways.insert (itw->first);
-        }
-
     // Step#2
-    for (auto it = ways.begin (); it != ways.end (); ++it)
+    std::set <osmid_t> poly_ways, non_poly_ways;
+    for (auto itw = ways.begin (); itw != ways.end (); ++itw)
     {
-        if ((*it).second.nodes.front () == (*it).second.nodes.back ())
+        if ((*itw).second.nodes.front () == (*itw).second.nodes.back ())
         {
-            if (poly_ways.find ((*it).first) == poly_ways.end ())
-                poly_ways.insert ((*it).first);
-        } else if (non_poly_ways.find ((*it).first) == non_poly_ways.end ())
-            non_poly_ways.insert ((*it).first);
-    }
-
-    // Step#2b - Erase any ways that contain no data (should not happen).
-    // TODO: Insert this back in sf version?
-    for (auto it = poly_ways.begin (); it != poly_ways.end (); )
-    {
-        auto itw = ways.find (*it);
-        if (itw->second.nodes.size () == 0)
-            it = poly_ways.erase (it);
-        else
-            ++it;
-    }
-    for (auto it = non_poly_ways.begin (); it != non_poly_ways.end (); )
-    {
-        auto itw = ways.find (*it);
-        if (itw->second.nodes.size () == 0)
-            it = non_poly_ways.erase (it);
-        else
-            ++it;
+            if (poly_ways.find ((*itw).first) == poly_ways.end ())
+                poly_ways.insert ((*itw).first);
+        } else if (non_poly_ways.find ((*itw).first) == non_poly_ways.end ())
+            non_poly_ways.insert ((*itw).first);
     }
 
     /************************************************************************
@@ -429,7 +400,7 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
     // The actual routines to extract the OSM data and store in sp objects
     Rcpp::S4 sp_points, sp_lines, sp_polygons, sp_multilines, sp_multipolygons;
     get_osm_ways_sp (sp_polygons, poly_ways, ways, nodes, unique_vals, "polygon");
-    get_osm_ways_sp (sp_lines, poly_ways, ways, nodes, unique_vals, "line");
+    get_osm_ways_sp (sp_lines, non_poly_ways, ways, nodes, unique_vals, "line");
     get_osm_nodes_sp (sp_points, nodes, unique_vals);
     get_osm_relations_sp (sp_multilines, sp_multipolygons, 
             rels, nodes, ways, unique_vals);
