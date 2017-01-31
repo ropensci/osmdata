@@ -27,14 +27,14 @@ packageVersion("osmdata")
 [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be built from a base query constructed with `opq` followed by `add_feature`. The corresponding OSM objects are then downloaded and converted to `sf` objects with `osmdata_sf` or to `sp` objects with `osmdata_sp`. For example,
 
 ``` r
-q0 <- opq (bbox=c(-0.27,51.47,-0.20,51.50)) # Central London, U.K.
+q0 <- opq (bbox=c(-0.27,51.47,-0.20,51.50)) # Chiswick Eyot in London, U.K.
 q1 <- add_feature (q0, key='name', value="Thames", exact=FALSE)
 x <- osmdata_sf (q1)
 x
 #> Object of class 'osmdata' with:
 #>                  $bbox : -2.03  51.38  0.68  51.79
 #>         $overpass_call : The call submitted to the overpass API
-#>             $timestamp : [ Tue Jan 31 22:34:19 2017 ]
+#>             $timestamp : [ Tue Jan 31 22:36:26 2017 ]
 #>            $osm_points : 'sf' Simple Features Collection with 21234 points
 #>             $osm_lines : 'sf' Simple Features Collection with 1866 linestrings
 #>          $osm_polygons : 'sf' Simple Features Collection with 22 polygons
@@ -50,7 +50,7 @@ bu
 #> Object of class 'osmdata' with:
 #>                  $bbox : 51.51,-0.12,51.52,-0.11
 #>         $overpass_call : The call submitted to the overpass API
-#>             $timestamp : [ Tue Jan 31 22:34:21 2017 ]
+#>             $timestamp : [ Tue Jan 31 22:36:28 2017 ]
 #>            $osm_points : 'sp' SpatialpointsDataFrame with 5070 points
 #>             $osm_lines : 'sp' SpatiallinesDataFrame with 14 lines
 #>          $osm_polygons : 'sp' SpatialpolygonsDataFrame with 562 polygons
@@ -67,7 +67,7 @@ hs
 #> Object of class 'osmdata' with:
 #>                  $bbox : 51.51,-0.12,51.52,-0.11
 #>         $overpass_call : The call submitted to the overpass API
-#>             $timestamp : [ Tue Jan 31 22:34:22 2017 ]
+#>             $timestamp : [ Tue Jan 31 22:36:31 2017 ]
 #>            $osm_points : 'sp' SpatialpointsDataFrame with 1985 points
 #>             $osm_lines : 'sp' SpatiallinesDataFrame with 545 lines
 #>          $osm_polygons : 'sp' SpatialpolygonsDataFrame with 30 polygons
@@ -132,7 +132,7 @@ The following functions are implemented:
 
 ``` r
 date()
-#> [1] "Tue Jan 31 22:34:22 2017"
+#> [1] "Tue Jan 31 22:36:31 2017"
 
 testthat::test_dir("tests/")
 #> testthat results ===========================================================
