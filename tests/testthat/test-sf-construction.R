@@ -49,18 +49,13 @@ make_sf <- function (...)
     object <- as.list(substitute(list(...)))[-1L] 
     arg_nm <- sapply(object, function(x) deparse(x))
     sfc_name <- make.names(arg_nm[sf_column])
+    #sfc_name <- "geometry"
     df [[sfc_name]] <- x [[sf_column]]
     attr(df, "sf_column") <- sfc_name
-    f <- factor(rep(NA_character_, length.out = ncol(df) - 1), 
-               levels = c ("field", "lattice", "entity"))
-    # Next version of sf:
-    #f = factor(rep(NA_character_, length.out = ncol(df) - 1), 
-    #           levels = c ("constant", "aggregate", "identity"))
-    # The right way to do it - not yet in "sf"!
-    #names(f) = names(df)[-ncol (df)]
-    # The current, wrong way as done in sf:
-    names(f) <- names(df)[-sf_column]
-    attr(df, "relation_to_geometry") <- f
+    f = factor(rep(NA_character_, length.out = ncol(df) - 1), 
+               levels = c ("constant", "aggregate", "identity"))
+    names(f) = names(df)[-ncol (df)]
+    attr(df, "agr") <- f
     class(df) <- c("sf", class(df))
     return (df)
 }

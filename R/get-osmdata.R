@@ -108,20 +108,16 @@ make_sf <- function (...)
                     data.frame(x[-sf_column], row.names = row.names, 
                            stringsAsFactors = TRUE)
 
-    #object <- as.list(substitute(list(...)))[-1L] 
-    #arg_nm <- sapply(object, function(x) deparse(x))
-    #sfc_name <- make.names(arg_nm[sf_column])
-    sfc_name <- "geometry"
+    object <- as.list(substitute(list(...)))[-1L] 
+    arg_nm <- sapply(object, function(x) deparse(x))
+    sfc_name <- make.names(arg_nm[sf_column])
+    #sfc_name <- "geometry"
     df [[sfc_name]] <- x [[sf_column]]
     attr(df, "sf_column") <- sfc_name
     f <- factor(rep(NA_character_, length.out = ncol(df) - 1), 
-               levels = c ("field", "lattice", "entity"))
-               #levels = c ("constant", "aggregate", "identity"))
-    # The right way to do it - not yet in "sf"!
+               levels = c ("constant", "aggregate", "identity"))
     names(f) <- names(df)[-ncol (df)]
-    # The current, wrong way as done in sf:
-    #names(f) = names(df)[-sf_column]
-    attr(df, "relation_to_geometry") <- f
+    attr(df, "agr") <- f
     class(df) <- c("sf", class(df))
     return (df)
 }
@@ -183,15 +179,45 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     # This is repetitive, but sf uses the allocated names, so get and assign can
     # not be used.
     # TODO: Find a way to loop this
-    nms <- c ("points", "lines", "polygons", "multilines", "multipolygons")
-    for (n in nms)
-    {
-        onm <- paste0 ("osm_", n)
-        if (length (res [[paste0 (n, "_kv")]]) > 0)
-            obj [[onm]] <- make_sf (res [[n]], res [[paste0 (n, "_kv")]])
-        else
-            obj [[onm]] <- make_sf (res [[n]])
-    }
+    #nms <- c ("points", "lines", "polygons", "multilines", "multipolygons")
+    #for (n in nms)
+    #{
+    #    onm <- paste0 ("osm_", n)
+    #    if (length (res [[paste0 (n, "_kv")]]) > 0)
+    #        obj [[onm]] <- make_sf (res [[n]], res [[paste0 (n, "_kv")]])
+    #    else
+    #        obj [[onm]] <- make_sf (res [[n]])
+    #}
+
+    geometry <- res$points
+    if (length (res$points_kv) > 0)
+        obj$osm_points <- make_sf (geometry, res$points_kv)
+    else
+        obj$osm_points <- make_sf (geometry)
+
+    geometry <- res$lines
+    if (length (res$lines_kv) > 0)
+        obj$osm_lines <- make_sf (geometry, res$lines_kv)
+    else
+        obj$osm_lines <- make_sf (geometry)
+
+    geometry <- res$polygons
+    if (length (res$polygons_kv) > 0)
+        obj$osm_polygons <- make_sf (geometry, res$polygons_kv)
+    else
+        obj$osm_polygons <- make_sf (geometry)
+
+    geometry <- res$multilines
+    if (length (res$multilines_kv) > 0)
+        obj$osm_multilines <- make_sf (geometry, res$multilines_kv)
+    else
+        obj$osm_multilines <- make_sf (geometry)
+
+    geometry <- res$multipolygons
+    if (length (res$multipolygons_kv) > 0)
+        obj$osm_multipolygons <- make_sf (geometry, res$multipolygons_kv)
+    else
+        obj$osm_multipolygons <- make_sf (geometry)
 
     return (obj)
 }
