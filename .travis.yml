@@ -6,8 +6,8 @@ cache: packages
 # precise fails because unmet deps in libgdal-dev can not be insalled
 
 matrix:
-    #allow_failures:
-    #    -os: osx
+    allow_failures: # temporarily enabled. TODO: disable
+        -os: osx
     include:
         - os: linux
           r: release
