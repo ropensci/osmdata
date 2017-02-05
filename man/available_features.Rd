@@ -21,4 +21,3 @@ available_features()
 \references{
 \url{http://wiki.openstreetmap.org/wiki/Map_Features}
 }
-

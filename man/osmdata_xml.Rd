@@ -33,4 +33,3 @@ or a raw vector.
 Objects of class \code{xml_document} can be saved as \code{.xml} or
 \code{.osm} files with code{xml2::write_xml}.
 }
-

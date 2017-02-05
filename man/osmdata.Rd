@@ -3,6 +3,7 @@
 \docType{package}
 \name{osmdata}
 \alias{osmdata}
+\alias{osmdata}
 \alias{osmdata-package}
 \title{osmdata class def}
 \usage{
@@ -72,7 +73,7 @@ to overpass API\cr
 \code{read_osm}\tab Read an XML OSM Overpass response from path\cr
 }
 }
+
 \author{
 Bob Rudis, Robin Lovelace, Maëlle Salmon, Mark Padgham
 }
-

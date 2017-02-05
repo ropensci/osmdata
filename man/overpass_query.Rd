@@ -62,4 +62,3 @@ out body;'
 pts <- overpass_query(only_nodes)
 }
 }
-

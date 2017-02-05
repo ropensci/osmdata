@@ -58,4 +58,3 @@ if(curl::has_internet()){
   }
 }
 }
-

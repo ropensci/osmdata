@@ -27,4 +27,3 @@ An object of class `osmdata` with the OSM components (points, lines,
 \description{
 Return an OSM Overpass query as an \code{osmdata} object in \code{sp} format.
 }
-

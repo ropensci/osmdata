@@ -2,6 +2,7 @@
 % Please edit documentation in R/stub.R
 \name{stub}
 \alias{stub}
+\alias{stub}
 \title{Replace a function with a stub.}
 \usage{
 stub(where, what, how)
@@ -40,4 +41,3 @@ stub(g, 'f', FALSE)
 g()
 
 }
-

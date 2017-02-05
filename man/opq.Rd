@@ -35,4 +35,3 @@ p <- overpass_query(opq("Leeds") \%>\%
 sp::plot(p$osm_polygons[1,])
 }
 }
-

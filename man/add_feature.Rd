@@ -32,4 +32,3 @@ The final query can be obtained from
 \references{
 \url{http://wiki.openstreetmap.org/wiki/Map_Features}
 }
-
