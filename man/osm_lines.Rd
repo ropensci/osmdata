@@ -16,6 +16,7 @@ An \code{sf} Simple Features Collection of linestrings
 }
 \description{
 If \code{id} is of a point object, \code{osm_lines} will return all lines
-containing that point. If \code{id} is of a line object, \code{osm_lines}
-will return all lines which intersect the given line.
+containing that point. If \code{id} is of a line or polygon object,
+\code{osm_lines} will return all lines which intersect the given line or
+polygon.
 }

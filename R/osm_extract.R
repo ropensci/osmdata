@@ -35,8 +35,9 @@ osm_points <- function(dat, id) {
 #' Extract all \code{osm_lines} from an osmdata object
 #'
 #' If \code{id} is of a point object, \code{osm_lines} will return all lines
-#' containing that point. If \code{id} is of a line object, \code{osm_lines}
-#' will return all lines which intersect the given line.
+#' containing that point. If \code{id} is of a line or polygon object,
+#' \code{osm_lines} will return all lines which intersect the given line or
+#' polygon.
 #'
 #' @param dat An object of class \code{osmdata}
 #' @param id OMS identification of object for which lines are to be extracted
@@ -58,16 +59,16 @@ osm_lines <- function(dat, id) {
 
     indx <- which (grepl ('osm_', names (dat)))
     where <- indx [which (sapply (dat [indx], function (i) id %in% rownames (i)))]
-    if (names (dat) [where] == 'osm_polygons')
-        stop ('lines can not be extracted from polygons')
     x <- dat [[where]] [which (rownames (dat [[where]]) == id),]$geometry
 
-    if (is (x, 'sfc_POINT') | is (x, 'sfc_LINESTRING'))
+    if (class (x) [1] %in% c ('sfc_POINT', 'sfc_LINESTRING', 'sfc_POLYGON'))
     {
         if (is (x, 'sfc_POINT'))
             pts <- id
-        else # linestring
+        else if (is (x, 'sfc_LINESTRING'))
             pts <- unique (rownames (x [[1]]))
+        else # polygon
+            pts <- unique (rownames (x [[1]] [[1]]))
         # find all intersecting lines
         indx <- which (sapply (dat$osm_lines$geometry, function (i) any (pts %in% rownames (i))))
         ids <- names (dat$osm_lines$geometry) [indx]
@@ -84,5 +85,62 @@ osm_lines <- function(dat, id) {
     }
 
     dat$osm_lines [which (rownames (dat$osm_lines) %in% ids), ]
+}
+
+
+#' Extract all \code{osm_polygons} from an osmdata object
+#'
+#' If \code{id} is of a point object, \code{osm_polygons} will return all
+#' polygons containing that point. If \code{id} is of a line or polygon object,
+#' \code{osm_polygons} will return all polygons which intersect the given line
+#' or polygon.
+#'
+#'
+#' @param dat An object of class \code{osmdata}
+#' @param id OMS identification of object for which polygons are to be extracted
+#' @return An \code{sf} Simple Features Collection of polygons 
+#'
+#' @export
+osm_polygons <- function(dat, id) {
+    if (missing (dat))
+        stop ('osm_polygons can not be extracted without data')
+    if (!is (dat, 'osmdata'))
+        stop ('dat must be of class osmdata')
+    if (missing (id))
+        stop ('id must be given to extract polygons')
+    if (!(is.character (id) | is.numeric (id)))
+        stop ('id must be of class character or numeric')
+
+    if (!is.character (id))
+        id <- as.character (id)
+
+    indx <- which (grepl ('osm_', names (dat)))
+    where <- indx [which (sapply (dat [indx], function (i) id %in% rownames (i)))]
+    x <- dat [[where]] [which (rownames (dat [[where]]) == id),]$geometry
+
+    if (class (x) [1] %in% c ('sfc_POINT', 'sfc_LINESTRING', 'sfc_POLYGON'))
+    {
+        if (is (x, 'sfc_POINT'))
+            pts <- id
+        else if (is (x, 'sfc_LINESTRING'))
+            pts <- unique (rownames (x [[1]]))
+        else # polygon
+            pts <- unique (rownames (x [[1]] [[1]]))
+        # find all intersecting polygons
+        indx <- which (sapply (dat$osm_polygons$geometry, function (i) any (pts %in% rownames (i))))
+        ids <- names (dat$osm_polygons$geometry) [indx]
+    } else 
+    {
+        if (is (x, 'sfc_MULTIPOLYGON'))
+            x <- x [[1]]
+        ids <- names (x [[1]])
+        if (is (x, 'MULTIPOLYGON'))
+        {
+            ids <- unlist (sapply (ids, function (i) strsplit (i, '-')))
+            names (ids) <- NULL
+        }
+    }
+
+    dat$osm_polygons [which (rownames (dat$osm_polygons) %in% ids), ]
 }
 
