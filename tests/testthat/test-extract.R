@@ -185,3 +185,42 @@ test_that ("polygons-from-points", {
                expect_equal (dim (pls), c (1, 7))
 })
 
+# ------------------- multilines
+
+test_that ("multilines-from-lines", {
+               q0 <- opq (bbox=c(1,1,5,5)) 
+               x <- osmdata_sf (q0, "../osm-multi.osm")
+               mls <- osm_multilines (x, rownames (x$osm_lines) [1])
+               expect_equal (dim (mls), c (1, 6)) 
+})
+
+test_that ("multilines-from-points", {
+               q0 <- opq (bbox=c(1,1,5,5)) 
+               x <- osmdata_sf (q0, "../osm-multi.osm")
+               mls <- osm_multilines (x, rownames (x$osm_points) [1])
+               expect_equal (dim (mls), c (1, 6))
+})
+
+# ------------------- multipolygons
+
+test_that ("multipolygons-from-polygons", {
+               q0 <- opq (bbox=c(1,1,5,5)) 
+               x <- osmdata_sf (q0, "../osm-multi.osm")
+               mps <- osm_multipolygons (x, rownames (x$osm_polygons) [1])
+               expect_equal (dim (mps), c (1, 5)) 
+})
+
+test_that ("multipolygons-from-lines", {
+               q0 <- opq (bbox=c(1,1,5,5)) 
+               x <- osmdata_sf (q0, "../osm-multi.osm")
+               mps <- osm_multipolygons (x, rownames (x$osm_lines) [2])
+               expect_equal (dim (mps), c (1, 5)) 
+})
+
+test_that ("multipolygons-from-points", {
+               q0 <- opq (bbox=c(1,1,5,5)) 
+               x <- osmdata_sf (q0, "../osm-multi.osm")
+               mps <- osm_multipolygons (x, rownames (x$osm_points) [1])
+               expect_equal (dim (mps), c (1, 5))
+})
+
