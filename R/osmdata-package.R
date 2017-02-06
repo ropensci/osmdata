@@ -36,6 +36,7 @@
 #' @importFrom curl has_internet
 #' @importFrom httr content GET POST stop_for_status
 #' @importFrom lubridate force_tz ymd_hms wday day month year
+#' @importFrom methods is
 #' @importFrom Rcpp evalCpp
 #' @importFrom rvest html_attr html_nodes
 #' @importFrom utils read.table timestamp

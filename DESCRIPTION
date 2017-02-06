@@ -27,6 +27,7 @@ Imports:
     curl,
     httr,
     lubridate,
+    methods,
     Rcpp (>= 0.12.4),
     rvest,
     jsonlite,
