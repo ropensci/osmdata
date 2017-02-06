@@ -46,7 +46,7 @@ devtools::load_all (".", export_all=FALSE)
 #devtools::document (".")
 #goodpractice::gp (".")
 #devtools::check (".")
-#testthat::test_dir ("./tests/")
+#testthat::test_package ("osmdata")
 #Rcpp::compileAttributes()
 ```
 ```{r cachegrind, echo=FALSE, eval=FALSE}
