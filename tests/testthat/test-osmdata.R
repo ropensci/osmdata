@@ -2,29 +2,6 @@ has_internet <- curl::has_internet ()
 is_cran <-  identical (Sys.getenv("NOT_CRAN"), "false")
 is_travis <-  identical (Sys.getenv("TRAVIS"), "true")
 
-context("nodes work")
-#test_that("nodes work", {
-#  only_nodes <- system.file("osm/only-nodes.osm", package="overpass")
-#  expect_that(read_osm(only_nodes), is_a("SpatialPointsDataFrame"))
-#})
-
-context("nodes & ways work")
-#test_that("nodes & ways work", {
-#  nodes_and_ways <- system.file("osm/nodes-and-ways.osm", package="overpass")
-#  expect_that(read_osm(nodes_and_ways), is_a("SpatialLinesDataFrame"))
-#})
-
-context("xml nodes & ways work")
-#test_that("xml nodes & ways work", {
-#  nodes_and_ways <- system.file("osm/actual-ways.osm", package="overpass")
-#  expect_that(read_osm(nodes_and_ways), is_a("SpatialLinesDataFrame"))
-#})
-
-context("duplicates (and large XML return) are handled")
-#test_that("duplicates are handled", {
-#  mammoth <- system.file("osm/mammoth.osm", package="overpass")
-#  expect_that(read_osm(mammoth), is_a("SpatialLinesDataFrame"))
-#})
 
 # Mock tests as discussed by Noam Ross here:
 # https://discuss.ropensci.org/t/best-practices-for-testing-api-packages/460
@@ -79,6 +56,8 @@ test_that ("make_query", {
     expect_true (is (res, "xml_document"))
 
     res <- osmdata_sp (qry)
+    expect_message (print (res), "Object of class 'osmdata' with")
+
     expect_s3_class (res, "osmdata")
     nms <- c ("bbox", "overpass_call", "timestamp", "osm_points",
               "osm_lines", "osm_polygons", "osm_multilines",
@@ -86,6 +65,7 @@ test_that ("make_query", {
     expect_named (res, expected=nms, ignore.order=FALSE)
 
     res <- osmdata_sf (qry)
+    expect_message (print (res), "Object of class 'osmdata' with")
     expect_s3_class (res, "osmdata")
     nms <- c ("bbox", "overpass_call", "timestamp", "osm_points",
               "osm_lines", "osm_polygons", "osm_multilines",

@@ -8,36 +8,41 @@
 #' @export
 bbox_to_string <- function(bbox) {
 
-  if (missing (bbox)) stop ("bbox must be provided")
-  #if (is.character(bbox)) {
-  #  bbox <- tmap::bb (bbox)
-  #}
-  if (!is.numeric (bbox)) stop ("bbox must be numeric")
-  if (length (bbox) < 4) stop ("bbox must contain four elements")
-  if (length (bbox) > 4) message ("only the first four elements of bbox used")
+    if (missing (bbox)) stop ("bbox must be provided")
+    #if (is.character(bbox)) {
+    #  bbox <- tmap::bb (bbox)
+    #}
+    if (!is.numeric (bbox)) stop ("bbox must be numeric")
+    if (length (bbox) < 4) stop ("bbox must contain four elements")
+    if (length (bbox) > 4) message ("only the first four elements of bbox used")
 
-  if (inherits(bbox, "matrix")) {
-    if (all (rownames (bbox) %in% c("x", "y")    ) &
-        all (colnames (bbox) %in% c("min", "max"))) {
-      bbox <- c(bbox["x", "min"], bbox["y", "min"], 
-                bbox["x", "max"], bbox["y", "max"])
-    } else if (all (rownames (bbox) %in% c("coords.x1", "coords.x2")) &
-               all (colnames (bbox) %in% c("min", "max"))) {
-      bbox <- c (bbox["x", "coords.x1"], bbox["y", "coords.x1"], 
-                 bbox["x", "coords.x2"], bbox["y", "coords.x2"])
+    if (inherits(bbox, "matrix")) {
+        if (all (c("x", "y") %in% rownames (bbox)) &
+            all (c("min", "max") %in% colnames (bbox)))
+        {
+            bbox <- c(bbox["x", "min"], bbox["y", "min"], 
+                      bbox["x", "max"], bbox["y", "max"])
+        } else if (all (c("coords.x1", "coords.x2") %in% rownames (bbox)) &
+                   all (c("min", "max") %in% colnames (bbox)))
+        {
+            bbox <- c (bbox["coords.x1", "min"], bbox["coords.x2", "min"], 
+                       bbox["coords.x1", "max"], bbox["coords.x2", "max"])
+        } # otherwise just presume (x,y) are rows and (min,max) are cols
+        bbox <- paste0 (bbox[c(2, 1, 4, 3)], collapse = ",")
+    } else 
+    {
+        if (!is.null (names (bbox)) & 
+            all (names (bbox) %in% c("left", "bottom", "right", "top"))) 
+        {
+            bbox <- paste0 (bbox[c ("bottom", "left", "top", "right")], collapse = ",")
+        } else 
+        {
+            x <- sort (bbox [c (1, 3)])
+            y <- sort (bbox [c (2, 4)])
+            bbox <- paste0 (c (y [1], x[1], y [2], x [2]), collapse = ",")
+        }
     }
-    bbox <- paste0 (bbox[c(2, 1, 4, 3)], collapse = ",")
-  } else {
-    if (!is.null (names (bbox)) & 
-        all (names (bbox) %in% c("left", "bottom", "right", "top"))) {
-      bbox <- paste0 (bbox[c ("bottom", "left", "top", "right")], collapse = ",")
-    } else {
-      x <- sort (bbox [c (1, 3)])
-      y <- sort (bbox [c (2, 4)])
-      bbox <- paste0 (c (y [1], x[1], y [2], x [2]), collapse = ",")
-    }
-  }
-  return(bbox)
+    return(bbox)
 }
 
 #' Get bounding box for a given place name.
@@ -89,38 +94,38 @@ getbb <- function(place_name,
                   limit = 10,
                   key = NULL,
                   silent = TRUE) {
-  
-  query <- list(q = place_name,
-                viewbox = viewbox,
-                format = 'json',
-                featuretype = featuretype,
-                key = key,
-                # bounded = 1, # seemingly not working
-                limit = limit)
-  
-  if(!silent)
-    print(httr::modify_url(base_url, query = query))
-  
-  res <- httr::POST(base_url, query = query)
-  txt <- httr::content(res, as = "text", encoding = "UTF-8")
-  obj <- jsonlite::fromJSON(txt)
-  
-  # Code optionally select more things stored in obj...
-  if(!is.null(display_name_contains)) {
-    obj <- obj[grepl(display_name_contains, obj$display_name),]
-  }
-  
-  if(format_out == "data.frame") {
-    return(obj)
-  } 
-  
-  bn <- as.numeric(obj$boundingbox[[1]])
-  bb_mat <- matrix(c(bn[3:4], bn[1:2]), nrow = 2, byrow = TRUE)
-  dimnames(bb_mat) <- list(c("x", "y"), c("min", "max"))
-  if(format_out == "matrix") {
-    return(bb_mat)
-  } else if(format_out == "string") {
-    bb_string <- osmdata::bbox_to_string(bbox = bb_mat)
-    return(bb_string)
-  }
+
+    query <- list(q = place_name,
+                  viewbox = viewbox,
+                  format = 'json',
+                  featuretype = featuretype,
+                  key = key,
+                  # bounded = 1, # seemingly not working
+                  limit = limit)
+
+    if(!silent)
+        print(httr::modify_url(base_url, query = query))
+
+    res <- httr::POST(base_url, query = query)
+    txt <- httr::content(res, as = "text", encoding = "UTF-8")
+    obj <- jsonlite::fromJSON(txt)
+
+    # Code optionally select more things stored in obj...
+    if(!is.null(display_name_contains))
+        obj <- obj[grepl(display_name_contains, obj$display_name),]
+
+    if(format_out == "data.frame")
+        return(obj)
+
+    bn <- as.numeric(obj$boundingbox[[1]])
+    bb_mat <- matrix(c(bn[3:4], bn[1:2]), nrow = 2, byrow = TRUE)
+    dimnames(bb_mat) <- list(c("x", "y"), c("min", "max"))
+    if(format_out == "matrix") 
+    {
+        return(bb_mat)
+    } else if(format_out == "string") 
+    {
+        bb_string <- osmdata::bbox_to_string(bbox = bb_mat)
+        return(bb_string)
+    }
 }
