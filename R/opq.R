@@ -23,7 +23,8 @@
 #'   add_feature("leisure", "park"))
 #' sp::plot(p$osm_polygons[1,])
 #' }
-opq <- function(bbox=NULL) {
+opq <- function(bbox=NULL) 
+{
     # TODO: Do we really need these [out:xml][timeout] specifiers?
     res <- list(bbox=bbox_to_string(bbox),
               features=c("[out:xml][timeout:25];\n(\n"))
@@ -47,38 +48,37 @@ opq <- function(bbox=NULL) {
 #'
 #' @references \url{http://wiki.openstreetmap.org/wiki/Map_Features}
 #' @export
-add_feature <- function(opq, key, value, exact=TRUE, bbox=NULL) {
+add_feature <- function(opq, key, value, exact=TRUE, bbox=NULL) 
+{
+    if (missing (key))
+        stop ('key must be provided')
 
-  if (is.null(bbox) & is.null(opq$bbox)) {
-    stop("A base bounding box has to either be set in opq() or must be set here.", 
-         call.=FALSE)
-  }
+    if (is.null(bbox) & is.null(opq$bbox))
+        stop('Bounding box has to either be set in opq or must be set here') 
+    if (is.null(bbox)) bbox <- opq$bbox
 
-  if (is.null(bbox)) bbox <- opq$bbox
+    if (missing (value))
+    {
+        paste0(sprintf(' node["%s"](%s);\n', key, bbox),
+               sprintf('  way["%s"](%s);\n', key, bbox),
+               sprintf('  relation["%s"](%s);\n\n', key, bbox)) -> thing
+    } else
+    {
+        if (exact) bind <- '='
+        else bind <- '~'
+        paste0(sprintf(' node["%s"%s"%s"](%s);\n', key, bind, value, bbox),
+               sprintf('  way["%s"%s"%s"](%s);\n', key, bind, value, bbox),
+               sprintf('  relation["%s"%s"%s"](%s);\n\n', key, bind, 
+                       value, bbox)) -> thing
+    }
 
-  if (missing (value))
-  {
-      paste0(sprintf(' node["%s"](%s);\n', key, bbox),
-             sprintf('  way["%s"](%s);\n', key, bbox),
-             sprintf('  relation["%s"](%s);\n\n', key, bbox)) -> thing
-  } else
-  {
-      if (exact) bind <- '='
-      else bind <- '~'
-      paste0(sprintf(' node["%s"%s"%s"](%s);\n', key, bind, value, bbox),
-             sprintf('  way["%s"%s"%s"](%s);\n', key, bind, value, bbox),
-             sprintf('  relation["%s"%s"%s"](%s);\n\n', key, bind, 
-                     value, bbox)) -> thing
-  }
+    opq$features <- c(opq$features, thing)
 
-  opq$features <- c(opq$features, thing)
-
-  if (is.null (opq$suffix))
-    opq$suffix <- ");\n(._;>);\nout body;"
+    if (is.null (opq$suffix))
+        opq$suffix <- ");\n(._;>);\nout body;"
     #opq$suffix <- ");\n(._;>);\nout qt body;"
-  # qt option is not compatible with sf because GDAL requires nodes to be
-  # numerically sorted
+    # qt option is not compatible with sf because GDAL requires nodes to be
+    # numerically sorted
 
-  opq
-
+    opq
 }
