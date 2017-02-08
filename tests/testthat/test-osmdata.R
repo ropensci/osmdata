@@ -2,6 +2,7 @@ has_internet <- curl::has_internet ()
 is_cran <-  identical (Sys.getenv("NOT_CRAN"), "false")
 is_travis <-  identical (Sys.getenv("TRAVIS"), "true")
 
+source ("../stub.R")
 
 # Mock tests as discussed by Noam Ross here:
 # https://discuss.ropensci.org/t/best-practices-for-testing-api-packages/460

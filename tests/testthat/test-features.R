@@ -4,6 +4,8 @@ is_travis <-  identical (Sys.getenv("TRAVIS"), "true")
 
 url_ftrs <- "http://wiki.openstreetmap.org/wiki/Map_Features"
 
+source ("../stub.R")
+
 # Mock tests as discussed by Noam Ross here:
 # https://discuss.ropensci.org/t/best-practices-for-testing-api-packages/460
 # and demonstrated in detail by Gabor Csardi here:

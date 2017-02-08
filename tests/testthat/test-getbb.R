@@ -2,6 +2,8 @@ has_internet <- curl::has_internet ()
 is_cran <-  identical (Sys.getenv("NOT_CRAN"), "false")
 is_travis <-  identical (Sys.getenv("TRAVIS"), "true")
 
+source ("../stub.R")
+
 get_local <- FALSE
 if (get_local) {
     # vcr code, for when it eventually appears on CRAN:

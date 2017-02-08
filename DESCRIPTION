@@ -46,5 +46,5 @@ LinkingTo: Rcpp
 URL: https://github.com/osmdatar/osmdata
 BugReports: https://github.com/osmdatar/osmdata/issues
 Encoding: UTF-8
-RoxygenNote: 6.0.0
+RoxygenNote: 6.0.1
 VignetteBuilder: knitr
