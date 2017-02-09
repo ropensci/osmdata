@@ -11,7 +11,10 @@ test_that ("multipolygon", {
                x_sf <- x_sf [, which (names (x_sf) %in% names (x))]
                # Then all of the object and dimnames inserted by `osmdata` have
                # to be removed
-               rownames (x_sf) <- rownames (x)
+               rownames (x) <- rownames (x_sf)
+               # but sf now also inserts default row.names that are numeric
+               # rather than character, so
+               class (attributes (x)$row.names) <- "integer"
                for (i in seq (length (x$geometry [[1]])))
                {
                    names (x$geometry [[1]] [[i]]) <- NULL

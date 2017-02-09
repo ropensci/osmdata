@@ -334,9 +334,11 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
 
                 Rcpp::S4 poly = Polygon (nmat);
                 poly.slot ("hole") = !outer;
+                poly.slot ("ringDir") = (int) 1; // TODO: Check this!
                 if (outer)
                     outer = false;
-                poly.slot ("ringDir") = (int) 1; // TODO: Check this!
+                else
+                    poly.slot ("ringDir") = (int) -1; // TODO: Check this!
                 outList_i [j] = poly;
             }
             outList_i.attr ("names") = id_vec [i];
@@ -344,7 +346,7 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
             Rcpp::S4 polygons = polygons_call.eval ();
             polygons.slot ("Polygons") = outList_i;
             polygons.slot ("ID") = id_vec [i];
-            polygons.slot ("plotOrder") = (int) 1; // TODO: Check this!
+            polygons.slot ("plotOrder") = (int) i + 1; 
             //polygons.slot ("labpt") = poly.slot ("labpt");
             //polygons.slot ("area") = poly.slot ("area");
             outList [i] = polygons;
