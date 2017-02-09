@@ -59,18 +59,15 @@ const std::string p4s = "+proj=longlat +datum=WGS84 +no_defs";
  *      3d. convert_poly_linestring_to_Rcpp ()
  *      3e. restructure_kv_mat ()
  * 4. cleanup.h = Functions to check and clean C++ arrays
- *      4a. reserve_arrs ()
- *      4b. check_geom_arrs ()
- *      4c. check_id_arr ()
- *      4d. clean_vec ()
- *      4e. clear_arr ()
- *      4f. clean_vecs ()
- *      4g. clean_arrs ()
+ *      4a. clean_vec ()
+ *      4b. clear_arr ()
+ *      4c. clean_vecs ()
+ *      4d. clean_arrs ()
  * 4. osmdatacpp
- *      3c. get_osm_relations ()
- *      3d. get_osm_ways ()
- *      3e. get_osm_nodes ()
- *      4a. rcpp_osmdata () - The final Rcpp function called by osmdata_sf
+ *      5c. get_osm_relations ()
+ *      5d. get_osm_ways ()
+ *      5e. get_osm_nodes ()
+ *      5a. rcpp_osmdata () - The final Rcpp function called by osmdata_sf
  *
  * ----------------------------------------------------------------------
  *

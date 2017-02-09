@@ -319,11 +319,6 @@ void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
         }
     }
 
-    check_geom_arrs (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
-    check_geom_arrs (lon_arr_ls, lat_arr_ls, rowname_arr_ls);
-    check_id_arr <osmid_t> (lon_arr_ls, id_vec_ls);
-    check_id_arr <std::string> (lon_arr_mp, id_vec_mp);
-
     convert_multipoly_to_sp (multipolygons, rels, lon_arr_mp, lat_arr_mp, 
         rowname_arr_mp, id_vec_mp, unique_vals);
     convert_multiline_to_sp (multilines, rels, lon_arr_ls, lat_arr_ls, 

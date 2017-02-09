@@ -32,16 +32,6 @@
 
 #include "common.h"
 
-void reserve_arrs (std::vector <float> &lats, std::vector <float> &lons,
-        std::vector <std::string> &rownames, int n);
-
-// Sanity check to ensure all 3D geometry arrays have same sizes
-void check_geom_arrs (const float_arr3 &lon_arr, const float_arr3 &lat_arr,
-        const string_arr3 &rowname_arr);
-
-template <typename T> void check_id_arr (const float_arr3 &lon_arr, 
-        const std::vector <std::vector <T> > &arr);
-
 template <typename T> void clean_vec (std::vector <std::vector <T> > &arr2);
 
 template <typename T1, typename T2> void clean_vecs (

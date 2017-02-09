@@ -30,49 +30,6 @@
 
 #include "cleanup.h"
 
-void reserve_arrs (std::vector <float> &lats, std::vector <float> &lons,
-        std::vector <std::string> &rownames, int n)
-{
-        lons.clear ();
-        lats.clear ();
-        rownames.clear ();
-        lons.reserve (n);
-        lats.reserve (n);
-        rownames.reserve (n);
-}
-
-// Sanity check to ensure all 3D geometry arrays have same sizes
-void check_geom_arrs (const float_arr3 &lon_arr, const float_arr3 &lat_arr,
-        const string_arr3 &rowname_arr)
-{
-    if (lon_arr.size () != lat_arr.size () ||
-            lon_arr.size () != rowname_arr.size ())
-        throw std::runtime_error ("lons, lats, and rownames differ in size");
-    for (int i=0; i<lon_arr.size (); i++)
-    {
-        if (lon_arr [i].size () != lat_arr [i].size () ||
-                lon_arr [i].size () != rowname_arr [i].size ())
-            throw std::runtime_error ("lons, lats, and rownames differ in size");
-        for (int j=0; j<lon_arr [i].size (); j++)
-            if (lon_arr [i][j].size () != lat_arr [i][j].size () ||
-                    lon_arr [i][j].size () != rowname_arr [i][j].size ())
-                throw std::runtime_error ("lons, lats, and rownames differ in size");
-    }
-}
-
-
-// ----- check_id_arr
-template <typename T> void check_id_arr (const float_arr3 &lon_arr, 
-        const std::vector <std::vector <T> > &arr)
-{
-    for (int i=0; i<lon_arr.size (); i++)
-        if (lon_arr [i].size () != arr [i].size ())
-            throw std::runtime_error ("geoms and way IDs differ in size");
-}
-template void check_id_arr <osmid_t> (const float_arr3 &lon_arr, 
-        const std::vector <std::vector <osmid_t> > &arr);
-template void check_id_arr<std::string> (const float_arr3 &lon_arr, 
-        const std::vector <std::vector <std::string> > &arr);
 
 // ----- clean_vec
 template <typename T> void clean_vec (std::vector <std::vector <T> > &arr2)
