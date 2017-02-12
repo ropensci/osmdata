@@ -2,7 +2,6 @@
 ^_pkgdown.yml$
 makefile$
 [.]md$
-^README[.]md$
 ^README[.]Rmd$
 ^README[.]html$
 ^fig/
@@ -12,13 +11,8 @@ makefile$
 ^src/Makevars$
 ^.*[.]Rproj$
 ^[.]Rproj[.]user$
-^CONDUCT[.]md$
-^vignettes/makefile$
 # Non-exported man files
 man/make_sf.Rd
 man/rcpp_osmdata_sf.Rd
 man/rcpp_osmdata_sp.Rd
-man/rcpp_test_points.Rd
-man/rcpp_test_lines.Rd
-man/rcpp_test_polygons.Rd
 ^appveyor[.]yml$
