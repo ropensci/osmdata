@@ -2,16 +2,18 @@
 #'
 #' This function converts a bounding box into a string for use in web apis
 #' 
-#' @param bbox bounding box as matrix or vector. Unnamed vectors will be sorted
-#' appropriately and must merely be in the order (x, y, x, y).
+#' @param bbox bounding box as character, matrix or vector. If character,
+#' numeric bbox will be extracted with \code{getbb} Unnamed vectors will be
+#' sorted appropriately and must merely be in the order (x, y, x, y).
 #'
 #' @export
 bbox_to_string <- function(bbox) {
 
     if (missing (bbox)) stop ("bbox must be provided")
-    #if (is.character(bbox)) {
-    #  bbox <- tmap::bb (bbox)
-    #}
+
+    if (is.character (bbox))
+        bbox <- getbb (bbox)
+
     if (!is.numeric (bbox)) stop ("bbox must be numeric")
     if (length (bbox) < 4) stop ("bbox must contain four elements")
     if (length (bbox) > 4) message ("only the first four elements of bbox used")
