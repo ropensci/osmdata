@@ -42,23 +42,293 @@ vignette: >
 
 ## <a name="1 quick intro"></a>1. A quick introcuction
 
+```{r install, eval=FALSE}
+devtools::install_github("osmdatar/osmdata")
+```
+
+```{r usage2, echo=FALSE, eval=FALSE}
+devtools::load_all ("..", export_all=FALSE)
+```
+
+`osmdata` uses the [`overpass` API](http://overpass.de) to download
+OpenStreetMap (OSM) data and convert them to either [Simple Features
+(SF)](https://cran.r-project.org/package=sf) or
+[`Spatial`](http://cran.r-project.org/package=sf) objects. `overpass` has its
+own query language, with all queries extracting data within a defined bounding
+box. A query may be initiated using the `osmdata` function `opq()`, which
+accepts the single argument of a bounding box.
+
+```{r}
+opq (bbox=c(51.1,0.1,51.2,0.2))
+```
+Bounding boxes may also be defined by simply passing the name of a desired area,
+```{r}
+opq (bbox="greater London, U.K.")
+```
+An `osmdata` query consists of an initial `opq()` query and one or more features:
+```{r}
+q <- opq (bbox="greater London, U.K.")
+q <- add_feature (q, key="highway", value="motorway")
+q
+```
+The corresponding data may then be extracted as `R Spatial` objects with,
+```{r}
+osmdata_sp (q)
+```
+or an `R Sinple Features` objects wtth
+```{r}
+osmdata_sf (q)
+```
+
+`overpass` data are returned in OSM XML format, and may be directly returned with
+```{r}
+doc <- osmdata_xml (q)
+```
+The function `osmdata_xml()` also allows data to be saved and used for
+subsequent queries through specifying a filename.
+```{r}
+osmdata_xml (q, "download.osm")
+```
+These downloaded data can then be directly processed by simply passing the same
+filename to `osmdata_sf/sp`
+```{r}
+dat <- osmdata_sp (q, "download.osm")
+dat <- osmdata_sf (q, "download.osm")
+```
+The query, `q`, must still be passed to these functions to enable additional
+data on the bounding box and timestamp to be appended to the `osmdata` objects
+returned by these functions.
+
+***TODO: modify these functions so they still work without the query objects***
+
+
+
 ## <a name="2 overpass"></a>2. The overpass API
+
+The `overpass` API is ...
 
 ## <a name="2.1 overpass queries"></a>2.1. overpass queries
 
+`overpass` has its own query language which largely works by extracting data
+based on specific combinations of `key-value` pairs, with `osmdata`
+implementing a simplified version. Full details of the `overpass` query
+language can be viewed [here] and [here].
+
+As demonstrated above, an `osmdata` query begins by specifying a bounding box
+with the function `opq()`, followed by specifying desired OSM features with
+`add_feature()`.  
+```{r}
+q <- opq (bbox="Kunming, China")
+q <- add_feature (q, key="natural", value="water")
+q <- add_feature (q, key="name", value="Guolin", exact=FALSE)
+q
+```
+The parameter `exact=FALSE` controls the two ways of matching `key-value` pairs
+in `overpass`: Either exactly and entirely, or through a partial string match.
+With the default `exact=TRUE`, this query would only return objects named
+"Guolin", and not, for example, any named "Guolin Reservoir". Using
+`exact=FALSE` will return "Guolin Reservoir" through just specifying
+`value="Guolin"`.
+
+Each successive feature added with `add_feature()` is ADDed to previous
+features, so, for example, extending the previous query by an additional
+`key-value` pair to 
+```{r}
+q <- add_feature (q, key="highway")
+q
+```
+will request all objects that are both water bodies with names matching "Guolin"
+**AND** that are also highways. Unsurprisingly, this query returns no data
+```{r}
+osmdata_sf (q)
+```
+
+Distinct and different features must be requested with distinct and different
+queries:
+```{r}
+q0 <- opq (bbox="Kunming, China")
+q1 <- add_feature (q0, key="natural", value="water")
+q1 <- add_feature (q1, key="name", value="Guolin", exact=FALSE)
+dat_water <- osmdata_sf (q1)
+q2 <- add_feature (q0, key="highway")
+dat_highway <- osmdata_sf (q2)
+```
+
+The function `osmdata_sf` returns an object of class `osmdata`, as described in
+detail below.
+
+The detailed structure of `overpass` queries can best be appreciated by using
+the [interactive online query building`](http://overpass-turbo.eu), which
+inludes a helful corrector function for incorrectly formatted queries. An
+`osmdata` query includes the two primary fields of `bbox` and `qry`, with the
+latter passed directly to the `overpass` API. Any queries constructed with the
+[interactive online query building`](http://overpass-turbo.eu) can also be
+pasted directly into the `qry` component of an `osmdata` query.
+
+
 ## <a name="3 osmdata queries"></a>3. `osmdata` queries
+
+As indicated above, `osmdata` queries are generally simplified versions of
+potentially more complex `overpass` queries, although arbitrarily complex
+`overpass` queries may be pasted directly into the `$qry` field of an `osmdata`
+query. Also as illustrated above, `osmdata` queries are generally constructed
+through initiating a query with `opq()`, and then specifying OSM features in
+terms of `key-value` pairs with `add_feeature()`. 
+
+At its simplest, `add_feature()` requires a single `key`, which by default will
+return all objects specifying any value for that `key`: 
+```{r}
+q0 <- opq(bbox="London City, U.K.")
+q1 <- add_feature (q0, key="highway")
+q1 <- add_feature (q0, key="name")
+```
+Passing that query to `osmdata_xml/sf/sp()` will return all named highways
+within the bounding box.
 
 ## <a name="3.1 query building"></a>3.1. Building a query
 
 ## <a name="3.2 query submission"></a>3.2. Submitting a query
 
+As demonstrated above, `osmdata` queries may be submitted to `overpass` using
+one of three functions specified by the kind of data they return.
+`osmdata_xml()` returns raw `XML` data, and enables these to be saved directly
+to disk for processing with other software.
+```{r}
+osmdata_xml (q, "document.osm")
+```
+The other two functions return data in the two primary `R` formats for storing
+and processing spatial data: `R Spatial (sp)` and `R Simple Features (sf)`.
+Both of these functions accept optional arguments specifying previously
+downloaded files (using `osmdata_xml()`) or an `XML` document.  
+```{r}
+dat <- osmdata_sp (q, "document.osm")
+doc <- osmdata_xml (q, file="doc2.osm")
+osmdata_sf (q, doc)
+osmdata_sf (q, "doc2.osm")
+identical (osmdata_sf (q, doc), osmdata_sf (q, "doc2.osm"))
+```
+
 ## <a name="4. osmdata object"></a>4. The `osmdata` object
+
+The `osmdata` extraction functions, `osmdata_xml()`, `osmdata_sf()`, and
+`osmdata_sp()` all return objects of class `osmdata`, the structure of which
+may be specified using the generic print method: 
+```{r}
+osmdata_sf (q, "doc2.osm")
+osmdata_sp (q, "doc2.osm")
+class (osmdata_xml (q))
+```
+The actual spatial data contained in an `osmdata` object are of either `sp`
+format when extracted with `osmdata_sp()` or `sf` format when extracted with
+`osmdata_sf()`. 
 
 ## <a name="4.1 osmdata_xml"></a>4.1. The `osmdata_xml()` funciton
 
+`osmdata_xml()` returns OSM data in native XML format, which are stored by
+convention with the file suffix `.osm`. This function also allows raw data to
+be saved to disk, as demonstrated above. The `XML` data are formatting using
+the `R` package `xml2`, and may be processed within `R` using any mehtods
+compatible with that data, or may be processed by any other software able to
+load the `XML` data directly from disk.
+
 ## <a name="4.1 osmdata_sf"></a>4.2. The `osmdata_sf()` funciton
+
+`osmdata_sf()` returns OSM data in Simple Features (SF) format, defined by the
+Open Geospatial Consortium, and implemented in the `R` package `sf`. This
+package provices a directly interface to the `C++` Graphical Data Abstraction
+Library (GDAL) which also includes a so-called `driver` for OSM data. This
+means that OSM data may also be read directly with `sf`, rather than using
+`osmdata`. Data must first be saved to disk, which can for example be readily
+achieved through downloading directly from the [overpass interactive online
+site](http://overpass-turbo.eu). 
+
+Queries constructed in `osmdata` can also be pasted directly into `overpass
+turbo`. The following example is based on this query: 
+```{r}
+q <- opq (bbox="Trentham, Australia")
+q <- add_feature (q, key="name") # any named objects
+osmdata_xml (q, "dat.osm")
+```
+***TODO: make function to convert osmdata query to overpass string***
+
+
+`sf` can then read such data independent of `osmdata` though
+```{r}
+sf::st_read ("dat.osm", layer="lines")
+```
+while the equivalent `osmdata` function returns
+```{r}
+osmdata_sf (q, "dat.osm")
+```
+`osmdata` returns considerably more spatial objects. The raw sizes of data
+returned can be compared with
+
+```{r}
+object.size (sf::st_read ("dat.osm", layer="lines", quiet=TRUE))
+object.size (osmdata_sf (q, "dat.osm")$osm_lines)
+```
+The primary difference between `sf/GDAL` and `osmdata` is that the former
+returns only those objects unique to each category of spatial object.  Thus OSM
+nodes (`points` in `sf/osmdata` representations) include, in `sf/GDAL`
+representation, only those points which are not part of any other objects (such
+as lines or polygons). In contrast, `osmdata point` objects include all points
+regardless of whether or not these are represented in other spatial objects.
+Similarly, 'line' objects in 'sf/GDAL' exclude any lines that are part of other
+objects such as 'multipolygon' or 'multiline' objects.
+
+This processing of data by `sf/GDAL` has two important implications:
+
+1. An implicit hierarchy of spatial objects is enforced through including
+elements of objects only at their 'highest' level of representation, where
+`multipolygon` and `multiline` objects are assumed to be at 'higher' levels
+than `polyon` or `line` objects, and these in turn are at 'higher' levels than
+`point` objects. `osmdata` makes no such hierarchical assumptions.
+
+2. All OSM are structured by giving each object a unique identifier so that the
+components of any given object (the nodes of a line, for example, or the lines
+of a multipolygon) can be referenced in terms of these identifiers alone. This
+enables the full details for any component of a given object to be extracted by
+examining that component. The `sf/GDAL` representation obviates this ability
+through removing these IDs and reduing everyhing to geometries alone. This
+means, for example, that the `key-value` pairs of the `line` or `polygon`
+components of `multipolygon` can never be extracted from an `sf/GDAL`
+representation. In contrast, `osmdata` retains all unique identifiers for all
+OSM objects, and so readily enables, for example, the properties of all `point`
+objects of a `line` to be extracted.
+
+Finally, note that `osmdata` will generally extract OSM data considerably
+faster than equivalent `sf/GDAL` routines (as detailed [here](git-wiki)).
+
 
 ## <a name="4.1 osmdata_sp"></a>4.3. The `osmdata_sp()` funciton
 
+As with `osmdata_sf()` described above, OSM data may be converted to `sp`
+format without using `osmdata` via the `sf` functions 
+```{r}
+dat <- sf::read_st ("dat2.osm")
+dat_sp <- as (dat, "Spatial")
+class (dat_sp)
+```
+These data are extracted using the GDAL, and so suffer all of the same
+shortcomings mentioned above.
+
 ## <a name="5. plotting"></a>5. Plotting
 
+The `R Spatial/sp` package implements its own plotting routines, so the
+components of an `osmdata` object can be plotted with internal `sp` routines,
+```{r}
+q0 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) # Central London, U.K.
+q1 <- add_feature (q0, key='building')
+bu <- osmdata_sp (q1)
+q2 <- add_feature (q0, key='highway')
+hw <- osmdata_sp (q2)
+```
+
+```{r plot1}
+sp::plot (bu$osm_polygons)
+lines (hw$osm_lines, col="red")
+```
+
+More powerful plotting routines are implemented in the package `osmplotr`,
+specifically intended to plot OSM data.  (To be completed following CRAN
+submission of `osmdata` and corresponding modification of `osmplotr`.)
