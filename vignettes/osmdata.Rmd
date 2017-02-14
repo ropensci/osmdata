@@ -309,6 +309,6 @@ dim (osmdata_sf (q, doc='buildings.osm')$osm_polygons); dim (osmdata_sf (q, doc=
 ```
 
 ```{r, echo=FALSE}
-#for (f in list.files (pattern="\\.osm"))
-#    if (file.exists (f)) file.remove (f)
+for (f in list.files (pattern="\\.osm"))
+    if (file.exists (f)) file.remove (f)
 ```
