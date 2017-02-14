@@ -1,9 +1,0 @@
-[out:xml][timeout:100];
-(
-  node["highway"="motorway"](51.24,-0.61,51.73,0.41);
-  way["highway"="motorway"](51.24,-0.61,51.73,0.41);
-  relation["highway"="motorway"](51.24,-0.61,51.73,0.41);
-);
-out body;
->;
-out skel qt;
