@@ -122,8 +122,6 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
         res <- httr::POST (base_url, body=query)
     } else {
         if (wait) {
-            message ("(available, next_slot, msg) = (", o_stat$available, ", ",
-                     o_stat$next_slot, ", ", o_stat$msg, ")")
             wait <- max(0, as.numeric (difftime (o_stat$next_slot, Sys.time(),
                                                  units = 'secs'))) + pad_wait
             message (sprintf ('Waiting %s seconds', wait))
