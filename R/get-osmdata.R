@@ -30,7 +30,8 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
 #' Return an OSM Overpass query as an \code{osmdata} object in \code{sp} format.
 #'
 #' @param q An object of class `overpass_query` constructed with \code{opq} and
-#'        \code{add_feature}.
+#'        \code{add_feature}. May be be omitted, in which case the
+#'        \code{osmdata} object will not include the query.
 #' @param doc If missing, \code{doc} is obtained by issuing the overpass query,
 #'        \code{q}, otherwise either the name of a file from which to read data,
 #'        or an object of class \code{XML} returned from \code{osmdata_xml}. 
@@ -46,8 +47,13 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
         encoding <- 'UTF-8'
 
     obj <- osmdata () # uses class def
-    obj$bbox <- q$bbox
-    obj$overpass_call <- qry_to_string (q)
+    if (missing (q))
+        message ('q missing: osmdata object will not include query')
+    else
+    {
+        obj$bbox <- q$bbox
+        obj$overpass_call <- qry_to_string (q)
+    }
 
     if (missing (doc))
     {
@@ -77,6 +83,8 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
     if (!quiet)
         message ('convertig OSM data to sp format')
     res <- rcpp_osmdata_sp (doc)
+    if (missing (q))
+        obj$bbox <- paste (res$bbox, collapse=' ')
     obj$osm_points <- res$points
     obj$osm_lines <- res$lines
     obj$osm_polygons <- res$polygons
@@ -124,7 +132,8 @@ make_sf <- function (...)
 #' Return an OSM Overpass query as an \code{osmdata} object in \code{sf} format.
 #'
 #' @param q An object of class `overpass_query` constructed with \code{opq} and
-#'        \code{add_feature}.
+#'        \code{add_feature}. May be be omitted, in which case the
+#'        \code{osmdata} object will not include the query.
 #' @param doc If missing, \code{doc} is obtained by issuing the overpass query,
 #'        \code{q}, otherwise either the name of a file from which to read data,
 #'        or an object of class \code{XML} returned from \code{osmdata_xml}. 
@@ -140,8 +149,13 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
         encoding <- 'UTF-8'
 
     obj <- osmdata () # uses class def
-    obj$bbox <- q$bbox
-    obj$overpass_call <- qry_to_string (q)
+    if (missing (q))
+        message ('q missing: osmdata object will not include query')
+    else
+    {
+        obj$bbox <- q$bbox
+        obj$overpass_call <- qry_to_string (q)
+    }
 
     if (missing (doc))
     {
@@ -171,7 +185,8 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     if (!quiet)
         message ('convertig OSM data to sp format')
     res <- rcpp_osmdata_sf (doc)
-    #obj$bbox <- res$bbox
+    if (missing (q))
+        obj$bbox <- paste (res$bbox, collapse=' ')
 
     nms <- c ("points", "lines", "polygons", "multilines", "multipolygons")
     # This is repetitive, but sf uses the allocated names, so get and assign can

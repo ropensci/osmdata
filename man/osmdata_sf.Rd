@@ -8,7 +8,8 @@ osmdata_sf(q, doc, quiet = TRUE, encoding)
 }
 \arguments{
 \item{q}{An object of class `overpass_query` constructed with \code{opq} and
-\code{add_feature}.}
+\code{add_feature}. May be be omitted, in which case the
+\code{osmdata} object will not include the query.}
 
 \item{doc}{If missing, \code{doc} is obtained by issuing the overpass query,
 \code{q}, otherwise either the name of a file from which to read data,
