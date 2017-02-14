@@ -5,7 +5,7 @@
 #'         text of the message from Overpass and the timestamp of the
 #'         next available slot
 #' @export
-overpass_status <- function(quiet=FALSE) {
+overpass_status <- function (quiet=FALSE) {
 
   available <- FALSE
   slot_time <- NULL
@@ -15,20 +15,21 @@ overpass_status <- function(quiet=FALSE) {
     if (!quiet) message (status)
   } else
   {
-    status <- httr::GET('http://overpass-api.de/api/status')
-    status <- httr::content(status)
-    status_now <- strsplit(status, '\n')[[1]][3]
+    status <- httr::GET ('http://overpass-api.de/api/status', 
+                         httr::timeout (100)) # don't timeout this!
+    status <- httr::content (status)
+    status_now <- strsplit (status, '\n')[[1]][4]
 
-    if (!quiet) message(status_now)
+    if (!quiet) message (status_now)
 
     if (grepl ('after', status_now)) {
       available <- FALSE
       slot_time <- lubridate::ymd_hms (gsub ('Slot available after: ', '', 
                                            status_now))
-      slot_time <- lubridate::force_tz (slot_time, tz = Sys.timezone())
+      slot_time <- lubridate::force_tz (slot_time, tz = Sys.timezone ())
     } else {
       available <- TRUE
-      slot_time <- Sys.time()
+      slot_time <- Sys.time ()
     }
   }
 
