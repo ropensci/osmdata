@@ -49,11 +49,14 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
     obj <- osmdata () # uses class def
     if (missing (q))
         message ('q missing: osmdata object will not include query')
-    else
+    else if (is (q, 'overpass_query'))
     {
         obj$bbox <- q$bbox
         obj$overpass_call <- qry_to_string (q)
-    }
+    } else if (is.character (q))
+        obj$overpass_call <- q
+    else
+        stop ('q must be an overpass query or a character string')
 
     if (missing (doc))
     {
@@ -83,7 +86,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
     if (!quiet)
         message ('convertig OSM data to sp format')
     res <- rcpp_osmdata_sp (doc)
-    if (missing (q))
+    if (is.null (obj$bbox))
         obj$bbox <- paste (res$bbox, collapse=' ')
     obj$osm_points <- res$points
     obj$osm_lines <- res$lines
@@ -151,11 +154,14 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     obj <- osmdata () # uses class def
     if (missing (q))
         message ('q missing: osmdata object will not include query')
-    else
+    else if (is (q, 'overpass_query'))
     {
         obj$bbox <- q$bbox
         obj$overpass_call <- qry_to_string (q)
-    }
+    } else if (is.character (q))
+        obj$overpass_call <- q
+    else
+        stop ('q must be an overpass query or a character string')
 
     if (missing (doc))
     {

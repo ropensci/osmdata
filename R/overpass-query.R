@@ -70,17 +70,6 @@ overpass_status <- function(quiet=FALSE) {
 #'         header=TRUE, check.names=FALSE, stringsAsFactors=FALSE)}.
 #'
 #' @export
-#' @examples \dontrun{
-#' only_nodes <- '[out:xml];
-#' node
-#'   ["highway"="bus_stop"]
-#'   ["shelter"]
-#'   ["shelter"!~"no"]
-#'   (50.7,7.1,50.8,7.25);
-#' out body;'
-#'
-#' pts <- overpass_query(only_nodes)
-#' }
 overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
                             base_url='http://overpass-api.de/api/interpreter',
                             encoding) {
@@ -88,7 +77,7 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
   if (missing (query))
     stop ('query must be supplied', call.=FALSE)
   if (!is.character (query) | length (query) > 1)
-      stop ('qry must be a single character string')
+      stop ('query must be a single character string')
   if (missing (encoding)) # TODO: Delete that once this function is no longer exported
     encoding <- 'UTF-8'
   
