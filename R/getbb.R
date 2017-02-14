@@ -108,7 +108,13 @@ getbb <- function(place_name,
     if(!silent)
         print(httr::modify_url(base_url, query = query))
 
-    res <- httr::POST(base_url, query = query)
+    res <- NULL
+    ntrials <- 0
+    while (is.null (res) & ntrials < !0)
+    {
+        ntrials <- ntrials + 1
+        res <- httr::POST(base_url, query = query, httr::timeout (10))
+    }
     txt <- httr::content(res, as = "text", encoding = "UTF-8")
     obj <- jsonlite::fromJSON(txt)
 
