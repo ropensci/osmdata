@@ -54,9 +54,10 @@ print.osmdata <- function (x, ...)
     if (!all (sapply (x, is.null)))
         message ("Object of class 'osmdata' with:")
 
-    nm <- c (rep (" ", 17), "$bbox")
-    message (nm, " : ", sapply (x$bbox, function (i) 
-                                paste (formatC (i, format="f", digits=2), " ")))
+    #nm <- c (rep (" ", 17), "$bbox")
+    #message (nm, " : ", sapply (x$bbox, function (i) 
+    #                            paste (formatC (i, format="f", digits=2), " ")))
+    message (c (rep (' ', 17), '$bbox : ', x$bbox))
 
     objs <- c ("overpass_call", "timestamp")
     prnts <- c ("The call submitted to the overpass API", x$timestamp)

@@ -140,7 +140,7 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
         encoding <- 'UTF-8'
 
     obj <- osmdata () # uses class def
-    #obj$bbox <- q$bbox
+    obj$bbox <- q$bbox
     obj$overpass_call <- qry_to_string (q)
 
     if (missing (doc))
@@ -171,7 +171,7 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     if (!quiet)
         message ('convertig OSM data to sp format')
     res <- rcpp_osmdata_sf (doc)
-    obj$bbox <- res$bbox
+    #obj$bbox <- res$bbox
 
     nms <- c ("points", "lines", "polygons", "multilines", "multipolygons")
     # This is repetitive, but sf uses the allocated names, so get and assign can
