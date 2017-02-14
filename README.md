@@ -32,11 +32,11 @@ q1 <- add_feature (q0, key='name', value="Thames", exact=FALSE)
 x <- osmdata_sf (q1)
 x
 #> Object of class 'osmdata' with:
-#>                  $bbox : -2.03  51.38  0.68  51.79
+#>                  $bbox : 51.47,-0.27,51.5,-0.2
 #>         $overpass_call : The call submitted to the overpass API
-#>             $timestamp : [ Tue Jan 31 22:36:26 2017 ]
-#>            $osm_points : 'sf' Simple Features Collection with 21234 points
-#>             $osm_lines : 'sf' Simple Features Collection with 1866 linestrings
+#>             $timestamp : [ Tue Feb 14 18:36:41 2017 ]
+#>            $osm_points : 'sf' Simple Features Collection with 21249 points
+#>             $osm_lines : 'sf' Simple Features Collection with 1871 linestrings
 #>          $osm_polygons : 'sf' Simple Features Collection with 22 polygons
 #>        $osm_multilines : 'sf' Simple Features Collection with 5 multilinestrings
 #>     $osm_multipolygons : 'sf' Simple Features Collection with 3 multipolygons
@@ -50,10 +50,10 @@ bu
 #> Object of class 'osmdata' with:
 #>                  $bbox : 51.51,-0.12,51.52,-0.11
 #>         $overpass_call : The call submitted to the overpass API
-#>             $timestamp : [ Tue Jan 31 22:36:28 2017 ]
-#>            $osm_points : 'sp' SpatialpointsDataFrame with 5070 points
-#>             $osm_lines : 'sp' SpatiallinesDataFrame with 14 lines
-#>          $osm_polygons : 'sp' SpatialpolygonsDataFrame with 562 polygons
+#>             $timestamp : [ Tue Feb 14 18:36:43 2017 ]
+#>            $osm_points : 'sp' SpatialpointsDataFrame with 5049 points
+#>             $osm_lines : 'sp' SpatiallinesDataFrame with 12 lines
+#>          $osm_polygons : 'sp' SpatialpolygonsDataFrame with 564 polygons
 #>        $osm_multilines : 'sp' SpatialmultilinesDataFrame with 0 multilines
 #>     $osm_multipolygons : 'sp' SpatialmultipolygonsDataFrame with 15 multipolygons
 ```
@@ -67,9 +67,9 @@ hs
 #> Object of class 'osmdata' with:
 #>                  $bbox : 51.51,-0.12,51.52,-0.11
 #>         $overpass_call : The call submitted to the overpass API
-#>             $timestamp : [ Tue Jan 31 22:36:31 2017 ]
-#>            $osm_points : 'sp' SpatialpointsDataFrame with 1985 points
-#>             $osm_lines : 'sp' SpatiallinesDataFrame with 545 lines
+#>             $timestamp : [ Tue Feb 14 18:36:54 2017 ]
+#>            $osm_points : 'sp' SpatialpointsDataFrame with 1984 points
+#>             $osm_lines : 'sp' SpatiallinesDataFrame with 550 lines
 #>          $osm_polygons : 'sp' SpatialpolygonsDataFrame with 30 polygons
 #>        $osm_multilines : 'sp' SpatialmultilinesDataFrame with 0 multilines
 #>     $osm_multipolygons : 'sp' SpatialmultipolygonsDataFrame with 3 multipolygons
@@ -115,31 +115,6 @@ x <- osmdata_sf (q1, "data.xml")
 The [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) provides access to OSM elements selected by search criteria such as location, types of objects, tag properties, proximity, or combinations of these.
 
 To explore simple Overpass queries interactively, try [overpass turbo](http://overpass-turbo.eu/), and to find out more about building queries see the [Language Guide](http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide) or the more comprehensive [Language Reference](http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL).
-
-<!--
-The following functions are implemented:
-
-- `add_feature`:    Add a feature to an Overpass query
-- `available_features`: List recognized features in OSM Overpass
-- `available_tags`: List tags associated with a feature
-- `bbox_to_string`: Convert a named matrix or a named vector (or an unnamed vector) return a string
-- `opq`:    Begin building an Overpass query
-- `overpass_query`: Issue OSM Overpass Query
-- `overpass_status`:    Retrieve status of the Overpass API
-- `read_osm`:   Read an XML OSM Overpass response from path
--->
-### Test Results
-
-``` r
-date()
-#> [1] "Tue Jan 31 22:36:31 2017"
-
-testthat::test_dir("tests/")
-#> testthat results ===========================================================
-#> OK: 59 SKIPPED: 0 FAILED: 0
-#> 
-#> DONE ======================================================================
-```
 
 ### Code of Conduct
 

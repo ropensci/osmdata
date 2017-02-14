@@ -1,35 +1,49 @@
 #' Retrieve status of the Overpass API
 #'
 #' @param quiet if \code{FALSE} display a status message
+#' @param wait If status is unavalable, wait this long (in s)
 #' @return an invisible list of whether the API is available along with the
 #'         text of the message from Overpass and the timestamp of the
 #'         next available slot
 #' @export
-overpass_status <- function (quiet=FALSE) {
-
+overpass_status <- function (quiet=FALSE, wait=10) 
+{
     available <- FALSE
-    slot_time <- NULL
+    slot_time <- status <- status_now <- NULL
+    ovp_url <- 'http://overpass-api.de/api/status'
+
     if (!curl::has_internet ())
     {
         status <- 'No internet connection'
         if (!quiet) message (status)
     } else
     {
-        status <- httr::GET ('http://overpass-api.de/api/status', 
-                             httr::timeout (100)) # don't timeout this!
-        status <- httr::content (status)
-        status_now <- strsplit (status, '\n')[[1]][4]
+        ntrials <- 0
+        while (is.null (status) & ntrials < 1)
+        {
+            ntrials <- ntrials + 1
+            status <- httr::GET (ovp_url, httr::timeout (10))
+        }
+        if (!is.null (status))
+        {
+            status <- httr::content (status)
+            status_now <- strsplit (status, '\n')[[1]][3]
+            if (!quiet) message (status_now)
 
-        if (!quiet) message (status_now)
-
-        if (grepl ('after', status_now)) {
-            available <- FALSE
-            slot_time <- lubridate::ymd_hms (gsub ('Slot available after: ', '', 
-                                                   status_now))
+            if (grepl ('after', status_now)) {
+                available <- FALSE
+                slot_time <- lubridate::ymd_hms (gsub ('Slot available after: ', 
+                                                       '', status_now))
+                slot_time <- lubridate::force_tz (slot_time, tz = Sys.timezone ())
+            } else {
+                available <- TRUE
+                slot_time <- Sys.time ()
+            }
+        } else
+        {
+            # status not even returned so pause the whole shebang for 10 seconds
+            slot_time <- lubridate::ymd_hms (lubridate::now () + 10)
             slot_time <- lubridate::force_tz (slot_time, tz = Sys.timezone ())
-        } else {
-            available <- TRUE
-            slot_time <- Sys.time ()
         }
     }
 
@@ -108,11 +122,12 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
         res <- httr::POST (base_url, body=query)
     } else {
         if (wait) {
-            wait <- max(0, as.numeric (difftime (o_stat$next_slot, Sys.time(), 
-                                               units = 'secs'))) + pad_wait
+            message ("(available, next_slot, msg) = (", o_stat$available, ", ",
+                     o_stat$next_slot, ", ", o_stat$msg, ")")
+            wait <- max(0, as.numeric (difftime (o_stat$next_slot, Sys.time(),
+                                                 units = 'secs'))) + pad_wait
             message (sprintf ('Waiting %s seconds', wait))
             Sys.sleep (wait)
-            #make_query (query, quiet)
             res <- httr::POST (base_url, body=query)
         } else {
             stop ('Overpass query unavailable', call.=FALSE)
@@ -128,7 +143,7 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
     else
         doc <- httr::content (res, as='text', encoding=encoding)
     # TODO: Just return the direct httr::POST result here and convert in the
-    # subsequent functions (`osmdata_xml/csv/sp/sf`).
+    # subsequent functions (`osmdata_xml/csv/sp/sf`)?
 
     return (doc)
 }

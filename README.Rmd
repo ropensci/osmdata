@@ -40,18 +40,7 @@ devtools::install_github("osmdatar/osmdata")
 ```
 
 ```{r usage2, echo=FALSE}
-#devtools::load_all (".")
 devtools::load_all (".", export_all=FALSE)
-#devtools::load_all (".", recompile=TRUE)
-#devtools::document (".")
-#goodpractice::gp (".")
-#devtools::check (".")
-#testthat::test_package ("osmdata")
-#Rcpp::compileAttributes()
-```
-```{r cachegrind, echo=FALSE, eval=FALSE}
-R -d "valgrind --tool=callgrind" -f test.R
-kcachegrind callgrind.out.<pid>
 ```
 
 Current verison:
@@ -133,28 +122,9 @@ queries see the
 or the more comprehensive
 [Language Reference](http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL).
 
-<!--
-The following functions are implemented:
-
-- `add_feature`:	Add a feature to an Overpass query
-- `available_features`:	List recognized features in OSM Overpass
-- `available_tags`:	List tags associated with a feature
-- `bbox_to_string`:	Convert a named matrix or a named vector (or an unnamed vector) return a string
-- `opq`:	Begin building an Overpass query
-- `overpass_query`:	Issue OSM Overpass Query
-- `overpass_status`:	Retrieve status of the Overpass API
-- `read_osm`:	Read an XML OSM Overpass response from path
--->
 
 
 
-### Test Results
-
-```{r test}
-date()
-
-testthat::test_dir("tests/")
-```
 
 ### Code of Conduct
 
