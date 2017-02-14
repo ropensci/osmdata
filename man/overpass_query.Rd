@@ -49,16 +49,3 @@ Issue OSM Overpass Query
 wrap function with \code{httr::with_verbose} if you want to see the
       \code{httr} query (useful for debugging connection issues).\cr \cr
 }
-\examples{
-\dontrun{
-only_nodes <- '[out:xml];
-node
-  ["highway"="bus_stop"]
-  ["shelter"]
-  ["shelter"!~"no"]
-  (50.7,7.1,50.8,7.25);
-out body;'
-
-pts <- overpass_query(only_nodes)
-}
-}

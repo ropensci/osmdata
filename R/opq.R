@@ -98,7 +98,7 @@ add_feature <- function (opq, key, value, exact=TRUE, bbox=NULL)
 #' Convert an osmdata query of class \code{opq} to a character string query to
 #' be submitted to the overpass API
 #'
-#' @param opq Overpass query object
+#' @param qry Overpass query object
 #' @return Character string to be submitted to the overpass API
 #' 
 #' @note The final query can be obtained from 
