@@ -23,11 +23,12 @@
 #'   add_feature("leisure", "park"))
 #' sp::plot(p$osm_polygons[1,])
 #' }
-opq <- function(bbox=NULL) 
+opq <- function (bbox=NULL) 
 {
     # TODO: Do we really need these [out:xml][timeout] specifiers?
-    res <- list(bbox=bbox_to_string(bbox),
-              features=c("[out:xml][timeout:25];\n(\n"))
+    res <- list (bbox = bbox_to_string (bbox),
+              prefix = "[out:xml][timeout:25];\n(\n",
+              suffix = ");\n(._;>);\nout body;", features = NULL)
     class (res) <- c (class (res), "overpass_query")
     return (res)
 }
@@ -48,31 +49,42 @@ opq <- function(bbox=NULL)
 #'
 #' @references \url{http://wiki.openstreetmap.org/wiki/Map_Features}
 #' @export
-add_feature <- function(opq, key, value, exact=TRUE, bbox=NULL) 
+add_feature <- function (opq, key, value, exact=TRUE, bbox=NULL) 
 {
     if (missing (key))
         stop ('key must be provided')
 
-    if (is.null(bbox) & is.null(opq$bbox))
-        stop('Bounding box has to either be set in opq or must be set here') 
-    if (is.null(bbox)) bbox <- opq$bbox
+    if (is.null (bbox) & is.null (opq$bbox))
+        stop ('Bounding box has to either be set in opq or must be set here') 
+
+    if (is.null (bbox)) 
+        bbox <- opq$bbox
+    else
+    {
+        bbox <- bbox_to_string (bbox)
+        opq$bbox <- bbox
+    }
+
+    if (exact) 
+        bind <- '=' 
+    else 
+        bind <- '~'
 
     if (missing (value))
     {
-        paste0(sprintf(' node["%s"](%s);\n', key, bbox),
-               sprintf('  way["%s"](%s);\n', key, bbox),
-               sprintf('  relation["%s"](%s);\n\n', key, bbox)) -> thing
+        #paste0(sprintf(' node["%s"](%s);\n', key, bbox),
+        #       sprintf('  way["%s"](%s);\n', key, bbox),
+        #       sprintf('  relation["%s"](%s);\n\n', key, bbox)) -> feature
+        feature <- paste0 (sprintf (' ["%s"]', key)) 
     } else
     {
-        if (exact) bind <- '='
-        else bind <- '~'
-        paste0(sprintf(' node["%s"%s"%s"](%s);\n', key, bind, value, bbox),
-               sprintf('  way["%s"%s"%s"](%s);\n', key, bind, value, bbox),
-               sprintf('  relation["%s"%s"%s"](%s);\n\n', key, bind, 
-                       value, bbox)) -> thing
+        #paste0(sprintf(' node["%s"%s"%s"](%s);\n', key, bind, value, bbox),
+        #       sprintf('  way["%s"%s"%s"](%s);\n', key, bind, value, bbox),
+        #       sprintf('  relation["%s"%s"%s"](%s);\n\n', key, bind, 
+        feature <- paste0 (sprintf (' ["%s"%s"%s"]', key, bind, value))
     }
 
-    opq$features <- c(opq$features, thing)
+    opq$features <- c(opq$features, feature)
 
     if (is.null (opq$suffix))
         opq$suffix <- ");\n(._;>);\nout body;"
@@ -81,4 +93,24 @@ add_feature <- function(opq, key, value, exact=TRUE, bbox=NULL)
     # numerically sorted
 
     opq
+}
+
+#' Convert an osmdata query of class \code{opq} to a character string query to
+#' be submitted to the overpass API
+#'
+#' @param opq Overpass query object
+#' @return Character string to be submitted to the overpass API
+#' 
+#' @note The final query can be obtained from 
+#' \code{paste0 (c (query$features, query$suffix), collapse="\n")}
+#'
+#' @export
+qry_to_string <- function (qry)
+{
+    features <- paste (qry$features, collapse='')
+    features <- paste0 (sprintf (' node %s (%s);\n', features, qry$bbox),
+                        sprintf (' way %s (%s);\n', features, qry$bbox),
+                        sprintf (' relation %s (%s);\n\n', features,
+                                 qry$bbox)) 
+    paste0 (qry$prefix, features, qry$suffix)
 }

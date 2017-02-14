@@ -11,28 +11,28 @@ overpass_status <- function(quiet=FALSE) {
   slot_time <- NULL
   if (!curl::has_internet ())
   {
-    status <- "No internet connection"
+    status <- 'No internet connection'
     if (!quiet) message (status)
   } else
   {
-    status <- httr::GET("http://overpass-api.de/api/status")
+    status <- httr::GET('http://overpass-api.de/api/status')
     status <- httr::content(status)
-    status_now <- strsplit(status, "\n")[[1]][3]
+    status_now <- strsplit(status, '\n')[[1]][3]
 
     if (!quiet) message(status_now)
 
-    if (grepl("after", status_now)) {
+    if (grepl ('after', status_now)) {
       available <- FALSE
-      slot_time <- lubridate::ymd_hms(gsub("Slot available after: ", "", 
+      slot_time <- lubridate::ymd_hms (gsub ('Slot available after: ', '', 
                                            status_now))
-      slot_time <- lubridate::force_tz(slot_time, tz = Sys.timezone())
+      slot_time <- lubridate::force_tz (slot_time, tz = Sys.timezone())
     } else {
       available <- TRUE
       slot_time <- Sys.time()
     }
   }
 
-  return(invisible(list(available=available, next_slot=slot_time, msg=status)))
+  return (invisible (list (available=available, next_slot=slot_time, msg=status)))
 
 }
 
@@ -82,64 +82,61 @@ overpass_status <- function(quiet=FALSE) {
 #' pts <- overpass_query(only_nodes)
 #' }
 overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
-                            base_url="http://overpass-api.de/api/interpreter",
+                            base_url='http://overpass-api.de/api/interpreter',
                             encoding) {
 
   if (missing (query))
-    stop ("query must be supplied", call.=FALSE)
+    stop ('query must be supplied', call.=FALSE)
+  if (!is.character (query) | length (query) > 1)
+      stop ('qry must be a single character string')
   if (missing (encoding)) # TODO: Delete that once this function is no longer exported
     encoding <- 'UTF-8'
   
-  if (!all (sapply (query, class) == "character"))
-    stop ("Elements in query must contain nothing but character strings", call.=FALSE)
   if (!is.logical (quiet))
     quiet <- FALSE
   if (!is.logical (wait))
     wait <- TRUE
   if (!is.numeric (pad_wait))
   {
-    message ("pad_wait must be numeric; setting to 5s")
+    message ('pad_wait must be numeric; setting to 5s')
     pad_wait <- 5
   }
   if (pad_wait < 0)
   {
-    warning ("pad_wait must be positive; setting to 5s")
+    warning ('pad_wait must be positive; setting to 5s')
     pad_wait <- 5
   }
 
   if (!curl::has_internet ())
-      stop("Overpass query unavailable without internet", call.=FALSE)
+      stop ('Overpass query unavailable without internet', call.=FALSE)
     
-  if (!quiet) message("Issuing query to OSM Overpass...")
+  if (!quiet) message('Issuing query to Overpass API ...')
 
   o_stat <- overpass_status (quiet)
-
-  if(is.list(query)) 
-    query <- paste0 (c (query$features, query$suffix), collapse="\n")
 
   if (o_stat$available) {
     res <- httr::POST (base_url, body=query)
   } else {
     if (wait) {
        wait <- max(0, as.numeric(difftime(o_stat$next_slot, Sys.time(), 
-                                          units = "secs"))) + pad_wait
-       message (sprintf ("Waiting %s seconds", wait))
+                                          units = 'secs'))) + pad_wait
+       message (sprintf ('Waiting %s seconds', wait))
        Sys.sleep (wait)
        #make_query (query, quiet)
        res <- httr::POST (base_url, body=query)
     } else {
-      stop ("Overpass query unavailable", call.=FALSE)
+      stop ('Overpass query unavailable', call.=FALSE)
     }
   }
-  if (!quiet) message("Query complete!")
+  if (!quiet) message ('Query complete!')
 
-  if (class (res) == "result") # differs only for mock tests
+  if (class (res) == 'result') # differs only for mock tests
     httr::stop_for_status (res)
 
-  if (class (res) == "raw") # for mock tests
+  if (class (res) == 'raw') # for mock tests
       doc <- rawToChar (res)  
   else
-      doc <- httr::content (res, as="text", encoding="UTF-8")
+      doc <- httr::content (res, as='text', encoding=encoding)
   # TODO: Just return the direct httr::POST result here and convert in the
   # subsequent functions (`osmdata_xml/csv/sp/sf`).
 

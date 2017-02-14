@@ -20,10 +20,8 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
     if (missing (encoding))
         encoding <- 'UTF-8'
 
-    #doc <- xml2::read_xml(osm_response, encoding=encoding)
-    #rcpp_osmdata_sp (doc)
-    doc <- overpass_query (q, quiet=quiet, encoding=encoding)
-    doc <- xml2::read_xml (doc)
+    doc <- overpass_query (qry_to_string (q), quiet=quiet, encoding=encoding)
+    doc <- xml2::read_xml (doc, encoding=encoding)
     if (!missing (filename))
         xml2::write_xml (doc, file=filename)
     invisible (doc)
@@ -49,11 +47,11 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
 
     obj <- osmdata () # uses class def
     obj$bbox <- q$bbox
-    obj$overpass_call <- q
+    obj$overpass_call <- qry_to_string (q)
 
     if (missing (doc))
     {
-        doc <- overpass_query (q, quiet=quiet, encoding=encoding)
+        doc <- overpass_query (obj$overpass_call, quiet=quiet, encoding=encoding)
         obj$timestamp <- timestamp (quiet=TRUE, prefix="[ ", suffix=" ]")
     } else 
     {
@@ -69,7 +67,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
         mon <- lubridate::month (tstmp, label=TRUE)
         day <- lubridate::day (tstmp)
         year <- lubridate::year (tstmp)
-        # TODO: Get this reges to **exclude** 'T' and 'Z'
+        # TODO: Get this regex to **exclude** 'T' and 'Z'
         hms <- regmatches (tstmp, regexpr ('T(.*?)Z', tstmp))
         hms <- substring (hms, 2, nchar (hms) - 1)
         obj$timestamp <- timestamp (paste (wday, mon, day, hms, year), quiet=TRUE)
@@ -143,11 +141,11 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
 
     obj <- osmdata () # uses class def
     #obj$bbox <- q$bbox
-    obj$overpass_call <- q
+    obj$overpass_call <- qry_to_string (q)
 
     if (missing (doc))
     {
-        doc <- overpass_query (q, quiet=quiet, encoding=encoding)
+        doc <- overpass_query (obj$overpass_call, quiet=quiet, encoding=encoding)
         obj$timestamp <- timestamp (quiet=TRUE, prefix="[ ", suffix=" ]")
     } else
     {
