@@ -2,7 +2,3 @@
 data/* binary
 src/* text=lf
 R/* text=lf
-docs/* linguist-documentation
-docs/articles/* linguist-documentation
-docs/news/* linguist-documentation
-docs/reference/* linguist-documentation
