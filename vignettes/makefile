@@ -1,4 +1,4 @@
-LFILE = 01osmdata
+LFILE = osmdata
 #LFILE = osm-sf-translation
 
 all: knith open 
