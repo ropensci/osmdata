@@ -19,10 +19,10 @@ overpass_status <- function (quiet=FALSE, wait=10)
     } else
     {
         ntrials <- 0
-        while (is.null (status) & ntrials < 1)
+        while (is.null (status) & ntrials < 10)
         {
             ntrials <- ntrials + 1
-            status <- httr::GET (ovp_url, httr::timeout (10))
+            status <- httr::GET (ovp_url, httr::timeout (100))
         }
         if (!is.null (status))
         {
