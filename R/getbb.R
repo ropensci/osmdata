@@ -47,6 +47,31 @@ bbox_to_string <- function(bbox) {
     return(bbox)
 }
 
+#' Check whether an API URL is available or not
+#'
+#' @param base_url The URL to be checked
+#' @param max_trials Maximum number of attempts before returning FALSE
+#' 
+#' @return TRUE if URL available, otherwise FALSE
+#' @export
+url_available <- function (base_url, max_trials=10)
+{
+    available <- FALSE
+
+    if (curl::has_internet ())
+    {
+        ntrials <- 0
+        while (!available & ntrials < max_trials)
+        {
+            ntrials <- ntrials + 1
+            status <- httr::http_status (httr::GET (base_url, httr::timeout (10)))
+            if (status$category == 'Success')
+                available <- TRUE
+        }
+    }
+    return (available)
+}
+
 #' Get bounding box for a given place name.
 #' 
 #' This function uses the free Nominatim API provided by OpenStreetMap to find
@@ -108,13 +133,16 @@ getbb <- function(place_name,
     if(!silent)
         print(httr::modify_url(base_url, query = query))
 
-    res <- NULL
-    ntrials <- 0
-    (is.null (res) & ntrials < 10)
+    wait <- 10 # wait this long if nominatim not available
+    available <- FALSE
+    while (!available)
     {
-        ntrials <- ntrials + 1
-        res <- httr::POST(base_url, query = query, httr::timeout (100))
+        available <- url_available (base_url)
+        if (!available)
+            Sys.sleep (wait)
     }
+
+    res <- httr::POST(base_url, query = query, httr::timeout (100))
     txt <- httr::content(res, as = "text", encoding = "UTF-8")
     obj <- jsonlite::fromJSON(txt)
 
