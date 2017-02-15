@@ -110,10 +110,10 @@ getbb <- function(place_name,
 
     res <- NULL
     ntrials <- 0
-    while (is.null (res) & ntrials < !0)
+    (is.null (res) & ntrials < 10)
     {
         ntrials <- ntrials + 1
-        res <- httr::POST(base_url, query = query, httr::timeout (10))
+        res <- httr::POST(base_url, query = query, httr::timeout (100))
     }
     txt <- httr::content(res, as = "text", encoding = "UTF-8")
     obj <- jsonlite::fromJSON(txt)
