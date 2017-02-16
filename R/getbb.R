@@ -133,13 +133,14 @@ getbb <- function(place_name,
     if(!silent)
         print(httr::modify_url(base_url, query = query))
 
-    wait <- 10 # wait this long if nominatim not available
+    wait <- 1 
     available <- FALSE
     while (!available)
     {
         available <- url_available (base_url)
         if (!available)
             Sys.sleep (wait)
+        wait <- wait * 2
     }
 
     res <- httr::POST(base_url, query = query, httr::timeout (100))
