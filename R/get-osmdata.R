@@ -1,3 +1,21 @@
+#' Get timestamp from OSM XML document
+#'
+#' @param doc OSM XML document
+#'
+#' @return An R timestamp object
+get_timestamp <- function (doc)
+{
+    tstmp <- xml2::xml_text (xml2::xml_find_all (doc, "//meta/@osm_base"))
+    wday <- lubridate::wday (tstmp, label=TRUE)
+    mon <- lubridate::month (tstmp, label=TRUE)
+    day <- lubridate::day (tstmp)
+    year <- lubridate::year (tstmp)
+    # TODO: Get this regex to **exclude** 'T' and 'Z'
+    hms <- regmatches (tstmp, regexpr ('T(.*?)Z', tstmp))
+    hms <- substring (hms, 2, nchar (hms) - 1)
+    timestamp (paste (wday, mon, day, hms, year), quiet=TRUE)
+}
+
 #' Return an OSM Overpass query in XML format 
 #' Read an (XML format) OSM Overpass response from a string, a connection,
 #' or a raw vector.
@@ -70,16 +88,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
                 stop ("file ", doc, " does not exist")
             doc <- xml2::read_xml (doc)
         }
-        # Convert XML timestamp to `date()` format:
-        tstmp <- xml2::xml_text (xml2::xml_find_all (doc, "//meta/@osm_base"))
-        wday <- lubridate::wday (tstmp, label=TRUE)
-        mon <- lubridate::month (tstmp, label=TRUE)
-        day <- lubridate::day (tstmp)
-        year <- lubridate::year (tstmp)
-        # TODO: Get this regex to **exclude** 'T' and 'Z'
-        hms <- regmatches (tstmp, regexpr ('T(.*?)Z', tstmp))
-        hms <- substring (hms, 2, nchar (hms) - 1)
-        obj$timestamp <- timestamp (paste (wday, mon, day, hms, year), quiet=TRUE)
+        obj$timestamp <- get_timestamp (doc)
         doc <- as.character (doc)
     } 
 
@@ -175,16 +184,7 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
                 stop ("file ", doc, " does not exist")
             doc <- xml2::read_xml (doc)
         }
-        # Convert XML timestamp to `date()` format:
-        tstmp <- xml2::xml_text (xml2::xml_find_all (doc, "//meta/@osm_base"))
-        wday <- lubridate::wday (tstmp, label=TRUE)
-        mon <- lubridate::month (tstmp, label=TRUE)
-        day <- lubridate::day (tstmp)
-        year <- lubridate::year (tstmp)
-        # TODO: Get this reges to **exclude** 'T' and 'Z'
-        hms <- regmatches (tstmp, regexpr ('T(.*?)Z', tstmp))
-        hms <- substring (hms, 2, nchar (hms) - 1)
-        obj$timestamp <- timestamp (paste (wday, mon, day, hms, year), quiet=TRUE)
+        obj$timestamp <- get_timestamp (doc)
         doc <- as.character (doc)
     }
 
