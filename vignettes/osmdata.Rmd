@@ -312,3 +312,32 @@ dim (osmdata_sf (q, doc='buildings.osm')$osm_polygons); dim (osmdata_sf (q, doc=
 for (f in list.files (pattern="\\.osm"))
     if (file.exists (f)) file.remove (f)
 ```
+
+## 5. Recursive searching
+
+OSM data are strucutred in three hierarchical levels:
+
+1. `nodes` representing spatial points 
+
+2. `ways` representing lines, both as `polygons` (with connected ends) and
+   non-polygonal `lines`
+
+3. `relations` representing more complex objects generally comprising
+   collections of `ways` and/or `nodes. Examples include `multipolygon
+   relations` comprising an outer polygon (which may itself be made of several
+   distinct `ways` which ultimately connect to form a single circle), and
+   several inner polygons.
+
+`osmdata` contains several functions which can be used to extract the components
+of individual objects.
+
+1. `osm_points` extracts all `point` or `node` objects 
+
+2. `osm_lines` extracts all `way` objects that are `lines` (that are, that are
+   not `polygons`) 
+
+3. `osm_polygons` extracts all `polygon` objects
+
+4. `osm_multilines` extracts all `multiline` objects; and
+
+5. `osm_multipolygons` extracts all `multipolygon` objects.
