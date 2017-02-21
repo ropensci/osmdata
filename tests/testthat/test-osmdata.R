@@ -18,16 +18,16 @@ if (get_local)
     qry <- add_feature (qry, key='highway', value='tertiary')
     qry <- paste0 (c (qry$features, qry$suffix), collapse='\n')
 
-    cfm_output_overpass_query <- NULL
-    trace(
-          curl::curl_fetch_memory,
-          exit = function() { cfm_output_overpass_query <<- returnValue() }
-          )
-    res <- httr::POST (base_url, body=qry)
-    #names (cfm_output_make_query)
-    untrace (curl::curl_fetch_memory)
-    save (cfm_output_overpass_query, 
-          file='./tests/testthat/cfm_output_overpass_query.rda')
+    # curl_fetch_memory way to grab output (no longer necessary):
+    #cfm_output_overpass_query <- NULL
+    #trace(
+    #      curl::curl_fetch_memory,
+    #      exit = function() { cfm_output_overpass_query <<- returnValue() }
+    #      )
+    #res <- httr::POST (base_url, body=qry)
+    #untrace (curl::curl_fetch_memory)
+    #save (cfm_output_overpass_query, 
+    #      file='./tests/testthat/cfm_output_overpass_query.rda')
 }
 
 context ('overpass query')

@@ -12,15 +12,14 @@ if (get_local) {
     #         file = "./tests/testthat/bb_test.Rds")
 
     # Equivalent code using internal 'stub.R' function
-    cfm_output_bb <- NULL
-    trace(
-          curl::curl_fetch_memory,
-          exit = function() { cfm_output_bb <<- returnValue() }
-          )
-    res <- httr::POST (base_url, query=query)
-    untrace (curl::curl_fetch_memory)
-    save (cfm_output_bb, 
-          file="./tests/testthat/cfm_output_bb.rda")
+    #trace ( curl::curl_fetch_memory, exit = function() { })
+    base_url = "https://nominatim.openstreetmap.org"
+    query <- list (q = 'Salzburg', viewbox = NULL, format = 'json',
+                   featuretype = 'settlement', key = NULL, limit = 10)
+    the_url <- httr::modify_url (base_url, query=query)
+    GET_result_bb <- httr::GET (the_url)
+    #untrace (curl::curl_fetch_memory)
+    save (GET_result_bb, file="GET_result_bb.rda")
 }
 
 context ("bbox")
@@ -37,9 +36,8 @@ test_that ('getbb-place_name', {
                if (has_internet) {
                    if (is_cran)
                    {
-                       load("cfm_output_bb.rda")
-                       stub (getbb, 'httr::POST', 
-                             function (x, ...) cfm_output_bb$content )
+                       load("GET_result_bb.rda")
+                       stub (getbb, 'httr::GET', function (x) GET_result_bb)
                    } 
                    res <- getbb (place_name="Salzburg")
                    expect_is (res, "matrix")
