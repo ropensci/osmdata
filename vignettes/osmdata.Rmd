@@ -13,7 +13,7 @@ vignette: >
 ---
 
 
-## 1. A quick introcuction
+## 1. A quick introduction
 
 ```{r install, eval=FALSE}
 devtools::install_github("osmdatar/osmdata")
@@ -48,7 +48,7 @@ The corresponding data may then be extracted as `R Spatial` objects with,
 ```{r osmdata_sp}
 osmdata_sp (q)
 ```
-or an `R Sinple Features` objects wtth
+or an `R Sinple Features` objects with
 ```{r osmdata_sf}
 osmdata_sf (q)
 ```
@@ -132,8 +132,8 @@ The function `osmdata_sf` returns an object of class `osmdata`, as described in
 detail below.
 
 The detailed structure of `overpass` queries can best be appreciated by using
-the [interactive online query builder](http://overpass-turbo.eu), which inludes a
-helful corrector function for incorrectly formatted queries. An `osmdata` query
+the [interactive online query builder](http://overpass-turbo.eu), which includes a
+helpful corrector function for incorrectly formatted queries. An `osmdata` query
 includes the two primary fields of `bbox` and `qry`, with the latter passed
 directly to the `overpass` API. Any queries constructed with the 
 [interactive online query builder](http://overpass-turbo.eu) can also be pasted
@@ -204,19 +204,19 @@ class (osmdata_sf (q, "buildings.osm")$osm_lines)
 class (osmdata_sp (q, "buildings.osm")$osm_lines)
 ```
 
-### 4.1. The `osmdata_xml()` funciton
+### 4.1. The `osmdata_xml()` function
 
 `osmdata_xml()` returns OSM data in native XML format, which are stored by
 convention with the file suffix `.osm`. This function also allows raw data to
 be saved to disk, as demonstrated above. The `XML` data are formatting using
-the `R` package `xml2`, and may be processed within `R` using any mehtods
+the `R` package `xml2`, and may be processed within `R` using any methods
 compatible with such data, or may be processed by any other software able to
 load the `XML` data directly from disk.
 ```{r}
 class (osmdata_xml (q))
 ```
 
-### 4.2. The `osmdata_sf()` funciton
+### 4.2. The `osmdata_sf()` function
 
 `osmdata_sf()` returns OSM data in 
 [Simple Features (SF)](http://www.opengeospatial.org/standards/sfo) 
@@ -281,7 +281,7 @@ components of any given object (the nodes of a line, for example, or the lines
 of a multipolygon) can be referenced in terms of these identifiers alone. This
 enables the full details for any component of a given object to be extracted by
 examining that component. The `sf/GDAL` representation obviates this ability
-through removing these IDs and reduing everyhing to geometries alone. This
+through removing these IDs and reducing everything to geometries alone. This
 means, for example, that the `key-value` pairs of the `line` or `polygon`
 components of `multipolygon` can never be extracted from an `sf/GDAL`
 representation. In contrast, `osmdata` retains all unique identifiers for all
@@ -292,7 +292,7 @@ Finally, note that `osmdata` will generally extract OSM data considerably
 faster than equivalent `sf/GDAL` routines (as detailed [here](git-wiki)).
 
 
-### 4.3. The `osmdata_sp()` funciton
+### 4.3. The `osmdata_sp()` function
 
 As with `osmdata_sf()` described above, OSM data may be converted to `sp`
 format without using `osmdata` via the `sf` functions 
@@ -315,7 +315,7 @@ for (f in list.files (pattern="\\.osm"))
 
 ## 5. Recursive searching
 
-OSM data are strucutred in three hierarchical levels:
+OSM data are structured in three hierarchical levels:
 
 1. `nodes` representing spatial points 
 
