@@ -15,6 +15,8 @@ vignette: >
 
 ## 1. A quick introduction
 
+The development version of the `osmdata` R package can be installed with the `devtools` (which can be installed with `installed.packages("devtools")`) as follows:
+
 ```{r install, eval=FALSE}
 devtools::install_github("osmdatar/osmdata")
 ```
