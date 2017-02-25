@@ -21,14 +21,17 @@ The development version of the `osmdata` R package can be installed with the `de
 devtools::install_github("osmdatar/osmdata")
 ```
 
-```{r usage2, echo=FALSE, message=FALSE}
-devtools::load_all ("..", export_all=FALSE)
+Once installed, it can be loaded in the usual way:
+
+```{r}
+library(osmdata)
 ```
 
 `osmdata` uses the [`overpass` API](http://overpass-api.de) to download
-OpenStreetMap (OSM) data and convert them to either [Simple Features
+OpenStreetMap (OSM) data and convert the results to either [Simple Features
 (SF)](https://cran.r-project.org/package=sf) or
-[`Spatial`](http://cran.r-project.org/package=sp) objects. `overpass` has its
+[`Spatial`](http://cran.r-project.org/package=sp) objects, defined by the `sf` and `sp` packages respectively. `overpass` is a C++ library that serves OSM data over the web (see [github.com/drolbr/Overpass-API](https://github.com/drolbr/Overpass-API) for its source code.
+It has its
 own query language, with all queries extracting data within a defined bounding
 box. A query may be initiated using the `osmdata` function `opq()`, which
 accepts the single argument of a bounding box.
