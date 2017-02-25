@@ -52,36 +52,32 @@ q <- add_feature (q, key="highway", value="motorway")
 The corresponding data may then be downloaded as follows:
 
 ```{r}
-doc <- overpass_query(qry_to_string(q), quiet = F)
+osmdata_xml(q, "doc.osm", quiet = F)
 ```
+
 
 This downloads the raw data underlying OSM, in xml format by default.
-Let's glimpse the first 100 characters of this dataset:
+Let's take a glimpse of this dataset:
 
 ```{r}
-length(doc) # one line of raw text
-nchar(doc) # containing almost 1 million chars!
-substr(doc, 1, 500) # first 500 chars
+doc = readLines("doc.osm")
+doc[1:5] # the first 5 lines of the raw xml file
 ```
 
-If you want to use this dataset in another program, like the excellent open source application [QGIS](http://qgis.org/en/site/), you can do so by saving this dataset as a .xml file, e.g.:
+If you want to use this dataset in another program, like the excellent open source GIS [QGIS](http://qgis.org/en/site/) or OSM data editor [JOSM](http://wiki.openstreetmap.org/wiki/JOSM), you can do so.
 
-```{r}
-writeLines(doc, file.path(tempdir(), "doc.osm"))
-```
-
-In QGIS this can then be loaded via a two-step process: `Vector > OpenStreetMap > Import topology from XML...` followed by `Vector > OpenStreetMap > Export topology to SpatialLite...`, as illustrated in the figure below:
+In QGIS this can then be loaded via a two-step process: `Vector > OpenStreetMap > Import topology from XML...` and open the `doc.osm` file saved previously, followed by `Vector > OpenStreetMap > Export topology to SpatialLite...`.
+The results are illustrated in the figure below:
 
 ![](https://cloud.githubusercontent.com/assets/1825120/23326333/7189dd04-faf4-11e6-91f1-bd1b0c366cad.png)
 
-Raw OSM data can also be loaded and edited with the excellent [JOSM](http://wiki.openstreetmap.org/wiki/JOSM) application.
 `osmdata` is therefore useful even if you only want to download OSM data.
 The remainder of this vignette assumes that not only do you want to get OSM data using R, you also want to import and eventually process it, using R. For that you'll need to import the data into a native R class.
 
 The osm doc can extracted as a `Spatial` object defined by the `sp` package, with:
 
 ```{r osmdata_sp}
-# osmdata_sp (doc = doc) # not working - any ideas?
+osmdata_sp (doc = "doc.osm")
 ```
 
 Note that you can also pass queries directly to the `osmdata_sp` function:
