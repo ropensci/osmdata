@@ -81,7 +81,7 @@ The remainder of this vignette assumes that not only do you want to get OSM data
 The osm doc can extracted as a `Spatial` object defined by the `sp` package, with:
 
 ```{r osmdata_sp}
-osmdata_sp (doc = doc)
+# osmdata_sp (doc = doc) # not working - any ideas?
 ```
 
 Note that you can also pass queries directly to the `osmdata_sp` function:
