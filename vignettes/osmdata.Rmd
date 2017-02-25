@@ -39,7 +39,7 @@ accepts the single argument of a bounding box.
 ```{r opq1}
 q <- opq (bbox=c(51.1,0.1,51.2,0.2))
 ```
-Bounding boxes may also be defined by simply passing the name of a desired area,
+Bounding boxes may also be defined by simply passing the name of a desired area, which does not have be precise:
 ```{r opq2}
 q <- opq (bbox="Greater London, U.K.")
 identical (opq (bbox="Greater London, U.K."), opq (bbox="greater london uk"))
@@ -49,11 +49,11 @@ An `osmdata` query consists of an initial `opq()` query and one or more features
 q <- opq (bbox="greater london uk")
 q <- add_feature (q, key="highway", value="motorway")
 ```
-The corresponding data may then be extracted as `R Spatial` objects with,
+The corresponding data may then be extracted as a `Spatial` object defined by the `sp` package, with,
 ```{r osmdata_sp}
 osmdata_sp (q)
 ```
-or an `R Sinple Features` objects with
+or an `R Simple Features` objects with
 ```{r osmdata_sf}
 osmdata_sf (q)
 ```
