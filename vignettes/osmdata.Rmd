@@ -51,16 +51,22 @@ q <- add_feature (q, key="highway", value="motorway")
 ```
 The corresponding data may then be downloaded as follows:
 
-```{r}
-osmdata_xml(q, "doc.osm", quiet = F)
+`overpass` data are returned in OSM XML format, and may be directly returned with
+```{r osmdata_xml}
+doc <- osmdata_xml (q)
 ```
+The function `osmdata_xml()` also allows data to be saved and used for
+subsequent queries through specifying a filename.
 
+```{r osmdata_xml2, eval=TRUE}
+osmdata_xml (q, "motorways.osm")
+```
 
 This downloads the raw data underlying OSM, in xml format by default.
 Let's take a glimpse of this dataset:
 
 ```{r}
-doc = readLines("doc.osm")
+doc = readLines("motorways.osm")
 doc[1:5] # the first 5 lines of the raw xml file
 ```
 
@@ -74,45 +80,35 @@ The results are illustrated in the figure below:
 `osmdata` is therefore useful even if you only want to download OSM data.
 The remainder of this vignette assumes that not only do you want to get OSM data using R, you also want to import and eventually process it, using R. For that you'll need to import the data into a native R class.
 
-The osm doc can extracted as a `Spatial` object defined by the `sp` package, with:
-
-```{r osmdata_sp}
-osmdata_sp (doc = "doc.osm")
-```
-
-Note that you can also pass queries directly to the `osmdata_sp` function:
+These downloaded data can be directly processed by passing the same
+filename to `osmdata_sf/sp`.
+The following function imports the data into R
+as a `Spatial` object defined by the `sp` package, with:
 
 ```{r}
-osmdata_sp(q)
-```
-
-or an `R Simple Features` objects with
-```{r osmdata_sf}
-osmdata_sf (q)
-```
-
-`overpass` data are returned in OSM XML format, and may be directly returned with
-```{r osmdata_xml}
-doc <- osmdata_xml (q)
-```
-The function `osmdata_xml()` also allows data to be saved and used for
-subsequent queries through specifying a filename.
-```{r osmdata_xml2, eval=TRUE}
-osmdata_xml (q, "motorways.osm")
-```
-These downloaded data can then be directly processed by simply passing the same
-filename to `osmdata_sf/sp`
-```{r osmdata_spsf, eval=FALSE}
 dat <- osmdata_sp (q, "motorways.osm")
-dat <- osmdata_sf (q, "motorways.osm")
+dat
 ```
-Note that the query, `q`, does not have to be submitted, but
+
+Here's how to load the data into Simple Features:
+
+```{r osmdata_spsf, eval=FALSE}
+dat <- osmdata_sf (q, "motorways.osm")
+dat
+```
+
+The query, `q`, does not have to be submitted:
+
 ```{r osmdata_spsf2, eval=TRUE}
 dat <- osmdata_sf (doc="motorways.osm")
 ```
 
+Note also that you can also pass queries directly to the `osmdata_*` functions, as illustrated below:
 
-
+```{r}
+osmdata_sp(q)
+osmdata_sf (q)
+```
 
 ## 2. The overpass API
 
