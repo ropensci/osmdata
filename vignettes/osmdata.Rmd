@@ -86,28 +86,28 @@ The following function imports the data into R
 as a `Spatial` object defined by the `sp` package, with:
 
 ```{r}
-dat <- osmdata_sp (q, "motorways.osm")
-dat
+dat_sp <- osmdata_sp (q, "motorways.osm")
+dat_sp
 ```
 
 Here's how to load the data into Simple Features:
 
 ```{r osmdata_spsf, eval=FALSE}
-dat <- osmdata_sf (q, "motorways.osm")
-dat
+dat_sf <- osmdata_sf (q, "motorways.osm")
+dat_sf
 ```
 
 The query, `q`, does not have to be submitted:
 
 ```{r osmdata_spsf2, eval=TRUE}
-dat <- osmdata_sf (doc="motorways.osm")
+dat_sf <- osmdata_sf (doc="motorways.osm")
 ```
 
 Note also that you can also pass queries directly to the `osmdata_*` functions, as illustrated below:
 
 ```{r}
-osmdata_sp(q)
-osmdata_sf (q)
+dat_sp <- osmdata_sp(q)
+dat_sf <- osmdata_sf (q)
 ```
 
 ## 2. The overpass API
