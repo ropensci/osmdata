@@ -20,6 +20,18 @@ if (get_local)
     qry <- add_feature (qry, key='highway')
     overpass_query_result <- overpass_query (qry_to_string (qry), encoding='UTF-8')
     save (overpass_query_result, file="../overpass_query_result.rda")
+    # but then overpass_query itself needs to be tested, so fetch_memory is used
+    # here
+    base_url <- 'http://overpass-api.de/api/interpreter'
+    cfm_output_overpass_query <- NULL
+    trace(
+          curl::curl_fetch_memory,
+          exit = function() { cfm_output_overpass_query <<- returnValue() }
+          )
+    res <- httr::POST (base_url, body=qry_to_string (qry))
+    untrace (curl::curl_fetch_memory)
+    class (cfm_output_overpass_query) <- 'response'
+    save (cfm_output_overpass_query, file='../cfm_output_overpass_query.rda')
 }
 
 context ('overpass query')
@@ -52,6 +64,19 @@ test_that ('make_query', {
           'Overpass query unavailable without internet', call.=FALSE)
     } else 
     {
+        # First test overpass_query() itself. Note that this still calls
+        # `overpass_status()` and does not stub the `httr::GET` call there.
+        if (is_cran)
+        {
+            load ("../cfm_output_overpass_query.rda")
+            stub (overpass_query, 'httr::POST', function (x, ...) 
+                  cfm_output_overpass_query)
+        }
+        testthat::expect_is (overpass_query (query=qry_to_string (qry)), 
+                             'character')
+
+        # Then test all `osmdata_..` functions by stubbing the results of
+        # `overpass_query()`
         if (is_cran)
         {
             load ("../overpass_query_result.rda")
