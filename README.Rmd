@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 [![Project Status: WIP](http://www.repostatus.org/badges/0.1.0/wip.svg)](http://www.repostatus.org/#wip)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/osmdata)](http://cran.r-project.org/web/packages/osmdata) 
 
-![](./fig/title.png)
+![](./docs/fig/title.png)
 
 
 `osmdata` is an R package for accessing OpenStreetMap (OSM) data using the
@@ -54,8 +54,9 @@ packageVersion("osmdata")
 
 [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be
 built from a base query constructed with `opq` followed by `add_feature`. The
-corresponding OSM objects are then downloaded and converted to `sf` objects with
-`osmdata_sf` or to `sp` objects with `osmdata_sp`. For example,
+corresponding OSM objects are then downloaded and converted to `R Simple
+Features (sf)` objects with `osmdata_sf()` or to `R Spatial (sp)` objects with
+`osmdata_sp()`. For example,
 
 ```{r query-thames}
 q0 <- opq (bbox=c(-0.27,51.47,-0.20,51.50)) # Chiswick Eyot in London, U.K.
@@ -64,43 +65,13 @@ x <- osmdata_sf (q1)
 x
 ```
 
-```{r query1}
-q0 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) # Central London, U.K.
-q1 <- add_feature (q0, key='building')
-bu <- osmdata_sp (q1)
-bu
-```
-
-or,
-
-```{r query2}
-q2 <- add_feature (q0, key='highway')
-hs <- osmdata_sp (q2)
-hs
-```
-
-Plotting with `sp`:
-```{r plot1, eval=FALSE}
-sp::plot (bu$osm_polygons)
-lines (hs$osm_lines, col="red")
-```
-![](./fig/README-plot1.png)
-
-```{r london-motorways, eval=FALSE}
-q0 <- opq (bbox=getbb ("London, UK"))
-q1 <- add_feature (q0, key="highway", value="motorway")
-lon <- osmdata_sp (q1, quiet=TRUE)
-sp::plot (lon$osm_lines)
-```
-![](./fig/README-london-motorways.png)
-
-OSM data can also be downloaded in OSM XML format with `osmdata_xml` and saved
+OSM data can also be downloaded in OSM XML format with `osmdata_xml()` and saved
 for use with other software.
 ```{r query3, eval=FALSE}
 osmdata_xml (q1, "data.xml")
 ```
-The `XML` document is returned silently and can be passed directly to
-`osmdata_sp` or `osmdata_sf`
+The `XML` document is returned silently and may be passed directly to
+`osmdata_sp()` or `osmdata_sf()`
 ```{r query4, eval=FALSE}
 doc <- osmdata_xml (q1, "data.xml")
 x <- osmdata_sf (q1, doc)
@@ -110,19 +81,7 @@ Or data can be read from a previously downloaded file:
 x <- osmdata_sf (q1, "data.xml")
 ```
 
-
-The [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) provides
-access to OSM elements selected by search criteria such as location, types of
-objects, tag properties, proximity, or combinations of these.
-
-To explore simple Overpass queries interactively, try 
-[overpass turbo](http://overpass-turbo.eu/), and to find out more about building
-queries see the 
-[Language Guide](http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide)
-or the more comprehensive
-[Language Reference](http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL).
-
-
+For more details, see the [website](https://osmdatar.github.io/osmdata/)
 
 
 
