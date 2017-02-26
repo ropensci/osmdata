@@ -16,26 +16,31 @@ if (get_local)
 {
     #trace ( curl::curl_fetch_memory, exit = function() { })
     url_ftrs <- "http://wiki.openstreetmap.org/wiki/Map_Features"
-    GET_available_features <- httr::GET (url_ftrs)
-    #untrace (curl::curl_fetch_memory)
-    save (GET_available_features, file="GET_available_features.rda")
+    cfm_output_af <- NULL
+    trace(
+          curl::curl_fetch_memory,
+          exit = function() { cfm_output_af <<- returnValue() }
+          )
+    res <- httr::GET (url_ftrs)
+    untrace (curl::curl_fetch_memory)
+    save (cfm_output_af, file="../cfm_output_af.rda")
 }
 
 context ("features.R")
 test_that ("available_features", {
-  expect_error (available_features (1), "unused argument")
-  if (!has_internet) {
-    expect_message (available_features (), "No internet connection")
-  } else 
-  {
+    expect_error (available_features (1), "unused argument")
+    if (!has_internet) {
+        expect_message (available_features (), "No internet connection")
+    } else 
+    {
     if (is_cran)
     {
-      load("GET_available_features.rda")
-      stub (available_features, 'httr::GET', function (x)
-            GET_available_features)
+        load ("../cfm_output_af.rda")
+        stub (available_features, 'httr::GET', function (x) 
+              cfm_output_af$content )
     }
     expect_is (available_features (), "character")
-  }
+    }
 })
 
 test_that ("available_tags", {
