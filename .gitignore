@@ -19,5 +19,5 @@ man/rcpp_test_polygons.Rd
 # vim files
 .*.un~
 .*.swp
-# osmdata files
-*.osm
+doc.osm
+motorways.osm
