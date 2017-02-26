@@ -14,20 +14,12 @@ source ('../stub.R')
 get_local <- FALSE
 if (get_local)
 {
-    qry <- opq (bbox=c(-0.12,51.11,-0.11,51.12)) 
-    qry <- add_feature (qry, key='highway', value='tertiary')
-    qry <- paste0 (c (qry$features, qry$suffix), collapse='\n')
-
-    # curl_fetch_memory way to grab output (no longer necessary):
-    #cfm_output_overpass_query <- NULL
-    #trace(
-    #      curl::curl_fetch_memory,
-    #      exit = function() { cfm_output_overpass_query <<- returnValue() }
-    #      )
-    #res <- httr::POST (base_url, body=qry)
-    #untrace (curl::curl_fetch_memory)
-    #save (cfm_output_overpass_query, 
-    #      file='./tests/testthat/cfm_output_overpass_query.rda')
+    # This test needs to return the results of overpass_query(), not the direct
+    # httr::POST call, so can't be grabbed with curl_fetch_memory
+    qry <- opq (bbox=c(-0.118,51.514,-0.115,51.517)) 
+    qry <- add_feature (qry, key='highway')
+    overpass_query_result <- overpass_query (qry_to_string (qry), encoding='UTF-8')
+    save (overpass_query_result, file="../overpass_query_result.rda")
 }
 
 context ('overpass query')
@@ -38,13 +30,13 @@ test_that ('overpass null values', {
 })
 
 test_that ('query-construction', {
-    q0 <- opq (bbox=c(-0.12,51.11,-0.11,51.12)) 
+    q0 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) 
     expect_error (q1 <- add_feature (q0), 'key must be provided')
     expect_silent (q1 <- add_feature (q0, key='aaa')) # bbox from qry
     q0$bbox <- NULL
     expect_error (q1 <- add_feature (q0, key='aaa'),
                   'Bounding box has to either be set in opq or must be set here') 
-    q0 <- opq (bbox=c(-0.12,51.11,-0.11,51.12)) 
+    q0 <- opq (bbox=c(-0.12,51.51,-0.11,51.52)) 
     q1 <- add_feature (q0, key='aaa')
     expect_false (grepl ('=', q1$features)) 
     q1 <- add_feature (q0, key='aaa', value='bbb')
@@ -52,8 +44,8 @@ test_that ('query-construction', {
 })
 
 test_that ('make_query', {
-    qry <- opq (bbox=c(-0.12,51.11,-0.11,51.12)) 
-    qry <- add_feature (qry, key='highway', value='tertiary')
+    qry <- opq (bbox=c(-0.118,51.514,-0.115,51.517)) 
+    qry <- add_feature (qry, key='highway')
 
     if (!has_internet) {
         expect_message (overpass_query (qry), 
@@ -62,15 +54,17 @@ test_that ('make_query', {
     {
         if (is_cran)
         {
-          load('cfm_output_overpass_query.rda')
-          stub (overpass_query, 'httr::POST', 
-                function (x, ...) cfm_output_overpass_query$content )
+            load ("../overpass_query_result.rda")
+            stub (osmdata_xml, 'overpass_query', function (x, ...) 
+                  overpass_query_result)
         } 
-        # NOTE: This still issues a query for overpass_status
         doc <- osmdata_xml (qry)
         expect_true (is (doc, 'xml_document'))
         expect_silent (osmdata_xml (qry, file='junk.osm'))
 
+        if (is_cran)
+            stub (osmdata_sp, 'overpass_query', function (x, ...) 
+                  overpass_query_result)
         res <- osmdata_sp (qry)
         expect_message (print (res), "Object of class 'osmdata' with")
         expect_silent (res <- osmdata_sp (qry, doc))
@@ -84,6 +78,9 @@ test_that ('make_query', {
                   'osm_multipolygons')
         expect_named (res, expected=nms, ignore.order=FALSE)
 
+        if (is_cran)
+            stub (osmdata_sf, 'overpass_query', function (x, ...) 
+                  overpass_query_result)
         res <- osmdata_sf (qry)
         expect_message (print (res), "Object of class 'osmdata' with")
         expect_silent (res <- osmdata_sf (qry, doc))

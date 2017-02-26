@@ -139,7 +139,8 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
     if (class (res) == 'raw') # for mock tests
         doc <- rawToChar (res)  
     else
-        doc <- httr::content (res, as='text', encoding=encoding)
+        doc <- httr::content (res, as='text', encoding=encoding,
+                              type="application/xml")
     # TODO: Just return the direct httr::POST result here and convert in the
     # subsequent functions (`osmdata_xml/csv/sp/sf`)?
 
