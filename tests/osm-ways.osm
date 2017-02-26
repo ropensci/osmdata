@@ -50,10 +50,10 @@
     <tag k="name" v="blue"/>
   </way>
   <way id="102">
-    <nd ref="19"/>
-    <nd ref="18"/>
-    <nd ref="22"/>
     <nd ref="16"/>
+    <nd ref="22"/>
+    <nd ref="18"/>
+    <nd ref="19"/>
     <tag k="boat" v="yes"/>
     <tag k="name" v="River Thames"/>
   </way>
