@@ -50,14 +50,12 @@ osmdata <- function (bbox, overpass_call,
 #' @export
 print.osmdata <- function (x, ...)
 {
+    msg <- NULL
     # print meta-data
     if (!all (sapply (x, is.null)))
-        message ("Object of class 'osmdata' with:")
+        msg <- "Object of class 'osmdata' with:\n"
 
-    #nm <- c (rep (" ", 17), "$bbox")
-    #message (nm, " : ", sapply (x$bbox, function (i) 
-    #                            paste (formatC (i, format="f", digits=2), " ")))
-    message (c (rep (' ', 17), '$bbox : ', x$bbox))
+    msg <- c (msg, c (rep (' ', 17), '$bbox : ', x$bbox, '\n'))
 
     objs <- c ("overpass_call", "timestamp")
     prnts <- c ("The call submitted to the overpass API", x$timestamp)
@@ -65,7 +63,7 @@ print.osmdata <- function (x, ...)
         if (!is.null (x [objs [i]]))
         {
             nm <- c (rep (" ", 21 - nchar (objs [i])), "$", objs [i])
-            message (nm, " : ", prnts [i])
+            msg <- c (msg, nm, ' : ', prnts [i], '\n')
         }
 
     # print geometry data
@@ -79,13 +77,16 @@ print.osmdata <- function (x, ...)
             xi <- x [[i]]
             nm <- c (rep (" ", 21 - nchar (i)), "$", i)
             if (is.null (xi))
-                message (nm, " : NULL")
+                msg <- c (msg, nm, ' : NULL\n')
             else if (grepl ("line", i)) # sf "lines" -> "linestrings"
-                message (nm, " : 'sf' Simple Features Collection with ",
-                         nrow (xi), " ", strsplit (i, "osm_")[[1]][2], "trings")
+                msg <- c (msg, nm, 
+                               " : 'sf' Simple Features Collection with ",
+                               nrow (xi), ' ', strsplit (i, 'osm_')[[1]][2], 
+                               'trings\n')
             else
-                message (nm, " : 'sf' Simple Features Collection with ",
-                         nrow (xi), " ", strsplit (i, "osm_")[[1]][2])
+                msg <- c (msg, nm, 
+                               " : 'sf' Simple Features Collection with ",
+                               nrow (xi), ' ', strsplit (i, 'osm_')[[1]][2], '\n')
         }
     } else
     {
@@ -94,13 +95,16 @@ print.osmdata <- function (x, ...)
             xi <- x [[i]]
             nm <- c (rep (" ", 21 - nchar (i)), "$", i)
             if (is.null (xi))
-                message (nm, " : NULL")
+                msg <- c (msg, nm, ' : NULL', '\n')
             else
-                message (nm, " : 'sp' Spatial", strsplit (i, "osm_")[[1]][2],
-                         "DataFrame with ", nrow (xi), " ", 
-                         strsplit (i, "osm_")[[1]][2])
+                msg <- c (msg, nm, " : 'sp' Spatial", 
+                               strsplit (i, 'osm_')[[1]][2], 'DataFrame with ',
+                               nrow (xi), ' ', strsplit (i, 'osm_')[[1]][2],
+                               '\n')
         }
     }
+
+    message (msg)
     #invisible (x)
 }
 
