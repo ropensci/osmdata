@@ -54,7 +54,7 @@ library(osmdata)
 `osmdata` uses the [`overpass` API](http://overpass-api.de) to download
 OpenStreetMap (OSM) data and convert the results to either [Simple Features
 (SF)](https://cran.r-project.org/package=sf) or
-[`Spatial`](http://cran.r-project.org/package=sp) objects, defined by the `sf` and `sp` packages respectively. `overpass` is a C++ library that serves OSM data over the web (see [github.com/drolbr/Overpass-API](https://github.com/drolbr/Overpass-API) for its source code.
+[`Spatial`](http://cran.r-project.org/package=sp) objects, defined by the `sf` and `sp` packages respectively. `overpass` is a C++ library that serves OSM data over the web (see code at [github.com/drolbr/Overpass-API](https://github.com/drolbr/Overpass-API)).
 It has its
 own query language, with all queries extracting data within a defined bounding
 box. A query may be initiated using the `osmdata` function `opq()`, which
