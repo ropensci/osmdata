@@ -73,6 +73,24 @@ An `osmdata` query consists of an initial `opq()` query and one or more features
 q <- opq (bbox="greater london uk")
 q <- add_feature (q, key="highway", value="motorway")
 ```
+
+The result is a list of class `overpass_query` that can be converted into
+URLs as follows:
+
+```{r}
+qry_to_string(q)
+```
+
+Internally, `osmdata` uses this to query the URLs from
+the base URL as follows:
+
+```{r}
+base_url <- "http://overpass-api.de/api/interpreter"
+res <- httr::POST(url = base_url, query = q)
+```
+
+`osmdata` saves you the effort of making these custom URLs and requests,
+and makes it easy download the data once the query has been constructed.
 The corresponding data may then be downloaded as follows:
 
 `overpass` data are returned in OSM XML format, and may be directly returned with
