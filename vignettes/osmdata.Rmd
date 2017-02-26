@@ -2,6 +2,7 @@
 title: "1. osmdata"
 author: "Mark Padgham"
 date: "`r Sys.Date()`"
+bibliography: overpass-refs.bib
 output:
     html_document:
         toc: true
@@ -13,7 +14,30 @@ vignette: >
 ---
 
 
-## 1. A quick introduction
+## 1. Introduction
+
+`osmdata` is an R package for downloading and using data from OpenStreetMap (OSM).
+OSM is a global open access mapping project, which anyone
+can contribute to or access data from [@OpenStreetMap].
+People new to OSM are recommended to explore what the maps look like at
+[www.openstreetmap.org/](www.openstreetmap.org/), where you can also sign-up
+to edit the map for your local area.
+
+The aim `osmdata` is to facilitate access and use of OSM with R.
+It is fair to say that using OSM data in R, and many other languages,
+has never been easy.
+@eugster_osmar:_2012 describes a `osmar`, an R package for handling OSM data
+that enables visualisation, search and even rudimentary routing operations.
+`osmar` is not user friendly or able to download OSM data flexibly,
+as reported in an [early tutorial](http://eprints.whiterose.ac.uk/77643/)
+comparing R and QGIS for handling OSM data [@lovelace_harnessing_2014].
+
+`osmdata` builds on two previous R packages:
+`osmplotr`, a package [available from CRAN](https://cran.r-project.org/package=osmplotr)
+for accessing and plotting OSM data [@osmplotr]
+and `overpass`, a [GitHub package](https://github.com/hrbrmstr/overpass)
+by Bob Rudis that provides an R interface to the 
+[overpass](http://overpass-api.de/) API.
 
 The development version of the `osmdata` R package can be installed with the `devtools` (which can be installed with `installed.packages("devtools")`) as follows:
 
@@ -375,3 +399,5 @@ of individual objects.
 4. `osm_multilines` extracts all `multiline` objects; and
 
 5. `osm_multipolygons` extracts all `multipolygon` objects.
+
+## 6. References
