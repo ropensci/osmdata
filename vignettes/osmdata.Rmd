@@ -39,7 +39,7 @@ and `overpass`, a [GitHub package](https://github.com/hrbrmstr/overpass)
 by Bob Rudis that provides an R interface to the 
 [overpass](http://overpass-api.de/) API.
 
-The development version of the `osmdata` R package can be installed with the `devtools` (which can be installed with `installed.packages("devtools")`) as follows:
+The development version of the `osmdata` R package can be installed with the `devtools` (which can be installed with `install.packages("devtools")`) as follows:
 
 ```{r install, eval=FALSE}
 devtools::install_github("osmdatar/osmdata")
