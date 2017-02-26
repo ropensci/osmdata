@@ -154,7 +154,13 @@ dat_sf <- osmdata_sf (q)
 
 ## 2. The overpass API
 
-The `overpass` API is ...
+The `overpass` API [is](http://wiki.openstreetmap.org/wiki/Overpass_API)
+> a read-only API that serves up custom selected parts of the OSM map data.
+
+The syntax of queries is not easy to learn, making wrappers to it useful.
+An excellent place to explore `overpass` queries specifically and
+OSM data in general is the [overpass-turbo website](http://overpass-turbo.eu/).
+Examples of its functionality in action can be found on the [OpenStreetMap wiki](http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_API_by_Example).
 
 ### 2.1. overpass queries
 
