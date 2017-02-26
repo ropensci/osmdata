@@ -15,6 +15,7 @@
   <node id="11" lat="3" lon="1">
     <tag k="stuff" v="yes"/>
     <tag k="junk" v="some"/>
+    <!-- test comment for rapidxml.h tests -->
   </node>
   <node id="12" lat="3" lon="2"/>
   <node id="13" lat="3" lon="3"/>
@@ -47,7 +48,7 @@
     <nd ref="15"/>
     <nd ref="19"/>
     <tag k="highway" v="maybe"/>
-    <tag k="name" v="blue"/>
+    <tag k="name" v="blue&lt;this&gt;"/>
   </way>
   <way id="102">
     <nd ref="19"/>
@@ -80,7 +81,7 @@
     <member type="way" ref="104" role="inner"/>
     <tag k="name" v="big loop"/>
     <tag k="type" v="multipolygon"/>
-    <tag k="something" v="stuff"/>
+    <tag k="something" v="stuff&amp;junk&apos;andthenwhat"/>
   </relation>
   <relation id="2000">
     <member type="way" ref="100" role=""/>
@@ -88,6 +89,6 @@
     <member type="way" ref="102" role=""/>
     <tag k="name" v="big loop"/>
     <tag k="type" v="route"/>
-    <tag k="something" v="stuff"/>
+    <tag k="something" v="stuff&apos;&quot;aa&quot;"/>
   </relation>
 </osm>
