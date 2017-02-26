@@ -16,3 +16,5 @@ man/make_sf.Rd
 man/rcpp_osmdata_sf.Rd
 man/rcpp_osmdata_sp.Rd
 ^appveyor[.]yml$
+^.*\.Rproj$
+^\.Rproj\.user$
