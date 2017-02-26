@@ -68,7 +68,12 @@ Bounding boxes may also be defined by simply passing the name of a desired area,
 q <- opq (bbox="Greater London, U.K.")
 identical (opq (bbox="Greater London, U.K."), opq (bbox="greater london uk"))
 ```
-An `osmdata` query consists of an initial `opq()` query and one or more features:
+
+An `osmdata` query consists of an initial `opq()` query and one or more
+'features', which are classified key-value pairs (see [wiki.openstreetmap.org/wiki/](http://wiki.openstreetmap.org/wiki) for detailed 
+[description of features](https://wiki.openstreetmap.org/wiki/Category:Keys)
+and [a list of all OSM keys](https://wiki.openstreetmap.org/wiki/Category:Keys)).
+
 ```{r opq3}
 q <- opq (bbox="greater london uk")
 q <- add_feature (q, key="highway", value="motorway")
@@ -178,8 +183,8 @@ with the function `opq()`, followed by specifying desired OSM features with
 `add_feature()`.  
 ```{r kunming}
 q <- opq (bbox="Kunming, China")
-q <- add_feature (q, key="natural", value="water")
-q <- add_feature (q, key="name:en", value="Dian", exact=FALSE)
+q1 <- add_feature (q, key="natural", value="water")
+q2 <- add_feature (q1, key="name:en", value="Dian", exact=FALSE)
 ```
 The parameter `exact=FALSE` controls the two ways of matching `key-value` pairs
 in `overpass`: Either exactly and entirely, or through a partial string match.
@@ -191,12 +196,20 @@ Each successive feature added with `add_feature()` is added to previous
 features, so, for example, extending the previous query by an additional
 `key-value` pair to 
 ```{r kunming2}
-q <- add_feature (q, key="highway")
+q3 <- add_feature (q2, key="highway")
 ```
 will request all objects that are both water bodies with names matching "Dian"
-**AND** that are also highways. Unsurprisingly, this query returns no data
+**AND** that are also highways. Unsurprisingly, this query returns no data,
+but the previous queries do: *the filtering is more restrictive with
+each feature added with `add_feature()`*.
+This is illustrated below by counting the number of points resulting from
+the queries generated previously:
+
 ```{r kunming-sf}
-nrow (osmdata_sf (q)$osm_points)
+# nrow (osmdata_sf (q)$osm_points) # all points in region - not shown
+nrow (osmdata_sf (q1)$osm_points)
+nrow (osmdata_sf (q2)$osm_points)
+nrow (osmdata_sf (q3)$osm_points)
 ```
 
 Distinct and different features must be requested with distinct and different
