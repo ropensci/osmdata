@@ -212,14 +212,12 @@ nrow (osmdata_sf (q2)$osm_points)
 nrow (osmdata_sf (q3)$osm_points)
 ```
 
-Distinct and different features must be requested with distinct and different
-queries:
+In summary, distinct features must be requested with different
+queries, so it makes sense to give each query a separate name, e.g.:
+
 ```{r kunming-all, eval=FALSE}
-q0 <- opq (bbox="Kunming, China")
-q1 <- add_feature (q0, key="natural", value="water")
-q1 <- add_feature (q1, key="name:en", value="Dian", exact=FALSE)
 dat_water <- osmdata_sf (q1)
-q2 <- add_feature (q0, key="highway")
+q_highway <- add_feature (q, key="highway")
 dat_highway <- osmdata_sf (q2)
 ```
 
@@ -255,6 +253,31 @@ Passing that query to `osmdata_xml/sf/sp()` will return all named highways
 within the bounding box.
 
 ### 3.1. Building a query
+
+Building on what we've already seen of the query-building methods presented above, let's imagine that we wanted to find all cycle paths in Seville, Spain:
+
+```{r}
+q0 <- opq("Seville")
+q1 <- add_feature(q0, key = "highway", value = "cycleway")
+cway_sev = osmdata_sf(q1)
+sf:::plot.sf(cway_sev$osm_lines)
+```
+
+The results show that there are many highways that OSM users have tagged as 'cycleways' in the city. Imagine we want to make a more specific query that only extracts cycleways in which `bicycle = designated` or which are bridges:
+
+```{r}
+q2 = add_feature(q1, key = "bicycle", value = "designated")
+cway_sev_bicycle = osmdata_sf(q2)
+q3 = add_feature(q1, key = "bridge", value = "yes")
+cway_sev_bridge = osmdata_sf(q3)
+```
+
+Now, the results can be combined to create a collection of all paths meeting the criteria:
+
+```{r}
+cpaths_sev = rbind(cway_sev_bicycle$osm_lines[1:3], cway_sev_bridge$osm_lines[1:3])
+sf:::plot.sf(cpaths_sev)
+```
 
 ### 3.2. Submitting a query
 
@@ -333,7 +356,6 @@ q <- opq (bbox="Trentham, Australia")
 q <- add_feature (q, key="name") # any named objects
 osmdata_xml (q, "trentham.osm")
 ```
-
 
 `sf` can then read such data independent of `osmdata` though
 ```{r sf1}
@@ -436,5 +458,13 @@ of individual objects.
 4. `osm_multilines` extracts all `multiline` objects; and
 
 5. `osm_multipolygons` extracts all `multipolygon` objects.
+
+This is illustrated with data already loaded (note the need to specify the ids of features that comprise the result):
+
+```{r}
+id <- as.character(cway_sev$osm_points$osm_id)
+cway_lines <- osm_lines(dat = cway_sev, id = id)
+```
+
 
 ## 6. References
