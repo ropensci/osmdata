@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert a named matrix or a named vector (or an unnamed vector) return a string — bbox_to_string • osmdata</title>
+<title>Convert an osmdata query of class  — qry_to_string • osmdata</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -77,22 +77,30 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert a named matrix or a named vector (or an unnamed vector) return a string</h1>
+    <h1>Convert an osmdata query of class </h1>
     </div>
 
     
-    <p>This function converts a bounding box into a string for use in web apis</p>
+    <p>Convert an osmdata query of class <code>opq</code> to a character string query to
+be submitted to the overpass API</p>
     
 
-    <pre><span class='fu'>bbox_to_string</span>(<span class='no'>bbox</span>)</pre>
+    <pre><span class='fu'>qry_to_string</span>(<span class='no'>qry</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
-      <dt>bbox</dt>
-      <dd>bounding box as character, matrix or vector. If character,
-numeric bbox will be extracted with <code>getbb</code> Unnamed vectors will be
-sorted appropriately and must merely be in the order (x, y, x, y).</dd>
+      <dt>qry</dt>
+      <dd>Overpass query object</dd>
     </dl>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Character string to be submitted to the overpass API</p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>The final query can be obtained from 
+<code>paste0 (c (query$features, query$suffix), collapse=&quot;\n&quot;)</code></p>
     
 
   </div>
@@ -100,7 +108,11 @@ sorted appropriately and must merely be in the order (x, y, x, y).</dd>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#note">Note</a></li>
+          </ul>
 
   </div>
 </div>
