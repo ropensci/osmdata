@@ -22,10 +22,10 @@ People new to OSM are recommended to explore what the maps look like at
 [www.openstreetmap.org/](www.openstreetmap.org/), where you can also sign-up
 to edit the map for your local area.
 
-The aim `osmdata` is to facilitate access and use of OSM with R.
+`osmdata` aims to facilitate access and use of OSM with R.
 It is fair to say that using OSM data in R, and many other languages,
 has never been easy.
-@eugster_osmar:_2012 describes a `osmar`, an R package for handling OSM data
+@eugster_osmar:_2012 describe `osmar`, an R package for handling OSM data
 that enables visualisation, search and even rudimentary routing operations.
 `osmar` is not user friendly or able to download OSM data flexibly,
 as reported in an [early tutorial](http://eprints.whiterose.ac.uk/77643/)
@@ -69,9 +69,12 @@ identical (opq (bbox="Greater London, U.K."), opq (bbox="greater london uk"))
 ```
 
 An `osmdata` query consists of an initial `opq()` query and one or more
-'features', which are classified key-value pairs (see [wiki.openstreetmap.org/wiki/](http://wiki.openstreetmap.org/wiki) for detailed 
+'features', which are specified in terms of `key-value` pairs (see 
+[wiki.openstreetmap.org/wiki/](http://wiki.openstreetmap.org/wiki) for detailed 
 [description of features](https://wiki.openstreetmap.org/wiki/Category:Keys)
-and [a list of all OSM keys](https://wiki.openstreetmap.org/wiki/Category:Keys)).
+and [a list of all OSM keys](https://wiki.openstreetmap.org/wiki/Category:Keys)). 
+The `osmdata` function `available_features()` returns the comprehensive list of
+feature keys currently used in OSM.
 
 ```{r opq3}
 q <- opq (bbox="greater london uk")
@@ -199,8 +202,8 @@ q3 <- add_feature (q2, key="highway")
 ```
 will request all objects that are both water bodies with names matching "Dian"
 **AND** that are also highways. Unsurprisingly, this query returns no data,
-but the previous queries do: *the filtering is more restrictive with
-each feature added with `add_feature()`*.
+but the previous queries do: the filtering is more restrictive with
+each feature added with `add_feature()`.
 This is illustrated below by counting the number of points resulting from
 the queries generated previously:
 
@@ -211,8 +214,8 @@ nrow (osmdata_sf (q2)$osm_points)
 nrow (osmdata_sf (q3)$osm_points)
 ```
 
-In summary, distinct features must be requested with different
-queries, so it makes sense to give each query a separate name, e.g.:
+Distinct features must be requested with different queries, so it makes sense to
+give each query a separate name, e.g.:
 
 ```{r kunming-all, eval=FALSE}
 dat_water <- osmdata_sf (q1)
@@ -220,8 +223,8 @@ q_highway <- add_feature (q, key="highway")
 dat_highway <- osmdata_sf (q2)
 ```
 
-The function `osmdata_sf` returns an object of class `osmdata`, as described in
-detail below.
+The two functions `osmdata_sf` and `osmdata_sp` both return objects of class
+`osmdata`, as described in detail below.
 
 The detailed structure of `overpass` queries can best be appreciated by using
 the [interactive online query builder](http://overpass-turbo.eu), which includes a
@@ -344,8 +347,8 @@ provides a direct interface to the `C++`
 [Graphical Data Abstraction Library (GDAL)](http://gdal.org) which also includes
 a so-called [`driver` for OSM data](http://www.gdal.org/drv_osm.html). This
 means that OSM data may also be read directly with `sf`, rather than using
-`osmdata`. Data must first be saved to disk, which can for example be readily
-achieved through downloading directly from the 
+`osmdata`. In this case, data must first be saved to disk, which can for example
+be readily achieved through downloading directly from the 
 [overpass interactive query builder](http://overpass-turbo.eu). 
 
 Queries constructed in `osmdata` can also be pasted directly into `overpass
@@ -379,10 +382,10 @@ difference between `sf/GDAL` and `osmdata` is that the former returns only those
 objects unique to each category of spatial object.  Thus OSM nodes (`points` in
 `sf/osmdata` representations) include, in `sf/GDAL` representation, only those
 points which are not part of any other objects (such as lines or polygons). In
-contrast, `osmdata point` objects include all points regardless of whether or
-not these are represented in other spatial objects.  Similarly, 'line' objects
-in 'sf/GDAL' exclude any lines that are part of other objects such as
-'multipolygon' or 'multiline' objects.
+contrast, the `osm_points` object returned by `osmdata` includes all points
+regardless of whether or not these are represented in other spatial objects.
+Similarly, `line` objects in `sf/GDAL` exclude any lines that are part of other
+objects such as `multipolygon` or `multiline` objects.
 
 This processing of data by `sf/GDAL` has two important implications:
 
@@ -397,12 +400,13 @@ components of any given object (the nodes of a line, for example, or the lines
 of a multipolygon) can be referenced in terms of these identifiers alone. This
 enables the full details for any component of a given object to be extracted by
 examining that component. The `sf/GDAL` representation obviates this ability
-through removing these IDs and reducing everything to geometries alone. This
-means, for example, that the `key-value` pairs of the `line` or `polygon`
-components of `multipolygon` can never be extracted from an `sf/GDAL`
-representation. In contrast, `osmdata` retains all unique identifiers for all
-OSM objects, and so readily enables, for example, the properties of all `point`
-objects of a `line` to be extracted.
+through removing these IDs and reducing everything to geometries alone (which
+is, after all, why it is called '*Simple* Features'). This means, for example,
+that the `key-value` pairs of the `line` or `polygon` components of
+`multipolygon` can never be extracted from an `sf/GDAL` representation. In
+contrast, `osmdata` retains all unique identifiers for all OSM objects, and so
+readily enables, for example, the properties of all `point` objects of a `line`
+to be extracted.
 
 Finally, note that `osmdata` will generally extract OSM data considerably
 faster than equivalent `sf/GDAL` routines (as detailed [here](git-wiki)).
