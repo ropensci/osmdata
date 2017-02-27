@@ -1,5 +1,9 @@
 ---
-output: rmarkdown::github_document
+title: "osmdata package"
+output:
+  md_document:
+    variant: markdown_github
+    toc: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -35,12 +39,8 @@ parts of the OSM map data. Map data are returned as
 
 ### Installation
 
-```{r install, eval=FALSE}
+```r
 devtools::install_github("osmdatar/osmdata")
-```
-
-```{r usage2, echo=FALSE}
-devtools::load_all (".", export_all=FALSE)
 ```
 
 Current verison:
@@ -67,17 +67,17 @@ x
 
 OSM data can also be downloaded in OSM XML format with `osmdata_xml()` and saved
 for use with other software.
-```{r query3, eval=FALSE}
+```r
 osmdata_xml (q1, "data.xml")
 ```
 The `XML` document is returned silently and may be passed directly to
 `osmdata_sp()` or `osmdata_sf()`
-```{r query4, eval=FALSE}
+```r
 doc <- osmdata_xml (q1, "data.xml")
 x <- osmdata_sf (q1, doc)
 ```
 Or data can be read from a previously downloaded file:
-```{r query5, eval=FALSE}
+```r
 x <- osmdata_sf (q1, "data.xml")
 ```
 

@@ -1,3 +1,7 @@
+-   [Installation](#installation)
+-   [Usage](#usage)
+-   [Code of Conduct](#code-of-conduct)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Build Status](https://travis-ci.org/osmdatar/osmdata.svg?branch=master)](https://travis-ci.org/osmdatar/osmdata) [![Build status](https://ci.appveyor.com/api/projects/status/github/osmdatar/osmdata?svg=true)](https://ci.appveyor.com/project/mpadge/osmdata) [![codecov](https://codecov.io/gh/osmdatar/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/osmdatar/osmdata) [![Project Status: WIP](http://www.repostatus.org/badges/0.1.0/wip.svg)](http://www.repostatus.org/#wip) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/osmdata)](http://cran.r-project.org/web/packages/osmdata)
 
@@ -11,13 +15,11 @@
 devtools::install_github("osmdatar/osmdata")
 ```
 
-    #> Loading osmdata
-    #> Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
-
 Current verison:
 
 ``` r
 library(osmdata)
+#> Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
 packageVersion("osmdata")
 #> [1] '0.0.0'
 ```
@@ -34,8 +36,8 @@ x
 #> Object of class 'osmdata' with:
 #>                  $bbox : 51.47,-0.27,51.5,-0.2
 #>         $overpass_call : The call submitted to the overpass API
-#>             $timestamp : [ Sun Feb 26 13:25:17 2017 ]
-#>            $osm_points : 'sf' Simple Features Collection with 21302 points
+#>             $timestamp : [ Mon Feb 27 10:30:20 2017 ]
+#>            $osm_points : 'sf' Simple Features Collection with 21304 points
 #>             $osm_lines : 'sf' Simple Features Collection with 1891 linestrings
 #>          $osm_polygons : 'sf' Simple Features Collection with 22 polygons
 #>        $osm_multilines : 'sf' Simple Features Collection with 5 multilinestrings
