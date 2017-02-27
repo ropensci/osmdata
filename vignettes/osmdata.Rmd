@@ -2,6 +2,7 @@
 title: "1. osmdata"
 author: "Mark Padgham"
 date: "`r Sys.Date()`"
+bibliography: overpass-refs.bib
 output:
     html_document:
         toc: true
@@ -13,9 +14,32 @@ vignette: >
 ---
 
 
-## 1. A quick introduction
+## 1. Introduction
 
-The development version of the `osmdata` R package can be installed with the `devtools` (which can be installed with `installed.packages("devtools")`) as follows:
+`osmdata` is an R package for downloading and using data from OpenStreetMap (OSM).
+OSM is a global open access mapping project, which anyone
+can contribute to or access data from [@OpenStreetMap].
+People new to OSM are recommended to explore what the maps look like at
+[www.openstreetmap.org/](www.openstreetmap.org/), where you can also sign-up
+to edit the map for your local area.
+
+The aim `osmdata` is to facilitate access and use of OSM with R.
+It is fair to say that using OSM data in R, and many other languages,
+has never been easy.
+@eugster_osmar:_2012 describes a `osmar`, an R package for handling OSM data
+that enables visualisation, search and even rudimentary routing operations.
+`osmar` is not user friendly or able to download OSM data flexibly,
+as reported in an [early tutorial](http://eprints.whiterose.ac.uk/77643/)
+comparing R and QGIS for handling OSM data [@lovelace_harnessing_2014].
+
+`osmdata` builds on two previous R packages:
+`osmplotr`, a package [available from CRAN](https://cran.r-project.org/package=osmplotr)
+for accessing and plotting OSM data [@osmplotr]
+and `overpass`, a [GitHub package](https://github.com/hrbrmstr/overpass)
+by Bob Rudis that provides an R interface to the 
+[overpass](http://overpass-api.de/) API.
+
+The development version of the `osmdata` R package can be installed with the `devtools` (which can be installed with `install.packages("devtools")`) as follows:
 
 ```{r install, eval=FALSE}
 devtools::install_github("osmdatar/osmdata")
@@ -30,7 +54,7 @@ library(osmdata)
 `osmdata` uses the [`overpass` API](http://overpass-api.de) to download
 OpenStreetMap (OSM) data and convert the results to either [Simple Features
 (SF)](https://cran.r-project.org/package=sf) or
-[`Spatial`](http://cran.r-project.org/package=sp) objects, defined by the `sf` and `sp` packages respectively. `overpass` is a C++ library that serves OSM data over the web (see [github.com/drolbr/Overpass-API](https://github.com/drolbr/Overpass-API) for its source code.
+[`Spatial`](http://cran.r-project.org/package=sp) objects, defined by the `sf` and `sp` packages respectively. `overpass` is a C++ library that serves OSM data over the web (see code at [github.com/drolbr/Overpass-API](https://github.com/drolbr/Overpass-API)).
 It has its
 own query language, with all queries extracting data within a defined bounding
 box. A query may be initiated using the `osmdata` function `opq()`, which
@@ -44,11 +68,34 @@ Bounding boxes may also be defined by simply passing the name of a desired area,
 q <- opq (bbox="Greater London, U.K.")
 identical (opq (bbox="Greater London, U.K."), opq (bbox="greater london uk"))
 ```
-An `osmdata` query consists of an initial `opq()` query and one or more features:
+
+An `osmdata` query consists of an initial `opq()` query and one or more
+'features', which are classified key-value pairs (see [wiki.openstreetmap.org/wiki/](http://wiki.openstreetmap.org/wiki) for detailed 
+[description of features](https://wiki.openstreetmap.org/wiki/Category:Keys)
+and [a list of all OSM keys](https://wiki.openstreetmap.org/wiki/Category:Keys)).
+
 ```{r opq3}
 q <- opq (bbox="greater london uk")
 q <- add_feature (q, key="highway", value="motorway")
 ```
+
+The result is a list of class `overpass_query` that can be converted into
+URLs as follows:
+
+```{r}
+qry_to_string(q)
+```
+
+Internally, `osmdata` uses this to query the URLs from
+the base URL as follows:
+
+```{r}
+base_url <- "http://overpass-api.de/api/interpreter"
+res <- httr::POST(url = base_url, query = q)
+```
+
+`osmdata` saves you the effort of making these custom URLs and requests,
+and makes it easy download the data once the query has been constructed.
 The corresponding data may then be downloaded as follows:
 
 `overpass` data are returned in OSM XML format, and may be directly returned with
@@ -112,7 +159,13 @@ dat_sf <- osmdata_sf (q)
 
 ## 2. The overpass API
 
-The `overpass` API is ...
+The `overpass` API [is](http://wiki.openstreetmap.org/wiki/Overpass_API)
+> a read-only API that serves up custom selected parts of the OSM map data.
+
+The syntax of queries is not easy to learn, making wrappers to it useful.
+An excellent place to explore `overpass` queries specifically and
+OSM data in general is the [overpass-turbo website](http://overpass-turbo.eu/).
+Examples of its functionality in action can be found on the [OpenStreetMap wiki](http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_API_by_Example).
 
 ### 2.1. overpass queries
 
@@ -130,8 +183,8 @@ with the function `opq()`, followed by specifying desired OSM features with
 `add_feature()`.  
 ```{r kunming}
 q <- opq (bbox="Kunming, China")
-q <- add_feature (q, key="natural", value="water")
-q <- add_feature (q, key="name:en", value="Dian", exact=FALSE)
+q1 <- add_feature (q, key="natural", value="water")
+q2 <- add_feature (q1, key="name:en", value="Dian", exact=FALSE)
 ```
 The parameter `exact=FALSE` controls the two ways of matching `key-value` pairs
 in `overpass`: Either exactly and entirely, or through a partial string match.
@@ -143,22 +196,28 @@ Each successive feature added with `add_feature()` is added to previous
 features, so, for example, extending the previous query by an additional
 `key-value` pair to 
 ```{r kunming2}
-q <- add_feature (q, key="highway")
+q3 <- add_feature (q2, key="highway")
 ```
 will request all objects that are both water bodies with names matching "Dian"
-**AND** that are also highways. Unsurprisingly, this query returns no data
+**AND** that are also highways. Unsurprisingly, this query returns no data,
+but the previous queries do: *the filtering is more restrictive with
+each feature added with `add_feature()`*.
+This is illustrated below by counting the number of points resulting from
+the queries generated previously:
+
 ```{r kunming-sf}
-nrow (osmdata_sf (q)$osm_points)
+# nrow (osmdata_sf (q)$osm_points) # all points in region - not shown
+nrow (osmdata_sf (q1)$osm_points)
+nrow (osmdata_sf (q2)$osm_points)
+nrow (osmdata_sf (q3)$osm_points)
 ```
 
-Distinct and different features must be requested with distinct and different
-queries:
+In summary, distinct features must be requested with different
+queries, so it makes sense to give each query a separate name, e.g.:
+
 ```{r kunming-all, eval=FALSE}
-q0 <- opq (bbox="Kunming, China")
-q1 <- add_feature (q0, key="natural", value="water")
-q1 <- add_feature (q1, key="name:en", value="Dian", exact=FALSE)
 dat_water <- osmdata_sf (q1)
-q2 <- add_feature (q0, key="highway")
+q_highway <- add_feature (q, key="highway")
 dat_highway <- osmdata_sf (q2)
 ```
 
@@ -194,6 +253,31 @@ Passing that query to `osmdata_xml/sf/sp()` will return all named highways
 within the bounding box.
 
 ### 3.1. Building a query
+
+Building on what we've already seen of the query-building methods presented above, let's imagine that we wanted to find all cycle paths in Seville, Spain:
+
+```{r}
+q0 <- opq("Seville")
+q1 <- add_feature(q0, key = "highway", value = "cycleway")
+cway_sev = osmdata_sf(q1)
+sf:::plot.sf(cway_sev$osm_lines)
+```
+
+The results show that there are many highways that OSM users have tagged as 'cycleways' in the city. Imagine we want to make a more specific query that only extracts cycleways in which `bicycle = designated` or which are bridges:
+
+```{r}
+q2 = add_feature(q1, key = "bicycle", value = "designated")
+cway_sev_bicycle = osmdata_sf(q2)
+q3 = add_feature(q1, key = "bridge", value = "yes")
+cway_sev_bridge = osmdata_sf(q3)
+```
+
+Now, the results can be combined to create a collection of all paths meeting the criteria:
+
+```{r}
+cpaths_sev = rbind(cway_sev_bicycle$osm_lines[1:3], cway_sev_bridge$osm_lines[1:3])
+sf:::plot.sf(cpaths_sev)
+```
 
 ### 3.2. Submitting a query
 
@@ -272,7 +356,6 @@ q <- opq (bbox="Trentham, Australia")
 q <- add_feature (q, key="name") # any named objects
 osmdata_xml (q, "trentham.osm")
 ```
-
 
 `sf` can then read such data independent of `osmdata` though
 ```{r sf1}
@@ -375,3 +458,13 @@ of individual objects.
 4. `osm_multilines` extracts all `multiline` objects; and
 
 5. `osm_multipolygons` extracts all `multipolygon` objects.
+
+This is illustrated with data already loaded (note the need to specify the ids of features that comprise the result):
+
+```{r}
+id <- as.character(cway_sev$osm_points$osm_id)
+cway_lines <- osm_lines(dat = cway_sev, id = id)
+```
+
+
+## 6. References
