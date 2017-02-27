@@ -21,3 +21,6 @@ man/rcpp_test_polygons.Rd
 .*.swp
 doc.osm
 motorways.osm
+bldgs2.osm
+buildings.osm
+trentham.osm
