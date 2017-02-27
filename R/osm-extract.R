@@ -177,6 +177,9 @@ osm_points <- function(dat, id) {
     if (missing (id))
         stop ('id must be given to extract points')
 
+    if (is.factor (id))
+        id <- as.character (id)
+
     id <- sanity_check (dat, id)
 
     x <- get_geoms (dat, id)
@@ -204,6 +207,9 @@ osm_lines <- function(dat, id) {
         stop ('osm_lines can not be extracted without data')
     if (missing (id))
         stop ('id must be given to extract lines')
+
+    if (is.factor (id))
+        id <- as.character (id)
 
     id <- sanity_check (dat, id)
 
@@ -235,6 +241,9 @@ osm_polygons <- function(dat, id) {
     if (missing (id))
         stop ('id must be given to extract polygons')
 
+    if (is.factor (id))
+        id <- as.character (id)
+
     id <- sanity_check (dat, id)
 
     x <- get_geoms (dat, id)
@@ -265,6 +274,9 @@ osm_multilines <- function(dat, id) {
     if (missing (id))
         stop ('id must be given to extract multilines')
 
+    if (is.factor (id))
+        id <- as.character (id)
+
     id <- sanity_check (dat, id)
 
     x <- get_geoms (dat, id)
@@ -292,6 +304,9 @@ osm_multipolygons <- function(dat, id) {
         stop ('osm_multipolygons can not be extracted without data')
     if (missing (id))
         stop ('id must be given to extract multipolygons')
+
+    if (is.factor (id))
+        id <- as.character (id)
 
     id <- sanity_check (dat, id)
 
