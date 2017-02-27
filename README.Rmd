@@ -59,31 +59,34 @@ Features (sf)` objects with `osmdata_sf()` or to `R Spatial (sp)` objects with
 `osmdata_sp()`. For example,
 
 ```{r query-thames}
-q0 <- opq (bbox=c(-0.27,51.47,-0.20,51.50)) # Chiswick Eyot in London, U.K.
-q1 <- add_feature (q0, key='name', value="Thames", exact=FALSE)
-x <- osmdata_sf (q1)
+q0 <- opq(bbox = c(-0.27, 51.47, -0.20, 51.50)) # Chiswick Eyot in London, U.K.
+q1 <- add_feature(q0, key = 'name', value = "Thames", exact = FALSE)
+x <- osmdata_sf(q1)
 x
 ```
 
 OSM data can also be downloaded in OSM XML format with `osmdata_xml()` and saved
 for use with other software.
+
 ```r
-osmdata_xml (q1, "data.xml")
+osmdata_xml(q1, "data.xml")
 ```
+
 The `XML` document is returned silently and may be passed directly to
 `osmdata_sp()` or `osmdata_sf()`
+
 ```r
-doc <- osmdata_xml (q1, "data.xml")
-x <- osmdata_sf (q1, doc)
+doc <- osmdata_xml(q1, "data.xml")
+x <- osmdata_sf(q1, doc)
 ```
+
 Or data can be read from a previously downloaded file:
+
 ```r
-x <- osmdata_sf (q1, "data.xml")
+x <- osmdata_sf(q1, "data.xml")
 ```
 
 For more details, see the [website](https://osmdatar.github.io/osmdata/)
-
-
 
 ### Code of Conduct
 
