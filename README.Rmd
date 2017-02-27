@@ -43,7 +43,7 @@ parts of the OSM map data. Map data are returned as
 devtools::install_github("osmdatar/osmdata")
 ```
 
-Current verison:
+Current version:
 
 ```{r}
 library(osmdata)
