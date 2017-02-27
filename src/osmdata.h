@@ -30,6 +30,8 @@
 
 #pragma once
 
+#include <Rcpp.h>
+
 #include "common.h"
 #include "get-bbox.h"
 #include "trace-osm.h"
@@ -306,6 +308,8 @@ inline void XmlData::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
                 rrel.nodes.push_back (std::stoll (it->value ()));
             else if (rrel.member_type == "way")
                 rrel.ways.push_back (std::stoll (it->value ()));
+            else if (rrel.member_type == "relation")
+                rrel.relations.push_back (std::stoll (it->value ()));
             else
                 throw std::runtime_error ("unknown member_type");
         } else if (!strcmp (it->name(), "role"))
@@ -314,6 +318,8 @@ inline void XmlData::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
                 rrel.role_node.push_back (it->value ());
             else if (rrel.member_type == "way")
                 rrel.role_way.push_back (it->value ());
+            else if (rrel.member_type == "relation")
+                rrel.role_relation.push_back (it->value ());
             else
                 throw std::runtime_error ("unknown member_type");
             // Not all OSM Multipolygons have (key="type",

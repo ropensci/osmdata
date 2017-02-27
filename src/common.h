@@ -127,9 +127,10 @@ struct RawRelation
     osmid_t id;
     std::string member_type;
     // APS would (key,value) be better in a std::map?
-    std::vector <std::string> key, value, role_node, role_way;
+    std::vector <std::string> key, value, role_node, role_way, role_relation;
     std::vector <osmid_t> nodes;
     std::vector <osmid_t> ways;
+    std::vector <osmid_t> relations; // relations can contain relations
 };
 
 struct Relation
@@ -141,6 +142,7 @@ struct Relation
     // Relations may have nodes as members, but these are not used here.
     std::vector <std::pair <osmid_t, std::string> > nodes; // str = role
     std::vector <std::pair <osmid_t, std::string> > ways; // str = role
+    std::vector <std::pair <osmid_t, std::string> > relations; // str = role
 };
 
 typedef std::vector <Relation> Relations;
