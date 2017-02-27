@@ -92,3 +92,7 @@ For more details, see the [website](https://osmdatar.github.io/osmdata/)
 
 Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). 
 By participating in this project you agree to abide by its terms.
+
+### Style guide
+
+It is important to have a consistent style across the project. We use where possible the [Hadley Wickham style guide](https://github.com/ropensci/packaging_guide#conduct).
