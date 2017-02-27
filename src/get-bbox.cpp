@@ -50,7 +50,7 @@ Rcpp::NumericMatrix rcpp_get_bbox (float xmin, float xmax, float ymin, float yma
     bbox.attr ("dimnames") = dimnames;
 
     return bbox;
-};
+}
 
 Rcpp::NumericVector rcpp_get_bbox_sf (float xmin, float xmax, float ymin, float ymax)
 {
@@ -69,4 +69,4 @@ Rcpp::NumericVector rcpp_get_bbox_sf (float xmin, float xmax, float ymin, float 
     bbox.attr ("names") = names;
 
     return bbox;
-};
+}
