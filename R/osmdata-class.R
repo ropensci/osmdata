@@ -182,6 +182,7 @@ c.osmdata <- function (...)
     } else
     {
         # TODO: implement sp version
+        stop ('c method currently implement only for osmdata_sf')
     }
     return (res)
 }
