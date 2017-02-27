@@ -19,7 +19,6 @@ Current version:
 
 ``` r
 library(osmdata)
-#> Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
 packageVersion("osmdata")
 #> [1] '0.0.0'
 ```
@@ -36,7 +35,7 @@ x
 #> Object of class 'osmdata' with:
 #>                  $bbox : 51.47,-0.27,51.5,-0.2
 #>         $overpass_call : The call submitted to the overpass API
-#>             $timestamp : [ Mon Feb 27 10:33:08 2017 ]
+#>             $timestamp : [ Mon Feb 27 10:23:29 2017 ]
 #>            $osm_points : 'sf' Simple Features Collection with 21304 points
 #>             $osm_lines : 'sf' Simple Features Collection with 1891 linestrings
 #>          $osm_polygons : 'sf' Simple Features Collection with 22 polygons

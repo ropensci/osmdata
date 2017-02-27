@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>osmdata class def � osmdata • osmdata</title>
+<title>osmdata class def — osmdata • osmdata</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -100,8 +100,8 @@ reference, an IDE) beyond XAPI, but also has a compatibility layer to
 allow a smooth transition from XAPI.</p>
     
 
-    <pre><span class='fu'>osmdata</span>(<span class='no'>bbox</span>, <span class='no'>overpass_call</span>, <span class='no'>osm_points</span>, <span class='no'>osm_linestrings</span>, <span class='no'>osm_polygons</span>,
-  <span class='no'>osm_multilinestrings</span>, <span class='no'>osm_multipolygons</span>, <span class='no'>timestamp</span>, <span class='no'>...</span>)</pre>
+    <pre><span class='fu'>osmdata</span>(<span class='no'>bbox</span>, <span class='no'>overpass_call</span>, <span class='no'>osm_points</span>, <span class='no'>osm_lines</span>, <span class='no'>osm_polygons</span>,
+  <span class='no'>osm_multilines</span>, <span class='no'>osm_multipolygons</span>, <span class='no'>timestamp</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -110,17 +110,23 @@ allow a smooth transition from XAPI.</p>
       <dt>overpass_call</dt>
       <dd>overpass_call</dd>
       <dt>osm_points</dt>
-      <dd><code>sf</code> Simple Features Collection of points</dd>
-      <dt>osm_linestrings</dt>
-      <dd><code>sf</code> Simple Features Collection of multilinestrings</dd>
+      <dd>OSM nodes as <code>sf</code> Simple Features Collection of points
+or <code>sp</code> SpatialPointsDataFrame</dd>
+      <dt>osm_lines</dt>
+      <dd>OSM ways <code>sf</code> Simple Features Collection of linestrings
+or <code>sp</code> SpatialLinesDataFrame</dd>
       <dt>osm_polygons</dt>
-      <dd><code>sf</code> Simple Features Collection of polygons</dd>
-      <dt>osm_multilinestrings</dt>
-      <dd><code>sf</code> Simple Features Collection of multilinestrings</dd>
+      <dd>OSM ways as <code>sf</code> Simple Features Collection of
+polygons or <code>sp</code> SpatialPolygonsDataFrame</dd>
+      <dt>osm_multilines</dt>
+      <dd>OSM relations as <code>sf</code> Simple Features Collection
+of multilinestrings or <code>sp</code> SpatialLinesDataFrame</dd>
       <dt>osm_multipolygons</dt>
-      <dd><code>sf</code> Simple Features Collection of multipolygons</dd>
+      <dd>OSM relations as <code>sf</code> Simple Features
+Collection of multipolygons or <code>sp</code>
+SpatialPolygonsDataFrame</dd>
       <dt>timestamp</dt>
-      <dd>timestamp</dd>
+      <dd>timestamp of OSM query</dd>
       <dt>...</dt>
       <dd>other options ignored</dd>
     </dl>
@@ -177,7 +183,7 @@ to overpass API</td>
 
     <h2>Author</h2>
     
-Bob Rudis, Robin Lovelace, Ma�lle Salmon, Mark Padgham
+Bob Rudis, Robin Lovelace, Maëlle Salmon, Mark Padgham
 
   </div>
 </div>

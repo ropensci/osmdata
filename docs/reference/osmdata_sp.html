@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return an OSM Overpass query as an  � osmdata_sp • osmdata</title>
+<title>Return an OSM Overpass query as an  — osmdata_sp • osmdata</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -90,7 +90,8 @@
     <dl class="dl-horizontal">
       <dt>q</dt>
       <dd>An object of class `overpass_query` constructed with <code>opq</code> and
-<code>add_feature</code>.</dd>
+<code>add_feature</code>. May be be omitted, in which case the
+<code>osmdata</code> object will not include the query.</dd>
       <dt>doc</dt>
       <dd>If missing, <code>doc</code> is obtained by issuing the overpass query,
 <code>q</code>, otherwise either the name of a file from which to read data,

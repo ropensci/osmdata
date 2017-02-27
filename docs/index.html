@@ -15,7 +15,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-home">
+    <div class="container template-vignette">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -55,18 +55,23 @@
 
       
       </header><div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9">
     
 
-<p><img src="./fig/title.png" alt=""></p>
+    
+    
+<div class="contents">
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+<div class="figure">
+<img src="./docs/fig/title.png">
+</div>
 <p><code>osmdata</code> is an R package for accessing OpenStreetMap (OSM) data using the <a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a>. The Overpass API (or OSM3S) is a read-only API that serves up custom selected parts of the OSM map data. Map data are returned as <a href="https://cran.r-project.org/package=sp"><code>sp</code></a> objects.</p>
 <div id="installation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#installation" class="anchor"> </a>Installation</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">"osmdatar/osmdata"</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="co">#&gt; Loading osmdata</span>
-<span class="co">#&gt; Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright</span></code></pre></div>
-<p>Current verison:</p>
+<p>Current version:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(osmdata)
 <span class="kw">packageVersion</span>(<span class="st">"osmdata"</span>)
 <span class="co">#&gt; [1] '0.0.0'</span></code></pre></div>
@@ -74,119 +79,38 @@
 <div id="usage" class="section level3">
 <h3 class="hasAnchor">
 <a href="#usage" class="anchor"> </a>Usage</h3>
-<p><a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a> queries can be built from a base query constructed with <code>opq</code> followed by <code>add_feature</code>. The corresponding OSM objects are then downloaded and converted to <code>sf</code> objects with <code>osmdata_sf</code> or to <code>sp</code> objects with <code>osmdata_sp</code>. For example,</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q0 &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span> (<span class="dt">bbox=</span><span class="kw">c</span>(-<span class="fl">0.27</span>,<span class="fl">51.47</span>,-<span class="fl">0.20</span>,<span class="fl">51.50</span>)) <span class="co"># Central London, U.K.</span>
+<p><a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a> queries can be built from a base query constructed with <code>opq</code> followed by <code>add_feature</code>. The corresponding OSM objects are then downloaded and converted to <code>R Simple Features (sf)</code> objects with <code><a href="reference/osmdata_sf.html">osmdata_sf()</a></code> or to <code>R Spatial (sp)</code> objects with <code><a href="reference/osmdata_sp.html">osmdata_sp()</a></code>. For example,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q0 &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span> (<span class="dt">bbox=</span><span class="kw">c</span>(-<span class="fl">0.27</span>,<span class="fl">51.47</span>,-<span class="fl">0.20</span>,<span class="fl">51.50</span>)) <span class="co"># Chiswick Eyot in London, U.K.</span>
 q1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_feature.html">add_feature</a></span> (q0, <span class="dt">key=</span><span class="st">'name'</span>, <span class="dt">value=</span><span class="st">"Thames"</span>, <span class="dt">exact=</span><span class="ot">FALSE</span>)
-doc &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_xml.html">osmdata_xml</a></span> (q1) <span class="co"># returns raw xml document</span>
-x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span> (q1, doc)
+x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span> (q1)
 x
 <span class="co">#&gt; Object of class 'osmdata' with:</span>
 <span class="co">#&gt;                  $bbox : 51.47,-0.27,51.5,-0.2</span>
 <span class="co">#&gt;         $overpass_call : The call submitted to the overpass API</span>
-<span class="co">#&gt;             $timestamp : ##------ Thurs Jan 26 14:37:02 2017 ------##</span>
-<span class="co">#&gt;            $osm_points : 'sf' Simple Features Collection with 21231 points</span>
-<span class="co">#&gt;       $osm_linestrings : 'sf' Simple Features Collection with 1865 linestrings</span>
+<span class="co">#&gt;             $timestamp : [ Mon Feb 27 10:23:31 2017 ]</span>
+<span class="co">#&gt;            $osm_points : 'sf' Simple Features Collection with 21304 points</span>
+<span class="co">#&gt;             $osm_lines : 'sf' Simple Features Collection with 1891 linestrings</span>
 <span class="co">#&gt;          $osm_polygons : 'sf' Simple Features Collection with 22 polygons</span>
-<span class="co">#&gt;  $osm_multilinestrings : 'sf' Simple Features Collection with 5 multilinestrings</span>
+<span class="co">#&gt;        $osm_multilines : 'sf' Simple Features Collection with 5 multilinestrings</span>
 <span class="co">#&gt;     $osm_multipolygons : 'sf' Simple Features Collection with 3 multipolygons</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q0 &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span> (<span class="dt">bbox=</span><span class="kw">c</span>(-<span class="fl">0.12</span>,<span class="fl">51.51</span>,-<span class="fl">0.11</span>,<span class="fl">51.52</span>)) <span class="co"># Central London, U.K.</span>
-q1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_feature.html">add_feature</a></span> (q0, <span class="dt">key=</span><span class="st">'building'</span>)
-bu &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sp.html">osmdata_sp</a></span> (q1)
-bu
-<span class="co">#&gt; Object of class 'osmdata' with:</span>
-<span class="co">#&gt;                  $bbox : 51.51,-0.12,51.52,-0.11</span>
-<span class="co">#&gt;         $overpass_call : The call submitted to the overpass API</span>
-<span class="co">#&gt;             $timestamp : [ Thu Jan 26 15:41:32 2017 ]</span>
-<span class="co">#&gt;   $osm_points           : 'sp' SpatialPointsDataFrame   with 5070 points</span>
-<span class="co">#&gt;   $osm_linestrings      : 'sp' SpatialLinesDataFrame    with 576 linestrings</span>
-<span class="co">#&gt;   $osm_polygons         : 'sp' SpatialPolygonsDataFrame with 576 polygons</span>
-<span class="co">#&gt;   $osm_multilinestrings : NULL</span>
-<span class="co">#&gt;   $osm_multipolygons  : NULL</span></code></pre></div>
-<p>or,</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q2 &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_feature.html">add_feature</a></span> (q0, <span class="dt">key=</span><span class="st">'highway'</span>, <span class="dt">value=</span><span class="st">'secondary'</span>)
-q2 &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_feature.html">add_feature</a></span> (q0, <span class="dt">key=</span><span class="st">'highway'</span>)
-hs &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sp.html">osmdata_sp</a></span> (q2)
-hs
-<span class="co">#&gt; Object of class 'osmdata' with:</span>
-<span class="co">#&gt;                  $bbox : 51.51,-0.12,51.52,-0.11</span>
-<span class="co">#&gt;         $overpass_call : The call submitted to the overpass API</span>
-<span class="co">#&gt;             $timestamp : [ Thu Jan 26 15:41:36 2017 ]</span>
-<span class="co">#&gt;   $osm_points           : 'sp' SpatialPointsDataFrame   with 1985 points</span>
-<span class="co">#&gt;   $osm_linestrings      : 'sp' SpatialLinesDataFrame    with 34 linestrings</span>
-<span class="co">#&gt;   $osm_polygons         : 'sp' SpatialPolygonsDataFrame with 34 polygons</span>
-<span class="co">#&gt;   $osm_multilinestrings : NULL</span>
-<span class="co">#&gt;   $osm_multipolygons  : NULL</span></code></pre></div>
-<p>Plotting with <code>sp</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sp::<span class="kw">plot</span> (bu$osm_polygons)
-<span class="kw">lines</span> (hs$osm_lines, <span class="dt">col=</span><span class="st">"red"</span>)</code></pre></div>
-<p><img src="./fig/README-plot1.png" alt=""></p>
-<p>OSM data can also be downloaded in OSM XML format with <code>osmdata_xml</code> and saved for use with other software.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bu_xml &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_xml.html">osmdata_xml</a></span> (q1)
-xml2::<span class="kw">write_xml</span> (bu_xml, <span class="dt">file=</span><span class="st">"buildings.osm"</span>)</code></pre></div>
-<p>The <a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a> provides access to OSM elements selected by search criteria such as location, types of objects, tag properties, proximity, or combinations of these.</p>
-<p>To explore simple Overpass queries interactively, try <a href="http://overpass-turbo.eu/">overpass turbo</a>, and to find out more about building queries see the <a href="http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide">Language Guide</a> or the more comprehensive <a href="http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL">Language Reference</a>.</p>
-<!--
-The following functions are implemented:
-
-- `add_feature`:    Add a feature to an Overpass query
-- `available_features`: List recognized features in OSM Overpass
-- `available_tags`: List tags associated with a feature
-- `bbox_to_string`: Convert a named matrix or a named vector (or an unnamed vector) return a string
-- `opq`:    Begin building an Overpass query
-- `overpass_query`: Issue OSM Overpass Query
-- `overpass_status`:    Retrieve status of the Overpass API
-- `read_osm`:   Read an XML OSM Overpass response from path
--->
-</div>
-<div id="further-examples" class="section level3">
-<h3 class="hasAnchor">
-<a href="#further-examples" class="anchor"> </a>Further examples</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q0 &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span> (<span class="dt">bbox=</span><span class="kw"><a href="reference/getbb.html">getbb</a></span> (<span class="st">"Bonn"</span>)) <span class="co"># Bonn, Germany</span>
-q1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_feature.html">add_feature</a></span> (q0, <span class="dt">key=</span><span class="st">"railway"</span>, <span class="dt">value=</span><span class="st">"station"</span>)
-<span class="kw"><a href="reference/osmdata_sp.html">osmdata_sp</a></span> (q1, <span class="dt">quiet=</span><span class="ot">TRUE</span>)
-<span class="co">#&gt; Object of class 'osmdata' with:</span>
-<span class="co">#&gt;                  $bbox : 50.575851,6.94066,50.895851,7.26066</span>
-<span class="co">#&gt;         $overpass_call : The call submitted to the overpass API</span>
-<span class="co">#&gt;             $timestamp : [ Thu Jan 26 15:41:43 2017 ]</span>
-<span class="co">#&gt;   $osm_points           : 'sp' SpatialPointsDataFrame   with 34 points</span>
-<span class="co">#&gt;   $osm_linestrings      : 'sp' SpatialLinesDataFrame    with 0 linestrings</span>
-<span class="co">#&gt;   $osm_polygons         : 'sp' SpatialPolygonsDataFrame with 0 polygons</span>
-<span class="co">#&gt;   $osm_multilinestrings : NULL</span>
-<span class="co">#&gt;   $osm_multipolygons  : NULL</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q0 &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span> (<span class="dt">bbox=</span><span class="kw">c</span>(<span class="fl">7.1</span>,<span class="fl">50.7</span>,<span class="fl">7.25</span>,<span class="fl">50.8</span>))
-q1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_feature.html">add_feature</a></span> (q0, <span class="dt">key=</span><span class="st">"highway"</span>, <span class="dt">value=</span><span class="st">"bus_stop"</span>)
-q1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_feature.html">add_feature</a></span> (q1, <span class="dt">key=</span><span class="st">"shelter"</span>)
-q1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_feature.html">add_feature</a></span> (q1, <span class="dt">key=</span><span class="st">"shelter"</span>, <span class="dt">value=</span><span class="st">"!no"</span>)
-pts &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sp.html">osmdata_sp</a></span> (q1, <span class="dt">quiet=</span><span class="ot">TRUE</span>)
-sp::<span class="kw">plot</span> (pts$osm_points)</code></pre></div>
-<p><img src="./fig/README-only_nodes.png" alt=""></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q0 &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span> (<span class="dt">bbox=</span><span class="kw"><a href="reference/getbb.html">getbb</a></span> (<span class="st">"London, UK"</span>))
-q1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_feature.html">add_feature</a></span> (q0, <span class="dt">key=</span><span class="st">"highway"</span>, <span class="dt">value=</span><span class="st">"motorway"</span>)
-lon &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sp.html">osmdata_sp</a></span> (q1, <span class="dt">quiet=</span><span class="ot">TRUE</span>)
-sp::<span class="kw">plot</span> (lon$osm_lines)</code></pre></div>
-<p><img src="./fig/README-london-motorways.png" alt=""></p>
-</div>
-<div id="test-results" class="section level3">
-<h3 class="hasAnchor">
-<a href="#test-results" class="anchor"> </a>Test Results</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">date</span>()
-<span class="co">#&gt; [1] "Thu Jan 26 15:41:43 2017"</span>
-
-testthat::<span class="kw">test_dir</span>(<span class="st">"tests/"</span>)
-<span class="co">#&gt; testthat results ===========================================================</span>
-<span class="co">#&gt; OK: 59 SKIPPED: 0 FAILED: 0</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; DONE ======================================================================</span></code></pre></div>
+<p>OSM data can also be downloaded in OSM XML format with <code><a href="reference/osmdata_xml.html">osmdata_xml()</a></code> and saved for use with other software.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/osmdata_xml.html">osmdata_xml</a></span> (q1, <span class="st">"data.xml"</span>)</code></pre></div>
+<p>The <code>XML</code> document is returned silently and may be passed directly to <code><a href="reference/osmdata_sp.html">osmdata_sp()</a></code> or <code><a href="reference/osmdata_sf.html">osmdata_sf()</a></code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">doc &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_xml.html">osmdata_xml</a></span> (q1, <span class="st">"data.xml"</span>)
+x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span> (q1, doc)</code></pre></div>
+<p>Or data can be read from a previously downloaded file:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span> (q1, <span class="st">"data.xml"</span>)</code></pre></div>
+<p>For more details, see the <a href="https://osmdatar.github.io/osmdata/">website</a></p>
 </div>
 <div id="code-of-conduct" class="section level3">
 <h3 class="hasAnchor">
 <a href="#code-of-conduct" class="anchor"> </a>Code of Conduct</h3>
 <p>Please note that this project is released with a <a href="CONDUCT.md">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
 </div>
-
+</div>
   </div>
 
-  <div class="col-md-3" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Links</h2>
 <ul class="list-unstyled">
 <li>Browse source code at <br><a href="https://github.com/osmdatar/osmdata">https://​github.com/​osmdatar/​osmdata</a>
@@ -215,6 +139,7 @@ testthat::<span class="kw">test_dir</span>(<span class="st">"tests/"</span>)
 </ul>
 </body></html>
 </div>
+
 </div>
 
 
