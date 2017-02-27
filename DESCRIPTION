@@ -14,7 +14,7 @@ Authors@R: c(
         comment="Author of included stub.R code"))
 Maintainer: Mark Padgham <mark.padgham@email.com>
 Title: Download OpenStreetMap Data with the Overpass API
-Description: Very fast download of OpenStreetMap (OSM) data into 'sp' objects.
+Description: Extraction of OpenStreetMap (OSM) data as 'sf' or 'sp' objects.
     OSM data are extracted from the overpass API and processed with very fast
     C++ routines for return to R.
 Depends:
