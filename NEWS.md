@@ -1,3 +1,3 @@
-0.2.0.9000 released
+0.0.0 
 ===================
-- Overpass API server status checks
+- Initial release
