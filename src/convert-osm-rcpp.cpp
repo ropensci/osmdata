@@ -147,9 +147,9 @@ Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls=fal
     std::vector <std::string> ids = dims [0], varnames = dims [1], varnames_new;
     Rcpp::CharacterMatrix kv_out;
 
-    int ni = std::distance (varnames.begin (),
+    unsigned ni = std::distance (varnames.begin (),
             std::find (varnames.begin (), varnames.end (), "name"));
-    int add_lines = 1;
+    unsigned add_lines = 1;
     if (ls)
         add_lines++;
 
@@ -160,12 +160,12 @@ Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls=fal
         // convert ids to CharacterVector - direct allocation doesn't work
         Rcpp::CharacterVector ids_rcpp (ids.size ());
         if (!ls)
-            for (int i=0; i<ids.size (); i++)
+            for (unsigned i=0; i<ids.size (); i++)
                 ids_rcpp (i) = ids [i];
         else
         { // extract way roles for multilinestring kev-val matrices
             roles = Rcpp::CharacterVector (ids.size ());
-            for (int i=0; i<ids.size (); i++)
+            for (unsigned i=0; i<ids.size (); i++)
             {
                 int ipos = ids [i].find ("-", 0);
                 ids_rcpp (i) = ids [i].substr (0, ipos).c_str ();
@@ -185,8 +185,8 @@ Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls=fal
             varnames_new.push_back ("role");
             kv_out.column (2) = roles;
         }
-        int count = 1 + add_lines;
-        for (int i=0; i<kv.ncol (); i++)
+        unsigned count = 1 + add_lines;
+        for (unsigned i=0; i<(unsigned) kv.ncol (); i++)
             if (i != ni)
             {
                 varnames_new.push_back (varnames [i]);
@@ -226,12 +226,12 @@ template <typename T> Rcpp::List convert_poly_linestring_to_sf (
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
     Rcpp::List dimnames (0);
     std::vector <std::string> colnames = {"lat", "lon"};
-    for (int i=0; i<lon_arr.size (); i++) // over all relations
+    for (unsigned i=0; i<lon_arr.size (); i++) // over all relations
     {
         Rcpp::List outList_i (lon_arr [i].size ()); 
-        for (int j=0; j<lon_arr [i].size (); j++) // over all ways
+        for (unsigned j=0; j<lon_arr [i].size (); j++) // over all ways
         {
-            int n = lon_arr [i][j].size ();
+            unsigned n = lon_arr [i][j].size ();
             nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
             std::copy (lon_arr [i][j].begin (), lon_arr [i][j].end (),
                     nmat.begin ());
@@ -304,7 +304,7 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
     Rcpp::List dimnames (0);
     std::vector <std::string> colnames = {"lat", "lon"}, rel_id;
 
-    int npolys = 0;
+    unsigned npolys = 0;
     for (auto itr = rels.begin (); itr != rels.end (); itr++)
         if (itr->ispoly)
             npolys++;
@@ -319,7 +319,7 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
             Rcpp::List outList_i (lon_arr [i].size ()); 
             // j over all ways, with outer always first followed by inner
             bool outer = true;
-            for (int j=0; j<lon_arr [i].size (); j++) 
+            for (unsigned j=0; j<lon_arr [i].size (); j++) 
             {
                 int n = lon_arr [i][j].size ();
                 nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
@@ -361,7 +361,7 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
     multipolygons.slot ("polygons") = outList;
     // fill plotOrder with numeric vector
     std::vector <int> plotord;
-    for (int i=0; i<rels.size (); i++) plotord.push_back (i + 1);
+    for (unsigned i=0; i<rels.size (); i++) plotord.push_back (i + 1);
     multipolygons.slot ("plotOrder") = plotord;
     plotord.clear ();
 
@@ -421,9 +421,9 @@ void convert_multiline_to_sp (Rcpp::S4 &multilines, const Relations &rels,
         {
             Rcpp::List outList_i (lon_arr [i].size ()); 
             // j over all ways
-            for (int j=0; j<lon_arr [i].size (); j++) 
+            for (unsigned j=0; j<lon_arr [i].size (); j++) 
             {
-                int n = lon_arr [i][j].size ();
+                unsigned n = lon_arr [i][j].size ();
                 nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
                 std::copy (lon_arr [i][j].begin (), lon_arr [i][j].end (),
                         nmat.begin ());

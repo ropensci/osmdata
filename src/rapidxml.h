@@ -2065,7 +2065,7 @@ namespace rapidxml
                         if (Flags & parse_validate_closing_tags)
                         {
                             // Skip and validate closing tag name
-                            Ch *closing_name = text;
+                            //Ch *closing_name = text;
                             skip<node_name_pred, Flags>(text);
                         }
                         else

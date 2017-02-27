@@ -34,7 +34,7 @@
 // ----- clean_vec
 template <typename T> void clean_vec (std::vector <std::vector <T> > &arr2)
 {
-    for (int i=0; i<arr2.size (); i++)
+    for (unsigned i=0; i<arr2.size (); i++)
         arr2 [i].clear ();
     arr2.clear ();
 }
@@ -73,9 +73,9 @@ template void clean_vecs <float, float, std::string> (
 template <typename T> void clean_arr (
         std::vector <std::vector <std::vector <T> > > &arr3)
 {
-    for (int i=0; i<arr3.size (); i++)
+    for (unsigned i=0; i<arr3.size (); i++)
     {
-        for (int j=0; j<arr3[i].size (); j++)
+        for (unsigned j=0; j<arr3[i].size (); j++)
             arr3 [i][j].clear ();
         arr3 [i].clear ();
     }

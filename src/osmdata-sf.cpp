@@ -236,7 +236,8 @@ void get_osm_ways_sf (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
 {
     if (!(geom_type == "POLYGON" || geom_type == "LINESTRING"))
         throw std::runtime_error ("geom_type must be POLYGON or LINESTRING");
-    if (wayList.size () != way_ids.size ())
+    // NOTE that Rcpp `.size()` returns a **signed** int
+    if ((unsigned) wayList.size () != way_ids.size ())
         throw std::runtime_error ("ways and IDs must have same lengths");
 
     int nrow = way_ids.size (), ncol = unique_vals.k_way.size ();
