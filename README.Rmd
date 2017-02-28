@@ -1,9 +1,8 @@
 ---
-title: "osmdata package"
+title: "osmdata, an R package for OpenStreetMap data"
 output:
   md_document:
     variant: markdown_github
-    toc: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
