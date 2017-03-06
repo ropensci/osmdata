@@ -162,7 +162,7 @@ c.osmdata <- function (...)
                 {
                     rindx <- which (!rownames (j) %in% rownames (resi))
                     cindx <- which (names (j) %in% names (resi))
-                    resj <- j [rindx, ]
+                    resj <- j [rindx, ,drop=FALSE]
                     # then expand resj as for resi above
                     cnames_new <- cnames [which (!cnames %in% names (resj))]
                     for (k in cnames_new)
