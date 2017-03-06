@@ -3,7 +3,7 @@
 
 ![](./docs/fig/title.png)
 
-`osmdata` is an R package for accessing OpenStreetMap (OSM) data using the [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API). The Overpass API (or OSM3S) is a read-only API that serves up custom selected parts of the OSM map data. Map data are returned as [`sp`](https://cran.r-project.org/package=sp) objects.
+`osmdata` is an R package for accessing OpenStreetMap (OSM) data using the [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API). The Overpass API (or OSM3S) is a read-only API that serves up custom selected parts of the OSM map data. Map data can be returned either as [Simple Features (`sf`)](https://cran.r-project.org/package=sf) or [Spatial (`sp`)](https://cran.r-project.org/package=sp) objects.
 
 ### Installation
 
@@ -11,14 +11,8 @@
 devtools::install_github("osmdatar/osmdata")
 ```
 
-Current version:
-
-``` r
-library(osmdata)
-#> Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
-packageVersion("osmdata")
-#> [1] '0.0.0'
-```
+    #> Loading osmdata
+    #> Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
 
 ### Usage
 
@@ -32,8 +26,8 @@ x
 #> Object of class 'osmdata' with:
 #>                  $bbox : 51.47,-0.27,51.5,-0.2
 #>         $overpass_call : The call submitted to the overpass API
-#>             $timestamp : [ Mon Feb 27 22:45:12 2017 ]
-#>            $osm_points : 'sf' Simple Features Collection with 21304 points
+#>             $timestamp : [ Mon Mar  6 13:06:47 2017 ]
+#>            $osm_points : 'sf' Simple Features Collection with 21305 points
 #>             $osm_lines : 'sf' Simple Features Collection with 1891 linestrings
 #>          $osm_polygons : 'sf' Simple Features Collection with 22 polygons
 #>        $osm_multilines : 'sf' Simple Features Collection with 5 multilinestrings
@@ -65,6 +59,8 @@ For more details, see the [website](https://osmdatar.github.io/osmdata/)
 
 Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 
+<!--
 ### Style guide
 
 It is important to have a consistent style across the project. We use where possible the [Hadley Wickham style guide](https://github.com/ropensci/packaging_guide#conduct).
+-->
