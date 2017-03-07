@@ -59,7 +59,7 @@ example, all paths, ways, and roads are designated in OSM with `key=highway`, so
 that a query all motorways in greater London (UK) can be constructed as follows:
 ```{r opq3}
 q <- opq(bbox = 'greater london uk')
-q <- add_feature(q, key = 'highway', value = 'motorway")
+q <- add_feature(q, key = 'highway', value = 'motorway')
 ```
 A detailed description of features is provided at the 
 [OSM wiki](https://wiki.openstreetmap.org/wiki/Category:Keys), or the 
