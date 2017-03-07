@@ -66,41 +66,60 @@
 <div class="figure">
 <img src="./docs/fig/title.png">
 </div>
-<p><code>osmdata</code> is an R package for accessing OpenStreetMap (OSM) data using the <a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a>. The Overpass API (or OSM3S) is a read-only API that serves up custom selected parts of the OSM map data. Map data are returned as <a href="https://cran.r-project.org/package=sp"><code>sp</code></a> objects.</p>
+<p><code>osmdata</code> is an R package for accessing OpenStreetMap (OSM) data using the <a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a>. The Overpass API (or OSM3S) is a read-only API that serves up custom selected parts of the OSM map data. Map data can be returned either as <a href="https://cran.r-project.org/package=sf">Simple Features (<code>sf</code>)</a> or <a href="https://cran.r-project.org/package=sp">Spatial (<code>sp</code>)</a> objects.</p>
 <div id="installation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#installation" class="anchor"> </a>Installation</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">"osmdatar/osmdata"</span>)</code></pre></div>
-<p>Current version:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(osmdata)
-<span class="kw">packageVersion</span>(<span class="st">"osmdata"</span>)
-<span class="co">#&gt; [1] '0.0.0'</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"osmdatar/osmdata"</span>)</code></pre></div>
+<pre><code>#&gt; '/usr/lib/R/bin/R' CMD INSTALL '/root/osmdata' --library='/tmp/RtmpscXAVq/devtools_install_46b12d919535' --no-R --no-data --no-help --no-demo --no-inst --no-docs --no-exec --no-multiarch --no-test-load --preclean
+#&gt; g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c RcppExports.cpp -o RcppExports.o
+#&gt; g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c cleanup.cpp -o cleanup.o
+#&gt; g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c common.cpp -o common.o
+#&gt; g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c convert-osm-rcpp.cpp -o convert-osm-rcpp.o
+#&gt; g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c get-bbox.cpp -o get-bbox.o
+#&gt; g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c osmdata-sf.cpp -o osmdata-sf.o
+#&gt; g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c osmdata-sp.cpp -o osmdata-sp.o
+#&gt; g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c trace-osm.cpp -o trace-osm.o
+#&gt; g++ -std=c++11 -shared -L/usr/lib/R/lib -Wl,-Bsymbolic-functions -Wl,-z,relro -o osmdata.so RcppExports.o cleanup.o common.o convert-osm-rcpp.o get-bbox.o osmdata-sf.o osmdata-sp.o trace-osm.o -L/usr/lib/R/lib -lR</code></pre>
 </div>
 <div id="usage" class="section level3">
 <h3 class="hasAnchor">
 <a href="#usage" class="anchor"> </a>Usage</h3>
 <p><a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a> queries can be built from a base query constructed with <code>opq</code> followed by <code>add_feature</code>. The corresponding OSM objects are then downloaded and converted to <code>R Simple Features (sf)</code> objects with <code><a href="reference/osmdata_sf.html">osmdata_sf()</a></code> or to <code>R Spatial (sp)</code> objects with <code><a href="reference/osmdata_sp.html">osmdata_sp()</a></code>. For example,</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q0 &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span> (<span class="dt">bbox=</span><span class="kw">c</span>(-<span class="fl">0.27</span>,<span class="fl">51.47</span>,-<span class="fl">0.20</span>,<span class="fl">51.50</span>)) <span class="co"># Chiswick Eyot in London, U.K.</span>
-q1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_feature.html">add_feature</a></span> (q0, <span class="dt">key=</span><span class="st">'name'</span>, <span class="dt">value=</span><span class="st">"Thames"</span>, <span class="dt">exact=</span><span class="ot">FALSE</span>)
-x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span> (q1)
-x
-<span class="co">#&gt; Object of class 'osmdata' with:</span>
-<span class="co">#&gt;                  $bbox : 51.47,-0.27,51.5,-0.2</span>
-<span class="co">#&gt;         $overpass_call : The call submitted to the overpass API</span>
-<span class="co">#&gt;             $timestamp : [ Mon Feb 27 10:23:31 2017 ]</span>
-<span class="co">#&gt;            $osm_points : 'sf' Simple Features Collection with 21304 points</span>
-<span class="co">#&gt;             $osm_lines : 'sf' Simple Features Collection with 1891 linestrings</span>
-<span class="co">#&gt;          $osm_polygons : 'sf' Simple Features Collection with 22 polygons</span>
-<span class="co">#&gt;        $osm_multilines : 'sf' Simple Features Collection with 5 multilinestrings</span>
-<span class="co">#&gt;     $osm_multipolygons : 'sf' Simple Features Collection with 3 multipolygons</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q0 &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span>(<span class="dt">bbox =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.27</span>, <span class="fl">51.47</span>, <span class="op">-</span><span class="fl">0.20</span>, <span class="fl">51.50</span>)) <span class="co"># Chiswick Eyot in London, U.K.</span>
+q1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_feature.html">add_feature</a></span>(q0, <span class="dt">key =</span> <span class="st">'name'</span>, <span class="dt">value =</span> <span class="st">"Thames"</span>, <span class="dt">exact =</span> <span class="ot">FALSE</span>)
+x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>(q1)
+x</code></pre></div>
+<pre><code>#&gt;  Object of class 'osmdata' with:
+#&gt;                   $bbox : 51.47,-0.27,51.5,-0.2
+#&gt;          $overpass_call : The call submitted to the overpass API
+#&gt;              $timestamp : [ Tue Mar  7 22:17:27 2017 ]
+#&gt;             $osm_points : 'sf' Simple Features Collection with 21305 points
+#&gt;              $osm_lines : 'sf' Simple Features Collection with 1891 linestrings
+#&gt;           $osm_polygons : 'sf' Simple Features Collection with 22 polygons
+#&gt;         $osm_multilines : 'sf' Simple Features Collection with 5 multilinestrings
+#&gt;      $osm_multipolygons : 'sf' Simple Features Collection with 3 multipolygons</code></pre>
 <p>OSM data can also be downloaded in OSM XML format with <code><a href="reference/osmdata_xml.html">osmdata_xml()</a></code> and saved for use with other software.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/osmdata_xml.html">osmdata_xml</a></span> (q1, <span class="st">"data.xml"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/osmdata_xml.html">osmdata_xml</a></span>(q1, <span class="st">"data.xml"</span>)</code></pre></div>
 <p>The <code>XML</code> document is returned silently and may be passed directly to <code><a href="reference/osmdata_sp.html">osmdata_sp()</a></code> or <code><a href="reference/osmdata_sf.html">osmdata_sf()</a></code></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">doc &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_xml.html">osmdata_xml</a></span> (q1, <span class="st">"data.xml"</span>)
-x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span> (q1, doc)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">doc &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_xml.html">osmdata_xml</a></span>(q1, <span class="st">"data.xml"</span>)
+x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>(q1, doc)</code></pre></div>
 <p>Or data can be read from a previously downloaded file:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span> (q1, <span class="st">"data.xml"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>(q1, <span class="st">"data.xml"</span>)</code></pre></div>
 <p>For more details, see the <a href="https://osmdatar.github.io/osmdata/">website</a></p>
+</div>
+<div id="style-guide" class="section level3">
+<h3 class="hasAnchor">
+<a href="#style-guide" class="anchor"> </a>Style guide</h3>
+<p>We appreciate any contributions; those that comply with our general coding style even more. In four short points:</p>
+<ol style="list-style-type: decimal">
+<li>
+<code>&lt;-</code> not <code>=</code>
+</li>
+<li>Indent with four spaces</li>
+<li>Be generous with other white spaces - you’ve got plenty of real estate on that big screen of yours.</li>
+<li>Code is much easier to read when braces are horizontally aligned, so please put <code>{</code> in the same horizontal position as <code>}</code>.</li>
+</ol>
 </div>
 <div id="code-of-conduct" class="section level3">
 <h3 class="hasAnchor">
