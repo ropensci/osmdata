@@ -27,6 +27,7 @@ The development version of the `osmdata` R package can be installed with the
 ```{r install, eval=FALSE}
 devtools::install_github('osmdatar/osmdata')
 ```
+
 ```{r, echo=FALSE, message=FALSE, results='hide'}
 devtools::load_all ('..', export_all=FALSE)
 ```
