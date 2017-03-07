@@ -44,7 +44,7 @@ parts of the OSM map data. Map data can be returned either as
 ```{r, eval=FALSE}
 devtools::install_github("osmdatar/osmdata")
 ```
-```{r, echo=FALSE, message=FALSE}
+```{r, echo=FALSE, message=FALSE, results='hide'}
 devtools::load_all (".", export_all=FALSE)
 ```
 

@@ -12,6 +12,7 @@ reference:
   - title: Prepare a query string
     contents:
     - getbb
+    - bbox_to_string
     - opq
     - add_feature
   - title: Get additional OSM info
@@ -22,18 +23,25 @@ reference:
     contents:
     - overpass_status
     - overpass_query
+    - qry_to_string
+  - title: Extract data
+    contents:
     - osmdata_xml
     - osmdata_sf
     - osmdata_sp
-  - title: Misc
+  - title: Search data
     contents:
-    - stub
+    - osm_points
+    - osm_lines
+    - osm_polygons
+    - osm_multilines
+    - osm_multipolygons
     
 articles:
-  - title: Short intro
+  - title: osmdata
     contents:
-    - osm-examples
-  - title: More details
+    - osmdata
+  - title: Translating OSM to Simple Features
     contents:
     - osm-sf-translation
 

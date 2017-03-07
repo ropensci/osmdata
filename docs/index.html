@@ -71,16 +71,6 @@
 <h3 class="hasAnchor">
 <a href="#installation" class="anchor"> </a>Installation</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"osmdatar/osmdata"</span>)</code></pre></div>
-<pre><code>#&gt; '/usr/lib/R/bin/R' CMD INSTALL '/root/osmdata' --library='/tmp/RtmpscXAVq/devtools_install_46b12d919535' --no-R --no-data --no-help --no-demo --no-inst --no-docs --no-exec --no-multiarch --no-test-load --preclean
-#&gt; g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c RcppExports.cpp -o RcppExports.o
-#&gt; g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c cleanup.cpp -o cleanup.o
-#&gt; g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c common.cpp -o common.o
-#&gt; g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c convert-osm-rcpp.cpp -o convert-osm-rcpp.o
-#&gt; g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c get-bbox.cpp -o get-bbox.o
-#&gt; g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c osmdata-sf.cpp -o osmdata-sf.o
-#&gt; g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c osmdata-sp.cpp -o osmdata-sp.o
-#&gt; g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c trace-osm.cpp -o trace-osm.o
-#&gt; g++ -std=c++11 -shared -L/usr/lib/R/lib -Wl,-Bsymbolic-functions -Wl,-z,relro -o osmdata.so RcppExports.o cleanup.o common.o convert-osm-rcpp.o get-bbox.o osmdata-sf.o osmdata-sp.o trace-osm.o -L/usr/lib/R/lib -lR</code></pre>
 </div>
 <div id="usage" class="section level3">
 <h3 class="hasAnchor">
