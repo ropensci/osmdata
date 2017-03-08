@@ -518,8 +518,8 @@ names(sf::st_read('trentham.osm', layer='points', quiet=TRUE)) # these are the k
 
 ```{r, echo=FALSE}
 c("osm_id",     "name",       "barrier",    "highway",    "ref",
-"address",    "is_in",      "place",      "man_made",   "other_tags",
-"geometry")
+  "address",    "is_in",      "place",      "man_made",   "other_tags",
+  "geometry")
 ```
 
 ```{r, eval=FALSE}
@@ -528,12 +528,12 @@ names(osmdata_sf(q, 'trentham.osm')$osm_points)
 
 ```{r, echo=FALSE}
 c("osm_id",           "name",             "X_description_",   "X_waypoint_",
-"addr.city",        "addr.housenumber", "addr.postcode",    "addr.street",
-"amenity",          "barrier",          "denomination",     "foot",
-"ford",             "highway",          "leisure",          "note_1",
-"phone",            "place",            "railway",  "railway.historic",
-"ref",              "religion",         "shop",             "source",
-"tourism",          "waterway",         "geometry")
+  "addr.city",        "addr.housenumber", "addr.postcode",    "addr.street",
+  "amenity",          "barrier",          "denomination",     "foot",
+  "ford",             "highway",          "leisure",          "note_1",
+  "phone",            "place",            "railway",  "railway.historic",
+  "ref",              "religion",         "shop",             "source",
+  "tourism",          "waterway",         "geometry")
 ```
 
 `key` fields which are not specified in a given set of OSM data are not returned
