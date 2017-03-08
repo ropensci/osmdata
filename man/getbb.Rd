@@ -2,7 +2,7 @@
 % Please edit documentation in R/getbb.R
 \name{getbb}
 \alias{getbb}
-\title{Get bounding box for a given place name.}
+\title{Get bounding box for a given place name}
 \usage{
 getbb(place_name, display_name_contains = NULL, viewbox = NULL,
   format_out = "matrix", base_url = "https://nominatim.openstreetmap.org",

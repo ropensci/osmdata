@@ -50,7 +50,7 @@ bbox_to_string <- function(bbox) {
     return(bbox)
 }
 
-#' Get bounding box for a given place name.
+#' Get bounding box for a given place name
 #' 
 #' This function uses the free Nominatim API provided by OpenStreetMap to find
 #' the bounding box (bb) associated with place names.
