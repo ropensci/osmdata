@@ -1,10 +1,17 @@
+# get the sf geometry of the component with id from dat
 get_geoms <- function (dat, id)
 {
     indx <- which (grepl ('osm_', names (dat)))
     where <- indx [which (sapply (dat [indx], function (i) 
                                   any (id %in% rownames (i))))]
     lapply (where, function (i)
-            dat [[i]] [which (rownames (dat [[i]]) %in% id),]$geometry)
+            {
+                indx <- which (rownames (dat [[i]]) %in% id)
+                nms <- rownames (dat [[i]]) [indx]
+                ret <- dat [[i]] [indx,]$geometry
+                names (ret) <- nms
+                return (ret)
+            })
 }
 
 # x is a list of sf objects all of same class
@@ -43,7 +50,11 @@ get_line_ids <- function (x, dat, id)
         ids <- as.character (unlist (lapply (x, function (i) names (i))))
     } else if (is (x [[1]], 'POLYGON'))
     {
-        ids <- names (x)
+        # find all intersecting lines
+        pts <- as.character (unlist (sapply (x, function (i) rownames (i [[1]]))))
+        indx <- which (sapply (dat$osm_lines$geometry, function (i) 
+                               any (pts %in% rownames (i))))
+        ids <- names (dat$osm_lines$geometry) [indx]
     } else if (is (x [[1]], 'LINESTRING'))
     {
         # find all intersecting lines
@@ -168,9 +179,18 @@ sanity_check <- function (dat, id)
 #' @param dat An object of class \code{osmdata}
 #' @param id OSM identification of one or more objects for which points are to
 #' be extracted
+#'
 #' @return An \code{sf} Simple Features Collection of points 
 #'
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' tr <- opq ("trentham australia") %>% osmdata_sf ()
+#' coliban <- tr$osm_lines [which (tr$osm_lines$name == 'Coliban River'),]
+#' pts <- osm_points (tr, rownames (coliban)) # all points of river
+#' waterfall <- pts [which (pts$waterway == 'waterfall'),] # the waterfall point
+#' }
 osm_points <- function(dat, id) {
     if (missing (dat))
         stop ('osm_points can not be extracted without data')
@@ -202,6 +222,21 @@ osm_points <- function(dat, id) {
 #' @return An \code{sf} Simple Features Collection of linestrings 
 #'
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' dat <- opq ("hengelo nl") %>% add_feature (key="highway") %>% osmdata_sf ()
+#' bus <- dat$osm_points [which (dat$osm_points$highway == 'bus_stop'),] %>%
+#'         rownames () # all OSM IDs of bus stops
+#' osm_lines (dat, bus) # all highways containing bus stops
+#'
+#' # All lines which intersect with Piccadilly Circus in London, UK
+#' dat <- opq ("Fitzrovia London") %>% add_feature (key="highway") %>% 
+#'     osmdata_sf ()
+#' i <- which (dat$osm_polygons$name == "Piccadilly Circus")
+#' id <- rownames (dat$osm_polygons [i,])
+#' osm_lines (dat, id)
+#' }
 osm_lines <- function(dat, id) {
     if (missing (dat))
         stop ('osm_lines can not be extracted without data')
@@ -235,6 +270,16 @@ osm_lines <- function(dat, id) {
 #' @return An \code{sf} Simple Features Collection of polygons 
 #'
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' Extract polygons which intersect Conway Street in London
+#' dat <- opq ("Marylebone London") %>% add_feature (key="highway") %>% 
+#'     osmdata_sf ()
+#' conway <- which (dat$osm_lines$name == "Conway Street") 
+#' id <- rownames (dat$osm_lines [conway,])
+#' osm_polygons (dat, id)
+#' }
 osm_polygons <- function(dat, id) {
     if (missing (dat))
         stop ('osm_polygons can not be extracted without data')

@@ -1,9 +1,12 @@
 #' List recognized features in OSM Overpass
 #'
 #' @return character vector of all known features
+#'
 #' @note requires internet access
 #' @references \url{http://wiki.openstreetmap.org/wiki/Map_Features}
+#'
 #' @export
+#'
 #' @examples
 #' available_features()
 available_features <- function() {
@@ -24,11 +27,15 @@ available_features <- function() {
 
 #' List tags associated with a feature
 #'
-#' @return character vector of all known tags for a feature
-#' @note requires internet access
 #' @param feature feature to retrieve
+#'
+#' @return character vector of all known tags for a feature
+#'
+#' @note requires internet access
 #' @references \url{http://wiki.openstreetmap.org/wiki/Map_Features}
+#'
 #' @export
+#'
 #' @examples
 #' available_tags("aerialway")
 available_tags <- function(feature) {

@@ -14,3 +14,6 @@ sorted appropriately and must merely be in the order (x, y, x, y).}
 \description{
 This function converts a bounding box into a string for use in web apis
 }
+\examples{
+bbox_to_string (getbb ("hampi india"))
+}

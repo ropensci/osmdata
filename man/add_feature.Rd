@@ -7,7 +7,7 @@
 add_feature(opq, key, value, exact = TRUE, bbox = NULL)
 }
 \arguments{
-\item{opq}{Overpass query object}
+\item{opq}{An \code{overpass_query} object}
 
 \item{key}{feature key}
 
@@ -26,8 +26,21 @@ opq query bbox has been set}
 Add a feature to an Overpass query
 }
 \note{
-The final query can be obtained from 
-\code{paste0 (c (query$features, query$suffix), collapse="\n")}
+The actual query submitted to the overpass API can be obtained from
+\link{opq_to_string}
+}
+\examples{
+\dontrun{
+q <- getbb ("portsmouth", display_name_contains="United States") \%>\% opq () \%>\% 
+        add_feature("amenity", "restaurant") \%>\%
+        add_feature("amenity", "pub") 
+osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
+q1 <- getbb ("portsmouth", display_name_contains="United States") \%>\% opq () \%>\% 
+        add_feature("amenity", "restaurant") 
+q2 <- getbb ("portsmouth", display_name_contains="United States") \%>\% opq () \%>\% 
+        add_feature("amenity", "pub") 
+c (osmdata_sf (q1), osmdata_sf (q1)) # all objects that are restaurants OR pubs
+}
 }
 \references{
 \url{http://wiki.openstreetmap.org/wiki/Map_Features}

@@ -18,7 +18,7 @@ if (get_local)
     # httr::POST call, so can't be grabbed with curl_fetch_memory
     qry <- opq (bbox=c(-0.118,51.514,-0.115,51.517)) 
     qry <- add_feature (qry, key='highway')
-    overpass_query_result <- overpass_query (qry_to_string (qry), encoding='UTF-8')
+    overpass_query_result <- overpass_query (opq_to_string (qry), encoding='UTF-8')
     save (overpass_query_result, file="../overpass_query_result.rda")
     # but then overpass_query itself needs to be tested, so fetch_memory is used
     # here
@@ -28,7 +28,7 @@ if (get_local)
           curl::curl_fetch_memory,
           exit = function() { cfm_output_overpass_query <<- returnValue() }
           )
-    res <- httr::POST (base_url, body=qry_to_string (qry))
+    res <- httr::POST (base_url, body=opq_to_string (qry))
     untrace (curl::curl_fetch_memory)
     class (cfm_output_overpass_query) <- 'response'
     save (cfm_output_overpass_query, file='../cfm_output_overpass_query.rda')
@@ -72,7 +72,7 @@ test_that ('make_query', {
             stub (overpass_query, 'httr::POST', function (x, ...) 
                   cfm_output_overpass_query)
         }
-        testthat::expect_is (overpass_query (query=qry_to_string (qry)), 
+        testthat::expect_is (overpass_query (query=opq_to_string (qry)), 
                              'character')
 
         # Then test all `osmdata_..` functions by stubbing the results of

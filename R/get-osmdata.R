@@ -34,11 +34,18 @@ get_timestamp <- function (doc)
 #' \code{.osm} files with code{xml2::write_xml}.
 #'
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' q <- opq ("hampi india")
+#' q <- add_feature (q, key="historic", value="ruins")
+#' osmdata_xml (q, filename="hampi.osm")
+#' }
 osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
     if (missing (encoding))
         encoding <- 'UTF-8'
 
-    doc <- overpass_query (qry_to_string (q), quiet=quiet, encoding=encoding)
+    doc <- overpass_query (opq_to_string (q), quiet=quiet, encoding=encoding)
     doc <- xml2::read_xml (doc, encoding=encoding)
     if (!missing (filename))
         xml2::write_xml (doc, file=filename)
@@ -57,9 +64,18 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
 #' @param encoding Unless otherwise specified XML documents are assumed to be
 #'        encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
 #'        an explicit encoding directive, this allows you to supply a default.
+#'
 #' @return An object of class `osmdata` with the OSM components (points, lines,
 #'         and polygons) represented in \code{sp} format.
+#'
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' hampi_sp <- opq ("hampi india") %>%
+#'             add_feature (key="historic", value="ruins") %>%
+#'             osmdata_sp ()
+#' }
 osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
     if (missing (encoding))
         encoding <- 'UTF-8'
@@ -70,7 +86,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
     else if (is (q, 'overpass_query'))
     {
         obj$bbox <- q$bbox
-        obj$overpass_call <- qry_to_string (q)
+        obj$overpass_call <- opq_to_string (q)
     } else if (is.character (q))
         obj$overpass_call <- q
     else
@@ -156,6 +172,13 @@ make_sf <- function (...)
 #' @return An object of class `osmdata` with the OSM components (points, lines,
 #'         and polygons) represented in \code{sf} format.
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' hampi_sf <- opq ("hampi india") %>%
+#'             add_feature (key="historic", value="ruins") %>%
+#'             osmdata_sf ()
+#' }
 osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     if (missing (encoding))
         encoding <- 'UTF-8'
@@ -166,7 +189,7 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     else if (is (q, 'overpass_query'))
     {
         obj$bbox <- q$bbox
-        obj$overpass_call <- qry_to_string (q)
+        obj$overpass_call <- opq_to_string (q)
     } else if (is.character (q))
         obj$overpass_call <- q
     else
