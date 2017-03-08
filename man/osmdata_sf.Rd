@@ -28,3 +28,10 @@ An object of class `osmdata` with the OSM components (points, lines,
 \description{
 Return an OSM Overpass query as an \code{osmdata} object in \code{sf} format.
 }
+\examples{
+\dontrun{
+hampi_sf <- opq ("hampi india") \%>\%
+            add_feature (key="historic", value="ruins") \%>\%
+            osmdata_sf ()
+}
+}

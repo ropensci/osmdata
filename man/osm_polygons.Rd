@@ -21,3 +21,13 @@ polygons containing that point. If \code{id} is of a line or polygon object,
 \code{osm_polygons} will return all polygons which intersect the given line
 or polygon.
 }
+\examples{
+\dontrun{
+Extract polygons which intersect Conway Street in London
+dat <- opq ("Marylebone London") \%>\% add_feature (key="highway") \%>\% 
+    osmdata_sf ()
+conway <- which (dat$osm_lines$name == "Conway Street") 
+id <- rownames (dat$osm_lines [conway,])
+osm_polygons (dat, id)
+}
+}

@@ -7,31 +7,26 @@
 opq(bbox = NULL)
 }
 \arguments{
-\item{bbox}{base bounding box to use with the features. Must set the individual
-feature bbox values if this value is not set. Can be a matrix (i.e. what
-\code{sp::bbox} returns), a string with values ("left,bottom,top,right"),
-a vector of length 4, or (if tmap is installed) a character place name.
-If the vector is named, the names will be used,
-otherwise, you should ensure the vector is in \code{c(top, left, bottom, right)}
-order.}
+\item{bbox}{Either four numeric values specifying the maximal and minimal
+longitudes and latitudes, or else a character string passed to
+\link{getbb} to be converted to a numerical bounding box.}
 }
 \value{
-\code{opq} object
+An \code{overpass_query} object
 }
 \description{
 Build an Overpass query
 }
 \examples{
 \dontrun{
-q <- opq(bbox=c(-70.8229993, 43.0135509, -70.7280563, 43.0996118)) \%>\%
-     add_feature("amenity", "pub", ) \%>\%
-     add_feature("amenity", "restaurant") \%>\%
-     add_feature("amenity", "library")
-q
-overpass_query(q) -> reading_noms
-sp::plot(reading_noms$osm_nodes)
-p <- overpass_query(opq("Leeds") \%>\%
-  add_feature("leisure", "park"))
-sp::plot(p$osm_polygons[1,])
+q <- getbb ("portsmouth", display_name_contains="United States") \%>\% opq () \%>\% 
+        add_feature("amenity", "restaurant") \%>\%
+        add_feature("amenity", "pub") 
+osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
+q1 <- getbb ("portsmouth", display_name_contains="United States") \%>\% opq () \%>\% 
+        add_feature("amenity", "restaurant") 
+q2 <- getbb ("portsmouth", display_name_contains="United States") \%>\% opq () \%>\% 
+        add_feature("amenity", "pub") 
+c (osmdata_sf (q1), osmdata_sf (q1)) # all objects that are restaurants OR pubs
 }
 }

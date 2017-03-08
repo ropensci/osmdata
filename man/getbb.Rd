@@ -29,6 +29,9 @@ string (see \code{\link{bbox_to_string}}) or data.frame (all 'hits' returned by 
 
 \item{silent}{Should the API be printed to screen? FALSE by default}
 }
+\value{
+Numeric bounding box as min and max of latitude and longitude
+}
 \description{
 This function uses the free Nominatim API provided by OpenStreetMap to find
 the bounding box (bb) associated with place names.
@@ -43,18 +46,16 @@ which can be found at \url{https://github.com/hrbrmstr/nominatim}.
 See \url{http://wiki.openstreetmap.org/wiki/Nominatim} for details.
 }
 \examples{
-if(curl::has_internet()){
-  getbb("Salzburg")
-  place_name <- "Hereford"
-  getbb(place_name, silent = FALSE)
-  # return bb whose display_name contain text string "United States"
-  getbb(place_name, display_name_contains = "United States", silent = FALSE)
-  # top 3 matches as data frame
-  getbb(place_name, format_out = "data.frame", limit = 3)
-  # using an alternative service (locationiq requires an API key)
-  key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
-  if(nchar(key) ==  32) {
-    getbb(place_name, base_url = "http://locationiq.org/v1/search.php", key = key)
-  }
+getbb("Salzburg")
+place_name <- "Hereford"
+getbb(place_name, silent = FALSE)
+# return bb whose display_name contain text string "United States"
+getbb(place_name, display_name_contains = "United States", silent = FALSE)
+# top 3 matches as data frame
+getbb(place_name, format_out = "data.frame", limit = 3)
+# using an alternative service (locationiq requires an API key)
+key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
+if(nchar(key) ==  32) {
+  getbb(place_name, base_url = "http://locationiq.org/v1/search.php", key = key)
 }
 }

@@ -33,3 +33,10 @@ or a raw vector.
 Objects of class \code{xml_document} can be saved as \code{.xml} or
 \code{.osm} files with code{xml2::write_xml}.
 }
+\examples{
+\dontrun{
+q <- opq ("hampi india")
+q <- add_feature (q, key="historic", value="ruins")
+osmdata_xml (q, filename="hampi.osm")
+}
+}

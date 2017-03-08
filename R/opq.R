@@ -1,27 +1,24 @@
 #' Build an Overpass query
 #'
-#' @param bbox base bounding box to use with the features. Must set the individual
-#'        feature bbox values if this value is not set. Can be a matrix (i.e. what
-#'        \code{sp::bbox} returns), a string with values ("left,bottom,top,right"),
-#'        a vector of length 4, or (if tmap is installed) a character place name.
-#'        If the vector is named, the names will be used,
-#'        otherwise, you should ensure the vector is in \code{c(top, left, bottom, right)}
-#'        order.
+#' @param bbox Either four numeric values specifying the maximal and minimal
+#'             longitudes and latitudes, or else a character string passed to
+#'             \link{getbb} to be converted to a numerical bounding box.
 #'
-#' @return \code{opq} object
+#' @return An \code{overpass_query} object
+#'
 #' @export
+#'
 #' @examples
 #' \dontrun{
-#' q <- opq(bbox=c(-70.8229993, 43.0135509, -70.7280563, 43.0996118)) %>%
-#'      add_feature("amenity", "pub", ) %>%
-#'      add_feature("amenity", "restaurant") %>%
-#'      add_feature("amenity", "library")
-#' q
-#' overpass_query(q) -> reading_noms
-#' sp::plot(reading_noms$osm_nodes)
-#' p <- overpass_query(opq("Leeds") %>%
-#'   add_feature("leisure", "park"))
-#' sp::plot(p$osm_polygons[1,])
+#' q <- getbb ("portsmouth", display_name_contains="United States") %>% opq () %>% 
+#'         add_feature("amenity", "restaurant") %>%
+#'         add_feature("amenity", "pub") 
+#' osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
+#' q1 <- getbb ("portsmouth", display_name_contains="United States") %>% opq () %>% 
+#'         add_feature("amenity", "restaurant") 
+#' q2 <- getbb ("portsmouth", display_name_contains="United States") %>% opq () %>% 
+#'         add_feature("amenity", "pub") 
+#' c (osmdata_sf (q1), osmdata_sf (q1)) # all objects that are restaurants OR pubs
 #' }
 opq <- function (bbox=NULL) 
 {
@@ -35,7 +32,7 @@ opq <- function (bbox=NULL)
 
 #' Add a feature to an Overpass query
 #'
-#' @param opq Overpass query object
+#' @param opq An \code{overpass_query} object
 #' @param key feature key
 #' @param value value for feature key
 #' @param exact If FALSE, \code{value} is not interpreted exactly; see
@@ -44,11 +41,25 @@ opq <- function (bbox=NULL)
 #'        opq query bbox has been set
 #' @return \code{opq} object
 #' 
-#' @note The final query can be obtained from 
-#' \code{paste0 (c (query$features, query$suffix), collapse="\n")}
+#' @note The actual query submitted to the overpass API can be obtained from
+#' \link{opq_to_string}
 #'
 #' @references \url{http://wiki.openstreetmap.org/wiki/Map_Features}
+#'
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' q <- getbb ("portsmouth", display_name_contains="United States") %>% opq () %>% 
+#'         add_feature("amenity", "restaurant") %>%
+#'         add_feature("amenity", "pub") 
+#' osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
+#' q1 <- getbb ("portsmouth", display_name_contains="United States") %>% opq () %>% 
+#'         add_feature("amenity", "restaurant") 
+#' q2 <- getbb ("portsmouth", display_name_contains="United States") %>% opq () %>% 
+#'         add_feature("amenity", "pub") 
+#' c (osmdata_sf (q1), osmdata_sf (q1)) # all objects that are restaurants OR pubs
+#' }
 add_feature <- function (opq, key, value, exact=TRUE, bbox=NULL) 
 {
     if (missing (key))
@@ -98,19 +109,20 @@ add_feature <- function (opq, key, value, exact=TRUE, bbox=NULL)
 #' Convert an osmdata query of class \code{opq} to a character string query to
 #' be submitted to the overpass API
 #'
-#' @param qry Overpass query object
+#' @param opq An \code{overpass_query} object
 #' @return Character string to be submitted to the overpass API
 #' 
-#' @note The final query can be obtained from 
-#' \code{paste0 (c (query$features, query$suffix), collapse="\n")}
-#'
 #' @export
-qry_to_string <- function (qry)
+#'
+#' @examples
+#' q <- opq ("hampi india")
+#' opq_to_string (q)
+opq_to_string <- function (opq)
 {
-    features <- paste (qry$features, collapse='')
-    features <- paste0 (sprintf (' node %s (%s);\n', features, qry$bbox),
-                        sprintf (' way %s (%s);\n', features, qry$bbox),
+    features <- paste (opq$features, collapse='')
+    features <- paste0 (sprintf (' node %s (%s);\n', features, opq$bbox),
+                        sprintf (' way %s (%s);\n', features, opq$bbox),
                         sprintf (' relation %s (%s);\n\n', features,
-                                 qry$bbox)) 
-    paste0 (qry$prefix, features, qry$suffix)
+                                 opq$bbox)) 
+    paste0 (opq$prefix, features, opq$suffix)
 }

@@ -7,6 +7,9 @@
 #' sorted appropriately and must merely be in the order (x, y, x, y).
 #'
 #' @export
+#'
+#' @examples
+#' bbox_to_string (getbb ("hampi india"))
 bbox_to_string <- function(bbox) {
 
     if (missing (bbox)) stop ("bbox must be provided")
@@ -71,21 +74,23 @@ bbox_to_string <- function(bbox) {
 #' @param limit How many results should the API return?
 #' @param key The API key to use for services that require it
 #' @param silent Should the API be printed to screen? FALSE by default
+#'
+#' @return Numeric bounding box as min and max of latitude and longitude
+#' 
 #' @export
+#' 
 #' @examples
-#' if(curl::has_internet()){
-#'   getbb("Salzburg")
-#'   place_name <- "Hereford"
-#'   getbb(place_name, silent = FALSE)
-#'   # return bb whose display_name contain text string "United States"
-#'   getbb(place_name, display_name_contains = "United States", silent = FALSE)
-#'   # top 3 matches as data frame
-#'   getbb(place_name, format_out = "data.frame", limit = 3)
-#'   # using an alternative service (locationiq requires an API key)
-#'   key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
-#'   if(nchar(key) ==  32) {
-#'     getbb(place_name, base_url = "http://locationiq.org/v1/search.php", key = key)
-#'   }
+#' getbb("Salzburg")
+#' place_name <- "Hereford"
+#' getbb(place_name, silent = FALSE)
+#' # return bb whose display_name contain text string "United States"
+#' getbb(place_name, display_name_contains = "United States", silent = FALSE)
+#' # top 3 matches as data frame
+#' getbb(place_name, format_out = "data.frame", limit = 3)
+#' # using an alternative service (locationiq requires an API key)
+#' key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
+#' if(nchar(key) ==  32) {
+#'   getbb(place_name, base_url = "http://locationiq.org/v1/search.php", key = key)
 #' }
 getbb <- function(place_name,
                   display_name_contains = NULL,
