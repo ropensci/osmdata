@@ -269,36 +269,27 @@ Now imagine we want to make a more specific query that only extracts designated
 cycleways or those which are bridges. Combining these into one query will return
 only those that are designated cycleways **AND** that are bridges:
 
-```{r, eval=FALSE}
+```{r}
 q2 <- add_feature(q1, key = 'bicycle', value = 'designated')
-q2 <- add_feature(q2, key = 'bridge', value = 'yes')
-cway_sev_bicycle_des_bridge <- osmdata_sf(q2)
+des_bike <- osmdata_sf(q2)
+q3 <- add_feature(q2, key = 'bridge', value = 'yes')
+des_bike_and_bridge <- osmdata_sf(q3)
 nrow(des_bike_and_bridge$osm_points); nrow(des_bike_and_bridge$osm_lines)
-```
-
-```{r, echo=FALSE}
-c(7, 3)
 ```
 
 That query returns only 7 points and 3 lines.  Designed cycleways **OR** bridges
 can be obtained through simply combining multiple `osmdata` objects with the `c`
 operator:
 
-```{r, eval=FALSE}
-q2 <- add_feature(q1, key = 'bicycle', value = 'designated')
-q3 <- add_feature(q1, key = 'bridge', value = 'yes')
-d2 <- osmdata_sf(q2)
-d3 <- osmdata_sf(q3)
-des_bike_or_bridge <- c(osmdata_sf(q2), osmdata_sf(q3))
+```{r}
+q4 <- add_feature(q1, key = 'bridge', value = 'yes')
+bridge <- osmdata_sf(q4)
+des_bike_or_bridge <- c(des_bike, bridge)
 nrow(des_bike_or_bridge$osm_points); nrow(des_bike_or_bridge$osm_lines)
 ```
 
-```{r, echo=FALSE}
-c(208, 40)
-```
-
 And as expected, the `OR` operation produces more data than the equivalent
-`AND`. 
+`AND`, showing the utility of combining `osmdata` objects with the generic function `c()`. 
 
 ## 3. The `osmdata` object
 
