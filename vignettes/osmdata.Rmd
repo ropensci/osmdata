@@ -16,10 +16,10 @@ vignette: >
 
 ## 1. Introduction
 
-`osmdata` is an R package for downloading and using data from OpenStreetMap (OSM).
-OSM is a global open access mapping project, which anyone can contribute to or
-access data from [@OpenStreetMap]--see the main website at 
-[www.openstreetmap.org/](www.openstreetmap.org/). 
+`osmdata` is an R package for downloading and using data from OpenStreetMap ([OSM](www.openstreetmap.org/)).
+OSM is a global open access mapping project, which is free and open under the [ODbL licence](http://www.openstreetmap.org/copyright) [@OpenStreetMap].
+This has many benefits, ensuring transparent data provenance and ownership, enabling real-time evolution of the database and, by allowing anyone to contribute, encouraging democratic decision making and citizen science [@johnson_models_2017].
+See the [OSM wiki](http://wiki.openstreetmap.org/wiki/Contribute_map_data) to find out how to contribute to the world's open geographical data commons. 
 
 The development version of the `osmdata` R package can be installed with the
 `devtools` package using the following command:
@@ -27,8 +27,9 @@ The development version of the `osmdata` R package can be installed with the
 ```{r install, eval=FALSE}
 devtools::install_github('osmdatar/osmdata')
 ```
+
 ```{r, echo=FALSE, message=FALSE, results='hide'}
-devtools::load_all ('..', export_all=FALSE)
+devtools::load_all('..', export_all=FALSE)
 ```
 
 Once installed, it can be loaded in the usual way:
@@ -38,12 +39,15 @@ library(osmdata)
 ```
 
 `osmdata` uses the [`overpass` API](http://overpass-api.de) to download
-OpenStreetMap (OSM) data and can convert the results to either [Simple Features
-(SF)](https://cran.r-project.org/package=sf) or
-[`Spatial`](https://cran.r-project.org/package=sp) objects, respectively defined
-by the `R` packages `sf` and `sp`.  `overpass` is a C++ library that serves OSM
+OpenStreetMap (OSM) data and can convert the results to either Simple Features
+(typically of class `sf`) or
+Spatial objects (e.g. `SpatialPointsDataFrame`), as defined
+by the packages [`sf`](https://cran.r-project.org/package=sf) and [`sp`](https://cran.r-project.org/package=sp) packages respectively.
+
+`overpass` is a C++ library that serves OSM
 data over the web.  All `overpass` queries begin with a bounding box, defined in
 `osmdata` with the function `opq()`:
+
 ```{r opq1}
 q <- opq(bbox = c(51.1, 0.1, 51.2, 0.2))
 ```
@@ -59,44 +63,33 @@ Following the initial `opq()` call, `osmdata` queries are built by adding one or
 more 'features', which are specified in terms of `key-value` pairs.  For
 example, all paths, ways, and roads are designated in OSM with `key=highway`, so
 that a query all motorways in greater London (UK) can be constructed as follows:
+
 ```{r opq3}
 q <- opq(bbox = 'greater london uk')
 q <- add_feature(q, key = 'highway', value = 'motorway')
 ```
+
 A detailed description of features is provided at the 
 [OSM wiki](https://wiki.openstreetmap.org/wiki/Category:Keys), or the 
 `osmdata` function `available_features()` can be used to retrive the
 comprehensive list of feature keys currently used in OSM.
+
 ```{r features, eval=FALSE}
-head (available_features ())
+head(available_features())
 ```
 ```{r, echo=FALSE}
-c ("4wd only",  "abandoned", "abutters",  "access",    "addr",      "addr:city")
+c("4wd only",  "abandoned", "abutters",  "access",    "addr",      "addr:city")
 ```
+
 There are two primary `osmdata` functions for obtaining data from a query:
 `osmdata_sf()` and `osmdata_sp()`, which return data in 
 [Simple Features (`sf`)](https://cran.r-project.org/package=sf)
 and [Spatial (`sp`)](https://cran.r-project.org/package=sp) formats,
 respectively.
-```{r osmdata_sf1, eval=FALSE}
-osmdata_sf (q)
-```
-```{r osmdata_sf1-output, echo=FALSE}
-msg <- c ("Object of class 'osmdata' with:\n",
-"                 $bbox : 51.2867602,-0.510375,51.6918741,0.3340155\n",
-"        $overpass_call : The call submitted to the overpass API\n",
-"            $timestamp : [ Mon Mar  6 20:49:04 2017 ]\n",
-"           $osm_points : 'sf' Simple Features Collection with 4564 points\n",
-"            $osm_lines : 'sf' Simple Features Collection with 688 linestrings\n",
-"         $osm_polygons : 'sf' Simple Features Collection with 0 polygons\n",
-"       $osm_multilines : 'sf' Simple Features Collection with 0 multilinestrings\n",
-"    $osm_multipolygons : 'sf' Simple Features Collection with 0 multipolygons")
-message (msg)
-```
-`osmdata_sp (q)` returns the equivalent data as `SpatialPointsDataFrame` and
+
+`osmdata_sp(q)` returns the equivalent data as `SpatialPointsDataFrame` and
 `SpatialLinesDataFrame` objects (with this particular query returning no
 `polygons` or `multi` objects).
-
 
 ## 2. The overpass API
 
@@ -106,7 +99,7 @@ As mentioned, `osmdata` obtains OSM data from the
 
 > a read-only API that serves up custom selected parts of the OSM map data.
 
-The syntax of `overpass` queries is powerful yet not easy to learn.  This
+The syntax of `overpass` queries is powerful yet hard to learn.  This
 section briefly introduces the structure of `overpass` queries in order to help
 construct more efficient and powerful queries.  Those wanting to skip straight
 onto query construction in `osmdata` may safely jump ahead to the [query example
@@ -133,8 +126,9 @@ to the `overpass API` with a query can be obtained with the function
 ```{r, eval=FALSE}
 qry_to_string(q)
 ```
+
 ```{r, echo=FALSE}
-msg <- c ("[out:xml][timeout:25];\n",
+msg <- c("[out:xml][timeout:25];\n",
 "(\n",
 "  node\n",
 "    [\"highway\"=\"motorway\"]\n",
@@ -147,13 +141,12 @@ msg <- c ("[out:xml][timeout:25];\n",
 "    (51.2867602,-0.510375,51.6918741,0.3340155);\n",
 ");\n",
 "(._;>);out body;")
-message (msg)
+message(msg)
 ```
 The resultant output may be pasted directly into the 
 [overpass-turbo](http://overpass-turbo.eu/) online interactive query builder.
 (The output of `qry_to_string` has been somewhat reformatted here to reflect
 the format typically used in `overpass-turbo`.)
-
 
 ### 2.1. osmdata queries
 
@@ -175,10 +168,12 @@ return 'Lake Dian' through just specifying `value='Dian'`.
 
 Each successive feature added with `add_feature()` is added to previous
 features, so, for example, extending the previous query by an additional
-`key-value` pair to 
+`key-value` pair to:
+
 ```{r kunming2}
 q3 <- add_feature(q2, key = 'highway')
 ```
+
 will request all objects that are both water bodies with names matching 'Dian'
 **AND** that are also highways. Unsurprisingly, this query returns no data,
 but the previous queries do: the filtering is more restrictive with
@@ -191,21 +186,23 @@ such as those produced by the `osmdata` function `qry_to_string()`, or copied
 directly from the [`overpass-turbo` query builder](overpass-turbo.eu).
 
 ```{r, eval=FALSE}
-osmdata_sf (qry_to_string (q))
+osmdata_sf(qry_to_string(q))
 ```
+
 ```{r, echo=FALSE}
-msg <- c ("Object of class 'osmdata' with:\n",
+msg <- c("Object of class 'osmdata' with:\n",
 "                 $bbox :\n",
 "        $overpass_call : The call submitted to the overpass API\n",
 "            $timestamp : [ Tue Mar  7 10:06:30 2017 ]\n",
 "           $osm_points : 'sf' Simple Features Collection with 360582 points\n",
 "           ...")
-message (msg)
+message(msg)
 ```
+
 Note that the result contains no value for `bbox`, because that information is
 lost when the full `osmdata_query`, `q`, is converted to a string.
-Nevertheless, the results of the two calls `osmdata_sf (qry_to_string (q))` and
-`osmdata_sf (q)` differ only in the values of `bbox` and `timestamp`, while
+Nevertheless, the results of the two calls `osmdata_sf(qry_to_string(q))` and
+`osmdata_sf(q)` differ only in the values of `bbox` and `timestamp`, while
 returning otherwise identical data.
 
 In summary, `osmdata` queries are generally simplified versions of potentially
@@ -217,19 +214,22 @@ with `add_feeature()`.
 
 The simplest way to use `osmdata` is to simply request all data within a given
 bounding box:
+
 ```{r, eval=FALSE}
 q <- opq(bbox = 'London City, U.K.')
-lots_of_data <- osmdata_sf (q)
+lots_of_data <- osmdata_sf(q)
 ```
-Queries are, however, usually refined through using `add_feature()`, which
+
+Queries are, however, usually more useful when refined through using `add_feature()`, which
 minimally requires a single `key` and returns all objects specifying any value
 for that `key`: 
 
 ```{r opq-london, eval=FALSE}
 q <- add_feature(q, key = 'highway')
 q <- add_feature(q, key = 'name')
-not_so_much_data <- osmdata_sf (q)
+not_so_much_data <- osmdata_sf(q)
 ```
+
 `osmdata` will use that query to return all named highways within the requested
 bounding box. Note that `key` specifications are requests for features which
 must include those keys, yet most features will also include many other keys,
@@ -251,87 +251,101 @@ sp::plot(cway_sev$osm_lines)
 Now imagine we want to make a more specific query that only extracts designated
 cycleways or those which are bridges. Combining these into one query will return
 only those that are designated cycleways **AND** that are bridges:
-```{r, eval=FALSE}
+
+```{r}
 q2 <- add_feature(q1, key = 'bicycle', value = 'designated')
-q2 <- add_feature(q2, key = 'bridge', value = 'yes')
-cway_sev_bicycle_des_bridge <- osmdata_sf(q2)
-nrow (des_bike_and_bridge$osm_points); nrow (des_bike_and_bridge$osm_lines)
+des_bike <- osmdata_sf(q2)
+q3 <- add_feature(q2, key = 'bridge', value = 'yes')
+des_bike_and_bridge <- osmdata_sf(q3)
+nrow(des_bike_and_bridge$osm_points); nrow(des_bike_and_bridge$osm_lines)
 ```
-```{r, echo=FALSE}
-c (7, 3)
-```
+
 That query returns only 7 points and 3 lines.  Designed cycleways **OR** bridges
 can be obtained through simply combining multiple `osmdata` objects with the `c`
 operator:
-```{r, eval=FALSE}
-q2 <- add_feature(q1, key = 'bicycle', value = 'designated')
-q3 <- add_feature(q1, key = 'bridge', value = 'yes')
-d2 <- osmdata_sf(q2)
-d3 <- osmdata_sf(q3)
-des_bike_or_bridge <- c (osmdata_sf(q2), osmdata_sf(q3))
-nrow (des_bike_or_bridge$osm_points); nrow (des_bike_or_bridge$osm_lines)
+
+```{r}
+q4 <- add_feature(q1, key = 'bridge', value = 'yes')
+bridge <- osmdata_sf(q4)
+des_bike_or_bridge <- c(des_bike, bridge)
+nrow(des_bike_or_bridge$osm_points); nrow(des_bike_or_bridge$osm_lines)
 ```
-```{r, echo=FALSE}
-c (208, 40)
-```
+
 And as expected, the `OR` operation produces more data than the equivalent
-`AND`. 
-
-
-
+`AND`, showing the utility of combining `osmdata` objects with the generic function `c()`. 
 
 ## 3. The `osmdata` object
 
-The `osmdata` extraction functions, `osmdata_sf()`, and `osmdata_sp()`, both
-return objects of class `osmdata`, the structure of which is shown with the
-generic print method as demonstrated above.  The actual spatial data contained
+The `osmdata` extraction functions (`osmdata_sf()` and `osmdata_sp()`), both
+return objects of class `osmdata`.
+The structure of `osmdata` objects are clear from their default print method, illustrated using the `bridge` example from the previous section:
+
+```{r}
+bridge
+```
+
+As the results show, all `osmdata` objects should contain:
+
+- A bounding box (which can be accessed with `bridge$bbox`)
+- A time-stamp of the query (`bridge$timestamp`, useful for checking data is up-to-date)
+- The spatial data, consisting of `osm_points`, `osm_lines`, `osm_polygons`, `osm_multilines` and `osm_multipolygons`.
+
+These some or all of these can be empty: only points and lines are illustrated in the example printed above. The more complex features of `osm_multilines` and `osm_multipolygons` refer to OSM relations than contain multiple lines and polygons.
+
+  The actual spatial data contained
 in an `osmdata` object are of either `sp` format when extracted with
 `osmdata_sp()` or `sf` format when extracted with `osmdata_sf()`. 
 
 ```{r osmdata_with_files3a, eval=FALSE}
-class (osmdata_sf (q)$osm_lines)
+class(osmdata_sf(q)$osm_lines)
 ```
+
 ```{r, echo=FALSE}
-c ("sf", "data.frame")
+c("sf", "data.frame")
 ```
+
 ```{r osmdata_with_files3b, eval=FALSE}
-class (osmdata_sp (q)$osm_lines)
+class(osmdata_sp(q)$osm_lines)
 ```
+
 ```{r, echo=FALSE}
-message ('[1] "SpatialLinesDataFrame"\nattr(,"package")\n[1] "sp"')
+message('[1] "SpatialLinesDataFrame"\nattr(,"package")\n[1] "sp"')
 ```
 
 In addition to these two functions, `osmdata` provides a third function,
 `osmdata_xml()`, which allows raw OSM data to be returned and optionally saved
 to disk in XML format. The following code demonstrates this function, beginning
 with a new query.
+
 ```{r osmdata_xml-london-buildings, eval=FALSE}
 q <- opq(bbox = c(-0.12, 51.51, -0.11, 51.52)) # Central London, U.K.
 q <- add_feature(q, key = 'building')
 dat <- osmdata_xml(q, file='buildings.osm')
-class (dat)
+class(dat)
 ```
+
 ```{r, echo=FALSE}
-c ("xml_document", "xml_node")
+c("xml_document", "xml_node")
 ```
+
 This call both returns the same data as the object `dat` and saves them to the
 file `buildings.osm`. Downloaded XML data can be converted to `sf` or `sp`
 formats by simply passing the data to the respective `osmdata` functions, either
 as the name of a file or an XML object:
 
 ```{r osmdata_with_files, eval=FALSE}
-doc <- osmdata_xml (q, 'buildings.osm')
-dat1 <- osmdata_sf (q, doc)
-dat2 <- osmdata_sf (q, 'buildings.osm')
-identical (dat1, dat2)
+doc <- osmdata_xml(q, 'buildings.osm')
+dat1 <- osmdata_sf(q, doc)
+dat2 <- osmdata_sf(q, 'buildings.osm')
+identical(dat1, dat2)
 ```
+
 ```{r, echo=FALSE}
 TRUE
 ```
+
 The following sub-sections now explore these three functions in more detail,
 beginning with `osmdata_xnl()`.
-
-
 
 ### 3.1. The `osmdata_xml()` function
 
@@ -345,10 +359,11 @@ data directly from disk.
 The first few lines of the XML data downloaded above look like this:
 
 ```{r, eval=FALSE}
-readLines ('buildings.osm') [1:8]
+readLines('buildings.osm') [1:8]
 ```
+
 ```{r, echo=FALSE}
-c ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+c("<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
 "<osm version=\"0.6\" generator=\"Overpass API\">",
 "  <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>",
 "  <meta osm_base=\"2017-03-07T09:28:03Z\"/>",
@@ -357,6 +372,7 @@ c ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
 "  <node id=\"25496793\" lat=\"51.5176768\" lon=\"-0.1111129\"/>",
 "  <node id=\"25496827\" lat=\"51.5164528\" lon=\"-0.1093186\"/>")
 ```
+
 These data can be used in any other programs able to read and process XML data,
 such as the open source GIS [QGIS](http://qgis.org/en/site/) or the OSM data
 editor [JOSM](http://wiki.openstreetmap.org/wiki/JOSM).  The remainder of this
@@ -369,8 +385,8 @@ either filenames or the `R` objects containing those data to the
 `osmdata_sf/sp()` functions:
 
 ```{r, eval=FALSE}
-dat_sp <- osmdata_sp (q, 'buildings.osm')
-dat_sf <- osmdata_sf (q, 'buildings.osm')
+dat_sp <- osmdata_sp(q, 'buildings.osm')
+dat_sf <- osmdata_sf(q, 'buildings.osm')
 ```
 
 ### 3.2. The `osmdata_sf()` function
@@ -389,35 +405,41 @@ be readily achieved using `osmdata_xml()` described above, or through
 downloading directly from the [overpass interactive query
 builder](http://overpass-turbo.eu). 
 
-The following example is based on this query: 
+The following example is based on this query:
+
 ```{r trentham, eval=FALSE}
-q <- opq (bbox = 'Trentham, Australia')
-q <- add_feature (q, key = 'name') # any named objects
-osmdata_xml (q, 'trentham.osm')
+q <- opq(bbox = 'Trentham, Australia')
+q <- add_feature(q, key = 'name') # any named objects
+osmdata_xml(q, 'trentham.osm')
 ```
-`sf` can then read such data independent of `osmdata` though
+
+`sf` can then read such data independent of `osmdata` though:
+
 ```{r sf1, eval=FALSE}
-sf::st_read ('trentham.osm', layer = 'points')
+sf::st_read('trentham.osm', layer = 'points')
 ```
+
 ```{r, echo=FALSE}
-msg <- c ("Reading layer `points' from data source `trentham.osm' using driver `OSM'\n",
+msg <- c("Reading layer `points' from data source `trentham.osm' using driver `OSM'\n",
 "Simple feature collection with 38 features and 10 fields\n",
 "geometry type:  POINT\n",
 "dimension:      XY\n",
 "bbox:           xmin: 144.2894 ymin: -37.4846 xmax: 144.3893 ymax: -37.36012\n",
 "epsg (SRID):    4326\n",
 "proj4string:    +proj=longlat +datum=WGS84 +no_defs")
-message (msg)
+message(msg)
 ```
+
 The `GDAL` drivers used by `sf` can only load single 'layers' of features, for
 example, `points`, `lines`, or `polygons`. In contrast, `osmdata` loads all
 features simultaneously:
 
 ```{r osmdata_sf2, eval=FALSE}
-osmdata_sf (q, 'trentham.osm')
+osmdata_sf(q, 'trentham.osm')
 ```
+
 ```{r, echo=FALSE}
-msg <- c ("Object of class 'osmdata' with:\n",
+msg <- c("Object of class 'osmdata' with:\n",
 "                 $bbox : -37.4300874,144.2863388,-37.3500874,144.3663388\n",
 "        $overpass_call : The call submitted to the overpass API\n",
 "            $timestamp : ##------ Tues Mar 7 09:36:02 2017 ------##\n",
@@ -426,20 +448,23 @@ msg <- c ("Object of class 'osmdata' with:\n",
 "         $osm_polygons : 'sf' Simple Features Collection with 37 polygons\n",
 "       $osm_multilines : 'sf' Simple Features Collection with 1 multilinestrings\n",
 "    $osm_multipolygons : 'sf' Simple Features Collection with 6 multipolygons")
-message (msg)
+message(msg)
 ```
+
 Even for spatial objects of the same type (the same 'layers' in `sf`
 terminology), `osmdata` returns considerably more objects--7,166 points compared
 .with just 38. The raw sizes of data returned can be compared with:
 
 ```{r object-sizes, eval=FALSE}
-s1 <- object.size (osmdata_sf (q, 'trentham.osm')$osm_points)
-s2 <- object.size (sf::st_read ('trentham.osm', layer='points', quiet=TRUE))
-as.numeric (s1 / s2)
+s1 <- object.size(osmdata_sf(q, 'trentham.osm')$osm_points)
+s2 <- object.size(sf::st_read('trentham.osm', layer='points', quiet=TRUE))
+as.numeric(s1 / s2)
 ```
+
 ```{r, echo=FALSE}
 511.4193
 ```
+
 And the `osmdata points` contain over 500 times as much data.  The primary
 difference between `sf/GDAL` and `osmdata` is that the former returns only those
 objects unique to each category of spatial object.  Thus OSM nodes (`points` in
@@ -474,36 +499,44 @@ to be extracted.
 Another reason why `osmdata` returns more data than `GDAL/sf` is that the latter
 extracts only a restricted list of OSM `keys`, whereas `osmdata` returns all
 `key` fields present in the requested data:
+
 ```{r, eval=FALSE}
-names (sf::st_read ('trentham.osm', layer='points', quiet=TRUE)) # these are the keys
+names(sf::st_read('trentham.osm', layer='points', quiet=TRUE)) # these are the keys
 ```
+
 ```{r, echo=FALSE}
-c ("osm_id",     "name",       "barrier",    "highway",    "ref",
-"address",    "is_in",      "place",      "man_made",   "other_tags",
-"geometry")
+c("osm_id",     "name",       "barrier",    "highway",    "ref",
+  "address",    "is_in",      "place",      "man_made",   "other_tags",
+  "geometry")
 ```
+
 ```{r, eval=FALSE}
-names (osmdata_sf (q, 'trentham.osm')$osm_points)
+names(osmdata_sf(q, 'trentham.osm')$osm_points)
 ```
+
 ```{r, echo=FALSE}
-c ("osm_id",           "name",             "X_description_",   "X_waypoint_",
-"addr.city",        "addr.housenumber", "addr.postcode",    "addr.street",
-"amenity",          "barrier",          "denomination",     "foot",
-"ford",             "highway",          "leisure",          "note_1",
-"phone",            "place",            "railway",  "railway.historic",
-"ref",              "religion",         "shop",             "source",
-"tourism",          "waterway",         "geometry")
+c("osm_id",           "name",             "X_description_",   "X_waypoint_",
+  "addr.city",        "addr.housenumber", "addr.postcode",    "addr.street",
+  "amenity",          "barrier",          "denomination",     "foot",
+  "ford",             "highway",          "leisure",          "note_1",
+  "phone",            "place",            "railway",  "railway.historic",
+  "ref",              "religion",         "shop",             "source",
+  "tourism",          "waterway",         "geometry")
 ```
+
 `key` fields which are not specified in a given set of OSM data are not returned
 by `osmdata`, while `GDAL/sf` returns the same `key` fields regardless of
 whether any values are specified.
+
 ```{r, eval=FALSE}
-addr <- sf::st_read ('trentham.osm', layer='points', quiet=TRUE)$address
-all (is.na (addr))
+addr <- sf::st_read('trentham.osm', layer='points', quiet=TRUE)$address
+all(is.na(addr))
 ```
+
 ```{r, echo=FALSE}
 TRUE
 ```
+
 and `key=address` contains no data yet is still returned by `GDAL/sf`.
 
 Finally, note that `osmdata` will generally extract OSM data considerably faster
@@ -515,36 +548,41 @@ As with `osmdata_sf()` described above, OSM data may be converted to `sp`
 format without using `osmdata` via the `sf` functions demonstrated below: 
 
 ```{r sf_sp, eval=FALSE}
-dat <- sf::st_read ('buildings.osm', layer = 'multipolygons', quiet=TRUE)
-dat_sp <- as (dat, 'Spatial')
-class (dat_sp)
+dat <- sf::st_read('buildings.osm', layer = 'multipolygons', quiet=TRUE)
+dat_sp <- as(dat, 'Spatial')
+class(dat_sp)
 ```
+
 ```{r, echo=FALSE}
-message ('[1] "SpatialPolygonsDataFrame"\nattr(,"package")\n[1] "sp"')
+message('[1] "SpatialPolygonsDataFrame"\nattr(,"package")\n[1] "sp"')
 ```
 
 These data are extracted using the GDAL, and so suffer all of the same
 shortcomings mentioned above. Note differences in the amount of data returned:
 
 ```{r, eval=FALSE}
-dim (dat_sp)
-```
-```{r, echo=FALSE}
-c (560, 25)
-```
-```{r, eval=FALSE}
-dim (osmdata_sp (q, doc = 'buildings.osm')$osm_polygons)
-```
-```{r, echo=FALSE}
-c (566, 114)
-```
-```{r, eval=FALSE}
-dim (osmdata_sp (q, doc = 'buildings.osm')$osm_multipolygons)
-```
-```{r, echo=FALSE}
-c (15, 52)
+dim(dat_sp)
 ```
 
+```{r, echo=FALSE}
+c(560, 25)
+```
+
+```{r, eval=FALSE}
+dim(osmdata_sp(q, doc = 'buildings.osm')$osm_polygons)
+```
+
+```{r, echo=FALSE}
+c(566, 114)
+```
+
+```{r, eval=FALSE}
+dim(osmdata_sp(q, doc = 'buildings.osm')$osm_multipolygons)
+```
+
+```{r, echo=FALSE}
+c(15, 52)
+```
 
 ## 4. Recursive searching
 
@@ -587,23 +625,26 @@ searching is performed in `osmdata` with the following functions:
 Each of these functions accepts as an argument a vector of OSM identifiers. To
 demonstrate these functions, we first re-create the example above of named
 objects from Trentham, Australia:
+
 ```{r, eval=FALSE}
-q <- opq (bbox = 'Trentham, Australia')
-q <- add_feature (q, key = 'name') # any named objects
-tr <- osmdata_sf (q)
+q <- opq(bbox = 'Trentham, Australia')
+q <- add_feature(q, key = 'name') # any named objects
+tr <- osmdata_sf(q)
 ```
 
 ### 4.1. Example
 
 Then imagine we are interested in the `osm_line` object describing the 'Coliban
 River':
+
 ```{r, eval=FALSE}
-i <- which (tr$osm_lines$name == 'Coliban River')
+i <- which(tr$osm_lines$name == 'Coliban River')
 coliban <- tr$osm_lines [i,]
-coliban [which (!is.na (coliban))]
+coliban[which(!is.na(coliban))]
 ```
+
 ```{r, echo=FALSE}
-msg <- c ("Simple feature collection with 1 feature and 3 fields\n",
+msg <- c("Simple feature collection with 1 feature and 3 fields\n",
 "geometry type:  LINESTRING\n",
 "dimension:      XY\n",
 "bbox:           xmin: 144.3235 ymin: -37.37162 xmax: 144.3335 ymax: 37.36366\n",
@@ -611,31 +652,37 @@ msg <- c ("Simple feature collection with 1 feature and 3 fields\n",
 "proj4string:    +proj=longlat +datum=WGS84 +no_defs\n",
 "           osm_id          name waterway                       geometry\n",
 "87104907 87104907 Coliban River    river LINESTRING(144.323471069336...")
-message (msg)
+message(msg)
 ```
+
 The locations of the points of this line can be extracted directly from the `sf`
-object with
+object with:
+
 ```{r, eval=FALSE}
 coliban$geometry [[1]]
 ```
+
 ```{r, echo=FALSE}
-msg <- c ("LINESTRING(144.323471069336 -37.3716201782227, 144.323944091797 -37.3714790344238, 144.324356079102 -37.3709754943848, 144.324493408203 -37.3704833984375, 144.324600219727 -37.370174407959, 144.324981689453 -37.3697204589844, 144.325149536133 -37.369441986084, 144.325393676758 -37.3690567016602, 144.325714111328 -37.3686943054199, 144.326080322266 -37.3682441711426)")
-message (msg)
+msg <- c("LINESTRING(144.323471069336 -37.3716201782227, 144.323944091797 -37.3714790344238, 144.324356079102 -37.3709754943848, 144.324493408203 -37.3704833984375, 144.324600219727 -37.370174407959, 144.324981689453 -37.3697204589844, 144.325149536133 -37.369441986084, 144.325393676758 -37.3690567016602, 144.325714111328 -37.3686943054199, 144.326080322266 -37.3682441711426)")
+message(msg)
 ```
+
 The output contains nothing other than geometries (because, to reiterate, these
 are '*Simple* Features'), and no further information regarding those points can
 be extracted. The Coliban River has a waterfall in Trentham, and one of the
 `osm_points` objects describes this waterfall.  The information necessary to
 locate this waterfall is removed from the `GDAL/sf` representation, but can be
 extracted with `osmdata` with the following lines, noting that the 
-OSM ID of the line `coliban` is given by `rownames (coliban)`.
+OSM ID of the line `coliban` is given by `rownames(coliban)`.
+
 ```{r, eval=FALSE}
-pts <- osm_points (tr, rownames (coliban))
-wf <- pts [which (pts$waterway == 'waterfall'),]
-wf [which (!is.na (wf))]
+pts <- osm_points(tr, rownames(coliban))
+wf <- pts [which(pts$waterway == 'waterfall'),]
+wf [which(!is.na(wf))]
 ```
+
 ```{r, echo=FALSE}
-msg <- c ("Simple feature collection with 1 feature and 4 fields\n",
+msg <- c("Simple feature collection with 1 feature and 4 fields\n",
 "geometry type:  POINT\n",
 "dimension:      XY\n",
 "bbox:           xmin: 144.3246 ymin: -37.37017 xmax: 144.3246 ymax: -37.37017\n",
@@ -645,18 +692,19 @@ msg <- c ("Simple feature collection with 1 feature and 4 fields\n",
 "1013064837 1013064837 Trentham Falls attraction waterfall\n",
 "                                 geometry\n",
 "1013064837 POINT(144.324600219727 -37....")
-message (msg)
+message(msg)
 ```
 
 This point could be used as the basis for further recursive searches. For
 example, all `multipolygon` objects which include Trentham Falls could be
 extracted with:
+
 ```{r, eval=FALSE}
-mp <- osm_multipolygons (tr, rownames (wf))
+mp <- osm_multipolygons(tr, rownames(wf))
 ```
+
 Although this returns no data in this case, it nevertheless demonstrates the
 usefulness and ease of recursive searching with `osmdata`.
-
 
 ```{r, echo=FALSE}
 for(f in list.files(pattern="\\.osm"))
@@ -679,4 +727,3 @@ by Bob Rudis that provides an R interface to the
 [overpass](http://overpass-api.de/) API.
 
 ## 6. References
-
