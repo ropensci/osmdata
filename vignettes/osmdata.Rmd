@@ -337,10 +337,7 @@ q <- opq(bbox = c(-0.12, 51.51, -0.11, 51.52)) # Central London, U.K.
 q <- add_feature(q, key = 'building')
 dat <- osmdata_xml(q, file='buildings.osm')
 class(dat)
-```
-
-```{r, echo=FALSE}
-c("xml_document", "xml_node")
+## [1] "xml_document" "xml_node"
 ```
 
 This call both returns the same data as the object `dat` and saves them to the
@@ -353,10 +350,7 @@ doc <- osmdata_xml(q, 'buildings.osm')
 dat1 <- osmdata_sf(q, doc)
 dat2 <- osmdata_sf(q, 'buildings.osm')
 identical(dat1, dat2)
-```
-
-```{r, echo=FALSE}
-TRUE
+## [1] TRUE
 ```
 
 The following sub-sections now explore these three functions in more detail,
@@ -374,18 +368,13 @@ data directly from disk.
 The first few lines of the XML data downloaded above look like this:
 
 ```{r, eval=FALSE}
-readLines('buildings.osm')[1:8]
-```
-
-```{r, echo=FALSE}
-c("<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
-"<osm version=\"0.6\" generator=\"Overpass API\">",
-"  <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>",
-"  <meta osm_base=\"2017-03-07T09:28:03Z\"/>",
-"  <node id=\"21593231\" lat=\"51.5149566\" lon=\"-0.1134203\"/>",
-"  <node id=\"25378129\" lat=\"51.5135870\" lon=\"-0.1115193\"/>",
-"  <node id=\"25496793\" lat=\"51.5176768\" lon=\"-0.1111129\"/>",
-"  <node id=\"25496827\" lat=\"51.5164528\" lon=\"-0.1093186\"/>")
+readLines('buildings.osm')[1:6]
+## [1] "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"                                                                             
+## [2] "<osm version=\"0.6\" generator=\"Overpass API\">"                                                                       
+## [3] "  <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>"
+## [4] "  <meta osm_base=\"2017-03-07T09:28:03Z\"/>"                                                                            
+## [5] "  <node id=\"21593231\" lat=\"51.5149566\" lon=\"-0.1134203\"/>"                                            
+## [6] "  <node id=\"25378129\" lat=\"51.5135870\" lon=\"-0.1115193\"/>"                                                        
 ```
 
 These data can be used in any other programs able to read and process XML data,
@@ -432,7 +421,6 @@ osmdata_xml(q, 'trentham.osm')
 
 ```{r sf1, eval=FALSE}
 sf::st_read('trentham.osm', layer = 'points')
-
 ## Reading layer `points' from data source `trentham.osm' using driver `OSM'
 ## Simple feature collection with 38 features and 10 fields
 ## geometry type:  POINT
@@ -448,19 +436,15 @@ features simultaneously:
 
 ```{r osmdata_sf2, eval=FALSE}
 osmdata_sf(q, 'trentham.osm')
-```
-
-```{r, echo=FALSE}
-msg <- c("Object of class 'osmdata' with:\n",
-"                 $bbox : -37.4300874,144.2863388,-37.3500874,144.3663388\n",
-"        $overpass_call : The call submitted to the overpass API\n",
-"            $timestamp : ##------ Tues Mar 7 09:36:02 2017 ------##\n",
-"           $osm_points : 'sf' Simple Features Collection with 7166 points\n",
-"            $osm_lines : 'sf' Simple Features Collection with 263 linestrings\n",
-"         $osm_polygons : 'sf' Simple Features Collection with 37 polygons\n",
-"       $osm_multilines : 'sf' Simple Features Collection with 1 multilinestrings\n",
-"    $osm_multipolygons : 'sf' Simple Features Collection with 6 multipolygons")
-message(msg)
+## Object of class 'osmdata' with:
+##                  $bbox : -37.4300874,144.2863388,-37.3500874,144.3663388
+##         $overpass_call : The call submitted to the overpass API
+##             $timestamp : ##------ Tues Mar 7 09:36:02 2017 ------##
+##            $osm_points : 'sf' Simple Features Collection with 7166 points
+##             $osm_lines : 'sf' Simple Features Collection with 263 linestrings
+##          $osm_polygons : 'sf' Simple Features Collection with 37 polygons
+##        $osm_multilines : 'sf' Simple Features Collection with 1 multilinestrings
+##     $osm_multipolygons : 'sf' Simple Features Collection with 6 multipolygons
 ```
 
 Even for spatial objects of the same type (the same 'layers' in `sf`
@@ -471,10 +455,7 @@ terminology), `osmdata` returns considerably more objects--7,166 points compared
 s1 <- object.size(osmdata_sf(q, 'trentham.osm')$osm_points)
 s2 <- object.size(sf::st_read('trentham.osm', layer='points', quiet=TRUE))
 as.numeric(s1 / s2)
-```
-
-```{r, echo=FALSE}
-511.4193
+## [1] 511.4193
 ```
 
 And the `osmdata points` contain over 500 times as much data.  The primary
@@ -514,26 +495,20 @@ extracts only a restricted list of OSM `keys`, whereas `osmdata` returns all
 
 ```{r, eval=FALSE}
 names(sf::st_read('trentham.osm', layer='points', quiet=TRUE)) # these are the keys
-```
-
-```{r, echo=FALSE}
-c("osm_id",     "name",       "barrier",    "highway",    "ref",
-  "address",    "is_in",      "place",      "man_made",   "other_tags",
-  "geometry")
+## [1] "osm_id"     "name"       "barrier"    "highway"   
+## [5] "ref"        "address"    "is_in"      "place"     
+## [9] "man_made"   "other_tags" "geometry"  
 ```
 
 ```{r, eval=FALSE}
 names(osmdata_sf(q, 'trentham.osm')$osm_points)
-```
-
-```{r, echo=FALSE}
-c("osm_id",           "name",             "X_description_",   "X_waypoint_",
-  "addr.city",        "addr.housenumber", "addr.postcode",    "addr.street",
-  "amenity",          "barrier",          "denomination",     "foot",
-  "ford",             "highway",          "leisure",          "note_1",
-  "phone",            "place",            "railway",  "railway.historic",
-  "ref",              "religion",         "shop",             "source",
-  "tourism",          "waterway",         "geometry")
+## [1] "osm_id"           "name"             "X_description_"   "X_waypoint_"     
+## [5] "addr.city"        "addr.housenumber" "addr.postcode"    "addr.street"     
+## [9] "amenity"          "barrier"          "denomination"     "foot"            
+## [13] "ford"             "highway"          "leisure"          "note_1"          
+## [17] "phone"            "place"            "railway"          "railway.historic"
+## [21] "ref"              "religion"         "shop"             "source"          
+## [25] "tourism"          "waterway"         "geometry" 
 ```
 
 `key` fields which are not specified in a given set of OSM data are not returned
@@ -543,10 +518,7 @@ whether any values are specified.
 ```{r, eval=FALSE}
 addr <- sf::st_read('trentham.osm', layer='points', quiet=TRUE)$address
 all(is.na(addr))
-```
-
-```{r, echo=FALSE}
-TRUE
+## TRUE
 ```
 
 and `key=address` contains no data yet is still returned by `GDAL/sf`.
@@ -563,10 +535,7 @@ format without using `osmdata` via the `sf` functions demonstrated below:
 dat <- sf::st_read('buildings.osm', layer = 'multipolygons', quiet=TRUE)
 dat_sp <- as(dat, 'Spatial')
 class(dat_sp)
-```
-
-```{r, echo=FALSE}
-message('[1] "SpatialPolygonsDataFrame"\nattr(,"package")\n[1] "sp"')
+## [1] "SpatialPolygonsDataFrame"\nattr(,"package")\n[1] "sp"
 ```
 
 These data are extracted using the GDAL, and so suffer all of the same
@@ -574,26 +543,17 @@ shortcomings mentioned above. Note differences in the amount of data returned:
 
 ```{r, eval=FALSE}
 dim(dat_sp)
-```
-
-```{r, echo=FALSE}
-c(560, 25)
+## [1] 560  25
 ```
 
 ```{r, eval=FALSE}
 dim(osmdata_sp(q, doc = 'buildings.osm')$osm_polygons)
-```
-
-```{r, echo=FALSE}
-c(566, 114)
+## [1] 566 114
 ```
 
 ```{r, eval=FALSE}
 dim(osmdata_sp(q, doc = 'buildings.osm')$osm_multipolygons)
-```
-
-```{r, echo=FALSE}
-c(15, 52)
+## [1] 15 52
 ```
 
 ## 4. Recursive searching
@@ -653,18 +613,14 @@ River':
 i <- which(tr$osm_lines$name == 'Coliban River')
 coliban <- tr$osm_lines[i,]
 coliban[which(!is.na(coliban))]
-```
-
-```{r, echo=FALSE}
-msg <- c("Simple feature collection with 1 feature and 3 fields\n",
-"geometry type:  LINESTRING\n",
-"dimension:      XY\n",
-"bbox:           xmin: 144.3235 ymin: -37.37162 xmax: 144.3335 ymax: 37.36366\n",
-"epsg (SRID):    4326\n",
-"proj4string:    +proj=longlat +datum=WGS84 +no_defs\n",
-"           osm_id          name waterway                       geometry\n",
-"87104907 87104907 Coliban River    river LINESTRING(144.323471069336...")
-message(msg)
+## Simple feature collection with 1 feature and 3 fields
+## geometry type:  LINESTRING
+## dimension:      XY
+## bbox:           xmin: 144.3235 ymin: -37.37162 xmax: 144.3335 ymax: 37.36366
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+##            osm_id          name waterway                       geometry
+## 87104907 87104907 Coliban River    river LINESTRING(144.323471069336...
 ```
 
 The locations of the points of this line can be extracted directly from the `sf`
@@ -672,11 +628,7 @@ object with:
 
 ```{r, eval=FALSE}
 coliban$geometry[[1]]
-```
-
-```{r, echo=FALSE}
-msg <- c("LINESTRING(144.323471069336 -37.3716201782227, 144.323944091797 -37.3714790344238, 144.324356079102 -37.3709754943848, 144.324493408203 -37.3704833984375, 144.324600219727 -37.370174407959, 144.324981689453 -37.3697204589844, 144.325149536133 -37.369441986084, 144.325393676758 -37.3690567016602, 144.325714111328 -37.3686943054199, 144.326080322266 -37.3682441711426)")
-message(msg)
+## LINESTRING(144.323471069336 -37.3716201782227, 144.323944091797 -37.3714790344238, 144.324356079102 -37.3709754943848, 144.324493408203 -37.3704833984375, 144.324600219727 -37.370174407959, 144.324981689453 -37.3697204589844, 144.325149536133 -37.369441986084, 144.325393676758 -37.3690567016602, 144.325714111328 -37.3686943054199, 144.326080322266 -37.3682441711426)
 ```
 
 The output contains nothing other than geometries (because, to reiterate, these
@@ -691,20 +643,16 @@ OSM ID of the line `coliban` is given by `rownames(coliban)`.
 pts <- osm_points(tr, rownames(coliban))
 wf <- pts[which(pts$waterway == 'waterfall'),]
 wf[which(!is.na(wf))]
-```
-
-```{r, echo=FALSE}
-msg <- c("Simple feature collection with 1 feature and 4 fields\n",
-"geometry type:  POINT\n",
-"dimension:      XY\n",
-"bbox:           xmin: 144.3246 ymin: -37.37017 xmax: 144.3246 ymax: -37.37017\n",
-"epsg (SRID):    4326\n",
-"proj4string:    +proj=longlat +datum=WGS84 +no_defs\n",
-"               osm_id           name    tourism  waterway\n",
-"1013064837 1013064837 Trentham Falls attraction waterfall\n",
-"                                 geometry\n",
-"1013064837 POINT(144.324600219727 -37....")
-message(msg)
+## Simple feature collection with 1 feature and 4 fields
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: 144.3246 ymin: -37.37017 xmax: 144.3246 ymax: -37.37017
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+##                osm_id           name    tourism  waterway
+## 1013064837 1013064837 Trentham Falls attraction waterfall
+##                                  geometry
+## 1013064837 POINT(144.324600219727 -37....
 ```
 
 This point could be used as the basis for further recursive searches. For
