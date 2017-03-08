@@ -137,7 +137,7 @@ get_multipolygon_ids <- function (x, dat, id)
 {
     ids <- NULL
 
-    # get ids of multipolygons
+    # get ids of all multipolygon components
     mps <- lapply (dat$osm_multipolygons$geometry, function (i) 
                    names (i [[1]]))
     mps <- lapply (mps, function (i) unlist (strsplit (i, '-')))
@@ -313,6 +313,20 @@ osm_polygons <- function(dat, id) {
 #' @return An \code{sf} Simple Features Collection of multilines 
 #'
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' dat <- opq ("London UK") %>% 
+#'     add_feature (key="name", value="Thames", exact=FALSE) %>% osmdata_sf ()
+#' # Get ids of lines called "The Thames":
+#' id <- rownames (dat$osm_lines [which (dat$osm_lines$name == "The Thames"),])
+#' # and find all multilinestring objects which include those lines:
+#' osm_multilines (dat, id)
+#' # Now note that
+#' nrow (dat$osm_multilines) # = 24 multiline objects
+#' nrow (osm_multilines (dat, id)) # = 1 - the recursive search selects the
+#'                                 # single multiline containing "The Thames"
+#' }
 osm_multilines <- function(dat, id) {
     if (missing (dat))
         stop ('osm_multilines can not be extracted without data')
@@ -344,6 +358,19 @@ osm_multilines <- function(dat, id) {
 #' @return An \code{sf} Simple Features Collection of multipolygons 
 #'
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' # find all multipolygons which contain the single polygon called 
+#' # "Chiswick Eyot" (which is an island).
+#' dat <- opq ("London UK") %>% 
+#'     add_feature (key="name", value="Thames", exact=FALSE) %>% osmdata_sf ()
+#' id <- rownames (dat$osm_polygons [which (dat$osm_polygons$name == "Chiswick Eyot"),])
+#' osm_multipolygons (dat, id)
+#' # That multipolygon is the Thames itself, but note that
+#' nrow (dat$osm_multipolygons) # = 14 multipolygon objects
+#' nrow (osm_multipolygons (dat, id)) # = 1 - the main Thames multipolygon
+#' }
 osm_multipolygons <- function(dat, id) {
     if (missing (dat))
         stop ('osm_multipolygons can not be extracted without data')
