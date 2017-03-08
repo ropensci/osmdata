@@ -1,37 +1,56 @@
-#' Tools to Work with the OpenStreetMap (OSM) Overpass API
+#' Import OpenStreetMap data in 'sf' and 'sp' formats
 #'
-#' The Overpass API (or OSM3S) is a read-only API that serves up custom
-#' selected parts of the OSM map data. It acts as a database over the web:
-#' the client sends a query to the API and gets back the data set that
-#' corresponds to the query.\cr
-#' \cr
-#' Unlike the main API, which is optimized for editing, Overpass API is
-#' optimized for data consumers that need a few elements within a glimpse
-#' or up to roughly 100 million elements in some minutes, both selected by
-#' search criteria like e.g. location, type of objects, tag properties,
-#' proximity, or combinations of them. It acts as a database backend for
-#' various services.\cr
-#' \cr
-#' Overpass API has a powerful query language (language guide, language
-#' reference, an IDE) beyond XAPI, but also has a compatibility layer to
-#' allow a smooth transition from XAPI.
+#' Imports OpenStreetMap (OSM) data into R as either 'sf' or 'sp' objects.  OSM
+#' data are extracted from the overpass API and processed with very fast C++
+#' routines for return to R.  The package enables simple overpass queries to be
+#' constructed without the user necessarily understanding the syntax of the
+#' overpass query language, while retaining the ability to handle arbitrarily
+#' complex queries. Functions are also provided to enable recursive searching
+#' between different kinds of OSM data (for example, to find all lines which
+#' intersect a given point).
 #'
-#' @section Functions:
-#' \tabular{ll}{
-#' \code{add_feature}\tab Add feature to an overpass API query\cr
-#' \code{available_features}\tab Obtain list all OpenStreetMap features\cr
-#' \code{available_tags}\tab List all tags for a given OpenStreetMap feature\cr
-#' \code{bbox_to_string}\tab Convert matrix or vector to a bbox string to pass
-#' to overpass API\cr
-#' \code{issue_query}\tab Finalize and issue an Overpass query\cr
-#' \code{opq}\tab Begin building an Overpass query\cr
-#' \code{overpass_query}\tab Issue OSM Overpass Query\cr
-#' \code{overpass_status}\tab Retrieve status of the Overpass API\cr
-#' \code{read_osm}\tab Read an XML OSM Overpass response from path\cr
+#' @section Functions to Prepare Queries:
+#' \itemize{
+#' \item \code{\link{getbb}}: Get bounding box for a given place name
+#' \item \code{\link{bbox_to_string}}: Convert a named matrix or a named vector
+#' (or an unnamed vector) return a string
+#' \item \code{\link{opq}}: Build an overpass query
+#' \item \code{\link{add_feature}}: Add a feature to an overpass query
+#' \item \code{\link{overpass_status}}: Retrieve status of the overpass API
+#' \item \code{\link{opq_to_string}}: Convert an osmdata query to overpass API
+#' string
 #' }
+#'
+#' @section Functions to Get Additional OSM Information:
+#' \itemize{
+#' \item \code{\link{available_features}}: List recognised features in OSM
+#' \item \code{\link{available_tags}}: List tags associated with a feature
+#' }
+#'
+#' @section Functions to Manage Queries:
+#' \itemize{
+#' \item \code{\link{overpass_query}}: Issue OSM overpass query
+#' }
+#'
+#' @section Functions to Extract OSM Data:
+#' \itemize{
+#' \item \code{\link{osmdata_sf}}: Return OSM data in \code{sf} format
+#' \item \code{\link{osmdata_sp}}: Return OSM data in \code{sp} format
+#' \item \code{\link{osmdata_xml}}: Return OSM data in \code{XML} format
+#' }
+#'
+#' @section Functions to Search Data:
+#' \itemize{
+#' \item \code{\link{osm_points}}: Extract all \code{osm_points} objects
+#' \item \code{\link{osm_lines}}: Extract all \code{osm_lines} objects
+#' \item \code{\link{osm_polygons}}: Extract all \code{osm_polygons} objects
+#' \item \code{\link{osm_multilines}}: Extract all \code{osm_multilines} objects
+#' \item \code{\link{osm_multipolygons}}: Extract all \code{osm_multipolygons} objects
+#' }
+#'
 #' @name osmdata
 #' @docType package
-#' @author Bob Rudis, Robin Lovelace, Maëlle Salmon, Mark Padgham
+#' @author Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon
 #' @import sp
 #' @importFrom curl has_internet
 #' @importFrom httr content GET POST stop_for_status

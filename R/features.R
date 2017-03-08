@@ -1,4 +1,4 @@
-#' List recognized features in OSM Overpass
+#' List recognized features in OSM 
 #'
 #' @return character vector of all known features
 #'

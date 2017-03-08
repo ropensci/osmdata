@@ -2,7 +2,7 @@
 % Please edit documentation in R/features.R
 \name{available_features}
 \alias{available_features}
-\title{List recognized features in OSM Overpass}
+\title{List recognized features in OSM}
 \usage{
 available_features()
 }
@@ -10,7 +10,7 @@ available_features()
 character vector of all known features
 }
 \description{
-List recognized features in OSM Overpass
+List recognized features in OSM
 }
 \note{
 requires internet access
