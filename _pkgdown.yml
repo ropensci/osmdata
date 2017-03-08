@@ -9,26 +9,23 @@ reference:
     contents:
     - osmdata-class
     - osmdata-package
-  - title: Prepare a query string
+  - title: Prepare queries
     contents:
     - getbb
     - bbox_to_string
+    - overpass_status
     - opq
     - add_feature
+    - opq_to_string
   - title: Get additional OSM info
     contents:
     - available_features
     - available_tags
-  - title: Manage queries
-    contents:
-    - overpass_status
-    - overpass_query
-    - opq_to_string
   - title: Extract data
     contents:
-    - osmdata_xml
     - osmdata_sf
     - osmdata_sp
+    - osmdata_xml
   - title: Search data
     contents:
     - osm_points

@@ -14,9 +14,9 @@
 #' \item \code{\link{getbb}}: Get bounding box for a given place name
 #' \item \code{\link{bbox_to_string}}: Convert a named matrix or a named vector
 #' (or an unnamed vector) return a string
+#' \item \code{\link{overpass_status}}: Retrieve status of the overpass API
 #' \item \code{\link{opq}}: Build an overpass query
 #' \item \code{\link{add_feature}}: Add a feature to an overpass query
-#' \item \code{\link{overpass_status}}: Retrieve status of the overpass API
 #' \item \code{\link{opq_to_string}}: Convert an osmdata query to overpass API
 #' string
 #' }
@@ -25,11 +25,6 @@
 #' \itemize{
 #' \item \code{\link{available_features}}: List recognised features in OSM
 #' \item \code{\link{available_tags}}: List tags associated with a feature
-#' }
-#'
-#' @section Functions to Manage Queries:
-#' \itemize{
-#' \item \code{\link{overpass_query}}: Issue OSM overpass query
 #' }
 #'
 #' @section Functions to Extract OSM Data:

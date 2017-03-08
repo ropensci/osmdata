@@ -18,3 +18,4 @@ man/rcpp_osmdata_sp.Rd
 ^appveyor[.]yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^paper\.md$
