@@ -671,7 +671,7 @@ for(f in list.files(pattern="\\.osm"))
     if(file.exists(f)) file.remove(f)
 ```
 
-### 4.2 Relations
+### 4.2 Relation example
 
 A special type of OSM object is a relation. These can be defined by their name,
 which can join many divers features into a single object.
