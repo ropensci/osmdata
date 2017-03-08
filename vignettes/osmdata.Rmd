@@ -237,7 +237,7 @@ q <- opq(bbox = 'London City, U.K.')
 lots_of_data <- osmdata_sf(q)
 ```
 
-Queries are, however, usually refined through using `add_feature()`, which
+Queries are, however, usually more useful when refined through using `add_feature()`, which
 minimally requires a single `key` and returns all objects specifying any value
 for that `key`: 
 
