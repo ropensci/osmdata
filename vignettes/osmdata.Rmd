@@ -95,7 +95,6 @@ There are two primary `osmdata` functions for obtaining data from a query:
 and [Spatial (`sp`)](https://cran.r-project.org/package=sp) formats,
 respectively.
 
-
 ## 2. The overpass API
 
 As mentioned, `osmdata` obtains OSM data from the 
@@ -130,24 +129,21 @@ to the `overpass API` with a query can be obtained with the function
 
 ```{r, eval=FALSE}
 qry_to_string(q)
+## [out:xml][timeout:25];
+## (
+##   node
+##     ["highway"="motorway"]
+##     (51.2867602,-0.510375,51.6918741,0.3340155);
+##   way  
+##     ["highway"="motorway"]
+##     (51.2867602,-0.510375,51.6918741,0.3340155);
+##   relation  
+##     ["highway"="motorway"]
+##     (51.2867602,-0.510375,51.6918741,0.3340155);
+## );
+## (._;>);out body;
 ```
 
-```{r, echo=FALSE}
-msg <- c("[out:xml][timeout:25];\n",
-"(\n",
-"  node\n",
-"    [\"highway\"=\"motorway\"]\n",
-"    (51.2867602,-0.510375,51.6918741,0.3340155);\n",
-"  way  \n",
-"    [\"highway\"=\"motorway\"]\n",
-"    (51.2867602,-0.510375,51.6918741,0.3340155);\n",
-"  relation  \n",
-"    [\"highway\"=\"motorway\"]\n",
-"    (51.2867602,-0.510375,51.6918741,0.3340155);\n",
-");\n",
-"(._;>);out body;")
-message(msg)
-```
 The resultant output may be pasted directly into the 
 [overpass-turbo](http://overpass-turbo.eu/) online interactive query builder.
 (The output of `qry_to_string` has been somewhat reformatted here to reflect
@@ -192,16 +188,12 @@ directly from the [`overpass-turbo` query builder](overpass-turbo.eu).
 
 ```{r, eval=FALSE}
 osmdata_sf(qry_to_string(q))
-```
-
-```{r, echo=FALSE}
-msg <- c("Object of class 'osmdata' with:\n",
-"                 $bbox :\n",
-"        $overpass_call : The call submitted to the overpass API\n",
-"            $timestamp : [ Tue Mar  7 10:06:30 2017 ]\n",
-"           $osm_points : 'sf' Simple Features Collection with 360582 points\n",
-"           ...")
-message(msg)
+## Object of class 'osmdata' with:
+##                  $bbox :
+##         $overpass_call : The call submitted to the overpass API
+##             $timestamp : [ Tue Mar  7 10:06:30 2017 ]
+##            $osm_points : 'sf' Simple Features Collection with 360582 points
+##            ...
 ```
 
 Note that the result contains no value for `bbox`, because that information is
@@ -218,7 +210,7 @@ with `opq()`, and then specifying OSM features in terms of `key-value` pairs
 with `add_feeature()`. 
 
 The simplest way to use `osmdata` is to simply request all data within a given
-bounding box:
+bounding box (warning - not intended to run):
 
 ```{r, eval=FALSE}
 q <- opq(bbox = 'London City, U.K.')
@@ -391,7 +383,7 @@ data directly from disk.
 The first few lines of the XML data downloaded above look like this:
 
 ```{r, eval=FALSE}
-readLines('buildings.osm') [1:8]
+readLines('buildings.osm')[1:8]
 ```
 
 ```{r, echo=FALSE}
@@ -449,17 +441,14 @@ osmdata_xml(q, 'trentham.osm')
 
 ```{r sf1, eval=FALSE}
 sf::st_read('trentham.osm', layer = 'points')
-```
 
-```{r, echo=FALSE}
-msg <- c("Reading layer `points' from data source `trentham.osm' using driver `OSM'\n",
-"Simple feature collection with 38 features and 10 fields\n",
-"geometry type:  POINT\n",
-"dimension:      XY\n",
-"bbox:           xmin: 144.2894 ymin: -37.4846 xmax: 144.3893 ymax: -37.36012\n",
-"epsg (SRID):    4326\n",
-"proj4string:    +proj=longlat +datum=WGS84 +no_defs")
-message(msg)
+## Reading layer `points' from data source `trentham.osm' using driver `OSM'
+## Simple feature collection with 38 features and 10 fields
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: 144.2894 ymin: -37.4846 xmax: 144.3893 ymax: -37.36012
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
 ```
 
 The `GDAL` drivers used by `sf` can only load single 'layers' of features, for
@@ -671,7 +660,7 @@ River':
 
 ```{r, eval=FALSE}
 i <- which(tr$osm_lines$name == 'Coliban River')
-coliban <- tr$osm_lines [i,]
+coliban <- tr$osm_lines[i,]
 coliban[which(!is.na(coliban))]
 ```
 
@@ -691,7 +680,7 @@ The locations of the points of this line can be extracted directly from the `sf`
 object with:
 
 ```{r, eval=FALSE}
-coliban$geometry [[1]]
+coliban$geometry[[1]]
 ```
 
 ```{r, echo=FALSE}
@@ -709,8 +698,8 @@ OSM ID of the line `coliban` is given by `rownames(coliban)`.
 
 ```{r, eval=FALSE}
 pts <- osm_points(tr, rownames(coliban))
-wf <- pts [which(pts$waterway == 'waterfall'),]
-wf [which(!is.na(wf))]
+wf <- pts[which(pts$waterway == 'waterfall'),]
+wf[which(!is.na(wf))]
 ```
 
 ```{r, echo=FALSE}
