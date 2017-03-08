@@ -84,6 +84,7 @@ comprehensive list of feature keys currently used in OSM.
 ```{r features, eval=FALSE}
 head(available_features())
 ```
+
 ```{r, echo=FALSE}
 c("4wd only",  "abandoned", "abutters",  "access",    "addr",      "addr:city")
 ```
