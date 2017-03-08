@@ -17,8 +17,7 @@ vignette: >
 ## 1. Introduction
 
 `osmdata` is an R package for downloading and using data from OpenStreetMap ([OSM](www.openstreetmap.org/)).
-OSM is a global open access mapping project, which is free to 
-access data from and add to [@OpenStreetMap], unlike proprietary map databases.
+OSM is a global open access mapping project, which is free and open [@OpenStreetMap].
 This has many benefits, ensuring transparent data provenance and ownership, enabling real-time evolution of the database and, by allowing anyone to contribute, encouraging citizen science [@johnson_models_2017].
 See the[OSM wiki](http://wiki.openstreetmap.org/wiki/Contribute_map_data) to find out how to contribute to the world's open geographical data commons. 
 
