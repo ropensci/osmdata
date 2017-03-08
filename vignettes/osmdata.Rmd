@@ -87,23 +87,6 @@ There are two primary `osmdata` functions for obtaining data from a query:
 and [Spatial (`sp`)](https://cran.r-project.org/package=sp) formats,
 respectively.
 
-```{r osmdata_sf1, eval=FALSE}
-osmdata_sf(q)
-```
-
-```{r osmdata_sf1-output, echo=FALSE}
-msg <- c("Object of class 'osmdata' with:\n",
-"                 $bbox : 51.2867602,-0.510375,51.6918741,0.3340155\n",
-"        $overpass_call : The call submitted to the overpass API\n",
-"            $timestamp : [ Mon Mar  6 20:49:04 2017 ]\n",
-"           $osm_points : 'sf' Simple Features Collection with 4564 points\n",
-"            $osm_lines : 'sf' Simple Features Collection with 688 linestrings\n",
-"         $osm_polygons : 'sf' Simple Features Collection with 0 polygons\n",
-"       $osm_multilines : 'sf' Simple Features Collection with 0 multilinestrings\n",
-"    $osm_multipolygons : 'sf' Simple Features Collection with 0 multipolygons")
-message(msg)
-```
-
 `osmdata_sp(q)` returns the equivalent data as `SpatialPointsDataFrame` and
 `SpatialLinesDataFrame` objects (with this particular query returning no
 `polygons` or `multi` objects).
@@ -293,9 +276,23 @@ And as expected, the `OR` operation produces more data than the equivalent
 
 ## 3. The `osmdata` object
 
-The `osmdata` extraction functions, `osmdata_sf()`, and `osmdata_sp()`, both
-return objects of class `osmdata`, the structure of which is shown with the
-generic print method as demonstrated above.  The actual spatial data contained
+The `osmdata` extraction functions (`osmdata_sf()` and `osmdata_sp()`), both
+return objects of class `osmdata`.
+The structure of `osmdata` objects are clear from their default print method, illustrated using the `bridge` example from the previous section:
+
+```{r}
+bridge
+```
+
+As the results show, all `osmdata` objects should contain:
+
+- A bounding box (which can be accessed with `bridge$bbox`)
+- A time-stamp of the query (`bridge$timestamp`, useful for checking data is up-to-date)
+- The spatial data, consisting of `osm_points`, `osm_lines`, `osm_polygons`, `osm_multilines` and `osm_multipolygons`.
+
+These some or all of these can be empty: only points and lines are illustrated in the example printed above. The more complex features of `osm_multilines` and `osm_multipolygons` refer to OSM relations than contain multiple lines and polygons.
+
+  The actual spatial data contained
 in an `osmdata` object are of either `sp` format when extracted with
 `osmdata_sp()` or `sf` format when extracted with `osmdata_sf()`. 
 
