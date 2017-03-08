@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract all  <U+2014> osm_points <e2><80><a2> osmdata</title>
+<title>Extract all osm_points</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -77,7 +77,7 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract all </h1>
+    <h1>Extract all osm_point objects</h1>
     </div>
 
     
@@ -100,6 +100,13 @@ be extracted</dd>
     <p>An <code>sf</code> Simple Features Collection of points</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'>## Not run: ------------------------------------</span>
+<span class='co'># tr &lt;- opq ("trentham australia") %&gt;% osmdata_sf ()</span>
+<span class='co'># coliban &lt;- tr$osm_lines [which (tr$osm_lines$name == 'Coliban River'),]</span>
+<span class='co'># pts &lt;- osm_points (tr, rownames (coliban)) # all points of river</span>
+<span class='co'># waterfall &lt;- pts [which (pts$waterway == 'waterfall'),] # the waterfall point</span>
+<span class='co'>## ---------------------------------------------</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -107,7 +114,9 @@ be extracted</dd>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

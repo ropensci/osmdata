@@ -89,7 +89,7 @@
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>opq</dt>
-      <dd>Overpass query object</dd>
+      <dd>An <code>overpass_query</code> object</dd>
       <dt>key</dt>
       <dd>feature key</dd>
       <dt>value</dt>
@@ -108,14 +108,26 @@ opq query bbox has been set</dd>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>The final query can be obtained from 
-<code>paste0 (c (query$features, query$suffix), collapse=&quot;\n&quot;)</code></p>
+    <p>The actual query submitted to the overpass API can be obtained from
+<a href='opq_to_string.html'>opq_to_string</a></p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href = 'http://wiki.openstreetmap.org/wiki/Map_Features'>http://wiki.openstreetmap.org/wiki/Map_Features</a></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'>## Not run: ------------------------------------</span>
+<span class='co'># q &lt;- getbb ("portsmouth", display_name_contains="United States") %&gt;% opq () %&gt;% </span>
+<span class='co'>#         add_feature("amenity", "restaurant") %&gt;%</span>
+<span class='co'>#         add_feature("amenity", "pub") </span>
+<span class='co'># osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)</span>
+<span class='co'># q1 &lt;- getbb ("portsmouth", display_name_contains="United States") %&gt;% opq () %&gt;% </span>
+<span class='co'>#         add_feature("amenity", "restaurant") </span>
+<span class='co'># q2 &lt;- getbb ("portsmouth", display_name_contains="United States") %&gt;% opq () %&gt;% </span>
+<span class='co'>#         add_feature("amenity", "pub") </span>
+<span class='co'># c (osmdata_sf (q1), osmdata_sf (q1)) # all objects that are restaurants OR pubs</span>
+<span class='co'>## ---------------------------------------------</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -127,7 +139,9 @@ opq query bbox has been set</dd>
       <li><a href="#note">Note</a></li>
 
       <li><a href="#references">References</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

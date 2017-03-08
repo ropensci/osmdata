@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract all  <U+2014> osm_multilines <e2><80><a2> osmdata</title>
+<title>Extract all osm_multilines</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -77,7 +77,7 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract all </h1>
+    <h1>Extract all osm_multiline objects</h1>
     </div>
 
     
@@ -103,6 +103,19 @@ to be extracted</dd>
     <p>An <code>sf</code> Simple Features Collection of multilines</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'>## Not run: ------------------------------------</span>
+<span class='co'># dat &lt;- opq ("London UK") %&gt;% </span>
+<span class='co'>#     add_feature (key="name", value="Thames", exact=FALSE) %&gt;% osmdata_sf ()</span>
+<span class='co'># # Get ids of lines called "The Thames":</span>
+<span class='co'># id &lt;- rownames (dat$osm_lines [which (dat$osm_lines$name == "The Thames"),])</span>
+<span class='co'># # and find all multilinestring objects which include those lines:</span>
+<span class='co'># osm_multilines (dat, id)</span>
+<span class='co'># # Now note that</span>
+<span class='co'># nrow (dat$osm_multilines) # = 24 multiline objects</span>
+<span class='co'># nrow (osm_multilines (dat, id)) # = 1 - the recursive search selects the</span>
+<span class='co'>#                                 # single multiline containing "The Thames"</span>
+<span class='co'>## ---------------------------------------------</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -110,7 +123,9 @@ to be extracted</dd>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

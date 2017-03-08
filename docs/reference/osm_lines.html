@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract all  <U+2014> osm_lines <e2><80><a2> osmdata</title>
+<title>Extract all osm_lines</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -77,7 +77,7 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract all </h1>
+    <h1>Extract all osm_line objects</h1>
     </div>
 
     
@@ -103,6 +103,20 @@ extracted</dd>
     <p>An <code>sf</code> Simple Features Collection of linestrings</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'>## Not run: ------------------------------------</span>
+<span class='co'># dat &lt;- opq ("hengelo nl") %&gt;% add_feature (key="highway") %&gt;% osmdata_sf ()</span>
+<span class='co'># bus &lt;- dat$osm_points [which (dat$osm_points$highway == 'bus_stop'),] %&gt;%</span>
+<span class='co'>#         rownames () # all OSM IDs of bus stops</span>
+<span class='co'># osm_lines (dat, bus) # all highways containing bus stops</span>
+<span class='co'># </span>
+<span class='co'># # All lines which intersect with Piccadilly Circus in London, UK</span>
+<span class='co'># dat &lt;- opq ("Fitzrovia London") %&gt;% add_feature (key="highway") %&gt;% </span>
+<span class='co'>#     osmdata_sf ()</span>
+<span class='co'># i &lt;- which (dat$osm_polygons$name == "Piccadilly Circus")</span>
+<span class='co'># id &lt;- rownames (dat$osm_polygons [i,])</span>
+<span class='co'># osm_lines (dat, id)</span>
+<span class='co'>## ---------------------------------------------</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -110,7 +124,9 @@ extracted</dd>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

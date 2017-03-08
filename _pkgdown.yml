@@ -7,7 +7,7 @@ templates:
 reference:
   - title: Package doc and class
     contents:
-    - osmdata
+    - osmdata-class
     - osmdata-package
   - title: Prepare a query string
     contents:
@@ -23,7 +23,7 @@ reference:
     contents:
     - overpass_status
     - overpass_query
-    - qry_to_string
+    - opq_to_string
   - title: Extract data
     contents:
     - osmdata_xml
@@ -38,11 +38,9 @@ reference:
     - osm_multipolygons
     
 articles:
-  - title: osmdata
+  - title: The osmdata package
     contents:
     - osmdata
-  - title: Translating OSM to Simple Features
-    contents:
     - osm-sf-translation
 
 navbar:

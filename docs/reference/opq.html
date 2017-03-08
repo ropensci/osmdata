@@ -89,32 +89,27 @@
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>bbox</dt>
-      <dd>base bounding box to use with the features. Must set the individual
-feature bbox values if this value is not set. Can be a matrix (i.e. what
-<code>sp::bbox</code> returns), a string with values (&quot;left,bottom,top,right&quot;),
-a vector of length 4, or (if tmap is installed) a character place name.
-If the vector is named, the names will be used,
-otherwise, you should ensure the vector is in <code>c(top, left, bottom, right)</code>
-order.</dd>
+      <dd>Either four numeric values specifying the maximal and minimal
+longitudes and latitudes, or else a character string passed to
+<a href='getbb.html'>getbb</a> to be converted to a numerical bounding box.</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>opq</code> object</p>
+    <p>An <code>overpass_query</code> object</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## Not run: ------------------------------------</span>
-<span class='co'># q &lt;- opq(bbox=c(-70.8229993, 43.0135509, -70.7280563, 43.0996118)) %&gt;%</span>
-<span class='co'>#      add_feature("amenity", "pub", ) %&gt;%</span>
-<span class='co'>#      add_feature("amenity", "restaurant") %&gt;%</span>
-<span class='co'>#      add_feature("amenity", "library")</span>
-<span class='co'># q</span>
-<span class='co'># overpass_query(q) -&gt; reading_noms</span>
-<span class='co'># sp::plot(reading_noms$osm_nodes)</span>
-<span class='co'># p &lt;- overpass_query(opq("Leeds") %&gt;%</span>
-<span class='co'>#   add_feature("leisure", "park"))</span>
-<span class='co'># sp::plot(p$osm_polygons[1,])</span>
+<span class='co'># q &lt;- getbb ("portsmouth", display_name_contains="United States") %&gt;% opq () %&gt;% </span>
+<span class='co'>#         add_feature("amenity", "restaurant") %&gt;%</span>
+<span class='co'>#         add_feature("amenity", "pub") </span>
+<span class='co'># osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)</span>
+<span class='co'># q1 &lt;- getbb ("portsmouth", display_name_contains="United States") %&gt;% opq () %&gt;% </span>
+<span class='co'>#         add_feature("amenity", "restaurant") </span>
+<span class='co'># q2 &lt;- getbb ("portsmouth", display_name_contains="United States") %&gt;% opq () %&gt;% </span>
+<span class='co'>#         add_feature("amenity", "pub") </span>
+<span class='co'># c (osmdata_sf (q1), osmdata_sf (q1)) # all objects that are restaurants OR pubs</span>
 <span class='co'>## ---------------------------------------------</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

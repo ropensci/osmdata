@@ -64,8 +64,9 @@
 <li>osmdata</li>
 </ol></h1>
                         <h4 class="author">Mark Padgham</h4>
+                        <h4 class="author">Robin Lovelace</h4>
             
-            <h4 class="date">2017-03-07</h4>
+            <h4 class="date">2017-03-08</h4>
           </div>
 
     
@@ -77,16 +78,6 @@
 <p><code>osmdata</code> is an R package for downloading and using data from OpenStreetMap (OSM). OSM is a global open access mapping project, which anyone can contribute to or access data from <span class="citation">(OpenStreetMap contributors 2017)</span>–see the main website at <a href="www.openstreetmap.org/" class="uri">www.openstreetmap.org/</a>.</p>
 <p>The development version of the <code>osmdata</code> R package can be installed with the <code>devtools</code> package using the following command:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">'osmdatar/osmdata'</span>)</code></pre></div>
-<pre><code>## '/usr/lib/R/bin/R' CMD INSTALL '/root/osmdata' --library='/tmp/Rtmp9TYt2H/devtools_install_4a0528d34341' --no-R --no-data --no-help --no-demo --no-inst --no-docs --no-exec --no-multiarch --no-test-load --preclean
-## g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c RcppExports.cpp -o RcppExports.o
-## g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c cleanup.cpp -o cleanup.o
-## g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c common.cpp -o common.o
-## g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c convert-osm-rcpp.cpp -o convert-osm-rcpp.o
-## g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c get-bbox.cpp -o get-bbox.o
-## g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c osmdata-sf.cpp -o osmdata-sf.o
-## g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c osmdata-sp.cpp -o osmdata-sp.o
-## g++ -std=c++11 -I/usr/share/R/include -DNDEBUG   -I"/usr/local/lib/R/site-library/Rcpp/include"   -fpic  -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g -c trace-osm.cpp -o trace-osm.o
-## g++ -std=c++11 -shared -L/usr/lib/R/lib -Wl,-Bsymbolic-functions -Wl,-z,relro -o osmdata.so RcppExports.o cleanup.o common.o convert-osm-rcpp.o get-bbox.o osmdata-sf.o osmdata-sp.o trace-osm.o -L/usr/lib/R/lib -lR</code></pre>
 <p>Once installed, it can be loaded in the usual way:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(osmdata)</code></pre></div>
 <p><code>osmdata</code> uses the <a href="http://overpass-api.de"><code>overpass</code> API</a> to download OpenStreetMap (OSM) data and can convert the results to either <a href="https://cran.r-project.org/package=sf">Simple Features (SF)</a> or <a href="https://cran.r-project.org/package=sp"><code>Spatial</code></a> objects, respectively defined by the <code>R</code> packages <code>sf</code> and <code>sp</code>. <code>overpass</code> is a C++ library that serves OSM data over the web. All <code>overpass</code> queries begin with a bounding box, defined in <code>osmdata</code> with the function <code><a href="../reference/opq.html">opq()</a></code>:</p>
@@ -123,8 +114,8 @@ q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_featu
 </blockquote>
 <p>The syntax of <code>overpass</code> queries is powerful yet not easy to learn. This section briefly introduces the structure of <code>overpass</code> queries in order to help construct more efficient and powerful queries. Those wanting to skip straight onto query construction in <code>osmdata</code> may safely jump ahead to the <a href="#query-example">query example below</a>.</p>
 <p><code>osmdata</code> simplifies queries so that OSM data can be extracted with very little understanding of the <code>overpass</code> query syntax, although it is still possible to submit arbitrarily complex <code>overpass</code> queries via <code>osmdata</code>. An excellent place to explore <code>overpass</code> queries specifically and OSM data in general is the online interactive query builder at <a href="http://overpass-turbo.eu/">overpass-turbo</a>, which includes a helpful corrector function for incorrectly formatted queries. Examples of its functionality in action can be found on the <a href="http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_API_by_Example">OpenStreetMap wiki</a>, with full details of the <code>overpass</code> query language given in the <a href="http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL">Query Language Guide</a> as well as the <a href="http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide">overpass API Language Guide</a>.</p>
-<p><code>osmdata</code> queries are lists of class <code>overpass_query</code>. The actual query passed to the <code>overpass API</code> with a query can be obtained with the function <code><a href="../reference/qry_to_string.html">qry_to_string()</a></code>. Applied to the preceding query, this function gives:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/qry_to_string.html">qry_to_string</a></span>(q)</code></pre></div>
+<p><code>osmdata</code> queries are lists of class <code>overpass_query</code>. The actual query passed to the <code>overpass API</code> with a query can be obtained with the function <code>qry_to_string()</code>. Applied to the preceding query, this function gives:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qry_to_string</span>(q)</code></pre></div>
 <pre><code>## [out:xml][timeout:25];
 ## (
 ##   node
@@ -150,8 +141,8 @@ q2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_feat
 <p>Each successive feature added with <code><a href="../reference/add_feature.html">add_feature()</a></code> is added to previous features, so, for example, extending the previous query by an additional <code>key-value</code> pair to</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_feature.html">add_feature</a></span>(q2, <span class="dt">key =</span> <span class="st">'highway'</span>)</code></pre></div>
 <p>will request all objects that are both water bodies with names matching ‘Dian’ <strong>AND</strong> that are also highways. Unsurprisingly, this query returns no data, but the previous queries do: the filtering is more restrictive with each feature added with <code><a href="../reference/add_feature.html">add_feature()</a></code>.</p>
-<p>The primary <code>osmdata</code> functions <code><a href="../reference/osmdata_sf.html">osmdata_sf()</a></code> or <code><a href="../reference/osmdata_sp.html">osmdata_sp()</a></code> pass these queries to <code>overpass</code> and return OSM data in corresponding <code>sf</code> or <code>sp</code> format, respectively. Both of these functions also accept direct <code>overpass</code> queries, such as those produced by the <code>osmdata</code> function <code><a href="../reference/qry_to_string.html">qry_to_string()</a></code>, or copied directly from the <a href="overpass-turbo.eu"><code>overpass-turbo</code> query builder</a>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/osmdata_sf.html">osmdata_sf</a></span> (<span class="kw"><a href="../reference/qry_to_string.html">qry_to_string</a></span> (q))</code></pre></div>
+<p>The primary <code>osmdata</code> functions <code><a href="../reference/osmdata_sf.html">osmdata_sf()</a></code> or <code><a href="../reference/osmdata_sp.html">osmdata_sp()</a></code> pass these queries to <code>overpass</code> and return OSM data in corresponding <code>sf</code> or <code>sp</code> format, respectively. Both of these functions also accept direct <code>overpass</code> queries, such as those produced by the <code>osmdata</code> function <code>qry_to_string()</code>, or copied directly from the <a href="overpass-turbo.eu"><code>overpass-turbo</code> query builder</a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/osmdata_sf.html">osmdata_sf</a></span> (<span class="kw">qry_to_string</span> (q))</code></pre></div>
 <pre><code>## Object of class 'osmdata' with:
 ##                  $bbox :
 ##         $overpass_call : The call submitted to the overpass API

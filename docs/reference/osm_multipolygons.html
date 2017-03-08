@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract all  <U+2014> osm_multipolygons <e2><80><a2> osmdata</title>
+<title>Extract all osm_multipolygons</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -77,7 +77,7 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract all </h1>
+    <h1>Extract all osm_multipolygon objects</h1>
     </div>
 
     
@@ -102,6 +102,18 @@ are to be extracted</dd>
     <p>An <code>sf</code> Simple Features Collection of multipolygons</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'>## Not run: ------------------------------------</span>
+<span class='co'># # find all multipolygons which contain the single polygon called </span>
+<span class='co'># # "Chiswick Eyot" (which is an island).</span>
+<span class='co'># dat &lt;- opq ("London UK") %&gt;% </span>
+<span class='co'>#     add_feature (key="name", value="Thames", exact=FALSE) %&gt;% osmdata_sf ()</span>
+<span class='co'># id &lt;- rownames (dat$osm_polygons [which (dat$osm_polygons$name == "Chiswick Eyot"),])</span>
+<span class='co'># osm_multipolygons (dat, id)</span>
+<span class='co'># # That multipolygon is the Thames itself, but note that</span>
+<span class='co'># nrow (dat$osm_multipolygons) # = 14 multipolygon objects</span>
+<span class='co'># nrow (osm_multipolygons (dat, id)) # = 1 - the main Thames multipolygon</span>
+<span class='co'>## ---------------------------------------------</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -109,7 +121,9 @@ are to be extracted</dd>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

@@ -113,6 +113,10 @@ string (see <code><a href='bbox_to_string.html'>bbox_to_string</a></code>) or da
       <dd>Should the API be printed to screen? FALSE by default</dd>
     </dl>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Numeric bounding box as min and max of latitude and longitude</p>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>It was inspired by the functions
@@ -124,27 +128,55 @@ which can be found at <a href = 'https://github.com/hrbrmstr/nominatim'>https://
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span>(<span class='kw'>curl</span><span class='kw'>::</span><span class='fu'>has_internet</span>()){
-  <span class='fu'>getbb</span>(<span class='st'>"Salzburg"</span>)
-  <span class='no'>place_name</span> <span class='kw'>&lt;-</span> <span class='st'>"Hereford"</span>
-  <span class='fu'>getbb</span>(<span class='no'>place_name</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-  <span class='co'># return bb whose display_name contain text string "United States"</span>
-  <span class='fu'>getbb</span>(<span class='no'>place_name</span>, <span class='kw'>display_name_contains</span> <span class='kw'>=</span> <span class='st'>"United States"</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-  <span class='co'># top 3 matches as data frame</span>
-  <span class='fu'>getbb</span>(<span class='no'>place_name</span>, <span class='kw'>format_out</span> <span class='kw'>=</span> <span class='st'>"data.frame"</span>, <span class='kw'>limit</span> <span class='kw'>=</span> <span class='fl'>3</span>)
-  <span class='co'># using an alternative service (locationiq requires an API key)</span>
-  <span class='no'>key</span> <span class='kw'>&lt;-</span> <span class='fu'>Sys.getenv</span>(<span class='st'>"LOCATIONIQ"</span>) <span class='co'># add LOCATIONIQ=type_your_api_key_here to .Renviron</span>
-  <span class='kw'>if</span>(<span class='fu'>nchar</span>(<span class='no'>key</span>) <span class='kw'>==</span>  <span class='fl'>32</span>) {
-    <span class='fu'>getbb</span>(<span class='no'>place_name</span>, <span class='kw'>base_url</span> <span class='kw'>=</span> <span class='st'>"http://locationiq.org/v1/search.php"</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>key</span>)
-  }
-}</div><div class='output co'>#&gt; [1] &quot;https://nominatim.openstreetmap.org/?q=Hereford&amp;format=json&amp;featuretype=settlement&amp;limit=10&quot;
-#&gt; [1] &quot;https://nominatim.openstreetmap.org/?q=Hereford&amp;format=json&amp;featuretype=settlement&amp;limit=10&quot;</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>getbb</span>(<span class='st'>"Salzburg"</span>)</div><div class='output co'>#&gt;        min      max
+#&gt; x 12.98563 13.12728
+#&gt; y 47.75121 47.85440</div><div class='input'><span class='no'>place_name</span> <span class='kw'>&lt;-</span> <span class='st'>"Hereford"</span>
+<span class='fu'>getbb</span>(<span class='no'>place_name</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] &quot;https://nominatim.openstreetmap.org/?q=Hereford&amp;format=json&amp;featuretype=settlement&amp;limit=10&quot;</div><div class='output co'>#&gt;         min       max
+#&gt; x -2.875173 -2.555173
+#&gt; y 51.895381 52.215381</div><div class='input'><span class='co'># return bb whose display_name contain text string "United States"</span>
+<span class='fu'>getbb</span>(<span class='no'>place_name</span>, <span class='kw'>display_name_contains</span> <span class='kw'>=</span> <span class='st'>"United States"</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] &quot;https://nominatim.openstreetmap.org/?q=Hereford&amp;format=json&amp;featuretype=settlement&amp;limit=10&quot;</div><div class='output co'>#&gt;          min        max
+#&gt; x -102.43202 -102.36123
+#&gt; y   34.79742   34.84601</div><div class='input'><span class='co'># top 3 matches as data frame</span>
+<span class='fu'>getbb</span>(<span class='no'>place_name</span>, <span class='kw'>format_out</span> <span class='kw'>=</span> <span class='st'>"data.frame"</span>, <span class='kw'>limit</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt;    place_id
+#&gt; 1    115330
+#&gt; 2 158456539
+#&gt; 3    482951
+#&gt;                                                                                      licence
+#&gt; 1 Data &lt;U+00A9&gt; OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
+#&gt; 2 Data &lt;U+00A9&gt; OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
+#&gt; 3 Data &lt;U+00A9&gt; OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
+#&gt;   osm_type    osm_id                                      boundingbox
+#&gt; 1     node  21280555   51.8953813, 52.2153813, -2.8751734, -2.5551734
+#&gt; 2 relation    114506 34.797419, 34.846009, -102.4320169, -102.3612329
+#&gt; 3     node 158531065 40.4292644, 40.4692644, -75.5721288, -75.5321288
+#&gt;          lat          lon
+#&gt; 1 52.0553813   -2.7151734
+#&gt; 2 34.8150622 -102.3977035
+#&gt; 3 40.4492644  -75.5521288
+#&gt;                                                     display_name class    type
+#&gt; 1            Hereford, Herefordshire, West Midlands, England, UK place    city
+#&gt; 2   Hereford, Deaf Smith County, Texas, United States of America place    city
+#&gt; 3 Hereford, Berks County, Pennsylvania, United States of America place village
+#&gt;   importance
+#&gt; 1  0.6358587
+#&gt; 2  0.5051060
+#&gt; 3  0.4559158
+#&gt;                                                                             icon
+#&gt; 1    https://nominatim.openstreetmap.org/images/mapicons/poi_place_city.p.20.png
+#&gt; 2    https://nominatim.openstreetmap.org/images/mapicons/poi_place_city.p.20.png
+#&gt; 3 https://nominatim.openstreetmap.org/images/mapicons/poi_place_village.p.20.png</div><div class='input'><span class='co'># using an alternative service (locationiq requires an API key)</span>
+<span class='no'>key</span> <span class='kw'>&lt;-</span> <span class='fu'>Sys.getenv</span>(<span class='st'>"LOCATIONIQ"</span>) <span class='co'># add LOCATIONIQ=type_your_api_key_here to .Renviron</span>
+<span class='kw'>if</span>(<span class='fu'>nchar</span>(<span class='no'>key</span>) <span class='kw'>==</span>  <span class='fl'>32</span>) {
+  <span class='fu'>getbb</span>(<span class='no'>place_name</span>, <span class='kw'>base_url</span> <span class='kw'>=</span> <span class='st'>"http://locationiq.org/v1/search.php"</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>key</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>

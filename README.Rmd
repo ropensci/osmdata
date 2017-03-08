@@ -28,7 +28,7 @@ knitr::opts_chunk$set(
 [![Project Status: WIP](http://www.repostatus.org/badges/0.1.0/wip.svg)](http://www.repostatus.org/#wip)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/osmdata)](http://cran.r-project.org/web/packages/osmdata) 
 
-![](./docs/fig/title.png)
+![](./fig/title.png)
 
 
 `osmdata` is an R package for accessing OpenStreetMap (OSM) data using the
