@@ -116,7 +116,7 @@ As mentioned, `osmdata` obtains OSM data from the
 
 > a read-only API that serves up custom selected parts of the OSM map data.
 
-The syntax of `overpass` queries is powerful yet not easy to learn.  This
+The syntax of `overpass` queries is powerful yet hard to learn.  This
 section briefly introduces the structure of `overpass` queries in order to help
 construct more efficient and powerful queries.  Those wanting to skip straight
 onto query construction in `osmdata` may safely jump ahead to the [query example
