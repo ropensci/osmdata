@@ -671,6 +671,22 @@ for(f in list.files(pattern="\\.osm"))
     if(file.exists(f)) file.remove(f)
 ```
 
+### 4.2 Relations
+
+A special type of OSM object is a relation. These can be defined by their name,
+which can join many divers features into a single object.
+The following example extracts the London Route Network Route 9,
+which is composed of many (over 100) separate lines:
+
+```{r, eval=FALSE}
+q <- opq ('greater london uk')
+q1 <- add_feature (q, key="name", value="London.Cycle.Network.Route.9", exact=FALSE)
+lcnr9 <- osmdata_sp(q1)
+sp::plot(lcnr9$osm_lines)
+```
+
+![](https://cloud.githubusercontent.com/assets/1825120/23709879/c98e2c2c-0412-11e7-86b8-1ffc95aab5a1.png)
+
 ## 5. Related Packages
 
 @eugster_osmar:_2012 describe `osmar`, an R package for handling OSM data
