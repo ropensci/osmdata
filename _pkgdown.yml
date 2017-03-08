@@ -49,9 +49,9 @@ navbar:
   left:
   - text: Home
     href: index.html
-  - text: Overview
+  - text: Vignettes
     href: articles/index.html
-  - text: Reference
+  - text: Functions
     href: reference/index.html
   right:
   - icon: fa-github fa-lg
