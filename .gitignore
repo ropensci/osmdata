@@ -13,14 +13,9 @@ inst/doc
 man/make_sf.Rd
 man/rcpp_osmdata_sf.Rd
 man/rcpp_osmdata_sp.Rd
-man/rcpp_test_points.Rd
-man/rcpp_test_lines.Rd
-man/rcpp_test_polygons.Rd
 # vim files
 .*.un~
 .*.swp
-doc.osm
-motorways.osm
-bldgs2.osm
+# .osm files generated from vignette
 buildings.osm
 trentham.osm
