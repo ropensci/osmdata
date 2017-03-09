@@ -8,10 +8,12 @@ tags:
 authors:
     - name: Mark Padgham
       affiliation: 1
-    - name: Maëlle Salmon
-      affiliation: 2
     - name: Robin Lovelace
       affiliation: 3
+    - name: Maëlle Salmon
+      affiliation: 2
+    - name: Bob Rudis
+      affiliation: 4
 affiliations:
     - name: Department of Geoinformatics, University of Salzburg, Austria
       index: 1
@@ -19,6 +21,8 @@ affiliations:
       index: 2
     - name: Institute of Transport Studies, University of Leeds, U.K.
       index: 3
+    - name: Rapid7
+      index: 4
 date: 8 March 2017
 bibliography: vignettes/osmdata-refs.bib
 ---
