@@ -370,7 +370,7 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st)
 {
 #ifdef DUMP_INPUT
     {
-        std::ofstream dump ("./osmdata-sp.xml");
+        std::ofstream dump ("./osmdata-sf.xml");
         if (dump.is_open())
         {
             dump.write (st.c_str(), st.size());
