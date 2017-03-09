@@ -6,14 +6,14 @@
 get_timestamp <- function (doc)
 {
     tstmp <- xml2::xml_text (xml2::xml_find_all (doc, "//meta/@osm_base"))
-    wday <- lubridate::wday (tstmp, label=TRUE)
-    mon <- lubridate::month (tstmp, label=TRUE)
+    wday <- lubridate::wday (tstmp, label = TRUE)
+    mon <- lubridate::month (tstmp, label = TRUE)
     day <- lubridate::day (tstmp)
     year <- lubridate::year (tstmp)
     # TODO: Get this regex to **exclude** 'T' and 'Z'
     hms <- regmatches (tstmp, regexpr ('T(.*?)Z', tstmp))
     hms <- substring (hms, 2, nchar (hms) - 1)
-    timestamp (paste (wday, mon, day, hms, year), quiet=TRUE)
+    timestamp (paste (wday, mon, day, hms, year), quiet = TRUE)
 }
 
 #' Return an OSM Overpass query in XML format 
@@ -45,10 +45,11 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
     if (missing (encoding))
         encoding <- 'UTF-8'
 
-    doc <- overpass_query (opq_to_string (q), quiet=quiet, encoding=encoding)
-    doc <- xml2::read_xml (doc, encoding=encoding)
+    doc <- overpass_query (opq_to_string (q), quiet = quiet,
+                           encoding = encoding)
+    doc <- xml2::read_xml (doc, encoding = encoding)
     if (!missing (filename))
-        xml2::write_xml (doc, file=filename)
+        xml2::write_xml (doc, file = filename)
     invisible (doc)
 }
 
@@ -94,9 +95,10 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
 
     if (missing (doc))
     {
-        doc <- overpass_query (obj$overpass_call, quiet=quiet, encoding=encoding)
-        obj$timestamp <- timestamp (quiet=TRUE, prefix="[ ", suffix=" ]")
-    } else 
+        doc <- overpass_query (obj$overpass_call, quiet = quiet,
+                               encoding = encoding)
+        obj$timestamp <- timestamp (quiet = TRUE, prefix = "[ ", suffix = " ]")
+    } else
     {
         if (is.character (doc))
         {
@@ -106,13 +108,13 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
         }
         obj$timestamp <- get_timestamp (doc)
         doc <- as.character (doc)
-    } 
+    }
 
     if (!quiet)
         message ('convertig OSM data to sp format')
     res <- rcpp_osmdata_sp (doc)
     if (is.null (obj$bbox))
-        obj$bbox <- paste (res$bbox, collapse=' ')
+        obj$bbox <- paste (res$bbox, collapse = ' ')
     obj$osm_points <- res$points
     obj$osm_lines <- res$lines
     obj$osm_polygons <- res$polygons
@@ -139,16 +141,16 @@ make_sf <- function (...)
     df <- if (length(x) == 1) # ONLY sfc
                 data.frame(row.names = row.names)
             else # create a data.frame from list:
-                    data.frame(x[-sf_column], row.names = row.names, 
+                    data.frame(x[-sf_column], row.names = row.names,
                            stringsAsFactors = TRUE)
 
-    object <- as.list(substitute(list(...)))[-1L] 
+    object <- as.list(substitute(list(...)))[-1L]
     arg_nm <- sapply(object, function(x) deparse(x))
     sfc_name <- make.names(arg_nm[sf_column])
     #sfc_name <- "geometry"
     df [[sfc_name]] <- x [[sf_column]]
     attr(df, "sf_column") <- sfc_name
-    f <- factor(rep(NA_character_, length.out = ncol(df) - 1), 
+    f <- factor(rep(NA_character_, length.out = ncol(df) - 1),
                levels = c ("constant", "aggregate", "identity"))
     names(f) <- names(df)[-ncol (df)]
     attr(df, "agr") <- f
@@ -197,8 +199,9 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
 
     if (missing (doc))
     {
-        doc <- overpass_query (obj$overpass_call, quiet=quiet, encoding=encoding)
-        obj$timestamp <- timestamp (quiet=TRUE, prefix="[ ", suffix=" ]")
+        doc <- overpass_query (obj$overpass_call, quiet = quiet,
+                               encoding = encoding)
+        obj$timestamp <- timestamp (quiet = TRUE, prefix = "[ ", suffix = " ]")
     } else
     {
         if (is.character (doc))
@@ -215,9 +218,8 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
         message ('convertig OSM data to sp format')
     res <- rcpp_osmdata_sf (doc)
     if (missing (q))
-        obj$bbox <- paste (res$bbox, collapse=' ')
+        obj$bbox <- paste (res$bbox, collapse = ' ')
 
-    nms <- c ("points", "lines", "polygons", "multilines", "multipolygons")
     # This is repetitive, but sf uses the allocated names, so get and assign can
     # not be used.
     # TODO: Find a way to loop this

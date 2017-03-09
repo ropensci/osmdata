@@ -20,9 +20,9 @@
 #' to provide access to the print method
 #'
 #' @export
-osmdata <- function (bbox, overpass_call, 
-                     osm_points, osm_lines, osm_polygons, 
-                     osm_multilines, osm_multipolygons, timestamp, ...) 
+osmdata <- function (bbox, overpass_call,
+                     osm_points, osm_lines, osm_polygons,
+                     osm_multilines, osm_multipolygons, timestamp, ...)
 {
     if (missing (bbox)) bbox <- NULL
     if (missing (overpass_call)) overpass_call <- NULL
@@ -79,14 +79,14 @@ print.osmdata <- function (x, ...)
             if (is.null (xi))
                 msg <- c (msg, nm, ' : NULL\n')
             else if (grepl ("line", i)) # sf "lines" -> "linestrings"
-                msg <- c (msg, nm, 
+                msg <- c (msg, nm,
                                " : 'sf' Simple Features Collection with ",
-                               nrow (xi), ' ', strsplit (i, 'osm_')[[1]][2], 
+                               nrow (xi), ' ', strsplit (i, 'osm_')[[1]][2],
                                'trings\n')
             else
-                msg <- c (msg, nm, 
-                               " : 'sf' Simple Features Collection with ",
-                               nrow (xi), ' ', strsplit (i, 'osm_')[[1]][2], '\n')
+                msg <- c (msg, nm, " : 'sf' Simple Features Collection with ",
+                               nrow (xi), ' ',
+                               strsplit (i, 'osm_')[[1]][2], '\n')
         }
     } else
     {
@@ -97,7 +97,7 @@ print.osmdata <- function (x, ...)
             if (is.null (xi))
                 msg <- c (msg, nm, ' : NULL', '\n')
             else
-                msg <- c (msg, nm, " : 'sp' Spatial", 
+                msg <- c (msg, nm, " : 'sp' Spatial",
                                strsplit (i, 'osm_')[[1]][2], 'DataFrame with ',
                                nrow (xi), ' ', strsplit (i, 'osm_')[[1]][2],
                                '\n')
@@ -115,7 +115,7 @@ c.osmdata <- function (...)
     cl_sf <- sapply (x, function (i) any (grep ('sf', sapply (i, class))))
     if (!(all (cl_sf) | all (!cl_sf)))
         stop ('All objects must be either osmdata_sf or osmdata_sp')
-    
+
     sf <- all (cl_sf)
     res <- osmdata ()
     res$bbox <- x [[1]]$bbox
@@ -134,7 +134,7 @@ c.osmdata <- function (...)
             if (length (xi) > 0)
             {
                 ids <- cnames <- NULL
-                for (j in xi) 
+                for (j in xi)
                 {
                     ids <- c (ids, rownames (j))
                     cnames <- c (cnames, colnames (j))
@@ -143,8 +143,9 @@ c.osmdata <- function (...)
                 cnames <- cnames [!cnames %in% core_names]
                 cnames <- sort (unique (cnames))
                 cnames <- c ('osm_id', 'name', cnames, 'geometry')
-                resi <- xi [[1]] 
-                # then expand resi to final number of columns keeping sf integrity 
+                resi <- xi [[1]]
+                # then expand resi to final number of columns keeping sf
+                # integrity
                 cnames_new <- cnames [which (!cnames %in% names (resi))]
                 for (j in cnames_new)
                     resi [j] <- rep (NA, nrow (resi))
@@ -155,14 +156,14 @@ c.osmdata <- function (...)
                            which (names (resi) == 'name'),
                            indx2 [order (names (resi) [indx2])],
                            which (names (resi) == 'geometry'))
-                resi <- resi [,indx]
+                resi <- resi [, indx]
                 # Then we're finally ready to pack in the remaining bits
                 xi [[1]] <- NULL
                 for (j in xi)
                 {
                     rindx <- which (!rownames (j) %in% rownames (resi))
-                    cindx <- which (names (j) %in% names (resi))
-                    resj <- j [rindx, ,drop=FALSE]
+                    # cindx <- which (names (j) %in% names (resi))
+                    resj <- j [rindx, , drop = FALSE]
                     # then expand resj as for resi above
                     cnames_new <- cnames [which (!cnames %in% names (resj))]
                     for (k in cnames_new)
@@ -173,7 +174,7 @@ c.osmdata <- function (...)
                                which (names (resj) == 'name'),
                                indx2 [order (names (resj) [indx2])],
                                which (names (resj) == 'geometry'))
-                    resj <- resj [,indx]
+                    resj <- resj [, indx]
                     resi <- rbind (resi, resj)
                 } # end for j in x
                 res [[i]] <- resi

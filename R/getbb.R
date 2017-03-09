@@ -25,22 +25,23 @@ bbox_to_string <- function(bbox) {
         if (all (c("x", "y") %in% rownames (bbox)) &
             all (c("min", "max") %in% colnames (bbox)))
         {
-            bbox <- c(bbox["x", "min"], bbox["y", "min"], 
+            bbox <- c(bbox["x", "min"], bbox["y", "min"],
                       bbox["x", "max"], bbox["y", "max"])
         } else if (all (c("coords.x1", "coords.x2") %in% rownames (bbox)) &
                    all (c("min", "max") %in% colnames (bbox)))
         {
-            bbox <- c (bbox["coords.x1", "min"], bbox["coords.x2", "min"], 
+            bbox <- c (bbox["coords.x1", "min"], bbox["coords.x2", "min"],
                        bbox["coords.x1", "max"], bbox["coords.x2", "max"])
         } # otherwise just presume (x,y) are rows and (min,max) are cols
         bbox <- paste0 (bbox[c(2, 1, 4, 3)], collapse = ",")
-    } else 
+    } else
     {
-        if (!is.null (names (bbox)) & 
-            all (names (bbox) %in% c("left", "bottom", "right", "top"))) 
+        if (!is.null (names (bbox)) &
+            all (names (bbox) %in% c("left", "bottom", "right", "top")))
         {
-            bbox <- paste0 (bbox[c ("bottom", "left", "top", "right")], collapse = ",")
-        } else 
+            bbox <- paste0 (bbox[c ("bottom", "left", "top", "right")],
+                            collapse = ",")
+        } else
         {
             x <- sort (bbox [c (1, 3)])
             y <- sort (bbox [c (2, 4)])
@@ -110,29 +111,29 @@ getbb <- function(place_name,
                   # bounded = 1, # seemingly not working
                   limit = limit)
 
-    if(!silent)
+    if (!silent)
         print(httr::modify_url(base_url, query = query))
 
-    res <- httr::GET (httr::modify_url (base_url, query=query))
+    res <- httr::GET (httr::modify_url (base_url, query = query))
     #res <- httr::POST(base_url, query = query, httr::timeout (100))
     txt <- httr::content(res, as = "text", encoding = "UTF-8",
-                         type="application/xml")
+                         type = "application/xml")
     obj <- jsonlite::fromJSON(txt)
 
     # Code optionally select more things stored in obj...
-    if(!is.null(display_name_contains))
-        obj <- obj[grepl(display_name_contains, obj$display_name),]
+    if (!is.null(display_name_contains))
+        obj <- obj[grepl(display_name_contains, obj$display_name), ]
 
-    if(format_out == "data.frame")
+    if (format_out == "data.frame")
         return(obj)
 
     bn <- as.numeric(obj$boundingbox[[1]])
     bb_mat <- matrix(c(bn[3:4], bn[1:2]), nrow = 2, byrow = TRUE)
     dimnames(bb_mat) <- list(c("x", "y"), c("min", "max"))
-    if(format_out == "matrix") 
+    if (format_out == "matrix")
     {
         return(bb_mat)
-    } else if(format_out == "string") 
+    } else if (format_out == "string")
     {
         bb_string <- osmdata::bbox_to_string(bbox = bb_mat)
         return(bb_string)

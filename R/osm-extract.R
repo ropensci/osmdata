@@ -2,13 +2,13 @@
 get_geoms <- function (dat, id)
 {
     indx <- which (grepl ('osm_', names (dat)))
-    where <- indx [which (sapply (dat [indx], function (i) 
+    where <- indx [which (sapply (dat [indx], function (i)
                                   any (id %in% rownames (i))))]
     lapply (where, function (i)
             {
                 indx <- which (rownames (dat [[i]]) %in% id)
                 nms <- rownames (dat [[i]]) [indx]
-                ret <- dat [[i]] [indx,]$geometry
+                ret <- dat [[i]] [indx, ]$geometry
                 names (ret) <- nms
                 return (ret)
             })
@@ -44,15 +44,17 @@ get_line_ids <- function (x, dat, id)
     if (is (x [[1]], 'MULTIPOLYGON'))
     {
         ids <- lapply (x, function (i) names (i [[1]]))
-        ids <- as.character (unlist (sapply (ids, function (i) strsplit (i, '-'))))
+        ids <- as.character (unlist (sapply (ids, function (i)
+                                             strsplit (i, '-'))))
     } else if (is (x [[1]], 'MULTILINESTRING'))
     {
         ids <- as.character (unlist (lapply (x, function (i) names (i))))
     } else if (is (x [[1]], 'POLYGON'))
     {
         # find all intersecting lines
-        pts <- as.character (unlist (sapply (x, function (i) rownames (i [[1]]))))
-        indx <- which (sapply (dat$osm_lines$geometry, function (i) 
+        pts <- as.character (unlist (sapply (x, function (i)
+                                             rownames (i [[1]]))))
+        indx <- which (sapply (dat$osm_lines$geometry, function (i)
                                any (pts %in% rownames (i))))
         ids <- names (dat$osm_lines$geometry) [indx]
     } else if (is (x [[1]], 'LINESTRING'))
@@ -60,14 +62,14 @@ get_line_ids <- function (x, dat, id)
         # find all intersecting lines
         pts <- do.call (rbind, x)
         pts <- as.character (rownames (pts))
-        indx <- which (sapply (dat$osm_lines$geometry, function (i) 
+        indx <- which (sapply (dat$osm_lines$geometry, function (i)
                                any (pts %in% rownames (i))))
         ids <- names (dat$osm_lines$geometry) [indx]
     } else if (is (x [[1]], 'POINT'))
     {
         # find all intersecting lines
         pts <- names (x)
-        indx <- which (sapply (dat$osm_lines$geometry, function (i) 
+        indx <- which (sapply (dat$osm_lines$geometry, function (i)
                                any (pts %in% rownames (i))))
         ids <- names (dat$osm_lines$geometry) [indx]
     }
@@ -80,7 +82,8 @@ get_polygon_ids <- function (x, dat, id)
     if (is (x [[1]], 'MULTIPOLYGON'))
     {
         ids <- lapply (x, function (i) names (i [[1]]))
-        ids <- as.character (unlist (sapply (ids, function (i) strsplit (i, '-'))))
+        ids <- as.character (unlist (sapply (ids, function (i)
+                                             strsplit (i, '-'))))
     } else if (is (x [[1]], 'MULTILINESTRING'))
     {
         stop ('MULTILINESTRINGS do not contain polygons by definition')
@@ -89,21 +92,21 @@ get_polygon_ids <- function (x, dat, id)
         # find all intersecting polygons
         pts <- do.call (rbind, lapply (x, function (i) i [[1]]))
         pts <- as.character (rownames (pts))
-        indx <- which (sapply (dat$osm_polygons$geometry, function (i) 
+        indx <- which (sapply (dat$osm_polygons$geometry, function (i)
                                any (pts %in% rownames (i [[1]]))))
         ids <- names (dat$osm_polygons$geometry) [indx]
     } else if (is (x [[1]], 'LINESTRING'))
     {
         # find all intersecting lines
         pts <- as.character (rownames (do.call (rbind, x)))
-        indx <- which (sapply (dat$osm_polygons$geometry, function (i) 
+        indx <- which (sapply (dat$osm_polygons$geometry, function (i)
                                any (pts %in% rownames (i [[1]]))))
         ids <- names (dat$osm_polygons$geometry) [indx]
     } else if (is (x [[1]], 'POINT'))
     {
         # find all intersecting lines
         pts <- names (x)
-        indx <- which (sapply (dat$osm_polygons$geometry, function (i) 
+        indx <- which (sapply (dat$osm_polygons$geometry, function (i)
                                any (pts %in% rownames (i [[1]]))))
         ids <- names (dat$osm_polygons$geometry) [indx]
     }
@@ -138,7 +141,7 @@ get_multipolygon_ids <- function (x, dat, id)
     ids <- NULL
 
     # get ids of all multipolygon components
-    mps <- lapply (dat$osm_multipolygons$geometry, function (i) 
+    mps <- lapply (dat$osm_multipolygons$geometry, function (i)
                    names (i [[1]]))
     mps <- lapply (mps, function (i) unlist (strsplit (i, '-')))
 

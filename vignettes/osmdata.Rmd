@@ -35,7 +35,7 @@ devtools::install_github('osmdatar/osmdata')
 ```
 
 ```{r, echo=FALSE, message=FALSE, results='hide'}
-devtools::load_all('..', export_all=FALSE)
+devtools::load_all('..', export_all = FALSE)
 ```
 
 Once installed, it can be loaded in the usual way:
@@ -335,7 +335,7 @@ with a new query.
 ```{r osmdata_xml-london-buildings, eval=FALSE}
 q <- opq(bbox = c(-0.12, 51.51, -0.11, 51.52)) # Central London, U.K.
 q <- add_feature(q, key = 'building')
-dat <- osmdata_xml(q, file='buildings.osm')
+dat <- osmdata_xml(q, file = 'buildings.osm')
 class(dat)
 ## [1] "xml_document" "xml_node"
 ```
@@ -453,7 +453,7 @@ terminology), `osmdata` returns considerably more objects--7,166 points compared
 
 ```{r object-sizes, eval=FALSE}
 s1 <- object.size(osmdata_sf(q, 'trentham.osm')$osm_points)
-s2 <- object.size(sf::st_read('trentham.osm', layer='points', quiet=TRUE))
+s2 <- object.size(sf::st_read('trentham.osm', layer = 'points', quiet = TRUE))
 as.numeric(s1 / s2)
 ## [1] 511.4193
 ```
@@ -494,7 +494,7 @@ extracts only a restricted list of OSM `keys`, whereas `osmdata` returns all
 `key` fields present in the requested data:
 
 ```{r, eval=FALSE}
-names(sf::st_read('trentham.osm', layer='points', quiet=TRUE)) # these are the keys
+names(sf::st_read('trentham.osm', layer = 'points', quiet = TRUE)) # the keys
 ## [1] "osm_id"     "name"       "barrier"    "highway"   
 ## [5] "ref"        "address"    "is_in"      "place"     
 ## [9] "man_made"   "other_tags" "geometry"  
@@ -516,7 +516,7 @@ by `osmdata`, while `GDAL/sf` returns the same `key` fields regardless of
 whether any values are specified.
 
 ```{r, eval=FALSE}
-addr <- sf::st_read('trentham.osm', layer='points', quiet=TRUE)$address
+addr <- sf::st_read('trentham.osm', layer = 'points', quiet = TRUE)$address
 all(is.na(addr))
 ## TRUE
 ```
@@ -532,7 +532,7 @@ As with `osmdata_sf()` described above, OSM data may be converted to `sp`
 format without using `osmdata` via the `sf` functions demonstrated below: 
 
 ```{r sf_sp, eval=FALSE}
-dat <- sf::st_read('buildings.osm', layer = 'multipolygons', quiet=TRUE)
+dat <- sf::st_read('buildings.osm', layer = 'multipolygons', quiet = TRUE)
 dat_sp <- as(dat, 'Spatial')
 class(dat_sp)
 ## [1] "SpatialPolygonsDataFrame"\nattr(,"package")\n[1] "sp"
@@ -611,7 +611,7 @@ River':
 
 ```{r, eval=FALSE}
 i <- which(tr$osm_lines$name == 'Coliban River')
-coliban <- tr$osm_lines[i,]
+coliban <- tr$osm_lines[i, ]
 coliban[which(!is.na(coliban))]
 ## Simple feature collection with 1 feature and 3 fields
 ## geometry type:  LINESTRING
@@ -641,7 +641,7 @@ OSM ID of the line `coliban` is given by `rownames(coliban)`.
 
 ```{r, eval=FALSE}
 pts <- osm_points(tr, rownames(coliban))
-wf <- pts[which(pts$waterway == 'waterfall'),]
+wf <- pts[which(pts$waterway == 'waterfall'), ]
 wf[which(!is.na(wf))]
 ## Simple feature collection with 1 feature and 4 fields
 ## geometry type:  POINT
@@ -667,8 +667,8 @@ Although this returns no data in this case, it nevertheless demonstrates the
 usefulness and ease of recursive searching with `osmdata`.
 
 ```{r, echo=FALSE}
-for(f in list.files(pattern="\\.osm"))
-    if(file.exists(f)) file.remove(f)
+for (f in list.files(pattern = "\\.osm"))
+    if (file.exists(f)) file.remove(f)
 ```
 
 ### 4.2 Relation example
@@ -680,7 +680,8 @@ which is composed of many (over 100) separate lines:
 
 ```{r, eval=FALSE}
 q <- opq ('greater london uk')
-q1 <- add_feature (q, key="name", value="London.Cycle.Network.Route.9", exact=FALSE)
+q1 <- add_feature (q, key = "name", value = "London.Cycle.Network.Route.9",
+                   exact = FALSE)
 lcnr9 <- osmdata_sp(q1)
 sp::plot(lcnr9$osm_lines)
 ```

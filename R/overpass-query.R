@@ -1,12 +1,12 @@
 #' Retrieve status of the Overpass API
 #'
 #' @param quiet if \code{FALSE} display a status message
-#' @param wait If status is unavalable, wait this long (in s)
+#' @param wait If status is unavailable, wait this long (in s)
 #' @return an invisible list of whether the API is available along with the
 #'         text of the message from Overpass and the timestamp of the
 #'         next available slot
 #' @export
-overpass_status <- function (quiet=FALSE, wait=10) 
+overpass_status <- function (quiet=FALSE, wait=10)
 {
     available <- FALSE
     slot_time <- status <- status_now <- NULL
@@ -32,9 +32,10 @@ overpass_status <- function (quiet=FALSE, wait=10)
 
             if (grepl ('after', status_now)) {
                 available <- FALSE
-                slot_time <- lubridate::ymd_hms (gsub ('Slot available after: ', 
+                slot_time <- lubridate::ymd_hms (gsub ('Slot available after: ',
                                                        '', status_now))
-                slot_time <- lubridate::force_tz (slot_time, tz = Sys.timezone ())
+                slot_time <- lubridate::force_tz (slot_time,
+                                                  tz = Sys.timezone ())
             } else {
                 available <- TRUE
                 slot_time <- Sys.time ()
@@ -47,7 +48,8 @@ overpass_status <- function (quiet=FALSE, wait=10)
         }
     }
 
-    return (invisible (list (available=available, next_slot=slot_time, msg=status)))
+    return (invisible (list (available = available, next_slot = slot_time,
+                             msg = status)))
 
 }
 
@@ -88,10 +90,11 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
                             encoding) {
 
     if (missing (query))
-        stop ('query must be supplied', call.=FALSE)
+        stop ('query must be supplied', call. = FALSE)
     if (!is.character (query) | length (query) > 1)
         stop ('query must be a single character string')
-    if (missing (encoding)) # TODO: Delete that once this function is no longer exported
+    # TODO: This function is no longer exported, so that's not needed
+    if (missing (encoding))
         encoding <- 'UTF-8'
 
     if (!is.logical (quiet))
@@ -110,23 +113,23 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
     }
 
     if (!curl::has_internet ())
-        stop ('Overpass query unavailable without internet', call.=FALSE)
+        stop ('Overpass query unavailable without internet', call. = FALSE)
 
     if (!quiet) message('Issuing query to Overpass API ...')
 
     o_stat <- overpass_status (quiet)
 
     if (o_stat$available) {
-        res <- httr::POST (base_url, body=query)
+        res <- httr::POST (base_url, body = query)
     } else {
         if (wait) {
             wait <- max(0, as.numeric (difftime (o_stat$next_slot, Sys.time(),
                                                  units = 'secs'))) + pad_wait
             message (sprintf ('Waiting %s seconds', wait))
             Sys.sleep (wait)
-            res <- httr::POST (base_url, body=query)
+            res <- httr::POST (base_url, body = query)
         } else {
-            stop ('Overpass query unavailable', call.=FALSE)
+            stop ('Overpass query unavailable', call. = FALSE)
         }
     }
     if (!quiet) message ('Query complete!')
@@ -135,10 +138,10 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
         httr::stop_for_status (res)
 
     if (class (res) == 'raw') # for mock tests
-        doc <- rawToChar (res)  
+        doc <- rawToChar (res)
     else
-        doc <- httr::content (res, as='text', encoding=encoding,
-                              type="application/xml")
+        doc <- httr::content (res, as = 'text', encoding = encoding,
+                              type = "application/xml")
     # TODO: Just return the direct httr::POST result here and convert in the
     # subsequent functions (`osmdata_xml/csv/sp/sf`)?
 

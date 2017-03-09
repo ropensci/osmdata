@@ -20,7 +20,7 @@
 #'         add_feature("amenity", "pub") 
 #' c (osmdata_sf (q1), osmdata_sf (q1)) # all objects that are restaurants OR pubs
 #' }
-opq <- function (bbox=NULL) 
+opq <- function (bbox=NULL)
 {
     # TODO: Do we really need these [out:xml][timeout] specifiers?
     res <- list (bbox = bbox_to_string (bbox),
@@ -60,15 +60,15 @@ opq <- function (bbox=NULL)
 #'         add_feature("amenity", "pub") 
 #' c (osmdata_sf (q1), osmdata_sf (q1)) # all objects that are restaurants OR pubs
 #' }
-add_feature <- function (opq, key, value, exact=TRUE, bbox=NULL) 
+add_feature <- function (opq, key, value, exact=TRUE, bbox=NULL)
 {
     if (missing (key))
         stop ('key must be provided')
 
     if (is.null (bbox) & is.null (opq$bbox))
-        stop ('Bounding box has to either be set in opq or must be set here') 
+        stop ('Bounding box has to either be set in opq or must be set here')
 
-    if (is.null (bbox)) 
+    if (is.null (bbox))
         bbox <- opq$bbox
     else
     {
@@ -76,9 +76,9 @@ add_feature <- function (opq, key, value, exact=TRUE, bbox=NULL)
         opq$bbox <- bbox
     }
 
-    if (exact) 
-        bind <- '=' 
-    else 
+    if (exact)
+        bind <- '='
+    else
         bind <- '~'
 
     if (missing (value))
@@ -86,12 +86,12 @@ add_feature <- function (opq, key, value, exact=TRUE, bbox=NULL)
         #paste0(sprintf(' node["%s"](%s);\n', key, bbox),
         #       sprintf('  way["%s"](%s);\n', key, bbox),
         #       sprintf('  relation["%s"](%s);\n\n', key, bbox)) -> feature
-        feature <- paste0 (sprintf (' ["%s"]', key)) 
+        feature <- paste0 (sprintf (' ["%s"]', key))
     } else
     {
         #paste0(sprintf(' node["%s"%s"%s"](%s);\n', key, bind, value, bbox),
         #       sprintf('  way["%s"%s"%s"](%s);\n', key, bind, value, bbox),
-        #       sprintf('  relation["%s"%s"%s"](%s);\n\n', key, bind, 
+        #       sprintf('  relation["%s"%s"%s"](%s);\n\n', key, bind,
         feature <- paste0 (sprintf (' ["%s"%s"%s"]', key, bind, value))
     }
 
@@ -119,10 +119,10 @@ add_feature <- function (opq, key, value, exact=TRUE, bbox=NULL)
 #' opq_to_string (q)
 opq_to_string <- function (opq)
 {
-    features <- paste (opq$features, collapse='')
+    features <- paste (opq$features, collapse = '')
     features <- paste0 (sprintf (' node %s (%s);\n', features, opq$bbox),
                         sprintf (' way %s (%s);\n', features, opq$bbox),
                         sprintf (' relation %s (%s);\n\n', features,
-                                 opq$bbox)) 
+                                 opq$bbox))
     paste0 (opq$prefix, features, opq$suffix)
 }
