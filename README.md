@@ -60,7 +60,7 @@ We appreciate any contributions; those that comply with our general coding style
 1.  `<-` not `=`
 2.  Indent with four spaces
 3.  Be generous with other white spaces - you've got plenty of real estate on that big screen of yours.
-4.  Code is much easier to read when braces are horizontally aligned, so please put `{` in the same horizontal position as `}`.
+4.  Code is much easier to read when braces are vertically aligned, so please put `{` in the same vertical position as `}`.
 
 ### Code of Conduct
 
