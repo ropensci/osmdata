@@ -3,9 +3,10 @@ title: "2. Translation of OSM to Simple Features"
 author: "Mark Padgham"
 date: "`r Sys.Date()`"
 output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
+    html_document:
         toc: true
+        toc_float: true
+        theme: flatly
 vignette: >
   %\VignetteIndexEntry{2. OSM to Simple Features}
   %\VignetteEngine{knitr::rmarkdown}
