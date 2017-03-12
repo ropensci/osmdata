@@ -183,7 +183,9 @@ c.osmdata <- function (...)
     } else
     {
         # TODO: implement sp version
-        stop ('c method currently implement only for osmdata_sf')
+        stop ("'c' method currently implemented only for osmdata_sf. ",
+              "You could use\n'osmdata_sf()', and convert with ",
+              "'as(x,'Spatial')' from package 'sf'.")
     }
     return (res)
 }
