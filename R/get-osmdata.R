@@ -105,7 +105,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
     {
         doc <- overpass_query (obj$overpass_call, quiet = quiet,
                                encoding = encoding)
-        obj$timestamp <- get_timestamp (quiet = TRUE, prefix = "[ ", suffix = " ]")
+        obj$timestamp <- get_timestamp ()
     } else
     {
         if (is.character (doc))
