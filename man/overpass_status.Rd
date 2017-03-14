@@ -9,7 +9,7 @@ overpass_status(quiet = FALSE, wait = 10)
 \arguments{
 \item{quiet}{if \code{FALSE} display a status message}
 
-\item{wait}{If status is unavalable, wait this long (in s)}
+\item{wait}{If status is unavailable, wait this long (in s)}
 }
 \value{
 an invisible list of whether the API is available along with the
