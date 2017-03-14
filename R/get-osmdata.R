@@ -1,19 +1,27 @@
-#' Get timestamp from OSM XML document
+#' Get timestamp from system or optional OSM XML document
 #'
-#' @param doc OSM XML document
+#' @param doc OSM XML document. If missing, \code{Sys.time()} is used.
 #'
 #' @return An R timestamp object
+#'
+#' @note This defines the timestamp format for \code{osmdata} objects, which
+#' includes months as text to ensure umambiguous timestamps 
 get_timestamp <- function (doc)
 {
-    tstmp <- xml2::xml_text (xml2::xml_find_all (doc, "//meta/@osm_base"))
-    wday <- lubridate::wday (tstmp, label = TRUE)
+    if (!missing (doc))
+    {
+        tstmp <- xml2::xml_text (xml2::xml_find_all (doc, "//meta/@osm_base"))
+        tstmp <- as.POSIXct (tstmp, format="%Y-%m-%dT%H:%M:%SZ")
+    } else
+        tstmp <- Sys.time ()
+    wday_t <- lubridate::wday (tstmp, label = TRUE)
+    wday <- lubridate::wday (tstmp, label = FALSE)
     mon <- lubridate::month (tstmp, label = TRUE)
     day <- lubridate::day (tstmp)
     year <- lubridate::year (tstmp)
-    # TODO: Get this regex to **exclude** 'T' and 'Z'
-    hms <- regmatches (tstmp, regexpr ('T(.*?)Z', tstmp))
-    hms <- substring (hms, 2, nchar (hms) - 1)
-    timestamp (paste (wday, mon, day, hms, year), quiet = TRUE)
+
+    hms <- strsplit (as.character (tstmp), ' ') [[1]] [2]
+    paste ('[', wday_t, wday, mon, year, hms, ']')
 }
 
 #' Return an OSM Overpass query in XML format 
@@ -201,7 +209,7 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     {
         doc <- overpass_query (obj$overpass_call, quiet = quiet,
                                encoding = encoding)
-        obj$timestamp <- timestamp (quiet = TRUE, prefix = "[ ", suffix = " ]")
+        obj$timestamp <- get_timestamp ()
     } else
     {
         if (is.character (doc))
