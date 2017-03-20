@@ -6,6 +6,8 @@
 #'
 #' @note This defines the timestamp format for \code{osmdata} objects, which
 #' includes months as text to ensure umambiguous timestamps 
+#'
+#' @noRd
 get_timestamp <- function (doc)
 {
     if (!missing (doc))
@@ -137,6 +139,12 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
 #'
 #' @param ... list of objects, at least on of which must be of class 'sfc'
 #' @return An object of class `sf` 
+#'
+#' @note Most of this code written by Edzer Pebesma, and taken from 
+#' \url{https://github.com/edzer/sfr/blob/master/R/agr.R} and 
+#' \url{https://github.com/edzer/sfr/blob/master/R/sfc.R}
+#'
+#' @noRd
 make_sf <- function (...)
 {
     x <- list (...)

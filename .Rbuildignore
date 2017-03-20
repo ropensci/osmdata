@@ -11,10 +11,6 @@ makefile$
 ^src/Makevars$
 ^.*[.]Rproj$
 ^[.]Rproj[.]user$
-# Non-exported man files
-man/make_sf.Rd
-man/rcpp_osmdata_sf.Rd
-man/rcpp_osmdata_sp.Rd
 ^appveyor[.]yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$

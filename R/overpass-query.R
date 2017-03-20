@@ -85,6 +85,7 @@ overpass_status <- function (quiet=FALSE, wait=10)
 #'         If you asked for a CSV, you will receive the text response back,
 #'         suitable for processing by \code{read.table(text=..., sep=...,
 #'         header=TRUE, check.names=FALSE, stringsAsFactors=FALSE)}.
+#' @noRd
 overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
                             base_url='http://overpass-api.de/api/interpreter',
                             encoding) {

@@ -9,10 +9,6 @@ inst/doc
 .RData
 # Output files from R CMD build
 /*.tar.gz
-# Non-exported man files
-man/make_sf.Rd
-man/rcpp_osmdata_sf.Rd
-man/rcpp_osmdata_sp.Rd
 # vim files
 .*.un~
 .*.swp

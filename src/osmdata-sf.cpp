@@ -45,21 +45,22 @@
  ************************************************************************/
 
 
-/* get_osm_relations_sf
- *
- * Return a dual Rcpp::List containing all OSM relations, the firmt element of
- * which holds `multipolygon` relations, while the second holds all others,
- * which are stored as `multilinestring` objects.
- *
- * @param rels Pointer to the vector of Relation objects
- * @param nodes Pointer to the vector of node objects
- * @param ways Pointer to the vector of way objects
- * @param unique_vals Pointer to a UniqueVals object containing std::sets of all
- *        unique IDs and keys for each kind of OSM object (nodes, ways, rels).
- *
- * @return A dual Rcpp::List, the first of which contains the multipolygon
- *         relations; the second the multilinestring relations.
- */
+//' get_osm_relations_sf
+//'
+//' Return a dual Rcpp::List containing all OSM relations, the firmt element of
+//' which holds `multipolygon` relations, while the second holds all others,
+//' which are stored as `multilinestring` objects.
+//'
+//' @param rels Pointer to the vector of Relation objects
+//' @param nodes Pointer to the vector of node objects
+//' @param ways Pointer to the vector of way objects
+//' @param unique_vals Pointer to a UniqueVals object containing std::sets of all
+//'       unique IDs and keys for each kind of OSM object (nodes, ways, rels).
+//'
+//' @return A dual Rcpp::List, the first of which contains the multipolygon
+//'         relations; the second the multilinestring relations.
+//' 
+//' @noRd 
 Rcpp::List get_osm_relations_sf (const Relations &rels, 
         const std::map <osmid_t, Node> &nodes,
         const std::map <osmid_t, OneWay> &ways, const UniqueVals &unique_vals,
@@ -215,20 +216,21 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
     return ret;
 }
 
-/* get_osm_ways_sf
- *
- * Store OSM ways as `sf::LINESTRING` or `sf::POLYGON` objects.
- *
- * @param wayList Pointer to Rcpp::List to hold the resultant geometries
- * @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
- * @param way_ids Vector of <osmid_t> IDs of ways to trace
- * @param ways Pointer to all ways in data set
- * @param nodes Pointer to all nodes in data set
- * @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
- * @param geom_type Character string specifying "POLYGON" or "LINESTRING"
- * @param bbox Pointer to the bbox needed for `sf` construction
- * @param crs Pointer to the crs needed for `sf` construction
- */
+//' get_osm_ways_sf
+//'
+//' Store OSM ways as `sf::LINESTRING` or `sf::POLYGON` objects.
+//'
+//' @param wayList Pointer to Rcpp::List to hold the resultant geometries
+//' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
+//' @param way_ids Vector of <osmid_t> IDs of ways to trace
+//' @param ways Pointer to all ways in data set
+//' @param nodes Pointer to all nodes in data set
+//' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
+//' @param geom_type Character string specifying "POLYGON" or "LINESTRING"
+//' @param bbox Pointer to the bbox needed for `sf` construction
+//' @param crs Pointer to the crs needed for `sf` construction
+//' 
+//' @noRd 
 void get_osm_ways_sf (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
         const std::set <osmid_t> way_ids, const Ways &ways, const Nodes &nodes,
         const UniqueVals &unique_vals, const std::string &geom_type,
@@ -289,17 +291,18 @@ void get_osm_ways_sf (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
         kv_df = R_NilValue;
 }
 
-/* get_osm_nodes_sf
- *
- * Store OSM nodes as `sf::POINT` objects
- *
- * @param ptxy Pointer to Rcpp::List to hold the resultant geometries
- * @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
- * @param nodes Pointer to all nodes in data set
- * @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
- * @param bbox Pointer to the bbox needed for `sf` construction
- * @param crs Pointer to the crs needed for `sf` construction
- */
+//' get_osm_nodes_sf
+//'
+//' Store OSM nodes as `sf::POINT` objects
+//'
+//' @param ptxy Pointer to Rcpp::List to hold the resultant geometries
+//' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
+//' @param nodes Pointer to all nodes in data set
+//' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
+//' @param bbox Pointer to the bbox needed for `sf` construction
+//' @param crs Pointer to the crs needed for `sf` construction
+//' 
+//' @noRd 
 void get_osm_nodes_sf (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
         const Nodes &nodes, const UniqueVals &unique_vals, 
         const Rcpp::NumericVector &bbox, const Rcpp::List &crs)
@@ -365,6 +368,8 @@ void get_osm_nodes_sf (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
 //'
 //' @param st Text contents of an overpass API query
 //' @return Rcpp::List objects of OSM data
+//' 
+//' @noRd 
 // [[Rcpp::export]]
 Rcpp::List rcpp_osmdata_sf (const std::string& st)
 {
