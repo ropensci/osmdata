@@ -18,8 +18,7 @@ vignette: >
 
 [OpenStreetMap (OSM)](http://openstreetmap.org) data has a unique structure that
 is not directly reconcilable with other modes of representing spatial data,
-notably including the widely-adopted Simple Features scheme of the Open
-Geospatial Consortium
+notably including the widely-adopted 
 [Simple Features (SF)](http://www.opengeospatial.org/standards/sfo) 
 scheme of the 
 [Open Geospatial Consortium (OGC)](http://www.opengeospatial.org). 
@@ -44,7 +43,7 @@ The three primary spatial objects of OSM are:
    member with `role=outer` or `role=inner`.
 
    - In the absence of `inner` and `outer` roles, an OSM relation is assumed to
-   be non-polygonal, and to instead form a colletion of non-enclosing lines.
+   be non-polygonal, and to instead form a collection of non-enclosing lines.
 
 --------
 
@@ -67,13 +66,12 @@ for OSM data are:
 (The seventh primary class is `GEOMETRYCOLLECTION`, which contains several
 objects with different geometries.) An SF (where that acronym may connote both
 singular and plural) consists of a sequence of spatial coordinates, which for
-OSM data are only ever `XY` coordinates represented by a string of `X`
-coordinates contained within a bracket, followed by a string of `Y` coordinates.
-In addition to coordinate data and associated coordinate reference systems, an
-SF may include any number of additional data which quantify or qualify the
-feature of interest.  In the 
+OSM data are only ever `XY` coordinates represented as strings enclosed within
+brackets.  In addition to coordinate data and associated coordinate reference
+systems, an SF may include any number of additional data which quantify or
+qualify the feature of interest.  In the 
 [`sf` extension to `R`](https://cran.r-project.org/package=sf), for example, a
-single SF is represnted by one row of a `data.frame`, which the geometry stored
+single SF is represented by one row of a `data.frame`, with the geometry stored
 in a single column, and any number of other columns containing these additional
 data.
 
@@ -123,7 +121,7 @@ An OSM multipolygon is translated by `osmdata` into a single `SF::MULTIPOLYGON`
 object which has an additional column specifying `num_members`. The `SF`
 geometry thus consists of a list (an `R::List` object) of this number of
 polygons, the first of which is the `outer` polygon, with all subsequent members
-forming closed inner rings.
+forming closed inner rings (either individually or in combination).
 
 Each of these inner polygons are also represented as one or more OSM objects, which
 will generally include detailed data on the individual components **not** able
@@ -135,7 +133,7 @@ for each `inner` polygon.
 
 Note that OSM `relation` objects generally have fewer (or different) `key-value`
 pairs than do OSM `way` objects. In the OSM system, data describing the detailed
-properties of the contituent ways of a given OSM relation are stored with those
+properties of the constituent ways of a given OSM relation are stored with those
 `ways` rather than with the `relation`. `osmdata` follows this general
 principle, and stored the geometry of all `ways` of a `relation` with the
 relation itself (that is, as part of the `MULTIPOLYGON` or `MULTILINESTRING`
@@ -189,20 +187,21 @@ will generally return surprisingly few points.
 
 ### 4.1. OSM Nodes
 
-Apart from the numerical difference arising through `osmdata` returning an `sf::POINTS` structure containing **all** nodes within a
-given set of OSM data, while `sf::st_read (file, layer='points')` returns only
-those points not represeted in other structure, the representation of points
-remains otherwise broading similar. The only other major difference is that
-`osmdata` retains all `key-value` pairs present in a given set of OSM data,
-whereas `GDAL/sf` only retains a select few of these. Moreover, the `keys`
-returned by `GDAL/sf` are pre-defined and invariant, meaning that data returned
-from `sf::st_read (...)` may often contain `key` columns in the resultant
-`data.frame` which contain no (non-`NA`) data. This difference is illustrated in
-an example repeated here from the  
+Apart from the numerical difference arising through `osmdata` returning an
+`sf::POINTS` structure containing **all** nodes within a given set of OSM data,
+while `sf::st_read (file, layer='points')` returns only those points not
+represented in other structure, the representation of points remains otherwise
+broadly similar. The only other major difference is that `osmdata` retains all
+`key-value` pairs present in a given set of OSM data, whereas `GDAL/sf` only
+retains a select few of these. Moreover, the `keys` returned by `GDAL/sf` are
+pre-defined and invariant, meaning that data returned from `sf::st_read (...)`
+may often contain `key` columns in the resultant `data.frame` which contain no
+(non-`NA`) data. This difference is illustrated in an example repeated here from
+the  
 [main `osmdata` vignette](https://github.com/osmdatar/osmdata/blob/master/vignettes/osmdata.Rmd),
 with the same principles applying to all of the following classes of OSM data.
 
-The following three lines define a query and download the resulant data to an
+The following three lines define a query and download the resultant data to an
 `XML` file.
 ```{r trentham, eval=FALSE}
 q <- opq (bbox = 'Trentham, Australia')
@@ -315,7 +314,7 @@ too long and complicated to be worthwhile demonstrating here.
 
 #### 5.1(b) Routing with `osmdata`
 
-`osmdata` retains all of the underlyhing ways of 'higher' structures
+`osmdata` retains all of the underlying ways of 'higher' structures
 (`SF::MULTIPOLYGON` or `SF::MULTILINESTRING` objects) as 
 `SF::LINESTRING` or `SF::POLYGON` objects. The geometries of the latter objects
 duplicate those of the 'higher' relations, yet contain additional `key-value`
@@ -324,7 +323,7 @@ members of a `relation` are stored within that relation, readily enabling the
 individual ways (`LINESTRING` or `POLYGON` objects) to be identified from the
 `relation` (`MULTIPOLYGON` or `MULTILINESTRING` object).
 
-The `osmdata` translation thus readily enables a singlularly complete network to
+The `osmdata` translation thus readily enables a singularly complete network to
 be reconstructed by simply combining the `SF::LINESTRING` layer with the
 `SF::POLYGON` layer. These layers will always contain entirely independent
 members, and so will always be able to be directly combined without duplicating
