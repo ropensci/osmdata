@@ -65,11 +65,12 @@ bbox_to_string <- function(bbox) {
 #' See \url{http://wiki.openstreetmap.org/wiki/Nominatim} for details.
 #' 
 #' @param place_name The name of the place you're searching for
-#' @param display_name_contains Text string to match with display_name field returned by
-#' \url{http://wiki.openstreetmap.org/wiki/Nominatim}
+#' @param display_name_contains Text string to match with display_name field
+#' returned by \url{http://wiki.openstreetmap.org/wiki/Nominatim}
 #' @param viewbox The bounds in which you're searching
-#' @param format_out Character string indicating output format: matrix (default - see \code{\link{bbox}}),
-#' string (see \code{\link{bbox_to_string}}) or data.frame (all 'hits' returned by Nominatim)
+#' @param format_out Character string indicating output format: matrix (default),
+#' string (see \code{\link{bbox_to_string}}) or data.frame (all 'hits' returned
+#' by Nominatim)
 #' @param base_url Base website from where data is queried
 #' @param featuretype The type of OSM feature (settlement is default)
 #' @param limit How many results should the API return?

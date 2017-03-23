@@ -11,13 +11,14 @@ getbb(place_name, display_name_contains = NULL, viewbox = NULL,
 \arguments{
 \item{place_name}{The name of the place you're searching for}
 
-\item{display_name_contains}{Text string to match with display_name field returned by
-\url{http://wiki.openstreetmap.org/wiki/Nominatim}}
+\item{display_name_contains}{Text string to match with display_name field
+returned by \url{http://wiki.openstreetmap.org/wiki/Nominatim}}
 
 \item{viewbox}{The bounds in which you're searching}
 
-\item{format_out}{Character string indicating output format: matrix (default - see \code{\link{bbox}}),
-string (see \code{\link{bbox_to_string}}) or data.frame (all 'hits' returned by Nominatim)}
+\item{format_out}{Character string indicating output format: matrix (default),
+string (see \code{\link{bbox_to_string}}) or data.frame (all 'hits' returned
+by Nominatim)}
 
 \item{base_url}{Base website from where data is queried}
 
