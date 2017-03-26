@@ -1,13 +1,13 @@
 context ("sp-osm")
 
 test_that ("multipolygon", {
-               x_sf <- sf::st_read ("../osm-multi.osm", layer="multipolygons", 
-                                    quiet=TRUE)
+               x_sf <- sf::st_read ("../osm-multi.osm",
+                                    layer = "multipolygons", quiet = TRUE)
                x_sp <- as (x_sf, "Spatial")
-               q0 <- opq (bbox=c(1,1,5,5)) 
+               q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sp (q0, "../osm-multi.osm")$osm_multipolygons
                # GDAL spits out a whole lot of generic field names, so first the
-               # two have to be reduced to common fields.  
+               # two have to be reduced to common fields.
                x <- x [, which (names (x) %in% names (x_sp))]
                x_sp <- x_sp [, which (names (x_sp) %in% names (x))]
                # Then all of the object and dimnames inserted by `osmdata` have
@@ -24,11 +24,11 @@ test_that ("multipolygon", {
                np <- length (slot (slot (x, "polygons")[[1]], "Polygons"))
                for (i in seq (np))
                {
-                   rownames (slot (slot (slot (x, "polygons")[[1]], 
+                   rownames (slot (slot (slot (x, "polygons")[[1]],
                                          "Polygons")[[i]], "coords")) <- NULL
-                   colnames (slot (slot (slot (x, "polygons")[[1]], 
+                   colnames (slot (slot (slot (x, "polygons")[[1]],
                                          "Polygons")[[i]], "coords")) <- NULL
-                   dimnames (slot (slot (slot (x, "polygons")[[1]], 
+                   dimnames (slot (slot (slot (x, "polygons")[[1]],
                                          "Polygons")[[i]], "coords")) <- NULL
                }
                # sp arbitrarily re-sorts the coordinates, so the following
@@ -36,13 +36,14 @@ test_that ("multipolygon", {
                for (i in seq (np))
                {
                    pi <- slot (slot (x, "polygons")[[1]], "Polygons") [[i]]
-                   pi_sp <- slot (slot (x_sp, "polygons")[[1]], "Polygons") [[i]]
+                   pi_sp <- slot (slot (x_sp, "polygons")[[1]],
+                                  "Polygons") [[i]]
                    xyi <- slot (pi, "coords")
                    xyi_sp <- slot (pi_sp, "coords")
                    #expect_identical (xyi, xyi_sp)
                    expect_identical (attributes (xyi), attributes (xyi_sp))
                }
-               
+
                # sp also inserts row.names in the "data" slot of type integer
                # instead of char, so those slots can't be compared either
                # ... sp tests are not continued any further, and these tests
@@ -51,10 +52,10 @@ test_that ("multipolygon", {
 
 
 test_that ("multilinestring", {
-               x_sf <- sf::st_read ("../osm-multi.osm", layer="multilinestrings", 
-                                    quiet=TRUE)
+               x_sf <- sf::st_read ("../osm-multi.osm",
+                                    layer = "multilinestrings", quiet = TRUE)
                x_sp <- as (x_sf, "Spatial")
-               q0 <- opq (bbox=c(1,1,5,5)) 
+               q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sp (q0, "../osm-multi.osm")$osm_multilines
                x <- x [, which (names (x) %in% names (x_sp))]
                x_sp <- x_sp [, which (names (x_sp) %in% names (x))]
@@ -65,11 +66,11 @@ test_that ("multilinestring", {
                np <- length (slot (slot (x, "lines")[[1]], "Lines"))
                for (i in seq (np))
                {
-                   rownames (slot (slot (slot (x, "lines")[[1]], 
+                   rownames (slot (slot (slot (x, "lines")[[1]],
                                          "Lines")[[i]], "coords")) <- NULL
-                   colnames (slot (slot (slot (x, "lines")[[1]], 
+                   colnames (slot (slot (slot (x, "lines")[[1]],
                                          "Lines")[[i]], "coords")) <- NULL
-                   dimnames (slot (slot (slot (x, "lines")[[1]], 
+                   dimnames (slot (slot (slot (x, "lines")[[1]],
                                          "Lines")[[i]], "coords")) <- NULL
                }
                for (i in seq (np))
@@ -83,20 +84,21 @@ test_that ("multilinestring", {
 })
 
 test_that ("ways", {
-               x_sf <- sf::st_read ("../osm-ways.osm", layer="lines", quiet=TRUE)
+               x_sf <- sf::st_read ("../osm-ways.osm",
+                                    layer = "lines", quiet = TRUE)
                x_sp <- as (x_sf, "Spatial")
-               q0 <- opq (bbox=c(1,1,5,5)) 
+               q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sp (q0, "../osm-ways.osm")$osm_lines
                x <- x [, which (names (x) %in% names (x_sp))]
                x_sp <- x_sp [, which (names (x_sp) %in% names (x))]
                np <- length (slot (slot (x, "lines")[[1]], "Lines"))
                for (i in seq (np))
                {
-                   rownames (slot (slot (slot (x, "lines")[[1]], 
+                   rownames (slot (slot (slot (x, "lines")[[1]],
                                          "Lines")[[i]], "coords")) <- NULL
-                   colnames (slot (slot (slot (x, "lines")[[1]], 
+                   colnames (slot (slot (slot (x, "lines")[[1]],
                                          "Lines")[[i]], "coords")) <- NULL
-                   dimnames (slot (slot (slot (x, "lines")[[1]], 
+                   dimnames (slot (slot (slot (x, "lines")[[1]],
                                          "Lines")[[i]], "coords")) <- NULL
                }
                for (i in seq (np))

@@ -13,13 +13,12 @@ get_timestamp <- function (doc)
     if (!missing (doc))
     {
         tstmp <- xml2::xml_text (xml2::xml_find_all (doc, "//meta/@osm_base"))
-        tstmp <- as.POSIXct (tstmp, format="%Y-%m-%dT%H:%M:%SZ")
+        tstmp <- as.POSIXct (tstmp, format = "%Y-%m-%dT%H:%M:%SZ")
     } else
         tstmp <- Sys.time ()
     wday_t <- lubridate::wday (tstmp, label = TRUE)
     wday <- lubridate::wday (tstmp, label = FALSE)
     mon <- lubridate::month (tstmp, label = TRUE)
-    day <- lubridate::day (tstmp)
     year <- lubridate::year (tstmp)
 
     hms <- strsplit (as.character (tstmp), ' ') [[1]] [2]

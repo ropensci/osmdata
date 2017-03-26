@@ -1,12 +1,12 @@
 context ("sf-osm")
 
 test_that ("multipolygon", {
-               x_sf <- sf::st_read ("../osm-multi.osm", layer="multipolygons", 
-                                    quiet=TRUE)
-               q0 <- opq (bbox=c(1,1,5,5)) 
+               x_sf <- sf::st_read ("../osm-multi.osm",
+                                    layer = "multipolygons", quiet = TRUE)
+               q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-multi.osm")$osm_multipolygons
                # GDAL spits out a whole lot of generic field names, so first the
-               # two have to be reduced to common fields.  
+               # two have to be reduced to common fields.
                x <- x [, which (names (x) %in% names (x_sf))]
                x_sf <- x_sf [, which (names (x_sf) %in% names (x))]
                # Then all of the object and dimnames inserted by `osmdata` have
@@ -27,9 +27,9 @@ test_that ("multipolygon", {
 
 
 test_that ("multilinestring", {
-               x_sf <- sf::st_read ("../osm-multi.osm", layer="multilinestrings", 
-                                    quiet=TRUE)
-               q0 <- opq (bbox=c(1,1,5,5)) 
+               x_sf <- sf::st_read ("../osm-multi.osm",
+                                    layer = "multilinestrings", quiet = TRUE)
+               q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-multi.osm")$osm_multilines
                x <- x [, which (names (x) %in% names (x_sf))]
                x_sf <- x_sf [, which (names (x_sf) %in% names (x))]
@@ -45,8 +45,9 @@ test_that ("multilinestring", {
 })
 
 test_that ("ways", {
-               x_sf <- sf::st_read ("../osm-ways.osm", layer="lines", quiet=TRUE)
-               q0 <- opq (bbox=c(1,1,5,5)) 
+               x_sf <- sf::st_read ("../osm-ways.osm",
+                                    layer = "lines", quiet = TRUE)
+               q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-ways.osm")$osm_lines
                x <- x [, which (names (x) %in% names (x_sf))]
                x_sf <- x_sf [, which (names (x_sf) %in% names (x))]
@@ -57,7 +58,9 @@ test_that ("ways", {
                # Then names also need to be removed from each non-sfc column
                for (i in 1:(ncol (x) - 1))
                    names (x [[names (x)[i] ]]) <- NULL
-               # These last lines change the order of attributes, # so they are reset here
-               attributes (x) <- attributes (x) [match (attributes (x_sf), attributes (x))]
+               # These last lines change the order of attributes, # so they are
+               # reset here
+               attributes (x) <- attributes (x) [match (attributes (x_sf),
+                                                        attributes (x))]
                expect_identical (x, x_sf)
 })

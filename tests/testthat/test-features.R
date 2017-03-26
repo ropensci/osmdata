@@ -19,11 +19,13 @@ if (get_local)
     cfm_output_af <- NULL
     trace(
           curl::curl_fetch_memory,
-          exit = function() { cfm_output_af <<- returnValue() }
+          exit = function() {
+              cfm_output_af <<- returnValue()
+          }
           )
     res <- httr::GET (url_ftrs)
     untrace (curl::curl_fetch_memory)
-    save (cfm_output_af, file="../cfm_output_af.rda")
+    save (cfm_output_af, file = "../cfm_output_af.rda")
 }
 
 context ("features.R")
@@ -31,12 +33,12 @@ test_that ("available_features", {
     expect_error (available_features (1), "unused argument")
     if (!has_internet) {
         expect_message (available_features (), "No internet connection")
-    } else 
+    } else
     {
     if (is_cran)
     {
         load ("../cfm_output_af.rda")
-        stub (available_features, 'httr::GET', function (x) 
+        stub (available_features, 'httr::GET', function (x)
               cfm_output_af$content )
     }
     expect_is (available_features (), "character")
