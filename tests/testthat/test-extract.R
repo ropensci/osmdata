@@ -116,9 +116,9 @@ test_that ("points-from-lines", {
                expect_equal (dim (pts), c (12, 4))
 
                # Only lines have multiples features
-               ids <- sapply (seq (x$osm_lines$geometry), function (i)
+               ids <- lapply (seq (x$osm_lines$geometry), function (i)
                       rownames (osm_points (x, rownames (x$osm_lines) [i])))
-               ids <- sort (unique (as.vector (ids)))
+               ids <- sort (unique (as.vector (unlist (ids))))
                ids_all <- sort (rownames (osm_points (x,
                                                   rownames (x$osm_lines))))
                expect_identical (ids, ids_all)

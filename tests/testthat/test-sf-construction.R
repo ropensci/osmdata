@@ -23,7 +23,9 @@ make_sfc <- function (x, type) {
     else
         x <- lapply (x, function (i)
                      structure (list (i), class = c ("XY", type, "sfg")))
-    attr (x, "n_empty") <- sum(sapply(x, function(x) length(x) == 0))
+    attr (x, "n_empty") <- sum(vapply(x, function(x)
+                                      length(x) == 0,
+                                      FUN.VALUE = logical (1)))
     class(x) <- c(paste0("sfc_", class(x[[1L]])[2L]), "sfc")
     attr(x, "precision") <- 0.0
     attr(x, "bbox") <- bb
@@ -36,7 +38,8 @@ make_sfc <- function (x, type) {
 make_sf <- function (...)
 {
     x <- list (...)
-    sf <- sapply(x, function(i) inherits(i, "sfc"))
+    sf <- vapply(x, function(i) inherits(i, "sfc"),
+                 FUN.VALUE = logical (1))
     sf_column <- which (sf)
     if (!is.null (names (x [[sf_column]])))
         row.names <- names (x [[sf_column]])
@@ -49,7 +52,7 @@ make_sf <- function (...)
                            stringsAsFactors = TRUE)
 
     object <- as.list(substitute(list(...)))[-1L]
-    arg_nm <- sapply(object, function(x) deparse(x))
+    arg_nm <- sapply(object, function(x) deparse(x)) #nolint
     sfc_name <- make.names(arg_nm[sf_column])
     #sfc_name <- "geometry"
     df [[sfc_name]] <- x [[sf_column]]

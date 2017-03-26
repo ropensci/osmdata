@@ -147,7 +147,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
 make_sf <- function (...)
 {
     x <- list (...)
-    sf <- sapply (x, function(i) inherits(i, "sfc"))
+    sf <- sapply (x, function(i) inherits(i, "sfc")) #nolint (gp() re: sapply)
     sf_column <- which (sf)
     if (!is.null (names (x [[sf_column]])))
         row.names <- names (x [[sf_column]])
@@ -160,7 +160,7 @@ make_sf <- function (...)
                            stringsAsFactors = TRUE)
 
     object <- as.list(substitute(list(...)))[-1L]
-    arg_nm <- sapply(object, function(x) deparse(x))
+    arg_nm <- sapply(object, function(x) deparse(x)) # nolint
     sfc_name <- make.names(arg_nm[sf_column])
     #sfc_name <- "geometry"
     df [[sfc_name]] <- x [[sf_column]]

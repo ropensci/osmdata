@@ -2,8 +2,9 @@
 get_geoms <- function (dat, id)
 {
     indx <- which (grepl ('osm_', names (dat)))
-    where <- indx [which (sapply (dat [indx], function (i)
-                                  any (id %in% rownames (i))))]
+    where <- indx [which (vapply (dat [indx], function (i) 
+                                  any (id %in% rownames (i)),
+                                  FUN.VALUE = logical (1)))]
     lapply (where, function (i)
             {
                 indx <- which (rownames (dat [[i]]) %in% id)
@@ -44,7 +45,7 @@ get_line_ids <- function (x, dat, id)
     if (is (x [[1]], 'MULTIPOLYGON'))
     {
         ids <- lapply (x, function (i) names (i [[1]]))
-        ids <- as.character (unlist (sapply (ids, function (i)
+        ids <- as.character (unlist (lapply (ids, function (i) 
                                              strsplit (i, '-'))))
     } else if (is (x [[1]], 'MULTILINESTRING'))
     {
@@ -52,25 +53,28 @@ get_line_ids <- function (x, dat, id)
     } else if (is (x [[1]], 'POLYGON'))
     {
         # find all intersecting lines
-        pts <- as.character (unlist (sapply (x, function (i)
+        pts <- as.character (unlist (lapply (x, function (i) 
                                              rownames (i [[1]]))))
-        indx <- which (sapply (dat$osm_lines$geometry, function (i)
-                               any (pts %in% rownames (i))))
+        indx <- which (vapply (dat$osm_lines$geometry, function (i) #nolint
+                               any (pts %in% rownames (i)),
+                               FUN.VALUE = logical (1)))
         ids <- names (dat$osm_lines$geometry) [indx]
     } else if (is (x [[1]], 'LINESTRING'))
     {
         # find all intersecting lines
         pts <- do.call (rbind, x)
         pts <- as.character (rownames (pts))
-        indx <- which (sapply (dat$osm_lines$geometry, function (i)
-                               any (pts %in% rownames (i))))
+        indx <- which (vapply (dat$osm_lines$geometry, function (i) 
+                               any (pts %in% rownames (i)),
+                               FUN.VALUE = logical (1)))
         ids <- names (dat$osm_lines$geometry) [indx]
     } else if (is (x [[1]], 'POINT'))
     {
         # find all intersecting lines
         pts <- names (x)
-        indx <- which (sapply (dat$osm_lines$geometry, function (i)
-                               any (pts %in% rownames (i))))
+        indx <- which (vapply (dat$osm_lines$geometry, function (i) #nolint
+                               any (pts %in% rownames (i)),
+                               FUN.VALUE = logical (1)))
         ids <- names (dat$osm_lines$geometry) [indx]
     }
     return (ids)
@@ -82,7 +86,7 @@ get_polygon_ids <- function (x, dat, id)
     if (is (x [[1]], 'MULTIPOLYGON'))
     {
         ids <- lapply (x, function (i) names (i [[1]]))
-        ids <- as.character (unlist (sapply (ids, function (i)
+        ids <- as.character (unlist (lapply (ids, function (i) #nolint
                                              strsplit (i, '-'))))
     } else if (is (x [[1]], 'MULTILINESTRING'))
     {
@@ -92,22 +96,25 @@ get_polygon_ids <- function (x, dat, id)
         # find all intersecting polygons
         pts <- do.call (rbind, lapply (x, function (i) i [[1]]))
         pts <- as.character (rownames (pts))
-        indx <- which (sapply (dat$osm_polygons$geometry, function (i)
-                               any (pts %in% rownames (i [[1]]))))
+        indx <- which (vapply (dat$osm_polygons$geometry, function (i)
+                               any (pts %in% rownames (i [[1]])),
+                               FUN.VALUE = logical (1)))
         ids <- names (dat$osm_polygons$geometry) [indx]
     } else if (is (x [[1]], 'LINESTRING'))
     {
         # find all intersecting lines
         pts <- as.character (rownames (do.call (rbind, x)))
-        indx <- which (sapply (dat$osm_polygons$geometry, function (i)
-                               any (pts %in% rownames (i [[1]]))))
+        indx <- which (vapply (dat$osm_polygons$geometry, function (i)
+                               any (pts %in% rownames (i [[1]])),
+                               FUN.VALUE = logical (1)))
         ids <- names (dat$osm_polygons$geometry) [indx]
     } else if (is (x [[1]], 'POINT'))
     {
         # find all intersecting lines
         pts <- names (x)
-        indx <- which (sapply (dat$osm_polygons$geometry, function (i)
-                               any (pts %in% rownames (i [[1]]))))
+        indx <- which (vapply (dat$osm_polygons$geometry, function (i)
+                               any (pts %in% rownames (i [[1]])),
+                               FUN.VALUE = logical (1)))
         ids <- names (dat$osm_polygons$geometry) [indx]
     }
     return (ids)
@@ -120,16 +127,18 @@ get_multiline_ids <- function (x, dat, id)
     {
         ids <- names (x)
         mls <- lapply (dat$osm_multilines$geometry, function (i) names (i))
-        indx <- sapply (mls, function (i) any (ids %in% i))
+        indx <- vapply (mls, function (i) any (ids %in% i), 
+                        FUN.VALUE = logical (1))
         ids <- names (indx) [which (indx)]
     } else if (is (x [[1]], 'POINT'))
     {
         # find all lines containing those points
-        lns <- names (which (sapply (dat$osm_lines$geometry, function (i)
-                                     any (rownames (i) %in% names (x)))))
+        lns <- names (which (vapply (dat$osm_lines$geometry, function (i)
+                                     any (rownames (i) %in% names (x)),
+                                     FUN.VALUE = logical (1))))
         # then find all multilines containing those lines
-        indx <- sapply (dat$osm_multilines$geometry, function (i)
-                        any (names (i) %in% lns))
+        indx <- vapply (dat$osm_multilines$geometry, function (i)
+                        any (names (i) %in% lns), FUN.VALUE = logical (1))
         ids <- names (indx) [which (indx)]
     }
 
@@ -148,13 +157,15 @@ get_multipolygon_ids <- function (x, dat, id)
     if (is (x [[1]], 'POLYGON') | is (x [[1]], 'LINESTRING'))
     {
         ids <- names (x)
-        indx <- sapply (mps, function (i) any (ids %in% i))
+        indx <- vapply (mps, function (i) any (ids %in% i), 
+                        FUN.VALUE = logical (1))
         ids <- names (indx) [which (indx)]
     } else if (is (x [[1]], 'POINT'))
     {
         # find all lines containing those points
-        lns <- names (which (sapply (dat$osm_lines$geometry, function (i)
-                                     any (rownames (i) %in% names (x)))))
+        lns <- names (which (vapply (dat$osm_lines$geometry, function (i)
+                                     any (rownames (i) %in% names (x)),
+                                     FUN.VALUE = logical (1))))
         # then find all multipolygons containing those lines
         indx <- lapply (mps, function (i) any (lns %in% i))
         ids <- names (indx) [which (as.logical (indx))]

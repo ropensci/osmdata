@@ -52,7 +52,7 @@ print.osmdata <- function (x, ...)
 {
     msg <- NULL
     # print meta-data
-    if (!all (sapply (x, is.null)))
+    if (!all (vapply (x, is.null, FUN.VALUE = logical (1)))) 
         msg <- "Object of class 'osmdata' with:\n"
 
     msg <- c (msg, c (rep (' ', 17), '$bbox : ', x$bbox, '\n'))
@@ -69,7 +69,7 @@ print.osmdata <- function (x, ...)
     # print geometry data
     indx <- which (grepl ("osm", names (x)))
 
-    sf <- any (grep ("sf", sapply (x, class)))
+    sf <- any (grep ("sf", lapply (x, class))) 
     if (sf)
     {
         for (i in names (x) [indx])
@@ -112,7 +112,9 @@ print.osmdata <- function (x, ...)
 c.osmdata <- function (...)
 {
     x <- list (...)
-    cl_sf <- sapply (x, function (i) any (grep ('sf', sapply (i, class))))
+    cl_sf <- vapply (x, function (i) 
+                     any (grep ('sf', lapply (i, class))),
+                     FUN.VALUE = logical (1))
     if (!(all (cl_sf) | all (!cl_sf)))
         stop ('All objects must be either osmdata_sf or osmdata_sp')
 
@@ -129,7 +131,7 @@ c.osmdata <- function (...)
         for (i in osm_indx)
         {
             xi <- lapply (x, function (j) j [[i]])
-            indx <- which (sapply (xi, nrow) > 0)
+            indx <- which (unlist (lapply (xi, nrow)) > 0) 
             xi <- xi [indx]
             if (length (xi) > 0)
             {
@@ -163,7 +165,7 @@ c.osmdata <- function (...)
                 {
                     rindx <- which (!rownames (j) %in% rownames (resi))
                     # cindx <- which (names (j) %in% names (resi))
-                    resj <- j [rindx, , drop = FALSE]
+                    resj <- j [rindx, , drop = FALSE] #nolint
                     # then expand resj as for resi above
                     cnames_new <- cnames [which (!cnames %in% names (resj))]
                     for (k in cnames_new)
