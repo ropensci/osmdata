@@ -26,8 +26,8 @@ opq query bbox has been set}
 Add a feature to an Overpass query
 }
 \note{
-The actual query submitted to the overpass API can be obtained from
-\link{opq_to_string}
+Values can be negated by pre-pending \code{!}. The actual query
+submitted to the overpass API can be obtained from \link{opq_to_string}
 }
 \examples{
 \dontrun{
@@ -40,6 +40,8 @@ q1 <- getbb ("portsmouth", display_name_contains="United States") \%>\% opq () \
 q2 <- getbb ("portsmouth", display_name_contains="United States") \%>\% opq () \%>\% 
         add_feature("amenity", "pub") 
 c (osmdata_sf (q1), osmdata_sf (q1)) # all objects that are restaurants OR pubs
+# Use of negation to extract all non-primary highways
+q <- opq ("portsmouth uk") \%>\% add_feature (key="highway", value="!primary")
 }
 }
 \references{

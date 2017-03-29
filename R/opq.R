@@ -41,8 +41,8 @@ opq <- function (bbox=NULL)
 #'        opq query bbox has been set
 #' @return \code{opq} object
 #' 
-#' @note The actual query submitted to the overpass API can be obtained from
-#' \link{opq_to_string}
+#' @note Values can be negated by pre-pending \code{!}. The actual query
+#' submitted to the overpass API can be obtained from \link{opq_to_string}
 #'
 #' @references \url{http://wiki.openstreetmap.org/wiki/Map_Features}
 #'
@@ -59,6 +59,8 @@ opq <- function (bbox=NULL)
 #' q2 <- getbb ("portsmouth", display_name_contains="United States") %>% opq () %>% 
 #'         add_feature("amenity", "pub") 
 #' c (osmdata_sf (q1), osmdata_sf (q1)) # all objects that are restaurants OR pubs
+#' # Use of negation to extract all non-primary highways
+#' q <- opq ("portsmouth uk") %>% add_feature (key="highway", value="!primary")
 #' }
 add_feature <- function (opq, key, value, exact=TRUE, bbox=NULL)
 {
@@ -83,15 +85,14 @@ add_feature <- function (opq, key, value, exact=TRUE, bbox=NULL)
 
     if (missing (value))
     {
-        #paste0(sprintf(' node["%s"](%s);\n', key, bbox),
-        #       sprintf('  way["%s"](%s);\n', key, bbox),
-        #       sprintf('  relation["%s"](%s);\n\n', key, bbox)) -> feature
         feature <- paste0 (sprintf (' ["%s"]', key))
     } else
     {
-        #paste0(sprintf(' node["%s"%s"%s"](%s);\n', key, bind, value, bbox),
-        #       sprintf('  way["%s"%s"%s"](%s);\n', key, bind, value, bbox),
-        #       sprintf('  relation["%s"%s"%s"](%s);\n\n', key, bind,
+        if (substring (value, 1, 1) == "1")
+        {
+            bind <- paste0 ("!", bind)
+            value <- substring (value, 2, nchar (value))
+        }
         feature <- paste0 (sprintf (' ["%s"%s"%s"]', key, bind, value))
     }
 
