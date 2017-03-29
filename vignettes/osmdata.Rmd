@@ -160,7 +160,7 @@ with the function `opq()`, followed by specifying desired OSM features with
 ```{r kunming}
 q <- opq(bbox = 'Kunming, China')
 q1 <- add_feature(q, key = 'natural', value = 'water')
-q2 <- add_feature(q1, key = 'name:en', value = 'Dian', exact = FALSE)
+q2 <- add_feature(q1, key = 'name:en', value = 'Dian', value_exact = FALSE)
 ```
 
 The parameter `exact=FALSE` controls the two ways of matching `key-value` pairs
@@ -683,7 +683,7 @@ which is composed of many (over 100) separate lines:
 ```{r, eval=FALSE}
 q <- opq ('greater london uk')
 q1 <- add_feature (q, key = "name", value = "London.Cycle.Network.Route.9",
-                   exact = FALSE)
+                   value_exact = FALSE)
 lcnr9 <- osmdata_sp(q1)
 sp::plot(lcnr9$osm_lines)
 ```

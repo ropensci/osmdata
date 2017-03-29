@@ -34,15 +34,24 @@ opq <- function (bbox=NULL)
 #'
 #' @param opq An \code{overpass_query} object
 #' @param key feature key
-#' @param value value for feature key
-#' @param exact If FALSE, \code{value} is not interpreted exactly; see
+#' @param value value for feature key; can be negated with an initial
+#' exclamation mark, \code{value="!this"}.
+#' @param key_exact If FALSE, \code{key} is not interpreted exactly; see
 #' \url{http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide#Non-exact_names}
+#' @param value_exact If FALSE, \code{value} is not interpreted exactly
+#' @param match_case If FALSE, matching for both \code{key} and \code{value} is
+#' not sensitive to case
 #' @param bbox optional bounding box for the feature query; must be set if no
 #'        opq query bbox has been set
 #' @return \code{opq} object
 #' 
-#' @note Values can be negated by pre-pending \code{!}. The actual query
-#' submitted to the overpass API can be obtained from \link{opq_to_string}
+#' @note \code{key_exact} should generally be \code{TRUE}, because OSM uses a
+#' reasonably well defined set of possible keys, as returned by
+#' \code{available_features}. Setting \code{key_exact=FALSE} allows matching of
+#' regular expressions on OSM keys, as described in Section 6.1.5 of
+#' \url{http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL}. The actual
+#' query submitted to the overpass API can be obtained from
+#' \link{opq_to_string}.
 #'
 #' @references \url{http://wiki.openstreetmap.org/wiki/Map_Features}
 #'
@@ -62,7 +71,8 @@ opq <- function (bbox=NULL)
 #' # Use of negation to extract all non-primary highways
 #' q <- opq ("portsmouth uk") %>% add_feature (key="highway", value="!primary") 
 #' }
-add_feature <- function (opq, key, value, exact=TRUE, bbox=NULL)
+add_feature <- function (opq, key, value, key_exact=TRUE, value_exact=TRUE,
+                         match_case=TRUE, bbox=NULL)
 {
     if (missing (key))
         stop ('key must be provided')
@@ -78,22 +88,30 @@ add_feature <- function (opq, key, value, exact=TRUE, bbox=NULL)
         opq$bbox <- bbox
     }
 
-    if (exact)
+    if (value_exact)
         bind <- '='
     else
         bind <- '~'
+    key_pre <- ""
+    if (!key_exact)
+        key_pre <- "~"
 
     if (missing (value))
     {
         feature <- paste0 (sprintf (' ["%s"]', key))
     } else
     {
-        if (substring (value, 1, 1) == "1")
+        if (substring (value, 1, 1) == "!")
         {
             bind <- paste0 ("!", bind)
             value <- substring (value, 2, nchar (value))
         }
-        feature <- paste0 (sprintf (' ["%s"%s"%s"]', key, bind, value))
+        feature <- paste0 (sprintf (' [%s"%s"%s"%s"', 
+                                    key_pre, key, bind, value))
+        if (!match_case)
+            feature <- paste0 (feature, ",i")
+        feature <- paste0 (feature, "]")
+        #feature <- paste0 (sprintf (' ["%s"%s"%s"]', key, bind, value))
     }
 
     opq$features <- c(opq$features, feature)

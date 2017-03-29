@@ -4,17 +4,24 @@
 \alias{add_feature}
 \title{Add a feature to an Overpass query}
 \usage{
-add_feature(opq, key, value, exact = TRUE, bbox = NULL)
+add_feature(opq, key, value, key_exact = TRUE, value_exact = TRUE,
+  match_case = TRUE, bbox = NULL)
 }
 \arguments{
 \item{opq}{An \code{overpass_query} object}
 
 \item{key}{feature key}
 
-\item{value}{value for feature key}
+\item{value}{value for feature key; can be negated with an initial
+exclamation mark, \code{value="!this"}.}
 
-\item{exact}{If FALSE, \code{value} is not interpreted exactly; see
+\item{key_exact}{If FALSE, \code{key} is not interpreted exactly; see
 \url{http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide#Non-exact_names}}
+
+\item{value_exact}{If FALSE, \code{value} is not interpreted exactly}
+
+\item{match_case}{If FALSE, matching for both \code{key} and \code{value} is
+not sensitive to case}
 
 \item{bbox}{optional bounding box for the feature query; must be set if no
 opq query bbox has been set}
@@ -26,8 +33,13 @@ opq query bbox has been set}
 Add a feature to an Overpass query
 }
 \note{
-Values can be negated by pre-pending \code{!}. The actual query
-submitted to the overpass API can be obtained from \link{opq_to_string}
+\code{key_exact} should generally be \code{TRUE}, because OSM uses a
+reasonably well defined set of possible keys, as returned by
+\code{available_features}. Setting \code{key_exact=FALSE} allows matching of
+regular expressions on OSM keys, as described in Section 6.1.5 of
+\url{http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL}. The actual
+query submitted to the overpass API can be obtained from
+\link{opq_to_string}.
 }
 \examples{
 \dontrun{
