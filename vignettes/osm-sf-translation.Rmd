@@ -19,7 +19,7 @@ vignette: >
 [OpenStreetMap (OSM)](http://openstreetmap.org) data has a unique structure that
 is not directly reconcilable with other modes of representing spatial data,
 notably including the widely-adopted 
-[Simple Features (SF)](http://www.opengeospatial.org/standards/sfo) 
+[Simple Features (SF)](http://www.opengeospatial.org/standards/sfa) 
 scheme of the 
 [Open Geospatial Consortium (OGC)](http://www.opengeospatial.org). 
 The three primary spatial objects of OSM are:

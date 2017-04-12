@@ -7,8 +7,9 @@
 \alias{osmdata-package}
 \title{osmdata class def}
 \usage{
-osmdata(bbox, overpass_call, osm_points, osm_lines, osm_polygons,
-  osm_multilines, osm_multipolygons, timestamp, ...)
+osmdata(bbox = NULL, overpass_call = NULL, osm_points = NULL,
+  osm_lines = NULL, osm_polygons = NULL, osm_multilines = NULL,
+  osm_multipolygons = NULL, timestamp = NULL)
 }
 \arguments{
 \item{bbox}{bounding box}

@@ -20,19 +20,11 @@
 #' to provide access to the print method
 #'
 #' @export
-osmdata <- function (bbox, overpass_call,
-                     osm_points, osm_lines, osm_polygons,
-                     osm_multilines, osm_multipolygons, timestamp, ...)
+osmdata <- function (bbox = NULL, overpass_call = NULL,
+                     osm_points = NULL, osm_lines = NULL, osm_polygons = NULL,
+                     osm_multilines = NULL, osm_multipolygons = NULL, 
+                     timestamp = NULL)
 {
-    if (missing (bbox)) bbox <- NULL
-    if (missing (overpass_call)) overpass_call <- NULL
-    if (missing (osm_points)) osm_points <- NULL
-    if (missing (osm_lines)) osm_lines <- NULL
-    if (missing (osm_polygons)) osm_polygons <- NULL
-    if (missing (osm_multilines)) osm_multilines <- NULL
-    if (missing (osm_multipolygons)) osm_multipolygons <- NULL
-    if (missing (timestamp)) timestamp <- NULL
-
     obj <- list (
                  bbox = bbox,
                  overpass_call = overpass_call,
@@ -97,10 +89,17 @@ print.osmdata <- function (x, ...)
             if (is.null (xi))
                 msg <- c (msg, nm, ' : NULL', '\n')
             else
-                msg <- c (msg, nm, " : 'sp' Spatial",
-                               strsplit (i, 'osm_')[[1]][2], 'DataFrame with ',
+            {
+                type <- strsplit (i, 'osm_') [[1]] [2]
+                types <- c ('points', 'lines', 'polygons',
+                            'multlines', 'multipolygons')
+                sp_types <- c ('Points', 'Lines', 'Polygons', 
+                               'Lines', 'Polygons')
+                types <- sp_types [match (type, types)]
+                msg <- c (msg, nm, " : 'sp' Spatial", types, 'DataFrame with ',
                                nrow (xi), ' ', strsplit (i, 'osm_')[[1]][2],
                                '\n')
+            }
         }
     }
 

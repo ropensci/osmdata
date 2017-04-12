@@ -91,7 +91,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
         encoding <- 'UTF-8'
 
     obj <- osmdata () # uses class def
-    if (missing (q))
+    if (missing (q) & !quiet)
         message ('q missing: osmdata object will not include query')
     else if (is (q, 'overpass_query'))
     {
@@ -201,7 +201,7 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
         encoding <- 'UTF-8'
 
     obj <- osmdata () # uses class def
-    if (missing (q))
+    if (missing (q) & !quiet)
         message ('q missing: osmdata object will not include query')
     else if (is (q, 'overpass_query'))
     {
