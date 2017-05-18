@@ -4,9 +4,8 @@ makefile$
 [.]md$
 ^README[.]Rmd$
 ^README[.]html$
+^aaa.Rmd$
 ^fig/
-^overpass/
-^doc/
 ^docs/
 ^src/Makevars$
 ^.*[.]Rproj$

@@ -16,7 +16,9 @@ List recognized features in OSM
 requires internet access
 }
 \examples{
+\dontrun{
 available_features()
+}
 }
 \references{
 \url{http://wiki.openstreetmap.org/wiki/Map_Features}

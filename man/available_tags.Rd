@@ -19,7 +19,9 @@ List tags associated with a feature
 requires internet access
 }
 \examples{
+\dontrun{
 available_tags("aerialway")
+}
 }
 \references{
 \url{http://wiki.openstreetmap.org/wiki/Map_Features}

@@ -33,8 +33,11 @@
 
 #include <Rcpp.h>
 
-// Note: roxygen attempts to import doxygen-style comments, even without the
-// doubule-square-bracket Rcpp::Export
+void R_init_osmdata(DllInfo* info) {
+    R_registerRoutines(info, NULL, NULL, NULL, NULL);
+    R_useDynamicSymbols(info, TRUE);
+}
+
 
 /************************************************************************
  ************************************************************************

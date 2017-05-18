@@ -8,7 +8,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' available_features()
+#' }
 available_features <- function() {
 
   url_ftrs <- "http://wiki.openstreetmap.org/wiki/Map_Features"
@@ -37,7 +39,9 @@ available_features <- function() {
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' available_tags("aerialway")
+#' }
 available_tags <- function(feature) {
   if (missing (feature))
     stop ("Please specify feature")
