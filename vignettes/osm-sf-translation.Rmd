@@ -81,7 +81,7 @@ letters (such as `POLYGON`), while OSM geometries use lower case (such as
 `SF`, while the `R` package of the same name is referred to as `R::sf`--upper
 case `R` followed by lower case `sf`. Much functionality of `R::sf` is
 determined by the underlying 
-[Geospatial Data Abstraction Library](http:www.gdal.org) (`GDAL`; described
+[Geospatial Data Abstraction Library](http://gdal.org) (`GDAL`; described
 below). Representations of data are often discussed here with reference to
 `GDAL/sf`, in which case it may always be assumed that the translation and
 representation of data are determined by `GDAL` and not directly by the creators

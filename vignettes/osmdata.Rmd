@@ -401,7 +401,7 @@ dat_sf <- osmdata_sf(q, 'buildings.osm')
 [Simple Features (SF)](http://www.opengeospatial.org/standards/sfo) 
 format, defined by the
 [Open Geospatial Consortium](http://www.opengeospatial.org), and implemented in
-the `R` package [`sf`](https://cran.r-proejct.org/package=sf). This package
+the `R` package [`sf`](https://cran.r-project.org/package=sf). This package
 provides a direct interface to the `C++` 
 [Graphical Data Abstraction Library (GDAL)](http://gdal.org) which also includes
 a so-called ['driver' for OSM data](http://www.gdal.org/drv_osm.html). This
