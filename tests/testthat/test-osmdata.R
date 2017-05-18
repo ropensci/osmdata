@@ -38,11 +38,6 @@ if (get_local)
 
 context ('overpass query')
 
-test_that ('overpass null values', {
-    expect_error (overpass_query (), 'query must be supplied')
-    expect_error (overpass_query (1), 'query must be a single character string')
-})
-
 test_that ('query-construction', {
     q0 <- opq (bbox = c(-0.12, 51.51, -0.11, 51.52))
     expect_error (q1 <- add_feature (q0), 'key must be provided')
@@ -66,18 +61,7 @@ test_that ('make_query', {
           'Overpass query unavailable without internet', call. = FALSE)
     } else
     {
-        # First test overpass_query() itself. Note that this still calls
-        # `overpass_status()` and does not stub the `httr::GET` call there.
-        if (is_cran | is_travis)
-        {
-            load ("../cfm_output_overpass_query.rda")
-            stub (overpass_query, 'httr::POST', function (x, ...)
-                  cfm_output_overpass_query)
-        }
-        testthat::expect_is (overpass_query (query = opq_to_string (qry)),
-                             'character')
-
-        # Then test all `osmdata_..` functions by stubbing the results of
+        # Test all `osmdata_..` functions by stubbing the results of
         # `overpass_query()`
         if (is_cran | is_travis)
         {
@@ -120,6 +104,6 @@ test_that ('make_query', {
                   'osm_multipolygons')
         expect_named (res, expected = nms, ignore.order = FALSE)
 
-        if (file.exists ('junk.osm')) file.remove ('junk.osm')
+        if (file.exists ('junk.osm')) invisible (file.remove ('junk.osm'))
     }
 })
