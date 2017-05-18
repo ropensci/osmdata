@@ -68,7 +68,7 @@ test_that ('make_query', {
     {
         # First test overpass_query() itself. Note that this still calls
         # `overpass_status()` and does not stub the `httr::GET` call there.
-        if (is_cran)
+        if (is_cran | is_travis)
         {
             load ("../cfm_output_overpass_query.rda")
             stub (overpass_query, 'httr::POST', function (x, ...)
@@ -79,7 +79,7 @@ test_that ('make_query', {
 
         # Then test all `osmdata_..` functions by stubbing the results of
         # `overpass_query()`
-        if (is_cran)
+        if (is_cran | is_travis)
         {
             load ("../overpass_query_result.rda")
             stub (osmdata_xml, 'overpass_query', function (x, ...)
@@ -89,7 +89,7 @@ test_that ('make_query', {
         expect_true (is (doc, 'xml_document'))
         expect_silent (osmdata_xml (qry, file = 'junk.osm'))
 
-        if (is_cran)
+        if (is_cran | is_travis)
             stub (osmdata_sp, 'overpass_query', function (x, ...)
                   overpass_query_result)
         res <- osmdata_sp (qry)
@@ -105,7 +105,7 @@ test_that ('make_query', {
                   'osm_multipolygons')
         expect_named (res, expected = nms, ignore.order = FALSE)
 
-        if (is_cran)
+        if (is_cran | is_travis)
             stub (osmdata_sf, 'overpass_query', function (x, ...)
                   overpass_query_result)
         res <- osmdata_sf (qry)

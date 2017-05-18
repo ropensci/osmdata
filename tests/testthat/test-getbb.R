@@ -40,7 +40,7 @@ test_that ("bbox", {
 
 test_that ('getbb-place_name', {
                if (has_internet) {
-                   if (is_cran)
+                   if (is_cran | is_travis)
                    {
                        load("../cfm_output_bb.rda")
                        stub (getbb, 'httr::GET', function (x) cfm_output_bb )
