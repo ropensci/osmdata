@@ -115,9 +115,11 @@ getbb <- function(place_name,
                   key = key,
                   # bounded = 1, # seemingly not working
                   limit = limit)
+    
+    q_url = httr::modify_url(base_url, query = query)
 
     if (!silent)
-        print(httr::modify_url(base_url, query = query))
+        print(q_url)
 
     res <- httr::GET (httr::modify_url (base_url, query = query))
     #res <- httr::POST(base_url, query = query, httr::timeout (100))
