@@ -15,5 +15,7 @@ sorted appropriately and must merely be in the order (x, y, x, y).}
 This function converts a bounding box into a string for use in web apis
 }
 \examples{
+\dontrun{
 bbox_to_string (getbb ("hampi india"))
+}
 }

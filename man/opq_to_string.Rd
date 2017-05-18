@@ -18,6 +18,8 @@ Convert an osmdata query of class \code{opq} to a character string query to
 be submitted to the overpass API
 }
 \examples{
+\dontrun{
 q <- opq ("hampi india")
 opq_to_string (q)
+}
 }

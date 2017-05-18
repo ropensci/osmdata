@@ -9,7 +9,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' bbox_to_string (getbb ("hampi india"))
+#' }
 bbox_to_string <- function(bbox) {
 
     if (missing (bbox)) stop ("bbox must be provided")
@@ -82,6 +84,7 @@ bbox_to_string <- function(bbox) {
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' getbb("Salzburg")
 #' place_name <- "Hereford"
 #' getbb(place_name, silent = FALSE)
@@ -93,6 +96,7 @@ bbox_to_string <- function(bbox) {
 #' key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
 #' if(nchar(key) ==  32) {
 #'   getbb(place_name, base_url = "http://locationiq.org/v1/search.php", key = key)
+#' }
 #' }
 getbb <- function(place_name,
                   display_name_contains = NULL,

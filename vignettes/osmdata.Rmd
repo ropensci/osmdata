@@ -63,9 +63,12 @@ q <- opq(bbox = c(51.1, 0.1, 51.2, 0.2))
 Bounding boxes may also be defined by simply passing the name of a desired area,
 which does not have be precise:
 
-```{r opq2}
+```{r opq2, eval = FALSE}
 q <- opq(bbox = 'Greater London, U.K.')
 identical(opq(bbox = 'Greater London, U.K.'), opq(bbox = 'greater london uk'))
+```
+```{r echo = FALSE}
+TRUE
 ```
 
 Following the initial `opq()` call, `osmdata` queries are built by adding one or
@@ -73,8 +76,12 @@ more 'features', which are specified in terms of `key-value` pairs.  For
 example, all paths, ways, and roads are designated in OSM with `key=highway`, so
 that a query all motorways in greater London (UK) can be constructed as follows:
 
-```{r opq3}
+```{r opq3, eval = FALSE}
 q <- opq(bbox = 'greater london uk')
+q <- add_feature(q, key = 'highway', value = 'motorway')
+```
+```{r, echo = FALSE}
+q <- opq (bbox = c (51.2867602, -0.510375, 51.6918741, 0.3340155))
 q <- add_feature(q, key = 'highway', value = 'motorway')
 ```
 
@@ -84,11 +91,11 @@ A detailed description of features is provided at the
 comprehensive list of feature keys currently used in OSM.
 
 ```{r features, eval=FALSE}
-head(available_features())
+head (available_features ())
 ```
 
 ```{r, echo=FALSE}
-c("4wd only",  "abandoned", "abutters",  "access",    "addr",      "addr:city")
+c ("4wd only", "abandoned", "abutters", "access", "addr", "addr:city")
 ```
 
 There are two primary `osmdata` functions for obtaining data from a query:
@@ -127,10 +134,10 @@ as well as the
 
 `osmdata` queries are lists of class `overpass_query`. The actual query passed
 to the `overpass API` with a query can be obtained with the function
-`qry_to_string()`.  Applied to the preceding query, this function gives:
+`opq_to_string()`.  Applied to the preceding query, this function gives:
 
 ```{r, eval=FALSE}
-qry_to_string(q)
+opq_to_string(q)
 ## [out:xml][timeout:25];
 ## (
 ##   node
@@ -148,7 +155,7 @@ qry_to_string(q)
 
 The resultant output may be pasted directly into the 
 [overpass-turbo](http://overpass-turbo.eu/) online interactive query builder.
-(The output of `qry_to_string` has been somewhat reformatted here to reflect
+(The output of `opq_to_string` has been somewhat reformatted here to reflect
 the format typically used in `overpass-turbo`.)
 
 ### 2.1. osmdata queries
@@ -157,8 +164,13 @@ As demonstrated above, an `osmdata` query begins by specifying a bounding box
 with the function `opq()`, followed by specifying desired OSM features with
 `add_feature()`.  
 
-```{r kunming}
+```{r kunming, eval = FALSE}
 q <- opq(bbox = 'Kunming, China')
+q1 <- add_feature(q, key = 'natural', value = 'water')
+q2 <- add_feature(q1, key = 'name:en', value = 'Dian', value_exact = FALSE)
+```
+```{r, echo = FALSE}
+q <- opq(bbox = c(24.8915153, 102.5417638, 25.2115153, 102.8617638))
 q1 <- add_feature(q, key = 'natural', value = 'water')
 q2 <- add_feature(q1, key = 'name:en', value = 'Dian', value_exact = FALSE)
 ```
@@ -185,23 +197,23 @@ each feature added with `add_feature()`.
 The primary `osmdata` functions `osmdata_sf()` or `osmdata_sp()` pass these
 queries to `overpass` and return OSM data in corresponding `sf` or `sp` format,
 respectively.  Both of these functions also accept direct `overpass` queries,
-such as those produced by the `osmdata` function `qry_to_string()`, or copied
+such as those produced by the `osmdata` function `opq_to_string()`, or copied
 directly from the [`overpass-turbo` query builder](overpass-turbo.eu).
 
 ```{r, eval=FALSE}
-osmdata_sf(qry_to_string(q))
+osmdata_sf(opq_to_string(q))
 ## Object of class 'osmdata' with:
 ##                  $bbox :
 ##         $overpass_call : The call submitted to the overpass API
-##             $timestamp : [ Tue Mar  7 10:06:30 2017 ]
+##             $timestamp : [ Thurs 5 May 2017 14:33:54 ]
 ##            $osm_points : 'sf' Simple Features Collection with 360582 points
 ##            ...
 ```
 
 Note that the result contains no value for `bbox`, because that information is
 lost when the full `osmdata_query`, `q`, is converted to a string.
-Nevertheless, the results of the two calls `osmdata_sf(qry_to_string(q))` and
-`osmdata_sf(q)` differ only in the values of `bbox` and `timestamp`, while
+Nevertheless, the results of the two calls `osmdata_sf (opq_to_string (q))` and
+`osmdata_sf (q)` differ only in the values of `bbox` and `timestamp`, while
 returning otherwise identical data.
 
 In summary, `osmdata` queries are generally simplified versions of potentially
@@ -292,7 +304,7 @@ bridge
 ##  Object of class 'osmdata' with:
 ##                   $bbox : 37.3002036,-6.0329182,37.4529579,-5.819157
 ##          $overpass_call : The call submitted to the overpass API
-##              $timestamp : [ Wed Mar  8 14:04:59 2017 ]
+##              $timestamp : [ Thurs 5 May 2017 14:41:19 ]
 ##             $osm_points : 'sf' Simple Features Collection with 69 points
 ##              $osm_lines : 'sf' Simple Features Collection with 25 linestrings
 ##           $osm_polygons : 'sf' Simple Features Collection with 0 polygons
@@ -441,10 +453,10 @@ osmdata_sf(q, 'trentham.osm')
 ## Object of class 'osmdata' with:
 ##                  $bbox : -37.4300874,144.2863388,-37.3500874,144.3663388
 ##         $overpass_call : The call submitted to the overpass API
-##             $timestamp : ##------ Tues Mar 7 09:36:02 2017 ------##
-##            $osm_points : 'sf' Simple Features Collection with 7166 points
+##             $timestamp : [ Thus 5 May 2017 14:42:19 ]
+##            $osm_points : 'sf' Simple Features Collection with 7106 points
 ##             $osm_lines : 'sf' Simple Features Collection with 263 linestrings
-##          $osm_polygons : 'sf' Simple Features Collection with 37 polygons
+##          $osm_polygons : 'sf' Simple Features Collection with 38 polygons
 ##        $osm_multilines : 'sf' Simple Features Collection with 1 multilinestrings
 ##     $osm_multipolygons : 'sf' Simple Features Collection with 6 multipolygons
 ```

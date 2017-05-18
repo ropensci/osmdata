@@ -47,6 +47,7 @@ which can be found at \url{https://github.com/hrbrmstr/nominatim}.
 See \url{http://wiki.openstreetmap.org/wiki/Nominatim} for details.
 }
 \examples{
+\dontrun{
 getbb("Salzburg")
 place_name <- "Hereford"
 getbb(place_name, silent = FALSE)
@@ -58,5 +59,6 @@ getbb(place_name, format_out = "data.frame", limit = 3)
 key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
 if(nchar(key) ==  32) {
   getbb(place_name, base_url = "http://locationiq.org/v1/search.php", key = key)
+}
 }
 }

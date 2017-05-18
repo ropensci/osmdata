@@ -134,8 +134,10 @@ add_feature <- function (opq, key, value, key_exact=TRUE, value_exact=TRUE,
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' q <- opq ("hampi india")
 #' opq_to_string (q)
+#' }
 opq_to_string <- function (opq)
 {
     features <- paste (opq$features, collapse = '')
