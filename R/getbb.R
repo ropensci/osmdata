@@ -115,15 +115,22 @@ getbb <- function(place_name,
                   key = key,
                   # bounded = 1, # seemingly not working
                   limit = limit)
+    
+    q_url = httr::modify_url(base_url, query = query)
 
     if (!silent)
-        print(httr::modify_url(base_url, query = query))
+        print(q_url)
 
-    res <- httr::GET (httr::modify_url (base_url, query = query))
+    res <- httr::GET (q_url)
     #res <- httr::POST(base_url, query = query, httr::timeout (100))
     txt <- httr::content(res, as = "text", encoding = "UTF-8",
                          type = "application/xml")
-    obj <- jsonlite::fromJSON(txt)
+    obj <- tryCatch(expr = {
+      jsonlite::fromJSON(txt)
+    }, error = function(cond){
+        message(paste0("Nominatim did respond as expected (e.g. due to excessive use of their api).\nPlease try again or use a different base_url\nThe url that failed was:\n", q_url))
+    }
+    )
 
     # Code optionally select more things stored in obj...
     if (!is.null(display_name_contains))
