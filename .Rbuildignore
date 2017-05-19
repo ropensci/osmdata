@@ -14,3 +14,5 @@ makefile$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^paper\.md$
+^configure$
+^src/Makevars.in$
