@@ -57,8 +57,12 @@ test_that ('make_query', {
     qry <- add_feature (qry, key = 'highway')
 
     if (!has_internet) {
-        expect_message (overpass_query (qry),
-          'Overpass query unavailable without internet', call. = FALSE)
+        expect_error (osmdata_xml (qry),
+                      'Overpass query unavailable without internet')
+        expect_error (osmdata_sf (qry),
+                      'Overpass query unavailable without internet')
+        expect_error (osmdata_sp (qry),
+                      'Overpass query unavailable without internet')
     } else
     {
         # Test all `osmdata_..` functions by stubbing the results of

@@ -30,34 +30,33 @@ if (get_local)
 
 context ("features.R")
 test_that ("available_features", {
-    expect_error (available_features (1), "unused argument")
-    if (!has_internet) {
-        expect_message (available_features (), "No internet connection")
-    } else
-    {
-    if (is_cran)
-    {
-        load ("../cfm_output_af.rda")
-        stub (available_features, 'httr::GET', function (x)
-              cfm_output_af$content )
-    }
-    expect_is (available_features (), "character")
-    }
-})
+               expect_error (available_features (1), "unused argument")
+               if (!has_internet) {
+                   expect_message (available_features (), "No internet connection")
+               } else
+               {
+                   if (is_cran)
+                   {
+                       load ("../cfm_output_af.rda")
+                       stub (available_features, 'httr::GET', function (x)
+                             cfm_output_af$content )
+                   }
+                   expect_is (available_features (), "character")
+               }
+          })
 
 test_that ("available_tags", {
-  expect_error (available_tags (), "Please specify feature")
-  expect_error (available_tags ("highway", 1), "unused argument")
-  if (!has_internet) {
-    expect_message (available_tags (), "No internet connection")
-  } else {
-    if (is_cran)
-    {
-      load("GET_available_features.rda")
-      stub (available_tags, 'httr::GET', function (x)
-            GET_available_features)
-    }
-    expect_that (length (available_tags ("junk")), equals (0))
-    expect_is (available_tags ("highway"), "character")
-  }
-})
+               expect_error (available_tags ("highway", 1), "unused argument")
+               if (!has_internet) {
+                   expect_message (available_tags (), "No internet connection")
+               } else {
+                   if (is_cran)
+                   {
+                       load("GET_available_features.rda")
+                       stub (available_tags, 'httr::GET', function (x)
+                             GET_available_features)
+                   }
+                   expect_that (length (available_tags ("junk")), equals (0))
+                   expect_is (available_tags ("highway"), "character")
+               }
+          })
