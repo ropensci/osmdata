@@ -16,3 +16,4 @@ makefile$
 ^paper\.md$
 ^configure$
 ^src/Makevars.in$
+^tests/timing-benchmark.R$
