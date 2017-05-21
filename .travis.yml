@@ -17,11 +17,11 @@ matrix:
           r: devel
           dist: trusty
         - os: osx
-          r: devel
+          r: release
           before_install: ''
           disable_homebrew: true
           #- os: osx
-          #r: release
+          #r: devel
           #before_install: ''
           #disable_homebrew: true
 
