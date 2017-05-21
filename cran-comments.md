@@ -1,6 +1,7 @@
 # Test environments
 
-* Ubuntu 12.04 (on `travis-ci`): R-release, R-devel
+* Ubuntu 14.04 (on `travis-ci`): R-release, R-devel
+* OXS: R-release (on `travis-ci`)
 * Windows Visual Studio 2015 (on `appveyor`; `x64`)
 * win-builder (R-release, R-devel, R-oldrelease)
 
