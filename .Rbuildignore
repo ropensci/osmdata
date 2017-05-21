@@ -1,3 +1,5 @@
+[.]md$
+[.]html$
 ^aaa[.]Rmd$
 ^appveyor[.]yml$
 ^configure$
@@ -8,9 +10,7 @@ makefile$
 ^.*[.]Rproj$
 ^paper[.]md$
 ^_pkgdown[.]yml$
-^README[.]md$
 ^README[.]Rmd$
-^README[.]html$
 ^src/Makevars$
 ^src/Makevars.in$
 ^tests/timing-benchmark.R$
