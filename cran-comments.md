@@ -5,6 +5,9 @@
 * Windows Visual Studio 2015 (on `appveyor`; `x64`)
 * win-builder (R-release, R-devel, R-oldrelease)
 
+Package also checked using both local memory sanitzer and `rocker/r-devel-san`
+with clean results. 
+
 # R CMD check results
 
 0 errors | 0 warnings | 1 note

@@ -130,7 +130,7 @@ test_that ("lines-from-multipolygons", {
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-multi.osm")
                lns <- osm_lines (x, rownames (x$osm_multipolygons))
-               expect_equal (dim (lns), c (3, 7))
+               expect_equal (dim (lns), c (4, 7))
 })
 
 test_that ("lines-from-multilines", {

@@ -70,11 +70,11 @@ void trace_multipolygon (Relations::const_iterator &itr_rel, const Ways &ways,
         }
         this_role = rwi->second;
         auto wayi = ways.find (rwi->first);
-        relation_ways.erase (rwi);
         if (wayi == ways.end ())
             throw std::runtime_error ("way can not be found");
         this_way.str ("");
         this_way << std::to_string (rwi->first);
+        relation_ways.erase (rwi);
 
         // Get first way of relation, and starting node
         node0 = wayi->second.nodes.front ();
