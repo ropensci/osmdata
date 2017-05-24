@@ -1,6 +1,7 @@
 has_internet <- curl::has_internet ()
-is_cran <-  identical (Sys.getenv("NOT_CRAN"), "false")
-is_travis <-  identical (Sys.getenv("TRAVIS"), "true")
+
+is_cran <- identical (Sys.getenv ("_R_CHECK_CRAN_INCOMING_"), 'true')
+is_travis <- identical (Sys.getenv("TRAVIS"), "true")
 
 source ("../stub.R")
 

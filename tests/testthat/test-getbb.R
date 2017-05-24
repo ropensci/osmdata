@@ -1,6 +1,7 @@
 has_internet <- curl::has_internet ()
-is_cran <-  identical (Sys.getenv("NOT_CRAN"), "false")
-is_travis <-  identical (Sys.getenv("TRAVIS"), "true")
+
+is_cran <- identical (Sys.getenv ("_R_CHECK_CRAN_INCOMING_"), 'true')
+is_travis <- identical (Sys.getenv ("TRAVIS"), "true")
 
 source ("../stub.R")
 
@@ -45,15 +46,11 @@ test_that ('getbb-place_name', {
                        load("../cfm_output_bb.rda")
                        stub (getbb, 'httr::GET', function (x) cfm_output_bb )
                    }
-                   # switching these tests off for now:
-                   if (!(is_cran | is_travis))
-                   {
-                       res <- getbb (place_name = "Salzburg")
-                       expect_is (res, "matrix")
-                       expect_length (res, 4)
-                       res <- getbb (place_name = "Salzburg", format_out = "string")
-                       expect_is (res, "character")
-                   }
+                   res <- getbb (place_name = "Salzburg")
+                   expect_is (res, "matrix")
+                   expect_length (res, 4)
+                   res <- getbb (place_name = "Salzburg", format_out = "string")
+                   expect_is (res, "character")
                }
           })
 
