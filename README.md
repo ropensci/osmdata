@@ -1,5 +1,5 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Build Status](https://travis-ci.org/osmdatar/osmdata.svg?branch=master)](https://travis-ci.org/osmdatar/osmdata) [![Build status](https://ci.appveyor.com/api/projects/status/github/osmdatar/osmdata?svg=true)](https://ci.appveyor.com/project/osmdatar/osmdata) [![codecov](https://codecov.io/gh/osmdatar/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/osmdatar/osmdata) [![Project Status: WIP](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/osmdata)](http://cran.r-project.org/web/packages/osmdata) [![CRAN Downloads](http://cranlogs.r-pkg.org/badges/grand-total/osmdata?color=orange)](http://cran.r-project.org/package=osmdata)
+[![Build Status](https://travis-ci.org/ropensci/osmdata.svg?branch=master)](https://travis-ci.org/ropensci/osmdata) [![Build status](https://ci.appveyor.com/api/projects/status/github/ropensci/osmdata?svg=true)](https://ci.appveyor.com/project/ropensci/osmdata) [![codecov](https://codecov.io/gh/ropensci/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/osmdata) [![Project Status: Active](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/osmdata)](http://cran.r-project.org/web/packages/osmdata) [![CRAN Downloads](http://cranlogs.r-pkg.org/badges/grand-total/osmdata?color=orange)](http://cran.r-project.org/package=osmdata)
 
 ![](./fig/title.png)
 
@@ -8,7 +8,10 @@
 ### Installation
 
 ``` r
-devtools::install_github("osmdatar/osmdata")
+library(osmdata)
+#> Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
+packageVersion("osmdata")
+#> [1] '0.0.1'
 ```
 
 ### Usage
@@ -17,7 +20,7 @@ devtools::install_github("osmdatar/osmdata")
 
 ``` r
 q0 <- opq(bbox = c(-0.27, 51.47, -0.20, 51.50)) # Chiswick Eyot in London, U.K.
-q1 <- add_feature(q0, key = 'name', value = "Thames", exact = FALSE)
+q1 <- add_feature(q0, key = 'name', value = "Thames", value_exact = FALSE)
 x <- osmdata_sf(q1)
 x
 ```
@@ -25,10 +28,10 @@ x
     #>  Object of class 'osmdata' with:
     #>                   $bbox : 51.47,-0.27,51.5,-0.2
     #>          $overpass_call : The call submitted to the overpass API
-    #>              $timestamp : [ Tue Mar  7 22:17:27 2017 ]
-    #>             $osm_points : 'sf' Simple Features Collection with 21305 points
-    #>              $osm_lines : 'sf' Simple Features Collection with 1891 linestrings
-    #>           $osm_polygons : 'sf' Simple Features Collection with 22 polygons
+    #>              $timestamp : [ Wed 4 May 2017 09:33:52 ]
+    #>             $osm_points : 'sf' Simple Features Collection with 21459 points
+    #>              $osm_lines : 'sf' Simple Features Collection with 1916 linestrings
+    #>           $osm_polygons : 'sf' Simple Features Collection with 23 polygons
     #>         $osm_multilines : 'sf' Simple Features Collection with 5 multilinestrings
     #>      $osm_multipolygons : 'sf' Simple Features Collection with 3 multipolygons
 
@@ -51,7 +54,7 @@ Or data can be read from a previously downloaded file:
 x <- osmdata_sf(q1, "data.xml")
 ```
 
-For more details, see the [website](https://osmdatar.github.io/osmdata/)
+For more details, see the [website](https://ropensci.github.io/osmdata/)
 
 ### Style guide
 
@@ -65,3 +68,5 @@ We appreciate any contributions; those that comply with our general coding style
 ### Code of Conduct
 
 Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+[![ropensci\_footer](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)

@@ -22,9 +22,9 @@ knitr::opts_chunk$set(
 ```
 
 
-[![Build Status](https://travis-ci.org/osmdatar/osmdata.svg?branch=master)](https://travis-ci.org/osmdatar/osmdata) 
-[![Build status](https://ci.appveyor.com/api/projects/status/github/osmdatar/osmdata?svg=true)](https://ci.appveyor.com/project/osmdatar/osmdata)
-[![codecov](https://codecov.io/gh/osmdatar/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/osmdatar/osmdata)
+[![Build Status](https://travis-ci.org/ropensci/osmdata.svg?branch=master)](https://travis-ci.org/ropensci/osmdata) 
+[![Build status](https://ci.appveyor.com/api/projects/status/github/ropensci/osmdata?svg=true)](https://ci.appveyor.com/project/ropensci/osmdata)
+[![codecov](https://codecov.io/gh/ropensci/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/osmdata)
 [![Project Status: Active](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/osmdata)](http://cran.r-project.org/web/packages/osmdata) 
 [![CRAN Downloads](http://cranlogs.r-pkg.org/badges/grand-total/osmdata?color=orange)](http://cran.r-project.org/package=osmdata)
@@ -42,15 +42,7 @@ parts of the OSM map data. Map data can be returned either as
 
 ### Installation
 
-```{r, eval=FALSE}
-devtools::install_github("osmdatar/osmdata")
-```
-```{r, echo=FALSE, message=FALSE, results='hide'}
-devtools::load_all (".", export_all=FALSE)
-```
-
-```{r, echo=FALSE, eval=FALSE}
-# Current version:
+```{r, eval=TRUE}
 library(osmdata)
 packageVersion("osmdata")
 ```
@@ -65,7 +57,7 @@ Features (sf)` objects with `osmdata_sf()` or to `R Spatial (sp)` objects with
 
 ```{r query-thames, eval=FALSE}
 q0 <- opq(bbox = c(-0.27, 51.47, -0.20, 51.50)) # Chiswick Eyot in London, U.K.
-q1 <- add_feature(q0, key = 'name', value = "Thames", exact = FALSE)
+q1 <- add_feature(q0, key = 'name', value = "Thames", value_exact = FALSE)
 x <- osmdata_sf(q1)
 x
 ```
@@ -73,10 +65,10 @@ x
 msg <- c (" Object of class 'osmdata' with:\n",
 "                  $bbox : 51.47,-0.27,51.5,-0.2\n",
 "         $overpass_call : The call submitted to the overpass API\n",
-"             $timestamp : [ Tue Mar  7 22:17:27 2017 ]\n",
-"            $osm_points : 'sf' Simple Features Collection with 21305 points\n",
-"             $osm_lines : 'sf' Simple Features Collection with 1891 linestrings\n",
-"          $osm_polygons : 'sf' Simple Features Collection with 22 polygons\n",
+"             $timestamp : [ Wed 4 May 2017 09:33:52 ]\n",
+"            $osm_points : 'sf' Simple Features Collection with 21459 points\n",
+"             $osm_lines : 'sf' Simple Features Collection with 1916 linestrings\n",
+"          $osm_polygons : 'sf' Simple Features Collection with 23 polygons\n",
 "        $osm_multilines : 'sf' Simple Features Collection with 5 multilinestrings\n",
 "     $osm_multipolygons : 'sf' Simple Features Collection with 3 multipolygons")
 message (msg)
@@ -103,7 +95,7 @@ Or data can be read from a previously downloaded file:
 x <- osmdata_sf(q1, "data.xml")
 ```
 
-For more details, see the [website](https://osmdatar.github.io/osmdata/)
+For more details, see the [website](https://ropensci.github.io/osmdata/)
 
 ### Style guide
 
@@ -121,3 +113,5 @@ even more. In four short points:
 
 Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). 
 By participating in this project you agree to abide by its terms.
+
+[![ropensci\_footer](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
