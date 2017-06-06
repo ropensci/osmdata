@@ -134,10 +134,10 @@ as well as the
 
 `osmdata` queries are lists of class `overpass_query`. The actual query passed
 to the `overpass API` with a query can be obtained with the function
-`opq_to_string()`.  Applied to the preceding query, this function gives:
+`opq_string()`.  Applied to the preceding query, this function gives:
 
 ```{r, eval=FALSE}
-opq_to_string(q)
+opq_string(q)
 ## [out:xml][timeout:25];
 ## (
 ##   node
@@ -155,7 +155,7 @@ opq_to_string(q)
 
 The resultant output may be pasted directly into the 
 [overpass-turbo](http://overpass-turbo.eu/) online interactive query builder.
-(The output of `opq_to_string` has been somewhat reformatted here to reflect
+(The output of `opq_string` has been somewhat reformatted here to reflect
 the format typically used in `overpass-turbo`.)
 
 ### 2.1. osmdata queries
@@ -197,11 +197,11 @@ each feature added with `add_feature()`.
 The primary `osmdata` functions `osmdata_sf()` or `osmdata_sp()` pass these
 queries to `overpass` and return OSM data in corresponding `sf` or `sp` format,
 respectively.  Both of these functions also accept direct `overpass` queries,
-such as those produced by the `osmdata` function `opq_to_string()`, or copied
+such as those produced by the `osmdata` function `opq_string()`, or copied
 directly from the [`overpass-turbo` query builder](overpass-turbo.eu).
 
 ```{r, eval=FALSE}
-osmdata_sf(opq_to_string(q))
+osmdata_sf(opq_string(q))
 ## Object of class 'osmdata' with:
 ##                  $bbox :
 ##         $overpass_call : The call submitted to the overpass API
@@ -212,7 +212,7 @@ osmdata_sf(opq_to_string(q))
 
 Note that the result contains no value for `bbox`, because that information is
 lost when the full `osmdata_query`, `q`, is converted to a string.
-Nevertheless, the results of the two calls `osmdata_sf (opq_to_string (q))` and
+Nevertheless, the results of the two calls `osmdata_sf (opq_string (q))` and
 `osmdata_sf (q)` differ only in the values of `bbox` and `timestamp`, while
 returning otherwise identical data.
 

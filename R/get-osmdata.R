@@ -54,7 +54,7 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
     if (missing (encoding))
         encoding <- 'UTF-8'
 
-    doc <- overpass_query (opq_to_string (q), quiet = quiet,
+    doc <- overpass_query (opq_string (q), quiet = quiet,
                            encoding = encoding)
     doc <- xml2::read_xml (doc, encoding = encoding)
     if (!missing (filename))
@@ -96,7 +96,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
     else if (is (q, 'overpass_query'))
     {
         obj$bbox <- q$bbox
-        obj$overpass_call <- opq_to_string (q)
+        obj$overpass_call <- opq_string (q)
     } else if (is.character (q))
         obj$overpass_call <- q
     else
@@ -206,7 +206,7 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     else if (is (q, 'overpass_query'))
     {
         obj$bbox <- q$bbox
-        obj$overpass_call <- opq_to_string (q)
+        obj$overpass_call <- opq_string (q)
     } else if (is.character (q))
         obj$overpass_call <- q
     else

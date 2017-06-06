@@ -16,7 +16,7 @@ reference:
     - overpass_status
     - opq
     - add_feature
-    - opq_to_string
+    - opq_string
   - title: Get additional OSM info
     contents:
     - available_features
