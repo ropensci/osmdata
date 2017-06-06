@@ -16,7 +16,7 @@ add_feature(opq, key, value, key_exact = TRUE, value_exact = TRUE,
 exclamation mark, \code{value="!this"}.}
 
 \item{key_exact}{If FALSE, \code{key} is not interpreted exactly; see
-\url{http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide#Non-exact_names}}
+\url{http://wiki.openstreetmap.org/wiki/Overpass_API/}}
 
 \item{value_exact}{If FALSE, \code{value} is not interpreted exactly}
 
@@ -39,7 +39,7 @@ reasonably well defined set of possible keys, as returned by
 regular expressions on OSM keys, as described in Section 6.1.5 of
 \url{http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL}. The actual
 query submitted to the overpass API can be obtained from
-\link{opq_to_string}.
+\link{opq_string}.
 }
 \examples{
 \dontrun{

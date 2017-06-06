@@ -37,7 +37,7 @@ opq <- function (bbox=NULL)
 #' @param value value for feature key; can be negated with an initial
 #' exclamation mark, \code{value="!this"}.
 #' @param key_exact If FALSE, \code{key} is not interpreted exactly; see
-#' \url{http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide#Non-exact_names}
+#' \url{http://wiki.openstreetmap.org/wiki/Overpass_API/}
 #' @param value_exact If FALSE, \code{value} is not interpreted exactly
 #' @param match_case If FALSE, matching for both \code{key} and \code{value} is
 #' not sensitive to case
@@ -51,7 +51,7 @@ opq <- function (bbox=NULL)
 #' regular expressions on OSM keys, as described in Section 6.1.5 of
 #' \url{http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL}. The actual
 #' query submitted to the overpass API can be obtained from
-#' \link{opq_to_string}.
+#' \link{opq_string}.
 #'
 #' @references \url{http://wiki.openstreetmap.org/wiki/Map_Features}
 #'

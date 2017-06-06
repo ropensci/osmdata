@@ -61,7 +61,7 @@ to provide access to the print method
 \item \code{\link{overpass_status}}: Retrieve status of the overpass API
 \item \code{\link{opq}}: Build an overpass query
 \item \code{\link{add_feature}}: Add a feature to an overpass query
-\item \code{\link{opq_to_string}}: Convert an osmdata query to overpass API
+\item \code{\link{opq_string}}: Convert an osmdata query to overpass API
 string
 }
 }
