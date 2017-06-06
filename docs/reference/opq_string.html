@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>All news • osmdata</title>
+<title>Convert an overpass query into a text string — opq_string • osmdata</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -36,7 +36,7 @@
   </head>
 
   <body>
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -77,24 +77,47 @@
       </header>
 
       <div class="row">
-
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Change log <small>All releases</small></h1>
+    <h1>Convert an overpass query into a text string</h1>
     </div>
 
-    <div class="contents">
-    </div>
+    
+    <p>Convert an osmdata query of class opq to a character string query to
+be submitted to the overpass API.</p>
+    
+
+    <pre class="usage"><span class='fu'>opq_string</span>(<span class='no'>opq</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>opq</th>
+      <td><p>An <code>overpass_query</code> object</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Character string to be submitted to the overpass API</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='opq.html'>opq</a></span> (<span class='st'>"hampi india"</span>)
+<span class='fu'>opq_string</span> (<span class='no'>q</span>)</div><div class='output co'>#&gt; [1] "[out:xml][timeout:25];\n(\n node  (15.3159769,76.4406199,15.3559769,76.4806199);\n way  (15.3159769,76.4406199,15.3559769,76.4806199);\n relation  (15.3159769,76.4406199,15.3559769,76.4806199);\n\n);\n(._;&gt;);\nout body;"</div></pre>
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-      </ul>
-    </div>
-  </div>
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
+  </div>
 </div>
 
       <footer>

@@ -5,11 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> Translation of OSM to Simple Features  • osmdata</title>
-<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<title>
+<ol start="2" style="list-style-type: decimal">
+<li>Translation of OSM to Simple Features</li>
+</ol> • osmdata</title>
+<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><!-- mathjax --><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
@@ -62,7 +65,7 @@
 </ol></h1>
                         <h4 class="author">Mark Padgham</h4>
             
-            <h4 class="date">2017-03-08</h4>
+            <h4 class="date">2017-06-06</h4>
           </div>
 
     
@@ -70,8 +73,8 @@
 <div class="contents">
 <div id="openstreetmap-data-structure" class="section level2">
 <h2 class="hasAnchor">
-<html><body><a href="#openstreetmap-data-structure" class="anchor"> </a></body></html>1. OpenStreetMap Data Structure</h2>
-<p><a href="http://openstreetmap.org">OpenStreetMap (OSM)</a> data has a unique structure that is not directly reconcilable with other modes of representing spatial data, notably including the widely-adopted Simple Features scheme of the Open Geospatial Consortium <a href="http://www.opengeospatial.org/standards/sfo">Simple Features (SF)</a> scheme of the <a href="http://www.opengeospatial.org">Open Geospatial Consortium (OGC)</a>. The three primary spatial objects of OSM are:</p>
+<a href="#openstreetmap-data-structure" class="anchor"></a>1. OpenStreetMap Data Structure</h2>
+<p><a href="http://openstreetmap.org">OpenStreetMap (OSM)</a> data has a unique structure that is not directly reconcilable with other modes of representing spatial data, notably including the widely-adopted <a href="http://www.opengeospatial.org/standards/sfa">Simple Features (SF)</a> scheme of the <a href="http://www.opengeospatial.org">Open Geospatial Consortium (OGC)</a>. The three primary spatial objects of OSM are:</p>
 <ol style="list-style-type: decimal">
 <li><p><code>nodes</code>, which are directly translatable to spatial points</p></li>
 <li><p><code>ways</code>, which may be closed, in which case they form polygons, or unclosed, in which case they are (non-polygonal) lines.</p></li>
@@ -79,13 +82,13 @@
 </ol>
 <ul>
 <li><p><code>multipolygon</code> relations, which specify relationships between an exterior polygon (through designating <code>role='outer'</code>) and possible inner polygons (<code>role='inner'</code>). These may or may not be designated with <code>type=multipolygon</code>. Political boundaries, for example, often have <code>type=boundary</code> rather than explicit <code>type-multipolygon</code>. <code>osmdata</code> identifies multioplygons as those <code>relation</code> objects having at least one member with <code>role=outer</code> or <code>role=inner</code>.</p></li>
-<li><p>In the absence of <code>inner</code> and <code>outer</code> roles, an OSM relation is assumed to be non-polygonal, and to instead form a colletion of non-enclosing lines.</p></li>
+<li><p>In the absence of <code>inner</code> and <code>outer</code> roles, an OSM relation is assumed to be non-polygonal, and to instead form a collection of non-enclosing lines.</p></li>
 </ul>
 <hr>
 </div>
 <div id="simple-features-data-structure" class="section level2">
 <h2 class="hasAnchor">
-<html><body><a href="#simple-features-data-structure" class="anchor"> </a></body></html>2. Simple Features Data Structure</h2>
+<a href="#simple-features-data-structure" class="anchor"></a>2. Simple Features Data Structure</h2>
 <p>The representation of spatial objects as Simple Features is <a href="http://www.opengeospatial.org/standards/sfo">described at length by the OGC</a>, with this document merely reviewing relevant aspects. The SF system assumes that spatial features can be represented in one of seven distinct primary classes, which by convention are referred to in all capital letters. Relevant classes for OSM data are:</p>
 <ol style="list-style-type: decimal">
 <li>POINT</li>
@@ -95,37 +98,37 @@
 <li>POLYGON</li>
 <li>MULTIPOLYGON</li>
 </ol>
-<p>(The seventh primary class is <code>GEOMETRYCOLLECTION</code>, which contains several objects with different geometries.) An SF (where that acronym may connote both singular and plural) consists of a sequence of spatial coordinates, which for OSM data are only ever <code>XY</code> coordinates represented by a string of <code>X</code> coordinates contained within a bracket, followed by a string of <code>Y</code> coordinates. In addition to coordinate data and associated coordinate reference systems, an SF may include any number of additional data which quantify or qualify the feature of interest. In the <a href="https://cran.r-project.org/package=sf"><code>sf</code> extension to <code>R</code></a>, for example, a single SF is represnted by one row of a <code>data.frame</code>, which the geometry stored in a single column, and any number of other columns containing these additional data.</p>
-<p>Simple Feature geometries are referred to in this vignette using all capital letters (such as <code>POLYGON</code>), while OSM geometries use lower case (such as <code>polygon</code>). Similarly, the Simple Features standard of the OGC is referred to as <code>SF</code>, while the <code>R</code> package of the same name is referred to as <code>R::sf</code>–upper case <code>R</code> followed by lower case <code>sf</code>. Much functionality of <code>R::sf</code> is determined by the underlying <a href="http:www.gdal.org">Geospatial Data Abstraction Library</a> (<code>GDAL</code>; described below). Representations of data are often discussed here with reference to <code>GDAL/sf</code>, in which case it may always be assumed that the translation and representation of data are determined by <code>GDAL</code> and not directly by the creators of <code>R::sf</code>.</p>
+<p>(The seventh primary class is <code>GEOMETRYCOLLECTION</code>, which contains several objects with different geometries.) An SF (where that acronym may connote both singular and plural) consists of a sequence of spatial coordinates, which for OSM data are only ever <code>XY</code> coordinates represented as strings enclosed within brackets. In addition to coordinate data and associated coordinate reference systems, an SF may include any number of additional data which quantify or qualify the feature of interest. In the <a href="https://cran.r-project.org/package=sf"><code>sf</code> extension to <code>R</code></a>, for example, a single SF is represented by one row of a <code>data.frame</code>, with the geometry stored in a single column, and any number of other columns containing these additional data.</p>
+<p>Simple Feature geometries are referred to in this vignette using all capital letters (such as <code>POLYGON</code>), while OSM geometries use lower case (such as <code>polygon</code>). Similarly, the Simple Features standard of the OGC is referred to as <code>SF</code>, while the <code>R</code> package of the same name is referred to as <code>R::sf</code>–upper case <code>R</code> followed by lower case <code>sf</code>. Much functionality of <code>R::sf</code> is determined by the underlying <a href="http://gdal.org">Geospatial Data Abstraction Library</a> (<code>GDAL</code>; described below). Representations of data are often discussed here with reference to <code>GDAL/sf</code>, in which case it may always be assumed that the translation and representation of data are determined by <code>GDAL</code> and not directly by the creators of <code>R::sf</code>.</p>
 <hr>
 </div>
 <div id="how-osmdata-translates-osm-into-simple-features" class="section level2">
 <h2 class="hasAnchor">
-<html><body><a href="#how-osmdata-translates-osm-into-simple-features" class="anchor"> </a></body></html>3. How <code>osmdata</code> translates OSM into Simple Features</h2>
+<a href="#how-osmdata-translates-osm-into-simple-features" class="anchor"></a>3. How <code>osmdata</code> translates OSM into Simple Features</h2>
 <div id="osm-nodes" class="section level3">
 <h3 class="hasAnchor">
-<html><body><a href="#osm-nodes" class="anchor"> </a></body></html>3.1. OSM Nodes</h3>
+<a href="#osm-nodes" class="anchor"></a>3.1. OSM Nodes</h3>
 <p>OSM nodes translate directly into <code>SF::POINT</code> objects, with all OSM <code>key-value</code> pairs stored in additional <code>data.frame</code> columns.</p>
 </div>
 <div id="osm-ways" class="section level3">
 <h3 class="hasAnchor">
-<html><body><a href="#osm-ways" class="anchor"> </a></body></html>3.2. OSM Ways</h3>
+<a href="#osm-ways" class="anchor"></a>3.2. OSM Ways</h3>
 <p>OSM ways may be either polygons or (non-polygonal) lines. <code>osmdata</code> translates these into <code>SF::LINESTRING</code> and <code>SF::POLYGON</code> objects, respectively. Although polygonal and non-polygonal ways may have systematically different <code>key</code> fields, they are conflated here to the single set of <code>key</code> values common to all <code>way</code> objects regardless of shape. This enables direct comparison and uniform operation on both <code>SF::LINESTRING</code> and <code>SF::POLYGON</code> objects.</p>
 </div>
 <div id="osm-relations" class="section level3">
 <h3 class="hasAnchor">
-<html><body><a href="#osm-relations" class="anchor"> </a></body></html>3.3 OSM Relations</h3>
+<a href="#osm-relations" class="anchor"></a>3.3 OSM Relations</h3>
 <p>OSM relations comprising members with <code>role=outer</code> or <code>role=inner</code> are translated into <code>SF::MULTIPOLYGON</code> objects; otherwise they form <code>SF::MULTILINESTRING</code> objects. As in the preceding case of OSM ways, potentially systematic differences between OSM <code>key</code> fields for <code>multipolygon</code> and other <code>relation</code> objects are ignored in favour of returning identical <code>key</code> fields in both cases, whether or not <code>value</code> fields for those <code>key</code>s exist.</p>
 <div id="a-multipolygon-relations" class="section level4">
 <h4 class="hasAnchor">
-<html><body><a href="#a-multipolygon-relations" class="anchor"> </a></body></html>3.3(a) Multipolygon Relations</h4>
-<p>An OSM multipolygon is translated by <code>osmdata</code> into a single <code>SF::MULTIPOLYGON</code> object which has an additional column specifying <code>num_members</code>. The <code>SF</code> geometry thus consists of a list (an <code>R::List</code> object) of this number of polygons, the first of which is the <code>outer</code> polygon, with all subsequent members forming closed inner rings.</p>
+<a href="#a-multipolygon-relations" class="anchor"></a>3.3(a) Multipolygon Relations</h4>
+<p>An OSM multipolygon is translated by <code>osmdata</code> into a single <code>SF::MULTIPOLYGON</code> object which has an additional column specifying <code>num_members</code>. The <code>SF</code> geometry thus consists of a list (an <code>R::List</code> object) of this number of polygons, the first of which is the <code>outer</code> polygon, with all subsequent members forming closed inner rings (either individually or in combination).</p>
 <p>Each of these inner polygons are also represented as one or more OSM objects, which will generally include detailed data on the individual components <strong>not</strong> able to be represented in the single multipolygon representation. Each inner polygon is therefore additionally stored in the <code>sf::MULTIPOLYGON</code> <code>data.frame</code> along with all associated data. Thus the row containing a multipolygon of <code>num_polygon</code> polygons is followed by <code>num_polygon - 1</code> rows containing the data for each <code>inner</code> polygon.</p>
-<p>Note that OSM <code>relation</code> objects generally have fewer (or different) <code>key-value</code> pairs than do OSM <code>way</code> objects. In the OSM system, data describing the detailed properties of the contituent ways of a given OSM relation are stored with those <code>ways</code> rather than with the <code>relation</code>. <code>osmdata</code> follows this general principle, and stored the geometry of all <code>ways</code> of a <code>relation</code> with the relation itself (that is, as part of the <code>MULTIPOLYGON</code> or <code>MULTILINESTRING</code> object), while those ways are also stored themselves as <code>LINESTRING</code> (or potentially <code>POLYGON</code>) objects, from where their additional <code>key-value</code> data may be accessed.</p>
+<p>Note that OSM <code>relation</code> objects generally have fewer (or different) <code>key-value</code> pairs than do OSM <code>way</code> objects. In the OSM system, data describing the detailed properties of the constituent ways of a given OSM relation are stored with those <code>ways</code> rather than with the <code>relation</code>. <code>osmdata</code> follows this general principle, and stored the geometry of all <code>ways</code> of a <code>relation</code> with the relation itself (that is, as part of the <code>MULTIPOLYGON</code> or <code>MULTILINESTRING</code> object), while those ways are also stored themselves as <code>LINESTRING</code> (or potentially <code>POLYGON</code>) objects, from where their additional <code>key-value</code> data may be accessed.</p>
 </div>
 <div id="b-multilinestring-relations" class="section level4">
 <h4 class="hasAnchor">
-<html><body><a href="#b-multilinestring-relations" class="anchor"> </a></body></html>3.3(b) Multilinestring Relations</h4>
+<a href="#b-multilinestring-relations" class="anchor"></a>3.3(b) Multilinestring Relations</h4>
 <p>OSM <code>relations</code> that are not <code>multipolygons</code> are translated into <code>SF::MULTILINESTRING</code> objects. Each member of any OSM relation is attributed a <code>role</code>, which may be empty. <code>osmdata</code> collates all ways within a relation according to their <code>role</code> attributes. Thus, unlike multipolygon relations which are always translated into a single <code>sf::MULTIPOLYGON</code> object, multilinestring relations are translated by <code>omsdata</code> into potentially several <code>sf::MULTILINESTRING</code> objects, one for each unique role.</p>
 <p>This is particularly useful because <code>relations</code> are often used to designated extended <code>highways</code> (for example, designated bicycle routes or motorways), yet these often exist in <code>primary</code> and <code>alternative</code> forms, with these categories specified in roles. Separating these roles enables ready access to any desired role.</p>
 <p>These multilinestring objects also have a column specifying <code>num_members</code>, as for multipolygons, with the primary member followed by <code>num_members</code> rows, one for each member of the multilinestring.</p>
@@ -135,21 +138,21 @@
 </div>
 <div id="gdal-translation-of-osm-into-simple-features" class="section level2">
 <h2 class="hasAnchor">
-<html><body><a href="#gdal-translation-of-osm-into-simple-features" class="anchor"> </a></body></html>4. <code>GDAL</code> Translation of OSM into Simple Features</h2>
+<a href="#gdal-translation-of-osm-into-simple-features" class="anchor"></a>4. <code>GDAL</code> Translation of OSM into Simple Features</h2>
 <p>The <code>R</code> package <a href="https://cran.r-project.org/package=sf"><code>sf</code></a> provide an <code>R</code> implementation of Spatial Features, and provides a wrapper around GDAL for reading geospatial data. <code>GDAL</code> provides a <a href="http://www.gdal.org/drv_osm.html">‘driver’ to read OSM data</a>, and thus <code>sf</code> can also be used to read <code>OSM</code> data in <code>R</code>, <a href="https://github.com/osmdatar/osmdata/blob/master/vignettes/osmdata.Rmd">as detailed in the main <code>osmdata</code> vignette</a>. However, the <code>GDAL</code> translation of OSM data differs in several important ways from the <code>osmdata</code> translation.</p>
 <p>The primary difference is that GDAL only returns <em>unique</em> objects of each spatial (SF) type. Thus <code>sf::POINT</code> objects consist of only those points that are not otherwise members of some ‘higher’ object (<code>line</code>, <code>polygon</code>, or <code>relation</code> objects). Although a given set of OSM data may actually contain a great many points, attempting to load these with</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sf<span class="op">::</span><span class="kw">st_read</span> (file, <span class="dt">layer=</span><span class="st">'points'</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sf<span class="op">::</span><span class="kw">st_read</span> (file, <span class="dt">layer =</span> <span class="st">'points'</span>)</code></pre></div>
 <p>will generally return surprisingly few points.</p>
 <div id="osm-nodes-1" class="section level3">
 <h3 class="hasAnchor">
-<html><body><a href="#osm-nodes-1" class="anchor"> </a></body></html>4.1. OSM Nodes</h3>
-<p>Apart from the numerical difference arising through <code>osmdata</code> returning an <code>sf::POINTS</code> structure containing <strong>all</strong> nodes within a given set of OSM data, while <code>sf::st_read (file, layer='points')</code> returns only those points not represeted in other structure, the representation of points remains otherwise broading similar. The only other major difference is that <code>osmdata</code> retains all <code>key-value</code> pairs present in a given set of OSM data, whereas <code>GDAL/sf</code> only retains a select few of these. Moreover, the <code>keys</code> returned by <code>GDAL/sf</code> are pre-defined and invariant, meaning that data returned from <code>sf::st_read (...)</code> may often contain <code>key</code> columns in the resultant <code>data.frame</code> which contain no (non-<code>NA</code>) data. This difference is illustrated in an example repeated here from the<br><a href="https://github.com/osmdatar/osmdata/blob/master/vignettes/osmdata.Rmd">main <code>osmdata</code> vignette</a>, with the same principles applying to all of the following classes of OSM data.</p>
-<p>The following three lines define a query and download the resulant data to an <code>XML</code> file.</p>
+<a href="#osm-nodes-1" class="anchor"></a>4.1. OSM Nodes</h3>
+<p>Apart from the numerical difference arising through <code>osmdata</code> returning an <code>sf::POINTS</code> structure containing <strong>all</strong> nodes within a given set of OSM data, while <code>sf::st_read (file, layer='points')</code> returns only those points not represented in other structure, the representation of points remains otherwise broadly similar. The only other major difference is that <code>osmdata</code> retains all <code>key-value</code> pairs present in a given set of OSM data, whereas <code>GDAL/sf</code> only retains a select few of these. Moreover, the <code>keys</code> returned by <code>GDAL/sf</code> are pre-defined and invariant, meaning that data returned from <code>sf::st_read (...)</code> may often contain <code>key</code> columns in the resultant <code>data.frame</code> which contain no (non-<code>NA</code>) data. This difference is illustrated in an example repeated here from the<br><a href="https://github.com/osmdatar/osmdata/blob/master/vignettes/osmdata.Rmd">main <code>osmdata</code> vignette</a>, with the same principles applying to all of the following classes of OSM data.</p>
+<p>The following three lines define a query and download the resultant data to an <code>XML</code> file.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/opq.html">opq</a></span> (<span class="dt">bbox =</span> <span class="st">'Trentham, Australia'</span>)
 q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_feature.html">add_feature</a></span> (q, <span class="dt">key =</span> <span class="st">'name'</span>) <span class="co"># any named objects</span>
-<span class="kw"><a href="../reference/osmdata_xml.html">osmdata_xml</a></span> (q, <span class="st">'trentham.osm'</span>) </code></pre></div>
+<span class="kw"><a href="../reference/osmdata_xml.html">osmdata_xml</a></span> (q, <span class="st">'trentham.osm'</span>)</code></pre></div>
 <p>These data may then be converted into SF representations using either <code>R::sf</code> or <code>osmdata</code>, with OSM <code>keys</code> being the column names of the resultant <code>data.frame</code> objects.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span> (sf<span class="op">::</span><span class="kw">st_read</span> (<span class="st">'trentham.osm'</span>, <span class="dt">layer=</span><span class="st">'points'</span>, <span class="dt">quiet=</span><span class="ot">TRUE</span>)) </code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span> (sf<span class="op">::</span><span class="kw">st_read</span> (<span class="st">'trentham.osm'</span>, <span class="dt">layer =</span> <span class="st">'points'</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>))</code></pre></div>
 <pre><code>##  [1] "osm_id"     "name"       "barrier"    "highway"    "ref"       
 ##  [6] "address"    "is_in"      "place"      "man_made"   "other_tags"
 ## [11] "geometry"</code></pre>
@@ -164,42 +167,42 @@ q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_featu
 ## [22] "religion"         "shop"             "source"          
 ## [25] "tourism"          "waterway"         "geometry"</code></pre>
 <p><code>osmdata</code> returns far more <code>key</code> fields than does <code>GDAL/sf</code>. More importantly, however, <code>GDAL/sf</code> returns pre-defined <code>key</code> fields regardless of whether they contain any data:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">addr &lt;-<span class="st"> </span>sf<span class="op">::</span><span class="kw">st_read</span> (<span class="st">'trentham.osm'</span>, <span class="dt">layer=</span><span class="st">'points'</span>, <span class="dt">quiet=</span><span class="ot">TRUE</span>)<span class="op">$</span>address
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">addr &lt;-<span class="st"> </span>sf<span class="op">::</span><span class="kw">st_read</span> (<span class="st">'trentham.osm'</span>, <span class="dt">layer =</span> <span class="st">'points'</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)<span class="op">$</span>address
 <span class="kw">all</span> (<span class="kw">is.na</span> (addr))</code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>In contrast, <code>osmdata</code> returns only those <code>key</code> fields which contain data (and so excludes <code>address</code> in the above example).</p>
 </div>
 <div id="osm-ways-1" class="section level3">
 <h3 class="hasAnchor">
-<html><body><a href="#osm-ways-1" class="anchor"> </a></body></html>4.2. OSM Ways</h3>
+<a href="#osm-ways-1" class="anchor"></a>4.2. OSM Ways</h3>
 <p>As for points, <code>GDAL/sf</code> only returns those ways that are not represented or contained in ‘higher’ objects (OSM relations interpreted as <code>SF::MULTIPOLYGON</code> or <code>SF::MULTILINESTRING</code> objects). <code>osmdata</code> returns all ways, and thus enables, for example, examination of the full attributes of any member of a multigeometry object. This is not possible with the <code>GDAL/sf</code> translation. As for points, the only additional difference between <code>osmdata</code> adn <code>GDAL/sf</code> is that <code>osmdata</code> retains all <code>key-value</code> pairs, whereas <code>GDAL</code> retains only a select few.</p>
 </div>
 <div id="osm-relations-1" class="section level3">
 <h3 class="hasAnchor">
-<html><body><a href="#osm-relations-1" class="anchor"> </a></body></html>4.3 OSM Relations</h3>
+<a href="#osm-relations-1" class="anchor"></a>4.3 OSM Relations</h3>
 <p>Translation of OSM relations into Simple Features differs more significantly between <code>osmdata</code> and <code>GDAL/sf</code>.</p>
 <div id="a-multipolygon-relations-1" class="section level4">
 <h4 class="hasAnchor">
-<html><body><a href="#a-multipolygon-relations-1" class="anchor"> </a></body></html>4.3(a) Multipolygon Relations</h4>
+<a href="#a-multipolygon-relations-1" class="anchor"></a>4.3(a) Multipolygon Relations</h4>
 <p>As indicated above, multipolygon relations are translated in broadly comparable ways by both <code>osmdata</code> and <code>sf/GDAL</code>. Note, however, the <code>way</code> members of an OSM relation may be specified in arbitrary order, and the multipolygonal way may not necessarily be traced through simply following the segments in the order returned by <code>sf/GDAL</code>.</p>
 </div>
 <div id="b-multilinestring-relations-1" class="section level4">
 <h4 class="hasAnchor">
-<html><body><a href="#b-multilinestring-relations-1" class="anchor"> </a></body></html>4.3(b) Multilinestring Relations</h4>
+<a href="#b-multilinestring-relations-1" class="anchor"></a>4.3(b) Multilinestring Relations</h4>
 <p>Linestring relations are simply read by GDAL directly in terms of the their constituent ways, resulting in a single <code>SF::MULTILINESTRING</code> object that contains exactly the same number of lines as the ways in the OSM relation, regardless of their <code>role</code> attributes. Note that <code>roles</code> are frequently used to specify <code>alternative</code> multi-way routes through a single OSM relation. Such distinctions between primary and alternative are erased with <code>GDAL/sf</code> reading.</p>
 </div>
 </div>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
-<html><body><a href="#examples" class="anchor"> </a></body></html>5 Examples</h2>
+<a href="#examples" class="anchor"></a>5 Examples</h2>
 <div id="routing" class="section level3">
 <h3 class="hasAnchor">
-<html><body><a href="#routing" class="anchor"> </a></body></html>5.1 Routing</h3>
+<a href="#routing" class="anchor"></a>5.1 Routing</h3>
 <p>Navigable paths, routes, and ways are all tagged within OSM as <code>highway</code>, readily enabling an <code>overpass</code> query to return only <code>ways</code> that can be used for routing purposes. Routes are nevertheless commonly assembled within OSM relations, particularly where they form major, designated transport ways such as long-distance foot or bicycle paths or major motorways.</p>
 <div id="a-routing-with-sfgdal" class="section level4">
 <h4 class="hasAnchor">
-<html><body><a href="#a-routing-with-sfgdal" class="anchor"> </a></body></html>5.1(a) Routing with <code>sf/GDAL</code>
+<a href="#a-routing-with-sfgdal" class="anchor"></a>5.1(a) Routing with <code>sf/GDAL</code>
 </h4>
 <p>A query for <code>key=highway</code> translated through <code>GDAL/sf</code> will return those ways not part of any ‘higher’ structure as <code>SF::LINESTRING</code> objects, but components of an entire transport network might also be returned as:</p>
 <ol style="list-style-type: decimal">
@@ -214,10 +217,10 @@ q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_featu
 </div>
 <div id="b-routing-with-osmdata" class="section level4">
 <h4 class="hasAnchor">
-<html><body><a href="#b-routing-with-osmdata" class="anchor"> </a></body></html>5.1(b) Routing with <code>osmdata</code>
+<a href="#b-routing-with-osmdata" class="anchor"></a>5.1(b) Routing with <code>osmdata</code>
 </h4>
-<p><code>osmdata</code> retains all of the underlyhing ways of ‘higher’ structures (<code>SF::MULTIPOLYGON</code> or <code>SF::MULTILINESTRING</code> objects) as <code>SF::LINESTRING</code> or <code>SF::POLYGON</code> objects. The geometries of the latter objects duplicate those of the ‘higher’ relations, yet contain additional <code>key-value</code> pairs corresponding to each way. Most importantly, the OSM ID values for all members of a <code>relation</code> are stored within that relation, readily enabling the individual ways (<code>LINESTRING</code> or <code>POLYGON</code> objects) to be identified from the <code>relation</code> (<code>MULTIPOLYGON</code> or <code>MULTILINESTRING</code> object).</p>
-<p>The <code>osmdata</code> translation thus readily enables a singlularly complete network to be reconstructed by simply combining the <code>SF::LINESTRING</code> layer with the <code>SF::POLYGON</code> layer. These layers will always contain entirely independent members, and so will always be able to be directly combined without duplicating any objects.</p>
+<p><code>osmdata</code> retains all of the underlying ways of ‘higher’ structures (<code>SF::MULTIPOLYGON</code> or <code>SF::MULTILINESTRING</code> objects) as <code>SF::LINESTRING</code> or <code>SF::POLYGON</code> objects. The geometries of the latter objects duplicate those of the ‘higher’ relations, yet contain additional <code>key-value</code> pairs corresponding to each way. Most importantly, the OSM ID values for all members of a <code>relation</code> are stored within that relation, readily enabling the individual ways (<code>LINESTRING</code> or <code>POLYGON</code> objects) to be identified from the <code>relation</code> (<code>MULTIPOLYGON</code> or <code>MULTILINESTRING</code> object).</p>
+<p>The <code>osmdata</code> translation thus readily enables a singularly complete network to be reconstructed by simply combining the <code>SF::LINESTRING</code> layer with the <code>SF::POLYGON</code> layer. These layers will always contain entirely independent members, and so will always be able to be directly combined without duplicating any objects.</p>
 </div>
 </div>
 </div>
