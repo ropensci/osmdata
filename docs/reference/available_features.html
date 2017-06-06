@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title> available_features • osmdata</title>
+<title>List recognized features in OSM � available_features • osmdata</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -77,11 +77,11 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>List recognized features in OSM Overpass</h1>
+    <h1>List recognized features in OSM</h1>
     </div>
 
     
-    <p>List recognized features in OSM Overpass</p>
+    <p>List recognized features in OSM</p>
     
 
     <pre><span class='fu'>available_features</span>()</pre>
@@ -100,127 +100,9 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>available_features</span>()</div><div class='output co'>#&gt;   [1] &quot;4wd only&quot;                &quot;abandoned&quot;              
-#&gt;   [3] &quot;abutters&quot;                &quot;access&quot;                 
-#&gt;   [5] &quot;addr&quot;                    &quot;addr:city&quot;              
-#&gt;   [7] &quot;addr:conscriptionnumber&quot; &quot;addr:country&quot;           
-#&gt;   [9] &quot;addr:district&quot;           &quot;addr:flats&quot;             
-#&gt;  [11] &quot;addr:full&quot;               &quot;addr:hamlet&quot;            
-#&gt;  [13] &quot;addr:housename&quot;          &quot;addr:housenumber&quot;       
-#&gt;  [15] &quot;addr:inclusion&quot;          &quot;addr:interpolation&quot;     
-#&gt;  [17] &quot;addr:place&quot;              &quot;addr:postcode&quot;          
-#&gt;  [19] &quot;addr:province&quot;           &quot;addr:state&quot;             
-#&gt;  [21] &quot;addr:street&quot;             &quot;addr:subdistrict&quot;       
-#&gt;  [23] &quot;addr:suburb&quot;             &quot;admin level&quot;            
-#&gt;  [25] &quot;aerialway&quot;               &quot;aeroway&quot;                
-#&gt;  [27] &quot;agricultural&quot;            &quot;alt name&quot;               
-#&gt;  [29] &quot;amenity&quot;                 &quot;area&quot;                   
-#&gt;  [31] &quot;attribution&quot;             &quot;atv&quot;                    
-#&gt;  [33] &quot;barrier&quot;                 &quot;basin&quot;                  
-#&gt;  [35] &quot;bdouble&quot;                 &quot;bicycle&quot;                
-#&gt;  [37] &quot;bicycle road&quot;            &quot;biergarten&quot;             
-#&gt;  [39] &quot;boat&quot;                    &quot;border type&quot;            
-#&gt;  [41] &quot;boundary&quot;                &quot;bridge&quot;                 
-#&gt;  [43] &quot;building&quot;                &quot;building:fireproof&quot;     
-#&gt;  [45] &quot;building:levels&quot;         &quot;busway&quot;                 
-#&gt;  [47] &quot;cables&quot;                  &quot;charge&quot;                 
-#&gt;  [49] &quot;circuits&quot;                &quot;club&quot;                   
-#&gt;  [51] &quot;comment&quot;                 &quot;construction&quot;           
-#&gt;  [53] &quot;covered&quot;                 &quot;craft&quot;                  
-#&gt;  [55] &quot;crossing&quot;                &quot;cuisine&quot;                
-#&gt;  [57] &quot;cutting&quot;                 &quot;cycleway&quot;               
-#&gt;  [59] &quot;denomination&quot;            &quot;depth&quot;                  
-#&gt;  [61] &quot;description&quot;             &quot;diet&quot;                   
-#&gt;  [63] &quot;direction&quot;               &quot;disused&quot;                
-#&gt;  [65] &quot;disused:railway&quot;         &quot;disused:shop&quot;           
-#&gt;  [67] &quot;drink&quot;                   &quot;drive in&quot;               
-#&gt;  [69] &quot;drive through&quot;           &quot;driving side&quot;           
-#&gt;  [71] &quot;ele&quot;                     &quot;electrified&quot;            
-#&gt;  [73] &quot;email&quot;                   &quot;embankment&quot;             
-#&gt;  [75] &quot;emergency&quot;               &quot;end date&quot;               
-#&gt;  [77] &quot;entrance&quot;                &quot;est width&quot;              
-#&gt;  [79] &quot;fax&quot;                     &quot;fee&quot;                    
-#&gt;  [81] &quot;fence type&quot;              &quot;fire boundary&quot;          
-#&gt;  [83] &quot;fire object:type&quot;        &quot;fire operator&quot;          
-#&gt;  [85] &quot;fire rank&quot;               &quot;fixme&quot;                  
-#&gt;  [87] &quot;foot&quot;                    &quot;ford&quot;                   
-#&gt;  [89] &quot;forestry&quot;                &quot;frequency&quot;              
-#&gt;  [91] &quot;fuel&quot;                    &quot;gauge&quot;                  
-#&gt;  [93] &quot;generator:method&quot;        &quot;generator:output&quot;       
-#&gt;  [95] &quot;generator:source&quot;        &quot;goods&quot;                  
-#&gt;  [97] &quot;hazmat&quot;                  &quot;healthcare&quot;             
-#&gt;  [99] &quot;healthcare:speciality&quot;   &quot;height&quot;                 
-#&gt; [101] &quot;hgv&quot;                     &quot;highway&quot;                
-#&gt; [103] &quot;historic&quot;                &quot;horse&quot;                  
-#&gt; [105] &quot;iata&quot;                    &quot;icao&quot;                   
-#&gt; [107] &quot;ice road&quot;                &quot;image&quot;                  
-#&gt; [109] &quot;incline&quot;                 &quot;industrial&quot;             
-#&gt; [111] &quot;information&quot;             &quot;inline skates&quot;          
-#&gt; [113] &quot;inscription&quot;             &quot;intermittent&quot;           
-#&gt; [115] &quot;internet access&quot;         &quot;is in&quot;                  
-#&gt; [117] &quot;is in:city&quot;              &quot;is in:country&quot;          
-#&gt; [119] &quot;junction&quot;                &quot;landuse&quot;                
-#&gt; [121] &quot;lanes&quot;                   &quot;layer&quot;                  
-#&gt; [123] &quot;leaf cycle&quot;              &quot;leaf type&quot;              
-#&gt; [125] &quot;leisure&quot;                 &quot;length&quot;                 
-#&gt; [127] &quot;lhv&quot;                     &quot;line&quot;                   
-#&gt; [129] &quot;lit&quot;                     &quot;location&quot;               
-#&gt; [131] &quot;lock&quot;                    &quot;man made&quot;               
-#&gt; [133] &quot;material&quot;                &quot;maxheight&quot;              
-#&gt; [135] &quot;maxlength&quot;               &quot;maxspeed&quot;               
-#&gt; [137] &quot;maxstay&quot;                 &quot;maxweight&quot;              
-#&gt; [139] &quot;maxwidth&quot;                &quot;military&quot;               
-#&gt; [141] &quot;minspeed&quot;                &quot;mofa&quot;                   
-#&gt; [143] &quot;mooring&quot;                 &quot;moped&quot;                  
-#&gt; [145] &quot;motor vehicle&quot;           &quot;motorboat&quot;              
-#&gt; [147] &quot;motorcar&quot;                &quot;motorcycle&quot;             
-#&gt; [149] &quot;motorcycle friendly&quot;     &quot;motorroad&quot;              
-#&gt; [151] &quot;mountain pass&quot;           &quot;mtb scale&quot;              
-#&gt; [153] &quot;mtb:description&quot;         &quot;mtb:scale:imba&quot;         
-#&gt; [155] &quot;name&quot;                    &quot;narrow&quot;                 
-#&gt; [157] &quot;natural&quot;                 &quot;noexit&quot;                 
-#&gt; [159] &quot;note&quot;                    &quot;nudism&quot;                 
-#&gt; [161] &quot;office&quot;                  &quot;official name&quot;          
-#&gt; [163] &quot;oneway&quot;                  &quot;oneway:bicycle&quot;         
-#&gt; [165] &quot;opening hours&quot;           &quot;operator&quot;               
-#&gt; [167] &quot;organic&quot;                 &quot;oven&quot;                   
-#&gt; [169] &quot;overtaking&quot;              &quot;parking:condition&quot;      
-#&gt; [171] &quot;parking:lane&quot;            &quot;passing places&quot;         
-#&gt; [173] &quot;phone&quot;                   &quot;piste:difficulty&quot;       
-#&gt; [175] &quot;piste:grooming&quot;          &quot;piste:type&quot;             
-#&gt; [177] &quot;place&quot;                   &quot;population&quot;             
-#&gt; [179] &quot;postal code&quot;             &quot;power&quot;                  
-#&gt; [181] &quot;proposed&quot;                &quot;protected area&quot;         
-#&gt; [183] &quot;psv&quot;                     &quot;public transport&quot;       
-#&gt; [185] &quot;railway&quot;                 &quot;railway:preserved&quot;      
-#&gt; [187] &quot;railway:track ref&quot;       &quot;recycling type&quot;         
-#&gt; [189] &quot;ref&quot;                     &quot;reference point&quot;        
-#&gt; [191] &quot;religion&quot;                &quot;residential&quot;            
-#&gt; [193] &quot;resource&quot;                &quot;roadtrain&quot;              
-#&gt; [195] &quot;ruins&quot;                   &quot;sac scale&quot;              
-#&gt; [197] &quot;seasonal&quot;                &quot;service&quot;                
-#&gt; [199] &quot;service times&quot;           &quot;shelter type&quot;           
-#&gt; [201] &quot;shop&quot;                    &quot;sidewalk&quot;               
-#&gt; [203] &quot;site&quot;                    &quot;ski&quot;                    
-#&gt; [205] &quot;social facility&quot;         &quot;source&quot;                 
-#&gt; [207] &quot;source ref&quot;              &quot;sport&quot;                  
-#&gt; [209] &quot;start date&quot;              &quot;step count&quot;             
-#&gt; [211] &quot;substation&quot;              &quot;surface&quot;                
-#&gt; [213] &quot;survey:date&quot;             &quot;tactile paving&quot;         
-#&gt; [215] &quot;tank&quot;                    &quot;tank trap&quot;              
-#&gt; [217] &quot;tidal&quot;                   &quot;todo&quot;                   
-#&gt; [219] &quot;toilets:wheelchair&quot;      &quot;toll&quot;                   
-#&gt; [221] &quot;tourism&quot;                 &quot;tracks&quot;                 
-#&gt; [223] &quot;tracktype&quot;               &quot;traffic calming&quot;        
-#&gt; [225] &quot;traffic sign&quot;            &quot;trail visibility&quot;       
-#&gt; [227] &quot;tunnel&quot;                  &quot;type&quot;                   
-#&gt; [229] &quot;url&quot;                     &quot;usage&quot;                  
-#&gt; [231] &quot;vehicle&quot;                 &quot;vending&quot;                
-#&gt; [233] &quot;voltage&quot;                 &quot;water&quot;                  
-#&gt; [235] &quot;waterway&quot;                &quot;website&quot;                
-#&gt; [237] &quot;wheelchair&quot;              &quot;width&quot;                  
-#&gt; [239] &quot;wikipedia&quot;               &quot;winter road&quot;            
-#&gt; [241] &quot;wires&quot;                   &quot;wood&quot;                   </div></pre>
+    <pre class="examples"><div class='input'><span class='co'>## Not run: ------------------------------------</span>
+<span class='co'># available_features()</span>
+<span class='co'>## ---------------------------------------------</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -240,7 +122,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Mark Padgham, Bob Rudis, Robin Lovelace, Ma<c3><ab>lle Salmon.</p>
+  <p>Developed by Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon.</p>
 </div>
 
 <div class="pkgdown">

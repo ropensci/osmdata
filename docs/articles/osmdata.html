@@ -9,10 +9,10 @@
 <ol style="list-style-type: decimal">
 <li>osmdata</li>
 </ol> • osmdata</title>
-<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><!-- mathjax --><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
@@ -74,10 +74,10 @@
 <div class="contents">
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>1. Introduction</h2>
+<html><body><a href="#introduction" class="anchor"> </a></body></html>1. Introduction</h2>
 <p><code>osmdata</code> is an R package for downloading and using data from OpenStreetMap (<a href="www.openstreetmap.org/">OSM</a>). OSM is a global open access mapping project, which is free and open under the <a href="http://www.openstreetmap.org/copyright">ODbL licence</a> <span class="citation">(OpenStreetMap contributors 2017)</span>. This has many benefits, ensuring transparent data provenance and ownership, enabling real-time evolution of the database and, by allowing anyone to contribute, encouraging democratic decision making and citizen science <span class="citation">(Johnson 2017)</span>. See the <a href="http://wiki.openstreetmap.org/wiki/Contribute_map_data">OSM wiki</a> to find out how to contribute to the world’s open geographical data commons.</p>
 <p>The development version of the <code>osmdata</code> R package can be installed with the <code>devtools</code> package using the following command:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">'osmdatar/osmdata'</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">'osmdatar/osmdata'</span>)</code></pre></div>
 <p>Once installed, it can be loaded in the usual way:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(osmdata)</code></pre></div>
 <p><code>osmdata</code> uses the <a href="http://overpass-api.de"><code>overpass</code> API</a> to download OpenStreetMap (OSM) data and can convert the results to either Simple Features (typically of class <code>sf</code>) or Spatial objects (e.g. <code>SpatialPointsDataFrame</code>), as defined by the packages <a href="https://cran.r-project.org/package=sf"><code>sf</code></a> and <a href="https://cran.r-project.org/package=sp"><code>sp</code></a> packages respectively.</p>
@@ -97,7 +97,7 @@ q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_featu
 </div>
 <div id="the-overpass-api" class="section level2">
 <h2 class="hasAnchor">
-<a href="#the-overpass-api" class="anchor"></a>2. The overpass API</h2>
+<html><body><a href="#the-overpass-api" class="anchor"> </a></body></html>2. The overpass API</h2>
 <p>As mentioned, <code>osmdata</code> obtains OSM data from the <a href="www.overpass-api.de"><code>overpass API</code></a>, <a href="http://wiki.openstreetmap.org/wiki/Overpass_API">which is</a></p>
 <blockquote>
 <p>a read-only API that serves up custom selected parts of the OSM map data.</p>
@@ -122,7 +122,7 @@ q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_featu
 <p>The resultant output may be pasted directly into the <a href="http://overpass-turbo.eu/">overpass-turbo</a> online interactive query builder. (The output of <code>opq_string</code> has been somewhat reformatted here to reflect the format typically used in <code>overpass-turbo</code>.)</p>
 <div id="osmdata-queries" class="section level3">
 <h3 class="hasAnchor">
-<a href="#osmdata-queries" class="anchor"></a>2.1. osmdata queries</h3>
+<html><body><a href="#osmdata-queries" class="anchor"> </a></body></html>2.1. osmdata queries</h3>
 <p>As demonstrated above, an <code>osmdata</code> query begins by specifying a bounding box with the function <code><a href="../reference/opq.html">opq()</a></code>, followed by specifying desired OSM features with <code><a href="../reference/add_feature.html">add_feature()</a></code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/opq.html">opq</a></span>(<span class="dt">bbox =</span> <span class="st">'Kunming, China'</span>)
 q1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_feature.html">add_feature</a></span>(q, <span class="dt">key =</span> <span class="st">'natural'</span>, <span class="dt">value =</span> <span class="st">'water'</span>)
@@ -152,28 +152,28 @@ not_so_much_data &lt;-<span class="st"> </span><span class="kw"><a href="../refe
 </div>
 <div id="query-example" class="section level3">
 <h3 class="hasAnchor">
-<a href="#query-example" class="anchor"></a>2.2. Query example</h3>
+<html><body><a href="#query-example" class="anchor"> </a></body></html>2.2. Query example</h3>
 <p>To appreciate query building in more concrete terms, let’s imagine that we wanted to find all cycle paths in Seville, Spain:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q0 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/opq.html">opq</a></span>(<span class="st">'Seville'</span>)
 q1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_feature.html">add_feature</a></span>(q0, <span class="dt">key =</span> <span class="st">'highway'</span>, <span class="dt">value =</span> <span class="st">'cycleway'</span>)
 cway_sev &lt;-<span class="st"> </span><span class="kw"><a href="../reference/osmdata_sp.html">osmdata_sp</a></span>(q1)
-sp<span class="op">::</span><span class="kw">plot</span>(cway_sev<span class="op">$</span>osm_lines)</code></pre></div>
+sp::<span class="kw">plot</span>(cway_sev$osm_lines)</code></pre></div>
 <div class="figure">
-<img src="https://cloud.githubusercontent.com/assets/1825120/23708182/fba4ed96-040c-11e7-90cd-3274d394030a.png">
+<img src="https://cloud.githubusercontent.com/assets/1825120/23708182/fba4ed96-040c-11e7-90cd-3274d394030a.png" alt="">
 </div>
 <p>Now imagine we want to make a more specific query that only extracts designated cycleways or those which are bridges. Combining these into one query will return only those that are designated cycleways <strong>AND</strong> that are bridges:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_feature.html">add_feature</a></span>(q1, <span class="dt">key =</span> <span class="st">'bicycle'</span>, <span class="dt">value =</span> <span class="st">'designated'</span>)
 des_bike &lt;-<span class="st"> </span><span class="kw"><a href="../reference/osmdata_sf.html">osmdata_sf</a></span>(q2)
 q3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_feature.html">add_feature</a></span>(q2, <span class="dt">key =</span> <span class="st">'bridge'</span>, <span class="dt">value =</span> <span class="st">'yes'</span>)
 des_bike_and_bridge &lt;-<span class="st"> </span><span class="kw"><a href="../reference/osmdata_sf.html">osmdata_sf</a></span>(q3)
-<span class="kw">nrow</span>(des_bike_and_bridge<span class="op">$</span>osm_points); <span class="kw">nrow</span>(des_bike_and_bridge<span class="op">$</span>osm_lines)
+<span class="kw">nrow</span>(des_bike_and_bridge$osm_points); <span class="kw">nrow</span>(des_bike_and_bridge$osm_lines)
 ## [1] 7
 ## [1] 3</code></pre></div>
 <p>That query returns only 7 points and 3 lines. Designed cycleways <strong>OR</strong> bridges can be obtained through simply combining multiple <code>osmdata</code> objects with the <code>c</code> operator:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q4 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_feature.html">add_feature</a></span>(q1, <span class="dt">key =</span> <span class="st">'bridge'</span>, <span class="dt">value =</span> <span class="st">'yes'</span>)
 bridge &lt;-<span class="st"> </span><span class="kw"><a href="../reference/osmdata_sf.html">osmdata_sf</a></span>(q4)
 des_bike_or_bridge &lt;-<span class="st"> </span><span class="kw">c</span>(des_bike, bridge)
-<span class="kw">nrow</span>(des_bike_or_bridge<span class="op">$</span>osm_points); <span class="kw">nrow</span>(des_bike_or_bridge<span class="op">$</span>osm_lines)
+<span class="kw">nrow</span>(des_bike_or_bridge$osm_points); <span class="kw">nrow</span>(des_bike_or_bridge$osm_lines)
 ## [1] 208
 ## [1] 40</code></pre></div>
 <p>And as expected, the <code>OR</code> operation produces more data than the equivalent <code>AND</code>, showing the utility of combining <code>osmdata</code> objects with the generic function <code>c()</code>.</p>
@@ -181,7 +181,7 @@ des_bike_or_bridge &lt;-<span class="st"> </span><span class="kw">c</span>(des_b
 </div>
 <div id="the-osmdata-object" class="section level2">
 <h2 class="hasAnchor">
-<a href="#the-osmdata-object" class="anchor"></a>3. The <code>osmdata</code> object</h2>
+<html><body><a href="#the-osmdata-object" class="anchor"> </a></body></html>3. The <code>osmdata</code> object</h2>
 <p>The <code>osmdata</code> extraction functions (<code><a href="../reference/osmdata_sf.html">osmdata_sf()</a></code> and <code><a href="../reference/osmdata_sp.html">osmdata_sp()</a></code>), both return objects of class <code>osmdata</code>. The structure of <code>osmdata</code> objects are clear from their default print method, illustrated using the <code>bridge</code> example from the previous section:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bridge
 ##  Object of class 'osmdata' with:
@@ -201,14 +201,14 @@ des_bike_or_bridge &lt;-<span class="st"> </span><span class="kw">c</span>(des_b
 </ul>
 <p>hese some or all of these can be empty: the example printed above contains only points and linesThe more complex features of <code>osm_multilines</code> and <code>osm_multipolygons</code> refer to OSM relations than contain multiple lines and polygons.</p>
 <p>The actual spatial data contained in an <code>osmdata</code> object are of either <code>sp</code> format when extracted with <code><a href="../reference/osmdata_sp.html">osmdata_sp()</a></code> or <code>sf</code> format when extracted with <code><a href="../reference/osmdata_sf.html">osmdata_sf()</a></code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(<span class="kw"><a href="../reference/osmdata_sf.html">osmdata_sf</a></span>(q)<span class="op">$</span>osm_lines)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(<span class="kw"><a href="../reference/osmdata_sf.html">osmdata_sf</a></span>(q)$osm_lines)
 ## [1] "sf"         "data.frame"</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(<span class="kw"><a href="../reference/osmdata_sp.html">osmdata_sp</a></span>(q)<span class="op">$</span>osm_lines)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(<span class="kw"><a href="../reference/osmdata_sp.html">osmdata_sp</a></span>(q)$osm_lines)
 ## [1] "SpatialLinesDataFrame"
 ## attr(,"package")
 ## [1] "sp"</code></pre></div>
 <p>In addition to these two functions, <code>osmdata</code> provides a third function, <code><a href="../reference/osmdata_xml.html">osmdata_xml()</a></code>, which allows raw OSM data to be returned and optionally saved to disk in XML format. The following code demonstrates this function, beginning with a new query.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/opq.html">opq</a></span>(<span class="dt">bbox =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.12</span>, <span class="fl">51.51</span>, <span class="op">-</span><span class="fl">0.11</span>, <span class="fl">51.52</span>)) <span class="co"># Central London, U.K.</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/opq.html">opq</a></span>(<span class="dt">bbox =</span> <span class="kw">c</span>(-<span class="fl">0.12</span>, <span class="fl">51.51</span>, -<span class="fl">0.11</span>, <span class="fl">51.52</span>)) <span class="co"># Central London, U.K.</span>
 q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_feature.html">add_feature</a></span>(q, <span class="dt">key =</span> <span class="st">'building'</span>)
 dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/osmdata_xml.html">osmdata_xml</a></span>(q, <span class="dt">file =</span> <span class="st">'buildings.osm'</span>)
 <span class="kw">class</span>(dat)
@@ -222,10 +222,10 @@ dat2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/osmdat
 <p>The following sub-sections now explore these three functions in more detail, beginning with <code>osmdata_xnl()</code>.</p>
 <div id="the-osmdata_xml-function" class="section level3">
 <h3 class="hasAnchor">
-<a href="#the-osmdata_xml-function" class="anchor"></a>3.1. The <code><a href="../reference/osmdata_xml.html">osmdata_xml()</a></code> function</h3>
+<html><body><a href="#the-osmdata_xml-function" class="anchor"> </a></body></html>3.1. The <code><a href="../reference/osmdata_xml.html">osmdata_xml()</a></code> function</h3>
 <p><code><a href="../reference/osmdata_xml.html">osmdata_xml()</a></code> returns OSM data in native XML format, and also allows these data to be saved directly to disk (conventionally using the file suffix <code>.osm</code>, although any suffix may be used). The <code>XML</code> data are formatting using the <code>R</code> package <code>xml2</code>, and may be processed within <code>R</code> using any methods compatible with such data, or may be processed by any other software able to load the <code>XML</code> data directly from disk.</p>
 <p>The first few lines of the XML data downloaded above look like this:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">readLines</span>(<span class="st">'buildings.osm'</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">readLines</span>(<span class="st">'buildings.osm'</span>)[<span class="dv">1</span>:<span class="dv">6</span>]
 ## [1] "&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;"                                                                             
 ## [2] "&lt;osm version=\"0.6\" generator=\"Overpass API\"&gt;"                                                                       
 ## [3] "  &lt;note&gt;The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.&lt;/note&gt;"
@@ -239,14 +239,14 @@ dat_sf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/osmd
 </div>
 <div id="the-osmdata_sf-function" class="section level3">
 <h3 class="hasAnchor">
-<a href="#the-osmdata_sf-function" class="anchor"></a>3.2. The <code><a href="../reference/osmdata_sf.html">osmdata_sf()</a></code> function</h3>
+<html><body><a href="#the-osmdata_sf-function" class="anchor"> </a></body></html>3.2. The <code><a href="../reference/osmdata_sf.html">osmdata_sf()</a></code> function</h3>
 <p><code><a href="../reference/osmdata_sf.html">osmdata_sf()</a></code> returns OSM data in <a href="http://www.opengeospatial.org/standards/sfo">Simple Features (SF)</a> format, defined by the <a href="http://www.opengeospatial.org">Open Geospatial Consortium</a>, and implemented in the <code>R</code> package <a href="https://cran.r-project.org/package=sf"><code>sf</code></a>. This package provides a direct interface to the <code>C++</code> <a href="http://gdal.org">Graphical Data Abstraction Library (GDAL)</a> which also includes a so-called <a href="http://www.gdal.org/drv_osm.html">‘driver’ for OSM data</a>. This means that OSM data may also be read directly with <code>sf</code>, rather than using <code>osmdata</code>. In this case, data must first be saved to disk, which can be readily achieved using <code><a href="../reference/osmdata_xml.html">osmdata_xml()</a></code> described above, or through downloading directly from the <a href="http://overpass-turbo.eu">overpass interactive query builder</a>.</p>
 <p>The following example is based on this query:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/opq.html">opq</a></span>(<span class="dt">bbox =</span> <span class="st">'Trentham, Australia'</span>)
 q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_feature.html">add_feature</a></span>(q, <span class="dt">key =</span> <span class="st">'name'</span>) <span class="co"># any named objects</span>
 <span class="kw"><a href="../reference/osmdata_xml.html">osmdata_xml</a></span>(q, <span class="st">'trentham.osm'</span>)</code></pre></div>
 <p><code>sf</code> can then read such data independent of <code>osmdata</code> though:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sf<span class="op">::</span><span class="kw">st_read</span>(<span class="st">'trentham.osm'</span>, <span class="dt">layer =</span> <span class="st">'points'</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sf::<span class="kw">st_read</span>(<span class="st">'trentham.osm'</span>, <span class="dt">layer =</span> <span class="st">'points'</span>)
 ## Reading layer `points' from data source `trentham.osm' using driver `OSM'
 ## Simple feature collection with 38 features and 10 fields
 ## geometry type:  POINT
@@ -266,9 +266,9 @@ q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_featu
 ##        $osm_multilines : 'sf' Simple Features Collection with 1 multilinestrings
 ##     $osm_multipolygons : 'sf' Simple Features Collection with 6 multipolygons</code></pre></div>
 <p>Even for spatial objects of the same type (the same ‘layers’ in <code>sf</code> terminology), <code>osmdata</code> returns considerably more objects–7,166 points compared .with just 38. The raw sizes of data returned can be compared with:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s1 &lt;-<span class="st"> </span><span class="kw">object.size</span>(<span class="kw"><a href="../reference/osmdata_sf.html">osmdata_sf</a></span>(q, <span class="st">'trentham.osm'</span>)<span class="op">$</span>osm_points)
-s2 &lt;-<span class="st"> </span><span class="kw">object.size</span>(sf<span class="op">::</span><span class="kw">st_read</span>(<span class="st">'trentham.osm'</span>, <span class="dt">layer =</span> <span class="st">'points'</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>))
-<span class="kw">as.numeric</span>(s1 <span class="op">/</span><span class="st"> </span>s2)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s1 &lt;-<span class="st"> </span><span class="kw">object.size</span>(<span class="kw"><a href="../reference/osmdata_sf.html">osmdata_sf</a></span>(q, <span class="st">'trentham.osm'</span>)$osm_points)
+s2 &lt;-<span class="st"> </span><span class="kw">object.size</span>(sf::<span class="kw">st_read</span>(<span class="st">'trentham.osm'</span>, <span class="dt">layer =</span> <span class="st">'points'</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>))
+<span class="kw">as.numeric</span>(s1 /<span class="st"> </span>s2)
 ## [1] 511.4193</code></pre></div>
 <p>And the <code>osmdata points</code> contain over 500 times as much data. The primary difference between <code>sf/GDAL</code> and <code>osmdata</code> is that the former returns only those objects unique to each category of spatial object. Thus OSM nodes (<code>points</code> in <code>sf/osmdata</code> representations) include, in <code>sf/GDAL</code> representation, only those points which are not part of any other objects (such as lines or polygons). In contrast, the <code>osm_points</code> object returned by <code>osmdata</code> includes all points regardless of whether or not these are represented in other spatial objects. Similarly, <code>line</code> objects in <code>sf/GDAL</code> exclude any lines that are part of other objects such as <code>multipolygon</code> or <code>multiline</code> objects.</p>
 <p>This processing of data by <code>sf/GDAL</code> has two important implications:</p>
@@ -277,11 +277,11 @@ s2 &lt;-<span class="st"> </span><span class="kw">object.size</span>(sf<span cla
 <li><p>All OSM are structured by giving each object a unique identifier so that the components of any given object (the nodes of a line, for example, or the lines of a multipolygon) can be described simply by giving these identifiers. This enables the components of any OSM object to be examined in detail. The <code>sf/GDAL</code> representation obviates this ability through removing these IDs and reducing everything to geometries alone (which is, after all, why it is called ‘<em>Simple</em> Features’). This means, for example, that the <code>key-value</code> pairs of the <code>line</code> or <code>polygon</code> components of <code>multipolygon</code> can never be extracted from an <code>sf/GDAL</code> representation. In contrast, <code>osmdata</code> retains all unique identifiers for all OSM objects, and so readily enables, for example, the properties of all <code>point</code> objects of a <code>line</code> to be extracted.</p></li>
 </ol>
 <p>Another reason why <code>osmdata</code> returns more data than <code>GDAL/sf</code> is that the latter extracts only a restricted list of OSM <code>keys</code>, whereas <code>osmdata</code> returns all <code>key</code> fields present in the requested data:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(sf<span class="op">::</span><span class="kw">st_read</span>(<span class="st">'trentham.osm'</span>, <span class="dt">layer =</span> <span class="st">'points'</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)) <span class="co"># the keys</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(sf::<span class="kw">st_read</span>(<span class="st">'trentham.osm'</span>, <span class="dt">layer =</span> <span class="st">'points'</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)) <span class="co"># the keys</span>
 ## [1] "osm_id"     "name"       "barrier"    "highway"   
 ## [5] "ref"        "address"    "is_in"      "place"     
 ## [9] "man_made"   "other_tags" "geometry"  </code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(<span class="kw"><a href="../reference/osmdata_sf.html">osmdata_sf</a></span>(q, <span class="st">'trentham.osm'</span>)<span class="op">$</span>osm_points)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(<span class="kw"><a href="../reference/osmdata_sf.html">osmdata_sf</a></span>(q, <span class="st">'trentham.osm'</span>)$osm_points)
 ## [1] "osm_id"           "name"             "X_description_"   "X_waypoint_"     
 ## [5] "addr.city"        "addr.housenumber" "addr.postcode"    "addr.street"     
 ## [9] "amenity"          "barrier"          "denomination"     "foot"            
@@ -290,7 +290,7 @@ s2 &lt;-<span class="st"> </span><span class="kw">object.size</span>(sf<span cla
 ## [21] "ref"              "religion"         "shop"             "source"          
 ## [25] "tourism"          "waterway"         "geometry" </code></pre></div>
 <p><code>key</code> fields which are not specified in a given set of OSM data are not returned by <code>osmdata</code>, while <code>GDAL/sf</code> returns the same <code>key</code> fields regardless of whether any values are specified.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">addr &lt;-<span class="st"> </span>sf<span class="op">::</span><span class="kw">st_read</span>(<span class="st">'trentham.osm'</span>, <span class="dt">layer =</span> <span class="st">'points'</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)<span class="op">$</span>address
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">addr &lt;-<span class="st"> </span>sf::<span class="kw">st_read</span>(<span class="st">'trentham.osm'</span>, <span class="dt">layer =</span> <span class="st">'points'</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)$address
 <span class="kw">all</span>(<span class="kw">is.na</span>(addr))
 ## TRUE</code></pre></div>
 <p>and <code>key=address</code> contains no data yet is still returned by <code>GDAL/sf</code>.</p>
@@ -298,24 +298,24 @@ s2 &lt;-<span class="st"> </span><span class="kw">object.size</span>(sf<span cla
 </div>
 <div id="the-osmdata_sp-function" class="section level3">
 <h3 class="hasAnchor">
-<a href="#the-osmdata_sp-function" class="anchor"></a>3.3. The <code><a href="../reference/osmdata_sp.html">osmdata_sp()</a></code> function</h3>
+<html><body><a href="#the-osmdata_sp-function" class="anchor"> </a></body></html>3.3. The <code><a href="../reference/osmdata_sp.html">osmdata_sp()</a></code> function</h3>
 <p>As with <code><a href="../reference/osmdata_sf.html">osmdata_sf()</a></code> described above, OSM data may be converted to <code>sp</code> format without using <code>osmdata</code> via the <code>sf</code> functions demonstrated below:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span>sf<span class="op">::</span><span class="kw">st_read</span>(<span class="st">'buildings.osm'</span>, <span class="dt">layer =</span> <span class="st">'multipolygons'</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span>sf::<span class="kw">st_read</span>(<span class="st">'buildings.osm'</span>, <span class="dt">layer =</span> <span class="st">'multipolygons'</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)
 dat_sp &lt;-<span class="st"> </span><span class="kw">as</span>(dat, <span class="st">'Spatial'</span>)
 <span class="kw">class</span>(dat_sp)
 ## [1] "SpatialPolygonsDataFrame"\nattr(,"package")\n[1] "sp"</code></pre></div>
 <p>These data are extracted using the GDAL, and so suffer all of the same shortcomings mentioned above. Note differences in the amount of data returned:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(dat_sp)
 ## [1] 560  25</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(<span class="kw"><a href="../reference/osmdata_sp.html">osmdata_sp</a></span>(q, <span class="dt">doc =</span> <span class="st">'buildings.osm'</span>)<span class="op">$</span>osm_polygons)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(<span class="kw"><a href="../reference/osmdata_sp.html">osmdata_sp</a></span>(q, <span class="dt">doc =</span> <span class="st">'buildings.osm'</span>)$osm_polygons)
 ## [1] 566 114</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(<span class="kw"><a href="../reference/osmdata_sp.html">osmdata_sp</a></span>(q, <span class="dt">doc =</span> <span class="st">'buildings.osm'</span>)<span class="op">$</span>osm_multipolygons)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(<span class="kw"><a href="../reference/osmdata_sp.html">osmdata_sp</a></span>(q, <span class="dt">doc =</span> <span class="st">'buildings.osm'</span>)$osm_multipolygons)
 ## [1] 15 52</code></pre></div>
 </div>
 </div>
 <div id="recursive-searching" class="section level2">
 <h2 class="hasAnchor">
-<a href="#recursive-searching" class="anchor"></a>4. Recursive searching</h2>
+<html><body><a href="#recursive-searching" class="anchor"> </a></body></html>4. Recursive searching</h2>
 <p>As described above, <code>osmdata</code> returns all data of each type and so allows the components of any given spatial object to be examined in their own right. This ability to extract, for example, all points of a line, or all polygons which include a given set of points, is referred to as <em>recursive searching</em>.</p>
 <p>Recursive searching is not possible with <code>GDAL/sf</code>, because OSM identifiers are removed, and only the unique data of each type of object are retained. To understand both recursive searching and why it is useful, note that OSM data are structured in three hierarchical levels:</p>
 <ol style="list-style-type: decimal">
@@ -337,11 +337,11 @@ q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_featu
 tr &lt;-<span class="st"> </span><span class="kw"><a href="../reference/osmdata_sf.html">osmdata_sf</a></span>(q)</code></pre></div>
 <div id="example" class="section level3">
 <h3 class="hasAnchor">
-<a href="#example" class="anchor"></a>4.1. Example</h3>
+<html><body><a href="#example" class="anchor"> </a></body></html>4.1. Example</h3>
 <p>Then imagine we are interested in the <code>osm_line</code> object describing the ‘Coliban River’:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">i &lt;-<span class="st"> </span><span class="kw">which</span>(tr<span class="op">$</span>osm_lines<span class="op">$</span>name <span class="op">==</span><span class="st"> 'Coliban River'</span>)
-coliban &lt;-<span class="st"> </span>tr<span class="op">$</span>osm_lines[i, ]
-coliban[<span class="kw">which</span>(<span class="op">!</span><span class="kw">is.na</span>(coliban))]
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">i &lt;-<span class="st"> </span><span class="kw">which</span>(tr$osm_lines$name ==<span class="st"> 'Coliban River'</span>)
+coliban &lt;-<span class="st"> </span>tr$osm_lines[i, ]
+coliban[<span class="kw">which</span>(!<span class="kw">is.na</span>(coliban))]
 ## Simple feature collection with 1 feature and 3 fields
 ## geometry type:  LINESTRING
 ## dimension:      XY
@@ -351,12 +351,12 @@ coliban[<span class="kw">which</span>(<span class="op">!</span><span class="kw">
 ##            osm_id          name waterway                       geometry
 ## 87104907 87104907 Coliban River    river LINESTRING(144.323471069336...</code></pre></div>
 <p>The locations of the points of this line can be extracted directly from the <code>sf</code> object with:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coliban<span class="op">$</span>geometry[[<span class="dv">1</span>]]
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">coliban$geometry[[<span class="dv">1</span>]]
 ## LINESTRING(144.323471069336 -37.3716201782227, 144.323944091797 -37.3714790344238, 144.324356079102 -37.3709754943848, 144.324493408203 -37.3704833984375, 144.324600219727 -37.370174407959, 144.324981689453 -37.3697204589844, 144.325149536133 -37.369441986084, 144.325393676758 -37.3690567016602, 144.325714111328 -37.3686943054199, 144.326080322266 -37.3682441711426)</code></pre></div>
 <p>The output contains nothing other than geometries (because, to reiterate, these are ‘<em>Simple</em> Features’), and no further information regarding those points can be extracted. The Coliban River has a waterfall in Trentham, and one of the <code>osm_points</code> objects describes this waterfall. The information necessary to locate this waterfall is removed from the <code>GDAL/sf</code> representation, but can be extracted with <code>osmdata</code> with the following lines, noting that the OSM ID of the line <code>coliban</code> is given by <code>rownames(coliban)</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/osm_points.html">osm_points</a></span>(tr, <span class="kw">rownames</span>(coliban))
-wf &lt;-<span class="st"> </span>pts[<span class="kw">which</span>(pts<span class="op">$</span>waterway <span class="op">==</span><span class="st"> 'waterfall'</span>), ]
-wf[<span class="kw">which</span>(<span class="op">!</span><span class="kw">is.na</span>(wf))]
+wf &lt;-<span class="st"> </span>pts[<span class="kw">which</span>(pts$waterway ==<span class="st"> 'waterfall'</span>), ]
+wf[<span class="kw">which</span>(!<span class="kw">is.na</span>(wf))]
 ## Simple feature collection with 1 feature and 4 fields
 ## geometry type:  POINT
 ## dimension:      XY
@@ -373,27 +373,27 @@ wf[<span class="kw">which</span>(<span class="op">!</span><span class="kw">is.na
 </div>
 <div id="relation-example" class="section level3">
 <h3 class="hasAnchor">
-<a href="#relation-example" class="anchor"></a>4.2 Relation example</h3>
+<html><body><a href="#relation-example" class="anchor"> </a></body></html>4.2 Relation example</h3>
 <p>A special type of OSM object is a relation. These can be defined by their name, which can join many divers features into a single object. The following example extracts the London Route Network Route 9, which is composed of many (over 100) separate lines:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/opq.html">opq</a></span> (<span class="st">'greater london uk'</span>)
 q1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_feature.html">add_feature</a></span> (q, <span class="dt">key =</span> <span class="st">"name"</span>, <span class="dt">value =</span> <span class="st">"London.Cycle.Network.Route.9"</span>,
                    <span class="dt">value_exact =</span> <span class="ot">FALSE</span>)
 lcnr9 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/osmdata_sp.html">osmdata_sp</a></span>(q1)
-sp<span class="op">::</span><span class="kw">plot</span>(lcnr9<span class="op">$</span>osm_lines)</code></pre></div>
+sp::<span class="kw">plot</span>(lcnr9$osm_lines)</code></pre></div>
 <div class="figure">
-<img src="https://cloud.githubusercontent.com/assets/1825120/23709879/c98e2c2c-0412-11e7-86b8-1ffc95aab5a1.png">
+<img src="https://cloud.githubusercontent.com/assets/1825120/23709879/c98e2c2c-0412-11e7-86b8-1ffc95aab5a1.png" alt="">
 </div>
 </div>
 </div>
 <div id="related-packages" class="section level2">
 <h2 class="hasAnchor">
-<a href="#related-packages" class="anchor"></a>5. Related Packages</h2>
+<html><body><a href="#related-packages" class="anchor"> </a></body></html>5. Related Packages</h2>
 <p><span class="citation">Eugster and Schlesinger (2012)</span> describe <code>osmar</code>, an R package for handling OSM data that enables visualisation, search and even rudimentary routing operations. <code>osmar</code> is not user friendly or able to download OSM data flexibly, as reported in an <a href="http://eprints.whiterose.ac.uk/77643/">early tutorial</a> comparing R and QGIS for handling OSM data <span class="citation">(Lovelace 2014)</span>.</p>
 <p><code>osmdata</code> builds on two previous R packages: <code>osmplotr</code>, a package <a href="https://cran.r-project.org/package=osmplotr">available from CRAN</a> for accessing and plotting OSM data <span class="citation">(Padgham 2016)</span> and <code>overpass</code>, a <a href="https://github.com/hrbrmstr/overpass">GitHub package</a> by Bob Rudis that provides an R interface to the <a href="http://overpass-api.de/">overpass</a> API.</p>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2 class="hasAnchor">
-<a href="#references" class="anchor"></a>6. References</h2>
+<html><body><a href="#references" class="anchor"> </a></body></html>6. References</h2>
 <div id="refs" class="references">
 <div id="ref-eugster_osmar:_2012">
 <p>Eugster, Manuel J a, and Thomas Schlesinger. 2012. “Osmar: OpenStreetMap and R.” <em>The R Journal</em> 5 (1): 53–64.</p>
@@ -408,7 +408,7 @@ sp<span class="op">::</span><span class="kw">plot</span>(lcnr9<span class="op">$
 <p>OpenStreetMap contributors. 2017. “Planet dump retrieved from http://planet.osm.org.” <a href="http://www.openstreetmap.org" class="uri">http://www.openstreetmap.org</a>.</p>
 </div>
 <div id="ref-osmplotr">
-<p>Padgham, Mark. 2016. <em>Osmplotr: Customisable Images of Openstreetmap Data</em>. <a href="https://cran.r-project.org/package=osmplotr" class="uri">https://cran.r-project.org/package=osmplotr</a>.</p>
+<p>Padgham, Mark. 2016. <em>Osmplotr: Customisable Images of OpenStreetMap Data</em>. <a href="https://cran.r-project.org/package=osmplotr" class="uri">https://cran.r-project.org/package=osmplotr</a>.</p>
 </div>
 </div>
 </div>

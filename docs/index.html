@@ -6,10 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Import OpenStreetMap Data as Simple Features or Spatial Objects • osmdata</title>
-<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><!-- mathjax --><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
@@ -64,22 +64,21 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 <div class="figure">
-<img src="fig/title.png">
+<img src="fig/title.png" alt="">
 </div>
 <p><code>osmdata</code> is an R package for accessing OpenStreetMap (OSM) data using the <a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a>. The Overpass API (or OSM3S) is a read-only API that serves up custom selected parts of the OSM map data. Map data can be returned either as <a href="https://cran.r-project.org/package=sf">Simple Features (<code>sf</code>)</a> or <a href="https://cran.r-project.org/package=sp">Spatial (<code>sp</code>)</a> objects.</p>
 <div id="installation" class="section level3">
 <h3 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h3>
+<a href="#installation" class="anchor"> </a>Installation</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(osmdata)
-<span class="co">#&gt; Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright</span>
 <span class="kw">packageVersion</span>(<span class="st">"osmdata"</span>)
-<span class="co">#&gt; [1] '0.0.1'</span></code></pre></div>
+<span class="co">#&gt; [1] '0.0.2'</span></code></pre></div>
 </div>
 <div id="usage" class="section level3">
 <h3 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h3>
+<a href="#usage" class="anchor"> </a>Usage</h3>
 <p><a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a> queries can be built from a base query constructed with <code>opq</code> followed by <code>add_feature</code>. The corresponding OSM objects are then downloaded and converted to <code>R Simple Features (sf)</code> objects with <code><a href="reference/osmdata_sf.html">osmdata_sf()</a></code> or to <code>R Spatial (sp)</code> objects with <code><a href="reference/osmdata_sp.html">osmdata_sp()</a></code>. For example,</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q0 &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span>(<span class="dt">bbox =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.27</span>, <span class="fl">51.47</span>, <span class="op">-</span><span class="fl">0.20</span>, <span class="fl">51.50</span>)) <span class="co"># Chiswick Eyot in London, U.K.</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q0 &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span>(<span class="dt">bbox =</span> <span class="kw">c</span>(-<span class="fl">0.27</span>, <span class="fl">51.47</span>, -<span class="fl">0.20</span>, <span class="fl">51.50</span>)) <span class="co"># Chiswick Eyot in London, U.K.</span>
 q1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_feature.html">add_feature</a></span>(q0, <span class="dt">key =</span> <span class="st">'name'</span>, <span class="dt">value =</span> <span class="st">"Thames"</span>, <span class="dt">value_exact =</span> <span class="ot">FALSE</span>)
 x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>(q1)
 x</code></pre></div>
@@ -103,7 +102,7 @@ x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.h
 </div>
 <div id="style-guide" class="section level3">
 <h3 class="hasAnchor">
-<a href="#style-guide" class="anchor"></a>Style guide</h3>
+<a href="#style-guide" class="anchor"> </a>Style guide</h3>
 <p>We appreciate any contributions; those that comply with our general coding style even more. In four short points:</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -116,7 +115,7 @@ x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.h
 </div>
 <div id="code-of-conduct" class="section level3">
 <h3 class="hasAnchor">
-<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h3>
+<a href="#code-of-conduct" class="anchor"> </a>Code of Conduct</h3>
 <p>Please note that this project is released with a <a href="CONDUCT.md">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
 <p><a href="http://ropensci.org"><img src="http://ropensci.org/public_images/github_footer.png" alt="ropensci_footer"></a></p>
 </div>
@@ -143,6 +142,7 @@ x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.h
 <li>Maëlle Salmon <br><small class="roles"> Author </small> </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
+<html><body>
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/ropensci/osmdata"><img src="https://travis-ci.org/ropensci/osmdata.svg?branch=master" alt="Build Status"></a></li>
@@ -152,6 +152,7 @@ x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.h
 <li><a href="http://cran.r-project.org/web/packages/osmdata"><img src="http://www.r-pkg.org/badges/version/osmdata" alt="CRAN_Status_Badge"></a></li>
 <li><a href="http://cran.r-project.org/package=osmdata"><img src="http://cranlogs.r-pkg.org/badges/grand-total/osmdata?color=orange" alt="CRAN Downloads"></a></li>
 </ul>
+</body></html>
 </div>
 
 </div>

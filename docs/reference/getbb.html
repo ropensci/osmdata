@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title> getbb • osmdata</title>
+<title>Get bounding box for a given place name � getbb • osmdata</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -77,7 +77,7 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get bounding box for a given place name.</h1>
+    <h1>Get bounding box for a given place name</h1>
     </div>
 
     
@@ -94,13 +94,14 @@ the bounding box (bb) associated with place names.</p>
       <dt>place_name</dt>
       <dd>The name of the place you&#39;re searching for</dd>
       <dt>display_name_contains</dt>
-      <dd>Text string to match with display_name field returned by
-<a href = 'http://wiki.openstreetmap.org/wiki/Nominatim'>http://wiki.openstreetmap.org/wiki/Nominatim</a></dd>
+      <dd>Text string to match with display_name field
+returned by <a href = 'http://wiki.openstreetmap.org/wiki/Nominatim'>http://wiki.openstreetmap.org/wiki/Nominatim</a></dd>
       <dt>viewbox</dt>
       <dd>The bounds in which you&#39;re searching</dd>
       <dt>format_out</dt>
-      <dd>Character string indicating output format: matrix (default - see <code>bbox</code>),
-string (see <code><a href='bbox_to_string.html'>bbox_to_string</a></code>) or data.frame (all &#39;hits&#39; returned by Nominatim)</dd>
+      <dd>Character string indicating output format: matrix (default),
+string (see <code><a href='bbox_to_string.html'>bbox_to_string</a></code>) or data.frame (all &#39;hits&#39; returned
+by Nominatim)</dd>
       <dt>base_url</dt>
       <dd>Base website from where data is queried</dd>
       <dt>featuretype</dt>
@@ -128,47 +129,20 @@ which can be found at <a href = 'https://github.com/hrbrmstr/nominatim'>https://
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>getbb</span>(<span class='st'>"Salzburg"</span>)</div><div class='output co'>#&gt;        min      max
-#&gt; x 12.98563 13.12728
-#&gt; y 47.75121 47.85440</div><div class='input'><span class='no'>place_name</span> <span class='kw'>&lt;-</span> <span class='st'>"Hereford"</span>
-<span class='fu'>getbb</span>(<span class='no'>place_name</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] &quot;https://nominatim.openstreetmap.org/?q=Hereford&amp;format=json&amp;featuretype=settlement&amp;limit=10&quot;</div><div class='output co'>#&gt;         min       max
-#&gt; x -2.875173 -2.555173
-#&gt; y 51.895381 52.215381</div><div class='input'><span class='co'># return bb whose display_name contain text string "United States"</span>
-<span class='fu'>getbb</span>(<span class='no'>place_name</span>, <span class='kw'>display_name_contains</span> <span class='kw'>=</span> <span class='st'>"United States"</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] &quot;https://nominatim.openstreetmap.org/?q=Hereford&amp;format=json&amp;featuretype=settlement&amp;limit=10&quot;</div><div class='output co'>#&gt;          min        max
-#&gt; x -102.43202 -102.36123
-#&gt; y   34.79742   34.84601</div><div class='input'><span class='co'># top 3 matches as data frame</span>
-<span class='fu'>getbb</span>(<span class='no'>place_name</span>, <span class='kw'>format_out</span> <span class='kw'>=</span> <span class='st'>"data.frame"</span>, <span class='kw'>limit</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt;    place_id
-#&gt; 1    115330
-#&gt; 2 158456539
-#&gt; 3    482951
-#&gt;                                                                                      licence
-#&gt; 1 Data &lt;U+00A9&gt; OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
-#&gt; 2 Data &lt;U+00A9&gt; OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
-#&gt; 3 Data &lt;U+00A9&gt; OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
-#&gt;   osm_type    osm_id                                      boundingbox
-#&gt; 1     node  21280555   51.8953813, 52.2153813, -2.8751734, -2.5551734
-#&gt; 2 relation    114506 34.797419, 34.846009, -102.4320169, -102.3612329
-#&gt; 3     node 158531065 40.4292644, 40.4692644, -75.5721288, -75.5321288
-#&gt;          lat          lon
-#&gt; 1 52.0553813   -2.7151734
-#&gt; 2 34.8150622 -102.3977035
-#&gt; 3 40.4492644  -75.5521288
-#&gt;                                                     display_name class    type
-#&gt; 1            Hereford, Herefordshire, West Midlands, England, UK place    city
-#&gt; 2   Hereford, Deaf Smith County, Texas, United States of America place    city
-#&gt; 3 Hereford, Berks County, Pennsylvania, United States of America place village
-#&gt;   importance
-#&gt; 1  0.6358587
-#&gt; 2  0.5051060
-#&gt; 3  0.4559158
-#&gt;                                                                             icon
-#&gt; 1    https://nominatim.openstreetmap.org/images/mapicons/poi_place_city.p.20.png
-#&gt; 2    https://nominatim.openstreetmap.org/images/mapicons/poi_place_city.p.20.png
-#&gt; 3 https://nominatim.openstreetmap.org/images/mapicons/poi_place_village.p.20.png</div><div class='input'><span class='co'># using an alternative service (locationiq requires an API key)</span>
-<span class='no'>key</span> <span class='kw'>&lt;-</span> <span class='fu'>Sys.getenv</span>(<span class='st'>"LOCATIONIQ"</span>) <span class='co'># add LOCATIONIQ=type_your_api_key_here to .Renviron</span>
-<span class='kw'>if</span>(<span class='fu'>nchar</span>(<span class='no'>key</span>) <span class='kw'>==</span>  <span class='fl'>32</span>) {
-  <span class='fu'>getbb</span>(<span class='no'>place_name</span>, <span class='kw'>base_url</span> <span class='kw'>=</span> <span class='st'>"http://locationiq.org/v1/search.php"</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>key</span>)
-}</div></pre>
+    <pre class="examples"><div class='input'><span class='co'>## Not run: ------------------------------------</span>
+<span class='co'># getbb("Salzburg")</span>
+<span class='co'># place_name &lt;- "Hereford"</span>
+<span class='co'># getbb(place_name, silent = FALSE)</span>
+<span class='co'># # return bb whose display_name contain text string "United States"</span>
+<span class='co'># getbb(place_name, display_name_contains = "United States", silent = FALSE)</span>
+<span class='co'># # top 3 matches as data frame</span>
+<span class='co'># getbb(place_name, format_out = "data.frame", limit = 3)</span>
+<span class='co'># # using an alternative service (locationiq requires an API key)</span>
+<span class='co'># key &lt;- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron</span>
+<span class='co'># if(nchar(key) ==  32) {</span>
+<span class='co'>#   getbb(place_name, base_url = "http://locationiq.org/v1/search.php", key = key)</span>
+<span class='co'># }</span>
+<span class='co'>## ---------------------------------------------</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -187,7 +161,7 @@ which can be found at <a href = 'https://github.com/hrbrmstr/nominatim'>https://
 
       <footer>
       <div class="copyright">
-  <p>Developed by Mark Padgham, Bob Rudis, Robin Lovelace, Ma<c3><ab>lle Salmon.</p>
+  <p>Developed by Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon.</p>
 </div>
 
 <div class="pkgdown">
