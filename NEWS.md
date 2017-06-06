@@ -1,3 +1,7 @@
+0.0.2
+===================
+- Rename function `opq_to_string()` to `opq_string()`
+
 0.0.1 (19 May 2017)
 ===================
 - Remove configure and Makevars files
