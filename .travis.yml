@@ -2,6 +2,7 @@ language: r
 warnings_are_errors: true
 sudo: required
 cache: packages
+latex: false # TODO: Enable after https://github.com/travis-ci/travis-build/pull/1072
 
 # precise fails because unmet deps in libgdal-dev can not be insalled
 
