@@ -7,6 +7,7 @@
 #' @return Character string to be submitted to the overpass API
 #' 
 #' @export
+#' @aliases opq_to_string
 #'
 #' @examples
 #' q <- opq ("hampi india")
