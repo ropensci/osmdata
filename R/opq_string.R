@@ -1,5 +1,7 @@
-#' Convert an osmdata query of class \code{opq} to a character string query to
-#' be submitted to the overpass API
+#' Convert an overpass query into a text string
+#'
+#' Convert an osmdata query of class opq to a character string query to
+#' be submitted to the overpass API.
 #'
 #' @param opq An \code{overpass_query} object
 #' @return Character string to be submitted to the overpass API
@@ -7,11 +9,9 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' q <- opq ("hampi india")
-#' opq_to_string (q)
-#' }
-opq_to_string <- function (opq)
+#' opq_string (q)
+opq_string <- function (opq)
 {
   features <- paste (opq$features, collapse = '')
   features <- paste0 (sprintf (' node %s (%s);\n', features, opq$bbox),
