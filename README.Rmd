@@ -2,6 +2,7 @@
 title: "osmdata, an R package for OpenStreetMap data"
 output:
   rmarkdown::html_vignette:
+    self_contained: no
 
   md_document:
     variant: markdown_github
