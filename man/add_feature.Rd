@@ -16,7 +16,7 @@ add_feature(opq, key, value, key_exact = TRUE, value_exact = TRUE,
 exclamation mark, \code{value="!this"}.}
 
 \item{key_exact}{If FALSE, \code{key} is not interpreted exactly; see
-\url{http://wiki.openstreetmap.org/wiki/Overpass_API/}}
+\url{https://wiki.openstreetmap.org/wiki/Overpass_API}}
 
 \item{value_exact}{If FALSE, \code{value} is not interpreted exactly}
 
