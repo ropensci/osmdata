@@ -55,6 +55,6 @@
 #' @importFrom rvest html_attr html_nodes
 #' @importFrom utils read.table 
 #' @importFrom xml2 read_html read_xml xml_attr xml_text xml_find_all
-#' @useDynLib osmdata
+#' @useDynLib osmdata, .registration = TRUE
 #' @importFrom jsonlite fromJSON
 NULL
