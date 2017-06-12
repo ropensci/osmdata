@@ -1,7 +1,9 @@
 has_internet <- curl::has_internet ()
 
-# true except when this is set by devtools::check
-is_cran <- is.na (Sys.getenv ("NOT_CRAN", unset = NA))
+# test_all used to switch off tests on CRAN
+test_all <- (identical (Sys.getenv ("PADGHAM_LOCAL"), "true") |
+             identical (Sys.getenv ("TRAVIS"), "true") |
+             identical (Sys.getenv ("APPVEYOR"), "True"))
 
 source ("../stub.R")
 
@@ -41,7 +43,7 @@ test_that ("bbox", {
 
 test_that ('getbb-place_name', {
                if (has_internet) {
-                   if (is_cran)
+                   if (!test_all)
                    {
                        load("../cfm_output_bb.rda")
                        stub (getbb, 'httr::GET', function (x) cfm_output_bb )
