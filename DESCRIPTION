@@ -13,7 +13,7 @@ Authors@R: c(
     person ("Bartnik", "Lukasz", role=c("ctb","cph"),
         comment="Author of included stub.R code"))
 Maintainer: Mark Padgham <mark.padgham@email.com>
-Title: Import "OpenStreetMap" Data as Simple Features or Spatial Objects
+Title: Import OpenStreetMap Data as Simple Features or Spatial Objects
 Description: Download and import of "OpenStreetMap" ('OSM') data as 'sf' or 'sp'
     objects.  'OSM' data are extracted from the 'Overpass' web server and
     processed with very fast 'C++' routines for return to 'R'.
