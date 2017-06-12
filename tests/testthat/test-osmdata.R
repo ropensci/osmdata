@@ -1,7 +1,7 @@
 has_internet <- curl::has_internet ()
 
-is_cran <- identical (Sys.getenv ("_R_CHECK_CRAN_INCOMING_"), 'true')
-is_travis <-  identical (Sys.getenv('TRAVIS'), 'true')
+# true except when this is set by devtools::check
+is_cran <- is.na (Sys.getenv ("NOT_CRAN", unset = NA))
 
 source ('../stub.R')
 
@@ -68,7 +68,7 @@ test_that ('make_query', {
     {
         # Test all `osmdata_..` functions by stubbing the results of
         # `overpass_query()`
-        if (is_cran | is_travis)
+        if (is_cran)
         {
             load ("../overpass_query_result.rda")
             stub (osmdata_xml, 'overpass_query', function (x, ...)
@@ -78,7 +78,7 @@ test_that ('make_query', {
         expect_true (is (doc, 'xml_document'))
         expect_silent (osmdata_xml (qry, file = 'junk.osm'))
 
-        if (is_cran | is_travis)
+        if (is_cran)
             stub (osmdata_sp, 'overpass_query', function (x, ...)
                   overpass_query_result)
         res <- osmdata_sp (qry)
@@ -94,7 +94,7 @@ test_that ('make_query', {
                   'osm_multipolygons')
         expect_named (res, expected = nms, ignore.order = FALSE)
 
-        if (is_cran | is_travis)
+        if (is_cran)
             stub (osmdata_sf, 'overpass_query', function (x, ...)
                   overpass_query_result)
         res <- osmdata_sf (qry)

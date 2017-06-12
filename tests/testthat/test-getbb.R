@@ -1,7 +1,7 @@
 has_internet <- curl::has_internet ()
 
-is_cran <- identical (Sys.getenv ("_R_CHECK_CRAN_INCOMING_"), 'true')
-is_travis <- identical (Sys.getenv ("TRAVIS"), "true")
+# true except when this is set by devtools::check
+is_cran <- is.na (Sys.getenv ("NOT_CRAN", unset = NA))
 
 source ("../stub.R")
 
@@ -41,7 +41,7 @@ test_that ("bbox", {
 
 test_that ('getbb-place_name', {
                if (has_internet) {
-                   if (is_cran | is_travis)
+                   if (is_cran)
                    {
                        load("../cfm_output_bb.rda")
                        stub (getbb, 'httr::GET', function (x) cfm_output_bb )
