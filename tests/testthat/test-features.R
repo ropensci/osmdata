@@ -35,7 +35,8 @@ context ("features.R")
 test_that ("available_features", {
                expect_error (available_features (1), "unused argument")
                if (!has_internet) {
-                   expect_message (available_features (), "No internet connection")
+                   expect_message (available_features (),
+                                   "No internet connection")
                } else
                {
                    if (!test_all)
@@ -55,9 +56,9 @@ test_that ("available_tags", {
                } else {
                    if (!test_all)
                    {
-                       load("GET_available_features.rda")
+                       load ("../cfm_output_af.rda")
                        stub (available_tags, 'httr::GET', function (x)
-                             GET_available_features)
+                             cfm_output_af$content )
                    }
                    expect_that (length (available_tags ("junk")), equals (0))
                    expect_is (available_tags ("highway"), "character")
