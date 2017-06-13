@@ -1,3 +1,8 @@
+
+0.0.3
+===================
+- Change tests only, no functional difference
+
 0.0.2
 ===================
 - Rename function `opq_to_string()` to `opq_string()`

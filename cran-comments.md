@@ -1,18 +1,8 @@
-# CRAN notes for osmdata_0.0.2 submission
+# CRAN notes for osmdata_0.0.3 submission
 
-The errors on some windows machines previously discussed with Brian Ripley were
-due to me failing to properly check the `_R_CHECK_CRAN_INCOMING_` environment
-variable which led to these machines running tests in a different way than
-intended.
-
-I now have
-```
-is_cran <- identical (Sys.getenv ("_R_CHECK_CRAN_INCOMING_"), 'true')
-```
-and skip the previously offending parts of tests if `is_cran` is TRUE.
-
-Additional notes regarding possibly invalid URL in one man/ entry and possibly
-mis-spelled word in DESCRIPTION have also been resolved.
+Previous fails were due to running full tests instead of CRAN-restricted set.
+Full tests are now only run for particular environment variables that will not
+exist on CRAN.
 
 ## Test environments
 
