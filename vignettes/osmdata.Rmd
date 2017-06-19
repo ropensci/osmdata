@@ -221,7 +221,7 @@ more complex `overpass` queries, although arbitrarily complex `overpass` queries
 may be passed directly to the primary `osmdata` functions.  As illustrated
 above, `osmdata` queries are generally constructed through initiating a query
 with `opq()`, and then specifying OSM features in terms of `key-value` pairs
-with `add_feeature()`. 
+with `add_feature()`. 
 
 The simplest way to use `osmdata` is to simply request all data within a given
 bounding box (warning - not intended to run):
