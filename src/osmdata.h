@@ -115,6 +115,9 @@ class XmlData
         Ways m_ways;
         Relations m_relations;
         UniqueVals m_unique;
+
+    protected:
+
         float xmin=FLOAT_MAX, xmax=-FLOAT_MAX, ymin=FLOAT_MAX, ymax=-FLOAT_MAX;
 
     public:
