@@ -19,14 +19,17 @@ Build an Overpass query
 }
 \examples{
 \dontrun{
-q <- getbb ("portsmouth", display_name_contains="United States") \%>\% opq () \%>\% 
-        add_feature("amenity", "restaurant") \%>\%
-        add_feature("amenity", "pub") 
+q <- getbb ("portsmouth", display_name_contains = "United States") \%>\%
+            opq () \%>\% 
+            add_feature("amenity", "restaurant") \%>\%
+            add_feature("amenity", "pub") 
 osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
-q1 <- getbb ("portsmouth", display_name_contains="United States") \%>\% opq () \%>\% 
-        add_feature("amenity", "restaurant") 
-q2 <- getbb ("portsmouth", display_name_contains="United States") \%>\% opq () \%>\% 
-        add_feature("amenity", "pub") 
+q1 <- getbb ("portsmouth", display_name_contains = "United States") \%>\%
+                opq () \%>\% 
+                add_feature("amenity", "restaurant") 
+q2 <- getbb ("portsmouth", display_name_contains = "United States") \%>\%
+                opq () \%>\% 
+                add_feature("amenity", "pub") 
 c (osmdata_sf (q1), osmdata_sf (q1)) # all objects that are restaurants OR pubs
 }
 }

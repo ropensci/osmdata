@@ -10,17 +10,20 @@
 #'
 #' @examples
 #' \dontrun{
-#' q <- getbb ("portsmouth", display_name_contains="United States") %>% opq () %>% 
-#'         add_feature("amenity", "restaurant") %>%
-#'         add_feature("amenity", "pub") 
+#' q <- getbb ("portsmouth", display_name_contains = "United States") %>%
+#'             opq () %>% 
+#'             add_feature("amenity", "restaurant") %>%
+#'             add_feature("amenity", "pub") 
 #' osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
-#' q1 <- getbb ("portsmouth", display_name_contains="United States") %>% opq () %>% 
-#'         add_feature("amenity", "restaurant") 
-#' q2 <- getbb ("portsmouth", display_name_contains="United States") %>% opq () %>% 
-#'         add_feature("amenity", "pub") 
+#' q1 <- getbb ("portsmouth", display_name_contains = "United States") %>%
+#'                 opq () %>% 
+#'                 add_feature("amenity", "restaurant") 
+#' q2 <- getbb ("portsmouth", display_name_contains = "United States") %>%
+#'                 opq () %>% 
+#'                 add_feature("amenity", "pub") 
 #' c (osmdata_sf (q1), osmdata_sf (q1)) # all objects that are restaurants OR pubs
 #' }
-opq <- function (bbox=NULL)
+opq <- function (bbox = NULL)
 {
     # TODO: Do we really need these [out:xml][timeout] specifiers?
     res <- list (bbox = bbox_to_string (bbox),
@@ -35,7 +38,7 @@ opq <- function (bbox=NULL)
 #' @param opq An \code{overpass_query} object
 #' @param key feature key
 #' @param value value for feature key; can be negated with an initial
-#' exclamation mark, \code{value="!this"}.
+#' exclamation mark, \code{value = "!this"}.
 #' @param key_exact If FALSE, \code{key} is not interpreted exactly; see
 #' \url{https://wiki.openstreetmap.org/wiki/Overpass_API}
 #' @param value_exact If FALSE, \code{value} is not interpreted exactly
@@ -47,8 +50,8 @@ opq <- function (bbox=NULL)
 #' 
 #' @note \code{key_exact} should generally be \code{TRUE}, because OSM uses a
 #' reasonably well defined set of possible keys, as returned by
-#' \code{available_features}. Setting \code{key_exact=FALSE} allows matching of
-#' regular expressions on OSM keys, as described in Section 6.1.5 of
+#' \code{available_features}. Setting \code{key_exact = FALSE} allows matching
+#' of regular expressions on OSM keys, as described in Section 6.1.5 of
 #' \url{http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL}. The actual
 #' query submitted to the overpass API can be obtained from
 #' \link{opq_string}.
@@ -59,20 +62,24 @@ opq <- function (bbox=NULL)
 #'
 #' @examples
 #' \dontrun{
-#' q <- getbb ("portsmouth", display_name_contains="United States") %>% opq () %>% 
-#'         add_feature("amenity", "restaurant") %>%
-#'         add_feature("amenity", "pub") 
+#' q <- getbb ("portsmouth", display_name_contains = "United States") %>%
+#'                 opq () %>% 
+#'                 add_feature("amenity", "restaurant") %>%
+#'                 add_feature("amenity", "pub") 
 #' osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
-#' q1 <- getbb ("portsmouth", display_name_contains="United States") %>% opq () %>% 
-#'         add_feature("amenity", "restaurant") 
-#' q2 <- getbb ("portsmouth", display_name_contains="United States") %>% opq () %>% 
-#'         add_feature("amenity", "pub") 
+#' q1 <- getbb ("portsmouth", display_name_contains = "United States") %>%
+#'                 opq () %>% 
+#'                 add_feature("amenity", "restaurant") 
+#' q2 <- getbb ("portsmouth", display_name_contains = "United States") %>%
+#'                 opq () %>% 
+#'                 add_feature("amenity", "pub") 
 #' c (osmdata_sf (q1), osmdata_sf (q1)) # all objects that are restaurants OR pubs
 #' # Use of negation to extract all non-primary highways
-#' q <- opq ("portsmouth uk") %>% add_feature (key="highway", value="!primary") 
+#' q <- opq ("portsmouth uk") %>%
+#'         add_feature (key="highway", value = "!primary") 
 #' }
-add_feature <- function (opq, key, value, key_exact=TRUE, value_exact=TRUE,
-                         match_case=TRUE, bbox=NULL)
+add_feature <- function (opq, key, value, key_exact = TRUE, value_exact = TRUE,
+                         match_case = TRUE, bbox = NULL)
 {
     if (missing (key))
         stop ('key must be provided')
@@ -97,6 +104,8 @@ add_feature <- function (opq, key, value, key_exact=TRUE, value_exact=TRUE,
         key_pre <- "~"
 
     if (missing (value))
+        value <- NULL
+    if (is.null (value))
     {
         feature <- paste0 (sprintf (' ["%s"]', key))
     } else
@@ -106,7 +115,7 @@ add_feature <- function (opq, key, value, key_exact=TRUE, value_exact=TRUE,
             bind <- paste0 ("!", bind)
             value <- substring (value, 2, nchar (value))
         }
-        feature <- paste0 (sprintf (' [%s"%s"%s"%s"', 
+        feature <- paste0 (sprintf (' [%s"%s"%s"%s"',
                                     key_pre, key, bind, value))
         if (!match_case)
             feature <- paste0 (feature, ",i")
