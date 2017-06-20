@@ -2,7 +2,7 @@ language: r
 warnings_are_errors: true
 sudo: required
 cache: packages
-latex: false # TODO: Enable after https://github.com/travis-ci/travis-build/pull/1072
+group: edge # https://blog.travis-ci.com/2017-06-19-trusty-updates-2017-Q2
 
 # precise fails because unmet deps in libgdal-dev can not be insalled
 
