@@ -33,6 +33,8 @@ get_timestamp <- function (doc)
 #'        \code{add_feature}.
 #' @param filename If given, OSM data are saved to the named file
 #' @param quiet suppress status messages. 
+#' @param base_url The url of the server running overpass to be queried, set to
+#'        \url{http://overpass-api.de/api/interpreter} by default.
 #' @param encoding Unless otherwise specified XML documents are assumed to be
 #'        encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
 #'        an explicit encoding directive, this allows you to supply a default.
@@ -50,12 +52,16 @@ get_timestamp <- function (doc)
 #' q <- add_feature (q, key="historic", value="ruins")
 #' osmdata_xml (q, filename="hampi.osm")
 #' }
-osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
+osmdata_xml <- function(q, filename, quiet=TRUE, base_url, encoding) {
     if (missing (encoding))
         encoding <- 'UTF-8'
 
-    doc <- overpass_query (opq_string (q), quiet = quiet,
-                           encoding = encoding)
+    if (missing (base_url))
+        doc <- overpass_query (opq_string (q), quiet = quiet,
+                               encoding = encoding)
+    else
+        doc <- overpass_query (opq_string (q), quiet = quiet,
+                               base_url = base_url, encoding = encoding)
     doc <- xml2::read_xml (doc, encoding = encoding)
     if (!missing (filename))
         xml2::write_xml (doc, file = filename)
@@ -70,6 +76,8 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
 #' @param doc If missing, \code{doc} is obtained by issuing the overpass query,
 #'        \code{q}, otherwise either the name of a file from which to read data,
 #'        or an object of class \code{XML} returned from \code{osmdata_xml}. 
+#' @param base_url The url of the server running overpass to be queried, set to
+#'        \url{http://overpass-api.de/api/interpreter} by default.
 #' @param quiet suppress status messages. 
 #' @param encoding Unless otherwise specified XML documents are assumed to be
 #'        encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
@@ -86,7 +94,7 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
 #'             add_feature (key="historic", value="ruins") %>%
 #'             osmdata_sp ()
 #' }
-osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
+osmdata_sp <- function(q, doc, quiet=TRUE, base_url, encoding) {
     if (missing (encoding))
         encoding <- 'UTF-8'
 
@@ -104,8 +112,13 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
 
     if (missing (doc))
     {
-        doc <- overpass_query (obj$overpass_call, quiet = quiet,
-                               encoding = encoding)
+        if (missing (base_url))
+            doc <- overpass_query (obj$overpass_call, quiet = quiet,
+                                   encoding = encoding)
+        else
+            doc <- overpass_query (obj$overpass_call, quiet = quiet,
+                                   base_url = base_url, encoding = encoding)
+
         obj$timestamp <- get_timestamp ()
     } else
     {
@@ -154,10 +167,10 @@ make_sf <- function (...)
     else
         row.names <- seq_along (x [[sf_column]])
     df <- if (length(x) == 1) # ONLY sfc
-                data.frame(row.names = row.names)
-            else # create a data.frame from list:
-                    data.frame(x[-sf_column], row.names = row.names,
-                           stringsAsFactors = TRUE)
+        data.frame(row.names = row.names)
+    else # create a data.frame from list:
+        data.frame(x[-sf_column], row.names = row.names,
+                   stringsAsFactors = TRUE)
 
     object <- as.list(substitute(list(...)))[-1L]
     arg_nm <- sapply(object, function(x) deparse(x)) # nolint
@@ -166,7 +179,7 @@ make_sf <- function (...)
     df [[sfc_name]] <- x [[sf_column]]
     attr(df, "sf_column") <- sfc_name
     f <- factor(rep(NA_character_, length.out = ncol(df) - 1),
-               levels = c ("constant", "aggregate", "identity"))
+                levels = c ("constant", "aggregate", "identity"))
     names(f) <- names(df)[-ncol (df)]
     attr(df, "agr") <- f
     class(df) <- c("sf", class(df))
@@ -182,6 +195,8 @@ make_sf <- function (...)
 #' @param doc If missing, \code{doc} is obtained by issuing the overpass query,
 #'        \code{q}, otherwise either the name of a file from which to read data,
 #'        or an object of class \code{XML} returned from \code{osmdata_xml}. 
+#' @param base_url The url of the server running overpass to be queried, set to
+#'        \url{http://overpass-api.de/api/interpreter} by default.
 #' @param quiet suppress status messages. 
 #' @param encoding Unless otherwise specified XML documents are assumed to be
 #'        encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
@@ -196,7 +211,7 @@ make_sf <- function (...)
 #'             add_feature (key="historic", value="ruins") %>%
 #'             osmdata_sf ()
 #' }
-osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
+osmdata_sf <- function(q, doc, quiet=TRUE, base_url, encoding) {
     if (missing (encoding))
         encoding <- 'UTF-8'
 
@@ -214,8 +229,16 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
 
     if (missing (doc))
     {
-        doc <- overpass_query (obj$overpass_call, quiet = quiet,
-                               encoding = encoding)
+        if (missing (base_url))
+        {
+            doc <- overpass_query (obj$overpass_call, quiet = quiet,
+                                   encoding = encoding)
+        } else
+        {
+            doc <- overpass_query (obj$overpass_call, quiet = quiet,
+                                   base_url = base_url, encoding = encoding)
+        } 
+
         obj$timestamp <- get_timestamp ()
     } else
     {
@@ -228,6 +251,7 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
         obj$timestamp <- get_timestamp (doc)
         doc <- as.character (doc)
     }
+
 
     if (!quiet)
         message ('convertig OSM data to sp format')
