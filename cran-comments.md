@@ -1,8 +1,8 @@
 # CRAN notes for osmdata_0.0.3 submission
 
-Previous fails were due to running full tests instead of CRAN-restricted set.
-Full tests are now only run for particular environment variables that will not
-exist on CRAN.
+The two remaining test fails were due to me failing to omit the last remaining
+offending line of tests. This has now been rectified, and all tests really
+should always pass from here on.
 
 ## Test environments
 

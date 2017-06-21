@@ -1,12 +1,12 @@
-^aaa[.]Rmd$
-^appveyor[.]yml$
+^aaa\.Rmd$
+^appveyor\.yml$
 ^configure$
 ^docs/
 ^fig/
 makefile$
-^.*[.]Rproj$
-^paper[.]md$
-^_pkgdown[.]yml$
+^.*\.Rproj$
+^paper\.md$
+^_pkgdown\.yml$
 ^cran-comments.md$
 ^CONDUCT\.md$
 ^README\.Rmd$
@@ -15,6 +15,6 @@ makefile$
 ^src/Makevars$
 ^src/Makevars.in$
 ^tests/timing-benchmark.R$
-^[.]travis[.]yml$
+^\.travis\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$

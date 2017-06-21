@@ -37,6 +37,7 @@ Imports:
 Suggests:
     devtools,
     knitr,
+    magrittr,
     rmarkdown,
     roxygen2,
     sf,

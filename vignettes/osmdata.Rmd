@@ -409,10 +409,10 @@ message (paste (
 "          $overpass_call : The call submitted to the overpass API\n",
 "              $timestamp : [ Thurs 5 May 2017 14:41:19 ]\n",
 "             $osm_points : 'sf' Simple Features Collection with 69 points\n",
-"              $osm_lines : 'sf' Simple Features Collection with 25 linestrings\n",
+"              $osm_lines : 'sf' Simple Features Collection with 25 linestrings\n", #nolint
 "           $osm_polygons : 'sf' Simple Features Collection with 0 polygons\n",
-"         $osm_multilines : 'sf' Simple Features Collection with 0 multilinestrings\n",
-"      $osm_multipolygons : 'sf' Simple Features Collection with 0 multipolygons"))
+"         $osm_multilines : 'sf' Simple Features Collection with 0 multilinestrings\n", #nolint
+"      $osm_multipolygons : 'sf' Simple Features Collection with 0 multipolygons")) #nolint
 ```
 
 As the results show, all `osmdata` objects should contain:
@@ -502,10 +502,10 @@ readLines('buildings.osm')[1:6]
 message (paste (
 ' [1] "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"\n',
 '[2] "<osm version=\"0.6\" generator=\"Overpass API\">"\n',
-'[3] "  <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>"\n',
-'[4] "  <meta osm_base=\"2017-03-07T09:28:03Z\"/>"\n',
-'[5] "  <node id=\"21593231\" lat=\"51.5149566\" lon=\"-0.1134203\"/>"\n',
-'[6] "  <node id=\"25378129\" lat=\"51.5135870\" lon=\"-0.1115193\"/>"'))
+'[3] "  <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>"\n', #nolint
+'[4] "  <meta osm_base=\"2017-03-07T09:28:03Z\"/>"\n', #nolint
+'[5] "  <node id=\"21593231\" lat=\"51.5149566\" lon=\"-0.1134203\"/>"\n', #nolint
+'[6] "  <node id=\"25378129\" lat=\"51.5135870\" lon=\"-0.1115193\"/>"')) #nolint
 ```
 
 These data can be used in any other programs able to read and process XML data,
@@ -560,7 +560,7 @@ message (paste0 (
 " Simple feature collection with 38 features and 10 fields\n",
 " geometry type:  POINT\n",
 " dimension:      XY\n",
-" bbox:           xmin: 144.2894 ymin: -37.4846 xmax: 144.3893 ymax: -37.36012\n",
+" bbox:           xmin: 144.2894 ymin: -37.4846 xmax: 144.3893 ymax: -37.36012\n", #nolint
 " epsg (SRID):    4326\n",
 " proj4string:    +proj=longlat +datum=WGS84 +no_defs"))
 ```
@@ -579,10 +579,10 @@ message (paste0 (
 "         $overpass_call : The call submitted to the overpass API\n",
 "             $timestamp : [ Wed 4 Jun 2017 11:57:39 ]\n",
 "            $osm_points : 'sf' Simple Features Collection with 7106 points\n",
-"             $osm_lines : 'sf' Simple Features Collection with 263 linestrings\n",
+"             $osm_lines : 'sf' Simple Features Collection with 263 linestrings\n", #nolint
 "          $osm_polygons : 'sf' Simple Features Collection with 38 polygons\n",
-"        $osm_multilines : 'sf' Simple Features Collection with 1 multilinestrings\n",
-"     $osm_multipolygons : 'sf' Simple Features Collection with 6 multipolygons"))
+"        $osm_multilines : 'sf' Simple Features Collection with 1 multilinestrings\n", #nolint
+"     $osm_multipolygons : 'sf' Simple Features Collection with 6 multipolygons")) #nolint
 ```
 
 Even for spatial objects of the same type (the same 'layers' in `sf`
@@ -774,7 +774,7 @@ message (paste0 (
 " Simple feature collection with 1 feature and 3 fields\n",
 " geometry type:  LINESTRING\n",
 " dimension:      XY\n",
-" bbox:           xmin: 144.3235 ymin: -37.37162 xmax: 144.3335 ymax: 37.36366\n",
+" bbox:           xmin: 144.3235 ymin: -37.37162 xmax: 144.3335 ymax: 37.36366\n", #nolint
 " epsg (SRID):    4326\n",
 " proj4string:    +proj=longlat +datum=WGS84 +no_defs\n",
 "            osm_id          name waterway                       geometry\n",
@@ -788,7 +788,7 @@ object with:
 coliban$geometry[[1]]
 ```
 ```{r, echo = FALSE}
-message ("LINESTRING(144.323471069336 -37.3716201782227, 144.323944091797 -37.3714790344238, 144.324356079102 -37.3709754943848, 144.324493408203 -37.3704833984375, 144.324600219727 -37.370174407959, 144.324981689453 -37.3697204589844, 144.325149536133 -37.369441986084, 144.325393676758 -37.3690567016602, 144.325714111328 -37.3686943054199, 144.326080322266 -37.3682441711426)")
+message ("LINESTRING(144.323471069336 -37.3716201782227, 144.323944091797 -37.3714790344238, 144.324356079102 -37.3709754943848, 144.324493408203 -37.3704833984375, 144.324600219727 -37.370174407959, 144.324981689453 -37.3697204589844, 144.325149536133 -37.369441986084, 144.325393676758 -37.3690567016602, 144.325714111328 -37.3686943054199, 144.326080322266 -37.3682441711426)") #nolint
 ```
 
 The output contains nothing other than geometries (because, to reiterate, these
@@ -809,7 +809,7 @@ message (paste0 (
 " Simple feature collection with 1 feature and 4 fields\n",
 " geometry type:  POINT\n",
 " dimension:      XY\n",
-" bbox:           xmin: 144.3246 ymin: -37.37017 xmax: 144.3246 ymax: -37.37017\n",
+" bbox:           xmin: 144.3246 ymin: -37.37017 xmax: 144.3246 ymax: -37.37017\n", #nolint
 " epsg (SRID):    4326\n",
 " proj4string:    +proj=longlat +datum=WGS84 +no_defs\n",
 "                osm_id           name    tourism  waterway\n",

@@ -12,6 +12,3 @@ inst/doc
 # vim files
 .*.un~
 .*.swp
-# .osm files generated from vignette
-buildings.osm
-trentham.osm

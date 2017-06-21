@@ -18,7 +18,7 @@ overpass_status <- function (quiet=FALSE, wait=10)
     else if (grepl ('vi-di', overpass_url) | grepl ('rambler', overpass_url))
         st_type <- 'timestamp'
     else
-        return (invisible (list (available = available, next_slot = next_slot,
+        return (invisible (list (available = available, next_slot = NULL,
                                  msg = status)))
 
     overpass_url <- 'http://overpass-api.de/api/interpreter'
