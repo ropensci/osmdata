@@ -4,7 +4,7 @@
 \alias{osmdata_sp}
 \title{Return an OSM Overpass query as an \code{osmdata} object in \code{sp} format.}
 \usage{
-osmdata_sp(q, doc, quiet = TRUE, base_url, encoding)
+osmdata_sp(q, doc, quiet = TRUE, encoding)
 }
 \arguments{
 \item{q}{An object of class `overpass_query` constructed with \code{opq} and
@@ -16,9 +16,6 @@ osmdata_sp(q, doc, quiet = TRUE, base_url, encoding)
 or an object of class \code{XML} returned from \code{osmdata_xml}.}
 
 \item{quiet}{suppress status messages.}
-
-\item{base_url}{The url of the server running overpass to be queried, set to
-\url{http://overpass-api.de/api/interpreter} by default.}
 
 \item{encoding}{Unless otherwise specified XML documents are assumed to be
 encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks

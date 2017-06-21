@@ -6,7 +6,7 @@
 Read an (XML format) OSM Overpass response from a string, a connection,
 or a raw vector.}
 \usage{
-osmdata_xml(q, filename, quiet = TRUE, base_url, encoding)
+osmdata_xml(q, filename, quiet = TRUE, encoding)
 }
 \arguments{
 \item{q}{An object of class `overpass_query` constructed with \code{opq} and
@@ -15,9 +15,6 @@ osmdata_xml(q, filename, quiet = TRUE, base_url, encoding)
 \item{filename}{If given, OSM data are saved to the named file}
 
 \item{quiet}{suppress status messages.}
-
-\item{base_url}{The url of the server running overpass to be queried, set to
-\url{http://overpass-api.de/api/interpreter} by default.}
 
 \item{encoding}{Unless otherwise specified XML documents are assumed to be
 encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks

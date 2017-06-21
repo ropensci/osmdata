@@ -10,7 +10,9 @@ overpass_status <- function (quiet=FALSE, wait=10)
 {
     available <- FALSE
     slot_time <- status <- status_now <- NULL
-    ovp_url <- 'http://overpass-api.de/api/status'
+
+    overpass_url <- get_overpass_url ()
+    status_url <- gsub ('interpreter', 'status', overpass_url)
 
     if (!curl::has_internet ())
     {
@@ -22,7 +24,7 @@ overpass_status <- function (quiet=FALSE, wait=10)
         while (is.null (status) & ntrials < 10)
         {
             ntrials <- ntrials + 1
-            status <- httr::GET (ovp_url, httr::timeout (100))
+            status <- httr::GET (status_url, httr::timeout (100))
         }
         if (!is.null (status))
         {
@@ -67,27 +69,12 @@ overpass_status <- function (quiet=FALSE, wait=10)
 #'        slot time or should it throw a an exception?
 #' @param pad_wait if there is a queue and \code{wait} is \code{TRUE}, pad the
 #'        next query start time by \code{pad_wait} seconds (default = 5 seconds).
-#' @param base_url the url of the server running overpass to be queried, set to
-#'        \url{http://overpass-api.de/api/interpreter} by default.
 #' @param encoding Unless otherwise specified XML documents are assumed to be
 #'        encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
 #'        an explicit encoding directive, this allows you to supply a default.
 #'
-#' @note wrap function with \code{httr::with_verbose} if you want to see the
-#'       \code{httr} query (useful for debugging connection issues).\cr \cr 
-#'
-#' @return If the \code{query} result only has OSM \code{node}s then the
-#'         function will return a \code{SpatialPointsDataFrame} with the
-#'         \code{node}s.\cr\cr
-#'         If the \code{query} result has OSM \code{way}s then the function will
-#'         return a \code{SpatialLinesDataFrame} with the \code{way}s\cr\cr
-#'         \code{relations}s are not handled yet.\cr\cr
-#'         If you asked for a CSV, you will receive the text response back,
-#'         suitable for processing by \code{read.table(text=..., sep=...,
-#'         header=TRUE, check.names=FALSE, stringsAsFactors=FALSE)}.
 #' @noRd
 overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
-                            base_url='http://overpass-api.de/api/interpreter',
                             encoding) {
 
     if (missing (query))
@@ -120,15 +107,17 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
 
     o_stat <- overpass_status (quiet)
 
+    overpass_url <- get_overpass_url ()
+
     if (o_stat$available) {
-        res <- httr::POST (base_url, body = query)
+        res <- httr::POST (overpass_url, body = query)
     } else {
         if (wait) {
             wait <- max(0, as.numeric (difftime (o_stat$next_slot, Sys.time(),
                                                  units = 'secs'))) + pad_wait
             message (sprintf ('Waiting %s seconds', wait))
             Sys.sleep (wait)
-            res <- httr::POST (base_url, body = query)
+            res <- httr::POST (overpass_url, body = query)
         } else {
             stop ('Overpass query unavailable', call. = FALSE)
         }
