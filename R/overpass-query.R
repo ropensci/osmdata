@@ -9,10 +9,21 @@
 overpass_status <- function (quiet=FALSE, wait=10)
 {
     available <- FALSE
-    slot_time <- status <- status_now <- NULL
+    slot_time <- status <- st_type <- NULL
 
     overpass_url <- get_overpass_url ()
-    status_url <- gsub ('interpreter', 'status', overpass_url)
+    if (grepl ('\\.de', overpass_url) |
+        grepl ('openstreetmap', overpass_url))
+        st_type <- 'status'
+    else if (grepl ('vi-di', overpass_url) | grepl ('rambler', overpass_url))
+        st_type <- 'timestamp'
+    else
+        return (invisible (list (available = available, next_slot = next_slot,
+                                 msg = status)))
+
+    overpass_url <- 'http://overpass-api.de/api/interpreter'
+
+    status_url <- gsub ('interpreter', st_type, overpass_url)
 
     if (!curl::has_internet ())
     {
@@ -28,20 +39,14 @@ overpass_status <- function (quiet=FALSE, wait=10)
         }
         if (!is.null (status))
         {
-            status <- httr::content (status)
-            status_now <- strsplit (status, '\n')[[1]][3]
-            if (!quiet) message (status_now)
+            status <- httr::content (status, encoding = 'UTF-8')
+            if (st_type == 'status')
+                slt <- get_slot_time (status = status, quiet = quiet)
+            else if (st_type == 'timestamp')
+                slt <- get_slot_timestamp (status = status)
 
-            if (grepl ('after', status_now)) {
-                available <- FALSE
-                slot_time <- lubridate::ymd_hms (gsub ('Slot available after: ',
-                                                       '', status_now))
-                slot_time <- lubridate::force_tz (slot_time,
-                                                  tz = Sys.timezone ())
-            } else {
-                available <- TRUE
-                slot_time <- Sys.time ()
-            }
+            available <- slt$available
+            slot_time <- slt$slot_time
         } else
         {
             # status not even returned so pause the whole shebang for 10 seconds
@@ -54,6 +59,38 @@ overpass_status <- function (quiet=FALSE, wait=10)
                              msg = status)))
 
 }
+
+# for APIs with status messages
+get_slot_time <- function (status, quiet)
+{
+    status_now <- strsplit (status, '\n')[[1]][3]
+    if (!quiet) message (status_now)
+
+    if (grepl ('after', status_now)) {
+        available <- FALSE
+        slot_time <- lubridate::ymd_hms (gsub ('Slot available after: ',
+                                               '', status_now))
+        slot_time <- lubridate::force_tz (slot_time,
+                                          tz = Sys.timezone ())
+    } else {
+        available <- TRUE
+        slot_time <- Sys.time ()
+    }
+
+    list ('available' = available, 'slot_time' = slot_time)
+}
+
+# For APIs with only timestamps but no status
+get_slot_timestamp <- function (status)
+{
+    slot_time <- NA
+    available <- FALSE
+    if (nchar (status) > 1)
+        available <- TRUE
+
+    list ('available' = available, 'slot_time' = slot_time)
+}
+
 
 #' Issue OSM Overpass Query
 #'
