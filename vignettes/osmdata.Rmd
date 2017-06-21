@@ -292,6 +292,21 @@ And as expected, the `OR` operation produces more data than the equivalent
 `AND`, showing the utility of combining `osmdata` objects with the generic
 function `c()`. 
 
+### 2.3 Different `overpass` API servers
+
+By default, `osmdata` uses the main `overpass` API server at
+`http://overpass-api.de/api/interpreter`. This default is set when the
+`osmdata` package is loaded into the current `R` workspace.  A list of available
+servers is maintained at
+[http://wiki.openstreetmap.org/wiki/Overpass_API](http://wiki.openstreetmap.org/wiki/Overpass_API).
+Alternative servers may be set using `set_overpass_url()`, for example,
+```{r, eval = FALSE}
+set_overpass_url ('http://overpass.osm.rambler.ru/cgi/interpreter')
+```
+All subsequent usage of `osmdata` within the same `R` session will then utilise
+the nominated overpass API server. A list of alternative servers is also given
+in the documentation for `set_overpass_url()` - see `?set_overpass_url`.
+
 ## 3. The `osmdata` object
 
 The `osmdata` extraction functions (`osmdata_sf()` and `osmdata_sp()`), both
