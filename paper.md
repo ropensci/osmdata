@@ -25,6 +25,8 @@ affiliations:
       index: 4
 date: 8 March 2017
 bibliography: vignettes/osmdata-refs.bib
+nocite: |
+  @*
 ---
 
 # Summary
@@ -41,5 +43,3 @@ intersect a given point). The package is faster than current alternatives for im
 OSM data into R and is the only one compatible with `sf`.
 
 # References
-
-(see bibliography)
