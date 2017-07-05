@@ -114,13 +114,17 @@ add_feature <- function (opq, key, value, key_exact = TRUE, value_exact = TRUE,
         {
             bind <- paste0 ("!", bind)
             value <- substring (value, 2, nchar (value))
+            if (key_pre == "~")
+            {
+                message ("Value negation only possible for exact keys")
+                key_pre <- ""
+            }
         }
         feature <- paste0 (sprintf (' [%s"%s"%s"%s"',
                                     key_pre, key, bind, value))
         if (!match_case)
             feature <- paste0 (feature, ",i")
         feature <- paste0 (feature, "]")
-        #feature <- paste0 (sprintf (' ["%s"%s"%s"]', key, bind, value))
     }
 
     opq$features <- c(opq$features, feature)
