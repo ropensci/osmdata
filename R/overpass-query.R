@@ -144,7 +144,10 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
 
     o_stat <- overpass_status (quiet)
 
-    overpass_url <- get_overpass_url ()
+    if (encoding != 'pbf')
+        overpass_url <- get_overpass_url ()
+    else
+        overpass_url <- 'http://dev.overpass-api.de/test753/interpreter'
 
     if (o_stat$available) {
         res <- httr::POST (overpass_url, body = query)
@@ -164,7 +167,9 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
     if (class (res) == 'result') # differs only for mock tests
         httr::stop_for_status (res)
 
-    if (class (res) == 'raw') # for mock tests
+    if (encoding == 'pbf')
+        doc <- httr::content (res, as = 'raw')
+    else if (class (res) == 'raw') # for mock tests
         doc <- rawToChar (res)
     else
         doc <- httr::content (res, as = 'text', encoding = encoding,
