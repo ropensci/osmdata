@@ -27,6 +27,7 @@ Imports:
     curl,
     httr,
     lubridate,
+    magrittr,
     methods,
     Rcpp (>= 0.12.4),
     rvest,
@@ -37,7 +38,6 @@ Imports:
 Suggests:
     devtools,
     knitr,
-    magrittr,
     rmarkdown,
     roxygen2,
     sf,

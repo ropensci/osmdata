@@ -17,8 +17,8 @@ returned by \url{http://wiki.openstreetmap.org/wiki/Nominatim}}
 \item{viewbox}{The bounds in which you're searching}
 
 \item{format_out}{Character string indicating output format: matrix (default),
-string (see \code{\link{bbox_to_string}}) or data.frame (all 'hits' returned
-by Nominatim)}
+string (see \code{\link{bbox_to_string}}), data.frame (all 'hits' returned
+by Nominatim), or polygon (full polygonal bounding boxes for each match).}
 
 \item{base_url}{Base website from where data is queried}
 
@@ -31,7 +31,15 @@ by Nominatim)}
 \item{silent}{Should the API be printed to screen? FALSE by default}
 }
 \value{
-Numeric bounding box as min and max of latitude and longitude
+Unless \code{format_out = "polygon"}, a numeric bounding box as min
+and max of latitude and longitude. If \code{format_out = "polygon"}, one or
+more two-columns matrices of polygonal longitude-latitude points. Where
+multiple \code{place_name} occurrences are found within \code{nominatim},
+each item of the list of coordinates may itself contain multiple coordinate
+matrices where multiple exact matches exist. If one one exact match exists
+with potentially multiple polygonal boundaries (for example, "london uk" is
+an exact match, but can mean either greater London or the City of London),
+only the first is returned. See examples below for illustration.
 }
 \description{
 This function uses the free Nominatim API provided by OpenStreetMap to find
@@ -60,5 +68,13 @@ key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renv
 if(nchar(key) ==  32) {
   getbb(place_name, base_url = "http://locationiq.org/v1/search.php", key = key)
 }
+
+# examples of polygonal boundaries
+bb <- getbb ("london uk", format_out = "polygon")
+# There are actually 2 boundaries (the larger of Greater London, and the
+# smaller of the enclosed City of London), but only the first is returned.
+bb <- getbb ("london", format_out = "polygon")
+# There are many places named "London", so this is a list of 10 items, the
+# first of which includes both boundaries from the previous example.
 }
 }
