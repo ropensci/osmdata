@@ -100,12 +100,6 @@ bbox_to_string <- function(bbox) {
 #' getbb(place_name, display_name_contains = "United States", silent = FALSE)
 #' # top 3 matches as data frame
 #' getbb(place_name, format_out = "data.frame", limit = 3)
-#' # using an alternative service (locationiq requires an API key)
-#' key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
-#' if(nchar(key) ==  32) {
-#'   getbb(place_name, base_url = "http://locationiq.org/v1/search.php", key = key)
-#' }
-#'
 #' # examples of polygonal boundaries
 #' bb <- getbb ("london uk", format_out = "polygon")
 #' plot(bb)
@@ -114,6 +108,11 @@ bbox_to_string <- function(bbox) {
 #' bb <- getbb ("london", format_out = "polygon")
 #' # There are many places named "London", so this is a list of 10 items, the
 #' # first of which includes both boundaries from the previous example.
+#' # using an alternative service (locationiq requires an API key)
+#' key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
+#' if(nchar(key) ==  32) {
+#'   getbb(place_name, base_url = "http://locationiq.org/v1/search.php", key = key)
+#' }
 #' }
 getbb <- function(place_name,
                   display_name_contains = NULL,
