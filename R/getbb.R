@@ -161,8 +161,9 @@ getbb <- function(place_name,
     if (!is.null(display_name_contains))
         obj <- obj[grepl(display_name_contains, obj$display_name), ]
 
-    if (format_out == "data.frame")
-        ret <- obj
+    if (format_out == "data.frame") {
+      return(obj)
+    }
 
     bn <- as.numeric(obj$boundingbox[[1]])
     bb_mat <- matrix(c(bn[3:4], bn[1:2]), nrow = 2, byrow = TRUE)
