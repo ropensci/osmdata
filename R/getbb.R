@@ -108,6 +108,7 @@ bbox_to_string <- function(bbox) {
 #'
 #' # examples of polygonal boundaries
 #' bb <- getbb ("london uk", format_out = "polygon")
+#' plot(bb)
 #' # There are actually 2 boundaries (the larger of Greater London, and the
 #' # smaller of the enclosed City of London), but only the first is returned.
 #' bb <- getbb ("london", format_out = "polygon")
