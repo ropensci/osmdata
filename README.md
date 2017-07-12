@@ -16,11 +16,11 @@ packageVersion("osmdata")
 
 ### Usage
 
-[Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be built from a base query constructed with `opq` followed by `add_feature`. The corresponding OSM objects are then downloaded and converted to `R Simple Features (sf)` objects with `osmdata_sf()` or to `R Spatial (sp)` objects with `osmdata_sp()`. For example,
+[Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be built from a base query constructed with `opq` followed by `add_osm_feature`. The corresponding OSM objects are then downloaded and converted to `R Simple Features (sf)` objects with `osmdata_sf()` or to `R Spatial (sp)` objects with `osmdata_sp()`. For example,
 
 ``` r
 q0 <- opq(bbox = c(-0.27, 51.47, -0.20, 51.50)) # Chiswick Eyot in London, U.K.
-q1 <- add_feature(q0, key = 'name', value = "Thames", value_exact = FALSE)
+q1 <- add_osm_feature(q0, key = 'name', value = "Thames", value_exact = FALSE)
 x <- osmdata_sf(q1)
 x
 ```
