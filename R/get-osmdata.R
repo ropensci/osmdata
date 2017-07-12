@@ -49,17 +49,29 @@ get_timestamp <- function (doc)
 #' q <- opq ("hampi india")
 #' q <- add_feature (q, key="historic", value="ruins")
 #' osmdata_xml (q, filename="hampi.osm")
+#' u = "http://download.geofabrik.de/europe/albania.osh.pbf"
+#' download.file(u, "albania.osh.pbf")
+#' osmdata_xml(input_file = "albania.osh.pbf", filename = "albania.osm")
+#' q = add_feature(opq("Albania"), "highway")
+#' albanian_roads = osmdata_sf(q, doc = "albania.osm")
+#' 
 #' }
-osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
+osmdata_xml <- function(q, filename, quiet=TRUE, encoding, input_file) {
     if (missing (encoding))
         encoding <- 'UTF-8'
-
-    doc <- overpass_query (query = opq_string (q), quiet = quiet,
-                           encoding = encoding)
-    doc <- xml2::read_xml (doc, encoding = encoding)
-    if (!missing (filename))
+    if(!missing(input_file)) {
+      if(grepl(pattern = ".pbf", x = input_file)) {
+        msg = paste0("osmconvert ", input_file, " >", filename)
+        system(msg)
+      }
+    } else {
+      doc <- overpass_query (query = opq_string (q), quiet = quiet,
+                             encoding = encoding)
+      doc <- xml2::read_xml (doc, encoding = encoding)
+      if (!missing (filename))
         xml2::write_xml (doc, file = filename)
-    invisible (doc)
+      invisible (doc)
+    }
 }
 
 #' Return an OSM Overpass query in PBF (Protocol Buffer Format).
