@@ -205,7 +205,7 @@ The following three lines define a query and download the resultant data to an
 `XML` file.
 ```{r trentham, eval=FALSE}
 q <- opq (bbox = 'Trentham, Australia')
-q <- add_feature (q, key = 'name') # any named objects
+q <- add_osm_feature (q, key = 'name') # any named objects
 osmdata_xml (q, 'trentham.osm')
 ```
 These data may then be converted into SF representations using either `R::sf` or

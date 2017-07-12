@@ -20,7 +20,7 @@ if (get_local)
     # This test needs to return the results of overpass_query(), not the direct
     # httr::POST call, so can't be grabbed with curl_fetch_memory
     qry <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517))
-    qry <- add_feature (qry, key = 'highway')
+    qry <- add_osm_feature (qry, key = 'highway')
     overpass_query_result <- overpass_query (opq_string (qry),
                                              encoding = 'UTF-8')
     save (overpass_query_result, file = "../overpass_query_result.rda")
@@ -43,21 +43,21 @@ context ('overpass query')
 
 test_that ('query-construction', {
     q0 <- opq (bbox = c(-0.12, 51.51, -0.11, 51.52))
-    expect_error (q1 <- add_feature (q0), 'key must be provided')
-    expect_silent (q1 <- add_feature (q0, key = 'aaa')) # bbox from qry
+    expect_error (q1 <- add_osm_feature (q0), 'key must be provided')
+    expect_silent (q1 <- add_osm_feature (q0, key = 'aaa')) # bbox from qry
     q0$bbox <- NULL
-    expect_error (q1 <- add_feature (q0, key = 'aaa'),
+    expect_error (q1 <- add_osm_feature (q0, key = 'aaa'),
               'Bounding box has to either be set in opq or must be set here')
     q0 <- opq (bbox = c(-0.12, 51.51, -0.11, 51.52))
-    q1 <- add_feature (q0, key = 'aaa')
+    q1 <- add_osm_feature (q0, key = 'aaa')
     expect_false (grepl ('=', q1$features))
-    q1 <- add_feature (q0, key = 'aaa', value = 'bbb')
+    q1 <- add_osm_feature (q0, key = 'aaa', value = 'bbb')
     expect_true (grepl ('=', q1$features))
 })
 
 test_that ('make_query', {
     qry <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517))
-    qry <- add_feature (qry, key = 'highway')
+    qry <- add_osm_feature (qry, key = 'highway')
 
     if (!has_internet) {
         expect_error (osmdata_xml (qry),

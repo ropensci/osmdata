@@ -10,7 +10,7 @@ osmdata_xml(q, filename, quiet = TRUE, encoding)
 }
 \arguments{
 \item{q}{An object of class `overpass_query` constructed with \code{opq} and
-\code{add_feature}.}
+\code{add_osm_feature}.}
 
 \item{filename}{If given, OSM data are saved to the named file}
 
@@ -36,7 +36,7 @@ Objects of class \code{xml_document} can be saved as \code{.xml} or
 \examples{
 \dontrun{
 q <- opq ("hampi india")
-q <- add_feature (q, key="historic", value="ruins")
+q <- add_osm_feature (q, key="historic", value="ruins")
 osmdata_xml (q, filename="hampi.osm")
 }
 }

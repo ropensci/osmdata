@@ -1,3 +1,9 @@
+0.0.5
+===================
+- Add extraction of bounding polygons with `getbb (..., format_out = "polygon")`
+- Add `trim_osmdata` function to trim an `osmdata` object to within a bounding
+  polygon (thanks @sytpp)
+
 
 0.0.4
 ===================
