@@ -5,7 +5,7 @@ benchmark <- function (times = 100)
 {
     devtools::load_all (".", export_all = FALSE)
     q0 <- opq (bbox = c(-0.27, 51.47, -0.20, 51.50))
-    q1 <- add_feature (q0, key = 'name', value = "Thames", exact = FALSE)
+    q1 <- add_osm_feature (q0, key = 'name', value = "Thames", exact = FALSE)
     # contains both multipolygons and multilinestrings
     doc <- osmdata_xml (q1, "export.osm")
 

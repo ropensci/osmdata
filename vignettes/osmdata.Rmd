@@ -79,11 +79,11 @@ that a query all motorways in greater London (UK) can be constructed as follows:
 
 ```{r opq3, eval = FALSE}
 q <- opq(bbox = 'greater london uk') %>%
-    add_feature(key = 'highway', value = 'motorway')
+    add_osm_feature(key = 'highway', value = 'motorway')
 ```
 ```{r, echo = FALSE}
 q <- opq (bbox = c (51.2867602, -0.510375, 51.6918741, 0.3340155)) %>%
-    add_feature(key = 'highway', value = 'motorway')
+    add_osm_feature(key = 'highway', value = 'motorway')
 ```
 
 A detailed description of features is provided at the 
@@ -180,27 +180,27 @@ in the documentation for `set_overpass_url()` - see `?set_overpass_url`.
 
 As demonstrated above, an `osmdata` query begins by specifying a bounding box
 with the function `opq()`, followed by specifying desired OSM features with
-`add_feature()`.  
+`add_osm_feature()`.  
 
 ```{r kunming1, eval = FALSE}
 q <- opq(bbox = 'Kunming, China') %>%
-    add_feature(key = 'natural', value = 'water')
+    add_osm_feature(key = 'natural', value = 'water')
 ```
 This query will request all natural water water bodies in Kunming, China. A
 particular water body may be requested through appending a further call to
-`add_feature()`:
+`add_osm_feature()`:
 
 ```{r kunming2, eval = FALSE}
 q <- opq(bbox = 'Kunming, China') %>%
-    add_feature(key = 'natural', value = 'water') %>%
-    add_feature(key = 'name:en', value = 'Dian', value_exact = FALSE)
+    add_osm_feature(key = 'natural', value = 'water') %>%
+    add_osm_feature(key = 'name:en', value = 'Dian', value_exact = FALSE)
 ```
 ```{r, echo = FALSE}
 q <- opq(bbox = c(102.5417638, 24.8915153, 102.8617638, 25.2115153)) %>%
-    add_feature(key = 'natural', value = 'water') %>%
-    add_feature(key = 'name:en', value = 'Dian', value_exact = FALSE)
+    add_osm_feature(key = 'natural', value = 'water') %>%
+    add_osm_feature(key = 'name:en', value = 'Dian', value_exact = FALSE)
 ```
-Each successive call to `add_feature()` **adds** features to a query. This query
+Each successive call to `add_osm_feature()` **adds** features to a query. This query
 is thus a request for all bodies of natural water **and** those with English
 names that include 'Dian'. The requested data may be extracted through calling
 one of the `osmdata_xml/sp/sf()` functions.
@@ -212,10 +212,10 @@ extracting separate data sets and combining then with the inbuilt `c` operator
 of `osmdata`. The following code demonstrates this with `osmdata_sf()`:
 ```{r kunming3, eval = FALSE}
 dat1 <- opq(bbox = 'Kunming, China') %>%
-    add_feature(key = 'natural', value = 'water') %>%
+    add_osm_feature(key = 'natural', value = 'water') %>%
     osmdata_sf ()
 dat2 <- opq(bbox = 'Kunming, China') %>%
-    add_feature(key = 'name:en', value = 'Dian', value_exact = FALSE) %>%
+    add_osm_feature(key = 'name:en', value = 'Dian', value_exact = FALSE) %>%
     osmdata_sf ()
 dat <- c (dat1, dat2)
 ```
@@ -266,8 +266,8 @@ Both `key` and `value` fields may be matched either exactly or approximately.
 The previous query is repeated here for convenience:
 ```{r kunming4, eval = FALSE}
 q <- opq(bbox = 'Kunming, China') %>%
-    add_feature(key = 'natural', value = 'water') %>%
-    add_feature(key = 'name:en', value = 'Dian', value_exact = FALSE)
+    add_osm_feature(key = 'natural', value = 'water') %>%
+    add_osm_feature(key = 'name:en', value = 'Dian', value_exact = FALSE)
 ```
 The parameter `value_exact = FALSE` controls the two ways of matching the
 specified `value` in `osmdata`: Either exactly and entirely, or through a
@@ -276,15 +276,15 @@ only return objects named 'Dian', and not, for example, any named 'Lake Dian'.
 Using `value_exact = FALSE` will return 'Lake Dian' through just specifying
 `value='Dian'`.
 
-In addtion to `value_exact`, `add_feature` also offers the additional two
+In addtion to `value_exact`, `add_osm_feature` also offers the additional two
 options of `key_exact` and `match_case`. The former functions just like
 `value_exact`, but is applied to the specified `key` parameter, while
 `match_case` (default `TRUE`) specifies whether case should also be matched.
 These options allow the above query to be rewritten,
 ```{r, eval = FALSE}
 q <- opq(bbox = 'Kunming, China') %>%
-    add_feature(key = 'natural', value = 'water') %>%
-    add_feature(key = 'name', value = 'dian', key_exact = FALSE,
+    add_osm_feature(key = 'natural', value = 'water') %>%
+    add_osm_feature(key = 'name', value = 'dian', key_exact = FALSE,
                 value_exact = FALSE, match_case = FALSE)
 ```
 
@@ -320,7 +320,7 @@ more complex `overpass` queries, although arbitrarily complex `overpass` queries
 may be passed directly to the primary `osmdata` functions.  As illustrated
 above, `osmdata` queries are generally constructed through initiating a query
 with `opq()`, and then specifying OSM features in terms of `key-value` pairs
-with `add_feature()`, along with judicious usage of the `key_exact`,
+with `add_osm_feature()`, along with judicious usage of the `key_exact`,
 `value_exact`, and `match_case` parameters.
 
 It is of course possible to simply request all data within a given
@@ -329,13 +329,13 @@ bounding box (warning - not intended to run):
 lots_of_data <- opq(bbox = 'City of London, U.K.') %>% osmdata_sf()
 ```
 Queries are, however, usually more useful when refined through using
-`add_feature()`, which minimally requires a single `key` and returns all objects
+`add_osm_feature()`, which minimally requires a single `key` and returns all objects
 specifying any value for that `key`: 
 
 ```{r opq-london, eval = FALSE}
 not_so_much_data <- opq(bbox = 'city of london uk') %>%
-    add_feature(key = 'highway') %>%
-    add_feature(key = 'name') %>%
+    add_osm_feature(key = 'highway') %>%
+    add_osm_feature(key = 'name') %>%
     osmdata_sf()
 ```
 
@@ -352,7 +352,7 @@ wanted to find all cycle paths in Seville, Spain:
 
 ```{r opq-seville-plot, eval = FALSE}
 q1 <- opq('Seville') %>%
-    add_feature(key = 'highway', value = 'cycleway')
+    add_osm_feature(key = 'highway', value = 'cycleway')
 cway_sev <- osmdata_sp(q1)
 sp::plot(cway_sev$osm_lines)
 ```
@@ -365,9 +365,9 @@ one query will return only those that are designated cycleways **AND** that are
 bridges:
 
 ```{r des-bike1, eval = FALSE}
-q2 <- add_feature(q1, key = 'bicycle', value = 'designated')
+q2 <- add_osm_feature(q1, key = 'bicycle', value = 'designated')
 des_bike <- osmdata_sf(q2)
-q3 <- add_feature(q2, key = 'bridge', value = 'yes')
+q3 <- add_osm_feature(q2, key = 'bridge', value = 'yes')
 des_bike_and_bridge <- osmdata_sf(q3)
 nrow(des_bike_and_bridge$osm_points); nrow(des_bike_and_bridge$osm_lines)
 ```
@@ -380,7 +380,7 @@ can be obtained through simply combining multiple `osmdata` objects with the `c`
 operator:
 
 ```{r, des-bike2, eval = FALSE}
-q4 <- add_feature(q1, key = 'bridge', value = 'yes')
+q4 <- add_osm_feature(q1, key = 'bridge', value = 'yes')
 bridge <- osmdata_sf(q4)
 des_bike_or_bridge <- c(des_bike, bridge)
 nrow(des_bike_or_bridge$osm_points); nrow(des_bike_or_bridge$osm_lines)
@@ -456,7 +456,7 @@ with a new query for a small portion of central London, U.K.
 
 ```{r osmdata_xml-london-buildings, eval = FALSE}
 dat <- opq(bbox = c(-0.12, 51.51, -0.11, 51.52)) %>%
-    add_feature(key = 'building') %>%
+    add_osm_feature(key = 'building') %>%
     osmdata_xml(file = 'buildings.osm')
 class(dat)
 ```
@@ -471,7 +471,7 @@ as the name of a file or an XML object:
 
 ```{r osmdata_with_files, eval = FALSE}
 q <- opq(bbox = c(-0.12, 51.51, -0.11, 51.52)) %>%
-    add_feature(key = 'building')
+    add_osm_feature(key = 'building')
 doc <- osmdata_xml(q, 'buildings.osm')
 dat1 <- osmdata_sf(q, doc)
 dat2 <- osmdata_sf(q, 'buildings.osm')
@@ -545,7 +545,7 @@ and saves them in the specified file.
 
 ```{r trentham, eval = FALSE}
 opq(bbox = 'Trentham, Australia') %>%
-    add_feature(key = 'name') %>%
+    add_osm_feature(key = 'name') %>%
     osmdata_xml(filename = 'trentham.osm')
 ```
 
@@ -755,7 +755,7 @@ objects from Trentham, Australia:
 
 ```{r, eval = FALSE}
 tr <- opq(bbox = 'Trentham, Australia') %>%
-    add_feature(key = 'name') %>%
+    add_osm_feature(key = 'name') %>%
     osmdata_sf()
 ```
 
@@ -843,7 +843,7 @@ which is composed of many (over 100) separate lines:
 
 ```{r, eval = FALSE}
 lcnr9 <- opq ('greater london uk') %>%
-    add_feature (key = "name", value = "London.Cycle.Network.Route.9",
+    add_osm_feature (key = "name", value = "London.Cycle.Network.Route.9",
                  value_exact = FALSE) %>%
     osmdata_sp()
 sp::plot(lcnr9$osm_lines)

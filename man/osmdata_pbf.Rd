@@ -8,7 +8,7 @@ osmdata_pbf(q, filename, quiet = TRUE)
 }
 \arguments{
 \item{q}{An object of class `overpass_query` constructed with \code{opq} and
-\code{add_feature}.}
+\code{add_osm_feature}.}
 
 \item{filename}{If given, OSM data are saved to the named file}
 
@@ -27,7 +27,7 @@ anything with PBF files.
 \examples{
 \dontrun{
 q <- opq ("hampi india")
-q <- add_feature (q, key="historic", value="ruins")
+q <- add_osm_feature (q, key="historic", value="ruins")
 osmdata_pdf (q, filename="hampi.pbf")
 }
 }

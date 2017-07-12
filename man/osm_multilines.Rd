@@ -24,7 +24,7 @@ object(s) which contain the object specified by \code{id}.
 \examples{
 \dontrun{
 dat <- opq ("London UK") \%>\% 
-    add_feature (key="name", value="Thames", exact=FALSE) \%>\% osmdata_sf ()
+    add_osm_feature (key="name", value="Thames", exact=FALSE) \%>\% osmdata_sf ()
 # Get ids of lines called "The Thames":
 id <- rownames (dat$osm_lines [which (dat$osm_lines$name == "The Thames"),])
 # and find all multilinestring objects which include those lines:

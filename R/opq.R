@@ -12,15 +12,15 @@
 #' \dontrun{
 #' q <- getbb ("portsmouth", display_name_contains = "United States") %>%
 #'             opq () %>% 
-#'             add_feature("amenity", "restaurant") %>%
-#'             add_feature("amenity", "pub") 
+#'             add_osm_feature("amenity", "restaurant") %>%
+#'             add_osm_feature("amenity", "pub") 
 #' osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
 #' q1 <- getbb ("portsmouth", display_name_contains = "United States") %>%
 #'                 opq () %>% 
-#'                 add_feature("amenity", "restaurant") 
+#'                 add_osm_feature("amenity", "restaurant") 
 #' q2 <- getbb ("portsmouth", display_name_contains = "United States") %>%
 #'                 opq () %>% 
-#'                 add_feature("amenity", "pub") 
+#'                 add_osm_feature("amenity", "pub") 
 #' c (osmdata_sf (q1), osmdata_sf (q1)) # all objects that are restaurants OR pubs
 #' }
 opq <- function (bbox = NULL)
@@ -56,6 +56,8 @@ opq <- function (bbox = NULL)
 #' query submitted to the overpass API can be obtained from
 #' \link{opq_string}.
 #'
+#' @note \code{add_feature} is deprecated; please use \code{add_osm_feature}.
+#'
 #' @references \url{http://wiki.openstreetmap.org/wiki/Map_Features}
 #'
 #' @export
@@ -64,22 +66,22 @@ opq <- function (bbox = NULL)
 #' \dontrun{
 #' q <- getbb ("portsmouth", display_name_contains = "United States") %>%
 #'                 opq () %>% 
-#'                 add_feature("amenity", "restaurant") %>%
-#'                 add_feature("amenity", "pub") 
+#'                 add_osm_feature("amenity", "restaurant") %>%
+#'                 add_osm_feature("amenity", "pub") 
 #' osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
 #' q1 <- getbb ("portsmouth", display_name_contains = "United States") %>%
 #'                 opq () %>% 
-#'                 add_feature("amenity", "restaurant") 
+#'                 add_osm_feature("amenity", "restaurant") 
 #' q2 <- getbb ("portsmouth", display_name_contains = "United States") %>%
 #'                 opq () %>% 
-#'                 add_feature("amenity", "pub") 
+#'                 add_osm_feature("amenity", "pub") 
 #' c (osmdata_sf (q1), osmdata_sf (q1)) # all objects that are restaurants OR pubs
 #' # Use of negation to extract all non-primary highways
 #' q <- opq ("portsmouth uk") %>%
-#'         add_feature (key="highway", value = "!primary") 
+#'         add_osm_feature (key="highway", value = "!primary") 
 #' }
-add_feature <- function (opq, key, value, key_exact = TRUE, value_exact = TRUE,
-                         match_case = TRUE, bbox = NULL)
+add_osm_feature <- function (opq, key, value, key_exact = TRUE,
+                             value_exact = TRUE, match_case = TRUE, bbox = NULL)
 {
     if (missing (key))
         stop ('key must be provided')
@@ -136,4 +138,13 @@ add_feature <- function (opq, key, value, key_exact = TRUE, value_exact = TRUE,
     # numerically sorted
 
     opq
+}
+
+#' @rdname add_osm_feature
+add_feature <- function (opq, key, value, key_exact = TRUE,
+                             value_exact = TRUE, match_case = TRUE, bbox = NULL)
+{
+    message ('add_feature() is deprecated; please use add_osm_feature()')
+    add_osm_feature (opq, key, value, key_exact = TRUE,
+                     value_exact = TRUE, match_case = TRUE, bbox = NULL)
 }

@@ -2,7 +2,7 @@
 get_geoms <- function (dat, id)
 {
     indx <- which (grepl ('osm_', names (dat)))
-    where <- indx [which (vapply (dat [indx], function (i) 
+    where <- indx [which (vapply (dat [indx], function (i)
                                   any (id %in% rownames (i)),
                                   FUN.VALUE = logical (1)))]
     lapply (where, function (i)
@@ -45,7 +45,7 @@ get_line_ids <- function (x, dat, id)
     if (is (x [[1]], 'MULTIPOLYGON'))
     {
         ids <- lapply (x, function (i) names (i [[1]]))
-        ids <- as.character (unlist (lapply (ids, function (i) 
+        ids <- as.character (unlist (lapply (ids, function (i)
                                              strsplit (i, '-'))))
     } else if (is (x [[1]], 'MULTILINESTRING'))
     {
@@ -53,7 +53,7 @@ get_line_ids <- function (x, dat, id)
     } else if (is (x [[1]], 'POLYGON'))
     {
         # find all intersecting lines
-        pts <- as.character (unlist (lapply (x, function (i) 
+        pts <- as.character (unlist (lapply (x, function (i)
                                              rownames (i [[1]]))))
         indx <- which (vapply (dat$osm_lines$geometry, function (i)
                                any (pts %in% rownames (i)),
@@ -64,7 +64,7 @@ get_line_ids <- function (x, dat, id)
         # find all intersecting lines
         pts <- do.call (rbind, x)
         pts <- as.character (rownames (pts))
-        indx <- which (vapply (dat$osm_lines$geometry, function (i) 
+        indx <- which (vapply (dat$osm_lines$geometry, function (i)
                                any (pts %in% rownames (i)),
                                FUN.VALUE = logical (1)))
         ids <- names (dat$osm_lines$geometry) [indx]
@@ -127,7 +127,7 @@ get_multiline_ids <- function (x, dat, id)
     {
         ids <- names (x)
         mls <- lapply (dat$osm_multilines$geometry, function (i) names (i))
-        indx <- vapply (mls, function (i) any (ids %in% i), 
+        indx <- vapply (mls, function (i) any (ids %in% i),
                         FUN.VALUE = logical (1))
         ids <- names (indx) [which (indx)]
     } else if (is (x [[1]], 'POINT'))
@@ -157,7 +157,7 @@ get_multipolygon_ids <- function (x, dat, id)
     if (is (x [[1]], 'POLYGON') | is (x [[1]], 'LINESTRING'))
     {
         ids <- names (x)
-        indx <- vapply (mps, function (i) any (ids %in% i), 
+        indx <- vapply (mps, function (i) any (ids %in% i),
                         FUN.VALUE = logical (1))
         ids <- names (indx) [which (indx)]
     } else if (is (x [[1]], 'POINT'))
@@ -239,13 +239,14 @@ osm_points <- function(dat, id) {
 #'
 #' @examples
 #' \dontrun{
-#' dat <- opq ("hengelo nl") %>% add_feature (key="highway") %>% osmdata_sf ()
+#' dat <- opq ("hengelo nl") %>% add_osm_feature (key="highway") %>%
+#'      osmdata_sf ()
 #' bus <- dat$osm_points [which (dat$osm_points$highway == 'bus_stop'),] %>%
 #'         rownames () # all OSM IDs of bus stops
 #' osm_lines (dat, bus) # all highways containing bus stops
 #'
 #' # All lines which intersect with Piccadilly Circus in London, UK
-#' dat <- opq ("Fitzrovia London") %>% add_feature (key="highway") %>% 
+#' dat <- opq ("Fitzrovia London") %>% add_osm_feature (key="highway") %>% 
 #'     osmdata_sf ()
 #' i <- which (dat$osm_polygons$name == "Piccadilly Circus")
 #' id <- rownames (dat$osm_polygons [i,])
@@ -288,7 +289,7 @@ osm_lines <- function(dat, id) {
 #' @examples
 #' \dontrun{
 #' Extract polygons which intersect Conway Street in London
-#' dat <- opq ("Marylebone London") %>% add_feature (key="highway") %>% 
+#' dat <- opq ("Marylebone London") %>% add_osm_feature (key="highway") %>% 
 #'     osmdata_sf ()
 #' conway <- which (dat$osm_lines$name == "Conway Street") 
 #' id <- rownames (dat$osm_lines [conway,])
@@ -331,7 +332,7 @@ osm_polygons <- function(dat, id) {
 #' @examples
 #' \dontrun{
 #' dat <- opq ("London UK") %>% 
-#'     add_feature (key="name", value="Thames", exact=FALSE) %>% osmdata_sf ()
+#'     add_osm_feature (key="name", value="Thames", exact=FALSE) %>% osmdata_sf ()
 #' # Get ids of lines called "The Thames":
 #' id <- rownames (dat$osm_lines [which (dat$osm_lines$name == "The Thames"),])
 #' # and find all multilinestring objects which include those lines:
@@ -378,7 +379,7 @@ osm_multilines <- function(dat, id) {
 #' # find all multipolygons which contain the single polygon called 
 #' # "Chiswick Eyot" (which is an island).
 #' dat <- opq ("London UK") %>% 
-#'     add_feature (key="name", value="Thames", exact=FALSE) %>% osmdata_sf ()
+#'     add_osm_feature (key="name", value="Thames", exact=FALSE) %>% osmdata_sf ()
 #' id <- rownames (dat$osm_polygons [which (dat$osm_polygons$name == "Chiswick Eyot"),])
 #' osm_multipolygons (dat, id)
 #' # That multipolygon is the Thames itself, but note that

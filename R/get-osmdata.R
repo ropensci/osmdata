@@ -30,7 +30,7 @@ get_timestamp <- function (doc)
 #' or a raw vector.
 #'
 #' @param q An object of class `overpass_query` constructed with \code{opq} and
-#'        \code{add_feature}.
+#'        \code{add_osm_feature}.
 #' @param filename If given, OSM data are saved to the named file
 #' @param quiet suppress status messages. 
 #' @param encoding Unless otherwise specified XML documents are assumed to be
@@ -47,7 +47,7 @@ get_timestamp <- function (doc)
 #' @examples
 #' \dontrun{
 #' q <- opq ("hampi india")
-#' q <- add_feature (q, key="historic", value="ruins")
+#' q <- add_osm_feature (q, key="historic", value="ruins")
 #' osmdata_xml (q, filename="hampi.osm")
 #' }
 osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
@@ -65,7 +65,7 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
 #' Return an OSM Overpass query in PBF (Protocol Buffer Format).
 #'
 #' @param q An object of class `overpass_query` constructed with \code{opq} and
-#'        \code{add_feature}.
+#'        \code{add_osm_feature}.
 #' @param filename If given, OSM data are saved to the named file
 #' @param quiet suppress status messages. 
 #'
@@ -79,7 +79,7 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
 #' @examples
 #' \dontrun{
 #' q <- opq ("hampi india")
-#' q <- add_feature (q, key="historic", value="ruins")
+#' q <- add_osm_feature (q, key="historic", value="ruins")
 #' osmdata_pdf (q, filename="hampi.pbf")
 #' }
 osmdata_pbf <- function(q, filename, quiet=TRUE) {
@@ -97,7 +97,7 @@ osmdata_pbf <- function(q, filename, quiet=TRUE) {
 #' Return an OSM Overpass query as an \code{osmdata} object in \code{sp} format.
 #'
 #' @param q An object of class `overpass_query` constructed with \code{opq} and
-#'        \code{add_feature}. May be be omitted, in which case the
+#'        \code{add_osm_feature}. May be be omitted, in which case the
 #'        \code{osmdata} object will not include the query.
 #' @param doc If missing, \code{doc} is obtained by issuing the overpass query,
 #'        \code{q}, otherwise either the name of a file from which to read data,
@@ -115,7 +115,7 @@ osmdata_pbf <- function(q, filename, quiet=TRUE) {
 #' @examples
 #' \dontrun{
 #' hampi_sp <- opq ("hampi india") %>%
-#'             add_feature (key="historic", value="ruins") %>%
+#'             add_osm_feature (key="historic", value="ruins") %>%
 #'             osmdata_sp ()
 #' }
 osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
@@ -210,7 +210,7 @@ make_sf <- function (...)
 #' Return an OSM Overpass query as an \code{osmdata} object in \code{sf} format.
 #'
 #' @param q An object of class `overpass_query` constructed with \code{opq} and
-#'        \code{add_feature}. May be be omitted, in which case the
+#'        \code{add_osm_feature}. May be be omitted, in which case the
 #'        \code{osmdata} object will not include the query.
 #' @param doc If missing, \code{doc} is obtained by issuing the overpass query,
 #'        \code{q}, otherwise either the name of a file from which to read data,
@@ -226,7 +226,7 @@ make_sf <- function (...)
 #' @examples
 #' \dontrun{
 #' hampi_sf <- opq ("hampi india") %>%
-#'             add_feature (key="historic", value="ruins") %>%
+#'             add_osm_feature (key="historic", value="ruins") %>%
 #'             osmdata_sf ()
 #' }
 osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
