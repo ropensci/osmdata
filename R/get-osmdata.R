@@ -153,7 +153,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
     }
 
     if (!quiet)
-        message ('convertig OSM data to sp format')
+        message ('converting OSM data to sp format')
     res <- rcpp_osmdata_sp (doc)
     if (is.null (obj$bbox))
         obj$bbox <- paste (res$bbox, collapse = ' ')
@@ -265,7 +265,7 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
 
 
     if (!quiet)
-        message ('convertig OSM data to sp format')
+        message ('converting OSM data to sf format')
     res <- rcpp_osmdata_sf (doc)
     if (missing (q))
         obj$bbox <- paste (res$bbox, collapse = ' ')
