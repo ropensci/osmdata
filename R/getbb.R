@@ -173,28 +173,52 @@ getbb <- function(place_name,
     else if (format_out == "polygon")
     {
         . <- NULL # suppress R CMD check note
-        gt <- obj$geotext %>%
+        indx_multi <- which (grepl ("MULTIPOLYGON", obj$geotext))
+        gt_p <- gt_mp <- NULL
+        if (length (indx_multi) > 0)
+        {
+            gt_mp <- obj$geotext [indx_multi] %>%
+                gsub ("MULTIPOLYGON\\(\\(\\(", "", .) %>%
+                gsub ("\\)\\)\\)", "", .) %>%
+                strsplit (split = ',')
+            indx_na <- rev (which (is.na (gt_mp)))
+            for (i in indx_na)
+                gt_mp [[i]] <- NULL
+        }
+
+        indx <- which (!(seq (obj) %in% indx_multi))
+        gt_p <- obj$geotext [indx] %>%
             gsub ("POLYGON\\(\\(", "", .) %>%
             gsub ("\\)\\)", "", .) %>%
             strsplit (split = ',')
-        indx <- which (vapply (gt, function (i)
+        indx_na <- rev (which (is.na (gt_p)))
+        for (i in indx_na)
+            gt_p [[i]] <- NULL
+
+        # TDOD: Do the following lines need to be repeated for _mp?
+        indx <- which (vapply (gt_p, function (i)
                                substring (i [1], 1, 1) == "P", logical (1)))
         if (length (indx) > 0)
-            gt <- gt [-indx]
-        num_multipolys <- length (gt)
-        if (num_multipolys > 0)
-        {
-            ret <- lapply (gt, function (i) get1bdypoly (i))
-            if (num_multipolys == 1)
-            {
-                ret <- ret [[1]]
-                if (is.list (ret))
-                    ret <- ret [[1]]
-            }
-        } else
+            gt_p <- gt_p [-indx]
+
+        if (length (gt_p) > 0)
+            gt_p <- lapply (gt_p, function (i) get1bdypoly (i))
+        if (length (gt_mp) > 0)
+            gt_mp <- lapply (gt_mp, function (i) get1bdymultipoly (i))
+
+        gt <- c (gt_p, gt_mp)
+        # multipolys below are not strict SF MULTIPOLYGONs, rather just cases
+        # where nominatim returns lists of multiple items
+        if (length (gt) == 0)
         {
             message ('No polygonal boundary for ', place_name)
             ret <- bb_mat
+        } else if (length (gt) == 1)
+        {
+                ret <- gt [[1]]
+        } else
+        {
+            ret <- gt
         }
     } else
     {
@@ -244,4 +268,25 @@ get1bdypoly <- function (p)
         ret <- ret [[1]]
 
     return (ret)
+}
+
+#' get1bdymultipoly
+#'
+#' Select first enclosing polygon from lists of multiple char MULTIPOLYGON
+#' objects returned by nominatim
+#'
+#' @param p One multipolygon returned by nominatim
+#'
+#' @return A single coordinate matrix
+#'
+#' @noRd
+get1bdymultipoly <- function (p)
+{
+    p <- p [1:min (which (grepl (")", p)))]
+
+    p <- vapply (p, function (i) gsub (")", "", i),
+                   character (1), USE.NAMES = FALSE)
+    t (cbind (vapply (p, function (i)
+                      as.numeric (strsplit (i, split = ' ') [[1]]),
+                      numeric (2), USE.NAMES = FALSE)))
 }
