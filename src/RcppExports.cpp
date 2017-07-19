@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // rcpp_osmdata_sf
 Rcpp::List rcpp_osmdata_sf(const std::string& st);
-RcppExport SEXP osmdata_rcpp_osmdata_sf(SEXP stSEXP) {
+RcppExport SEXP _osmdata_rcpp_osmdata_sf(SEXP stSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -18,7 +18,7 @@ END_RCPP
 }
 // rcpp_osmdata_sp
 Rcpp::List rcpp_osmdata_sp(const std::string& st);
-RcppExport SEXP osmdata_rcpp_osmdata_sp(SEXP stSEXP) {
+RcppExport SEXP _osmdata_rcpp_osmdata_sp(SEXP stSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
