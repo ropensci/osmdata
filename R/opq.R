@@ -1,8 +1,10 @@
 #' Build an Overpass query
 #'
-#' @param bbox Either four numeric values specifying the maximal and minimal
-#'             longitudes and latitudes, or else a character string passed to
-#'             \link{getbb} to be converted to a numerical bounding box.
+#' @param bbox Either (i) four numeric values specifying the maximal and minimal
+#'             longitudes and latitudes; (ii) a character string passed to
+#'             \link{getbb} to be converted to a numerical bounding box; or
+#'             (iii) a matrix representing a bounding polygon as returned from
+#'             \code{getbb(..., format_out = "polygon")}.
 #'
 #' @return An \code{overpass_query} object
 #'

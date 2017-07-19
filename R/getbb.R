@@ -20,10 +20,15 @@ bbox_to_string <- function(bbox) {
         bbox <- getbb (bbox)
 
     if (!is.numeric (bbox)) stop ("bbox must be numeric")
-    if (length (bbox) < 4) stop ("bbox must contain four elements")
-    if (length (bbox) > 4) message ("only the first four elements of bbox used")
 
-    if (inherits(bbox, "matrix")) {
+    if (inherits(bbox, "matrix"))
+    {
+        if (nrow (bbox) > 2)
+        {
+            bbox <- c (min (bbox [, 1]), min (bbox [, 2]),
+                       max (bbox [, 1]), max (bbox [, 2]))
+        }
+
         if (all (c("x", "y") %in% rownames (bbox)) &
             all (c("min", "max") %in% colnames (bbox)))
         {
@@ -38,6 +43,11 @@ bbox_to_string <- function(bbox) {
         bbox <- paste0 (bbox[c(2, 1, 4, 3)], collapse = ",")
     } else
     {
+        if (length (bbox) < 4)
+            stop ("bbox must contain four elements")
+        else if (length (bbox) > 4)
+            message ("only the first four elements of bbox used")
+
         if (!is.null (names (bbox)) &
             all (names (bbox) %in% c("left", "bottom", "right", "top")))
         {
@@ -132,13 +142,14 @@ getbb <- function(place_name,
                   key = NULL,
                   silent = TRUE) {
 
+    query <- list (q = place_name)
     featuretype <- tolower (featuretype)
     if (featuretype == "settlement")
-        query <- list (q = place_name, featuretype = "settlement")
+        query <- c (query, list (featuretype = "settlement"))
     else if (featuretype %in% c ("city", "county", "state", "country"))
     {
-        query <- list (place_name)
-        names (query) <- featuretype
+        query <- c (query, list (place_name))
+        names (query) <- c ("q", featuretype)
     } else
         stop ("featuretype ", featuretype, " not recognised;\n",
               "please use one of (settlement, city, county, state, country)")
