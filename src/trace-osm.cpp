@@ -30,7 +30,6 @@
  ***************************************************************************/
 
 #include "trace-osm.h"
-#include <Rcpp.h> // TODO: Delete that!
 
 /* Traces a single multipolygon relation 
  * 
