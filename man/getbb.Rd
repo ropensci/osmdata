@@ -22,7 +22,7 @@ by Nominatim), or polygon (full polygonal bounding boxes for each match).}
 
 \item{base_url}{Base website from where data is queried}
 
-\item{featuretype}{The type of OSM feature (settlement is default)}
+\item{featuretype}{The type of OSM feature (settlement is default; see Note)}
 
 \item{limit}{How many results should the API return?}
 
@@ -53,6 +53,14 @@ It was inspired by the functions
 which can be found at \url{https://github.com/hrbrmstr/nominatim}.
 
 See \url{http://wiki.openstreetmap.org/wiki/Nominatim} for details.
+}
+\note{
+Specific values of \code{featuretype} include "street", "city",
+\url{http://wiki.openstreetmap.org/wiki/Nominatim} for details). The default
+\code{featuretype = "settlement"} combines results from all intermediate
+levels below "country" and above "streets". If the bounding box or polygon of
+a city is desired, better results will usually be obtained with
+\code{featuretype = "city"}.
 }
 \examples{
 \dontrun{
