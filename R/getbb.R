@@ -74,7 +74,7 @@ bbox_to_string <- function(bbox) {
 #' string (see \code{\link{bbox_to_string}}), data.frame (all 'hits' returned
 #' by Nominatim), or polygon (full polygonal bounding boxes for each match).
 #' @param base_url Base website from where data is queried
-#' @param featuretype The type of OSM feature (settlement is default)
+#' @param featuretype The type of OSM feature (settlement is default; see Note)
 #' @param limit How many results should the API return?
 #' @param key The API key to use for services that require it
 #' @param silent Should the API be printed to screen? FALSE by default
@@ -88,6 +88,14 @@ bbox_to_string <- function(bbox) {
 #' with potentially multiple polygonal boundaries (for example, "london uk" is
 #' an exact match, but can mean either greater London or the City of London),
 #' only the first is returned. See examples below for illustration.
+#' 
+#' @note Specific values of \code{featuretype} include "street", "city",
+#" "county", "state", and "country" (see
+#' \url{http://wiki.openstreetmap.org/wiki/Nominatim} for details). The default
+#' \code{featuretype = "settlement"} combines results from all intermediate
+#' levels below "country" and above "streets". If the bounding box or polygon of
+#' a city is desired, better results will usually be obtained with
+#' \code{featuretype = "city"}.
 #' 
 #' @export
 #' 
@@ -124,15 +132,25 @@ getbb <- function(place_name,
                   key = NULL,
                   silent = TRUE) {
 
-    query <- list(q = place_name,
-                  viewbox = viewbox,
-                  format = 'json',
-                  featuretype = featuretype,
-                  key = key,
-                  # bounded = 1, # seemingly not working
-                  limit = limit)
+    featuretype <- tolower (featuretype)
+    if (featuretype == "settlement")
+        query <- list (q = place_name, featuretype = "settlement")
+    else if (featuretype %in% c ("city", "county", "state", "country"))
+    {
+        query <- list (place_name)
+        names (query) <- featuretype
+    } else
+        stop ("featuretype ", featuretype, " not recognised;\n",
+              "please use one of (settlement, city, county, state, country)")
+
     if (format_out == "polygon")
         query <- c (query, list (polygon_text = 1))
+
+    query <- c (query, list (viewbox = viewbox,
+                             format = 'json',
+                             key = key,
+                             # bounded = 1, # seemingly not working
+                             limit = limit))
 
     q_url <- httr::modify_url(base_url, query = query)
 
