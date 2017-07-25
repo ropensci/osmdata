@@ -7,9 +7,11 @@
 opq(bbox = NULL)
 }
 \arguments{
-\item{bbox}{Either four numeric values specifying the maximal and minimal
-longitudes and latitudes, or else a character string passed to
-\link{getbb} to be converted to a numerical bounding box.}
+\item{bbox}{Either (i) four numeric values specifying the maximal and minimal
+longitudes and latitudes; (ii) a character string passed to
+\link{getbb} to be converted to a numerical bounding box; or
+(iii) a matrix representing a bounding polygon as returned from
+\code{getbb(..., format_out = "polygon")}.}
 }
 \value{
 An \code{overpass_query} object

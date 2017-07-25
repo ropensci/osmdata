@@ -20,10 +20,15 @@ bbox_to_string <- function(bbox) {
         bbox <- getbb (bbox)
 
     if (!is.numeric (bbox)) stop ("bbox must be numeric")
-    if (length (bbox) < 4) stop ("bbox must contain four elements")
-    if (length (bbox) > 4) message ("only the first four elements of bbox used")
 
-    if (inherits(bbox, "matrix")) {
+    if (inherits(bbox, "matrix"))
+    {
+        if (nrow (bbox) > 2)
+        {
+            bbox <- c (min (bbox [, 1]), min (bbox [, 2]),
+                       max (bbox [, 1]), max (bbox [, 2]))
+        }
+
         if (all (c("x", "y") %in% rownames (bbox)) &
             all (c("min", "max") %in% colnames (bbox)))
         {
@@ -38,6 +43,11 @@ bbox_to_string <- function(bbox) {
         bbox <- paste0 (bbox[c(2, 1, 4, 3)], collapse = ",")
     } else
     {
+        if (length (bbox) < 4)
+            stop ("bbox must contain four elements")
+        else if (length (bbox) > 4)
+            message ("only the first four elements of bbox used")
+
         if (!is.null (names (bbox)) &
             all (names (bbox) %in% c("left", "bottom", "right", "top")))
         {
@@ -74,7 +84,7 @@ bbox_to_string <- function(bbox) {
 #' string (see \code{\link{bbox_to_string}}), data.frame (all 'hits' returned
 #' by Nominatim), or polygon (full polygonal bounding boxes for each match).
 #' @param base_url Base website from where data is queried
-#' @param featuretype The type of OSM feature (settlement is default)
+#' @param featuretype The type of OSM feature (settlement is default; see Note)
 #' @param limit How many results should the API return?
 #' @param key The API key to use for services that require it
 #' @param silent Should the API be printed to screen? FALSE by default
@@ -88,6 +98,14 @@ bbox_to_string <- function(bbox) {
 #' with potentially multiple polygonal boundaries (for example, "london uk" is
 #' an exact match, but can mean either greater London or the City of London),
 #' only the first is returned. See examples below for illustration.
+#' 
+#' @note Specific values of \code{featuretype} include "street", "city",
+#" "county", "state", and "country" (see
+#' \url{http://wiki.openstreetmap.org/wiki/Nominatim} for details). The default
+#' \code{featuretype = "settlement"} combines results from all intermediate
+#' levels below "country" and above "streets". If the bounding box or polygon of
+#' a city is desired, better results will usually be obtained with
+#' \code{featuretype = "city"}.
 #' 
 #' @export
 #' 
@@ -125,15 +143,26 @@ getbb <- function(place_name,
                   key = NULL,
                   silent = TRUE) {
 
-    query <- list(q = place_name,
-                  viewbox = viewbox,
-                  format = 'json',
-                  featuretype = featuretype,
-                  key = key,
-                  # bounded = 1, # seemingly not working
-                  limit = limit)
+    query <- list (q = place_name)
+    featuretype <- tolower (featuretype)
+    if (featuretype == "settlement")
+        query <- c (query, list (featuretype = "settlement"))
+    else if (featuretype %in% c ("city", "county", "state", "country"))
+    {
+        query <- c (query, list (place_name))
+        names (query) <- c ("q", featuretype)
+    } else
+        stop ("featuretype ", featuretype, " not recognised;\n",
+              "please use one of (settlement, city, county, state, country)")
+
     if (format_out == "polygon")
         query <- c (query, list (polygon_text = 1))
+
+    query <- c (query, list (viewbox = viewbox,
+                             format = 'json',
+                             key = key,
+                             # bounded = 1, # seemingly not working
+                             limit = limit))
 
     q_url <- httr::modify_url(base_url, query = query)
 
@@ -175,28 +204,52 @@ getbb <- function(place_name,
     else if (format_out == "polygon")
     {
         . <- NULL # suppress R CMD check note
-        gt <- obj$geotext %>%
+        indx_multi <- which (grepl ("MULTIPOLYGON", obj$geotext))
+        gt_p <- gt_mp <- NULL
+        if (length (indx_multi) > 0)
+        {
+            gt_mp <- obj$geotext [indx_multi] %>%
+                gsub ("MULTIPOLYGON\\(\\(\\(", "", .) %>%
+                gsub ("\\)\\)\\)", "", .) %>%
+                strsplit (split = ',')
+            indx_na <- rev (which (is.na (gt_mp)))
+            for (i in indx_na)
+                gt_mp [[i]] <- NULL
+        }
+
+        indx <- which (!(seq (obj) %in% indx_multi))
+        gt_p <- obj$geotext [indx] %>%
             gsub ("POLYGON\\(\\(", "", .) %>%
             gsub ("\\)\\)", "", .) %>%
             strsplit (split = ',')
-        indx <- which (vapply (gt, function (i)
+        indx_na <- rev (which (is.na (gt_p)))
+        for (i in indx_na)
+            gt_p [[i]] <- NULL
+
+        # TDOD: Do the following lines need to be repeated for _mp?
+        indx <- which (vapply (gt_p, function (i)
                                substring (i [1], 1, 1) == "P", logical (1)))
         if (length (indx) > 0)
-            gt <- gt [-indx]
-        num_multipolys <- length (gt)
-        if (num_multipolys > 0)
-        {
-            ret <- lapply (gt, function (i) get1bdypoly (i))
-            if (num_multipolys == 1)
-            {
-                ret <- ret [[1]]
-                if (is.list (ret))
-                    ret <- ret [[1]]
-            }
-        } else
+            gt_p <- gt_p [-indx]
+
+        if (length (gt_p) > 0)
+            gt_p <- lapply (gt_p, function (i) get1bdypoly (i))
+        if (length (gt_mp) > 0)
+            gt_mp <- lapply (gt_mp, function (i) get1bdymultipoly (i))
+
+        gt <- c (gt_p, gt_mp)
+        # multipolys below are not strict SF MULTIPOLYGONs, rather just cases
+        # where nominatim returns lists of multiple items
+        if (length (gt) == 0)
         {
             message ('No polygonal boundary for ', place_name)
             ret <- bb_mat
+        } else if (length (gt) == 1)
+        {
+                ret <- gt [[1]]
+        } else
+        {
+            ret <- gt
         }
     } else
     {
@@ -246,4 +299,25 @@ get1bdypoly <- function (p)
         ret <- ret [[1]]
 
     return (ret)
+}
+
+#' get1bdymultipoly
+#'
+#' Select first enclosing polygon from lists of multiple char MULTIPOLYGON
+#' objects returned by nominatim
+#'
+#' @param p One multipolygon returned by nominatim
+#'
+#' @return A single coordinate matrix
+#'
+#' @noRd
+get1bdymultipoly <- function (p)
+{
+    p <- p [1:min (which (grepl (")", p)))]
+
+    p <- vapply (p, function (i) gsub (")", "", i),
+                   character (1), USE.NAMES = FALSE)
+    t (cbind (vapply (p, function (i)
+                      as.numeric (strsplit (i, split = ' ') [[1]]),
+                      numeric (2), USE.NAMES = FALSE)))
 }

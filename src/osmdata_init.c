@@ -4,12 +4,12 @@
 #include <R_ext/Rdynload.h>
 
 /* .Call calls */
-extern SEXP osmdata_rcpp_osmdata_sf(SEXP);
-extern SEXP osmdata_rcpp_osmdata_sp(SEXP);
+extern SEXP _osmdata_rcpp_osmdata_sf(SEXP);
+extern SEXP _osmdata_rcpp_osmdata_sp(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-    {"osmdata_rcpp_osmdata_sf", (DL_FUNC) &osmdata_rcpp_osmdata_sf, 1},
-    {"osmdata_rcpp_osmdata_sp", (DL_FUNC) &osmdata_rcpp_osmdata_sp, 1},
+    {"_osmdata_rcpp_osmdata_sf", (DL_FUNC) &_osmdata_rcpp_osmdata_sf, 1},
+    {"_osmdata_rcpp_osmdata_sp", (DL_FUNC) &_osmdata_rcpp_osmdata_sp, 1},
     {NULL, NULL, 0}
 };
 

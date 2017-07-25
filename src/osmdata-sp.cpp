@@ -119,7 +119,7 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
 
     Rcpp::List wayList (way_ids.size ());
 
-    int nrow = way_ids.size (), ncol = unique_vals.k_way.size ();
+    size_t nrow = way_ids.size (), ncol = unique_vals.k_way.size ();
     std::vector <std::string> waynames;
     waynames.reserve (way_ids.size ());
 
@@ -130,6 +130,10 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
     Rcpp::Language polygons_call ("new", "Polygons");
     Rcpp::S4 polygons, line, lines;
 
+    // index of ill-formed polygons later removed - see issue#85
+    std::vector <unsigned int> indx_out;
+    std::vector <bool> poly_okay (nrow);
+
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
     for (auto wi = way_ids.begin (); wi != way_ids.end (); ++wi)
@@ -139,6 +143,7 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
         trace_way_nmat (ways, nodes, (*wi), nmat);
         Rcpp::List dummy_list (0);
         int pos = std::distance (way_ids.begin (), wi);
+        poly_okay [pos] = true;
         if (geom_type == "line")
         {
             // sp::Line and sp::Lines objects can be constructed directly from
@@ -157,6 +162,18 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
             wayList [pos] = lines;
         } else 
         {
+            if (nmat.nrow () == 3 && nmat (0, 0) == nmat (2, 0) &&
+                    nmat (0, 1) == nmat (2, 1))
+            {
+                // polygon has only 3 rows with start == end, so is ill-formed
+                indx_out.push_back (pos);
+                poly_okay [pos] = false;
+                // temp copy with > 3 rows necessary to suppress sp warning
+                Rcpp::NumericMatrix nmat2 =
+                    Rcpp::NumericMatrix (Rcpp::Dimension (4, 2));
+                nmat = nmat2;
+            }
+
             Rcpp::S4 poly = Polygon (nmat);
             poly.slot ("hole") = false;
             poly.slot ("ringDir") = (int) 1;
@@ -173,7 +190,31 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
         auto wj = ways.find (*wi);
         get_value_mat_way (wj, ways, unique_vals, kv_mat, pos);
     } // end for it over poly_ways
+    if (indx_out.size () > 0)
+    {
+        std::reverse (indx_out.begin (), indx_out.end ());
+        for (auto i: indx_out)
+        {
+            wayList.erase (i);
+            waynames.erase (waynames.begin () + i);
+        }
+    }
     wayList.attr ("names") = waynames;
+
+    // Reduce kv_mat to indx_in
+    if (indx_out.size () > 0)
+    {
+        size_t n_okay = nrow - indx_out.size ();
+        Rcpp::CharacterMatrix kv_mat2 (Rcpp::Dimension (n_okay, ncol));
+        std::fill (kv_mat2.begin (), kv_mat2.end (), NA_STRING);
+        int pos = 0;
+        for (size_t i = 0; i<nrow; i++)
+        {
+            if (poly_okay [i])
+                kv_mat2 (pos++, Rcpp::_) = kv_mat (i, Rcpp::_);
+        }
+        kv_mat = kv_mat2;
+    }
 
     Rcpp::DataFrame kv_df;
     if (way_ids.size () > 0)

@@ -57,16 +57,21 @@ void trace_multipolygon (Relations::const_iterator &itr_rel, const Ways &ways,
         relation_ways.push_back (std::make_pair (itw->first, itw->second));
     it_osm_str_vec itr_rw;
 
-    bool done_outer = false, way_okay = true;
+    bool way_okay = true;
     // Then trace through all those ways and store associated data
     while (relation_ways.size () > 0)
     {
         auto rwi = relation_ways.begin ();
-        if (!done_outer) // "outer" role first 
+        if (rwi->second != "outer") // "outer" role first 
         {
-            while (rwi->second != "outer")
+            while (std::distance (rwi, relation_ways.end ()) > 1)
+            {
                 std::advance (rwi, 1);
-            done_outer = true;
+                if (rwi->second == "outer")
+                    break;
+            }
+            if (rwi->second != "outer") // just reset to first
+                rwi = relation_ways.begin ();
         }
         this_role = rwi->second;
         auto wayi = ways.find (rwi->first);

@@ -59,7 +59,7 @@ NULL
 #' 
 #' @noRd 
 rcpp_osmdata_sf <- function(st) {
-    .Call(osmdata_rcpp_osmdata_sf, st)
+    .Call(`_osmdata_rcpp_osmdata_sf`, st)
 }
 
 #' get_osm_nodes_sp
@@ -120,6 +120,6 @@ NULL
 #' 
 #' @noRd 
 rcpp_osmdata_sp <- function(st) {
-    .Call(osmdata_rcpp_osmdata_sp, st)
+    .Call(`_osmdata_rcpp_osmdata_sp`, st)
 }
 
