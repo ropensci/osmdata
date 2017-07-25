@@ -143,6 +143,17 @@ query language given in the
 as well as the 
 [overpass API Language Guide](http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide).
 
+By default, `osmdata` sends queries to `http://overpass-api.de/api/interpreter` but other servers can be used, thanks to functions that *get* and *set* the base url:
+
+```{r}
+get_overpass_url()
+new_url <- "http://overpass.openstreetmap.ie/api/interpreter"
+```
+
+```{r, eval=FALSE}
+set_overpass_url(new_url) # reset the base url (not run)
+```
+
 `osmdata` queries are lists of class `overpass_query`. The actual query passed
 to the `overpass API` with a query can be obtained with the function
 `opq_string()`.  Applied to the preceding query, this function gives:
