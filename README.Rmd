@@ -34,8 +34,10 @@ knitr::opts_chunk$set(
 ![](./fig/title.png)
 
 
-`osmdata` is an R package for accessing OpenStreetMap (OSM) data using the
-[Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API).  The Overpass
+`osmdata` is an R package for accessing the raw vector data underlying OpenStreetMap (OSM) via the
+[Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API).
+(Other packages such as [`OpenStreetMap`](https://cran.r-project.org/web/packages/OpenStreetMap/index.html) can be used to download raster tiles based on OSM data.)
+The Overpass
 API (or OSM3S) is a read-only API that serves up custom selected
 parts of the OSM map data. Map data can be returned either as
 [Simple Features (`sf`)](https://cran.r-project.org/package=sf) or
