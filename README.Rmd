@@ -32,6 +32,7 @@ knitr::opts_chunk$set(
 [![Project Status: Active](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 
 ![](./fig/title.png)
+[![](https://badges.ropensci.org/103_status.svg)](https://github.com/ropensci/onboarding/issues/103)
 
 
 `osmdata` is an R package for accessing the raw vector data underlying OpenStreetMap (OSM) via the
