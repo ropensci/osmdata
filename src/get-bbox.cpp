@@ -67,6 +67,7 @@ Rcpp::NumericVector rcpp_get_bbox_sf (float xmin, float xmax, float ymin, float 
     bbox (3) = ymax;
 
     bbox.attr ("names") = names;
+    bbox.attr ("class") = "bbox";
 
     return bbox;
 }

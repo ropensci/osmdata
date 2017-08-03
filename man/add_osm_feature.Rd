@@ -60,7 +60,7 @@ q1 <- getbb ("portsmouth", display_name_contains = "United States") \%>\%
 q2 <- getbb ("portsmouth", display_name_contains = "United States") \%>\%
                 opq () \%>\% 
                 add_osm_feature("amenity", "pub") 
-c (osmdata_sf (q1), osmdata_sf (q1)) # all objects that are restaurants OR pubs
+c (osmdata_sf (q1), osmdata_sf (q2)) # all objects that are restaurants OR pubs
 # Use of negation to extract all non-primary highways
 q <- opq ("portsmouth uk") \%>\%
         add_osm_feature (key="highway", value = "!primary") 
