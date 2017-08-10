@@ -87,7 +87,7 @@ bbox_to_string <- function(bbox) {
 #' @param featuretype The type of OSM feature (settlement is default; see Note)
 #' @param limit How many results should the API return?
 #' @param key The API key to use for services that require it
-#' @param silent Should the API be printed to screen? FALSE by default
+#' @param silent Should the API be printed to screen? TRUE by default
 #'
 #' @return Unless \code{format_out = "polygon"}, a numeric bounding box as min
 #' and max of latitude and longitude. If \code{format_out = "polygon"}, one or
