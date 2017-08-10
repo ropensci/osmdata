@@ -3,6 +3,10 @@
 - Add extraction of bounding polygons with `getbb (..., format_out = "polygon")`
 - Add `trim_osmdata` function to trim an `osmdata` object to within a bounding
   polygon (thanks @sytpp)
+- Add `unique_osmdata` function which reduces each component of an `osmdata`
+  object only to unique elements (so `$osm_points`, for example, only contains
+  points that are not represented in other - line, polygon, whatever -
+  objects).
 - Rename `add_feature` to `add_osm_feature` (and deprecate old version)
 
 
