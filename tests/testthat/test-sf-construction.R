@@ -1,6 +1,7 @@
 context ("sf-construction")
 
-skip_on_cran()
+test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
+             identical (Sys.getenv ("TRAVIS"), "true"))
 
 make_sfc <- function (x, type) {
     if (!is.list (x)) x <- list (x)
@@ -71,6 +72,9 @@ make_sf <- function (...)
 # **********************************************************
 # ***                       POINTS                       ***
 # **********************************************************
+
+if (test_all)
+{
 
 test_that ("sfg-point", {
                x <- structure (1:2, class = c("XY", "POINT", "sfg"))
@@ -404,3 +408,5 @@ test_that ("sf-multipolygon-with-fields", {
                x <- make_sf (dat, x0)
                expect_identical (x, y)
 })
+
+} # end if test_all
