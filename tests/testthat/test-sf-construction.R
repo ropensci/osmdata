@@ -1,5 +1,7 @@
 context ("sf-construction")
 
+skip_on_cran()
+
 make_sfc <- function (x, type) {
     if (!is.list (x)) x <- list (x)
     type <- toupper (type)
