@@ -143,6 +143,7 @@ add_osm_feature <- function (opq, key, value, key_exact = TRUE,
 }
 
 #' @rdname add_osm_feature
+#' @export
 add_feature <- function (opq, key, value, key_exact = TRUE,
                              value_exact = TRUE, match_case = TRUE, bbox = NULL)
 {

@@ -3,6 +3,7 @@
 - Add extraction of bounding polygons with `getbb (..., format_out = "polygon")`
 - Add `trim_osmdata` function to trim an `osmdata` object to within a bounding
   polygon (thanks @sytpp)
+- Rename `add_feature` to `add_osm_feature` (and deprecate old version)
 
 
 0.0.4
