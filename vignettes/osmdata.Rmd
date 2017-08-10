@@ -29,8 +29,9 @@ encouraging democratic decision making and citizen science
 [OSM wiki](http://wiki.openstreetmap.org/wiki/Contribute_map_data) to find out
 how to contribute to the world's open geographical data commons. 
 
-Unlike the [`OpenStreetMap`](https://cran.r-project.org/web/packages/OpenStreetMap/index.html) package,
-which facilitates the download of raster tiles, `osmdata` provides access to the vector data underlying OSM.
+Unlike the [`OpenStreetMap`](https://cran.r-project.org/package=OpenStreetMap)
+package, which facilitates the download of raster tiles, `osmdata` provides
+access to the vector data underlying OSM.
 
 `osmdata` can be installed from CRAN with
 ```{r, eval = FALSE}
