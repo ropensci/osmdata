@@ -240,7 +240,7 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
         sp_ways.slot ("polygons") = wayList;
         // Fill plotOrder slot with numeric vector
         std::vector <int> plord;
-        for (int i=0; i<nrow; i++) plord.push_back (i + 1);
+        for (unsigned int i=0; i<nrow; i++) plord.push_back (i + 1);
         sp_ways.slot ("plotOrder") = plord;
         plord.clear ();
         sp_ways.slot ("data") = kv_df;

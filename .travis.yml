@@ -17,6 +17,9 @@ matrix:
         - os: linux
           r: devel
           dist: trusty
+        - os: linux
+          r: oldrel
+          dist: trusty
         - os: osx
           r: release
           before_install: ''
