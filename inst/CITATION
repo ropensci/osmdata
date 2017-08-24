@@ -1,0 +1,12 @@
+@article{Padgham2017,
+    doi = {10.21105/joss.00305},
+    url = {https://doi.org/10.21105/joss.00305},
+    year  = {2017},
+    month = {jun},
+    publisher = {The Open Journal},
+    volume = {2},
+    number = {14},
+    author = {Mark Padgham and Robin Lovelace and Maëlle Salmon and Bob Rudis},
+    title = {osmdata},
+    journal = {The Journal of Open Source Software}
+}
