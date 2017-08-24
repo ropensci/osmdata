@@ -28,7 +28,7 @@ by Nominatim), or polygon (full polygonal bounding boxes for each match).}
 
 \item{key}{The API key to use for services that require it}
 
-\item{silent}{Should the API be printed to screen? FALSE by default}
+\item{silent}{Should the API be printed to screen? TRUE by default}
 }
 \value{
 Unless \code{format_out = "polygon"}, a numeric bounding box as min
