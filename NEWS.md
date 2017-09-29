@@ -1,3 +1,8 @@
+0.0.5.99
+===================
+- Add `timeout` and `memsize` options to `opq()` to improve handling large
+  queries.
+
 0.0.5
 ===================
 - Add extraction of bounding polygons with `getbb (..., format_out = "polygon")`
