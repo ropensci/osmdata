@@ -100,17 +100,20 @@ get_slot_timestamp <- function (status)
 #' @noRd
 check_for_error <- function (doc)
 {
-    if (grepl ("error: ", doc, ignore.case = TRUE))
+    # the nchar check uses an arbitrary value to avoid trying to `read_xml()`
+    # read data, which would take forever.
+    if (grepl ("error: ", doc, ignore.case = TRUE) &
+        nchar (doc) < 10000)
     {
         docx <- xml2::read_xml (doc)
         if (xml2::xml_length (docx) < 10) # arbitrarily low value
         {
             remark <- xml2::xml_text (xml2::xml_find_all (docx, "remark"))
-            if (nchar (remark) > 0)
-                remark <- paste0 ("overpass", remark)
+            if (length (remark) > 1)
+                stop (paste0 ("overpass", remark))
             else
-                remark <- "overpass server error"
-            stop (remark)
+                stop ("General overpass server error; returned:\n",
+                      xml2::xml_text (docx))
         }
     }
 }

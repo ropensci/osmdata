@@ -245,11 +245,8 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
 
     if (missing (doc))
     {
-        message ("overpass_query with:\n-----", obj$overpass_call,
-                 "-----")
         doc <- overpass_query (query = obj$overpass_call, quiet = quiet,
                                encoding = encoding)
-        message ("done")
 
         obj$timestamp <- get_timestamp ()
     } else
