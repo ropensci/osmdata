@@ -4,7 +4,7 @@
 \alias{osmdata_sp}
 \title{Return an OSM Overpass query as an \code{osmdata} object in \code{sp} format.}
 \usage{
-osmdata_sp(q, doc, quiet = TRUE, encoding)
+osmdata_sp(q, doc, quiet = TRUE, encoding = "UTF-8")
 }
 \arguments{
 \item{q}{An object of class `overpass_query` constructed with \code{opq} and

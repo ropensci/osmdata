@@ -34,12 +34,14 @@
 #'                 add_osm_feature("amenity", "pub") 
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all objects that are restaurants OR pubs
 #' }
-opq <- function (bbox = NULL, timeout = 25, memsize = 2048000)
+opq <- function (bbox = NULL, timeout = 25, memsize)
 {
     # TODO: Do we really need these [out:xml][timeout] specifiers?
     timeout <- format (timeout, scientific = FALSE)
-    memsize <- format (memsize, scientific = FALSE)
-    prefix <- paste0 ("[out:xml][timeout:", timeout, "][maxsize:", memsize, "]")
+    prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
+    if (!missing (memsize))
+        prefix <- paste0 (prefix, "[", format (memsize, scientific = FALSE),
+                          "]")
     res <- list (bbox = bbox_to_string (bbox),
               prefix = paste0 (prefix, ";\n(\n"),
               suffix = ");\n(._;>);\nout body;", features = NULL)

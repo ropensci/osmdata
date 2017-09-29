@@ -4,7 +4,7 @@
 \alias{opq}
 \title{Build an Overpass query}
 \usage{
-opq(bbox = NULL, timeout = 25, memsize = 2048000)
+opq(bbox = NULL, timeout = 25, memsize)
 }
 \arguments{
 \item{bbox}{Either (i) four numeric values specifying the maximal and minimal
