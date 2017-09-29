@@ -91,6 +91,30 @@ get_slot_timestamp <- function (status)
     list ('available' = available, 'slot_time' = slot_time)
 }
 
+#' Check for error issued by overpass server, even though status = 200
+#'
+#' @param doc Character string returned by \code{httr::content} call in
+#' following \code{overpass_query} function.
+#' @param return Nothing; stops execution if error encountered.
+#'
+#' @noRd
+check_for_error <- function (doc)
+{
+    if (grepl ("error: ", doc, ignore.case = TRUE))
+    {
+        docx <- xml2::read_xml (doc)
+        if (xml2::xml_length (docx) < 10) # arbitrarily low value
+        {
+            remark <- xml2::xml_text (xml2::xml_find_all (docx, "remark"))
+            if (nchar (remark) > 0)
+                remark <- paste0 ("overpass", remark)
+            else
+                remark <- "overpass server error"
+            stop (remark)
+        }
+    }
+}
+
 
 #' Issue OSM Overpass Query
 #'
@@ -111,16 +135,13 @@ get_slot_timestamp <- function (status)
 #'        an explicit encoding directive, this allows you to supply a default.
 #'
 #' @noRd
-overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
-                            encoding) {
+overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
+                            encoding = 'UTF-8') {
 
     if (missing (query))
         stop ('query must be supplied', call. = FALSE)
     if (!is.character (query) | length (query) > 1)
         stop ('query must be a single character string')
-    # TODO: This function is no longer exported, so that's not needed
-    if (missing (encoding))
-        encoding <- 'UTF-8'
 
     if (!is.logical (quiet))
         quiet <- FALSE
@@ -176,6 +197,7 @@ overpass_query <- function (query, quiet=FALSE, wait=TRUE, pad_wait=5,
                               type = "application/xml")
     # TODO: Just return the direct httr::POST result here and convert in the
     # subsequent functions (`osmdata_xml/csv/sp/sf`)?
+    check_for_error (doc)
 
     return (doc)
 }

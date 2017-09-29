@@ -4,7 +4,7 @@
 \alias{opq}
 \title{Build an Overpass query}
 \usage{
-opq(bbox = NULL)
+opq(bbox = NULL, timeout = 25, memsize = 2048000)
 }
 \arguments{
 \item{bbox}{Either (i) four numeric values specifying the maximal and minimal
@@ -12,12 +12,24 @@ longitudes and latitudes; (ii) a character string passed to
 \link{getbb} to be converted to a numerical bounding box; or
 (iii) a matrix representing a bounding polygon as returned from
 \code{getbb(..., format_out = "polygon")}.}
+
+\item{timeout}{It may be necessary to ncrease this value for large queries,
+because the server may time out before all data are delivered.}
+
+\item{memsize}{The default memory size for the 'overpass' server; may need to
+be increased in order to handle large queries.}
 }
 \value{
 An \code{overpass_query} object
 }
 \description{
 Build an Overpass query
+}
+\note{
+See
+\url{https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29}
+for explanation of \code{timeout} and \code{memsize} (or \code{maxsize} in
+overpass terms).
 }
 \examples{
 \dontrun{

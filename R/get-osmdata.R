@@ -118,10 +118,8 @@ osmdata_pbf <- function(q, filename, quiet=TRUE) {
 #'             add_osm_feature (key="historic", value="ruins") %>%
 #'             osmdata_sp ()
 #' }
-osmdata_sp <- function(q, doc, quiet=TRUE, encoding) {
-    if (missing (encoding))
-        encoding <- 'UTF-8'
-
+osmdata_sp <- function(q, doc, quiet=TRUE, encoding = 'UTF-8')
+{
     obj <- osmdata () # uses class def
     if (missing (q) & !quiet)
         message ('q missing: osmdata object will not include query')
@@ -247,8 +245,11 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
 
     if (missing (doc))
     {
+        message ("overpass_query with:\n-----", obj$overpass_call,
+                 "-----")
         doc <- overpass_query (query = obj$overpass_call, quiet = quiet,
                                encoding = encoding)
+        message ("done")
 
         obj$timestamp <- get_timestamp ()
     } else

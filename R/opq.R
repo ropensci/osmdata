@@ -5,8 +5,17 @@
 #'             \link{getbb} to be converted to a numerical bounding box; or
 #'             (iii) a matrix representing a bounding polygon as returned from
 #'             \code{getbb(..., format_out = "polygon")}.
+#' @param timeout It may be necessary to ncrease this value for large queries,
+#'             because the server may time out before all data are delivered.
+#' @param memsize The default memory size for the 'overpass' server; may need to
+#'             be increased in order to handle large queries.
 #'
 #' @return An \code{overpass_query} object
+#'
+#' @note See
+#' \url{https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29}
+#' for explanation of \code{timeout} and \code{memsize} (or \code{maxsize} in
+#' overpass terms).
 #'
 #' @export
 #'
@@ -25,11 +34,12 @@
 #'                 add_osm_feature("amenity", "pub") 
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all objects that are restaurants OR pubs
 #' }
-opq <- function (bbox = NULL)
+opq <- function (bbox = NULL, timeout = 25, memsize = 2048000)
 {
     # TODO: Do we really need these [out:xml][timeout] specifiers?
+    prefix <- paste0 ("[out:xml][timeout:", timeout, "][maxsize:", memsize, "]")
     res <- list (bbox = bbox_to_string (bbox),
-              prefix = "[out:xml][timeout:25];\n(\n",
+              prefix = paste0 (prefix, ";\n(\n"),
               suffix = ");\n(._;>);\nout body;", features = NULL)
     class (res) <- c (class (res), "overpass_query")
     return (res)
