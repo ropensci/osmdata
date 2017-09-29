@@ -37,6 +37,8 @@
 opq <- function (bbox = NULL, timeout = 25, memsize = 2048000)
 {
     # TODO: Do we really need these [out:xml][timeout] specifiers?
+    timeout <- format (timeout, scientific = FALSE)
+    memsize <- format (memsize, scientific = FALSE)
     prefix <- paste0 ("[out:xml][timeout:", timeout, "][maxsize:", memsize, "]")
     res <- list (bbox = bbox_to_string (bbox),
               prefix = paste0 (prefix, ";\n(\n"),
