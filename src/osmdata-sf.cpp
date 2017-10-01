@@ -280,13 +280,14 @@ void get_osm_ways_sf (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
     wayList.attr ("bbox") = bbox;
     wayList.attr ("crs") = crs;
 
+    kv_df = R_NilValue;
     if (way_ids.size () > 0)
     {
         kv_mat.attr ("names") = unique_vals.k_way;
         kv_mat.attr ("dimnames") = Rcpp::List::create (waynames, unique_vals.k_way);
-        kv_df = restructure_kv_mat (kv_mat, false);
-    } else
-        kv_df = R_NilValue;
+        if (kv_mat.nrow () > 0 && kv_mat.ncol () > 0)
+            kv_df = restructure_kv_mat (kv_mat, false);
+    }
 }
 
 //' get_osm_nodes_sf
@@ -403,7 +404,6 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st)
 
     Rcpp::NumericVector bbox = rcpp_get_bbox_sf (xml.x_min (), xml.y_min (), 
                                               xml.x_max (), xml.y_max ());
-
     Rcpp::List crs = Rcpp::List::create (NA_INTEGER, 
             Rcpp::CharacterVector::create (NA_STRING));
     crs (0) = 4326;
