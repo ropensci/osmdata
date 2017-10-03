@@ -167,6 +167,8 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding = 'UTF-8')
     obj$osm_multilines <- res$multilines
     obj$osm_multipolygons <- res$multipolygons
 
+    class (obj) <- c (class (obj), "osmdata_sp")
+
     return (obj)
 }
 
@@ -316,6 +318,8 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
         obj$osm_multipolygons <- make_sf (geometry, res$multipolygons_kv)
     else
         obj$osm_multipolygons <- make_sf (geometry)
+
+    class (obj) <- c (class (obj), "osmdata_sf")
 
     return (obj)
 }
