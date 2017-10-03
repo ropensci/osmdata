@@ -54,8 +54,14 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
     if (missing (encoding))
         encoding <- 'UTF-8'
 
-    doc <- overpass_query (query = opq_string (q), quiet = quiet,
-                           encoding = encoding)
+    if (missing (q) & !quiet)
+        message ('q missing: osmdata object will not include query')
+    else if (is (q, 'overpass_query'))
+        q <- opq_string (q)
+    else if (!is.character (q))
+        stop ('q must be an overpass query or a character string')
+
+    doc <- overpass_query (query = q, quiet = quiet, encoding = encoding)
     doc <- xml2::read_xml (doc, encoding = encoding)
     if (!missing (filename))
         xml2::write_xml (doc, file = filename)
