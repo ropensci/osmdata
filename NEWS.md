@@ -2,6 +2,8 @@
 ===================
 - Add `timeout` and `memsize` options to `opq()` to improve handling large
   queries.
+- Fix minor yet important C++ code lines that prevented package being used as
+  dependency by other packages on some systems
 
 0.0.5
 ===================

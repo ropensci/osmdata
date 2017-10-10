@@ -21,8 +21,6 @@ overpass_status <- function (quiet=FALSE, wait=10)
         return (invisible (list (available = available, next_slot = NULL,
                                  msg = status)))
 
-    overpass_url <- 'http://overpass-api.de/api/interpreter'
-
     status_url <- gsub ('interpreter', st_type, overpass_url)
 
     if (!curl::has_internet ())
