@@ -97,12 +97,12 @@ void trace_multipolygon (Relations::const_iterator &itr_rel, const Ways &ways,
             {
                 if (itw->second == this_role)
                 {
-                    auto wayi = ways.find (itw->first);
-                    if (wayi == ways.end ())
+                    auto wayj = ways.find (itw->first);
+                    if (wayj == ways.end ())
                         throw std::runtime_error ("way can not be found");
                     last_node = trace_way (ways, nodes, first_node,
-                            wayi->first, lons, lats, rownames, true);
-                    this_way << "-" << std::to_string (wayi->first);
+                            wayj->first, lons, lats, rownames, true);
+                    this_way << "-" << std::to_string (wayj->first);
                     if (last_node >= 0)
                     {
                         first_node = last_node;
