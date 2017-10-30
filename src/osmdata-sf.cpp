@@ -74,8 +74,8 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
     Rcpp::List dimnames (0);
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
 
-    float_arr2 lat_vec, lon_vec;
-    float_arr3 lat_arr_mp, lon_arr_mp, lon_arr_ls, lat_arr_ls;
+    double_arr2 lat_vec, lon_vec;
+    double_arr3 lat_arr_mp, lon_arr_mp, lon_arr_ls, lat_arr_ls;
     string_arr2 rowname_vec, id_vec_mp, roles_ls; 
     string_arr3 rowname_arr_mp, rowname_arr_ls;
     std::vector <osmid_t> ids_ls; 
@@ -119,7 +119,7 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
             lat_arr_mp.push_back (lat_vec);
             rowname_arr_mp.push_back (rowname_vec);
             id_vec_mp.push_back (ids_mp);
-            clean_vecs <float, float, std::string> (lon_vec, lat_vec, rowname_vec);
+            clean_vecs <double, double, std::string> (lon_vec, lat_vec, rowname_vec);
             ids_mp.clear ();
             get_value_mat_rel (itr, unique_vals, kv_mat_mp, count_mp++);
         } else // store as multilinestring
@@ -148,7 +148,7 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
                 lat_arr_ls.push_back (lat_vec);
                 rowname_arr_ls.push_back (rowname_vec);
                 id_vec_ls.push_back (ids_ls);
-                clean_vecs <float, float, std::string> (lon_vec, lat_vec, rowname_vec);
+                clean_vecs <double, double, std::string> (lon_vec, lat_vec, rowname_vec);
                 ids_ls.clear ();
                 get_value_mat_rel (itr, unique_vals, kv_mat_ls, count_ls++);
             }
@@ -198,8 +198,8 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
         kv_df_mp = R_NilValue;
 
     // ****** clean up *****
-    clean_arrs <float, float, std::string> (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
-    clean_arrs <float, float, std::string> (lon_arr_ls, lat_arr_ls, rowname_arr_ls);
+    clean_arrs <double, double, std::string> (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
+    clean_arrs <double, double, std::string> (lon_arr_ls, lat_arr_ls, rowname_arr_ls);
     clean_vecs <std::string, osmid_t> (id_vec_mp, id_vec_ls);
     rel_id_mp.clear ();
     rel_id_ls.clear ();
@@ -389,7 +389,7 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st)
     const std::vector <Relation>& rels = xml.relations ();
     const UniqueVals unique_vals = xml.unique_vals ();
 
-    std::vector <float> lons, lats;
+    std::vector <double> lons, lats;
     std::set <std::string> keyset; // must be ordered!
     Rcpp::List dimnames (0);
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));

@@ -278,8 +278,8 @@ void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
     Rcpp::List dimnames (0);
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
 
-    float_arr2 lat_vec, lon_vec;
-    float_arr3 lat_arr_mp, lon_arr_mp, lon_arr_ls, lat_arr_ls;
+    double_arr2 lat_vec, lon_vec;
+    double_arr3 lat_arr_mp, lon_arr_mp, lon_arr_ls, lat_arr_ls;
     string_arr2 rowname_vec, id_vec_mp, roles_ls; 
     string_arr3 rowname_arr_mp, rowname_arr_ls;
     std::vector <osmid_t> ids_ls; 
@@ -323,7 +323,7 @@ void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
             lat_arr_mp.push_back (lat_vec);
             rowname_arr_mp.push_back (rowname_vec);
             id_vec_mp.push_back (ids_mp);
-            clean_vecs <float, float, std::string> (lon_vec, lat_vec, rowname_vec);
+            clean_vecs <double, double, std::string> (lon_vec, lat_vec, rowname_vec);
             ids_mp.clear ();
             if (nmp > 0)
                 get_value_mat_rel (itr, unique_vals, kv_mat_mp, count_mp++);
@@ -353,7 +353,7 @@ void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
                 lat_arr_ls.push_back (lat_vec);
                 rowname_arr_ls.push_back (rowname_vec);
                 id_vec_ls.push_back (ids_ls);
-                clean_vecs <float, float, std::string> (lon_vec, lat_vec, rowname_vec);
+                clean_vecs <double, double, std::string> (lon_vec, lat_vec, rowname_vec);
                 ids_ls.clear ();
                 if (nls > 0)
                     get_value_mat_rel (itr, unique_vals, kv_mat_ls, count_ls++);
@@ -369,8 +369,8 @@ void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
         rowname_arr_ls, id_vec_ls, unique_vals);
 
     // ****** clean up *****
-    clean_arrs <float, float, std::string> (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
-    clean_arrs <float, float, std::string> (lon_arr_ls, lat_arr_ls, rowname_arr_ls);
+    clean_arrs <double, double, std::string> (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
+    clean_arrs <double, double, std::string> (lon_arr_ls, lat_arr_ls, rowname_arr_ls);
     clean_vecs <std::string, osmid_t> (id_vec_mp, id_vec_ls);
     rel_id_mp.clear ();
     rel_id_ls.clear ();

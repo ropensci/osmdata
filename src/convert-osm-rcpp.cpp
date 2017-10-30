@@ -220,7 +220,7 @@ Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls=fal
  */
 // TODO: Replace return value with pointer to List as argument?
 template <typename T> Rcpp::List convert_poly_linestring_to_sf (
-        const float_arr3 &lon_arr, const float_arr3 &lat_arr, 
+        const double_arr3 &lon_arr, const double_arr3 &lat_arr, 
         const string_arr3 &rowname_arr, 
         const std::vector <std::vector <T> > &id_vec, 
         const std::vector <std::string> &rel_id, const std::string type)
@@ -266,12 +266,12 @@ template <typename T> Rcpp::List convert_poly_linestring_to_sf (
     return outList;
 }
 template Rcpp::List convert_poly_linestring_to_sf <osmid_t> (
-        const float_arr3 &lon_arr, const float_arr3 &lat_arr, 
+        const double_arr3 &lon_arr, const double_arr3 &lat_arr, 
         const string_arr3 &rowname_arr, 
         const std::vector <std::vector <osmid_t> > &id_vec, 
         const std::vector <std::string> &rel_id, const std::string type);
 template Rcpp::List convert_poly_linestring_to_sf <std::string> (
-        const float_arr3 &lon_arr, const float_arr3 &lat_arr, 
+        const double_arr3 &lon_arr, const double_arr3 &lat_arr, 
         const string_arr3 &rowname_arr, 
         const std::vector <std::vector <std::string> > &id_vec, 
         const std::vector <std::string> &rel_id, const std::string type);
@@ -291,7 +291,7 @@ template Rcpp::List convert_poly_linestring_to_sf <std::string> (
  * @return Object pointed to by 'multipolygons' is constructed.
  */
 void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
-        const float_arr3 &lon_arr, const float_arr3 &lat_arr, 
+        const double_arr3 &lon_arr, const double_arr3 &lat_arr, 
         const string_arr3 &rowname_arr, const string_arr2 &id_vec,
         const UniqueVals &unique_vals)
 {
@@ -397,7 +397,7 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
  * @return Object pointed to by 'multilines' is constructed.
  */
 void convert_multiline_to_sp (Rcpp::S4 &multilines, const Relations &rels,
-        const float_arr3 &lon_arr, const float_arr3 &lat_arr, 
+        const double_arr3 &lon_arr, const double_arr3 &lat_arr, 
         const string_arr3 &rowname_arr, const osmt_arr2 &id_vec,
         const UniqueVals &unique_vals)
 {

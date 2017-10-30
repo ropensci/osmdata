@@ -38,7 +38,7 @@ template <typename T> void clean_vec (std::vector <std::vector <T> > &arr2)
         arr2 [i].clear ();
     arr2.clear ();
 }
-template void clean_vec <float> (std::vector <std::vector <float> > &arr2);
+template void clean_vec <double> (std::vector <std::vector <double> > &arr2);
 template void clean_vec <osmid_t> (std::vector <std::vector <osmid_t> > &arr2);
 template void clean_vec <std::string> (std::vector <std::vector <std::string> > &arr2);
 
@@ -64,9 +64,9 @@ template <typename T1, typename T2, typename T3> void clean_vecs (
     clean_vec (arr2_2);
     clean_vec (arr2_3);
 }
-template void clean_vecs <float, float, std::string> (
-        std::vector <std::vector <float> > &arr2_1,
-        std::vector <std::vector <float> > &arr2_2,
+template void clean_vecs <double, double, std::string> (
+        std::vector <std::vector <double> > &arr2_1,
+        std::vector <std::vector <double> > &arr2_2,
         std::vector <std::vector <std::string> > &arr2_3);
 
 // ----- clean_arr
@@ -81,8 +81,8 @@ template <typename T> void clean_arr (
     }
     arr3.clear ();
 }
-template void clean_arr <float> (
-        std::vector <std::vector <std::vector <float> > > &arr3);
+template void clean_arr <double> (
+        std::vector <std::vector <std::vector <double> > > &arr3);
 template void clean_arr <std::string> (
         std::vector <std::vector <std::vector <std::string> > > &arr3);
 
@@ -105,7 +105,7 @@ template <typename T1, typename T2, typename T3> void clean_arrs (
     clean_arr (arr3_2);
     clean_arr (arr3_3);
 }
-template void clean_arrs <float, float, std::string> (
-        std::vector <std::vector <std::vector <float> > > &arr3_1,
-        std::vector <std::vector <std::vector <float> > > &arr3_2,
+template void clean_arrs <double, double, std::string> (
+        std::vector <std::vector <std::vector <double> > > &arr3_1,
+        std::vector <std::vector <std::vector <double> > > &arr3_2,
         std::vector <std::vector <std::vector <std::string> > > &arr3_3);
