@@ -83,7 +83,7 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
     osmt_arr2 id_vec_ls;
     std::vector <std::string> roles;
 
-    int nmp = 0, nls = 0; // number of multipolygon and multilinestringrelations
+    unsigned int nmp = 0, nls = 0; // number of multipolygon and multilinestringrelations
     for (auto itr = rels.begin (); itr != rels.end (); ++itr)
     {
         if (itr->ispoly) 
@@ -99,13 +99,13 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
         }
     }
 
-    int ncol = unique_vals.k_rel.size ();
+    size_t ncol = unique_vals.k_rel.size ();
     rel_id_mp.reserve (nmp);
     rel_id_ls.reserve (nls);
 
     Rcpp::CharacterMatrix kv_mat_mp (Rcpp::Dimension (nmp, ncol)),
         kv_mat_ls (Rcpp::Dimension (nls, ncol));
-    int count_mp = 0, count_ls = 0;
+    unsigned int count_mp = 0, count_ls = 0;
 
     for (auto itr = rels.begin (); itr != rels.end (); ++itr)
     {
@@ -237,16 +237,16 @@ void get_osm_ways_sf (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
     if (!(geom_type == "POLYGON" || geom_type == "LINESTRING"))
         throw std::runtime_error ("geom_type must be POLYGON or LINESTRING");
     // NOTE that Rcpp `.size()` returns a **signed** int
-    if ((unsigned) wayList.size () != way_ids.size ())
+    if (static_cast <unsigned int> (wayList.size ()) != way_ids.size ())
         throw std::runtime_error ("ways and IDs must have same lengths");
 
-    int nrow = way_ids.size (), ncol = unique_vals.k_way.size ();
+    size_t nrow = way_ids.size (), ncol = unique_vals.k_way.size ();
     std::vector <std::string> waynames;
     waynames.reserve (way_ids.size ());
 
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
-    int count = 0;
+    unsigned int count = 0;
     for (auto wi = way_ids.begin (); wi != way_ids.end (); ++wi)
     {
         waynames.push_back (std::to_string (*wi));
@@ -306,9 +306,9 @@ void get_osm_nodes_sf (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
         const Nodes &nodes, const UniqueVals &unique_vals, 
         const Rcpp::NumericVector &bbox, const Rcpp::List &crs)
 {
-    int nrow = nodes.size (), ncol = unique_vals.k_point.size ();
+    size_t nrow = nodes.size (), ncol = unique_vals.k_point.size ();
 
-    if (ptList.size () != nrow)
+    if (static_cast <size_t> (ptList.size ()) != nrow)
         throw std::runtime_error ("points must have same size as nodes");
 
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
@@ -317,7 +317,7 @@ void get_osm_nodes_sf (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
     std::vector <std::string> ptnames;
     ptnames.reserve (nodes.size ());
     // TODO: Repalce count with std::distance
-    int count = 0;
+    unsigned int count = 0;
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
         Rcpp::NumericVector ptxy = Rcpp::NumericVector::create (NA_REAL, NA_REAL);
@@ -330,9 +330,10 @@ void get_osm_nodes_sf (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
                 kv_iter != ni->second.key_val.end (); ++kv_iter)
         {
             const std::string &key = kv_iter->first;
-            int ni = std::distance (unique_vals.k_point.begin (),
-                    unique_vals.k_point.find (key));
-            kv_mat (count, ni) = kv_iter->second;
+            unsigned int ndi = static_cast <unsigned int> (
+                    std::distance (unique_vals.k_point.begin (),
+                    unique_vals.k_point.find (key)));
+            kv_mat (count, ndi) = kv_iter->second;
         }
         count++;
     }
