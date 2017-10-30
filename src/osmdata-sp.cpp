@@ -188,7 +188,7 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
         }
         dummy_list.erase (0);
         auto wj = ways.find (*wi);
-        get_value_mat_way (wj, ways, unique_vals, kv_mat, pos);
+        get_value_mat_way (wj, unique_vals, kv_mat, pos);
     } // end for it over poly_ways
     if (indx_out.size () > 0)
     {
@@ -326,7 +326,7 @@ void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
             clean_vecs <float, float, std::string> (lon_vec, lat_vec, rowname_vec);
             ids_mp.clear ();
             if (nmp > 0)
-                get_value_mat_rel (itr, rels, unique_vals, kv_mat_mp, count_mp++);
+                get_value_mat_rel (itr, unique_vals, kv_mat_mp, count_mp++);
         } else // store as multilinestring
         {
             // multistrings are grouped here by roles, unlike GDAL which just
@@ -356,7 +356,7 @@ void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
                 clean_vecs <float, float, std::string> (lon_vec, lat_vec, rowname_vec);
                 ids_ls.clear ();
                 if (nls > 0)
-                    get_value_mat_rel (itr, rels, unique_vals, kv_mat_ls, count_ls++);
+                    get_value_mat_rel (itr, unique_vals, kv_mat_ls, count_ls++);
             }
             roles_ls.push_back (roles);
             roles.clear ();

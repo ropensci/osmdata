@@ -68,7 +68,7 @@ typedef std::vector <std::pair <osmid_t, std::string> >::iterator it_osm_str_vec
 constexpr float FLOAT_MAX =  std::numeric_limits<float>::max ();
 
 // Convenience typedefs for some rapidxml types
-typedef std::unique_ptr<rapidxml::xml_document<>> XmlDocPtr;
+typedef std::unique_ptr<rapidxml::xml_document<> > XmlDocPtr;
 typedef const rapidxml::xml_node<>* XmlNodePtr;
 typedef const rapidxml::xml_attribute<>* XmlAttrPtr;
 

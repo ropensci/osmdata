@@ -121,7 +121,7 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
             id_vec_mp.push_back (ids_mp);
             clean_vecs <float, float, std::string> (lon_vec, lat_vec, rowname_vec);
             ids_mp.clear ();
-            get_value_mat_rel (itr, rels, unique_vals, kv_mat_mp, count_mp++);
+            get_value_mat_rel (itr, unique_vals, kv_mat_mp, count_mp++);
         } else // store as multilinestring
         {
             // multistrings are grouped here by roles, unlike GDAL which just
@@ -150,7 +150,7 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
                 id_vec_ls.push_back (ids_ls);
                 clean_vecs <float, float, std::string> (lon_vec, lat_vec, rowname_vec);
                 ids_ls.clear ();
-                get_value_mat_rel (itr, rels, unique_vals, kv_mat_ls, count_ls++);
+                get_value_mat_rel (itr, unique_vals, kv_mat_ls, count_ls++);
             }
             roles_ls.push_back (roles);
             roles.clear ();
@@ -266,7 +266,7 @@ void get_osm_ways_sf (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
             wayList [count] = polyList_temp;
         }
         auto wj = ways.find (*wi);
-        get_value_mat_way (wj, ways, unique_vals, kv_mat, count++);
+        get_value_mat_way (wj, unique_vals, kv_mat, count++);
     } // end for it over poly_ways
 
     wayList.attr ("names") = waynames;

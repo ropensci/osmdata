@@ -57,17 +57,17 @@ void trace_way_nmat (const Ways &ways, const Nodes &nodes,
     auto wayi = ways.find (wayi_id);
     std::vector <std::string> rownames;
     rownames.clear ();
-    int n = wayi->second.nodes.size ();
+    size_t n = wayi->second.nodes.size ();
     rownames.reserve (n);
     nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
 
-    int tempi = 0;
+    size_t tempi = 0;
     for (auto ni = wayi->second.nodes.begin ();
             ni != wayi->second.nodes.end (); ++ni)
     {
         rownames.push_back (std::to_string (*ni));
-        nmat (tempi, 0) = nodes.find (*ni)->second.lon;
-        nmat (tempi++, 1) = nodes.find (*ni)->second.lat;
+        nmat (tempi, 0) = static_cast <double> (nodes.find (*ni)->second.lon);
+        nmat (tempi++, 1) = static_cast <double> (nodes.find (*ni)->second.lat);
     }
 
     std::vector <std::string> colnames = {"lon", "lat"};
@@ -75,7 +75,7 @@ void trace_way_nmat (const Ways &ways, const Nodes &nodes,
     dimnames.push_back (rownames);
     dimnames.push_back (colnames);
     nmat.attr ("dimnames") = dimnames;
-    dimnames.erase (0, dimnames.size ());
+    dimnames.erase (0, static_cast <int> (dimnames.size ()));
 }
 
 /* get_value_mat_way
@@ -92,16 +92,17 @@ void trace_way_nmat (const Ways &ways, const Nodes &nodes,
 // TODO: Is it faster to use a std::vector <std::string> instead of
 // Rcpp::CharacterMatrix and then simply
 // Rcpp::CharacterMatrix mat (nrow, ncol, value_vec.begin ()); ?
-void get_value_mat_way (Ways::const_iterator wayi, const Ways &ways,
-        const UniqueVals &unique_vals, Rcpp::CharacterMatrix &value_arr, int rowi)
+void get_value_mat_way (Ways::const_iterator wayi,
+        const UniqueVals &unique_vals, Rcpp::CharacterMatrix &value_arr,
+        unsigned int rowi)
 {
     for (auto kv_iter = wayi->second.key_val.begin ();
             kv_iter != wayi->second.key_val.end (); ++kv_iter)
     {
         const std::string &key = kv_iter->first;
-        int coli = std::distance (unique_vals.k_way.begin (),
+        long int coli = std::distance (unique_vals.k_way.begin (),
                 unique_vals.k_way.find (key));
-        value_arr (rowi, coli) = kv_iter->second;
+        value_arr (rowi, static_cast <unsigned int> (coli)) = kv_iter->second;
     }
 }
 
@@ -116,16 +117,17 @@ void get_value_mat_way (Ways::const_iterator wayi, const Ways &ways,
  *        by tracing the key-val pairs of the relation 'reli'
  * @param rowi Integer value for the key-val pairs for reli
  */
-void get_value_mat_rel (Relations::const_iterator &reli, const Relations &rels,
-        const UniqueVals &unique_vals, Rcpp::CharacterMatrix &value_arr, int rowi)
+void get_value_mat_rel (Relations::const_iterator &reli,
+        const UniqueVals &unique_vals, Rcpp::CharacterMatrix &value_arr,
+        unsigned int rowi)
 {
     for (auto kv_iter = reli->key_val.begin (); kv_iter != reli->key_val.end ();
             ++kv_iter)
     {
         const std::string &key = kv_iter->first;
-        int coli = std::distance (unique_vals.k_rel.begin (),
+        long int coli = std::distance (unique_vals.k_rel.begin (),
                 unique_vals.k_rel.find (key));
-        value_arr (rowi, coli) = kv_iter->second;
+        value_arr (rowi, static_cast <unsigned int> (coli)) = kv_iter->second;
     }
 }
 
@@ -147,37 +149,39 @@ Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls=fal
     std::vector <std::string> ids = dims [0], varnames = dims [1], varnames_new;
     Rcpp::CharacterMatrix kv_out;
 
-    unsigned ni = std::distance (varnames.begin (),
-            std::find (varnames.begin (), varnames.end (), "name"));
-    unsigned add_lines = 1;
+    int ni = static_cast <int> (std::distance (varnames.begin (),
+            std::find (varnames.begin (), varnames.end (), "name")));
+    unsigned int add_lines = 1;
     if (ls)
         add_lines++;
 
-    if (ni < varnames.size ())
+    if (ni < static_cast <int> (varnames.size ()))
     {
         Rcpp::CharacterVector name_vals = kv.column (ni);
         Rcpp::CharacterVector roles; // only for ls, but has to be defined here
         // convert ids to CharacterVector - direct allocation doesn't work
         Rcpp::CharacterVector ids_rcpp (ids.size ());
         if (!ls)
-            for (unsigned i=0; i<ids.size (); i++)
+            for (unsigned int i=0; i<ids.size (); i++)
                 ids_rcpp (i) = ids [i];
         else
         { // extract way roles for multilinestring kev-val matrices
             roles = Rcpp::CharacterVector (ids.size ());
-            for (unsigned i=0; i<ids.size (); i++)
+            for (unsigned int i=0; i<ids.size (); i++)
             {
-                int ipos = ids [i].find ("-", 0);
+                size_t ipos = ids [i].find ("-", 0);
                 ids_rcpp (i) = ids [i].substr (0, ipos).c_str ();
                 roles (i) = ids [i].substr (ipos + 1, ids[i].length () - ipos);
             }
         }
 
-        varnames_new.reserve (kv.ncol () + add_lines);
+        varnames_new.reserve (static_cast <unsigned int> (kv.ncol ()) +
+                add_lines);
         varnames_new.push_back ("osm_id");
         varnames_new.push_back ("name");
-        kv_out = Rcpp::CharacterMatrix (Rcpp::Dimension (kv.nrow (),
-                    kv.ncol () + add_lines));
+        kv_out = Rcpp::CharacterMatrix (Rcpp::Dimension (
+                    static_cast <unsigned int> (kv.nrow ()),
+                    static_cast <unsigned int> (kv.ncol ()) + add_lines));
         kv_out.column (0) = ids_rcpp;
         kv_out.column (1) = name_vals;
         if (ls)
@@ -185,12 +189,13 @@ Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls=fal
             varnames_new.push_back ("role");
             kv_out.column (2) = roles;
         }
-        unsigned count = 1 + add_lines;
-        for (unsigned i=0; i<(unsigned) kv.ncol (); i++)
-            if (i != ni)
+        unsigned int count = 1 + add_lines;
+        for (unsigned int i=0; i<static_cast <unsigned int> (kv.ncol ()); i++)
+            if (i != static_cast <unsigned int> (ni))
             {
                 varnames_new.push_back (varnames [i]);
-                kv_out.column (count++) = kv.column (i);
+                kv_out.column (static_cast <int> (count++)) =
+                    kv.column (static_cast <int> (i));
             }
         kv_out.attr ("dimnames") = Rcpp::List::create (ids, varnames_new);
     } else
@@ -226,12 +231,12 @@ template <typename T> Rcpp::List convert_poly_linestring_to_sf (
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
     Rcpp::List dimnames (0);
     std::vector <std::string> colnames = {"lat", "lon"};
-    for (unsigned i=0; i<lon_arr.size (); i++) // over all relations
+    for (unsigned int i=0; i<lon_arr.size (); i++) // over all relations
     {
         Rcpp::List outList_i (lon_arr [i].size ()); 
-        for (unsigned j=0; j<lon_arr [i].size (); j++) // over all ways
+        for (unsigned int j=0; j<lon_arr [i].size (); j++) // over all ways
         {
-            unsigned n = lon_arr [i][j].size ();
+            size_t n = lon_arr [i][j].size ();
             nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
             std::copy (lon_arr [i][j].begin (), lon_arr [i][j].end (),
                     nmat.begin ());
@@ -240,7 +245,7 @@ template <typename T> Rcpp::List convert_poly_linestring_to_sf (
             dimnames.push_back (rowname_arr [i][j]);
             dimnames.push_back (colnames);
             nmat.attr ("dimnames") = dimnames;
-            dimnames.erase (0, dimnames.size ());
+            dimnames.erase (0, static_cast <int> (dimnames.size ()));
             outList_i [j] = nmat;
         }
         outList_i.attr ("names") = id_vec [i];
@@ -295,7 +300,7 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
     Rcpp::Function Polygon = sp_env ["Polygon"];
     Rcpp::Language polygons_call ("new", "Polygons");
 
-    int nrow = lon_arr.size (), ncol = unique_vals.k_rel.size ();
+    size_t nrow = lon_arr.size (), ncol = unique_vals.k_rel.size ();
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
 
@@ -304,7 +309,7 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
     Rcpp::List dimnames (0);
     std::vector <std::string> colnames = {"lat", "lon"}, rel_id;
 
-    unsigned npolys = 0;
+    unsigned int npolys = 0;
     for (auto itr = rels.begin (); itr != rels.end (); itr++)
         if (itr->ispoly)
             npolys++;
@@ -312,16 +317,16 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
         throw std::runtime_error ("polygons must be same size as geometries");
     rel_id.reserve (npolys);
 
-    int i = 0;
+    unsigned int i = 0;
     for (auto itr = rels.begin (); itr != rels.end (); itr++)
         if (itr->ispoly)
         {
             Rcpp::List outList_i (lon_arr [i].size ()); 
             // j over all ways, with outer always first followed by inner
             bool outer = true;
-            for (unsigned j=0; j<lon_arr [i].size (); j++) 
+            for (unsigned int j=0; j<lon_arr [i].size (); j++) 
             {
-                int n = lon_arr [i][j].size ();
+                size_t n = lon_arr [i][j].size ();
                 nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
                 std::copy (lon_arr [i][j].begin (), lon_arr [i][j].end (),
                         nmat.begin ());
@@ -330,15 +335,15 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
                 dimnames.push_back (rowname_arr [i][j]);
                 dimnames.push_back (colnames);
                 nmat.attr ("dimnames") = dimnames;
-                dimnames.erase (0, dimnames.size ());
+                dimnames.erase (0, static_cast <int> (dimnames.size ()));
 
                 Rcpp::S4 poly = Polygon (nmat);
                 poly.slot ("hole") = !outer;
-                poly.slot ("ringDir") = (int) 1; // TODO: Check this!
+                poly.slot ("ringDir") = static_cast <int> (1); // TODO: Check this!
                 if (outer)
                     outer = false;
                 else
-                    poly.slot ("ringDir") = (int) -1; // TODO: Check this!
+                    poly.slot ("ringDir") = static_cast <int> (-1); // TODO: Check this!
                 outList_i [j] = poly;
             }
             outList_i.attr ("names") = id_vec [i];
@@ -346,13 +351,13 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
             Rcpp::S4 polygons = polygons_call.eval ();
             polygons.slot ("Polygons") = outList_i;
             polygons.slot ("ID") = id_vec [i];
-            polygons.slot ("plotOrder") = (int) i + 1; 
+            polygons.slot ("plotOrder") = static_cast <int> (i) + 1; 
             //polygons.slot ("labpt") = poly.slot ("labpt");
             //polygons.slot ("area") = poly.slot ("area");
             outList [i] = polygons;
             rel_id.push_back (std::to_string (itr->id));
 
-            get_value_mat_rel (itr, rels, unique_vals, kv_mat, i++);
+            get_value_mat_rel (itr, unique_vals, kv_mat, i++);
         } // end if ispoly & for i
     outList.attr ("names") = rel_id;
 
@@ -360,8 +365,8 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
     multipolygons = sp_polys_call.eval ();
     multipolygons.slot ("polygons") = outList;
     // fill plotOrder with numeric vector
-    std::vector <int> plotord;
-    for (unsigned i=0; i<rels.size (); i++) plotord.push_back (i + 1);
+    std::vector <unsigned int> plotord;
+    for (i=0; i<rels.size (); i++) plotord.push_back (i + 1);
     multipolygons.slot ("plotOrder") = plotord;
     plotord.clear ();
 
@@ -404,26 +409,26 @@ void convert_multiline_to_sp (Rcpp::S4 &multilines, const Relations &rels,
     Rcpp::List dimnames (0);
     std::vector <std::string> colnames = {"lat", "lon"}, rel_id;
 
-    int nlines = 0;
+    unsigned int nlines = 0;
     for (auto itr = rels.begin (); itr != rels.end (); itr++)
         if (!itr->ispoly)
             nlines++;
     rel_id.reserve (nlines);
 
     Rcpp::List outList (nlines); 
-    int ncol = unique_vals.k_rel.size ();
+    size_t ncol = unique_vals.k_rel.size ();
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nlines, ncol));
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
 
-    int i = 0;
+    unsigned int i = 0;
     for (auto itr = rels.begin (); itr != rels.end (); itr++)
         if (!itr->ispoly)
         {
             Rcpp::List outList_i (lon_arr [i].size ()); 
             // j over all ways
-            for (unsigned j=0; j<lon_arr [i].size (); j++) 
+            for (unsigned int j=0; j<lon_arr [i].size (); j++) 
             {
-                unsigned n = lon_arr [i][j].size ();
+                size_t n = lon_arr [i][j].size ();
                 nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
                 std::copy (lon_arr [i][j].begin (), lon_arr [i][j].end (),
                         nmat.begin ());
@@ -432,7 +437,7 @@ void convert_multiline_to_sp (Rcpp::S4 &multilines, const Relations &rels,
                 dimnames.push_back (rowname_arr [i][j]);
                 dimnames.push_back (colnames);
                 nmat.attr ("dimnames") = dimnames;
-                dimnames.erase (0, dimnames.size ());
+                dimnames.erase (0, static_cast <int> (dimnames.size ()));
 
                 Rcpp::S4 line = line_call.eval ();
                 line.slot ("coords") = nmat;
@@ -447,7 +452,7 @@ void convert_multiline_to_sp (Rcpp::S4 &multilines, const Relations &rels,
             outList [i] = lines;
             rel_id.push_back (std::to_string (itr->id));
 
-            get_value_mat_rel (itr, rels, unique_vals, kv_mat, i++);
+            get_value_mat_rel (itr, unique_vals, kv_mat, i++);
         } // end if ispoly & for i
     outList.attr ("names") = rel_id;
 
