@@ -52,7 +52,7 @@ void get_osm_nodes_sp (Rcpp::S4 &sp_points, const Nodes &nodes,
 {
     Rcpp::NumericMatrix ptxy; 
     Rcpp::CharacterMatrix kv_mat;
-    int nrow = nodes.size (), ncol = unique_vals.k_point.size ();
+    size_t nrow = nodes.size (), ncol = unique_vals.k_point.size ();
 
     kv_mat = Rcpp::CharacterMatrix (Rcpp::Dimension (nrow, ncol));
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
@@ -62,7 +62,8 @@ void get_osm_nodes_sp (Rcpp::S4 &sp_points, const Nodes &nodes,
     ptnames.reserve (nodes.size ());
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
-        int pos = std::distance (nodes.begin (), ni);
+        unsigned int pos = static_cast <unsigned int> (
+                std::distance (nodes.begin (), ni));
         ptxy (pos, 0) = ni->second.lon;
         ptxy (pos, 1) = ni->second.lat;
         ptnames.push_back (std::to_string (ni->first));
@@ -70,9 +71,10 @@ void get_osm_nodes_sp (Rcpp::S4 &sp_points, const Nodes &nodes,
                 kv_iter != ni->second.key_val.end (); ++kv_iter)
         {
             const std::string &key = kv_iter->first;
-            int ni = std::distance (unique_vals.k_point.begin (),
-                    unique_vals.k_point.find (key));
-            kv_mat (pos, ni) = kv_iter->second;
+            unsigned int ndi = static_cast <unsigned int> (
+                    std::distance (unique_vals.k_point.begin (),
+                        unique_vals.k_point.find (key)));
+            kv_mat (pos, ndi) = kv_iter->second;
         }
     }
     std::vector <std::string> colnames = {"lon", "lat"};
@@ -80,7 +82,7 @@ void get_osm_nodes_sp (Rcpp::S4 &sp_points, const Nodes &nodes,
     dimnames.push_back (ptnames);
     dimnames.push_back (colnames);
     ptxy.attr ("dimnames") = dimnames;
-    dimnames.erase (0, dimnames.size ());
+    dimnames.erase (0, static_cast <int> (dimnames.size ()));
 
     kv_mat.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
 
@@ -142,7 +144,8 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
         Rcpp::NumericMatrix nmat;
         trace_way_nmat (ways, nodes, (*wi), nmat);
         Rcpp::List dummy_list (0);
-        int pos = std::distance (way_ids.begin (), wi);
+        unsigned int pos = static_cast <unsigned int> (
+                std::distance (way_ids.begin (), wi));
         poly_okay [pos] = true;
         if (geom_type == "line")
         {
@@ -162,8 +165,9 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
             wayList [pos] = lines;
         } else 
         {
-            if (nmat.nrow () == 3 && nmat (0, 0) == nmat (2, 0) &&
-                    nmat (0, 1) == nmat (2, 1))
+            const double dtol = 1.0e-6;
+            if (nmat.nrow () == 3 && fabs (nmat (0, 0) - nmat (2, 0)) < dtol &&
+                    (fabs (nmat (0, 1) - nmat (2, 1)) < dtol))
             {
                 // polygon has only 3 rows with start == end, so is ill-formed
                 indx_out.push_back (pos);
@@ -176,12 +180,12 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
 
             Rcpp::S4 poly = Polygon (nmat);
             poly.slot ("hole") = false;
-            poly.slot ("ringDir") = (int) 1;
+            poly.slot ("ringDir") = static_cast <int> (1);
             dummy_list.push_back (poly);
             polygons = polygons_call.eval ();
             polygons.slot ("Polygons") = dummy_list;
             polygons.slot ("ID") = (*wi);
-            polygons.slot ("plotOrder") = (int) 1;
+            polygons.slot ("plotOrder") = static_cast <int> (1);
             polygons.slot ("labpt") = poly.slot ("labpt");
             polygons.slot ("area") = poly.slot ("area");
             wayList [pos] = polygons;
@@ -195,7 +199,7 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
         std::reverse (indx_out.begin (), indx_out.end ());
         for (auto i: indx_out)
         {
-            wayList.erase (i);
+            wayList.erase (static_cast <int> (i));
             waynames.erase (waynames.begin () + i);
         }
     }
@@ -211,7 +215,8 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
         for (size_t i = 0; i<nrow; i++)
         {
             if (poly_okay [i])
-                kv_mat2 (pos++, Rcpp::_) = kv_mat (i, Rcpp::_);
+                kv_mat2 (pos++, Rcpp::_) =
+                    kv_mat (static_cast <int> (i), Rcpp::_);
         }
         kv_mat = kv_mat2;
     }
@@ -239,7 +244,7 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
         sp_ways = sp_polys_call.eval ();
         sp_ways.slot ("polygons") = wayList;
         // Fill plotOrder slot with numeric vector
-        std::vector <int> plord;
+        std::vector <unsigned int> plord;
         for (unsigned int i=0; i<nrow; i++) plord.push_back (i + 1);
         sp_ways.slot ("plotOrder") = plord;
         plord.clear ();
@@ -287,7 +292,7 @@ void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
     osmt_arr2 id_vec_ls;
     std::vector <std::string> roles;
 
-    int nmp = 0, nls = 0; // number of multipolygon and multilinestringrelations
+    unsigned int nmp = 0, nls = 0; // number of multipolygon and multilinestringrelations
     for (auto itr = rels.begin (); itr != rels.end (); ++itr)
     {
         if (itr->ispoly) 
@@ -303,13 +308,13 @@ void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
         }
     }
 
-    int ncol = unique_vals.k_rel.size ();
+    size_t ncol = unique_vals.k_rel.size ();
     rel_id_mp.reserve (nmp);
     rel_id_ls.reserve (nls);
 
     Rcpp::CharacterMatrix kv_mat_mp (Rcpp::Dimension (nmp, ncol)),
         kv_mat_ls (Rcpp::Dimension (nls, ncol));
-    int count_mp = 0, count_ls = 0;
+    unsigned int count_mp = 0, count_ls = 0;
 
     for (auto itr = rels.begin (); itr != rels.end (); ++itr)
     {
