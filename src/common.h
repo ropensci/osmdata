@@ -59,6 +59,8 @@ typedef long long osmid_t;
 
 typedef std::vector <std::vector <float> > float_arr2;
 typedef std::vector <std::vector <std::vector <float> > > float_arr3;
+typedef std::vector <std::vector <double> > double_arr2;
+typedef std::vector <std::vector <std::vector <double> > > double_arr3;
 typedef std::vector <std::vector <std::string> > string_arr2;
 typedef std::vector <std::vector <std::vector <std::string> > > string_arr3;
 typedef std::vector <std::vector <osmid_t> > osmt_arr2;
@@ -66,6 +68,7 @@ typedef std::vector <std::pair <osmid_t, std::string> > osm_str_vec;
 typedef std::vector <std::pair <osmid_t, std::string> >::iterator it_osm_str_vec;
 
 constexpr float FLOAT_MAX =  std::numeric_limits<float>::max ();
+constexpr double DOUBLE_MAX =  std::numeric_limits<double>::max ();
 
 // Convenience typedefs for some rapidxml types
 typedef std::unique_ptr<rapidxml::xml_document<> > XmlDocPtr;
@@ -93,14 +96,14 @@ struct RawNode
 {
     osmid_t id;
     std::vector <std::string> key, value;
-    float lat, lon;
+    double lat, lon;
 };
 
 struct Node
 {
     osmid_t id;
     std::map <std::string, std::string> key_val;
-    float lat, lon;
+    double lat, lon;
 };
 
 /* Traversing the XML tree means keys and values are read sequentially and

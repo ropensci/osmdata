@@ -32,5 +32,5 @@
 
 #include <Rcpp.h>
 
-Rcpp::NumericMatrix rcpp_get_bbox (float xmin, float xmax, float ymin, float ymax);
-Rcpp::NumericVector rcpp_get_bbox_sf (float xmin, float xmax, float ymin, float ymax);
+Rcpp::NumericMatrix rcpp_get_bbox (double xmin, double xmax, double ymin, double ymax);
+Rcpp::NumericVector rcpp_get_bbox_sf (double xmin, double xmax, double ymin, double ymax);
