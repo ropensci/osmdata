@@ -65,26 +65,35 @@ queries begin with a bounding box, defined in `osmdata` with the function
 q <- opq(bbox = c(51.1, 0.1, 51.2, 0.2))
 ```
 
-Bounding boxes may also be defined by simply passing the name of a desired area - if `bbox` is a text string `opq()` uses the helper function `getbb()` to convert it into a bounding box:
+Bounding boxes may also be defined by simply passing the name of a desired area
+- if `bbox` is a text string `opq()` uses the helper function `getbb()` to
+  convert it into a bounding box:
 
 ```{r opq2, eval = FALSE}
 bb = getbb('Greater London, U.K.')
 q <- opq(bbox = bb)
 ```
 
-Note that the text string is not case sensitive, and that you can avoid the intermediate step of using `getbb()` by placing a text string directly into the `bbox` argument of `opq()`:
+Note that the text string is not case sensitive, and that you can avoid the
+intermediate step of using `getbb()` by placing a text string directly into the
+`bbox` argument of `opq()`:
 
 ```{r eval=FALSE}
 identical(q, opq(bbox = 'greater london uk'))
 ## TRUE
 ```
 
-Note also that `getbb()` can return a data frame reporting multiple matches or matrices representing bounding polygons of matches:
-
+Note also that `getbb()` can return a data frame reporting multiple matches or
+matrices representing bounding polygons of matches:
 ```{r, eval=FALSE}
 bb_df = getbb(place_name = "london", format_out = "data.frame")
 bb_poly = getbb(place_name = "london", format_out = "polygon")
 ```
+The [`overpass API`](www.overpass-api.de) only accepts simple rectangular
+bounding boxes, and so data requested with a bounding polygon will actually be
+all data within the corresponding bounding box, but such data may be
+subsequently trimmed to within the polygon with the `trim_osmdata()` function,
+demonstrated in the code immediately below.
 
 Following the initial `opq()` call, `osmdata` queries are built by adding one or
 more 'features', which are specified in terms of `key-value` pairs.  For
@@ -99,6 +108,16 @@ q <- opq(bbox = 'greater london uk') %>%
 q <- opq (bbox = c (51.2867602, -0.510375, 51.6918741, 0.3340155)) %>%
     add_osm_feature(key = 'highway', value = 'motorway')
 ```
+
+All highways from within the polygonal boundary of Greater London can be
+extracted with,
+```{r opq3, eval = FALSE}
+q <- opq(bbox = 'greater london uk', format_out = 'polygon') %>%
+    add_osm_feature(key = 'highway', value = 'motorway') %>%
+    trim_osmdata ()
+```
+See `?time_osmdata()` for further ways to obtain polygonally bounded sets of OSM
+data.
 
 A detailed description of features is provided at the 
 [OSM wiki](https://wiki.openstreetmap.org/wiki/Category:Keys), or the 
@@ -147,7 +166,9 @@ query language given in the
 as well as the 
 [overpass API Language Guide](http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide).
 
-By default, `osmdata` sends queries to `http://overpass-api.de/api/interpreter` but other servers can be used, thanks to functions that *get* and *set* the base url:
+By default, `osmdata` sends queries to `http://overpass-api.de/api/interpreter`
+but other servers can be used, thanks to functions that *get* and *set* the base
+url:
 
 ```{r}
 get_overpass_url()

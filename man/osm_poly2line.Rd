@@ -16,7 +16,7 @@ objeccts merged into \code{$osm_lines}.
 \description{
 Street networks downloaded with \code{add_osm_object(key = "highway")} will
 store any circular highways in \code{$osm_polygons}. this function combines
-those with the \code${$osm_lines} component to yield a single \pkg{sf}
+those with the \code{$osm_lines} component to yield a single \pkg{sf}
 \code{data.frame} of all highways, whether polygonal or not.
 }
 \note{
