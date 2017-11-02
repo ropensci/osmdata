@@ -111,7 +111,7 @@ q <- opq (bbox = c (51.2867602, -0.510375, 51.6918741, 0.3340155)) %>%
 
 All highways from within the polygonal boundary of Greater London can be
 extracted with,
-```{r opq3, eval = FALSE}
+```{r trim-osmdata, eval = FALSE}
 q <- opq(bbox = 'greater london uk', format_out = 'polygon') %>%
     add_osm_feature(key = 'highway', value = 'motorway') %>%
     trim_osmdata ()

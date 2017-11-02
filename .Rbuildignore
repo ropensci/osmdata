@@ -1,6 +1,7 @@
 ^aaa\.Rmd$
 ^appveyor\.yml$
 ^configure$
+^CONTRIBUTING.md$
 ^docs/
 ^fig/
 makefile$
