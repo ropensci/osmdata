@@ -19,3 +19,19 @@ store any circular highways in \code{$osm_polygons}. this function combines
 those with the \code${$osm_lines} component to yield a single \pkg{sf}
 \code{data.frame} of all highways, whether polygonal or not.
 }
+\note{
+The \code{$osm_polygons} field is retained, with those features also
+repeated as \code{LINESTRING} objects in \code{$osm_lines}.
+}
+\examples{
+\dontrun{
+dat <- opq ("colchester uk") \%>\%
+            add_osm_feature (key="highway") \%>\%
+            osmdata_sf ()
+# colchester has lots of roundabouts, and these are stored in 'osm_polygons'
+# rather than 'osm_lines'. The former can be merged with the latter by:
+dat2 <- osm_poly2line (dat)
+# 'dat2' will have more lines than 'dat', but the same number of polygons (they
+# are left unchanged.) 
+}
+}

@@ -12,3 +12,12 @@ test_that ("c-method", {
                    expect_true (nrow (x [[i]]) >= nrow (x2 [[i]]))
                }
 })
+
+test_that ("poly2line", {
+                q <- opq (bbox = c(1, 1, 5, 5))
+                x <- osmdata_sf (q, "../osm-multi.osm")
+                nold <- nrow (x$osm_lines)
+                x <- osm_poly2line (x)
+                nnew <- nrow (x$osm_lines)
+                expect_identical (nrow (x$osm_polygons), nnew - nold)
+})

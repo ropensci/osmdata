@@ -10,26 +10,37 @@
 #' objeccts merged into \code{$osm_lines}.
 #'
 #' @note The \code{$osm_polygons} field is retained, with those features also
-#' repeated as \code`LINESTRING} objects in \code{$osm_lines}.
+#' repeated as \code{LINESTRING} objects in \code{$osm_lines}.
 #'
 #' @export
+#' @examples
+#' \dontrun{
+#' dat <- opq ("colchester uk") %>%
+#'             add_osm_feature (key="highway") %>%
+#'             osmdata_sf ()
+#' # colchester has lots of roundabouts, and these are stored in 'osm_polygons'
+#' # rather than 'osm_lines'. The former can be merged with the latter by:
+#' dat2 <- osm_poly2line (dat)
+#' # 'dat2' will have more lines than 'dat', but the same number of polygons (they
+#' # are left unchanged.) 
+#' }
 osm_poly2line <- function (osmdat)
 {
     if (!is (osmdat, "osmdata_sf"))
         stop ("osm_poly2line only works for objects of class osmdata_sf")
 
-    g <- lapply (dat$osm_polygons$geometry, function (i) {
+    g <- lapply (osmdat$osm_polygons$geometry, function (i) {
                      p1 <- i [[1]]
                      class (p1) <- c ("XY", "LINESTRING", "sfg")
                      return (p1)
             })
-    names (g) <- names (dat$osm_polygons$geometry)
+    names (g) <- names (osmdat$osm_polygons$geometry)
     # then copy all attributes from the lines
-    attrs  <- attributes (dat$osm_lines$geometry)
+    attrs  <- attributes (osmdat$osm_lines$geometry)
     attrs <- attrs [names (attrs) != "names"]
     attributes (g) <- c (attributes (g), attrs)
-    attr (g, "bbox") <- attr (dat$osm_polygons$geometry, "bbox")
-    polys <- dat$osm_polygons
+    attr (g, "bbox") <- attr (osmdat$osm_polygons$geometry, "bbox")
+    polys <- osmdat$osm_polygons
     polys$geometry <- g
 
     # use osmdata.c method to join the two sets of lines
@@ -37,7 +48,7 @@ osm_poly2line <- function (osmdat)
     newdat$osm_lines <- polys
     # This has to be put into newdat to ensure fields with no features are
     # retained as empty data frames rather than NULL objects
-    newdat <- c (dat, newdat)
-    dat$osm_lines <- newdat$osm_lines
-    return (dat)
+    newdat <- c (osmdat, newdat)
+    osmdat$osm_lines <- newdat$osm_lines
+    return (osmdat)
 }
