@@ -17,9 +17,13 @@
 #' @export
 trim_osmdata <- function (dat, bb_poly, exclude = TRUE)
 {
-    trim_to_poly_pts (dat, bb_poly, exclude = exclude) %>%
-        trim_to_poly (bb_poly = bb_poly, exclude = exclude) %>%
-        trim_to_poly_multi (bb_poly = bb_poly, exclude = exclude)
+    if (nrow (bb) > 2)
+    {
+        dat <- trim_to_poly_pts (dat, bb_poly, exclude = exclude) %>%
+            trim_to_poly (bb_poly = bb_poly, exclude = exclude) %>%
+            trim_to_poly_multi (bb_poly = bb_poly, exclude = exclude)
+    }
+    return (dat)
 }
 
 trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE)
