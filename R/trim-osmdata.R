@@ -17,7 +17,7 @@
 #' @export
 trim_osmdata <- function (dat, bb_poly, exclude = TRUE)
 {
-    if (nrow (bb) > 2)
+    if (nrow (bb_poly) > 2)
     {
         dat <- trim_to_poly_pts (dat, bb_poly, exclude = exclude) %>%
             trim_to_poly (bb_poly = bb_poly, exclude = exclude) %>%
