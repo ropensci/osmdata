@@ -198,7 +198,8 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
                               type = "application/xml")
     # TODO: Just return the direct httr::POST result here and convert in the
     # subsequent functions (`osmdata_xml/csv/sp/sf`)?
-    check_for_error (doc)
+    if (encoding != 'pbf')
+        check_for_error (doc)
 
     return (doc)
 }
