@@ -2,6 +2,7 @@
 
 S3method(c,osmdata)
 S3method(print,osmdata)
+export("%>%")
 export(add_feature)
 export(add_osm_feature)
 export(available_features)
