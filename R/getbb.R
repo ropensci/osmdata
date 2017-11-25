@@ -82,7 +82,8 @@ bbox_to_string <- function(bbox) {
 #' @param viewbox The bounds in which you're searching
 #' @param format_out Character string indicating output format: matrix (default),
 #' string (see \code{\link{bbox_to_string}}), data.frame (all 'hits' returned
-#' by Nominatim), or polygon (full polygonal bounding boxes for each match).
+#' by Nominatim), sf_polygon (for polygons that work with the sf package)
+#' or polygon (full polygonal bounding boxes for each match).
 #' @param base_url Base website from where data is queried
 #' @param featuretype The type of OSM feature (settlement is default; see Note)
 #' @param limit How many results should the API return?
@@ -120,13 +121,13 @@ bbox_to_string <- function(bbox) {
 #' getbb(place_name, format_out = "data.frame", limit = 3)
 #' # Examples of polygonal boundaries
 #' bb <- getbb ("london uk", format_out = "polygon") # single match
-#' dim(bb) # matrix of longitude/latitude pairs
-#' plot(bb)
+#' dim(bb[[1]]) # matrix of longitude/latitude pairs
 #' # Multiple matches return a nested list of matrices:
-#' bb <- getbb ("london", format_out = "polygon")
-#' sapply(bb, length) # 5 lists returned
+#' sapply(bb, length) 
 #' bbmat = matrix(unlist(bb), ncol = 2)
-#' plot(bbmat) # worldwide coverage of places called "london"
+#' plot(bbmat) # worldwide coverage of places matching "london uk"
+#' bb_sf = getbb("london", format_out = "sf_polygon") # only selects 1st of multipolygons
+#' sf:::plot.sf(bb_sf)
 #' # Using an alternative service (locationiq requires an API key)
 #' key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
 #' if(nchar(key) ==  32) {
@@ -142,7 +143,7 @@ getbb <- function(place_name,
                   limit = 10,
                   key = NULL,
                   silent = TRUE) {
-
+    is_polygon <- grepl("polygon", format_out)
     query <- list (q = place_name)
     featuretype <- tolower (featuretype)
     if (featuretype == "settlement")
@@ -155,7 +156,7 @@ getbb <- function(place_name,
         stop ("featuretype ", featuretype, " not recognised;\n",
               "please use one of (settlement, city, county, state, country)")
 
-    if (format_out == "polygon")
+    if (is_polygon)
         query <- c (query, list (polygon_text = 1))
 
     query <- c (query, list (viewbox = viewbox,
@@ -201,7 +202,7 @@ getbb <- function(place_name,
         ret <- bb_mat
     else if (format_out == "string")
         ret <- bbox_to_string (bbox = bb_mat)
-    else if (format_out == "polygon")
+    else if (is_polygon)
     {
         . <- NULL # suppress R CMD check note
         indx_multi <- which (grepl ("MULTIPOLYGON", obj$geotext))
@@ -255,6 +256,19 @@ getbb <- function(place_name,
     {
         stop (paste0 ('format_out not recognised; please specify one of ',
                       '[data.frame, matrix, string, polygon]'))
+    }
+    
+    
+    if(format_out == "sf_polygon") {
+      ret = lapply(X = ret, function(x) {
+        if(is(x, "list")) {
+          x <- x[[1]]
+        }
+        sf::st_polygon(list(x)) 
+      }) %>% 
+        sf::st_sfc() %>% 
+        sf::st_sf() %>% 
+        sf::st_set_crs(4326)
     }
 
     return (ret)
