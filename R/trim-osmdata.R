@@ -70,7 +70,10 @@ get_trim_indx <- function (g, bb, exclude)
                         else
                             return (FALSE)
                     })
-    which (unlist (indx))
+    ret <- NULL # multi objects can be empty
+    if (length (indx) > 0)
+        ret <- which (unlist (indx))
+    return (ret)
 }
 
 trim_to_poly <- function (dat, bb_poly, exclude = TRUE)
@@ -104,7 +107,8 @@ trim_to_poly_multi <- function (dat, bb_poly, exclude = TRUE)
             if (nrow (dat [[g]]) > 0)
             {
                 indx <- lapply (dat [[g]]$geometry, function (gi)
-                                get_trim_indx (gi, bb_poly, exclude = exclude))
+                                get_trim_indx (g = gi [[1]], bb = bb_poly,
+                                               exclude = exclude))
                 ilens <- vapply (indx, length, 1L, USE.NAMES = FALSE)
                 glens <- vapply (dat [[g]]$geometry, length,
                                  1L, USE.NAMES = FALSE)
