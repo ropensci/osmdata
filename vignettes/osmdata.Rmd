@@ -43,13 +43,12 @@ library(osmdata)
 ```
 The development version of `osmdata` can be installed with the `devtools`
 package using the following command:
+
 ```{r install, eval = FALSE}
 devtools::install_github('osmdatar/osmdata')
 ```
-This vignette also uses:
-```{r, message = FALSE}
-require (magrittr)
-```
+
+This vignette also uses the [`magrittr`](https://github.com/tidyverse/magrittr) pipe, `%>%`, for 'pipy' workflows.
 
 `osmdata` uses the [`overpass` API](http://overpass-api.de) to download
 OpenStreetMap (OSM) data and can convert the results to either Simple Features

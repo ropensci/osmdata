@@ -106,9 +106,14 @@ trim_to_poly_multi <- function (dat, bb_poly, exclude = TRUE)
         {
             if (nrow (dat [[g]]) > 0)
             {
-                indx <- lapply (dat [[g]]$geometry, function (gi)
-                                get_trim_indx (g = gi [[1]], bb = bb_poly,
-                                               exclude = exclude))
+                if (g == "osm_multilines")
+                    indx <- lapply (dat [[g]]$geometry, function (gi)
+                                    get_trim_indx (g = gi, bb = bb_poly,
+                                                   exclude = exclude))
+                else
+                    indx <- lapply (dat [[g]]$geometry, function (gi)
+                                    get_trim_indx (g = gi [[1]], bb = bb_poly,
+                                                   exclude = exclude))
                 ilens <- vapply (indx, length, 1L, USE.NAMES = FALSE)
                 glens <- vapply (dat [[g]]$geometry, length,
                                  1L, USE.NAMES = FALSE)
