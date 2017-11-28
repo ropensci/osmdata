@@ -98,6 +98,8 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
             nls += roles_set.size ();
         }
     }
+    std::vector <bool> mp_okay (nmp);
+    std::fill (mp_okay.begin (), mp_okay.end (), true);
 
     size_t ncol = unique_vals.k_rel.size ();
     rel_id_mp.reserve (nmp);
@@ -113,12 +115,15 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
         {
             trace_multipolygon (itr, ways, nodes, lon_vec, lat_vec,
                     rowname_vec, ids_mp);
-            // Store all ways in that relation and their associated roles
             rel_id_mp.push_back (std::to_string (itr->id));
             lon_arr_mp.push_back (lon_vec);
             lat_arr_mp.push_back (lat_vec);
             rowname_arr_mp.push_back (rowname_vec);
             id_vec_mp.push_back (ids_mp);
+
+            if (rowname_vec.size () == 0)
+                mp_okay [count_mp] = false;
+
             clean_vecs <double, double, std::string> (lon_vec, lat_vec, rowname_vec);
             ids_mp.clear ();
             get_value_mat_rel (itr, unique_vals, kv_mat_mp, count_mp++);
@@ -155,6 +160,37 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
             roles_ls.push_back (roles);
             roles.clear ();
         }
+    }
+
+    // Erase any multipolygon ways that are not okay. An example of these is
+    // opq("salzburg") %>% add_osm_feature (key = "highway"), for which
+    // $osm_multipolygons [[42]] with way#4108738 is not okay.
+    std::vector <std::string> not_okay_id;
+    for (size_t i = 0; i < mp_okay.size (); i++)
+        if (!mp_okay [i])
+            not_okay_id.push_back (rel_id_mp [i]);
+
+    for (std::string i: not_okay_id)
+    {
+        std::vector <std::string>::iterator it =
+            std::find (rel_id_mp.begin (), rel_id_mp.end (), i);
+        size_t j = std::distance (rel_id_mp.begin (), it);
+        lon_arr_mp.erase (lon_arr_mp.begin () + j);
+        lat_arr_mp.erase (lat_arr_mp.begin () + j);
+        rowname_arr_mp.erase (rowname_arr_mp.begin () + j);
+        id_vec_mp.erase (id_vec_mp.begin () + j);
+        rel_id_mp.erase (rel_id_mp.begin () + j);
+
+        Rcpp::CharacterMatrix kv_mat_mp2 (
+                Rcpp::Dimension (kv_mat_mp.nrow () - 1, ncol));
+        for (size_t k = 0; k < kv_mat_mp.nrow (); k++)
+        {
+            if (k < j)
+                kv_mat_mp2 (k, Rcpp::_) = kv_mat_mp (k, Rcpp::_);
+            else if (k > j)
+                kv_mat_mp2 (k - 1, Rcpp::_) = kv_mat_mp (k, Rcpp::_);
+        }
+        kv_mat_mp = kv_mat_mp2;
     }
 
     Rcpp::List polygonList = convert_poly_linestring_to_sf <std::string>
