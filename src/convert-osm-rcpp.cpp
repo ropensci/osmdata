@@ -353,7 +353,12 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
 
             Rcpp::S4 polygons = polygons_call.eval ();
             polygons.slot ("Polygons") = outList_i;
-            polygons.slot ("ID") = id_vec [i];
+            // convert id_vec to single string
+            std::string id_vec_str = id_vec [i] [0];
+            for (int j = 1; j < id_vec [i].size (); j++)
+                id_vec_str += "." + id_vec [i] [j];
+            polygons.slot ("ID") = id_vec_str;
+            //polygons.slot ("ID") = id_vec [i]; // sp expects char not vec!
             polygons.slot ("plotOrder") = plotorder;
             //polygons.slot ("labpt") = poly.slot ("labpt");
             //polygons.slot ("area") = poly.slot ("area");
