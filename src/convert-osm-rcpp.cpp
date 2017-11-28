@@ -324,6 +324,8 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
             Rcpp::List outList_i (lon_arr [i].size ()); 
             // j over all ways, with outer always first followed by inner
             bool outer = true;
+            //std::vector <int> plotorder (lon_arr [i].size ());
+            Rcpp::IntegerVector plotorder (lon_arr [i].size ());
             for (unsigned int j=0; j<lon_arr [i].size (); j++) 
             {
                 size_t n = lon_arr [i][j].size ();
@@ -339,19 +341,20 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
 
                 Rcpp::S4 poly = Polygon (nmat);
                 poly.slot ("hole") = !outer;
-                poly.slot ("ringDir") = static_cast <int> (1); // TODO: Check this!
+                poly.slot ("ringDir") = static_cast <int> (1);
                 if (outer)
                     outer = false;
                 else
-                    poly.slot ("ringDir") = static_cast <int> (-1); // TODO: Check this!
+                    poly.slot ("ringDir") = static_cast <int> (-1);
                 outList_i [j] = poly;
+                plotorder [j] = static_cast <int> (j) + 1; // 1-based R values
             }
             outList_i.attr ("names") = id_vec [i];
 
             Rcpp::S4 polygons = polygons_call.eval ();
             polygons.slot ("Polygons") = outList_i;
             polygons.slot ("ID") = id_vec [i];
-            polygons.slot ("plotOrder") = static_cast <int> (i) + 1; 
+            polygons.slot ("plotOrder") = plotorder;
             //polygons.slot ("labpt") = poly.slot ("labpt");
             //polygons.slot ("area") = poly.slot ("area");
             outList [i] = polygons;
@@ -366,9 +369,9 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
     multipolygons.slot ("polygons") = outList;
     // Fill plotOrder slot with int vector - this has to be int, not
     // unsigned int!
-    std::vector <int> plotord;
+    std::vector <int> plotord (rels.size ());
     for (int j=0; j<rels.size (); j++)
-        plotord.push_back (j + 1);
+        plotord [j] = j + 1;
     multipolygons.slot ("plotOrder") = plotord;
     plotord.clear ();
 

@@ -246,7 +246,8 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
         // Fill plotOrder slot with int vector - this has to be int, not
         // unsigned int!
         std::vector <int> plord;
-        for (int i=0; i<nrow; i++) plord.push_back (i + 1);
+        for (int i=0; i<nrow; i++)
+            plord.push_back (i + 1);
         sp_ways.slot ("plotOrder") = plord;
         plord.clear ();
         sp_ways.slot ("data") = kv_df;
