@@ -364,9 +364,11 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
     Rcpp::Language sp_polys_call ("new", "SpatialPolygonsDataFrame");
     multipolygons = sp_polys_call.eval ();
     multipolygons.slot ("polygons") = outList;
-    // fill plotOrder with numeric vector
-    std::vector <unsigned int> plotord;
-    for (i=0; i<rels.size (); i++) plotord.push_back (i + 1);
+    // Fill plotOrder slot with int vector - this has to be int, not
+    // unsigned int!
+    std::vector <int> plotord;
+    for (int j=0; j<rels.size (); j++)
+        plotord.push_back (j + 1);
     multipolygons.slot ("plotOrder") = plotord;
     plotord.clear ();
 
