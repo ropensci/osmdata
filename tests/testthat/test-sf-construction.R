@@ -39,35 +39,6 @@ make_sfc <- function (x, type) {
     x
 }
 
-make_sf <- function (...)
-{
-    x <- list (...)
-    sf <- vapply(x, function(i) inherits(i, "sfc"),
-                 FUN.VALUE = logical (1))
-    sf_column <- which (sf)
-    if (!is.null (names (x [[sf_column]])))
-        row.names <- names (x [[sf_column]])
-    else
-        row.names <- seq_along (x [[sf_column]])
-    df <- if (length(x) == 1) # ONLY sfc
-                data.frame(row.names = row.names)
-            else # create a data.frame from list:
-                    data.frame(x[-sf_column], row.names = row.names,
-                           stringsAsFactors = TRUE)
-
-    object <- as.list(substitute(list(...)))[-1L]
-    arg_nm <- sapply(object, function(x) deparse(x)) #nolint
-    sfc_name <- make.names(arg_nm[sf_column])
-    #sfc_name <- "geometry"
-    df [[sfc_name]] <- x [[sf_column]]
-    attr(df, "sf_column") <- sfc_name
-    f <- factor(rep(NA_character_, length.out = ncol(df) - 1),
-               levels = c ("constant", "aggregate", "identity"))
-    names(f) <- names(df)[-ncol (df)]
-    attr(df, "agr") <- f
-    class(df) <- c("sf", class(df))
-    return (df)
-}
 
 # **********************************************************
 # ***                       POINTS                       ***

@@ -186,7 +186,8 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding = 'UTF-8')
 make_sf <- function (...)
 {
     x <- list (...)
-    sf <- sapply (x, function(i) inherits(i, "sfc")) #nolint (gp() re: sapply)
+    sf <- vapply(x, function(i) inherits(i, "sfc"),
+                 FUN.VALUE = logical (1))
     sf_column <- which (sf)
     if (!is.null (names (x [[sf_column]])))
         row.names <- names (x [[sf_column]])
