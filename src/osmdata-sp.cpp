@@ -243,9 +243,10 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
         Rcpp::Language sp_polys_call ("new", "SpatialPolygonsDataFrame");
         sp_ways = sp_polys_call.eval ();
         sp_ways.slot ("polygons") = wayList;
-        // Fill plotOrder slot with numeric vector
-        std::vector <unsigned int> plord;
-        for (unsigned int i=0; i<nrow; i++) plord.push_back (i + 1);
+        // Fill plotOrder slot with int vector - this has to be int, not
+        // unsigned int!
+        std::vector <int> plord;
+        for (int i=0; i<nrow; i++) plord.push_back (i + 1);
         sp_ways.slot ("plotOrder") = plord;
         plord.clear ();
         sp_ways.slot ("data") = kv_df;
