@@ -1,5 +1,6 @@
 ---
 title: "osmdata, an R package for OpenStreetMap data"
+keywords: "open street map, openstreetmap, overpass API, OSM"
 output:
   rmarkdown::html_vignette:
     self_contained: no
