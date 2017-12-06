@@ -12,14 +12,9 @@ overpass_status <- function (quiet=FALSE, wait=10)
     slot_time <- status <- st_type <- NULL
 
     overpass_url <- get_overpass_url ()
-    if (grepl ('\\.de', overpass_url) |
-        grepl ('openstreetmap', overpass_url))
-        st_type <- 'status'
-    else if (grepl ('vi-di', overpass_url) | grepl ('rambler', overpass_url))
+    st_type <- 'status'
+    if (grepl ('vi-di', overpass_url) | grepl ('rambler', overpass_url))
         st_type <- 'timestamp'
-    else
-        return (invisible (list (available = available, next_slot = NULL,
-                                 msg = status)))
 
     status_url <- gsub ('interpreter', st_type, overpass_url)
 
