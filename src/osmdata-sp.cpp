@@ -62,6 +62,7 @@ void get_osm_nodes_sp (Rcpp::S4 &sp_points, const Nodes &nodes,
     ptnames.reserve (nodes.size ());
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
+        Rcpp::checkUserInterrupt ();
         unsigned int pos = static_cast <unsigned int> (
                 std::distance (nodes.begin (), ni));
         ptxy (pos, 0) = ni->second.lon;
@@ -140,6 +141,7 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
     for (auto wi = way_ids.begin (); wi != way_ids.end (); ++wi)
     {
+        Rcpp::checkUserInterrupt ();
         waynames.push_back (std::to_string (*wi));
         Rcpp::NumericMatrix nmat;
         trace_way_nmat (ways, nodes, (*wi), nmat);
@@ -320,6 +322,7 @@ void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
 
     for (auto itr = rels.begin (); itr != rels.end (); ++itr)
     {
+        Rcpp::checkUserInterrupt ();
         if (itr->ispoly) // itr->second can only be "outer" or "inner"
         {
             trace_multipolygon (itr, ways, nodes, lon_vec, lat_vec,

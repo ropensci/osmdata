@@ -1,11 +1,12 @@
 0.0.5.99
 ===================
-= Add new function 'osm_poly2line()' to coerce the 'osmdata$odm_polygons' object
+- Add new function 'osm_poly2line()' to coerce the 'osmdata$odm_polygons' object
   for 'osmdata_sf' objects to lines, and append to 'osmdata$osm_lnes'. This is
   important for street networks ('add_osm_objects (key = "highway")'), which are
   otherwise separated between these two components. 
 - Add `timeout` and `memsize` options to `opq()` to improve handling large
   queries.
+- Make C++ code interruptible so long processing can be cancelled
 - Fix minor yet important C++ code lines that prevented package being used as
   dependency by other packages on some systems
 

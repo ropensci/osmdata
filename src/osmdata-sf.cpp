@@ -111,6 +111,7 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
 
     for (auto itr = rels.begin (); itr != rels.end (); ++itr)
     {
+        Rcpp::checkUserInterrupt ();
         if (itr->ispoly) // itr->second can only be "outer" or "inner"
         {
             trace_multipolygon (itr, ways, nodes, lon_vec, lat_vec,
@@ -285,6 +286,7 @@ void get_osm_ways_sf (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
     unsigned int count = 0;
     for (auto wi = way_ids.begin (); wi != way_ids.end (); ++wi)
     {
+        Rcpp::checkUserInterrupt ();
         waynames.push_back (std::to_string (*wi));
         Rcpp::NumericMatrix nmat;
         trace_way_nmat (ways, nodes, (*wi), nmat);
@@ -356,6 +358,7 @@ void get_osm_nodes_sf (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
     unsigned int count = 0;
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
+        Rcpp::checkUserInterrupt ();
         Rcpp::NumericVector ptxy = Rcpp::NumericVector::create (NA_REAL, NA_REAL);
         ptxy.attr ("class") = Rcpp::CharacterVector::create ("XY", "POINT", "sfg");
         ptxy (0) = ni->second.lon;
