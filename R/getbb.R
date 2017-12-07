@@ -89,6 +89,8 @@ bbox_to_string <- function(bbox) {
 #' @param limit How many results should the API return?
 #' @param key The API key to use for services that require it
 #' @param silent Should the API be printed to screen? TRUE by default
+#' @param poly_num Which of matching polygons should be used?
+#' The first polygon in the first match is the default (\code{c(1, 1)}).
 #'
 #' @return Unless \code{format_out = "polygon"}, a numeric bounding box as min
 #' and max of latitude and longitude. If \code{format_out = "polygon"}, one or
@@ -142,7 +144,8 @@ getbb <- function(place_name,
                   featuretype = "settlement",
                   limit = 10,
                   key = NULL,
-                  silent = TRUE) {
+                  silent = TRUE,
+                  poly_num = c(1, 1)) {
     is_polygon <- grepl("polygon", format_out)
     query <- list (q = place_name)
     featuretype <- tolower (featuretype)
@@ -258,17 +261,8 @@ getbb <- function(place_name,
                       '[data.frame, matrix, string, polygon]'))
     }
     
-    
     if(format_out == "sf_polygon") {
-      ret = lapply(X = ret, function(x) {
-        if(is(x, "list")) {
-          x <- x[[1]]
-        }
-        sf::st_polygon(list(x)) 
-      }) %>% 
-        sf::st_sfc() %>% 
-        sf::st_sf() %>% 
-        sf::st_set_crs(4326)
+      ret = mat2sf_poly(ret[[poly_num[1]]][[poly_num[2]]], pname = place_name)
     }
 
     return (ret)
@@ -334,4 +328,35 @@ get1bdymultipoly <- function (p)
     t (cbind (vapply (p, function (i)
                       as.numeric (strsplit (i, split = ' ') [[1]]),
                       numeric (2), USE.NAMES = FALSE)))
+}
+#' convert a matrix to an sf polygon
+#'
+#' Select first enclosing polygon from lists of multiple char MULTIPOLYGON
+#' objects returned by nominatim
+#'
+#' @param mat A matrix
+#' @param mat The name of the polygon
+#'
+#' @return A list that can be converted into a simple features geometry
+#' @noRd
+mat2sf_poly <- function (mat, pname)
+{
+  mat_sf <- list (mat)
+  class (mat_sf) <- c ("XY", "POLYGON", "sfg")
+  mat_sf <- list (mat_sf)
+  attr (mat_sf, "class") <- c ("sfc_POLYGON", "sfc")
+  attr (mat_sf, "precision") <- 0
+  bb <- as.vector (t (apply (mat, 2, range)))
+  names (bb) <- c ("xmin", "ymin", "xmax", "ymax")
+  class (bb) <- "bbox"
+  attr (mat_sf, "bbox") <- bb
+  crs <- list (epsg = 4326L,
+               proj4string = "+proj=longlat +datum=WGS84 +no_defs")
+  class (crs) <- "crs"
+  attr (mat_sf, "crs") <- crs
+  attr (mat_sf, "n_empty") <- 0L
+  mat_sf <- make_sf (mat_sf)
+  names (mat_sf) <- pname
+  attr (mat_sf, "sf_column") <- pname
+  return (mat_sf)
 }
