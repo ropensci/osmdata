@@ -128,8 +128,10 @@ bbox_to_string <- function(bbox) {
 #' sapply(bb, length) 
 #' bbmat = matrix(unlist(bb), ncol = 2)
 #' plot(bbmat) # worldwide coverage of places matching "london uk"
-#' bb_sf = getbb("london", format_out = "sf_polygon") # only selects 1st of multipolygons
+#' bb_sf = getbb("kathmandu", format_out = "sf_polygon") 
 #' sf:::plot.sf(bb_sf)
+#' bb_sf = getbb("london", format_out = "sf_polygon") # only selects 1st of multipolygons
+#' getbb("kathmandu", format_out = "sf_polygon") 
 #' # Using an alternative service (locationiq requires an API key)
 #' key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
 #' if(nchar(key) ==  32) {
@@ -262,7 +264,11 @@ getbb <- function(place_name,
     }
     
     if(format_out == "sf_polygon") {
-      ret = mat2sf_poly(ret[[poly_num[1]]][[poly_num[2]]], pname = place_name)
+      if(is(ret[[poly_num[1]]], "matrix")) {
+        ret = mat2sf_poly(ret[[poly_num[1]]], pname = place_name)
+      } else {
+        ret = mat2sf_poly(ret[[poly_num[1]]][[poly_num[2]]], pname = place_name)
+      }
     }
 
     return (ret)
