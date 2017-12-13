@@ -82,12 +82,15 @@ bbox_to_string <- function(bbox) {
 #' @param viewbox The bounds in which you're searching
 #' @param format_out Character string indicating output format: matrix (default),
 #' string (see \code{\link{bbox_to_string}}), data.frame (all 'hits' returned
-#' by Nominatim), or polygon (full polygonal bounding boxes for each match).
+#' by Nominatim), sf_polygon (for polygons that work with the sf package)
+#' or polygon (full polygonal bounding boxes for each match).
 #' @param base_url Base website from where data is queried
 #' @param featuretype The type of OSM feature (settlement is default; see Note)
 #' @param limit How many results should the API return?
 #' @param key The API key to use for services that require it
 #' @param silent Should the API be printed to screen? TRUE by default
+#' @param poly_num Which of matching polygons should be used?
+#' The first polygon in the first match is the default (\code{c(1, 1)}).
 #'
 #' @return Unless \code{format_out = "polygon"}, a numeric bounding box as min
 #' and max of latitude and longitude. If \code{format_out = "polygon"}, one or
@@ -120,13 +123,15 @@ bbox_to_string <- function(bbox) {
 #' getbb(place_name, format_out = "data.frame", limit = 3)
 #' # Examples of polygonal boundaries
 #' bb <- getbb ("london uk", format_out = "polygon") # single match
-#' dim(bb) # matrix of longitude/latitude pairs
-#' plot(bb)
+#' dim(bb[[1]]) # matrix of longitude/latitude pairs
 #' # Multiple matches return a nested list of matrices:
-#' bb <- getbb ("london", format_out = "polygon")
-#' sapply(bb, length) # 5 lists returned
+#' sapply(bb, length) 
 #' bbmat = matrix(unlist(bb), ncol = 2)
-#' plot(bbmat) # worldwide coverage of places called "london"
+#' plot(bbmat) # worldwide coverage of places matching "london uk"
+#' bb_sf = getbb("kathmandu", format_out = "sf_polygon") 
+#' sf:::plot.sf(bb_sf)
+#' bb_sf = getbb("london", format_out = "sf_polygon") # only selects 1st of multipolygons
+#' getbb("kathmandu", format_out = "sf_polygon") 
 #' # Using an alternative service (locationiq requires an API key)
 #' key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
 #' if(nchar(key) ==  32) {
@@ -141,8 +146,9 @@ getbb <- function(place_name,
                   featuretype = "settlement",
                   limit = 10,
                   key = NULL,
-                  silent = TRUE) {
-
+                  silent = TRUE,
+                  poly_num = c(1, 1)) {
+    is_polygon <- grepl("polygon", format_out)
     query <- list (q = place_name)
     featuretype <- tolower (featuretype)
     if (featuretype == "settlement")
@@ -155,7 +161,7 @@ getbb <- function(place_name,
         stop ("featuretype ", featuretype, " not recognised;\n",
               "please use one of (settlement, city, county, state, country)")
 
-    if (format_out == "polygon")
+    if (is_polygon)
         query <- c (query, list (polygon_text = 1))
 
     query <- c (query, list (viewbox = viewbox,
@@ -201,7 +207,7 @@ getbb <- function(place_name,
         ret <- bb_mat
     else if (format_out == "string")
         ret <- bbox_to_string (bbox = bb_mat)
-    else if (format_out == "polygon")
+    else if (is_polygon)
     {
         . <- NULL # suppress R CMD check note
         indx_multi <- which (grepl ("MULTIPOLYGON", obj$geotext))
@@ -255,6 +261,14 @@ getbb <- function(place_name,
     {
         stop (paste0 ('format_out not recognised; please specify one of ',
                       '[data.frame, matrix, string, polygon]'))
+    }
+    
+    if(format_out == "sf_polygon") {
+      if(is(ret[[poly_num[1]]], "matrix")) {
+        ret = mat2sf_poly(ret[[poly_num[1]]], pname = place_name)
+      } else {
+        ret = mat2sf_poly(ret[[poly_num[1]]][[poly_num[2]]], pname = place_name)
+      }
     }
 
     return (ret)
@@ -320,4 +334,35 @@ get1bdymultipoly <- function (p)
     t (cbind (vapply (p, function (i)
                       as.numeric (strsplit (i, split = ' ') [[1]]),
                       numeric (2), USE.NAMES = FALSE)))
+}
+#' convert a matrix to an sf polygon
+#'
+#' Select first enclosing polygon from lists of multiple char MULTIPOLYGON
+#' objects returned by nominatim
+#'
+#' @param mat A matrix
+#' @param mat The name of the polygon
+#'
+#' @return A list that can be converted into a simple features geometry
+#' @noRd
+mat2sf_poly <- function (mat, pname)
+{
+  mat_sf <- list (mat)
+  class (mat_sf) <- c ("XY", "POLYGON", "sfg")
+  mat_sf <- list (mat_sf)
+  attr (mat_sf, "class") <- c ("sfc_POLYGON", "sfc")
+  attr (mat_sf, "precision") <- 0
+  bb <- as.vector (t (apply (mat, 2, range)))
+  names (bb) <- c ("xmin", "ymin", "xmax", "ymax")
+  class (bb) <- "bbox"
+  attr (mat_sf, "bbox") <- bb
+  crs <- list (epsg = 4326L,
+               proj4string = "+proj=longlat +datum=WGS84 +no_defs")
+  class (crs) <- "crs"
+  attr (mat_sf, "crs") <- crs
+  attr (mat_sf, "n_empty") <- 0L
+  mat_sf <- make_sf (mat_sf)
+  names (mat_sf) <- pname
+  attr (mat_sf, "sf_column") <- pname
+  return (mat_sf)
 }
