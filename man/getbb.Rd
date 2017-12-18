@@ -80,6 +80,7 @@ dim(bb[[1]]) # matrix of longitude/latitude pairs
 bb_sf = getbb("kathmandu", format_out = "sf_polygon") 
 # sf:::plot.sf(bb_sf) # can be plotted if sf is installed
 getbb("london", format_out = "sf_polygon") # only selects 1st of multipolygons
+getbb("bristol, connecticut", format_out = "sf_polygon") # rectangular bb
 # Using an alternative service (locationiq requires an API key)
 key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
 if(nchar(key) ==  32) {
