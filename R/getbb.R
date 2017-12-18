@@ -258,7 +258,6 @@ getbb <- function(place_name,
     }
     
     if(format_out == "sf_polygon") {
-      browser()
       if(is(ret, "matrix")) {
         ret = mat2sf_poly(ret, pname = place_name)
       } else if(is(ret[[poly_num[1]]], "matrix")) {
