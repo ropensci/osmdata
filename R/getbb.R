@@ -125,7 +125,7 @@ bbox_to_string <- function(bbox) {
 #' bb_sf = getbb("kathmandu", format_out = "sf_polygon") 
 #' # sf:::plot.sf(bb_sf) # can be plotted if sf is installed
 #' getbb("london", format_out = "sf_polygon") # only selects 1st of multipolygons
-#' getbb("bristol, connecticut", format_out = "sf_polygon") # rectangular bb
+#' getbb("accra", format_out = "sf_polygon") # rectangular bb
 #' # Using an alternative service (locationiq requires an API key)
 #' key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
 #' if(nchar(key) ==  32) {
@@ -258,6 +258,7 @@ getbb <- function(place_name,
     }
     
     if(format_out == "sf_polygon") {
+      browser()
       if(is(ret, "matrix")) {
         ret = mat2sf_poly(ret, pname = place_name)
       } else if(is(ret[[poly_num[1]]], "matrix")) {
@@ -343,6 +344,11 @@ get1bdymultipoly <- function (p)
 #' @noRd
 mat2sf_poly <- function (mat, pname)
 {
+  if(nrow(mat) == 2) {
+    x = c(mat[1, 1], mat[1, 2], mat[1, 2], mat[1, 1], mat[1, 1])
+    y = c(mat[2, 2], mat[2, 2], mat[2, 1], mat[2, 1], mat[2, 2])
+    mat = cbind(x, y)
+  }
   mat_sf <- list (mat)
   class (mat_sf) <- c ("XY", "POLYGON", "sfg")
   mat_sf <- list (mat_sf)
