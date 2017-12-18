@@ -116,9 +116,9 @@ bbox_to_string <- function(bbox) {
 #' \dontrun{
 #' getbb("Salzburg")
 #' # select based on display_name, print query url
-#' getbb(place_name, display_name_contains = "United States", silent = FALSE)
+#' getbb("Hereford", display_name_contains = "United States", silent = FALSE)
 #' # top 3 matches as data frame
-#' getbb(place_name, format_out = "data.frame", limit = 3)
+#' getbb("Hereford", format_out = "data.frame", limit = 3)
 #' # Examples of polygonal boundaries
 #' bb <- getbb ("london uk", format_out = "polygon") # single match
 #' dim(bb[[1]]) # matrix of longitude/latitude pairs
