@@ -264,6 +264,7 @@ getbb <- function(place_name,
     }
     
     if(format_out == "sf_polygon") {
+      browser()
       if(is(ret[[poly_num[1]]], "matrix")) {
         ret = mat2sf_poly(ret[[poly_num[1]]], pname = place_name)
       } else {
@@ -362,7 +363,7 @@ mat2sf_poly <- function (mat, pname)
   attr (mat_sf, "crs") <- crs
   attr (mat_sf, "n_empty") <- 0L
   mat_sf <- make_sf (mat_sf)
-  names (mat_sf) <- pname
-  attr (mat_sf, "sf_column") <- pname
+  names (mat_sf) <- "geometry"
+  attr (mat_sf, "sf_column") <- "geometry"
   return (mat_sf)
 }
