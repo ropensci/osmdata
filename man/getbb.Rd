@@ -70,23 +70,17 @@ a city is desired, better results will usually be obtained with
 \examples{
 \dontrun{
 getbb("Salzburg")
-place_name <- "Hereford"
-getbb(place_name, silent = FALSE)
-# return bb whose display_name contain text string "United States"
-getbb(place_name, display_name_contains = "United States", silent = FALSE)
+# select based on display_name, print query url
+getbb("Hereford", display_name_contains = "United States", silent = FALSE)
 # top 3 matches as data frame
-getbb(place_name, format_out = "data.frame", limit = 3)
+getbb("Hereford", format_out = "data.frame", limit = 3)
 # Examples of polygonal boundaries
 bb <- getbb ("london uk", format_out = "polygon") # single match
 dim(bb[[1]]) # matrix of longitude/latitude pairs
-# Multiple matches return a nested list of matrices:
-sapply(bb, length) 
-bbmat = matrix(unlist(bb), ncol = 2)
-plot(bbmat) # worldwide coverage of places matching "london uk"
 bb_sf = getbb("kathmandu", format_out = "sf_polygon") 
-sf:::plot.sf(bb_sf)
-bb_sf = getbb("london", format_out = "sf_polygon") # only selects 1st of multipolygons
-getbb("kathmandu", format_out = "sf_polygon") 
+# sf:::plot.sf(bb_sf) # can be plotted if sf is installed
+getbb("london", format_out = "sf_polygon") # only selects 1st of multipolygons
+getbb("accra", format_out = "sf_polygon") # rectangular bb
 # Using an alternative service (locationiq requires an API key)
 key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
 if(nchar(key) ==  32) {
