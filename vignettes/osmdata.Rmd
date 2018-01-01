@@ -375,7 +375,7 @@ To appreciate query building in more concrete terms, let's imagine that we
 wanted to find all cycle paths in Seville, Spain:
 
 ```{r opq-seville-plot, eval = FALSE}
-q1 <- opq('Seville') %>%
+q1 <- opq('Sevilla') %>%
     add_osm_feature(key = 'highway', value = 'cycleway')
 cway_sev <- osmdata_sp(q1)
 sp::plot(cway_sev$osm_lines)
