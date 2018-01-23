@@ -61,8 +61,7 @@ test_that ("sfc-point", {
 test_that ("sf-point", {
                x <- sf::st_sfc (sf::st_point(1:2))
                expect_identical (x, make_sfc (1:2, "POINT"))
-               #y <- sf::st_sf (x) # TODO: Revert for sf 0.5.0
-               y <- sf::st_sf (list ('x' = x)) # workaround for sf 0.4.3
+               y <- sf::st_sf (x)
                x <- make_sf (x)
                expect_identical (x, y)
 })
