@@ -177,21 +177,26 @@ void trace_multilinestring (Relations::const_iterator &itr_rel,
         ids.push_back (rwi->first);
         std::string this_role = rwi->second;
         auto wayi = ways.find (rwi->first);
-        if (wayi == ways.end ())
-            throw std::runtime_error ("way can not be found");
+        //if (wayi == ways.end ())
+        //    throw std::runtime_error ("way can not be found");
+        // Non-overpass OSM data sets can have way IDs in old changelogs that no
+        // longer exist; this clause ensures that they are simply skipped but
+        // reading continues. Thanks @RobinLovelace
+        if (wayi != ways.end ())
+        {
+            osmid_t first_node = wayi->second.nodes.front ();
+            first_node = trace_way (ways, nodes, first_node, 
+                    wayi->first, lons, lats, rownames, false);
 
-        osmid_t first_node = wayi->second.nodes.front ();
-        first_node = trace_way (ways, nodes, first_node, 
-                wayi->first, lons, lats, rownames, false);
+            lon_vec.push_back (lons);
+            lat_vec.push_back (lats);
+            rowname_vec.push_back (rownames);
 
-        lon_vec.push_back (lons);
-        lat_vec.push_back (lats);
-        rowname_vec.push_back (rownames);
-
-        lons.clear ();
-        lats.clear ();
-        rownames.clear ();
-        relation_ways.erase (rwi);
+            lons.clear ();
+            lats.clear ();
+            rownames.clear ();
+            relation_ways.erase (rwi);
+        }
     } // end while relation_ways.size > 0
 }
 
