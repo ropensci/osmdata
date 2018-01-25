@@ -1,0 +1,329 @@
+{
+  "@context": ["http://purl.org/codemeta/2.0", "http://schema.org"],
+  "@type": "SoftwareSourceCode",
+  "identifier": "osmdata",
+  "description": "Download and import of 'OpenStreetMap' ('OSM') data as 'sf' or 'sp'\n    objects.  'OSM' data are extracted from the 'Overpass' web server and\n    processed with very fast 'C++' routines for return to 'R'.",
+  "name": "osmdata: Import 'OpenStreetMap' Data as Simple Features or Spatial Objects",
+  "codeRepository": "https://github.com/ropensci/osmdata",
+  "issueTracker": "https://github.com/ropensci/osmdata/issues",
+  "license": "https://spdx.org/licenses/GPL-3.0",
+  "version": "0.0.5.100",
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "R",
+    "version": "3.4.1",
+    "url": "https://r-project.org"
+  },
+  "runtimePlatform": "R version 3.4.1 (2017-06-30)",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Central R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Mark",
+      "familyName": "Padgham",
+      "email": "mark.padgham@email.com"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Bob",
+      "familyName": "Rudis"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Robin",
+      "familyName": "Lovelace"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Maëlle",
+      "familyName": "Salmon"
+    }
+  ],
+  "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Andrew",
+      "familyName": "Smith"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Marcin",
+      "familyName": "Kalicinski"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Finkelstein",
+      "familyName": "Noam"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Bartnik",
+      "familyName": "Lukasz"
+    }
+  ],
+  "copyrightHolder": [
+    {
+      "@type": "Person",
+      "givenName": "Marcin",
+      "familyName": "Kalicinski"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Finkelstein",
+      "familyName": "Noam"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Bartnik",
+      "familyName": "Lukasz"
+    }
+  ],
+  "maintainer": {
+    "@type": "Person",
+    "givenName": "Mark",
+    "familyName": "Padgham",
+    "email": "mark.padgham@email.com"
+  },
+  "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "devtools",
+      "name": "devtools",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "knitr",
+      "name": "knitr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "rmarkdown",
+      "name": "rmarkdown",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "roxygen2",
+      "name": "roxygen2",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "sf",
+      "name": "sf",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "testthat",
+      "name": "testthat",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    }
+  ],
+  "softwareRequirements": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "curl",
+      "name": "curl",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "httr",
+      "name": "httr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "lubridate",
+      "name": "lubridate",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "magrittr",
+      "name": "magrittr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "methods",
+      "name": "methods"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "Rcpp",
+      "name": "Rcpp",
+      "version": "0.12.4",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "rvest",
+      "name": "rvest",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "jsonlite",
+      "name": "jsonlite",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "sp",
+      "name": "sp",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "utils",
+      "name": "utils"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "xml2",
+      "name": "xml2",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Central R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "R",
+      "name": "R",
+      "version": "3.2.4"
+    }
+  ],
+  "applicationCategory": "DataAccess",
+  "isPartOf": "https://ropensci.org",
+  "keywords": ["open0street0map", "openstreetmap", "overpass0API", "OSM"],
+  "contIntegration": "https://travis-ci.org/ropensci/osmdata",
+  "developmentStatus": "active",
+  "releaseNotes": "https://github.com/ropensci/osmdata/blob/master/NEWS.md",
+  "readme": "https://github.com/ropensci/osmdata/blob/master/README.md",
+  "fileSize": "282.801KB",
+  "citation": [
+    {
+      "@type": "ScholarlyArticle",
+      "datePublished": "2017",
+      "author": [
+        {
+          "@type": "Person",
+          "givenName": "Mark",
+          "familyName": "Padgham"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Bob",
+          "familyName": "Rudis"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Robin",
+          "familyName": "Lovelace"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Maëlle",
+          "familyName": "Salmon"
+        }
+      ],
+      "name": "osmdata",
+      "identifier": "10.21105/joss.00305",
+      "url": "https://doi.org/10.21105/joss.00305",
+      "@id": "https://doi.org/10.21105/joss.00305",
+      "sameAs": "https://doi.org/10.21105/joss.00305",
+      "isPartOf": {
+        "@type": "PublicationIssue",
+        "issueNumber": "14",
+        "datePublished": "2017",
+        "isPartOf": {
+          "@type": ["PublicationVolume", "Periodical"],
+          "volumeNumber": "2",
+          "name": "The Journal of Open Source Software"
+        }
+      }
+    }
+  ]
+}
