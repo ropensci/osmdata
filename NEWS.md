@@ -4,6 +4,7 @@
   for 'osmdata_sf' objects to lines, and append to 'osmdata$osm_lnes'. This is
   important for street networks ('add_osm_objects (key = "highway")'), which are
   otherwise separated between these two components. 
+- Add new function `opq_osm_id` to query by OSM identifier alone
 - Add `timeout` and `memsize` options to `opq()` to improve handling large
   queries.
 - Make C++ code interruptible so long processing can be cancelled
