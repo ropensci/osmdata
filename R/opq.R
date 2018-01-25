@@ -164,20 +164,26 @@ add_osm_feature <- function (opq, key, value, key_exact = TRUE,
 #' @references
 #' \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_element_id}
 #'
+#' @note Extracting elements by ID requires explicitly specifying the type of
+#' element. Only elements of one of the three given types can be extracted in a
+#' single query, but the results of multiple types can neverthelss be combined
+#' with the \code{c} operation of \code{osmdata}.
+#'
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' id <- c (1489221200, 1489221321, 1489221491)
-#' dat <- opq_osm_id (type = "node", id = id) %>%
+#' dat1 <- opq_osm_id (type = "node", id = id) %>%
 #'     opq_string () %>%
-#'     osmdata_sf () %>%
-#'     .$osm_points
+#'     osmdata_sf ()
+#' dat1$osm_points # the desired nodes
 #' id <- c (136190595, 136190596)
-#' dat <- opq_osm_id (type = "way", id = id) %>%
+#' dat2 <- opq_osm_id (type = "way", id = id) %>%
 #'     opq_string () %>%
-#'     osmdata_sf () %>%
-#'     .$osm_lines
+#'     osmdata_sf ()
+#' dat2$osm_lines # the desired ways
+#' dat <- c (dat1, dat2) # The node and way data combined
 #' }
 opq_osm_id <- function (id = NULL, type = NULL)
 {
