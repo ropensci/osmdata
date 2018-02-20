@@ -1,4 +1,4 @@
-0.0.5.99
+0.0.6
 ===================
 - Add new function 'osm_poly2line()' to coerce the 'osmdata$odm_polygons' object
   for 'osmdata_sf' objects to lines, and append to 'osmdata$osm_lnes'. This is
@@ -7,6 +7,8 @@
 - Add new function `opq_osm_id` to query by OSM identifier alone
 - Add `timeout` and `memsize` options to `opq()` to improve handling large
   queries.
+- Return useful information from overpass server when it returns neither error
+  nor useful data
 - Make C++ code interruptible so long processing can be cancelled
 - Fix minor yet important C++ code lines that prevented package being used as
   dependency by other packages on some systems
