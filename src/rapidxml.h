@@ -1,3 +1,5 @@
+#pragma clang system_header // exclude from clang warnings
+
 #ifndef RAPIDXML_HPP_INCLUDED
 #define RAPIDXML_HPP_INCLUDED
 

@@ -175,16 +175,18 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
     {
         std::vector <std::string>::iterator it =
             std::find (rel_id_mp.begin (), rel_id_mp.end (), i);
-        size_t j = std::distance (rel_id_mp.begin (), it);
+        //size_t j = static_cast <size_t> (std::distance (rel_id_mp.begin (), it));
+        long int j = std::distance (rel_id_mp.begin (), it);
         lon_arr_mp.erase (lon_arr_mp.begin () + j);
         lat_arr_mp.erase (lat_arr_mp.begin () + j);
         rowname_arr_mp.erase (rowname_arr_mp.begin () + j);
         id_vec_mp.erase (id_vec_mp.begin () + j);
         rel_id_mp.erase (rel_id_mp.begin () + j);
 
-        Rcpp::CharacterMatrix kv_mat_mp2 (
-                Rcpp::Dimension (kv_mat_mp.nrow () - 1, ncol));
-        for (size_t k = 0; k < kv_mat_mp.nrow (); k++)
+        size_t st_nrow = static_cast <size_t> (kv_mat_mp.nrow ());
+        Rcpp::CharacterMatrix kv_mat_mp2 (Rcpp::Dimension (st_nrow - 1, ncol));
+        // k is int for type-compatible Rcpp indexing
+        for (int k = 0; k < kv_mat_mp.nrow (); k++)
         {
             if (k < j)
                 kv_mat_mp2 (k, Rcpp::_) = kv_mat_mp (k, Rcpp::_);

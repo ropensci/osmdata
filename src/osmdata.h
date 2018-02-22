@@ -421,6 +421,9 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st);
 // in osmdata_sp.cpp
 void get_osm_nodes_sp (Rcpp::S4 &sp_points, const Nodes &nodes, 
         const UniqueVals &unique_vals);
+void get_osm_ways_sp (Rcpp::S4 &sp_ways, 
+        const std::set <osmid_t> way_ids, const Ways &ways, const Nodes &nodes,
+        const UniqueVals &unique_vals, const std::string &geom_type);
 void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons, 
         const Relations &rels, const std::map <osmid_t, Node> &nodes,
         const std::map <osmid_t, OneWay> &ways, const UniqueVals &unique_vals);
