@@ -1,3 +1,7 @@
+0.0.6.001
+===================
+- Fix bug in `c` method so it works when `sf` not loaded
+
 0.0.6
 ===================
 - Add new function 'osm_poly2line()' to coerce the 'osmdata$odm_polygons' object

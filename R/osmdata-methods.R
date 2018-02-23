@@ -116,7 +116,11 @@ c.osmdata <- function (...)
                            which (names (resi) == 'name'),
                            indx2 [order (names (resi) [indx2])],
                            which (names (resi) == 'geometry'))
-                resi <- resi [, indx]
+                att <- attributes (resi)
+                resi <- resi [, indx, drop = FALSE]
+                nms <- names (resi)
+                attributes (resi) <- att # restored sf_column and agr attributes
+                names (resi) <- nms
                 # Then we're finally ready to pack in the remaining bits
                 xi [[1]] <- NULL
                 for (j in xi)
@@ -138,6 +142,8 @@ c.osmdata <- function (...)
                     resi <- rbind (resi, resj)
                 } # end for j in x
                 res [[i]] <- resi
+                attr (res [[i]], "sf_column") <- attr (resi, "sf_column")
+                attr (res [[i]], "agr") <- attr (resi, "agr")
             } # end if length (xi) > 0
         } # end for i in osm_indx
     } else
