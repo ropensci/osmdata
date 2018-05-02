@@ -38,12 +38,13 @@ opq <- function (bbox = NULL, timeout = 25, memsize)
 {
     timeout <- format (timeout, scientific = FALSE)
     prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
+    suffix <- ");\n(._;>;);\nout body;" # recurse down
     if (!missing (memsize))
         prefix <- paste0 (prefix, "[maxsize:",
                           format (memsize, scientific = FALSE), "]")
     res <- list (bbox = bbox_to_string (bbox),
               prefix = paste0 (prefix, ";\n(\n"),
-              suffix = ");\n(._;>);\nout body;", features = NULL)
+              suffix = suffix, features = NULL)
     class (res) <- c (class (res), "overpass_query")
     return (res)
 }
