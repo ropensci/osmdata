@@ -36,7 +36,6 @@
 #include "get-bbox.h"
 #include "trace-osm.h"
 #include "convert-osm-rcpp.h"
-#include "cleanup.h"
 
 //const std::string crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0";
 const std::string p4s = "+proj=longlat +datum=WGS84 +no_defs";
@@ -60,11 +59,6 @@ const std::string p4s = "+proj=longlat +datum=WGS84 +no_defs";
  *      3c. get_value_mat_rel ()
  *      3d. convert_poly_linestring_to_Rcpp ()
  *      3e. restructure_kv_mat ()
- * 4. cleanup.h = Functions to check and clean C++ arrays
- *      4a. clean_vec ()
- *      4b. clear_arr ()
- *      4c. clean_vecs ()
- *      4d. clean_arrs ()
  * 4. osmdata.cpp
  *      5c. get_osm_relations ()
  *      5d. get_osm_ways ()

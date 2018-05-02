@@ -125,8 +125,15 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
             if (rowname_vec.size () == 0)
                 mp_okay [count_mp] = false;
 
-            clean_vecs <double, double, std::string> (lon_vec, lat_vec, rowname_vec);
+            lon_vec.clear ();
+            lon_vec.shrink_to_fit ();
+            lat_vec.clear ();
+            lat_vec.shrink_to_fit ();
+            rowname_vec.clear ();
+            rowname_vec.shrink_to_fit ();
             ids_mp.clear ();
+            ids_mp.shrink_to_fit ();
+
             get_value_mat_rel (itr, unique_vals, kv_mat_mp, count_mp++);
         } else // store as multilinestring
         {
@@ -154,8 +161,16 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
                 lat_arr_ls.push_back (lat_vec);
                 rowname_arr_ls.push_back (rowname_vec);
                 id_vec_ls.push_back (ids_ls);
-                clean_vecs <double, double, std::string> (lon_vec, lat_vec, rowname_vec);
+
+                lon_vec.clear ();
+                lon_vec.shrink_to_fit ();
+                lat_vec.clear ();
+                lat_vec.shrink_to_fit ();
+                rowname_vec.clear ();
+                rowname_vec.shrink_to_fit ();
                 ids_ls.clear ();
+                ids_ls.shrink_to_fit ();
+
                 get_value_mat_rel (itr, unique_vals, kv_mat_ls, count_ls++);
             }
             roles_ls.push_back (roles);
@@ -237,13 +252,25 @@ Rcpp::List get_osm_relations_sf (const Relations &rels,
         kv_df_mp = R_NilValue;
 
     // ****** clean up *****
-    clean_arrs <double, double, std::string> (lon_arr_mp, lat_arr_mp, rowname_arr_mp);
-    clean_arrs <double, double, std::string> (lon_arr_ls, lat_arr_ls, rowname_arr_ls);
-    clean_vecs <std::string, osmid_t> (id_vec_mp, id_vec_ls);
+    lon_arr_mp.clear ();
+    lon_arr_mp.shrink_to_fit ();
+    lon_arr_ls.clear ();
+    lon_arr_ls.shrink_to_fit ();
+    lat_arr_mp.clear ();
+    lat_arr_mp.shrink_to_fit ();
+    lat_arr_ls.clear ();
+    lat_arr_ls.shrink_to_fit ();
+    rowname_arr_mp.clear ();
+    rowname_arr_mp.shrink_to_fit ();
+    rowname_arr_ls.clear ();
+    rowname_arr_ls.shrink_to_fit ();
+
     rel_id_mp.clear ();
+    rel_id_mp.shrink_to_fit ();
     rel_id_ls.clear ();
+    rel_id_ls.shrink_to_fit ();
     roles_ls.clear ();
-    keyset.clear ();
+    roles_ls.shrink_to_fit ();
 
     Rcpp::List ret (4);
     ret [0] = polygonList;
