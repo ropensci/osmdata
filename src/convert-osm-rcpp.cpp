@@ -355,7 +355,7 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
             polygons.slot ("Polygons") = outList_i;
             // convert id_vec to single string
             std::string id_vec_str = id_vec [i] [0];
-            for (int j = 1;
+            for (unsigned int j = 1;
                     j < static_cast <unsigned int> (id_vec [i].size ()); j++)
                 id_vec_str += "." + id_vec [i] [j];
             polygons.slot ("ID") = id_vec_str;
@@ -376,8 +376,8 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
     // Fill plotOrder slot with int vector - this has to be int, not
     // unsigned int!
     std::vector <int> plotord (rels.size ());
-    for (int j=0; j<static_cast <unsigned int> (rels.size ()); j++)
-        plotord [j] = j + 1;
+    for (unsigned int j=0; j<static_cast <unsigned int> (rels.size ()); j++)
+        plotord [j] = static_cast <int> (j) + 1;
     multipolygons.slot ("plotOrder") = plotord;
     plotord.clear ();
 

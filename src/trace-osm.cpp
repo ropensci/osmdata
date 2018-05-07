@@ -226,7 +226,6 @@ osmid_t trace_way (const Ways &ways, const Nodes &nodes, osmid_t first_node,
 {
     osmid_t last_node = -1;
     auto wayi = ways.find (wayi_id);
-    std::vector <osmid_t>::const_iterator it_node_begin, it_node_end;
     bool add_node = true;
     if (append)
         add_node = false;
