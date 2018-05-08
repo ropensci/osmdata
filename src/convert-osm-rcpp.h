@@ -35,6 +35,8 @@
 
 #include <Rcpp.h>
 
+namespace osm_convert {
+
 void trace_way_nmat (const Ways &ways, const Nodes &nodes, 
         const osmid_t &wayi_id, Rcpp::NumericMatrix &nmat);
 
@@ -63,3 +65,5 @@ void convert_multiline_to_sp (Rcpp::S4 &multilines, const Relations &rels,
         const double_arr3 &lon_arr, const double_arr3 &lat_arr, 
         const string_arr3 &rowname_arr, const osmt_arr2 &id_vec,
         const UniqueVals &unique_vals);
+
+} // end namespace osm_convert

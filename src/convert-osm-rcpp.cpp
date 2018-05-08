@@ -51,7 +51,7 @@
  * @rownames pointer to vector of rownames for each node.
  * @nmat Rcpp::NumericMatrix to store lons, lats, and rownames
  */
-void trace_way_nmat (const Ways &ways, const Nodes &nodes, 
+void osm_convert::trace_way_nmat (const Ways &ways, const Nodes &nodes, 
         const osmid_t &wayi_id, Rcpp::NumericMatrix &nmat)
 {
     auto wayi = ways.find (wayi_id);
@@ -92,7 +92,7 @@ void trace_way_nmat (const Ways &ways, const Nodes &nodes,
 // TODO: Is it faster to use a std::vector <std::string> instead of
 // Rcpp::CharacterMatrix and then simply
 // Rcpp::CharacterMatrix mat (nrow, ncol, value_vec.begin ()); ?
-void get_value_mat_way (Ways::const_iterator wayi,
+void osm_convert::get_value_mat_way (Ways::const_iterator wayi,
         const UniqueVals &unique_vals, Rcpp::CharacterMatrix &value_arr,
         unsigned int rowi)
 {
@@ -117,7 +117,7 @@ void get_value_mat_way (Ways::const_iterator wayi,
  *        by tracing the key-val pairs of the relation 'reli'
  * @param rowi Integer value for the key-val pairs for reli
  */
-void get_value_mat_rel (Relations::const_iterator &reli,
+void osm_convert::get_value_mat_rel (Relations::const_iterator &reli,
         const UniqueVals &unique_vals, Rcpp::CharacterMatrix &value_arr,
         unsigned int rowi)
 {
@@ -142,7 +142,7 @@ void get_value_mat_rel (Relations::const_iterator &reli,
  * @param ls true only for multilinestrings, which have compound rownames which
  *        include roles
  */
-Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls=false)
+Rcpp::CharacterMatrix osm_convert::restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls=false)
 {
     // The following has to be done in 2 lines:
     std::vector <std::vector <std::string> > dims = kv.attr ("dimnames");
@@ -219,7 +219,7 @@ Rcpp::CharacterMatrix restructure_kv_mat (Rcpp::CharacterMatrix &kv, bool ls=fal
  * @return An Rcpp::List object of [relation][way][node/geom] data.
  */
 // TODO: Replace return value with pointer to List as argument?
-template <typename T> Rcpp::List convert_poly_linestring_to_sf (
+template <typename T> Rcpp::List osm_convert::convert_poly_linestring_to_sf (
         const double_arr3 &lon_arr, const double_arr3 &lat_arr, 
         const string_arr3 &rowname_arr, 
         const std::vector <std::vector <T> > &id_vec, 
@@ -265,16 +265,99 @@ template <typename T> Rcpp::List convert_poly_linestring_to_sf (
 
     return outList;
 }
-template Rcpp::List convert_poly_linestring_to_sf <osmid_t> (
+template <> Rcpp::List osm_convert::convert_poly_linestring_to_sf <osmid_t> (
         const double_arr3 &lon_arr, const double_arr3 &lat_arr, 
         const string_arr3 &rowname_arr, 
         const std::vector <std::vector <osmid_t> > &id_vec, 
-        const std::vector <std::string> &rel_id, const std::string type);
-template Rcpp::List convert_poly_linestring_to_sf <std::string> (
+        const std::vector <std::string> &rel_id, const std::string type)
+{
+    if (!(type == "MULTILINESTRING" || type == "MULTIPOLYGON"))
+        throw std::runtime_error ("type must be multilinestring/polygon");
+    Rcpp::List outList (lon_arr.size ()); 
+    Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
+    Rcpp::List dimnames (0);
+    std::vector <std::string> colnames = {"lat", "lon"};
+    for (unsigned int i=0; i<lon_arr.size (); i++) // over all relations
+    {
+        Rcpp::List outList_i (lon_arr [i].size ()); 
+        for (unsigned int j=0; j<lon_arr [i].size (); j++) // over all ways
+        {
+            size_t n = lon_arr [i][j].size ();
+            nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
+            std::copy (lon_arr [i][j].begin (), lon_arr [i][j].end (),
+                    nmat.begin ());
+            std::copy (lat_arr [i][j].begin (), lat_arr [i][j].end (),
+                    nmat.begin () + n);
+            dimnames.push_back (rowname_arr [i][j]);
+            dimnames.push_back (colnames);
+            nmat.attr ("dimnames") = dimnames;
+            dimnames.erase (0, static_cast <int> (dimnames.size ()));
+            outList_i [j] = nmat;
+        }
+        outList_i.attr ("names") = id_vec [i];
+        if (type == "MULTIPOLYGON")
+        {
+            Rcpp::List tempList (1);
+            tempList (0) = outList_i;
+            tempList.attr ("class") = Rcpp::CharacterVector::create ("XY", type, "sfg");
+            outList [i] = tempList;
+        } else
+        {
+            outList_i.attr ("class") = Rcpp::CharacterVector::create ("XY", type, "sfg");
+            outList [i] = outList_i;
+        }
+    }
+    outList.attr ("names") = rel_id;
+
+    return outList;
+}
+
+template <> Rcpp::List osm_convert::convert_poly_linestring_to_sf <std::string> (
         const double_arr3 &lon_arr, const double_arr3 &lat_arr, 
         const string_arr3 &rowname_arr, 
         const std::vector <std::vector <std::string> > &id_vec, 
-        const std::vector <std::string> &rel_id, const std::string type);
+        const std::vector <std::string> &rel_id, const std::string type)
+{
+    if (!(type == "MULTILINESTRING" || type == "MULTIPOLYGON"))
+        throw std::runtime_error ("type must be multilinestring/polygon");
+    Rcpp::List outList (lon_arr.size ()); 
+    Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
+    Rcpp::List dimnames (0);
+    std::vector <std::string> colnames = {"lat", "lon"};
+    for (unsigned int i=0; i<lon_arr.size (); i++) // over all relations
+    {
+        Rcpp::List outList_i (lon_arr [i].size ()); 
+        for (unsigned int j=0; j<lon_arr [i].size (); j++) // over all ways
+        {
+            size_t n = lon_arr [i][j].size ();
+            nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
+            std::copy (lon_arr [i][j].begin (), lon_arr [i][j].end (),
+                    nmat.begin ());
+            std::copy (lat_arr [i][j].begin (), lat_arr [i][j].end (),
+                    nmat.begin () + n);
+            dimnames.push_back (rowname_arr [i][j]);
+            dimnames.push_back (colnames);
+            nmat.attr ("dimnames") = dimnames;
+            dimnames.erase (0, static_cast <int> (dimnames.size ()));
+            outList_i [j] = nmat;
+        }
+        outList_i.attr ("names") = id_vec [i];
+        if (type == "MULTIPOLYGON")
+        {
+            Rcpp::List tempList (1);
+            tempList (0) = outList_i;
+            tempList.attr ("class") = Rcpp::CharacterVector::create ("XY", type, "sfg");
+            outList [i] = tempList;
+        } else
+        {
+            outList_i.attr ("class") = Rcpp::CharacterVector::create ("XY", type, "sfg");
+            outList [i] = outList_i;
+        }
+    }
+    outList.attr ("names") = rel_id;
+
+    return outList;
+}
 
 /* convert_multipoly_to_sp
  *
@@ -290,7 +373,7 @@ template Rcpp::List convert_poly_linestring_to_sf <std::string> (
  *
  * @return Object pointed to by 'multipolygons' is constructed.
  */
-void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
+void osm_convert::convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
         const double_arr3 &lon_arr, const double_arr3 &lat_arr, 
         const string_arr3 &rowname_arr, const string_arr2 &id_vec,
         const UniqueVals &unique_vals)
@@ -366,7 +449,7 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
             outList [i] = polygons;
             rel_id.push_back (std::to_string (itr->id));
 
-            get_value_mat_rel (itr, unique_vals, kv_mat, i++);
+            osm_convert::get_value_mat_rel (itr, unique_vals, kv_mat, i++);
         } // end if ispoly & for i
     outList.attr ("names") = rel_id;
 
@@ -407,7 +490,7 @@ void convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relations &rels,
  *
  * @return Object pointed to by 'multilines' is constructed.
  */
-void convert_multiline_to_sp (Rcpp::S4 &multilines, const Relations &rels,
+void osm_convert::convert_multiline_to_sp (Rcpp::S4 &multilines, const Relations &rels,
         const double_arr3 &lon_arr, const double_arr3 &lat_arr, 
         const string_arr3 &rowname_arr, const osmt_arr2 &id_vec,
         const UniqueVals &unique_vals)
@@ -463,7 +546,7 @@ void convert_multiline_to_sp (Rcpp::S4 &multilines, const Relations &rels,
             outList [i] = lines;
             rel_id.push_back (std::to_string (itr->id));
 
-            get_value_mat_rel (itr, unique_vals, kv_mat, i++);
+            osm_convert::get_value_mat_rel (itr, unique_vals, kv_mat, i++);
         } // end if ispoly & for i
     outList.attr ("names") = rel_id;
 

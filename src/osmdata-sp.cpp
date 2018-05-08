@@ -35,7 +35,7 @@
 
 #include <algorithm> // for min_element/max_element
 
-//' get_osm_nodes_sp
+//' get_osm_nodes
 //'
 //' Store OSM nodes as `sf::POINT` objects
 //'
@@ -47,7 +47,7 @@
 //' @param crs Pointer to the crs needed for `sf` construction
 //' 
 //' @noRd 
-void get_osm_nodes_sp (Rcpp::S4 &sp_points, const Nodes &nodes, 
+void osm_sp::get_osm_nodes (Rcpp::S4 &sp_points, const Nodes &nodes, 
         const UniqueVals &unique_vals)
 {
     Rcpp::NumericMatrix ptxy; 
@@ -98,7 +98,7 @@ void get_osm_nodes_sp (Rcpp::S4 &sp_points, const Nodes &nodes,
 }
 
 
-//' get_osm_ways_sp
+//' get_osm_ways
 //'
 //' Store OSM ways as `sf::LINESTRING` or `sf::POLYGON` objects.
 //'
@@ -113,7 +113,7 @@ void get_osm_nodes_sp (Rcpp::S4 &sp_points, const Nodes &nodes,
 //' @param crs Pointer to the crs needed for `sf` construction
 //' 
 //' @noRd 
-void get_osm_ways_sp (Rcpp::S4 &sp_ways, 
+void osm_sp::get_osm_ways (Rcpp::S4 &sp_ways, 
         const std::set <osmid_t> way_ids, const Ways &ways, const Nodes &nodes,
         const UniqueVals &unique_vals, const std::string &geom_type)
 {
@@ -144,7 +144,7 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
         Rcpp::checkUserInterrupt ();
         waynames.push_back (std::to_string (*wi));
         Rcpp::NumericMatrix nmat;
-        trace_way_nmat (ways, nodes, (*wi), nmat);
+        osm_convert::trace_way_nmat (ways, nodes, (*wi), nmat);
         Rcpp::List dummy_list (0);
         unsigned int pos = static_cast <unsigned int> (
                 std::distance (way_ids.begin (), wi));
@@ -194,7 +194,7 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
         }
         dummy_list.erase (0);
         auto wj = ways.find (*wi);
-        get_value_mat_way (wj, unique_vals, kv_mat, pos);
+        osm_convert::get_value_mat_way (wj, unique_vals, kv_mat, pos);
     } // end for it over poly_ways
     if (indx_out.size () > 0)
     {
@@ -257,7 +257,7 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
 }
 
 
-//' get_osm_relations_sp
+//' get_osm_relations
 //'
 //' Return a dual Rcpp::List containing all OSM relations, the firmt element of
 //' which holds `multipolygon` relations, while the second holds all others,
@@ -273,7 +273,7 @@ void get_osm_ways_sp (Rcpp::S4 &sp_ways,
 //'         relations; the second the multilinestring relations.
 //' 
 //' @noRd 
-void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons, 
+void osm_sp::get_osm_relations (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons, 
         const Relations &rels, const std::map <osmid_t, Node> &nodes,
         const std::map <osmid_t, OneWay> &ways, const UniqueVals &unique_vals)
 {
@@ -344,7 +344,7 @@ void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
             ids_mp.shrink_to_fit ();
 
             if (nmp > 0)
-                get_value_mat_rel (itr, unique_vals, kv_mat_mp, count_mp++);
+                osm_convert::get_value_mat_rel (itr, unique_vals, kv_mat_mp, count_mp++);
         } else // store as multilinestring
         {
             // multistrings are grouped here by roles, unlike GDAL which just
@@ -382,16 +382,16 @@ void get_osm_relations_sp (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
                 ids_ls.shrink_to_fit ();
 
                 if (nls > 0)
-                    get_value_mat_rel (itr, unique_vals, kv_mat_ls, count_ls++);
+                    osm_convert::get_value_mat_rel (itr, unique_vals, kv_mat_ls, count_ls++);
             }
             roles_ls.push_back (roles);
             roles.clear ();
         }
     }
 
-    convert_multipoly_to_sp (multipolygons, rels, lon_arr_mp, lat_arr_mp, 
+    osm_convert::convert_multipoly_to_sp (multipolygons, rels, lon_arr_mp, lat_arr_mp, 
         rowname_arr_mp, id_vec_mp, unique_vals);
-    convert_multiline_to_sp (multilines, rels, lon_arr_ls, lat_arr_ls, 
+    osm_convert::convert_multiline_to_sp (multilines, rels, lon_arr_ls, lat_arr_ls, 
         rowname_arr_ls, id_vec_ls, unique_vals);
 
     // ****** clean up *****
@@ -478,10 +478,10 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
 
     // The actual routines to extract the OSM data and store in sp objects
     Rcpp::S4 sp_points, sp_lines, sp_polygons, sp_multilines, sp_multipolygons;
-    get_osm_ways_sp (sp_polygons, poly_ways, ways, nodes, unique_vals, "polygon");
-    get_osm_ways_sp (sp_lines, non_poly_ways, ways, nodes, unique_vals, "line");
-    get_osm_nodes_sp (sp_points, nodes, unique_vals);
-    get_osm_relations_sp (sp_multilines, sp_multipolygons, 
+    osm_sp::get_osm_ways (sp_polygons, poly_ways, ways, nodes, unique_vals, "polygon");
+    osm_sp::get_osm_ways (sp_lines, non_poly_ways, ways, nodes, unique_vals, "line");
+    osm_sp::get_osm_nodes (sp_points, nodes, unique_vals);
+    osm_sp::get_osm_relations (sp_multilines, sp_multipolygons, 
             rels, nodes, ways, unique_vals);
 
     // Add bbox and crs to each sp object
