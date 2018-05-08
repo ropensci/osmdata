@@ -265,99 +265,16 @@ template <typename T> Rcpp::List osm_convert::convert_poly_linestring_to_sf (
 
     return outList;
 }
-template <> Rcpp::List osm_convert::convert_poly_linestring_to_sf <osmid_t> (
+template Rcpp::List osm_convert::convert_poly_linestring_to_sf <osmid_t> (
         const double_arr3 &lon_arr, const double_arr3 &lat_arr, 
         const string_arr3 &rowname_arr, 
         const std::vector <std::vector <osmid_t> > &id_vec, 
-        const std::vector <std::string> &rel_id, const std::string type)
-{
-    if (!(type == "MULTILINESTRING" || type == "MULTIPOLYGON"))
-        throw std::runtime_error ("type must be multilinestring/polygon");
-    Rcpp::List outList (lon_arr.size ()); 
-    Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
-    Rcpp::List dimnames (0);
-    std::vector <std::string> colnames = {"lat", "lon"};
-    for (unsigned int i=0; i<lon_arr.size (); i++) // over all relations
-    {
-        Rcpp::List outList_i (lon_arr [i].size ()); 
-        for (unsigned int j=0; j<lon_arr [i].size (); j++) // over all ways
-        {
-            size_t n = lon_arr [i][j].size ();
-            nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
-            std::copy (lon_arr [i][j].begin (), lon_arr [i][j].end (),
-                    nmat.begin ());
-            std::copy (lat_arr [i][j].begin (), lat_arr [i][j].end (),
-                    nmat.begin () + n);
-            dimnames.push_back (rowname_arr [i][j]);
-            dimnames.push_back (colnames);
-            nmat.attr ("dimnames") = dimnames;
-            dimnames.erase (0, static_cast <int> (dimnames.size ()));
-            outList_i [j] = nmat;
-        }
-        outList_i.attr ("names") = id_vec [i];
-        if (type == "MULTIPOLYGON")
-        {
-            Rcpp::List tempList (1);
-            tempList (0) = outList_i;
-            tempList.attr ("class") = Rcpp::CharacterVector::create ("XY", type, "sfg");
-            outList [i] = tempList;
-        } else
-        {
-            outList_i.attr ("class") = Rcpp::CharacterVector::create ("XY", type, "sfg");
-            outList [i] = outList_i;
-        }
-    }
-    outList.attr ("names") = rel_id;
-
-    return outList;
-}
-
-template <> Rcpp::List osm_convert::convert_poly_linestring_to_sf <std::string> (
+        const std::vector <std::string> &rel_id, const std::string type);
+template Rcpp::List osm_convert::convert_poly_linestring_to_sf <std::string> (
         const double_arr3 &lon_arr, const double_arr3 &lat_arr, 
         const string_arr3 &rowname_arr, 
         const std::vector <std::vector <std::string> > &id_vec, 
-        const std::vector <std::string> &rel_id, const std::string type)
-{
-    if (!(type == "MULTILINESTRING" || type == "MULTIPOLYGON"))
-        throw std::runtime_error ("type must be multilinestring/polygon");
-    Rcpp::List outList (lon_arr.size ()); 
-    Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
-    Rcpp::List dimnames (0);
-    std::vector <std::string> colnames = {"lat", "lon"};
-    for (unsigned int i=0; i<lon_arr.size (); i++) // over all relations
-    {
-        Rcpp::List outList_i (lon_arr [i].size ()); 
-        for (unsigned int j=0; j<lon_arr [i].size (); j++) // over all ways
-        {
-            size_t n = lon_arr [i][j].size ();
-            nmat = Rcpp::NumericMatrix (Rcpp::Dimension (n, 2));
-            std::copy (lon_arr [i][j].begin (), lon_arr [i][j].end (),
-                    nmat.begin ());
-            std::copy (lat_arr [i][j].begin (), lat_arr [i][j].end (),
-                    nmat.begin () + n);
-            dimnames.push_back (rowname_arr [i][j]);
-            dimnames.push_back (colnames);
-            nmat.attr ("dimnames") = dimnames;
-            dimnames.erase (0, static_cast <int> (dimnames.size ()));
-            outList_i [j] = nmat;
-        }
-        outList_i.attr ("names") = id_vec [i];
-        if (type == "MULTIPOLYGON")
-        {
-            Rcpp::List tempList (1);
-            tempList (0) = outList_i;
-            tempList.attr ("class") = Rcpp::CharacterVector::create ("XY", type, "sfg");
-            outList [i] = tempList;
-        } else
-        {
-            outList_i.attr ("class") = Rcpp::CharacterVector::create ("XY", type, "sfg");
-            outList [i] = outList_i;
-        }
-    }
-    outList.attr ("names") = rel_id;
-
-    return outList;
-}
+        const std::vector <std::string> &rel_id, const std::string type);
 
 /* convert_multipoly_to_sp
  *
