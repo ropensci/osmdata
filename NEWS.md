@@ -1,6 +1,7 @@
-0.0.6.001
+0.0.7
 ===================
 - Fix bug in `c` method so it works when `sf` not loaded
+- Fix bug in overpass query syntax to match new QL requirements
 
 0.0.6
 ===================
