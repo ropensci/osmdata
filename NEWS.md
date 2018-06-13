@@ -1,5 +1,6 @@
 0.0.7.001
 ===================
+- Fix bug in `trim_osmdata` so that all sf attributes are reinstated
 
 0.0.7
 ===================
