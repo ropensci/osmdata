@@ -14,9 +14,13 @@
 #' @return A trimmed version of \code{dat}, reduced only to those components
 #' lying within the bounding polygon.
 #'
+#' @note It will generally be necessary to pre-load the \pkg{sf} package for
+#' this function to work correctly.
+#'
 #' @export
 trim_osmdata <- function (dat, bb_poly, exclude = TRUE)
 {
+    is_sf_loaded ()
     if (nrow (bb_poly) > 2)
     {
         dat <- trim_to_poly_pts (dat, bb_poly, exclude = exclude) %>%
@@ -24,6 +28,13 @@ trim_osmdata <- function (dat, bb_poly, exclude = TRUE)
             trim_to_poly_multi (bb_poly = bb_poly, exclude = exclude)
     }
     return (dat)
+}
+
+is_sf_loaded <- function ()
+{
+    if (!any (grepl ("package:sf", search ())))
+        message ("It is generally necessary to pre-load the sf package ",
+                 "for this function to work correctly")
 }
 
 trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE)
