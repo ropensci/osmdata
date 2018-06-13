@@ -87,9 +87,15 @@ trim_to_poly <- function (dat, bb_poly, exclude = TRUE)
             {
                 indx <- get_trim_indx (dat [[g]]$geometry, bb_poly,
                                        exclude = exclude)
-                cl <- class (dat [[g]]$geometry)
+                #cl <- class (dat [[g]]$geometry) # TODO: Delete
+                attrs <- attributes (dat [[g]])
+                attrs$row.names <- attrs$row.names [indx]
+                attrs_g <- attributes (dat [[g]]$geometry)
+                attrs_g$names <- attrs_g$names [indx]
                 dat [[g]] <- dat [[g]] [indx, ] # this strips sf class defs
-                class (dat [[g]]$geometry) <- cl
+                #class (dat [[g]]$geometry) <- cl # TODO: Delete
+                attributes (dat [[g]]) <- attrs
+                attributes (dat [[g]]$geometry) <- attrs_g
             }
         }
     }
@@ -122,9 +128,15 @@ trim_to_poly_multi <- function (dat, bb_poly, exclude = TRUE)
                 else
                     indx <- which (ilens > 0)
 
-                cl <- class (dat [[g]]$geometry)
+                #cl <- class (dat [[g]]$geometry) # TODO: Delete
+                attrs <- attributes (dat [[g]])
+                attrs$row.names <- attrs$row.names [indx]
+                attrs_g <- attributes (dat [[g]]$geometry)
+                attrs_g$names <- attrs_g$names [indx]
                 dat [[g]] <- dat [[g]] [indx, ]
-                class (dat [[g]]$geometry) <- cl
+                #class (dat [[g]]$geometry) <- cl # TODO: Delete
+                attributes (dat [[g]]) <- attrs
+                attributes (dat [[g]]$geometry) <- attrs_g
             }
         }
     }
