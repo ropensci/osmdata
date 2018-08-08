@@ -1,10 +1,9 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Build Status](https://travis-ci.org/ropensci/osmdata.svg?branch=master)](https://travis-ci.org/ropensci/osmdata) [![Build status](https://ci.appveyor.com/api/projects/status/github/ropensci/osmdata?svg=true)](https://ci.appveyor.com/project/ropensci/osmdata) [![codecov](https://codecov.io/gh/ropensci/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/osmdata) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/osmdata)](http://cran.r-project.org/web/packages/osmdata) [![status](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3/status.svg)](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3) [![CRAN Downloads](http://cranlogs.r-pkg.org/badges/grand-total/osmdata?color=orange)](http://cran.r-project.org/package=osmdata) [![Project Status: Active](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 
-![](./fig/title.png)
-[![](https://badges.ropensci.org/103_status.svg)](https://github.com/ropensci/onboarding/issues/103)
+![](./fig/title.png) [![](https://badges.ropensci.org/103_status.svg)](https://github.com/ropensci/onboarding/issues/103)
 
-`osmdata` is an R package for accessing OpenStreetMap (OSM) data using the [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API). The Overpass API (or OSM3S) is a read-only API that serves up custom selected parts of the OSM map data. Map data can be returned either as [Simple Features (`sf`)](https://cran.r-project.org/package=sf) or [Spatial (`sp`)](https://cran.r-project.org/package=sp) objects.
+`osmdata` is an R package for accessing the raw vector data underlying OpenStreetMap (OSM) via the [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API). (Other packages such as [`OpenStreetMap`](https://cran.r-project.org/web/packages/OpenStreetMap/index.html) can be used to download raster tiles based on OSM data.) The Overpass API (or OSM3S) is a read-only API that serves up custom selected parts of the OSM map data. Map data can be returned either as [Simple Features (`sf`)](https://cran.r-project.org/package=sf) or [Spatial (`sp`)](https://cran.r-project.org/package=sp) objects.
 
 ### Installation
 
@@ -12,7 +11,7 @@
 library(osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
 packageVersion("osmdata")
-#> [1] '0.0.4'
+#> [1] '0.0.7'
 ```
 
 ### Usage
@@ -65,6 +64,33 @@ We appreciate any contributions; those that comply with our general coding style
 2.  Indent with four spaces
 3.  Be generous with other white spaces - you've got plenty of real estate on that big screen of yours.
 4.  Code is much easier to read when braces are vertically aligned, so please put `{` in the same vertical position as `}`.
+
+### Citation
+
+``` r
+citation ("osmdata")
+#> 
+#> To cite osmdata in publications use:
+#> 
+#>   Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon (2017).
+#>   osmdata Journal of Open Source Software, 2(14). URL
+#>   https://doi.org/10.21105/joss.00305
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Article{,
+#>     title = {osmdata},
+#>     author = {Mark Padgham and Bob Rudis and Robin Lovelace and Maëlle Salmon},
+#>     journal = {The Journal of Open Source Software},
+#>     year = {2017},
+#>     volume = {2},
+#>     number = {14},
+#>     month = {jun},
+#>     publisher = {The Open Journal},
+#>     url = {https://doi.org/10.21105/joss.00305},
+#>     doi = {10.21105/joss.00305},
+#>   }
+```
 
 ### Code of Conduct
 

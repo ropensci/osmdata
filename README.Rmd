@@ -115,6 +115,12 @@ even more. In four short points:
 4. Code is much easier to read when braces are vertically aligned, so please
    put `{` in the same vertical position as `}`.
 
+### Citation
+
+```{r}
+citation ("osmdata")
+```
+
 ### Code of Conduct
 
 Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). 
