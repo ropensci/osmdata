@@ -21,6 +21,11 @@
 trim_osmdata <- function (dat, bb_poly, exclude = TRUE)
 {
     is_sf_loaded ()
+    if (is.list (bb_poly) & length (bb_poly) > 1)
+    {
+        message ("bb_poly has more than one polygon; the first will be selected.")
+        bb_poly <- bb_poly [[1]]
+    }
     if (nrow (bb_poly) > 2)
     {
         dat <- trim_to_poly_pts (dat, bb_poly, exclude = exclude) %>%
