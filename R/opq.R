@@ -113,6 +113,13 @@ add_osm_feature <- function (opq, key, value, key_exact = TRUE,
         opq$bbox <- bbox
     }
 
+    if (!key_exact & value_exact)
+    {
+        message ("key_exact = FALSE can only combined with value_exact = FALSE; ",
+                 "setting value_exact = FALSE")
+        value_exact = FALSE
+    }
+
     if (value_exact)
         bind <- '='
     else

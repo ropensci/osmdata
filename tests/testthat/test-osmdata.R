@@ -53,7 +53,14 @@ test_that ('query-construction', {
     expect_false (grepl ('=', q1$features))
     q1 <- add_osm_feature (q0, key = 'aaa', value = 'bbb')
     expect_true (grepl ('=', q1$features))
-})
+    expect_message (
+                q1 <- add_osm_feature (q0, key = 'aaa', value = 'bbb',
+                                       key_exact = FALSE),
+                "key_exact = FALSE can only combined with value_exact = FALSE;")
+    expect_silent (
+                q1 <- add_osm_feature (q0, key = 'aaa', value = 'bbb',
+                                       key_exact = FALSE, value_exact = FALSE))
+          })
 
 test_that ('make_query', {
     qry <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517))
