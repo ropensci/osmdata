@@ -188,7 +188,11 @@ getbb <- function(place_name,
 
     # Code optionally select more things stored in obj...
     if (!is.null(display_name_contains))
+    {
         obj <- obj[grepl(display_name_contains, obj$display_name), ]
+        if (nrow (obj) == 0)
+            stop ("No locations include display name ", display_name_contains)
+    }
 
     if (format_out == "data.frame") {
       return(obj)
