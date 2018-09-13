@@ -25,3 +25,7 @@ lying within the bounding polygon.
 \description{
 Trim an \code{osmdata} object to within a bounding polygon
 }
+\note{
+It will generally be necessary to pre-load the \pkg{sf} package for
+this function to work correctly.
+}

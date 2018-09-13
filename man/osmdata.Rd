@@ -3,7 +3,6 @@
 \docType{package}
 \name{osmdata}
 \alias{osmdata}
-\alias{osmdata}
 \alias{osmdata-package}
 \title{osmdata class def}
 \usage{
@@ -37,8 +36,6 @@ SpatialPolygonsDataFrame}
 \item{...}{other options ignored}
 }
 \description{
-osmdata class def
-
 Imports OpenStreetMap (OSM) data into R as either 'sf' or 'sp' objects.  OSM
 data are extracted from the overpass API and processed with very fast C++
 routines for return to R.  The package enables simple overpass queries to be
