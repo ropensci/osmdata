@@ -5,9 +5,10 @@
 \title{Get bounding box for a given place name}
 \usage{
 getbb(place_name, display_name_contains = NULL, viewbox = NULL,
-  format_out = "matrix", base_url = "https://nominatim.openstreetmap.org",
-  featuretype = "settlement", limit = 10, key = NULL, silent = TRUE,
-  poly_num = c(1, 1))
+  format_out = "matrix",
+  base_url = "https://nominatim.openstreetmap.org",
+  featuretype = "settlement", limit = 10, key = NULL,
+  silent = TRUE, poly_num = c(1, 1))
 }
 \arguments{
 \item{place_name}{The name of the place you're searching for}

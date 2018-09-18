@@ -6,31 +6,53 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>osmdata class def — osmdata â€¢ osmdata</title>
+<title>osmdata class def â€” osmdata â€¢ osmdata</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
+
+
+<meta property="og:title" content="osmdata class def â€” osmdata" />
+
+<meta property="og:description" content="Imports OpenStreetMap (OSM) data into R as either 'sf' or 'sp' objects.  OSM
+data are extracted from the overpass API and processed with very fast C++
+routines for return to R.  The package enables simple overpass queries to be
+constructed without the user necessarily understanding the syntax of the
+overpass query language, while retaining the ability to handle arbitrarily
+complex queries. Functions are also provided to enable recursive searching
+between different kinds of OSM data (for example, to find all lines which
+intersect a given point)." />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -44,8 +66,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">osmdata</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">osmdata</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.7.2</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -67,6 +93,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -74,16 +101,17 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>osmdata class def</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/osmdata/blob/master/R/osmdata-class.R'><code>R/osmdata-class.R</code></a>, <a href='https://github.com/ropensci/osmdata/blob/master/R/osmdata-package.R'><code>R/osmdata-package.R</code></a></small>
+    <div class="hidden name"><code>osmdata.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
-    <p>osmdata class def</p>
-
-    <p>Imports OpenStreetMap (OSM) data into R as either &#39;sf&#39; or &#39;sp&#39; objects.  OSM
+    <p>Imports OpenStreetMap (OSM) data into R as either 'sf' or 'sp' objects.  OSM
 data are extracted from the overpass API and processed with very fast C++
 routines for return to R.  The package enables simple overpass queries to be
 constructed without the user necessarily understanding the syntax of the
@@ -92,38 +120,58 @@ complex queries. Functions are also provided to enable recursive searching
 between different kinds of OSM data (for example, to find all lines which
 intersect a given point).</p>
     
+    </div>
 
-    <pre><span class='fu'>osmdata</span>(<span class='kw'>bbox</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>overpass_call</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>osm_points</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+    <pre class="usage"><span class='fu'>osmdata</span>(<span class='kw'>bbox</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>overpass_call</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>osm_points</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>osm_lines</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>osm_polygons</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>osm_multilines</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>osm_multipolygons</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>timestamp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>bbox</dt>
-      <dd>bounding box</dd>
-      <dt>overpass_call</dt>
-      <dd>overpass_call</dd>
-      <dt>osm_points</dt>
-      <dd>OSM nodes as <code>sf</code> Simple Features Collection of points
-or <code>sp</code> SpatialPointsDataFrame</dd>
-      <dt>osm_lines</dt>
-      <dd>OSM ways <code>sf</code> Simple Features Collection of linestrings
-or <code>sp</code> SpatialLinesDataFrame</dd>
-      <dt>osm_polygons</dt>
-      <dd>OSM ways as <code>sf</code> Simple Features Collection of
-polygons or <code>sp</code> SpatialPolygonsDataFrame</dd>
-      <dt>osm_multilines</dt>
-      <dd>OSM relations as <code>sf</code> Simple Features Collection
-of multilinestrings or <code>sp</code> SpatialLinesDataFrame</dd>
-      <dt>osm_multipolygons</dt>
-      <dd>OSM relations as <code>sf</code> Simple Features
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>bbox</th>
+      <td><p>bounding box</p></td>
+    </tr>
+    <tr>
+      <th>overpass_call</th>
+      <td><p>overpass_call</p></td>
+    </tr>
+    <tr>
+      <th>osm_points</th>
+      <td><p>OSM nodes as <code>sf</code> Simple Features Collection of points
+or <code>sp</code> SpatialPointsDataFrame</p></td>
+    </tr>
+    <tr>
+      <th>osm_lines</th>
+      <td><p>OSM ways <code>sf</code> Simple Features Collection of linestrings
+or <code>sp</code> SpatialLinesDataFrame</p></td>
+    </tr>
+    <tr>
+      <th>osm_polygons</th>
+      <td><p>OSM ways as <code>sf</code> Simple Features Collection of
+polygons or <code>sp</code> SpatialPolygonsDataFrame</p></td>
+    </tr>
+    <tr>
+      <th>osm_multilines</th>
+      <td><p>OSM relations as <code>sf</code> Simple Features Collection
+of multilinestrings or <code>sp</code> SpatialLinesDataFrame</p></td>
+    </tr>
+    <tr>
+      <th>osm_multipolygons</th>
+      <td><p>OSM relations as <code>sf</code> Simple Features
 Collection of multipolygons or <code>sp</code>
-SpatialPolygonsDataFrame</dd>
-      <dt>timestamp</dt>
-      <dd>timestamp of OSM query</dd>
-      <dt>...</dt>
-      <dd>other options ignored</dd>
-    </dl>
+SpatialPolygonsDataFrame</p></td>
+    </tr>
+    <tr>
+      <th>timestamp</th>
+      <td><p>timestamp of OSM query</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>other options ignored</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
@@ -132,61 +180,45 @@ to provide access to the print method</p>
     
     <h2 class="hasAnchor" id="functions-to-prepare-queries"><a class="anchor" href="#functions-to-prepare-queries"></a>Functions to Prepare Queries</h2>
 
-    <p></p>
-    <p><ul>
-<li> <code><a href='getbb.html'>getbb</a></code>: Get bounding box for a given place name
-</li>
-<li> <code><a href='bbox_to_string.html'>bbox_to_string</a></code>: Convert a named matrix or a named vector
-(or an unnamed vector) return a string
-</li>
-<li> <code><a href='overpass_status.html'>overpass_status</a></code>: Retrieve status of the overpass API
-</li>
-<li> <code><a href='opq.html'>opq</a></code>: Build an overpass query
-</li>
-<li> <code><a href='add_feature.html'>add_feature</a></code>: Add a feature to an overpass query
-</li>
-<li> <code><a href='opq_string.html'>opq_string</a></code>: Convert an osmdata query to overpass API
-string
-</li>
-</ul></p>
+    
+    <ul>
+<li><p><code><a href='getbb.html'>getbb</a></code>: Get bounding box for a given place name</p></li>
+<li><p><code><a href='bbox_to_string.html'>bbox_to_string</a></code>: Convert a named matrix or a named vector
+(or an unnamed vector) return a string</p></li>
+<li><p><code><a href='overpass_status.html'>overpass_status</a></code>: Retrieve status of the overpass API</p></li>
+<li><p><code><a href='opq.html'>opq</a></code>: Build an overpass query</p></li>
+<li><p><code><a href='add_osm_feature.html'>add_osm_feature</a></code>: Add a feature to an overpass query</p></li>
+<li><p><code><a href='opq_string.html'>opq_string</a></code>: Convert an osmdata query to overpass API
+string</p></li>
+</ul>
     
     <h2 class="hasAnchor" id="functions-to-get-additional-osm-information"><a class="anchor" href="#functions-to-get-additional-osm-information"></a>Functions to Get Additional OSM Information</h2>
 
-    <p></p>
-    <p><ul>
-<li> <code><a href='available_features.html'>available_features</a></code>: List recognised features in OSM
-</li>
-<li> <code><a href='available_tags.html'>available_tags</a></code>: List tags associated with a feature
-</li>
-</ul></p>
+    
+    <ul>
+<li><p><code><a href='available_features.html'>available_features</a></code>: List recognised features in OSM</p></li>
+<li><p><code><a href='available_tags.html'>available_tags</a></code>: List tags associated with a feature</p></li>
+</ul>
     
     <h2 class="hasAnchor" id="functions-to-extract-osm-data"><a class="anchor" href="#functions-to-extract-osm-data"></a>Functions to Extract OSM Data</h2>
 
-    <p></p>
-    <p><ul>
-<li> <code><a href='osmdata_sf.html'>osmdata_sf</a></code>: Return OSM data in <code>sf</code> format
-</li>
-<li> <code><a href='osmdata_sp.html'>osmdata_sp</a></code>: Return OSM data in <code>sp</code> format
-</li>
-<li> <code><a href='osmdata_xml.html'>osmdata_xml</a></code>: Return OSM data in <code>XML</code> format
-</li>
-</ul></p>
+    
+    <ul>
+<li><p><code><a href='osmdata_sf.html'>osmdata_sf</a></code>: Return OSM data in <code>sf</code> format</p></li>
+<li><p><code><a href='osmdata_sp.html'>osmdata_sp</a></code>: Return OSM data in <code>sp</code> format</p></li>
+<li><p><code><a href='osmdata_xml.html'>osmdata_xml</a></code>: Return OSM data in <code>XML</code> format</p></li>
+</ul>
     
     <h2 class="hasAnchor" id="functions-to-search-data"><a class="anchor" href="#functions-to-search-data"></a>Functions to Search Data</h2>
 
-    <p></p>
-    <p><ul>
-<li> <code><a href='osm_points.html'>osm_points</a></code>: Extract all <code>osm_points</code> objects
-</li>
-<li> <code><a href='osm_lines.html'>osm_lines</a></code>: Extract all <code>osm_lines</code> objects
-</li>
-<li> <code><a href='osm_polygons.html'>osm_polygons</a></code>: Extract all <code>osm_polygons</code> objects
-</li>
-<li> <code><a href='osm_multilines.html'>osm_multilines</a></code>: Extract all <code>osm_multilines</code> objects
-</li>
-<li> <code><a href='osm_multipolygons.html'>osm_multipolygons</a></code>: Extract all <code>osm_multipolygons</code> objects
-</li>
-</ul></p>
+    
+    <ul>
+<li><p><code><a href='osm_points.html'>osm_points</a></code>: Extract all <code>osm_points</code> objects</p></li>
+<li><p><code><a href='osm_lines.html'>osm_lines</a></code>: Extract all <code>osm_lines</code> objects</p></li>
+<li><p><code><a href='osm_polygons.html'>osm_polygons</a></code>: Extract all <code>osm_polygons</code> objects</p></li>
+<li><p><code><a href='osm_multilines.html'>osm_multilines</a></code>: Extract all <code>osm_multilines</code> objects</p></li>
+<li><p><code><a href='osm_multipolygons.html'>osm_multipolygons</a></code>: Extract all <code>osm_multipolygons</code> objects</p></li>
+</ul>
     
 
   </div>
@@ -208,7 +240,7 @@ string
 
     <h2>Author</h2>
     
-Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon
+Mark Padgham, Bob Rudis, Robin Lovelace, MaÃ«lle Salmon
 
   </div>
 </div>
@@ -219,11 +251,14 @@ Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
