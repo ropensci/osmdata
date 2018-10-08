@@ -7,11 +7,24 @@
 
 ### Installation
 
+To install (note that the CRAN version does not currently work with the Overpass API):
+
+``` r
+# Install from CRAN 
+install.packages("osmdata")
+
+# Alternatively, install the development version
+# install.packages("devtools")
+devtools::install_github("ropensci/osmdata")
+```
+
+To load the package and check the version:
+
 ``` r
 library(osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
 packageVersion("osmdata")
-#> [1] '0.0.7'
+#> [1] '0.0.7.2'
 ```
 
 ### Usage
