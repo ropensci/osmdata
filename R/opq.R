@@ -7,15 +7,17 @@
 #'             \code{getbb(..., format_out = "polygon")}.
 #' @param timeout It may be necessary to ncrease this value for large queries,
 #'             because the server may time out before all data are delivered.
-#' @param memsize The default memory size for the 'overpass' server; may need to
-#'             be increased in order to handle large queries.
+#' @param memsize The default memory size for the 'overpass' server in
+#'              \emph{bytes}; may need to be increased in order to handle large
+#'              queries. 
 #'
 #' @return An \code{overpass_query} object
 #'
 #' @note See
 #' \url{https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29}
 #' for explanation of \code{timeout} and \code{memsize} (or \code{maxsize} in
-#' overpass terms).
+#' overpass terms). Note in particular the comment that queries with arbitrarily
+#' large \code{memsize} are likely to be rejeted.
 #'
 #' @export
 #'
