@@ -48,6 +48,17 @@ parts of the OSM map data. Map data can be returned either as
 
 ### Installation
 
+To install (note that the CRAN version does not currently work with the Overpass API):
+```{r, eval=FALSE}
+# Install from CRAN 
+install.packages("osmdata")
+
+# Alternatively, install the development version
+# install.packages("devtools")
+devtools::install_github("ropensci/osmdata")
+```
+
+To load the package and check the version:
 ```{r, eval=TRUE}
 library(osmdata)
 packageVersion("osmdata")
