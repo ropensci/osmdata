@@ -1,4 +1,4 @@
-0.0.7.002
+0.0.8
 ===================
 - Fix bug in `trim_osmdata` so that all sf attributes are reinstated, and also
   issue message that sf-preload is necessary for this function
