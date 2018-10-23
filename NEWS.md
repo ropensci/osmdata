@@ -1,8 +1,11 @@
+0.0.8.099
+===================
+
 0.0.8
 ===================
 - Fix bug in `trim_osmdata` so that all sf attributes are reinstated, and also
   issue message that sf-preload is necessary for this function
-- Fix big with opq (key_exact = FALSE) so value_exact is always also set to
+- Fix bug with opq (key_exact = FALSE) so value_exact is always also set to
   FALSE
 
 0.0.7
