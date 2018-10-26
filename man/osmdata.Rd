@@ -6,14 +6,17 @@
 \alias{osmdata-package}
 \title{osmdata class def}
 \usage{
-osmdata(bbox = NULL, overpass_call = NULL, osm_points = NULL,
-  osm_lines = NULL, osm_polygons = NULL, osm_multilines = NULL,
-  osm_multipolygons = NULL, timestamp = NULL)
+osmdata(bbox = NULL, overpass_call = NULL, meta = NULL,
+  osm_points = NULL, osm_lines = NULL, osm_polygons = NULL,
+  osm_multilines = NULL, osm_multipolygons = NULL)
 }
 \arguments{
 \item{bbox}{bounding box}
 
 \item{overpass_call}{overpass_call}
+
+\item{meta}{metadata of overpass query, including timestamps and version
+numbers}
 
 \item{osm_points}{OSM nodes as \code{sf} Simple Features Collection of points
 or \code{sp} SpatialPointsDataFrame}
@@ -30,8 +33,6 @@ of multilinestrings or \code{sp} SpatialLinesDataFrame}
 \item{osm_multipolygons}{OSM relations as \code{sf} Simple Features
 Collection of multipolygons or \code{sp}
 SpatialPolygonsDataFrame}
-
-\item{timestamp}{timestamp of OSM query}
 
 \item{...}{other options ignored}
 }

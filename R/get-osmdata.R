@@ -207,7 +207,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding = 'UTF-8')
 #' Make an 'sf' object from an 'sfc' list and associated data matrix returned
 #' from 'rcpp_osmdata_sf'
 #'
-#' @param ... list of objects, at least on of which must be of class 'sfc'
+#' @param ... list of objects, at least one of which must be of class 'sfc'
 #' @return An object of class `sf` 
 #'
 #' @note Most of this code written by Edzer Pebesma, and taken from 

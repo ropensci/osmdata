@@ -98,10 +98,12 @@ test_that ('make_query', {
         expect_message (res <- osmdata_sp (qry, 'junk.osm', quiet = FALSE))
 
         expect_s3_class (res, 'osmdata')
-        nms <- c ('bbox', 'overpass_call', 'timestamp', 'osm_points',
+        nms <- c ('bbox', 'overpass_call', 'meta', 'osm_points',
                   'osm_lines', 'osm_polygons', 'osm_multilines',
                   'osm_multipolygons')
         expect_named (res, expected = nms, ignore.order = FALSE)
+        nms <- c ("timestamp", "OSM_version", "overpass_version")
+        expect_named (res$meta, expected = nms, ignore.order = FALSE)
 
         if (!test_all)
             stub (osmdata_sf, 'overpass_query', function (x, ...)
@@ -113,10 +115,12 @@ test_that ('make_query', {
         expect_silent (res <- osmdata_sf (qry, 'junk.osm'))
         expect_message (res <- osmdata_sf (qry, 'junk.osm', quiet = FALSE))
         expect_s3_class (res, 'osmdata')
-        nms <- c ('bbox', 'overpass_call', 'timestamp', 'osm_points',
+        nms <- c ('bbox', 'overpass_call', 'meta', 'osm_points',
                   'osm_lines', 'osm_polygons', 'osm_multilines',
                   'osm_multipolygons')
         expect_named (res, expected = nms, ignore.order = FALSE)
+        nms <- c ("timestamp", "OSM_version", "overpass_version")
+        expect_named (res$meta, expected = nms, ignore.order = FALSE)
 
         if (file.exists ('junk.osm')) invisible (file.remove ('junk.osm'))
     }
