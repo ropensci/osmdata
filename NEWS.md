@@ -1,5 +1,11 @@
 0.0.8.099
 ===================
+Major changes:
+
+Minor changes:
+- Overpass URL now randomly selected from the four primary servers (see
+  https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances),
+  thanks to @JimShady.
 
 0.0.8
 ===================
