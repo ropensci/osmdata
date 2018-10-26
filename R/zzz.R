@@ -1,8 +1,20 @@
 .onLoad <- function (libname, pkgname)
 {
     op <- options ()
+	
+	## Added and edited code here by JimShady to use random API each time.
+	available_apis <- c('http://overpass-api.de/api/interpreter',
+						'https://lz4.overpass-api.de/api/interpreter',
+						'https://z.overpass-api.de/api/interpreter',
+						'https://overpass.kumi.systems/api/interpreter')
+	
+	
+	
     op.osmdata <- list (osmdata.base_url =
-                        'http://overpass-api.de/api/interpreter')
+                        sample(available_apis, 1))
+	
+	## End of code edited by JimShady
+	
     toset <- !(names (op.osmdata) %in% names (op))
     if (any (toset))
         options (op.osmdata [toset])
