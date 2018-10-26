@@ -386,13 +386,14 @@ void osm_convert::convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relati
     multipolygons.slot ("plotOrder") = plotord;
     plotord.clear ();
 
-    Rcpp::DataFrame kv_df;
+    Rcpp::DataFrame kv_df = R_NilValue;
     if (rel_id.size () > 0)
     {
         kv_mat.attr ("names") = unique_vals.k_rel;
         kv_mat.attr ("dimnames") = Rcpp::List::create (rel_id, unique_vals.k_rel);
-        kv_df = kv_mat;
-        kv_df.attr ("names") = unique_vals.k_rel;
+        kv_mat.attr ("names") = unique_vals.k_rel;
+        if (kv_mat.nrow () > 0 && kv_mat.ncol () > 0)
+            kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
         multipolygons.slot ("data") = kv_df;
     }
     rel_id.clear ();
@@ -476,13 +477,14 @@ void osm_convert::convert_multiline_to_sp (Rcpp::S4 &multilines, const Relations
     multilines = sp_lines_call.eval ();
     multilines.slot ("lines") = outList;
 
-    Rcpp::DataFrame kv_df;
+    Rcpp::DataFrame kv_df = R_NilValue;
     if (rel_id.size () > 0)
     {
         kv_mat.attr ("names") = unique_vals.k_rel;
         kv_mat.attr ("dimnames") = Rcpp::List::create (rel_id, unique_vals.k_rel);
-        kv_df = kv_mat;
-        kv_df.attr ("names") = unique_vals.k_rel;
+        kv_mat.attr ("names") = unique_vals.k_rel;
+        if (kv_mat.nrow () > 0 && kv_mat.ncol () > 0)
+            kv_df = osm_convert::restructure_kv_mat (kv_mat, true);
         multilines.slot ("data") = kv_df;
     }
     rel_id.clear ();

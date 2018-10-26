@@ -85,10 +85,13 @@ void osm_sp::get_osm_nodes (Rcpp::S4 &sp_points, const Nodes &nodes,
     ptxy.attr ("dimnames") = dimnames;
     dimnames.erase (0, static_cast <int> (dimnames.size ()));
 
-    kv_mat.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
-
-    Rcpp::DataFrame kv_df= kv_mat;
-    kv_df.attr ("names") = unique_vals.k_point;
+    Rcpp::DataFrame kv_df = R_NilValue;
+    if (unique_vals.k_point.size () > 0)
+    {
+        kv_mat.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
+        kv_mat.attr ("names") = unique_vals.k_point;
+        kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
+    }
 
     Rcpp::Language points_call ("new", "SpatialPoints");
     Rcpp::Language sp_points_call ("new", "SpatialPointsDataFrame");
@@ -223,16 +226,16 @@ void osm_sp::get_osm_ways (Rcpp::S4 &sp_ways,
         kv_mat = kv_mat2;
     }
 
-    Rcpp::DataFrame kv_df;
+    Rcpp::DataFrame kv_df = R_NilValue;
     if (way_ids.size () > 0)
     {
         kv_mat.attr ("names") = unique_vals.k_way;
         kv_mat.attr ("dimnames") = Rcpp::List::create (waynames, unique_vals.k_way);
-        kv_df = kv_mat;
+        kv_mat.attr ("names") = unique_vals.k_way;
+        if (kv_mat.nrow () > 0 && kv_mat.ncol () > 0)
+            kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
         // TODO: Can names be assigned to R_NilValue?
-        kv_df.attr ("names") = unique_vals.k_way;
-    } else
-        kv_df = R_NilValue;
+    }
 
     if (geom_type == "line")
     {
