@@ -1,11 +1,17 @@
 0.0.8.099
 ===================
 Major changes:
+- Structure of `osmdata` object modified to replace former `$timestamp` field
+  with `$meta` field containing a list of `$timestamp`, `$OSM_version`
+  (currently 0.6), and `$overpass_version`.
 
 Minor changes:
+- vignette updated
 - Overpass URL now randomly selected from the four primary servers (see
   https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances),
   thanks to @JimShady.
+- bug fix for osmdata_sp() (see #56)
+- osmdata_sp() fixed to return osm_id values (see #131; thanks @JimShady).
 
 0.0.8
 ===================
