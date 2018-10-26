@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">osmdata</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.7.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.8.99</span>
       </span>
     </div>
 
@@ -76,19 +76,27 @@
 <div id="installation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(osmdata)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co">#&gt; Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">packageVersion</span>(<span class="st">"osmdata"</span>)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co">#&gt; [1] '0.0.7'</span></a></code></pre></div>
+<p>To install (note that the CRAN version does not currently work with the Overpass API):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># Install from CRAN </span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">install.packages</span>(<span class="st">"osmdata"</span>)</a>
+<a class="sourceLine" id="cb1-3" title="3"></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="co"># Alternatively, install the development version</span></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="co"># install.packages("devtools")</span></a>
+<a class="sourceLine" id="cb1-6" title="6">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ropensci/osmdata"</span>)</a></code></pre></div>
+<p>To load the package and check the version:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">library</span>(osmdata)</a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="co">#&gt; Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright</span></a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="kw">packageVersion</span>(<span class="st">"osmdata"</span>)</a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt; [1] '0.0.8'</span></a></code></pre></div>
 </div>
 <div id="usage" class="section level3">
 <h3 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h3>
 <p><a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a> queries can be built from a base query constructed with <code>opq</code> followed by <code>add_osm_feature</code>. The corresponding OSM objects are then downloaded and converted to <code>R Simple Features (sf)</code> objects with <code><a href="reference/osmdata_sf.html">osmdata_sf()</a></code> or to <code>R Spatial (sp)</code> objects with <code><a href="reference/osmdata_sp.html">osmdata_sp()</a></code>. For example,</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">q0 &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span>(<span class="dt">bbox =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.27</span>, <span class="fl">51.47</span>, <span class="fl">-0.20</span>, <span class="fl">51.50</span>)) <span class="co"># Chiswick Eyot in London, U.K.</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">q1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_osm_feature.html">add_osm_feature</a></span>(q0, <span class="dt">key =</span> <span class="st">'name'</span>, <span class="dt">value =</span> <span class="st">"Thames"</span>, <span class="dt">value_exact =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>(q1)</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">x</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">q0 &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span>(<span class="dt">bbox =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.27</span>, <span class="fl">51.47</span>, <span class="fl">-0.20</span>, <span class="fl">51.50</span>)) <span class="co"># Chiswick Eyot in London, U.K.</span></a>
+<a class="sourceLine" id="cb3-2" title="2">q1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_osm_feature.html">add_osm_feature</a></span>(q0, <span class="dt">key =</span> <span class="st">'name'</span>, <span class="dt">value =</span> <span class="st">"Thames"</span>, <span class="dt">value_exact =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb3-3" title="3">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>(q1)</a>
+<a class="sourceLine" id="cb3-4" title="4">x</a></code></pre></div>
 <pre><code>#&gt;  Object of class 'osmdata' with:
 #&gt;                   $bbox : 51.47,-0.27,51.5,-0.2
 #&gt;          $overpass_call : The call submitted to the overpass API
@@ -99,12 +107,12 @@
 #&gt;         $osm_multilines : 'sf' Simple Features Collection with 5 multilinestrings
 #&gt;      $osm_multipolygons : 'sf' Simple Features Collection with 3 multipolygons</code></pre>
 <p>OSM data can also be downloaded in OSM XML format with <code><a href="reference/osmdata_xml.html">osmdata_xml()</a></code> and saved for use with other software.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="reference/osmdata_xml.html">osmdata_xml</a></span>(q1, <span class="st">"data.xml"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="reference/osmdata_xml.html">osmdata_xml</a></span>(q1, <span class="st">"data.xml"</span>)</a></code></pre></div>
 <p>The <code>XML</code> document is returned silently and may be passed directly to <code><a href="reference/osmdata_sp.html">osmdata_sp()</a></code> or <code><a href="reference/osmdata_sf.html">osmdata_sf()</a></code></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">doc &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_xml.html">osmdata_xml</a></span>(q1, <span class="st">"data.xml"</span>)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>(q1, doc)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">doc &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_xml.html">osmdata_xml</a></span>(q1, <span class="st">"data.xml"</span>)</a>
+<a class="sourceLine" id="cb6-2" title="2">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>(q1, doc)</a></code></pre></div>
 <p>Or data can be read from a previously downloaded file:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>(q1, <span class="st">"data.xml"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>(q1, <span class="st">"data.xml"</span>)</a></code></pre></div>
 <p>For more details, see the <a href="https://ropensci.github.io/osmdata/">website</a></p>
 </div>
 <div id="style-guide" class="section level3">
@@ -123,28 +131,28 @@
 <div id="citation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#citation" class="anchor"></a>Citation</h3>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">citation</span> (<span class="st">"osmdata"</span>)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; To cite osmdata in publications use:</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt;   Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon (2017).</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt;   osmdata Journal of Open Source Software, 2(14). URL</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt;   https://doi.org/10.21105/joss.00305</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt;   @Article{,</span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt;     title = {osmdata},</span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt;     author = {Mark Padgham and Bob Rudis and Robin Lovelace and Maëlle Salmon},</span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt;     journal = {The Journal of Open Source Software},</span></a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt;     year = {2017},</span></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt;     volume = {2},</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt;     number = {14},</span></a>
-<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt;     month = {jun},</span></a>
-<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt;     publisher = {The Open Journal},</span></a>
-<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt;     url = {https://doi.org/10.21105/joss.00305},</span></a>
-<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt;     doi = {10.21105/joss.00305},</span></a>
-<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt;   }</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">citation</span> (<span class="st">"osmdata"</span>)</a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-3" title="3"><span class="co">#&gt; To cite osmdata in publications use:</span></a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="co">#&gt;   Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon (2017).</span></a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="co">#&gt;   osmdata Journal of Open Source Software, 2(14). URL</span></a>
+<a class="sourceLine" id="cb8-7" title="7"><span class="co">#&gt;   https://doi.org/10.21105/joss.00305</span></a>
+<a class="sourceLine" id="cb8-8" title="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-9" title="9"><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></a>
+<a class="sourceLine" id="cb8-10" title="10"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-11" title="11"><span class="co">#&gt;   @Article{,</span></a>
+<a class="sourceLine" id="cb8-12" title="12"><span class="co">#&gt;     title = {osmdata},</span></a>
+<a class="sourceLine" id="cb8-13" title="13"><span class="co">#&gt;     author = {Mark Padgham and Bob Rudis and Robin Lovelace and Maëlle Salmon},</span></a>
+<a class="sourceLine" id="cb8-14" title="14"><span class="co">#&gt;     journal = {The Journal of Open Source Software},</span></a>
+<a class="sourceLine" id="cb8-15" title="15"><span class="co">#&gt;     year = {2017},</span></a>
+<a class="sourceLine" id="cb8-16" title="16"><span class="co">#&gt;     volume = {2},</span></a>
+<a class="sourceLine" id="cb8-17" title="17"><span class="co">#&gt;     number = {14},</span></a>
+<a class="sourceLine" id="cb8-18" title="18"><span class="co">#&gt;     month = {jun},</span></a>
+<a class="sourceLine" id="cb8-19" title="19"><span class="co">#&gt;     publisher = {The Open Journal},</span></a>
+<a class="sourceLine" id="cb8-20" title="20"><span class="co">#&gt;     url = {https://doi.org/10.21105/joss.00305},</span></a>
+<a class="sourceLine" id="cb8-21" title="21"><span class="co">#&gt;     doi = {10.21105/joss.00305},</span></a>
+<a class="sourceLine" id="cb8-22" title="22"><span class="co">#&gt;   }</span></a></code></pre></div>
 </div>
 <div id="code-of-conduct" class="section level3">
 <h3 class="hasAnchor">
