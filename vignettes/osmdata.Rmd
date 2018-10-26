@@ -848,7 +848,34 @@ sp::plot(lcnr9$osm_lines)
 
 ![](https://cloud.githubusercontent.com/assets/1825120/23709879/c98e2c2c-0412-11e7-86b8-1ffc95aab5a1.png)
 
-## 5. Related Packages
+## 5. Additional Functionality
+
+This section briefly describes a few of additional functions, with additional
+detail provided in the help files for each of these function.
+
+1. The `trim_osmdata()` function, as described above in the sub-section on
+   bounding boxes, trims an `osmdata` object to within a defined bounding
+   *polygon*, rather than bounding box.
+2. The `opq_osm_id()` function allows queries for particular OSM objects by
+   their OSM-allocated ID values.
+3. The `osm_poly2line()` function converts all `$osm_polygons` items of an
+   `osmdata` object to `$osm_lines`. These objects remain polygonal in form,
+   through sharing identical start and end points, but can then be treated as
+   simple lines. This is important for polygonal highways, which are
+   automatically classified as `$osm_polygons` simply because they form closed
+   loops. The function enables all highways to be grouped together (as
+   `$osm_lines`) regardless of the form.
+4. The `unique_osmdata()` function removes redundant items from the different
+   components of an `osmdata` object. A multilinestring, for example, is
+   composed of multiple lines, and each line is composed of multiple points. For
+   a multilinestring, an `osmdata` object will thus contain several
+   `$osm_lines`, and for each of these several `$osm_points`. This function
+   removes all of these redundant objects, so that `$osm_lines` only contains
+   lines which are not part of any higher-level objects, and `$osm_points` only
+   contains points which are not part of any higher-level objects.
+
+
+## 6. Related Packages
 
 @eugster_osmar:_2012 describe `osmar`, an R package for handling OSM data
 that enables visualisation, search and even rudimentary routing operations.
@@ -865,4 +892,4 @@ and `overpass`, a [GitHub package](https://github.com/hrbrmstr/overpass)
 by Bob Rudis that provides an R interface to the 
 [overpass](http://overpass-api.de/) API.
 
-## 6. References
+## 7. References

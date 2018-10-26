@@ -122,9 +122,9 @@ intersect a given point).</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>osmdata</span>(<span class='kw'>bbox</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>overpass_call</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>osm_points</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>osm_lines</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>osm_polygons</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>osm_multilines</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>osm_multipolygons</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>timestamp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>osmdata</span>(<span class='kw'>bbox</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>overpass_call</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>meta</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>osm_points</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>osm_lines</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>osm_polygons</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>osm_multilines</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>osm_multipolygons</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,6 +136,11 @@ intersect a given point).</p>
     <tr>
       <th>overpass_call</th>
       <td><p>overpass_call</p></td>
+    </tr>
+    <tr>
+      <th>meta</th>
+      <td><p>metadata of overpass query, including timestamps and version
+numbers</p></td>
     </tr>
     <tr>
       <th>osm_points</th>
@@ -162,10 +167,6 @@ of multilinestrings or <code>sp</code> SpatialLinesDataFrame</p></td>
       <td><p>OSM relations as <code>sf</code> Simple Features
 Collection of multipolygons or <code>sp</code>
 SpatialPolygonsDataFrame</p></td>
-    </tr>
-    <tr>
-      <th>timestamp</th>
-      <td><p>timestamp of OSM query</p></td>
     </tr>
     <tr>
       <th>...</th>

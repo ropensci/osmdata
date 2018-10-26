@@ -464,15 +464,26 @@
 <p><img src="https://cloud.githubusercontent.com/assets/1825120/23709879/c98e2c2c-0412-11e7-86b8-1ffc95aab5a1.png"></p>
 </div>
 </div>
+<div id="additional-functionality" class="section level2">
+<h2 class="hasAnchor">
+<a href="#additional-functionality" class="anchor"></a>5. Additional Functionality</h2>
+<p>This section briefly describes a few of additional functions, with additional detail provided in the help files for each of these function.</p>
+<ol style="list-style-type: decimal">
+<li>The <code><a href="../reference/trim_osmdata.html">trim_osmdata()</a></code> function, as described above in the sub-section on bounding boxes, trims an <code>osmdata</code> object to within a defined bounding <em>polygon</em>, rather than bounding box.</li>
+<li>The <code><a href="../reference/opq_osm_id.html">opq_osm_id()</a></code> function allows queries for particular OSM objects by their OSM-allocated ID values.</li>
+<li>The <code><a href="../reference/osm_poly2line.html">osm_poly2line()</a></code> function converts all <code>$osm_polygons</code> items of an <code>osmdata</code> object to <code>$osm_lines</code>. These objects remain polygonal in form, through sharing identical start and end points, but can then be treated as simple lines. This is important for polygonal highways, which are automatically classified as <code>$osm_polygons</code> simply because they form closed loops. The function enables all highways to be grouped together (as <code>$osm_lines</code>) regardless of the form.</li>
+<li>The <code><a href="../reference/unique_osmdata.html">unique_osmdata()</a></code> function removes redundant items from the different components of an <code>osmdata</code> object. A multilinestring, for example, is composed of multiple lines, and each line is composed of multiple points. For a multilinestring, an <code>osmdata</code> object will thus contain several <code>$osm_lines</code>, and for each of these several <code>$osm_points</code>. This function removes all of these redundant objects, so that <code>$osm_lines</code> only contains lines which are not part of any higher-level objects, and <code>$osm_points</code> only contains points which are not part of any higher-level objects.</li>
+</ol>
+</div>
 <div id="related-packages" class="section level2">
 <h2 class="hasAnchor">
-<a href="#related-packages" class="anchor"></a>5. Related Packages</h2>
+<a href="#related-packages" class="anchor"></a>6. Related Packages</h2>
 <p><span class="citation">Eugster and Schlesinger (2012)</span> describe <code>osmar</code>, an R package for handling OSM data that enables visualisation, search and even rudimentary routing operations. <code>osmar</code> is not user friendly or able to download OSM data flexibly, as reported in an <a href="http://eprints.whiterose.ac.uk/77643/">early tutorial</a> comparing R and QGIS for handling OSM data <span class="citation">(Lovelace 2014)</span>. Note also that the <code>osmar</code> package does not work at present, and can not be used for accessing OSM data.</p>
 <p><code>osmdata</code> builds on two previous R packages: <code>osmplotr</code>, a package <a href="https://cran.r-project.org/package=osmplotr">available from CRAN</a> for accessing and plotting OSM data <span class="citation">(Padgham 2016)</span> and <code>overpass</code>, a <a href="https://github.com/hrbrmstr/overpass">GitHub package</a> by Bob Rudis that provides an R interface to the <a href="http://overpass-api.de/">overpass</a> API.</p>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2 class="hasAnchor">
-<a href="#references" class="anchor"></a>6. References</h2>
+<a href="#references" class="anchor"></a>7. References</h2>
 <div id="refs" class="references">
 <div id="ref-eugster_osmar:_2012">
 <p>Eugster, Manuel J a, and Thomas Schlesinger. 2012. “Osmar: OpenStreetMap and R.” <em>The R Journal</em> 5 (1): 53–64.</p>
@@ -502,8 +513,9 @@
       <li><a href="#the-overpass-api">2. The overpass API</a></li>
       <li><a href="#the-osmdata-object">3. The <code>osmdata</code> object</a></li>
       <li><a href="#recursive-searching">4. Recursive searching</a></li>
-      <li><a href="#related-packages">5. Related Packages</a></li>
-      <li><a href="#references">6. References</a></li>
+      <li><a href="#additional-functionality">5. Additional Functionality</a></li>
+      <li><a href="#related-packages">6. Related Packages</a></li>
+      <li><a href="#references">7. References</a></li>
       </ul>
 </div>
       </div>
