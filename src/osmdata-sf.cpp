@@ -312,9 +312,10 @@ void osm_sf::get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
 
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
-    unsigned int count = 0;
     for (auto wi = way_ids.begin (); wi != way_ids.end (); ++wi)
     {
+        unsigned int count = static_cast <unsigned int> (
+                std::distance (way_ids.begin (), wi));
         Rcpp::checkUserInterrupt ();
         waynames.push_back (std::to_string (*wi));
         Rcpp::NumericMatrix nmat;
@@ -333,7 +334,7 @@ void osm_sf::get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
             wayList [count] = polyList_temp;
         }
         auto wj = ways.find (*wi);
-        osm_convert::get_value_mat_way (wj, unique_vals, kv_mat, count++);
+        osm_convert::get_value_mat_way (wj, unique_vals, kv_mat, count);
     } // end for it over poly_ways
 
     wayList.attr ("names") = waynames;
@@ -383,10 +384,10 @@ void osm_sf::get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
 
     std::vector <std::string> ptnames;
     ptnames.reserve (nodes.size ());
-    // TODO: Repalce count with std::distance
-    unsigned int count = 0;
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
+        unsigned int count = static_cast <unsigned int> (
+                std::distance (nodes.begin (), ni));
         Rcpp::checkUserInterrupt ();
         Rcpp::NumericVector ptxy = Rcpp::NumericVector::create (NA_REAL, NA_REAL);
         ptxy.attr ("class") = Rcpp::CharacterVector::create ("XY", "POINT", "sfg");
@@ -403,7 +404,6 @@ void osm_sf::get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
                     unique_vals.k_point.find (key)));
             kv_mat (count, ndi) = kv_iter->second;
         }
-        count++;
     }
     if (unique_vals.k_point.size () > 0)
     {
