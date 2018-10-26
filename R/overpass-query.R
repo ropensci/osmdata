@@ -1,12 +1,11 @@
 #' Retrieve status of the Overpass API
 #'
 #' @param quiet if \code{FALSE} display a status message
-#' @param wait If status is unavailable, wait this long (in s)
 #' @return an invisible list of whether the API is available along with the
 #'         text of the message from Overpass and the timestamp of the
 #'         next available slot
 #' @export
-overpass_status <- function (quiet=FALSE, wait=10)
+overpass_status <- function (quiet=FALSE)
 {
     available <- FALSE
     slot_time <- status <- st_type <- NULL
@@ -24,12 +23,8 @@ overpass_status <- function (quiet=FALSE, wait=10)
         if (!quiet) message (status)
     } else
     {
-        ntrials <- 0
-        while (is.null (status) & ntrials < 10)
-        {
-            ntrials <- ntrials + 1
-            status <- httr::GET (status_url, httr::timeout (100))
-        }
+        status <- httr::RETRY ("GET", status_url, timeout = 100,
+                               times = 10)
         if (!is.null (status))
         {
             status <- httr::content (status, encoding = 'UTF-8')
@@ -167,7 +162,7 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
         overpass_url <- 'http://dev.overpass-api.de/test753/interpreter'
 
     if (o_stat$available) {
-        res <- httr::POST (overpass_url, body = query)
+        res <- httr::RETRY ("POST", overpass_url, body = query)
     } else {
         if (wait) {
             wait <- max(0, as.numeric (difftime (o_stat$next_slot, Sys.time(),

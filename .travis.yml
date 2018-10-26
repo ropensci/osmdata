@@ -7,8 +7,7 @@ cache: packages
 # precise fails because unmet deps in libgdal-dev can not be insalled
 
 matrix:
-    allow_failures: # temporarily enabled. TODO: disable
-        -os: osx
+    env:
     include:
         - os: linux
           r: release
@@ -28,6 +27,8 @@ matrix:
           #r: devel
           #before_install: ''
           #disable_homebrew: true
+    allow_failures: # temporarily enabled. TODO: disable
+        -os: osx
 
 before_install:
     - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
