@@ -4,6 +4,7 @@ Major changes:
 - Structure of `osmdata` object modified to replace former `$timestamp` field
   with `$meta` field containing a list of `$timestamp`, `$OSM_version`
   (currently 0.6), and `$overpass_version`.
+- add_osm_feature() now accepts vectors of multiple values (see #139).
 
 Minor changes:
 - vignette updated

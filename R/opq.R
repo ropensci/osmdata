@@ -56,7 +56,8 @@ opq <- function (bbox = NULL, timeout = 25, memsize)
 #' @param opq An \code{overpass_query} object
 #' @param key feature key
 #' @param value value for feature key; can be negated with an initial
-#' exclamation mark, \code{value = "!this"}.
+#' exclamation mark, \code{value = "!this"}, and can also be a vector,
+#' \code{value = c ("this", "that")}.
 #' @param key_exact If FALSE, \code{key} is not interpreted exactly; see
 #' \url{https://wiki.openstreetmap.org/wiki/Overpass_API}
 #' @param value_exact If FALSE, \code{value} is not interpreted exactly
@@ -137,7 +138,12 @@ add_osm_feature <- function (opq, key, value, key_exact = TRUE,
         feature <- paste0 (sprintf (' ["%s"]', key))
     } else
     {
-        if (substring (value, 1, 1) == "!")
+        if (length (value) > 1)
+        {
+            # convert to OR'ed regex:
+            value <- paste0 (value, collapse = "|")
+            bind <- "~"
+        } else if (substring (value, 1, 1) == "!")
         {
             bind <- paste0 ("!", bind)
             value <- substring (value, 2, nchar (value))

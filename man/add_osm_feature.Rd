@@ -17,7 +17,8 @@ add_feature(opq, key, value, key_exact = TRUE, value_exact = TRUE,
 \item{key}{feature key}
 
 \item{value}{value for feature key; can be negated with an initial
-exclamation mark, \code{value = "!this"}.}
+exclamation mark, \code{value = "!this"}, and can also be a vector,
+\code{value = c ("this", "that")}.}
 
 \item{key_exact}{If FALSE, \code{key} is not interpreted exactly; see
 \url{https://wiki.openstreetmap.org/wiki/Overpass_API}}
