@@ -151,7 +151,7 @@ osmdata_pbf <- function(q, filename, quiet=TRUE) {
 #'             add_osm_feature (key="historic", value="ruins") %>%
 #'             osmdata_sp ()
 #' }
-osmdata_sp <- function(q, doc, quiet=TRUE, encoding = 'UTF-8')
+osmdata_sp <- function(q, doc, quiet = TRUE, encoding = 'UTF-8')
 {
     obj <- osmdata () # uses class def
     if (missing (q) & !quiet)
@@ -165,6 +165,37 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding = 'UTF-8')
     else
         stop ('q must be an overpass query or a character string')
 
+    temp <- fill_overpass_data (obj, doc)
+    obj <- temp$obj
+    doc <- temp$doc
+
+    if (!quiet)
+        message ('converting OSM data to sp format')
+    res <- rcpp_osmdata_sp (doc)
+    if (is.null (obj$bbox))
+        obj$bbox <- paste (res$bbox, collapse = ' ')
+    obj$osm_points <- res$points
+    obj$osm_lines <- res$lines
+    obj$osm_polygons <- res$polygons
+    obj$osm_multilines <- res$multilines
+    obj$osm_multipolygons <- res$multipolygons
+
+    class (obj) <- c (class (obj), "osmdata_sp")
+
+    return (obj)
+}
+
+#' fill osmdata object with overpass data and metadata, and return character
+#' version of OSM xml document
+#'
+#' @param obj Initial \code{osmdata} object
+#' @param doc Document contain XML-formatted version of OSM data
+#' @inheritParams osmdata_sp
+#' @return List of an \code{osmdata} object (\code{obj}), and XML document
+#' (\code{doc})
+#' @noRd
+fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8")
+{
     if (missing (doc))
     {
         doc <- overpass_query (query = obj$overpass_call, quiet = quiet,
@@ -187,21 +218,7 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding = 'UTF-8')
                       overpass_version = get_overpass_version (doc))
         doc <- as.character (doc)
     }
-
-    if (!quiet)
-        message ('converting OSM data to sp format')
-    res <- rcpp_osmdata_sp (doc)
-    if (is.null (obj$bbox))
-        obj$bbox <- paste (res$bbox, collapse = ' ')
-    obj$osm_points <- res$points
-    obj$osm_lines <- res$lines
-    obj$osm_polygons <- res$polygons
-    obj$osm_multilines <- res$multilines
-    obj$osm_multipolygons <- res$multipolygons
-
-    class (obj) <- c (class (obj), "osmdata_sp")
-
-    return (obj)
+    list (obj = obj, doc = doc)
 }
 
 #' Make an 'sf' object from an 'sfc' list and associated data matrix returned
@@ -245,6 +262,7 @@ make_sf <- function (...)
     return (df)
 }
 
+sf_types <- c ("points", "lines", "polygons", "multilines", "multipolygons")
 
 #' Return an OSM Overpass query as an \code{osmdata} object in \code{sf} format.
 #'
@@ -284,28 +302,9 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     else
         stop ('q must be an overpass query or a character string')
 
-    if (missing (doc))
-    {
-        doc <- overpass_query (query = obj$overpass_call, quiet = quiet,
-                               encoding = encoding)
-        docx <- xml2::read_xml (doc)
-        obj$meta <- list (timestamp = get_timestamp (docx),
-                      OSM_version = get_osm_version (docx),
-                      overpass_version = get_overpass_version (docx))
-    } else
-    {
-        if (is.character (doc))
-        {
-            if (!file.exists (doc))
-                stop ("file ", doc, " does not exist")
-            doc <- xml2::read_xml (doc)
-        }
-        obj$meta <- list (timestamp = get_timestamp (doc),
-                      OSM_version = get_osm_version (doc),
-                      overpass_version = get_overpass_version (doc))
-        doc <- as.character (doc)
-    }
-
+    temp <- fill_overpass_data (obj, doc)
+    obj <- temp$obj
+    doc <- temp$doc
 
     if (!quiet)
         message ('converting OSM data to sf format')
@@ -313,50 +312,25 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     if (missing (q))
         obj$bbox <- paste (res$bbox, collapse = ' ')
 
-    # This is repetitive, but sf uses the allocated names, so get and assign can
-    # not be used.
-    # TODO: Find a way to loop this
-    #nms <- c ("points", "lines", "polygons", "multilines", "multipolygons")
-    #for (n in nms)
-    #{
-    #    onm <- paste0 ("osm_", n)
-    #    if (length (res [[paste0 (n, "_kv")]]) > 0)
-    #        obj [[onm]] <- make_sf (res [[n]], res [[paste0 (n, "_kv")]])
-    #    else
-    #        obj [[onm]] <- make_sf (res [[n]])
-    #}
-
-    geometry <- res$points
-    if (length (res$points_kv) > 0)
-        obj$osm_points <- make_sf (geometry, res$points_kv)
-    else
-        obj$osm_points <- make_sf (geometry)
-
-    geometry <- res$lines
-    if (length (res$lines_kv) > 0)
-        obj$osm_lines <- make_sf (geometry, res$lines_kv)
-    else
-        obj$osm_lines <- make_sf (geometry)
-
-    geometry <- res$polygons
-    if (length (res$polygons_kv) > 0)
-        obj$osm_polygons <- make_sf (geometry, res$polygons_kv)
-    else
-        obj$osm_polygons <- make_sf (geometry)
-
-    geometry <- res$multilines
-    if (length (res$multilines_kv) > 0)
-        obj$osm_multilines <- make_sf (geometry, res$multilines_kv)
-    else
-        obj$osm_multilines <- make_sf (geometry)
-
-    geometry <- res$multipolygons
-    if (length (res$multipolygons_kv) > 0)
-        obj$osm_multipolygons <- make_sf (geometry, res$multipolygons_kv)
-    else
-        obj$osm_multipolygons <- make_sf (geometry)
-
+    for (ty in sf_types)
+        obj <- fill_objects (res, obj, type = ty)
     class (obj) <- c (class (obj), "osmdata_sf")
+
+    return (obj)
+}
+
+fill_objects <- function (res, obj, type = "points")
+{
+    if (!type %in% sf_types)
+        stop ("type must be one of ", paste (sf_types, collapse = " "))
+
+    geometry <- res [[type]]
+    obj_name <- paste0 ("osm_", type)
+    kv_name <- paste0 (type, "_kv")
+    if (length (res [[kv_name]]) > 0)
+        obj [[obj_name]] <- make_sf (geometry, res [[kv_name]])
+    else
+        obj [[obj_name]] <- make_sf (geometry)
 
     return (obj)
 }
