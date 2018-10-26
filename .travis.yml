@@ -6,8 +6,8 @@ cache: packages
 
 # precise fails because unmet deps in libgdal-dev can not be insalled
 
+env:
 matrix:
-    env:
     include:
         - os: linux
           r: release
@@ -28,7 +28,7 @@ matrix:
           #before_install: ''
           #disable_homebrew: true
     allow_failures: # temporarily enabled. TODO: disable
-        -os: osx
+        - os: osx
           r: release
           before_install: ''
           disable_homebrew: true
