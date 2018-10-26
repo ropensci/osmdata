@@ -389,10 +389,10 @@ void osm_sp::get_osm_relations (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
         }
     }
 
-    osm_convert::convert_multipoly_to_sp (multipolygons, rels, lon_arr_mp, lat_arr_mp, 
-        rowname_arr_mp, id_vec_mp, unique_vals);
-    osm_convert::convert_multiline_to_sp (multilines, rels, lon_arr_ls, lat_arr_ls, 
-        rowname_arr_ls, id_vec_ls, unique_vals);
+    osm_convert::convert_multipoly_to_sp (multipolygons, rels, lon_arr_mp,
+            lat_arr_mp, rowname_arr_mp, id_vec_mp, unique_vals);
+    osm_convert::convert_multiline_to_sp (multilines, rels, lon_arr_ls,
+            lat_arr_ls, rowname_arr_ls, id_vec_ls, unique_vals);
 
     // ****** clean up *****
     lon_arr_mp.clear ();

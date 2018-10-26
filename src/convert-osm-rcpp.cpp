@@ -295,7 +295,6 @@ void osm_convert::convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relati
         const string_arr3 &rowname_arr, const string_arr2 &id_vec,
         const UniqueVals &unique_vals)
 {
-
     Rcpp::Environment sp_env = Rcpp::Environment::namespace_env ("sp");
     Rcpp::Function Polygon = sp_env ["Polygon"];
     Rcpp::Language polygons_call ("new", "Polygons");
@@ -353,12 +352,17 @@ void osm_convert::convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relati
 
             Rcpp::S4 polygons = polygons_call.eval ();
             polygons.slot ("Polygons") = outList_i;
-            // convert id_vec to single string
-            std::string id_vec_str = id_vec [i] [0];
-            for (unsigned int j = 1;
-                    j < static_cast <unsigned int> (id_vec [i].size ()); j++)
-                id_vec_str += "." + id_vec [i] [j];
-            polygons.slot ("ID") = id_vec_str;
+            // Issue #36 caused by data with one item having no actual data for
+            // one item, so id_vec[i].size = lon_vec[i].size = ... = 0
+            if (id_vec [i].size () > 0)
+            {
+                // convert id_vec to single string
+                std::string id_vec_str = id_vec [i] [0];
+                for (unsigned int j = 1;
+                        j < static_cast <unsigned int> (id_vec [i].size ()); j++)
+                    id_vec_str += "." + id_vec [i] [j];
+                polygons.slot ("ID") = id_vec_str;
+            }
             //polygons.slot ("ID") = id_vec [i]; // sp expects char not vec!
             polygons.slot ("plotOrder") = plotorder;
             //polygons.slot ("labpt") = poly.slot ("labpt");
@@ -373,6 +377,7 @@ void osm_convert::convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relati
     Rcpp::Language sp_polys_call ("new", "SpatialPolygonsDataFrame");
     multipolygons = sp_polys_call.eval ();
     multipolygons.slot ("polygons") = outList;
+
     // Fill plotOrder slot with int vector - this has to be int, not
     // unsigned int!
     std::vector <int> plotord (rels.size ());
