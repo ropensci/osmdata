@@ -8,8 +8,9 @@ print.osmdata <- function (x, ...)
 
     msg <- c (msg, c (rep (' ', 17), '$bbox : ', x$bbox, '\n'))
 
-    objs <- c ("overpass_call", "timestamp")
-    prnts <- c ("The call submitted to the overpass API", x$timestamp)
+    objs <- c ("overpass_call", "meta")
+    prnts <- c ("The call submitted to the overpass API",
+                "metadata including timestamp and version numbers")
     for (i in seq (objs))
         if (!is.null (x [objs [i]]))
         {
@@ -80,7 +81,7 @@ c.osmdata <- function (...)
     res <- osmdata ()
     res$bbox <- x [[1]]$bbox
     res$overpass_call <- x [[1]]$overpass_call
-    res$timestamp <- x [[1]]$timestamp
+    res$meta <- x [[1]]$meta
 
     if (sf)
     {

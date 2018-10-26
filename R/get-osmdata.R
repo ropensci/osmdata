@@ -30,6 +30,28 @@ get_timestamp <- function (doc)
     paste ('[', wday_t, wday, mon, year, hms, ']')
 }
 
+#' Get OSM database version
+#'
+#' @param doc OSM XML document
+#'
+#' @return Single number (as character string) representing OSM database version
+#' @noRd
+get_osm_version <- function (doc)
+{
+    xml2::xml_text (xml2::xml_find_all (doc, "//osm/@version"))
+}
+
+#' Get overpass version
+#'
+#' @param doc OSM XML document
+#'
+#' @return Single number (as character string) representing overpass version
+#' @noRd
+get_overpass_version <- function (doc)
+{
+    xml2::xml_text (xml2::xml_find_all (doc, "//osm/@generator"))
+}
+
 #' Return an OSM Overpass query in XML format 
 #' Read an (XML format) OSM Overpass response from a string, a connection,
 #' or a raw vector.
@@ -148,7 +170,10 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding = 'UTF-8')
         doc <- overpass_query (query = obj$overpass_call, quiet = quiet,
                                encoding = encoding)
 
-        obj$timestamp <- get_timestamp ()
+        docx <- xml2::read_xml (doc)
+        obj$meta <- list (timestamp = get_timestamp (docx),
+                      OSM_version = get_osm_version (docx),
+                      overpass_version = get_overpass_version (docx))
     } else
     {
         if (is.character (doc))
@@ -157,7 +182,9 @@ osmdata_sp <- function(q, doc, quiet=TRUE, encoding = 'UTF-8')
                 stop ("file ", doc, " does not exist")
             doc <- xml2::read_xml (doc)
         }
-        obj$timestamp <- get_timestamp (doc)
+        obj$meta <- list (timestamp = get_timestamp (doc),
+                      OSM_version = get_osm_version (doc),
+                      overpass_version = get_overpass_version (doc))
         doc <- as.character (doc)
     }
 
@@ -261,8 +288,10 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     {
         doc <- overpass_query (query = obj$overpass_call, quiet = quiet,
                                encoding = encoding)
-
-        obj$timestamp <- get_timestamp ()
+        docx <- xml2::read_xml (doc)
+        obj$meta <- list (timestamp = get_timestamp (docx),
+                      OSM_version = get_osm_version (docx),
+                      overpass_version = get_overpass_version (docx))
     } else
     {
         if (is.character (doc))
@@ -271,7 +300,9 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
                 stop ("file ", doc, " does not exist")
             doc <- xml2::read_xml (doc)
         }
-        obj$timestamp <- get_timestamp (doc)
+        obj$meta <- list (timestamp = get_timestamp (doc),
+                      OSM_version = get_osm_version (doc),
+                      overpass_version = get_overpass_version (doc))
         doc <- as.character (doc)
     }
 
