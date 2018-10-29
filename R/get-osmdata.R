@@ -334,3 +334,61 @@ fill_objects <- function (res, obj, type = "points")
 
     return (obj)
 }
+
+#' Return an OSM Overpass query as an \code{osmdata} object in \code{silicate}
+#' (\code{SC}) format.
+#'
+#' @param q An object of class `overpass_query` constructed with \code{opq} and
+#'      \code{add_osm_feature}. May be be omitted, in which case the
+#'      \code{osmdata} object will not include the query.
+#' @param doc If missing, \code{doc} is obtained by issuing the overpass query,
+#'      \code{q}, otherwise either the name of a file from which to read data,
+#'      or an object of class \code{XML} returned from \code{osmdata_xml}. 
+#' @param quiet suppress status messages. 
+#' @param encoding Unless otherwise specified XML documents are assumed to be
+#'      encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
+#'      an explicit encoding directive, this allows you to supply a default.
+#' @return An object of class `osmdata` representing the original OSM hierarchy
+#'      of nodes, ways, and relations.
+#' @export
+#'
+#' @note The \code{silicate} format is currently highly experimental, and
+#'      recommended for use only if you really know what you're doing.
+#'
+#' @examples
+#' \dontrun{
+#' hampi_sf <- opq ("hampi india") %>%
+#'             add_osm_feature (key="historic", value="ruins") %>%
+#'             osmdata_sc ()
+#' }
+osmdata_sc <- function(q, doc, quiet=TRUE, encoding) {
+    if (missing (encoding))
+        encoding <- 'UTF-8'
+
+    obj <- osmdata () # uses class def
+    if (missing (q) & !quiet)
+        message ('q missing: osmdata object will not include query')
+    else if (is (q, 'overpass_query'))
+    {
+        obj$bbox <- q$bbox
+        obj$overpass_call <- opq_string (q)
+    } else if (is.character (q))
+        obj$overpass_call <- q
+    else
+        stop ('q must be an overpass query or a character string')
+
+    temp <- fill_overpass_data (obj, doc)
+    obj <- temp$obj
+    doc <- temp$doc
+
+    if (!quiet)
+        message ('converting OSM data to sf format')
+    res <- rcpp_osmdata_sc (doc)
+    if (missing (q))
+        obj$bbox <- paste (res$bbox, collapse = ' ')
+
+    class (obj) <- c (class (obj), "osmdata_sc")
+
+    return (obj)
+}
+

@@ -65,13 +65,14 @@ Rcpp::List osm_sc::get_osm_relations (const Relations &rels,
     for (auto itr = rels.begin (); itr != rels.end (); ++itr)
     {
         nrow_kv += itr->key_val.size ();
-        nrow_memb += itr->relations.size ();
+        nrow_memb += itr->ways.size ();
     }
 
-    Rcpp::DataFrame kv_df (Rcpp::Dimension (nrow_kv, 3));
-    Rcpp::DataFrame rel_df (Rcpp::Dimension (nrow_memb, 3));
+    Rcpp::CharacterMatrix kv_df (Rcpp::Dimension (nrow_kv, 3));
+    Rcpp::CharacterMatrix rel_df (Rcpp::Dimension (nrow_memb, 3));
     // rel_df has [rel ID, member ID, member role]
 
+    int junk = 0; // TODO: Delete
     for (auto itr = rels.begin (); itr != rels.end (); ++itr)
     {
         Rcpp::checkUserInterrupt ();
@@ -81,20 +82,20 @@ Rcpp::List osm_sc::get_osm_relations (const Relations &rels,
 
         unsigned int i = std::distance (rels.begin (), itr);
         ids [i] = itr->id;
-        for (auto r = itr->relations.begin (); r != itr->relations.end (); ++r)
+        for (auto r = relation_ways.begin (); r != relation_ways.end (); ++r)
         {
             unsigned int j = i + static_cast <unsigned int> (
-                    std::distance (itr->relations.begin (), r));
-            rel_df (j, 0) = itr->id;
-            rel_df (j, 1) = std::to_string (r->first);
-            rel_df (j, 2) = r->second;
+                    std::distance (relation_ways.begin (), r));
+            rel_df (j, 0) = std::to_string (itr->id); // relation ID
+            rel_df (j, 1) = std::to_string (r->first); // ref ID of component obj
+            rel_df (j, 2) = r->second; // role of component
         }
 
         for (auto k = itr->key_val.begin (); k != itr->key_val.end (); ++k)
         {
             unsigned int j = i + static_cast <unsigned int> (
                     std::distance (itr->key_val.begin (), k));
-            kv_df (j, 0) = itr->id;
+            kv_df (j, 0) = std::to_string (itr->id);
             kv_df (j, 1) = k->first;
             kv_df (j, 2) = k->second;
         }
@@ -341,7 +342,7 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
      * --------------------------------------------------------------*/
 
     Rcpp::List ret (1);
-    ret [1] = kv_df;
+    ret [0] = kv_df;
 
     std::vector <std::string> retnames {"kv"};
     ret.attr ("names") = retnames;
