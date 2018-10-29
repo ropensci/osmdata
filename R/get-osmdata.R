@@ -384,11 +384,12 @@ osmdata_sc <- function(q, doc, quiet=TRUE, encoding) {
     if (!quiet)
         message ('converting OSM data to sf format')
     res <- rcpp_osmdata_sc (doc)
+
     if (missing (q))
         obj$bbox <- paste (res$bbox, collapse = ' ')
 
     class (obj) <- c (class (obj), "osmdata_sc")
 
-    return (obj)
+    return (res)
 }
 
