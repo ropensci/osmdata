@@ -66,4 +66,8 @@ void convert_multiline_to_sp (Rcpp::S4 &multilines, const Relations &rels,
         const string_arr3 &rowname_arr, const osmt_arr2 &id_vec,
         const UniqueVals &unique_vals);
 
+void convert_relation_to_sc (string_arr2 &members_out,
+        string_arr2 &kv_out, const Relations &rels,
+        const UniqueVals &unique_vals);
+
 } // end namespace osm_convert

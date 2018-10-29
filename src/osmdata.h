@@ -430,3 +430,19 @@ void get_osm_relations (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
 } // end namespace osm_sp
 
 Rcpp::List rcpp_osmdata_sp (const std::string& st);
+
+namespace osm_sc {
+
+Rcpp::List get_osm_relations (const Relations &rels, 
+        const UniqueVals &unique_vals);
+void get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
+        const std::set <osmid_t> way_ids, const Ways &ways, const Nodes &nodes,
+        const UniqueVals &unique_vals, const std::string &geom_type,
+        const Rcpp::NumericVector &bbox, const Rcpp::List &crs);
+void get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
+        const Nodes &nodes, const UniqueVals &unique_vals, 
+        const Rcpp::NumericVector &bbox, const Rcpp::List &crs);
+
+} // end namespace osm_sc
+
+Rcpp::List rcpp_osmdata_sc (const std::string& st);

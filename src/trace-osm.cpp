@@ -31,6 +31,24 @@
 
 #include "trace-osm.h"
 
+/* Traces a single relation of any type (SC only)
+ *
+ * @param itr_rel iterator to XmlData::Relations structure
+ */
+void trace_relation (Relations::const_iterator &itr_rel,
+        osm_str_vec &relation_ways, 
+        std::vector <std::pair <std::string, std::string> > & relation_kv)
+{
+    relation_ways.reserve (itr_rel->ways.size ());
+    for (auto itw = itr_rel->ways.begin (); itw != itr_rel->ways.end (); ++itw)
+            relation_ways.push_back (std::make_pair (itw->first, itw->second));
+
+    relation_kv.reserve (itr_rel->key_val.size ());
+    for (auto itk = itr_rel->key_val.begin ();
+            itk != itr_rel->key_val.end (); ++itk)
+        relation_kv.push_back (std::make_pair (itk->first, itk->second));
+}
+
 
 /* Traces a single multipolygon relation 
  * 
@@ -177,7 +195,6 @@ void trace_multilinestring (Relations::const_iterator &itr_rel,
     {
         auto rwi = relation_ways.begin ();
         ids.push_back (rwi->first);
-        std::string this_role = rwi->second;
         auto wayi = ways.find (rwi->first);
         //if (wayi == ways.end ())
         //    throw std::runtime_error ("way can not be found");

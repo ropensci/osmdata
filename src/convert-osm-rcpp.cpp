@@ -489,3 +489,57 @@ void osm_convert::convert_multiline_to_sp (Rcpp::S4 &multilines, const Relations
     }
     rel_id.clear ();
 }
+
+/* convert_relation_to_sc
+ *
+ * Converts the data contained in all the arguments into an SC object
+ *
+ * @param id_vec 2D array of either <std::string> or <osmid_t> IDs for all ways
+ *        used in the geometry.
+ *
+ * @return Objects pointed to by 'members_out' and 'kv_out' are constructed.
+ */
+void osm_convert::convert_relation_to_sc (string_arr2 &members_out,
+        string_arr2 &kv_out, const Relations &rels,
+        const UniqueVals &unique_vals)
+{
+    int nmembers = 0;
+    for (auto itr = rels.begin (); itr != rels.end (); itr++)
+        nmembers += itr->relations.size ();
+
+    members_out.resize (nmembers);
+    for (auto m: members_out)
+        m.resize (3);
+
+    size_t ncol = unique_vals.k_rel.size ();
+    kv_out.resize (ncol);
+    for (auto k: kv_out)
+        k.resize (rels.size ());
+
+    for (auto itr = rels.begin (); itr != rels.end (); itr++)
+    {
+        const unsigned int rowi = static_cast <unsigned int> (
+                std::distance (rels.begin (), itr));
+
+        // Get all members of that relation and their roles:
+        for (auto ritr = itr->relations.begin ();
+                ritr != itr->relations.end (); ++ritr)
+        {
+            const unsigned int rowj = rowi + static_cast <unsigned int> (
+                    std::distance (itr->relations.begin (), ritr));
+            members_out [rowj] [0] = std::to_string (itr->id);
+            members_out [rowj] [1] = std::to_string (ritr->first); // OSM id
+            members_out [rowj] [2] = ritr->second; // role
+        }
+        
+        // And then key-value pairs
+        for (auto kv_iter = itr->key_val.begin ();
+                kv_iter != itr->key_val.end (); ++kv_iter)
+        {
+            const std::string &key = kv_iter->first;
+            long int coli = std::distance (unique_vals.k_rel.begin (),
+                    unique_vals.k_rel.find (key));
+            kv_out [coli] [rowi] = kv_iter->second;
+        }
+    } // end for itr
+}

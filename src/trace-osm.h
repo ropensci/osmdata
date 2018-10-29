@@ -33,6 +33,10 @@
 
 #include "common.h"
 
+void trace_relation (Relations::const_iterator &itr_rel,
+        osm_str_vec &relation_ways, 
+        std::vector <std::pair <std::string, std::string> > & relation_kv);
+
 void trace_multipolygon (Relations::const_iterator &itr_rel, const Ways &ways,
         const Nodes &nodes, double_arr2 &lon_vec, double_arr2 &lat_vec,
         string_arr2 &rowname_vec, std::vector <std::string> &ids);
