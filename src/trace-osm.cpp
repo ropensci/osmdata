@@ -31,6 +31,7 @@
 
 #include "trace-osm.h"
 
+
 /* Traces a single multipolygon relation 
  * 
  * @param itr_rel iterator to XmlData::Relations structure
@@ -53,12 +54,13 @@ void trace_multipolygon (Relations::const_iterator &itr_rel, const Ways &ways,
     std::vector <std::string> rownames, wayname_vec;
 
     osm_str_vec relation_ways;
+    relation_ways.reserve (itr_rel->ways.size ());
     for (auto itw = itr_rel->ways.begin (); itw != itr_rel->ways.end (); ++itw)
         relation_ways.push_back (std::make_pair (itw->first, itw->second));
     it_osm_str_vec itr_rw;
 
     bool way_okay = true;
-    // Then trace through all those ways and store associated data
+    // Then trace through all those relations and store associated data
     while (relation_ways.size () > 0)
     {
         auto rwi = relation_ways.begin ();
@@ -165,12 +167,12 @@ void trace_multilinestring (Relations::const_iterator &itr_rel,
     std::vector <std::string> rownames;
 
     osm_str_vec relation_ways;
-    relation_ways.reserve (itr_rel->ways.size ());
+    //relation_ways.reserve (itr_rel->ways.size ());
     for (auto itw = itr_rel->ways.begin (); itw != itr_rel->ways.end (); ++itw)
         if (itw->second == role)
             relation_ways.push_back (std::make_pair (itw->first, itw->second));
 
-    // Then trace through all those ways and store associated data
+    // Then trace through all those relations and store associated data
     while (relation_ways.size () > 0)
     {
         auto rwi = relation_ways.begin ();
