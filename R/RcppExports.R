@@ -18,15 +18,12 @@ NULL
 
 #' get_osm_ways
 #'
-#' Store OSM ways as `sf::LINESTRING` or `sf::POLYGON` objects.
-#'
 #' @param wayList Pointer to Rcpp::List to hold the resultant geometries
 #' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
 #' @param way_ids Vector of <osmid_t> IDs of ways to trace
 #' @param ways Pointer to all ways in data set
 #' @param nodes Pointer to all nodes in data set
 #' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
-#' @param geom_type Character string specifying "POLYGON" or "LINESTRING"
 #' @param bbox Pointer to the bbox needed for `sf` construction
 #' @param crs Pointer to the crs needed for `sf` construction
 #' 

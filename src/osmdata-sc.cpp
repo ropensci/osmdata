@@ -56,8 +56,7 @@
 //' @return An Rcpp::List
 //' 
 //' @noRd 
-Rcpp::List osm_sc::get_osm_relations (const Relations &rels, 
-        const UniqueVals &unique_vals)
+Rcpp::List osm_sc::get_osm_relations (const Relations &rels) 
 {
     std::vector <osmid_t> ids (rels.size ()); 
 
@@ -114,80 +113,60 @@ Rcpp::List osm_sc::get_osm_relations (const Relations &rels,
 
 //' get_osm_ways
 //'
-//' Store OSM ways as `sf::LINESTRING` or `sf::POLYGON` objects.
-//'
 //' @param wayList Pointer to Rcpp::List to hold the resultant geometries
 //' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
 //' @param way_ids Vector of <osmid_t> IDs of ways to trace
 //' @param ways Pointer to all ways in data set
 //' @param nodes Pointer to all nodes in data set
 //' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
-//' @param geom_type Character string specifying "POLYGON" or "LINESTRING"
 //' @param bbox Pointer to the bbox needed for `sf` construction
 //' @param crs Pointer to the crs needed for `sf` construction
 //' 
 //' @noRd 
-void osm_sc::get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
-        const std::set <osmid_t> way_ids, const Ways &ways, const Nodes &nodes,
-        const UniqueVals &unique_vals, const std::string &geom_type,
-        const Rcpp::NumericVector &bbox, const Rcpp::List &crs)
+void osm_sc::get_osm_ways (Rcpp::DataFrame &way_df, Rcpp::DataFrame &kv_df,
+        const Ways &ways)
 {
-    if (!(geom_type == "POLYGON" || geom_type == "LINESTRING"))
-        throw std::runtime_error ("geom_type must be POLYGON or LINESTRING");
-    // NOTE that Rcpp `.size()` returns a **signed** int
-    if (static_cast <unsigned int> (wayList.size ()) != way_ids.size ())
-        throw std::runtime_error ("ways and IDs must have same lengths");
-
-    size_t nrow = way_ids.size (), ncol = unique_vals.k_way.size ();
-    std::vector <std::string> waynames;
-    waynames.reserve (way_ids.size ());
-
-    Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
-    std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
-    for (auto wi = way_ids.begin (); wi != way_ids.end (); ++wi)
+    int nrefs = 0, nkv = 0;
+    for (auto wi = ways.begin (); wi != ways.end (); ++wi)
     {
-        unsigned int count = static_cast <unsigned int> (
-                std::distance (way_ids.begin (), wi));
-        Rcpp::checkUserInterrupt ();
-        waynames.push_back (std::to_string (*wi));
-        Rcpp::NumericMatrix nmat;
-        osm_convert::trace_way_nmat (ways, nodes, (*wi), nmat);
-        if (geom_type == "LINESTRING")
-        {
-            nmat.attr ("class") = 
-                Rcpp::CharacterVector::create ("XY", geom_type, "sfg");
-            wayList [count] = nmat;
-        } else // polygons are lists
-        {
-            Rcpp::List polyList_temp = Rcpp::List (1);
-            polyList_temp (0) = nmat;
-            polyList_temp.attr ("class") = 
-                Rcpp::CharacterVector::create ("XY", geom_type, "sfg");
-            wayList [count] = polyList_temp;
-        }
-        auto wj = ways.find (*wi);
-        osm_convert::get_value_mat_way (wj, unique_vals, kv_mat, count);
-    } // end for it over poly_ways
-
-    wayList.attr ("names") = waynames;
-    wayList.attr ("n_empty") = 0;
-    std::stringstream ss;
-    ss.str ("");
-    ss << "sfc_" << geom_type;
-    std::string sfc_type = ss.str ();
-    wayList.attr ("class") = Rcpp::CharacterVector::create (sfc_type, "sfc");
-    wayList.attr ("precision") = 0.0;
-    wayList.attr ("bbox") = bbox;
-    wayList.attr ("crs") = crs;
-
-    kv_df = R_NilValue;
-    if (way_ids.size () > 0)
-    {
-        kv_mat.attr ("names") = unique_vals.k_way;
-        kv_mat.attr ("dimnames") = Rcpp::List::create (waynames, unique_vals.k_way);
-        if (kv_mat.nrow () > 0 && kv_mat.ncol () > 0)
-            kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
+        nrefs += wi->second.nodes.size ();
+        nkv += wi->second.key_val.size ();
     }
+
+    Rcpp::CharacterMatrix way_mat (Rcpp::Dimension (nrefs, 2));
+    Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nkv, 3));
+
+    // TODO: Impelement these properly with std::distance
+    int count_w = 0, count_k = 0;
+    for (auto wi = ways.begin (); wi != ways.end (); ++wi)
+    {
+        Rcpp::checkUserInterrupt ();
+        unsigned int i = static_cast <unsigned int> (
+                std::distance (ways.begin (), wi));
+
+        for (auto wj = wi->second.nodes.begin ();
+                wj != wi->second.nodes.end (); ++wj)
+        {
+            way_mat (count_w, 0) = std::to_string (wi->first);
+            way_mat (count_w++, 1) = std::to_string (*wj);
+        }
+        
+        for (auto kj = wi->second.key_val.begin ();
+                kj != wi->second.key_val.end (); ++kj)
+        {
+            kv_mat (count_k, 0) = std::to_string (wi->first);
+            kv_mat (count_k, 1) = kj->first;
+            kv_mat (count_k++, 2) = kj->second;
+        }
+    }
+    std::vector <std::string> relnames {"id", "ref"};
+    std::vector <std::string> nullvec;
+    way_mat.attr ("dimnames") = Rcpp::List::create (nullvec, relnames);
+    way_df = way_mat;
+
+    std::vector <std::string> kvnames {"id", "key", "value"};
+    kv_mat.attr ("dimnames") = Rcpp::List::create (nullvec, kvnames);
+    kv_df = kv_mat;
 }
 
 //' get_osm_nodes
@@ -288,7 +267,6 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
     const std::map <osmid_t, Node>& nodes = xml.nodes ();
     const std::map <osmid_t, OneWay>& ways = xml.ways ();
     const std::vector <Relation>& rels = xml.relations ();
-    const UniqueVals unique_vals = xml.unique_vals ();
 
     std::vector <double> lons, lats;
     std::set <std::string> keyset; // must be ordered!
@@ -299,42 +277,21 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
      * 2. Extract OSM Relations
      * --------------------------------------------------------------*/
 
-    Rcpp::List tempList = osm_sc::get_osm_relations (rels, unique_vals);
-    Rcpp::DataFrame rel_df, kv_df;
+    Rcpp::List tempList = osm_sc::get_osm_relations (rels);
+    Rcpp::DataFrame rel_df, rel_kv_df;
     rel_df = tempList [0];
-    kv_df = tempList [1];
     if (rel_df.nrow () == 0)
         rel_df = R_NilValue;
-    if (kv_df.nrow () == 0)
-        kv_df = R_NilValue;
+    rel_kv_df = tempList [1];
+    if (rel_kv_df.nrow () == 0)
+        rel_kv_df = R_NilValue;
 
     /* --------------------------------------------------------------
      * 3. Extract OSM ways
      * --------------------------------------------------------------*/
 
-    /*
-    // first divide into polygonal and non-polygonal
-    std::set <osmid_t> poly_ways, non_poly_ways;
-    for (auto itw = ways.begin (); itw != ways.end (); ++itw)
-    {
-        if ((*itw).second.nodes.front () == (*itw).second.nodes.back ())
-        {
-            if (poly_ways.find ((*itw).first) == poly_ways.end ())
-                poly_ways.insert ((*itw).first);
-        } else if (non_poly_ways.find ((*itw).first) == non_poly_ways.end ())
-            non_poly_ways.insert ((*itw).first);
-    }
-
-    Rcpp::List polyList (poly_ways.size ());
-    Rcpp::DataFrame kv_df_polys;
-    osm_sc::get_osm_ways (polyList, kv_df_polys, poly_ways, ways, nodes, unique_vals,
-            "POLYGON", bbox, crs);
-
-    Rcpp::List lineList (non_poly_ways.size ());
-    Rcpp::DataFrame kv_df_lines;
-    osm_sc::get_osm_ways (lineList, kv_df_lines, non_poly_ways, ways, nodes, unique_vals,
-            "LINESTRING", bbox, crs);
-    */
+    Rcpp::DataFrame way_df, way_kv_df;
+    osm_sc::get_osm_ways (way_df, way_kv_df, ways);
 
     /* --------------------------------------------------------------
      * 3. Extract OSM nodes
@@ -351,11 +308,13 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
      * 5. Collate all data
      * --------------------------------------------------------------*/
 
-    Rcpp::List ret (2);
+    Rcpp::List ret (4);
     ret [0] = rel_df;
-    ret [1] = kv_df;
+    ret [1] = rel_kv_df;
+    ret [2] = way_df;
+    ret [3] = way_kv_df;
 
-    std::vector <std::string> retnames {"rel", "kv"};
+    std::vector <std::string> retnames {"rel", "rel_kv", "way", "way_kv"};
     ret.attr ("names") = retnames;
     
     return ret;
