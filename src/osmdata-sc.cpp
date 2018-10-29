@@ -68,7 +68,7 @@ Rcpp::List osm_sc::get_osm_relations (const Relations &rels,
         nrow_memb += itr->relations.size ();
     }
 
-    Rcpp::DataFrame kv_df (Rcpp::Dimension (nrow_kv, unique_vals.k_rel.size ()));
+    Rcpp::DataFrame kv_df (Rcpp::Dimension (nrow_kv, 3));
     Rcpp::DataFrame rel_df (Rcpp::Dimension (nrow_memb, 3));
     // rel_df has [rel ID, member ID, member role]
 
@@ -94,10 +94,9 @@ Rcpp::List osm_sc::get_osm_relations (const Relations &rels,
         {
             unsigned int j = i + static_cast <unsigned int> (
                     std::distance (itr->key_val.begin (), k));
-            const std::string &key = k->first;
-            long int coli = std::distance (unique_vals.k_rel.begin (),
-                    unique_vals.k_rel.find (key));
-            kv_df (j, static_cast <unsigned int> (coli)) = k->second;
+            kv_df (j, 0) = itr->id;
+            kv_df (j, 1) = k->first;
+            kv_df (j, 2) = k->second;
         }
     }
 
