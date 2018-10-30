@@ -97,12 +97,12 @@ void osm_sc::get_osm_relations (Rcpp::DataFrame &rel_df, Rcpp::DataFrame &kv_df,
             kv_mat (j, 2) = k->second;
         }
     }
-    rel_df = Rcpp::DataFrame::create (Rcpp::Named ("id") = rel_mat (Rcpp::_, 0),
+    rel_df = Rcpp::DataFrame::create (Rcpp::Named ("object_") = rel_mat (Rcpp::_, 0),
                                     Rcpp::Named ("ref") = rel_mat (Rcpp::_, 1),
                                     Rcpp::Named ("role") = rel_mat (Rcpp::_, 2),
                                     Rcpp::_["stringsAsFactors"] = false );
 
-    kv_df = Rcpp::DataFrame::create (Rcpp::Named ("id") = kv_mat (Rcpp::_, 0),
+    kv_df = Rcpp::DataFrame::create (Rcpp::Named ("object_") = kv_mat (Rcpp::_, 0),
                                     Rcpp::Named ("key") = kv_mat (Rcpp::_, 1),
                                     Rcpp::Named ("value") = kv_mat (Rcpp::_, 2),
                                     Rcpp::_["stringsAsFactors"] = false );
@@ -190,10 +190,11 @@ void osm_sc::get_osm_ways (Rcpp::DataFrame &edge,
             Rcpp::Named ("object_") = object_link_edge_mat (Rcpp::_, 1),
             Rcpp::_["stringsAsFactors"] = false );
 
-    std::vector <std::string> nullvec;
-    std::vector <std::string> kvnames {"id", "key", "value"};
-    kv_mat.attr ("dimnames") = Rcpp::List::create (nullvec, kvnames);
-    kv_df = kv_mat;
+    kv_df = Rcpp::DataFrame::create (
+            Rcpp::Named ("object_") = kv_mat (Rcpp::_, 0),
+            Rcpp::Named ("key") = kv_mat (Rcpp::_, 1),
+            Rcpp::Named ("value") = kv_mat (Rcpp::_, 2),
+            Rcpp::_["stringsAsFactors"] = false );
 }
 
 //' get_osm_nodes
@@ -241,10 +242,11 @@ void osm_sc::get_osm_nodes (Rcpp::DataFrame &node_df, Rcpp::DataFrame &kv_df,
                                     Rcpp::Named ("vertex_") = node_ids,
                                     Rcpp::_["stringsAsFactors"] = false );
 
-    std::vector <std::string> kvnames {"id", "key", "value"};
-    std::vector <std::string> nullvec;
-    kv_mat.attr ("dimnames") = Rcpp::List::create (nullvec, kvnames);
-    kv_df = kv_mat;
+    kv_df = Rcpp::DataFrame::create (
+            Rcpp::Named ("object_") = kv_mat (Rcpp::_, 0),
+            Rcpp::Named ("key") = kv_mat (Rcpp::_, 1),
+            Rcpp::Named ("value") = kv_mat (Rcpp::_, 2),
+            Rcpp::_["stringsAsFactors"] = false );
 }
 
 

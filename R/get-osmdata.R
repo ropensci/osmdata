@@ -430,10 +430,10 @@ add_ref_role_cols <- function (x)
     if (nrow (x) == 0)
     {
         x <- data.frame (matrix (ncol = 5, nrow = 0))
-        names (x) <- c ("id", "ref", "role", "key", "value")
+        names (x) <- c ("object_", "ref", "role", "key", "value")
     } else
     {
-        x <- data.frame (id = x$id,
+        x <- data.frame (object_ = x$object_,
                          ref = NA_character_,
                          role = NA_character_,
                          key = x$key,
