@@ -417,6 +417,8 @@ osmdata_sc <- function(q, doc, quiet=TRUE, encoding) {
     #    obj$meta$bbox <- paste (res$bbox, collapse = ' ')
 
     #class (obj) <- c (class (obj), "osmdata_sc")
+    attr (obj, "join_ramp") <- c ("object", "object_link_edge", "edge", "vertex")
+    attr(obj, "class") <- c ("SC", "sc")
 
     return (obj)
 }
