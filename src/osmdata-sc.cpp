@@ -48,12 +48,9 @@
 //' Return an Rcpp::List containing all OSM relations.
 //'
 //' @param rels Pointer to the vector of Relation objects
-//' @param nodes Pointer to the vector of node objects
-//' @param ways Pointer to the vector of way objects
-//' @param unique_vals Pointer to a UniqueVals object containing std::sets of all
-//'       unique IDs and keys for each kind of OSM object (nodes, ways, rels).
 //'
-//' @return An Rcpp::List
+//' @return An Rcpp::List containing two long-form matrices: one for the
+//'     relation members and one for key-val pairs.
 //' 
 //' @noRd 
 Rcpp::List osm_sc::get_osm_relations (const Relations &rels) 
@@ -111,44 +108,70 @@ Rcpp::List osm_sc::get_osm_relations (const Relations &rels)
     return ret;
 }
 
+
+// Function to generate IDs for the edges in each way
+std::string random_id (size_t len) {
+    auto randchar = []() -> char
+    {
+        const char charset[] = \
+            "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        const size_t max_index = (sizeof(charset) - 1);
+        //return charset [ rand() % max_index ];
+        size_t i = static_cast <size_t> (floor (Rcpp::runif (1) [0] * max_index));
+        return charset [i];
+    };
+    std::string str (len, 0);
+    std::generate_n (str.begin(), len, randchar);
+    return str;
+}
+
 //' get_osm_ways
 //'
-//' @param wayList Pointer to Rcpp::List to hold the resultant geometries
+//' @param edge Pointer to Rcpp::DataFrame to hold the SC::edge table
+//' @param object_link_edge Pointer to Rcpp::DataFrame to hold the
+//'         SC::object_linkedge table
 //' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
-//' @param way_ids Vector of <osmid_t> IDs of ways to trace
 //' @param ways Pointer to all ways in data set
-//' @param nodes Pointer to all nodes in data set
-//' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
-//' @param bbox Pointer to the bbox needed for `sf` construction
-//' @param crs Pointer to the crs needed for `sf` construction
 //' 
 //' @noRd 
-void osm_sc::get_osm_ways (Rcpp::DataFrame &way_df, Rcpp::DataFrame &kv_df,
+void osm_sc::get_osm_ways (Rcpp::DataFrame &edge,
+        Rcpp::DataFrame &object_link_edge, Rcpp::DataFrame &kv_df,
         const Ways &ways)
 {
-    int nrefs = 0, nkv = 0;
+    const int length_ids = 10;
+
+    Rcpp::RNGScope scope; // set random seed
+
+    int nedges = 0, nkv = 0;
     for (auto wi = ways.begin (); wi != ways.end (); ++wi)
     {
-        nrefs += wi->second.nodes.size ();
+        nedges += wi->second.nodes.size () - 1;
         nkv += wi->second.key_val.size ();
     }
 
-    Rcpp::CharacterMatrix way_mat (Rcpp::Dimension (nrefs, 2));
+    Rcpp::CharacterMatrix edge_mat (Rcpp::Dimension (nedges, 3));
+    Rcpp::CharacterMatrix object_link_edge_mat (Rcpp::Dimension (nedges, 2));
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nkv, 3));
 
     // TODO: Impelement these properly with std::distance
     int count_w = 0, count_k = 0;
-    for (auto wi = ways.begin (); wi != ways.end (); ++wi)
+    for (auto wi = ways.begin (); wi != std::prev (ways.end ()); ++wi)
     {
         Rcpp::checkUserInterrupt ();
-        unsigned int i = static_cast <unsigned int> (
-                std::distance (ways.begin (), wi));
 
-        for (auto wj = wi->second.nodes.begin ();
-                wj != wi->second.nodes.end (); ++wj)
+        auto first = wi->second.nodes.begin ();
+        auto last = wi->second.nodes.empty () ? 
+                wi->second.nodes.end () : std::prev (wi->second.nodes.end ());
+        //for (auto wj = wi->second.nodes.begin ();
+        //        wj != wi->second.nodes.end (); ++wj)
+        for (auto wj = first; wj != last; ++wj)
         {
-            way_mat (count_w, 0) = std::to_string (wi->first);
-            way_mat (count_w++, 1) = std::to_string (*wj);
+            edge_mat (count_w, 0) = std::to_string (*wj);
+            edge_mat (count_w, 1) = std::to_string (*std::next (wj));
+            std::string idj = random_id (length_ids);
+            edge_mat (count_w, 2) = idj;
+            object_link_edge_mat (count_w, 0) = idj;
+            object_link_edge_mat (count_w++, 1) = std::to_string (wi->first);
         }
         
         for (auto kj = wi->second.key_val.begin ();
@@ -159,10 +182,14 @@ void osm_sc::get_osm_ways (Rcpp::DataFrame &way_df, Rcpp::DataFrame &kv_df,
             kv_mat (count_k++, 2) = kj->second;
         }
     }
-    std::vector <std::string> relnames {"id", "ref"};
+    std::vector <std::string> edgenames {".vertex0", ".vertex1", "edge_"};
     std::vector <std::string> nullvec;
-    way_mat.attr ("dimnames") = Rcpp::List::create (nullvec, relnames);
-    way_df = way_mat;
+    edge_mat.attr ("dimnames") = Rcpp::List::create (nullvec, edgenames);
+    edge = edge_mat;
+
+    std::vector <std::string> objnames {"edge_", "object_"};
+    object_link_edge_mat.attr ("dimnames") = Rcpp::List::create (nullvec, objnames);
+    object_link_edge = object_link_edge_mat;
 
     std::vector <std::string> kvnames {"id", "key", "value"};
     kv_mat.attr ("dimnames") = Rcpp::List::create (nullvec, kvnames);
@@ -170,8 +197,6 @@ void osm_sc::get_osm_ways (Rcpp::DataFrame &way_df, Rcpp::DataFrame &kv_df,
 }
 
 //' get_osm_nodes
-//'
-//' Store OSM nodes as `sf::POINT` objects
 //'
 //' @param ptxy Pointer to Rcpp::List to hold the resultant geometries
 //' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
@@ -181,55 +206,48 @@ void osm_sc::get_osm_ways (Rcpp::DataFrame &way_df, Rcpp::DataFrame &kv_df,
 //' @param crs Pointer to the crs needed for `sf` construction
 //' 
 //' @noRd 
-void osm_sc::get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
-        const Nodes &nodes, const UniqueVals &unique_vals, 
-        const Rcpp::NumericVector &bbox, const Rcpp::List &crs)
+void osm_sc::get_osm_nodes (Rcpp::CharacterVector &node_ids,
+        Rcpp::DataFrame &node_df, Rcpp::DataFrame &kv_df, const Nodes &nodes)
 {
-    size_t nrow = nodes.size (), ncol = unique_vals.k_point.size ();
+    const size_t nrow = nodes.size ();
 
-    if (static_cast <size_t> (ptList.size ()) != nrow)
-        throw std::runtime_error ("points must have same size as nodes");
+    //Rcpp::CharacterVector node_vec (nrow); // node IDs
+    node_ids = Rcpp::CharacterVector (nrow);
+    Rcpp::NumericMatrix node_mat (nrow, 2); // lon-lat
 
-    Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
-    std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
+    int nkeys = 0;
+    for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
+        nkeys += ni->second.key_val.size ();
+    Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nkeys, 3));
 
-    std::vector <std::string> ptnames;
-    ptnames.reserve (nodes.size ());
+    int keyj = 0; // TODO: Use std::distance for that
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
-        unsigned int count = static_cast <unsigned int> (
+        const unsigned int i = static_cast <unsigned int> (
                 std::distance (nodes.begin (), ni));
-        Rcpp::checkUserInterrupt ();
-        Rcpp::NumericVector ptxy = Rcpp::NumericVector::create (NA_REAL, NA_REAL);
-        ptxy.attr ("class") = Rcpp::CharacterVector::create ("XY", "POINT", "sfg");
-        ptxy (0) = ni->second.lon;
-        ptxy (1) = ni->second.lat;
-        ptList (count) = ptxy;
-        ptnames.push_back (std::to_string (ni->first));
+        if (i % 1000 == 0)
+            Rcpp::checkUserInterrupt ();
+
+        node_ids (i) = std::to_string (ni->first);
+        node_mat (i, 0) = ni->second.lon;
+        node_mat (i, 1) = ni->second.lat;
+
         for (auto kv_iter = ni->second.key_val.begin ();
                 kv_iter != ni->second.key_val.end (); ++kv_iter)
         {
-            const std::string &key = kv_iter->first;
-            unsigned int ndi = static_cast <unsigned int> (
-                    std::distance (unique_vals.k_point.begin (),
-                    unique_vals.k_point.find (key)));
-            kv_mat (count, ndi) = kv_iter->second;
+            kv_mat (keyj, 0) = std::to_string (ni->first);
+            kv_mat (keyj, 1) = kv_iter->first;
+            kv_mat (keyj++, 2) = kv_iter->second;
         }
     }
-    if (unique_vals.k_point.size () > 0)
-    {
-        kv_mat.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
-        kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
-    } else
-        kv_df = R_NilValue;
+    std::vector <std::string> nodenames {"x_", "y_"};
+    std::vector <std::string> nullvec;
+    node_mat.attr ("dimnames") = Rcpp::List::create (nullvec, nodenames);
+    node_df = node_mat;
 
-    ptList.attr ("names") = ptnames;
-    ptnames.clear ();
-    ptList.attr ("n_empty") = 0;
-    ptList.attr ("class") = Rcpp::CharacterVector::create ("sfc_POINT", "sfc");
-    ptList.attr ("precision") = 0.0;
-    ptList.attr ("bbox") = bbox;
-    ptList.attr ("crs") = crs;
+    std::vector <std::string> kvnames {"id", "key", "value"};
+    kv_mat.attr ("dimnames") = Rcpp::List::create (nullvec, kvnames);
+    kv_df = kv_mat;
 }
 
 
@@ -273,10 +291,7 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
     Rcpp::List dimnames (0);
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
 
-    /* --------------------------------------------------------------
-     * 2. Extract OSM Relations
-     * --------------------------------------------------------------*/
-
+    // ------- 1. Extract OSM Relations
     Rcpp::List tempList = osm_sc::get_osm_relations (rels);
     Rcpp::DataFrame rel_df, rel_kv_df;
     rel_df = tempList [0];
@@ -286,35 +301,29 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
     if (rel_kv_df.nrow () == 0)
         rel_kv_df = R_NilValue;
 
-    /* --------------------------------------------------------------
-     * 3. Extract OSM ways
-     * --------------------------------------------------------------*/
+    // ------- 2. Extract OSM ways
+    Rcpp::DataFrame edge, object_link_edge, way_kv_df;
+    osm_sc::get_osm_ways (edge, object_link_edge, way_kv_df, ways);
 
-    Rcpp::DataFrame way_df, way_kv_df;
-    osm_sc::get_osm_ways (way_df, way_kv_df, ways);
+    // ------- 3. Extract OSM nodes
+    Rcpp::DataFrame node_df, node_kv_df;
+    Rcpp::CharacterVector node_ids;
+    osm_sc::get_osm_nodes (node_ids, node_df, node_kv_df, nodes);
 
-    /* --------------------------------------------------------------
-     * 3. Extract OSM nodes
-     * --------------------------------------------------------------*/
-
-    /*
-    Rcpp::List pointList (nodes.size ());
-    Rcpp::DataFrame kv_df_points;
-    osm_sc::get_osm_nodes (pointList, kv_df_points, nodes, unique_vals, bbox, crs);
-    */
-
-
-    /* --------------------------------------------------------------
-     * 5. Collate all data
-     * --------------------------------------------------------------*/
-
-    Rcpp::List ret (4);
+    // ------- 4. Collate all data
+    Rcpp::List ret (8);
     ret [0] = rel_df;
     ret [1] = rel_kv_df;
-    ret [2] = way_df;
-    ret [3] = way_kv_df;
+    ret [2] = edge;
+    ret [3] = object_link_edge;
+    ret [4] = way_kv_df;
+    ret [5] = node_ids;
+    ret [6] = node_df;
+    ret [7] = node_kv_df;
 
-    std::vector <std::string> retnames {"rel", "rel_kv", "way", "way_kv"};
+    std::vector <std::string> retnames {"rel", "rel_kv",
+                                        "edge", "object_link_edge",
+                                        "way_kv", "vertex_", "vertex", "node_kv"};
     ret.attr ("names") = retnames;
     
     return ret;

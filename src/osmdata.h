@@ -434,11 +434,11 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st);
 namespace osm_sc {
 
 Rcpp::List get_osm_relations (const Relations &rels);
-void get_osm_ways (Rcpp::DataFrame &way_df, Rcpp::DataFrame &kv_df,
+void get_osm_ways (Rcpp::DataFrame &edge,
+        Rcpp::DataFrame &object_link_edge, Rcpp::DataFrame &kv_df,
         const Ways &ways);
-void get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
-        const Nodes &nodes, const UniqueVals &unique_vals, 
-        const Rcpp::NumericVector &bbox, const Rcpp::List &crs);
+void get_osm_nodes (Rcpp::CharacterVector &node_ids,
+        Rcpp::DataFrame &node_df, Rcpp::DataFrame &kv_df, const Nodes &nodes);
 
 } // end namespace osm_sc
 

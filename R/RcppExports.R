@@ -6,33 +6,25 @@
 #' Return an Rcpp::List containing all OSM relations.
 #'
 #' @param rels Pointer to the vector of Relation objects
-#' @param nodes Pointer to the vector of node objects
-#' @param ways Pointer to the vector of way objects
-#' @param unique_vals Pointer to a UniqueVals object containing std::sets of all
-#'       unique IDs and keys for each kind of OSM object (nodes, ways, rels).
 #'
-#' @return An Rcpp::List
+#' @return An Rcpp::List containing two long-form matrices: one for the
+#'     relation members and one for key-val pairs.
 #' 
 #' @noRd 
 NULL
 
 #' get_osm_ways
 #'
-#' @param wayList Pointer to Rcpp::List to hold the resultant geometries
+#' @param edge Pointer to Rcpp::DataFrame to hold the SC::edge table
+#' @param object_link_edge Pointer to Rcpp::DataFrame to hold the
+#'         SC::object_linkedge table
 #' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
-#' @param way_ids Vector of <osmid_t> IDs of ways to trace
 #' @param ways Pointer to all ways in data set
-#' @param nodes Pointer to all nodes in data set
-#' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
-#' @param bbox Pointer to the bbox needed for `sf` construction
-#' @param crs Pointer to the crs needed for `sf` construction
 #' 
 #' @noRd 
 NULL
 
 #' get_osm_nodes
-#'
-#' Store OSM nodes as `sf::POINT` objects
 #'
 #' @param ptxy Pointer to Rcpp::List to hold the resultant geometries
 #' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs

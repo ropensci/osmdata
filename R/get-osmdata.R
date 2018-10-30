@@ -385,6 +385,12 @@ osmdata_sc <- function(q, doc, quiet=TRUE, encoding) {
         message ('converting OSM data to sf format')
     res <- rcpp_osmdata_sc (doc)
 
+    res$rel_kv$obj_type <- res$rel$rel$obj_type <- "relation"
+    res$way_kv$obj_type <- "way"
+    res$node_kv$obj_type <- "node"
+    res$vertex <- cbind (res$vertex, vertex_ = res$vertex_)
+    res$vertex_ <- NULL
+
     if (missing (q))
         obj$bbox <- paste (res$bbox, collapse = ' ')
 

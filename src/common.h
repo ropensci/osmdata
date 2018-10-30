@@ -75,7 +75,9 @@ typedef std::unique_ptr<rapidxml::xml_document<> > XmlDocPtr;
 typedef const rapidxml::xml_node<>* XmlNodePtr;
 typedef const rapidxml::xml_attribute<>* XmlAttrPtr;
 
+// ----- functions in common.cpp
 XmlDocPtr parseXML (const std::string& xmlString);
+// ----- end functions in common.cpp
 
 struct UniqueVals
 {
