@@ -145,7 +145,8 @@ void osm_sc::get_osm_ways (Rcpp::DataFrame &edge,
     int nedges = 0, nkv = 0;
     for (auto wi = ways.begin (); wi != ways.end (); ++wi)
     {
-        nedges += wi->second.nodes.size () - 1;
+        if (wi->second.nodes.size () > 0)
+            nedges += wi->second.nodes.size () - 1;
         nkv += wi->second.key_val.size ();
     }
 
@@ -155,7 +156,7 @@ void osm_sc::get_osm_ways (Rcpp::DataFrame &edge,
 
     // TODO: Impelement these properly with std::distance
     int count_w = 0, count_k = 0;
-    for (auto wi = ways.begin (); wi != std::prev (ways.end ()); ++wi)
+    for (auto wi = ways.begin (); wi != ways.end (); ++wi)
     {
         Rcpp::checkUserInterrupt ();
 
