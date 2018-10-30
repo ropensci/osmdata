@@ -365,7 +365,7 @@ osmdata_sc <- function(q, doc, quiet=TRUE, encoding) {
     if (missing (encoding))
         encoding <- 'UTF-8'
 
-    obj <- osmdata () # uses class def
+    obj <- osmdata () # class def used here to for fill_overpass_data fn
     if (missing (q) & !quiet)
         message ('q missing: osmdata object will not include query')
     else if (is (q, 'overpass_query'))
@@ -381,21 +381,52 @@ osmdata_sc <- function(q, doc, quiet=TRUE, encoding) {
     obj <- temp$obj
     doc <- temp$doc
 
-    if (!quiet)
-        message ('converting OSM data to sf format')
-    res <- rcpp_osmdata_sc (doc)
+    meta <- NA
+    names (meta) <- "proj"
+    meta ["timestamp"] <- obj$meta$timestamp
+    meta ["OSM_version"] <- obj$meta$OSM_version
+    meta ["overpass_version"] <- obj$meta$overpass_version
 
-    res$rel_kv$obj_type <- res$rel$rel$obj_type <- "relation"
+    if (!quiet)
+        message ('converting OSM data to sc format')
+    res <- rcpp_osmdata_sc (temp$doc)
+
+    # rel has the $vertex, $edge and $object_link_edge tables ready to go.  The
+    # $object table is mostly just key-val pairs, but the relations have
+    # additional members - called "ref" and "role" entries. The key-val tables
+    # are therefore expanded to add these two columns before rbind-ing the whole
+    # lot to the one table:
+    res$rel_kv$obj_type <- "relation"
     res$way_kv$obj_type <- "way"
     res$node_kv$obj_type <- "node"
-    res$vertex <- cbind (res$vertex, vertex_ = res$vertex_)
-    res$vertex_ <- NULL
 
-    if (missing (q))
-        obj$bbox <- paste (res$bbox, collapse = ' ')
+    res$rel$key <- NA_character_
+    res$rel$value <- NA_character_
+    res$rel_kv <- add_ref_role_cols (res$rel_kv)
+    res$way_kv <- add_ref_role_cols (res$way_kv)
+    res$node_kv <- add_ref_role_cols (res$node_kv)
 
-    class (obj) <- c (class (obj), "osmdata_sc")
+    obj <- list () # SC **does not** use osmdata class definition
+    obj$object <- tibble::as.tibble (rbind (res$rel, res$rel_kv,
+                                            res$way_kv, res$node_kv))
+    obj$object_link_edge <- tibble::as.tibble (res$object_link_edge)
+    obj$edge <- tibble::as.tibble (res$edge)
+    obj$vertex <- tibble::as.tibble (res$vertex)
+    obj$meta <- meta
+    #if (missing (q)) # TODO: Implement this!
+    #    obj$meta$bbox <- paste (res$bbox, collapse = ' ')
 
-    return (res)
+    #class (obj) <- c (class (obj), "osmdata_sc")
+
+    return (obj)
 }
 
+add_ref_role_cols <- function (x)
+{
+    data.frame (id = x$id,
+                ref = NA_character_,
+                role = NA_character_,
+                key = x$key,
+                value = x$value,
+                stringsAsFactors = FALSE)
+}

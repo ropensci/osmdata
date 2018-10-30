@@ -48,12 +48,14 @@
 //' Return an Rcpp::List containing all OSM relations.
 //'
 //' @param rels Pointer to the vector of Relation objects
+//' @param rel_df Pointer to return object containing the members of each
+//'         relation.
+//' @param rel_kv Pointer to return object containing key-value pairs for each
+//'         relation.
 //'
-//' @return An Rcpp::List containing two long-form matrices: one for the
-//'     relation members and one for key-val pairs.
-//' 
 //' @noRd 
-Rcpp::List osm_sc::get_osm_relations (const Relations &rels) 
+void osm_sc::get_osm_relations (Rcpp::DataFrame &rel_df, Rcpp::DataFrame &kv_df,
+        const Relations &rels)
 {
     std::vector <osmid_t> ids (rels.size ()); 
 
@@ -95,17 +97,15 @@ Rcpp::List osm_sc::get_osm_relations (const Relations &rels)
             kv_mat (j, 2) = k->second;
         }
     }
-    std::vector <std::string> relnames {"id", "ref", "role"};
-    std::vector <std::string> nullvec;
-    rel_mat.attr ("dimnames") = Rcpp::List::create (nullvec, relnames);
+    rel_df = Rcpp::DataFrame::create (Rcpp::Named ("id") = rel_mat (Rcpp::_, 0),
+                                    Rcpp::Named ("ref") = rel_mat (Rcpp::_, 1),
+                                    Rcpp::Named ("role") = rel_mat (Rcpp::_, 2),
+                                    Rcpp::_["stringsAsFactors"] = false );
 
-    std::vector <std::string> kvnames {"id", "key", "value"};
-    kv_mat.attr ("dimnames") = Rcpp::List::create (nullvec, kvnames);
-
-    Rcpp::List ret (2);
-    ret [0] = rel_mat;
-    ret [1] = kv_mat;
-    return ret;
+    kv_df = Rcpp::DataFrame::create (Rcpp::Named ("id") = kv_mat (Rcpp::_, 0),
+                                    Rcpp::Named ("key") = kv_mat (Rcpp::_, 1),
+                                    Rcpp::Named ("value") = kv_mat (Rcpp::_, 2),
+                                    Rcpp::_["stringsAsFactors"] = false );
 }
 
 
@@ -182,15 +182,17 @@ void osm_sc::get_osm_ways (Rcpp::DataFrame &edge,
             kv_mat (count_k++, 2) = kj->second;
         }
     }
-    std::vector <std::string> edgenames {".vertex0", ".vertex1", "edge_"};
+    edge = Rcpp::DataFrame::create (Rcpp::Named (".vertex0") = edge_mat (Rcpp::_, 0),
+                                    Rcpp::Named (".vertex1") = edge_mat (Rcpp::_, 1),
+                                    Rcpp::Named ("edge_") = edge_mat (Rcpp::_, 2),
+                                    Rcpp::_["stringsAsFactors"] = false );
+
+    object_link_edge = Rcpp::DataFrame::create (
+            Rcpp::Named ("edge_") = object_link_edge_mat (Rcpp::_, 0),
+            Rcpp::Named ("object_") = object_link_edge_mat (Rcpp::_, 1),
+            Rcpp::_["stringsAsFactors"] = false );
+
     std::vector <std::string> nullvec;
-    edge_mat.attr ("dimnames") = Rcpp::List::create (nullvec, edgenames);
-    edge = edge_mat;
-
-    std::vector <std::string> objnames {"edge_", "object_"};
-    object_link_edge_mat.attr ("dimnames") = Rcpp::List::create (nullvec, objnames);
-    object_link_edge = object_link_edge_mat;
-
     std::vector <std::string> kvnames {"id", "key", "value"};
     kv_mat.attr ("dimnames") = Rcpp::List::create (nullvec, kvnames);
     kv_df = kv_mat;
@@ -198,21 +200,17 @@ void osm_sc::get_osm_ways (Rcpp::DataFrame &edge,
 
 //' get_osm_nodes
 //'
-//' @param ptxy Pointer to Rcpp::List to hold the resultant geometries
+//' @param node_df Pointer to Rcpp::DataFrame to hold nodes
 //' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
 //' @param nodes Pointer to all nodes in data set
-//' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
-//' @param bbox Pointer to the bbox needed for `sf` construction
-//' @param crs Pointer to the crs needed for `sf` construction
 //' 
 //' @noRd 
-void osm_sc::get_osm_nodes (Rcpp::CharacterVector &node_ids,
-        Rcpp::DataFrame &node_df, Rcpp::DataFrame &kv_df, const Nodes &nodes)
+void osm_sc::get_osm_nodes (Rcpp::DataFrame &node_df, Rcpp::DataFrame &kv_df,
+        const Nodes &nodes)
 {
     const size_t nrow = nodes.size ();
 
-    //Rcpp::CharacterVector node_vec (nrow); // node IDs
-    node_ids = Rcpp::CharacterVector (nrow);
+    Rcpp::CharacterVector node_ids (nrow);
     Rcpp::NumericMatrix node_mat (nrow, 2); // lon-lat
 
     int nkeys = 0;
@@ -240,12 +238,13 @@ void osm_sc::get_osm_nodes (Rcpp::CharacterVector &node_ids,
             kv_mat (keyj++, 2) = kv_iter->second;
         }
     }
-    std::vector <std::string> nodenames {"x_", "y_"};
-    std::vector <std::string> nullvec;
-    node_mat.attr ("dimnames") = Rcpp::List::create (nullvec, nodenames);
-    node_df = node_mat;
+    node_df = Rcpp::DataFrame::create (Rcpp::Named ("x_") = node_mat (Rcpp::_, 0),
+                                    Rcpp::Named ("y_") = node_mat (Rcpp::_, 1),
+                                    Rcpp::Named ("vertex_") = node_ids,
+                                    Rcpp::_["stringsAsFactors"] = false );
 
     std::vector <std::string> kvnames {"id", "key", "value"};
+    std::vector <std::string> nullvec;
     kv_mat.attr ("dimnames") = Rcpp::List::create (nullvec, kvnames);
     kv_df = kv_mat;
 }
@@ -292,14 +291,8 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
 
     // ------- 1. Extract OSM Relations
-    Rcpp::List tempList = osm_sc::get_osm_relations (rels);
     Rcpp::DataFrame rel_df, rel_kv_df;
-    rel_df = tempList [0];
-    if (rel_df.nrow () == 0)
-        rel_df = R_NilValue;
-    rel_kv_df = tempList [1];
-    if (rel_kv_df.nrow () == 0)
-        rel_kv_df = R_NilValue;
+    osm_sc::get_osm_relations (rel_df, rel_kv_df, rels);
 
     // ------- 2. Extract OSM ways
     Rcpp::DataFrame edge, object_link_edge, way_kv_df;
@@ -307,23 +300,21 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
 
     // ------- 3. Extract OSM nodes
     Rcpp::DataFrame node_df, node_kv_df;
-    Rcpp::CharacterVector node_ids;
-    osm_sc::get_osm_nodes (node_ids, node_df, node_kv_df, nodes);
+    osm_sc::get_osm_nodes (node_df, node_kv_df, nodes);
 
     // ------- 4. Collate all data
-    Rcpp::List ret (8);
+    Rcpp::List ret (7);
     ret [0] = rel_df;
     ret [1] = rel_kv_df;
     ret [2] = edge;
     ret [3] = object_link_edge;
     ret [4] = way_kv_df;
-    ret [5] = node_ids;
-    ret [6] = node_df;
-    ret [7] = node_kv_df;
+    ret [5] = node_df;
+    ret [6] = node_kv_df;
 
     std::vector <std::string> retnames {"rel", "rel_kv",
                                         "edge", "object_link_edge",
-                                        "way_kv", "vertex_", "vertex", "node_kv"};
+                                        "way_kv", "vertex", "node_kv"};
     ret.attr ("names") = retnames;
     
     return ret;

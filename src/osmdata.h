@@ -433,12 +433,13 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st);
 
 namespace osm_sc {
 
-Rcpp::List get_osm_relations (const Relations &rels);
+void get_osm_relations (Rcpp::DataFrame &rel_df, Rcpp::DataFrame &kv_df,
+        const Relations &rels);
 void get_osm_ways (Rcpp::DataFrame &edge,
         Rcpp::DataFrame &object_link_edge, Rcpp::DataFrame &kv_df,
         const Ways &ways);
-void get_osm_nodes (Rcpp::CharacterVector &node_ids,
-        Rcpp::DataFrame &node_df, Rcpp::DataFrame &kv_df, const Nodes &nodes);
+void get_osm_nodes (Rcpp::DataFrame &node_df, Rcpp::DataFrame &kv_df,
+        const Nodes &nodes);
 
 } // end namespace osm_sc
 

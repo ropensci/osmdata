@@ -6,10 +6,11 @@
 #' Return an Rcpp::List containing all OSM relations.
 #'
 #' @param rels Pointer to the vector of Relation objects
+#' @param rel_df Pointer to return object containing the members of each
+#'         relation.
+#' @param rel_kv Pointer to return object containing key-value pairs for each
+#'         relation.
 #'
-#' @return An Rcpp::List containing two long-form matrices: one for the
-#'     relation members and one for key-val pairs.
-#' 
 #' @noRd 
 NULL
 
@@ -26,12 +27,9 @@ NULL
 
 #' get_osm_nodes
 #'
-#' @param ptxy Pointer to Rcpp::List to hold the resultant geometries
+#' @param node_df Pointer to Rcpp::DataFrame to hold nodes
 #' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
 #' @param nodes Pointer to all nodes in data set
-#' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
-#' @param bbox Pointer to the bbox needed for `sf` construction
-#' @param crs Pointer to the crs needed for `sf` construction
 #' 
 #' @noRd 
 NULL
