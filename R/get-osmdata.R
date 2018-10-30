@@ -381,12 +381,6 @@ osmdata_sc <- function(q, doc, quiet=TRUE, encoding) {
     obj <- temp$obj
     doc <- temp$doc
 
-    meta <- NA
-    names (meta) <- "proj"
-    meta ["timestamp"] <- obj$meta$timestamp
-    meta ["OSM_version"] <- obj$meta$OSM_version
-    meta ["overpass_version"] <- obj$meta$overpass_version
-
     if (!quiet)
         message ('converting OSM data to sc format')
     res <- rcpp_osmdata_sc (temp$doc)
@@ -412,13 +406,15 @@ osmdata_sc <- function(q, doc, quiet=TRUE, encoding) {
     obj$object_link_edge <- tibble::as.tibble (res$object_link_edge)
     obj$edge <- tibble::as.tibble (res$edge)
     obj$vertex <- tibble::as.tibble (res$vertex)
-    obj$meta <- meta
+    obj$meta <- tibble::tibble (proj = NA_character_,
+                                ctime = temp$obj$meta$timestamp,
+                                OSM_version = temp$obj$meta$OSM_version,
+                                overpass_version = temp$obj$meta$overpass_version)
     #if (missing (q)) # TODO: Implement this!
     #    obj$meta$bbox <- paste (res$bbox, collapse = ' ')
 
-    #class (obj) <- c (class (obj), "osmdata_sc")
     attr (obj, "join_ramp") <- c ("object", "object_link_edge", "edge", "vertex")
-    attr(obj, "class") <- c ("SC", "sc")
+    attr (obj, "class") <- c ("SC", "sc")
 
     return (obj)
 }
