@@ -390,12 +390,18 @@ osmdata_sc <- function(q, doc, quiet=TRUE, encoding) {
     # additional members - called "ref" and "role" entries. The key-val tables
     # are therefore expanded to add these two columns before rbind-ing the whole
     # lot to the one table:
-    res$rel_kv$obj_type <- "relation"
-    res$way_kv$obj_type <- "way"
-    res$node_kv$obj_type <- "node"
+    if (nrow (res$rel_kv) > 0)
+        res$rel_kv$obj_type <- "relation"
+    if (nrow (res$way_kv) > 0)
+        res$way_kv$obj_type <- "way"
+    if (nrow (res$node_kv) > 0)
+        res$node_kv$obj_type <- "node"
 
-    res$rel$key <- NA_character_
-    res$rel$value <- NA_character_
+    if (nrow (res$rel) > 0)
+    {
+        res$rel$key <- NA_character_
+        res$rel$value <- NA_character_
+    }
     res$rel_kv <- add_ref_role_cols (res$rel_kv)
     res$way_kv <- add_ref_role_cols (res$way_kv)
     res$node_kv <- add_ref_role_cols (res$node_kv)
@@ -421,10 +427,18 @@ osmdata_sc <- function(q, doc, quiet=TRUE, encoding) {
 
 add_ref_role_cols <- function (x)
 {
-    data.frame (id = x$id,
-                ref = NA_character_,
-                role = NA_character_,
-                key = x$key,
-                value = x$value,
-                stringsAsFactors = FALSE)
+    if (nrow (x) == 0)
+    {
+        x <- data.frame (matrix (ncol = 5, nrow = 0))
+        names (x) <- c ("id", "ref", "role", "key", "value")
+    } else
+    {
+        x <- data.frame (id = x$id,
+                         ref = NA_character_,
+                         role = NA_character_,
+                         key = x$key,
+                         value = x$value,
+                         stringsAsFactors = FALSE)
+    }
+    return (x)
 }
