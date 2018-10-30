@@ -162,8 +162,6 @@ void osm_sc::get_osm_ways (Rcpp::DataFrame &edge,
         auto first = wi->second.nodes.begin ();
         auto last = wi->second.nodes.empty () ? 
                 wi->second.nodes.end () : std::prev (wi->second.nodes.end ());
-        //for (auto wj = wi->second.nodes.begin ();
-        //        wj != wi->second.nodes.end (); ++wj)
         for (auto wj = first; wj != last; ++wj)
         {
             edge_mat (count_w, 0) = std::to_string (*wj);
@@ -182,8 +180,8 @@ void osm_sc::get_osm_ways (Rcpp::DataFrame &edge,
             kv_mat (count_k++, 2) = kj->second;
         }
     }
-    edge = Rcpp::DataFrame::create (Rcpp::Named (".vertex0") = edge_mat (Rcpp::_, 0),
-                                    Rcpp::Named (".vertex1") = edge_mat (Rcpp::_, 1),
+    edge = Rcpp::DataFrame::create (Rcpp::Named (".vx0") = edge_mat (Rcpp::_, 0),
+                                    Rcpp::Named (".vx1") = edge_mat (Rcpp::_, 1),
                                     Rcpp::Named ("edge_") = edge_mat (Rcpp::_, 2),
                                     Rcpp::_["stringsAsFactors"] = false );
 

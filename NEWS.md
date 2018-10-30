@@ -2,7 +2,8 @@
 ===================
 Major changes:
 - New function `osmdata_sc` to return data in `silicate::SC` format (see
-  github.com/hypertidy/silicate)
+  github.com/hypertidy/silicate; this also requires additional dependency on
+  `tibble`)
 - Structure of `osmdata` object modified to replace former `$timestamp` field
   with `$meta` field containing a list of `$timestamp`, `$OSM_version`
   (currently 0.6), and `$overpass_version`.
