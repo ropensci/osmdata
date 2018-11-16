@@ -46,7 +46,7 @@ The development version of `osmdata` can be installed with the `devtools`
 package using the following command:
 
 ```{r install, eval = FALSE}
-devtools::install_github('osmdatar/osmdata')
+devtools::install_github('ropensci/osmdata')
 ```
 
 This vignette also uses the [`magrittr`](https://github.com/tidyverse/magrittr) pipe, `%>%`, for 'pipy' workflows.
@@ -684,7 +684,7 @@ and `key=address` contains no data yet is still returned by `GDAL/sf`.
 
 Finally, note that `osmdata` will generally extract OSM data considerably faster
 than equivalent `sf/GDAL` routines (as detailed
-[here](https://github.com/osmdatar/osmdata/wiki/Timing-benchmarks)).
+[here](https://github.com/ropensci/osmdata/wiki/Timing-benchmarks)).
 
 ### 3.3. The `osmdata_sp()` function
 

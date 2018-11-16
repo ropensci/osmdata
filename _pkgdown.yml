@@ -52,4 +52,4 @@ navbar:
     href: reference/index.html
   right:
   - icon: fa-github fa-lg
-    href: https://github.com/osmdatar/osmdata
+    href: https://github.com/ropensci/osmdata

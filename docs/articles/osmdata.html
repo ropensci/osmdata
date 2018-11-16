@@ -47,7 +47,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/osmdatar/osmdata">
+  <a href="https://github.com/ropensci/osmdata">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -68,7 +68,7 @@
                         <h4 class="author">Mark Padgham</h4>
                         <h4 class="author">Robin Lovelace</h4>
             
-            <h4 class="date">2018-10-26</h4>
+            <h4 class="date">2018-11-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/osmdata/blob/master/vignettes/osmdata.Rmd"><code>vignettes/osmdata.Rmd</code></a></small>
       <div class="hidden name"><code>osmdata.Rmd</code></div>
@@ -88,7 +88,7 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">library</span>(osmdata)</a></code></pre></div>
 <pre><code>## Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright</code></pre>
 <p>The development version of <code>osmdata</code> can be installed with the <code>devtools</code> package using the following command:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">'osmdatar/osmdata'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">'ropensci/osmdata'</span>)</a></code></pre></div>
 <p>This vignette also uses the <a href="https://github.com/tidyverse/magrittr"><code>magrittr</code></a> pipe, <code>%&gt;%</code>, for ‘pipy’ workflows.</p>
 <p><code>osmdata</code> uses the <a href="http://overpass-api.de"><code>overpass</code> API</a> to download OpenStreetMap (OSM) data and can convert the results to either Simple Features (typically of class <code>sf</code>) or Spatial objects (e.g. <code>SpatialPointsDataFrame</code>), as defined by the packages <a href="https://cran.r-project.org/package=sf"><code>sf</code></a> and <a href="https://cran.r-project.org/package=sp"><code>sp</code></a> packages respectively.</p>
 <p><code>overpass</code> is a C++ library that serves OSM data over the web. All <code>overpass</code> queries begin with a bounding box, defined in <code>osmdata</code> with the function <code><a href="../reference/opq.html">opq()</a></code>:</p>
@@ -375,7 +375,7 @@
 <a class="sourceLine" id="cb49-2" title="2"><span class="kw">all</span>(<span class="kw">is.na</span>(addr))</a>
 <a class="sourceLine" id="cb49-3" title="3"><span class="co">## TRUE</span></a></code></pre></div>
 <p>and <code>key=address</code> contains no data yet is still returned by <code>GDAL/sf</code>.</p>
-<p>Finally, note that <code>osmdata</code> will generally extract OSM data considerably faster than equivalent <code>sf/GDAL</code> routines (as detailed <a href="https://github.com/osmdatar/osmdata/wiki/Timing-benchmarks">here</a>).</p>
+<p>Finally, note that <code>osmdata</code> will generally extract OSM data considerably faster than equivalent <code>sf/GDAL</code> routines (as detailed <a href="https://github.com/ropensci/osmdata/wiki/Timing-benchmarks">here</a>).</p>
 </div>
 <div id="the-osmdata_sp-function" class="section level3">
 <h3 class="hasAnchor">

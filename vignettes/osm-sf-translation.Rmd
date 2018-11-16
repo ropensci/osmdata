@@ -171,7 +171,7 @@ implementation of Spatial Features, and provides a wrapper around GDAL for
 reading geospatial data. `GDAL` provides a ['driver' to read OSM
 data](http://www.gdal.org/drv_osm.html), and thus `sf` can also be used to read
 `OSM` data in `R`, 
-[as detailed in the main `osmdata` vignette](https://github.com/osmdatar/osmdata/blob/master/vignettes/osmdata.Rmd).
+[as detailed in the main `osmdata` vignette](https://ropensci.github.io/osmdata/articles/osmdata.html).
 However, the `GDAL` translation of OSM data differs in several important ways
 from the `osmdata` translation.
 
@@ -198,7 +198,7 @@ pre-defined and invariant, meaning that data returned from `sf::st_read (...)`
 may often contain `key` columns in the resultant `data.frame` which contain no
 (non-`NA`) data. This difference is illustrated in an example repeated here from
 the  
-[main `osmdata` vignette](https://github.com/osmdatar/osmdata/blob/master/vignettes/osmdata.Rmd),
+[main `osmdata` vignette](https://ropensci.github.io/osmdata/articles/osmdata.html),
 with the same principles applying to all of the following classes of OSM data.
 
 The following three lines define a query and download the resultant data to an

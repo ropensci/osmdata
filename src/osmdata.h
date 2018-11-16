@@ -23,7 +23,7 @@
  *
  *  Limitations:
  *
- *  Dependencies:       none (rapidXML header included in osmdatar)
+ *  Dependencies:       none (rapidXML header included in osmdata)
  *
  *  Compiler Options:   -std=c++11
  ***************************************************************************/

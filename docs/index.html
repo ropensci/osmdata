@@ -49,7 +49,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/osmdatar/osmdata">
+  <a href="https://github.com/ropensci/osmdata">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -87,25 +87,25 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">library</span>(osmdata)</a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="co">#&gt; Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright</span></a>
 <a class="sourceLine" id="cb2-3" title="3"><span class="kw">packageVersion</span>(<span class="st">"osmdata"</span>)</a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt; [1] '0.0.8'</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt; [1] '0.0.8.99'</span></a></code></pre></div>
 </div>
 <div id="usage" class="section level3">
 <h3 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h3>
 <p><a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a> queries can be built from a base query constructed with <code>opq</code> followed by <code>add_osm_feature</code>. The corresponding OSM objects are then downloaded and converted to <code>R Simple Features (sf)</code> objects with <code><a href="reference/osmdata_sf.html">osmdata_sf()</a></code> or to <code>R Spatial (sp)</code> objects with <code><a href="reference/osmdata_sp.html">osmdata_sp()</a></code>. For example,</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">q0 &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span>(<span class="dt">bbox =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.27</span>, <span class="fl">51.47</span>, <span class="fl">-0.20</span>, <span class="fl">51.50</span>)) <span class="co"># Chiswick Eyot in London, U.K.</span></a>
-<a class="sourceLine" id="cb3-2" title="2">q1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/add_osm_feature.html">add_osm_feature</a></span>(q0, <span class="dt">key =</span> <span class="st">'name'</span>, <span class="dt">value =</span> <span class="st">"Thames"</span>, <span class="dt">value_exact =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb3-3" title="3">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>(q1)</a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span>(<span class="dt">bbox =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.27</span>, <span class="fl">51.47</span>, <span class="fl">-0.20</span>, <span class="fl">51.50</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># Chiswick Eyot in London, U.K.</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="st">    </span><span class="kw"><a href="reference/add_osm_feature.html">add_osm_feature</a></span>(<span class="dt">key =</span> <span class="st">'name'</span>, <span class="dt">value =</span> <span class="st">"Thames"</span>, <span class="dt">value_exact =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="st">    </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>()</a>
 <a class="sourceLine" id="cb3-4" title="4">x</a></code></pre></div>
-<pre><code>#&gt;  Object of class 'osmdata' with:
-#&gt;                   $bbox : 51.47,-0.27,51.5,-0.2
-#&gt;          $overpass_call : The call submitted to the overpass API
-#&gt;              $timestamp : [ Wed 4 May 2017 09:33:52 ]
-#&gt;             $osm_points : 'sf' Simple Features Collection with 21459 points
-#&gt;              $osm_lines : 'sf' Simple Features Collection with 1916 linestrings
-#&gt;           $osm_polygons : 'sf' Simple Features Collection with 23 polygons
-#&gt;         $osm_multilines : 'sf' Simple Features Collection with 5 multilinestrings
-#&gt;      $osm_multipolygons : 'sf' Simple Features Collection with 3 multipolygons</code></pre>
+<pre><code>#&gt; Object of class 'osmdata' with:
+#&gt;                  $bbox : 51.47,-0.27,51.5,-0.2
+#&gt;         $overpass_call : The call submitted to the overpass API
+#&gt;                  $meta : metadata including timestamp and version numbers
+#&gt;            $osm_points : 'sf' Simple Features Collection with 24548 points
+#&gt;             $osm_lines : 'sf' Simple Features Collection with 2219 linestrings
+#&gt;          $osm_polygons : 'sf' Simple Features Collection with 33 polygons
+#&gt;        $osm_multilines : 'sf' Simple Features Collection with 6 multilinestrings
+#&gt;     $osm_multipolygons : 'sf' Simple Features Collection with 3 multipolygons</code></pre>
 <p>OSM data can also be downloaded in OSM XML format with <code><a href="reference/osmdata_xml.html">osmdata_xml()</a></code> and saved for use with other software.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="reference/osmdata_xml.html">osmdata_xml</a></span>(q1, <span class="st">"data.xml"</span>)</a></code></pre></div>
 <p>The <code>XML</code> document is returned silently and may be passed directly to <code><a href="reference/osmdata_sp.html">osmdata_sp()</a></code> or <code><a href="reference/osmdata_sf.html">osmdata_sf()</a></code></p>

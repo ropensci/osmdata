@@ -47,7 +47,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/osmdatar/osmdata">
+  <a href="https://github.com/ropensci/osmdata">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -67,7 +67,7 @@
       <h1>2. Translation of OSM to Simple Features</h1>
                         <h4 class="author">Mark Padgham</h4>
             
-            <h4 class="date">2018-10-26</h4>
+            <h4 class="date">2018-11-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/osmdata/blob/master/vignettes/osm-sf-translation.Rmd"><code>vignettes/osm-sf-translation.Rmd</code></a></small>
       <div class="hidden name"><code>osm-sf-translation.Rmd</code></div>
@@ -146,14 +146,14 @@
 <div id="gdal-translation-of-osm-into-simple-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#gdal-translation-of-osm-into-simple-features" class="anchor"></a>4. <code>GDAL</code> Translation of OSM into Simple Features</h2>
-<p>The <code>R</code> package <a href="https://cran.r-project.org/package=sf"><code>sf</code></a> provide an <code>R</code> implementation of Spatial Features, and provides a wrapper around GDAL for reading geospatial data. <code>GDAL</code> provides a <a href="http://www.gdal.org/drv_osm.html">‘driver’ to read OSM data</a>, and thus <code>sf</code> can also be used to read <code>OSM</code> data in <code>R</code>, <a href="https://github.com/osmdatar/osmdata/blob/master/vignettes/osmdata.Rmd">as detailed in the main <code>osmdata</code> vignette</a>. However, the <code>GDAL</code> translation of OSM data differs in several important ways from the <code>osmdata</code> translation.</p>
+<p>The <code>R</code> package <a href="https://cran.r-project.org/package=sf"><code>sf</code></a> provide an <code>R</code> implementation of Spatial Features, and provides a wrapper around GDAL for reading geospatial data. <code>GDAL</code> provides a <a href="http://www.gdal.org/drv_osm.html">‘driver’ to read OSM data</a>, and thus <code>sf</code> can also be used to read <code>OSM</code> data in <code>R</code>, <a href="https://ropensci.github.io/osmdata/articles/osmdata.html">as detailed in the main <code>osmdata</code> vignette</a>. However, the <code>GDAL</code> translation of OSM data differs in several important ways from the <code>osmdata</code> translation.</p>
 <p>The primary difference is that GDAL only returns <em>unique</em> objects of each spatial (SF) type. Thus <code>sf::POINT</code> objects consist of only those points that are not otherwise members of some ‘higher’ object (<code>line</code>, <code>polygon</code>, or <code>relation</code> objects). Although a given set of OSM data may actually contain a great many points, attempting to load these with</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">sf<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/sf/topics/st_read">st_read</a></span> (file, <span class="dt">layer =</span> <span class="st">'points'</span>)</a></code></pre></div>
 <p>will generally return surprisingly few points.</p>
 <div id="osm-nodes-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#osm-nodes-1" class="anchor"></a>4.1. OSM Nodes</h3>
-<p>Apart from the numerical difference arising through <code>osmdata</code> returning an <code>sf::POINTS</code> structure containing <strong>all</strong> nodes within a given set of OSM data, while <code><a href="http://www.rdocumentation.org/packages/sf/topics/st_read">sf::st_read (file, layer='points')</a></code> returns only those points not represented in other structure, the representation of points remains otherwise broadly similar. The only other major difference is that <code>osmdata</code> retains all <code>key-value</code> pairs present in a given set of OSM data, whereas <code>GDAL/sf</code> only retains a select few of these. Moreover, the <code>keys</code> returned by <code>GDAL/sf</code> are pre-defined and invariant, meaning that data returned from <code><a href="http://www.rdocumentation.org/packages/sf/topics/st_read">sf::st_read (...)</a></code> may often contain <code>key</code> columns in the resultant <code>data.frame</code> which contain no (non-<code>NA</code>) data. This difference is illustrated in an example repeated here from the<br><a href="https://github.com/osmdatar/osmdata/blob/master/vignettes/osmdata.Rmd">main <code>osmdata</code> vignette</a>, with the same principles applying to all of the following classes of OSM data.</p>
+<p>Apart from the numerical difference arising through <code>osmdata</code> returning an <code>sf::POINTS</code> structure containing <strong>all</strong> nodes within a given set of OSM data, while <code><a href="http://www.rdocumentation.org/packages/sf/topics/st_read">sf::st_read (file, layer='points')</a></code> returns only those points not represented in other structure, the representation of points remains otherwise broadly similar. The only other major difference is that <code>osmdata</code> retains all <code>key-value</code> pairs present in a given set of OSM data, whereas <code>GDAL/sf</code> only retains a select few of these. Moreover, the <code>keys</code> returned by <code>GDAL/sf</code> are pre-defined and invariant, meaning that data returned from <code><a href="http://www.rdocumentation.org/packages/sf/topics/st_read">sf::st_read (...)</a></code> may often contain <code>key</code> columns in the resultant <code>data.frame</code> which contain no (non-<code>NA</code>) data. This difference is illustrated in an example repeated here from the<br><a href="https://ropensci.github.io/osmdata/articles/osmdata.html">main <code>osmdata</code> vignette</a>, with the same principles applying to all of the following classes of OSM data.</p>
 <p>The following three lines define a query and download the resultant data to an <code>XML</code> file.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/opq.html">opq</a></span> (<span class="dt">bbox =</span> <span class="st">'Trentham, Australia'</span>)</a>
 <a class="sourceLine" id="cb2-2" title="2">q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_osm_feature.html">add_osm_feature</a></span> (q, <span class="dt">key =</span> <span class="st">'name'</span>) <span class="co"># any named objects</span></a>
