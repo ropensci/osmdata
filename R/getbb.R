@@ -41,7 +41,7 @@ bbox_to_string <- function(bbox) {
                        bbox["coords.x1", "max"], bbox["coords.x2", "max"])
         } else if (all (c("x", "y") %in% tolower (colnames (bbox))))
         {
-            bbox <- paste0 (bbox [c (1, 3, 2, 4)], collapse = ",")
+            bbox <- paste0 (bbox [c (3, 1, 4, 2)], collapse = ",")
         } else
         {
             # otherwise just presume (x,y) are rows and (min,max) are cols
