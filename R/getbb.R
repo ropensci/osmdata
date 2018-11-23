@@ -41,11 +41,11 @@ bbox_to_string <- function(bbox) {
                        bbox["coords.x1", "max"], bbox["coords.x2", "max"])
         } else if (all (c("x", "y") %in% tolower (colnames (bbox))))
         {
-            bbox <- paste0 (bbox [c (3, 1, 4, 2)], collapse = ",")
+            bbox <- bbox [c (3, 1, 4, 2)]
         } else
         {
             # otherwise just presume (x,y) are rows and (min,max) are cols
-            bbox <- paste0 (bbox[c(2, 1, 4, 3)], collapse = ",")
+            bbox <- bbox[c(2, 1, 4, 3)]
         }
     } else
     {
@@ -57,16 +57,15 @@ bbox_to_string <- function(bbox) {
         if (!is.null (names (bbox)) &
             all (names (bbox) %in% c("left", "bottom", "right", "top")))
         {
-            bbox <- paste0 (bbox[c ("bottom", "left", "top", "right")],
-                            collapse = ",")
+            bbox <- bbox[c ("bottom", "left", "top", "right")]
         } else
         {
             x <- sort (bbox [c (1, 3)])
             y <- sort (bbox [c (2, 4)])
-            bbox <- paste0 (c (y [1], x[1], y [2], x [2]), collapse = ",")
+            bbox <- c (y [1], x[1], y [2], x [2])
         }
     }
-    return(bbox)
+    return (paste0 (bbox, collapse = ","))
 }
 
 #' Get bounding box for a given place name
