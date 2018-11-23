@@ -120,6 +120,7 @@ class XmlData
             // APS empty m_nodes/m_ways/m_relations constructed here, no need to explicitly clear
             XmlDocPtr p = parseXML (str);
             traverseWays (p->first_node ());
+            make_key_val_indices ();
         }
 
         // APS make the dtor virtual since compiler support for "final" is limited
@@ -144,6 +145,7 @@ class XmlData
         void traverseRelation (XmlNodePtr pt, RawRelation& rrel);
         void traverseWay (XmlNodePtr pt, RawWay& rway);
         void traverseNode (XmlNodePtr pt, RawNode& rnode);
+        void make_key_val_indices ();
 
 }; // end Class::XmlData
 
@@ -395,6 +397,22 @@ inline void XmlData::traverseNode (XmlNodePtr pt, RawNode& rnode)
     }
 } // end function XmlData::traverseNode
 
+inline void XmlData::make_key_val_indices ()
+{
+    // These are std::maps which enable keys to be mapped directly onto their
+    // column number in the key-val matrices
+    unsigned int i = 0;
+    for (auto m: m_unique.k_point)
+        m_unique.k_point_index.insert (std::make_pair (m, i++));
+
+    i = 0;
+    for (auto m: m_unique.k_way)
+        m_unique.k_way_index.insert (std::make_pair (m, i++));
+
+    i = 0;
+    for (auto m: m_unique.k_rel)
+        m_unique.k_rel_index.insert (std::make_pair (m, i++));
+}
 
 /*---------------------------- fn headers -----------------------------*/
 

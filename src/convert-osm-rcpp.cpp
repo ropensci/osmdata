@@ -103,9 +103,8 @@ void osm_convert::get_value_mat_way (Ways::const_iterator wayi,
             kv_iter != wayi->second.key_val.end (); ++kv_iter)
     {
         const std::string &key = kv_iter->first;
-        long int coli = std::distance (unique_vals.k_way.begin (),
-                unique_vals.k_way.find (key));
-        value_arr (rowi, static_cast <unsigned int> (coli)) = kv_iter->second;
+        unsigned int coli = unique_vals.k_way_index.at (key);
+        value_arr (rowi, coli) = kv_iter->second;
     }
 }
 
@@ -128,9 +127,8 @@ void osm_convert::get_value_mat_rel (Relations::const_iterator &reli,
             ++kv_iter)
     {
         const std::string &key = kv_iter->first;
-        long int coli = std::distance (unique_vals.k_rel.begin (),
-                unique_vals.k_rel.find (key));
-        value_arr (rowi, static_cast <unsigned int> (coli)) = kv_iter->second;
+        unsigned int coli = unique_vals.k_rel_index.at (key);
+        value_arr (rowi, coli) = kv_iter->second;
     }
 }
 
@@ -548,8 +546,8 @@ void osm_convert::convert_relation_to_sc (string_arr2 &members_out,
                 kv_iter != itr->key_val.end (); ++kv_iter)
         {
             const std::string &key = kv_iter->first;
-            long int coli = std::distance (unique_vals.k_rel.begin (),
-                    unique_vals.k_rel.find (key));
+            long int coli = static_cast <long int> (
+                    unique_vals.k_rel_index.at (key));
             kv_out [coli] [rowi] = kv_iter->second;
         }
         rowi++;

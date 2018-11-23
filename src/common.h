@@ -92,6 +92,9 @@ struct UniqueVals
     // is slower than an unordered_set, it is useful to have keys alphabetically
     // ordered.
     std::set <std::string> k_point, k_way, k_rel;
+    // A numeric index is also constructed to enable direct indexing into
+    // key-val matrices. This is an unsigned int for indexing into Rcpp objects.
+    std::map <std::string, unsigned int> k_point_index, k_way_index, k_rel_index;
 };
 
 struct RawNode

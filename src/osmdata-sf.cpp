@@ -414,9 +414,7 @@ void osm_sf::get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
                 kv_iter != ni->second.key_val.end (); ++kv_iter)
         {
             const std::string &key = kv_iter->first;
-            unsigned int ndi = static_cast <unsigned int> (
-                    std::distance (unique_vals.k_point.begin (),
-                    unique_vals.k_point.find (key)));
+            unsigned int ndi = unique_vals.k_point_index.at (key);
             kv_mat (count, ndi) = kv_iter->second;
         }
         count++;
