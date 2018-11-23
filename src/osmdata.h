@@ -405,7 +405,7 @@ Rcpp::List get_osm_relations (const Relations &rels,
         const std::map <osmid_t, OneWay> &ways, const UniqueVals &unique_vals,
         const Rcpp::NumericVector &bbox, const Rcpp::List &crs);
 void get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
-        const std::set <osmid_t> way_ids, const Ways &ways, const Nodes &nodes,
+        const std::set <osmid_t> &way_ids, const Ways &ways, const Nodes &nodes,
         const UniqueVals &unique_vals, const std::string &geom_type,
         const Rcpp::NumericVector &bbox, const Rcpp::List &crs);
 void get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
@@ -421,7 +421,7 @@ namespace osm_sp {
 void get_osm_nodes (Rcpp::S4 &sp_points, const Nodes &nodes, 
         const UniqueVals &unique_vals);
 void get_osm_ways (Rcpp::S4 &sp_ways, 
-        const std::set <osmid_t> way_ids, const Ways &ways, const Nodes &nodes,
+        const std::set <osmid_t> &way_ids, const Ways &ways, const Nodes &nodes,
         const UniqueVals &unique_vals, const std::string &geom_type);
 void get_osm_relations (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons, 
         const Relations &rels, const std::map <osmid_t, Node> &nodes,

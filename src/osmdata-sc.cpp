@@ -33,6 +33,10 @@
 
 #include <Rcpp.h>
 
+// Note: This code uses explicit index counters within most loops which use Rcpp
+// objects, because these otherwise require a 
+// static_cast <size_t> (std::distance (...)). This operation copies each
+// instance and can slow the loops down by several orders of magnitude!
 
 /************************************************************************
  ************************************************************************
@@ -79,22 +83,20 @@ void osm_sc::get_osm_relations (Rcpp::DataFrame &rel_df, Rcpp::DataFrame &kv_df,
 
         unsigned int i = std::distance (rels.begin (), itr);
         ids [i] = itr->id;
+        unsigned int j = i; // explicit loop index
         for (auto r = relation_ways.begin (); r != relation_ways.end (); ++r)
         {
-            unsigned int j = i + static_cast <unsigned int> (
-                    std::distance (relation_ways.begin (), r));
             rel_mat (j, 0) = std::to_string (itr->id); // relation ID
             rel_mat (j, 1) = std::to_string (r->first); // ref ID of component obj
-            rel_mat (j, 2) = r->second; // role of component
+            rel_mat (j++, 2) = r->second; // role of component
         }
 
+        j = i;
         for (auto k = itr->key_val.begin (); k != itr->key_val.end (); ++k)
         {
-            unsigned int j = i + static_cast <unsigned int> (
-                    std::distance (itr->key_val.begin (), k));
             kv_mat (j, 0) = std::to_string (itr->id);
             kv_mat (j, 1) = k->first;
-            kv_mat (j, 2) = k->second;
+            kv_mat (j++, 2) = k->second;
         }
     }
     rel_df = Rcpp::DataFrame::create (Rcpp::Named ("object_") = rel_mat (Rcpp::_, 0),
@@ -218,17 +220,15 @@ void osm_sc::get_osm_nodes (Rcpp::DataFrame &node_df, Rcpp::DataFrame &kv_df,
         nkeys += ni->second.key_val.size ();
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nkeys, 3));
 
-    int keyj = 0; // TODO: Use std::distance for that
+    int i = 0, keyj = 0;
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
-        const unsigned int i = static_cast <unsigned int> (
-                std::distance (nodes.begin (), ni));
         if (i % 1000 == 0)
             Rcpp::checkUserInterrupt ();
 
         node_ids (i) = std::to_string (ni->first);
         node_mat (i, 0) = ni->second.lon;
-        node_mat (i, 1) = ni->second.lat;
+        node_mat (i++, 1) = ni->second.lat;
 
         for (auto kv_iter = ni->second.key_val.begin ();
                 kv_iter != ni->second.key_val.end (); ++kv_iter)

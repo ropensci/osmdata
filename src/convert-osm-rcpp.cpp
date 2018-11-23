@@ -66,8 +66,10 @@ void osm_convert::trace_way_nmat (const Ways &ways, const Nodes &nodes,
             ni != wayi->second.nodes.end (); ++ni)
     {
         rownames.push_back (std::to_string (*ni));
-        nmat (tempi, 0) = static_cast <double> (nodes.find (*ni)->second.lon);
-        nmat (tempi++, 1) = static_cast <double> (nodes.find (*ni)->second.lat);
+        //nmat (tempi, 0) = static_cast <double> (nodes.find (*ni)->second.lon);
+        //nmat (tempi++, 1) = static_cast <double> (nodes.find (*ni)->second.lat);
+        nmat (tempi, 0) = nodes.find (*ni)->second.lon;
+        nmat (tempi++, 1) = nodes.find (*ni)->second.lat;
     }
 
     std::vector <std::string> colnames = {"lon", "lat"};
@@ -75,7 +77,8 @@ void osm_convert::trace_way_nmat (const Ways &ways, const Nodes &nodes,
     dimnames.push_back (rownames);
     dimnames.push_back (colnames);
     nmat.attr ("dimnames") = dimnames;
-    dimnames.erase (0, static_cast <int> (dimnames.size ()));
+    //dimnames.erase (0, static_cast <int> (dimnames.size ()));
+    dimnames.erase (0, 2);
 }
 
 /* get_value_mat_way
@@ -189,14 +192,17 @@ Rcpp::CharacterMatrix osm_convert::restructure_kv_mat (Rcpp::CharacterMatrix &kv
             varnames_new.push_back ("role");
             kv_out.column (2) = roles;
         }
-        unsigned int count = 1 + add_lines;
+        int count = 1 + static_cast <int> (add_lines);
+        int i_int = 0;
         for (unsigned int i=0; i<static_cast <unsigned int> (kv.ncol ()); i++)
+        {
             if (i != static_cast <unsigned int> (ni))
             {
                 varnames_new.push_back (varnames [i]);
-                kv_out.column (static_cast <int> (count++)) =
-                    kv.column (static_cast <int> (i));
+                kv_out.column (count++) = kv.column (i_int);
             }
+            i_int++;
+        }
         kv_out.attr ("dimnames") = Rcpp::List::create (ids, varnames_new);
     } else
         kv_out = kv;
@@ -245,7 +251,8 @@ template <typename T> Rcpp::List osm_convert::convert_poly_linestring_to_sf (
             dimnames.push_back (rowname_arr [i][j]);
             dimnames.push_back (colnames);
             nmat.attr ("dimnames") = dimnames;
-            dimnames.erase (0, static_cast <int> (dimnames.size ()));
+            //dimnames.erase (0, static_cast <int> (dimnames.size ()));
+            dimnames.erase (0, 2);
             outList_i [j] = nmat;
         }
         outList_i.attr ("names") = id_vec [i];
@@ -336,7 +343,8 @@ void osm_convert::convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relati
                 dimnames.push_back (rowname_arr [i][j]);
                 dimnames.push_back (colnames);
                 nmat.attr ("dimnames") = dimnames;
-                dimnames.erase (0, static_cast <int> (dimnames.size ()));
+                //dimnames.erase (0, static_cast <int> (dimnames.size ()));
+                dimnames.erase (0, 2);
 
                 Rcpp::S4 poly = Polygon (nmat);
                 poly.slot ("hole") = !outer;
@@ -381,8 +389,8 @@ void osm_convert::convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relati
     // Fill plotOrder slot with int vector - this has to be int, not
     // unsigned int!
     std::vector <int> plotord (rels.size ());
-    for (unsigned int j=0; j<static_cast <unsigned int> (rels.size ()); j++)
-        plotord [j] = static_cast <int> (j) + 1;
+    for (int j = 0; j < static_cast <int> (rels.size ()); j++)
+        plotord [j] = j + 1;
     multipolygons.slot ("plotOrder") = plotord;
     plotord.clear ();
 
@@ -454,7 +462,8 @@ void osm_convert::convert_multiline_to_sp (Rcpp::S4 &multilines, const Relations
                 dimnames.push_back (rowname_arr [i][j]);
                 dimnames.push_back (colnames);
                 nmat.attr ("dimnames") = dimnames;
-                dimnames.erase (0, static_cast <int> (dimnames.size ()));
+                //dimnames.erase (0, static_cast <int> (dimnames.size ()));
+                dimnames.erase (0, 2);
 
                 Rcpp::S4 line = line_call.eval ();
                 line.slot ("coords") = nmat;
@@ -516,20 +525,22 @@ void osm_convert::convert_relation_to_sc (string_arr2 &members_out,
     for (auto k: kv_out)
         k.resize (rels.size ());
 
+    unsigned int rowi = 0; // explicit loop index - see note at top of osmdata-sf
     for (auto itr = rels.begin (); itr != rels.end (); itr++)
     {
-        const unsigned int rowi = static_cast <unsigned int> (
-                std::distance (rels.begin (), itr));
+        //const unsigned int rowi = static_cast <unsigned int> (
+        //        std::distance (rels.begin (), itr));
 
         // Get all members of that relation and their roles:
+        unsigned int rowj = rowi;
         for (auto ritr = itr->relations.begin ();
                 ritr != itr->relations.end (); ++ritr)
         {
-            const unsigned int rowj = rowi + static_cast <unsigned int> (
-                    std::distance (itr->relations.begin (), ritr));
+            //const unsigned int rowj = rowi + static_cast <unsigned int> (
+            //        std::distance (itr->relations.begin (), ritr));
             members_out [rowj] [0] = std::to_string (itr->id);
             members_out [rowj] [1] = std::to_string (ritr->first); // OSM id
-            members_out [rowj] [2] = ritr->second; // role
+            members_out [rowj++] [2] = ritr->second; // role
         }
         
         // And then key-value pairs
@@ -541,5 +552,6 @@ void osm_convert::convert_relation_to_sc (string_arr2 &members_out,
                     unique_vals.k_rel.find (key));
             kv_out [coli] [rowi] = kv_iter->second;
         }
+        rowi++;
     } // end for itr
 }
