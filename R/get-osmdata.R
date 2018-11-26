@@ -165,7 +165,7 @@ osmdata_sp <- function(q, doc, quiet = TRUE, encoding = 'UTF-8')
     else
         stop ('q must be an overpass query or a character string')
 
-    temp <- fill_overpass_data (obj, doc)
+    temp <- fill_overpass_data (obj, doc, quiet = quiet)
     obj <- temp$obj
     doc <- temp$doc
 
@@ -302,7 +302,7 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
     else
         stop ('q must be an overpass query or a character string')
 
-    temp <- fill_overpass_data (obj, doc)
+    temp <- fill_overpass_data (obj, doc, quiet = quiet)
     obj <- temp$obj
     doc <- temp$doc
 
@@ -387,7 +387,7 @@ osmdata_sc <- function(q, doc, directed = FALSE, quiet=TRUE, encoding) {
     else
         stop ('q must be an overpass query or a character string')
 
-    temp <- fill_overpass_data (obj, doc)
+    temp <- fill_overpass_data (obj, doc, quiet = quiet)
     obj <- temp$obj
     doc <- temp$doc
 
