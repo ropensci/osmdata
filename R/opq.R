@@ -175,6 +175,8 @@ add_osm_feature <- function (opq, key, value, key_exact = TRUE,
 #'
 #' @param id One or more official OSM identifiers (long-form integers)
 #' @param type Type of object; must be either `node`, `way`, or `relation`
+#' @param open_url If `TRUE`, open the OSM page of the specified object in web
+#' browser. Multiple objects (`id` values) will be opened in multiple pages.
 #' @return \code{opq} object
 #' 
 #' @references
@@ -201,7 +203,7 @@ add_osm_feature <- function (opq, key, value, key_exact = TRUE,
 #' dat2$osm_lines # the desired ways
 #' dat <- c (dat1, dat2) # The node and way data combined
 #' }
-opq_osm_id <- function (id = NULL, type = NULL)
+opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE)
 {
     if (is.null (type))
         stop ('type must be specified: one of node, way, or relation')
@@ -211,6 +213,13 @@ opq_osm_id <- function (id = NULL, type = NULL)
     opq$bbox <- NULL
     opq$features <- NULL
     opq$id <- list (type = type, id = id)
+
+    if (open_url)
+    {
+        u <- paste0 ("https://openstreetmap.org/", type [1], "/", id)
+        for (i in u)
+            browseURL (i)
+    }
 
     opq
 }
