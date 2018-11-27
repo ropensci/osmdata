@@ -9,7 +9,7 @@ makefile$
 ^paper\.md$
 ^_pkgdown\.yml$
 ^cran-comments.md$
-^CONDUCT\.md$
+^CODE_OF_CONDUCT\.md$
 ^README\.Rmd$
 ^README\.md$
 ^README\.html$

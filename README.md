@@ -45,7 +45,7 @@ To load the package and check the version:
 library(osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
 packageVersion("osmdata")
-#> [1] '0.0.8'
+#> [1] '0.0.8.99'
 ```
 
 ### Usage
@@ -138,7 +138,7 @@ citation ("osmdata")
 ### Code of Conduct
 
 Please note that this project is released with a [Contributor Code of
-Conduct](CONDUCT.md). By participating in this project you agree to
-abide by its terms.
+Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree
+to abide by its terms.
 
 [![ropensci\_footer](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)

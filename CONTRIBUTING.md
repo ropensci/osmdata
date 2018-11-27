@@ -50,6 +50,6 @@ with a space between `function` and `()`. That's it.
 ## Code of Conduct
 
 We want to encourage a warm, welcoming, and safe environment for contributing to
-this project. See the
-[code of conduct](https://github.com/ropensci/osmdata/blob/master/CONDUCT.md) for
+this project. See the [code of
+conduct](https://github.com/ropensci/osmdata/blob/master/CODE_OF_CONDUCT.md) for
 more information.
