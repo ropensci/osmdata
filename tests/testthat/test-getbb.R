@@ -15,20 +15,31 @@ if (get_local) {
     #         file = "./tests/testthat/bb_test.Rds")
 
     # Equivalent code using internal 'stub.R' function
-    base_url <- "https://nominatim.openstreetmap.org"
-    query <- list (q = 'Salzburg', viewbox = NULL, format = 'json',
-                   featuretype = 'settlement', key = NULL, limit = 10)
-    the_url <- httr::modify_url (base_url, query = query)
-    cfm_output_bb <- NULL
-    trace(
-          curl::curl_fetch_memory,
-          exit = function() {
-              cfm_output_bb <<- returnValue()
-          })
-    res <- httr::GET (the_url)
-    class (cfm_output_bb) <- 'response'
-    untrace (curl::curl_fetch_memory)
-    save (cfm_output_bb, file = '../cfm_output_bb.rda')
+    stub1 <- function (query)
+    {
+        base_url <- "https://nominatim.openstreetmap.org"
+        the_url <- httr::modify_url (base_url, query = query)
+        cfm_output <- NULL
+        trace(
+              curl::curl_fetch_memory,
+              exit = function() {
+                  cfm_output <<- returnValue()
+              })
+        res <- httr::GET (the_url)
+        class (cfm_output) <- 'response'
+        untrace (curl::curl_fetch_memory)
+        return (cfm_output)
+    }
+
+    list (q = 'Salzburg', viewbox = NULL, format = 'json',
+          featuretype = 'settlement', key = NULL, limit = 10) %>%
+        stub1 () -> cfm_output_bb
+    save (cfm_output_bb, file = '../cfm_output_bb1.rda')
+    list (q = 'Salzburg', viewbox = NULL, format = 'json',
+          polygon_geojson = 1,
+          featuretype = 'settlement', key = NULL, limit = 10) %>%
+        stub1 () -> cfm_output_bb
+    save (cfm_output_bb, file = '../cfm_output_bb2.rda')
 }
 
 context ("bbox")
@@ -45,7 +56,7 @@ test_that ('getbb-place_name', {
                if (has_internet) {
                    if (!test_all)
                    {
-                       load("../cfm_output_bb.rda")
+                       load("../cfm_output_bb2.rda")
                        stub (getbb, 'httr::GET', function (x) cfm_output_bb )
                    }
                    res <- getbb (place_name = "Salzburg")
