@@ -395,12 +395,13 @@ osmdata_sc <- function(q, doc, directed = FALSE, quiet=TRUE, encoding) {
 
     if (nrow (res$rel) > 0)
     {
-        res$rel$key <- NA_character_
-        res$rel$value <- NA_character_
+        # Change res$rel from ("ref", "role") to ("value", "key")
+        res$rel <- data.frame (object_ = res$rel$object,
+                               key = paste0 ("rel_role_", res$rel$role),
+                               value = res$rel$ref,
+                               obj_type = "relation",
+                               stringsAsFactors = FALSE)
     }
-    res$rel_kv <- add_ref_role_cols (res$rel_kv)
-    res$way_kv <- add_ref_role_cols (res$way_kv)
-    res$node_kv <- add_ref_role_cols (res$node_kv)
 
     res$object_link_edge$native_ <- TRUE
     res <- duplicate_twoway_edges (res, directed)
@@ -423,25 +424,6 @@ osmdata_sc <- function(q, doc, directed = FALSE, quiet=TRUE, encoding) {
     attr (obj, "class") <- c ("SC", "sc")
 
     return (obj)
-}
-
-add_ref_role_cols <- function (x)
-{
-    if (nrow (x) == 0)
-    {
-        x <- data.frame (matrix (ncol = 6, nrow = 0))
-        names (x) <- c ("object_", "ref", "role", "key", "value", "obj_type")
-    } else
-    {
-        x <- data.frame (object_ = x$object_,
-                         ref = NA_character_,
-                         role = NA_character_,
-                         key = x$key,
-                         value = x$value,
-                         obj_type = x$obj_type,
-                         stringsAsFactors = FALSE)
-    }
-    return (x)
 }
 
 duplicate_twoway_edges <- function (x, directed)
