@@ -74,6 +74,7 @@ void osm_sc::get_osm_relations (Rcpp::DataFrame &rel_df, Rcpp::DataFrame &kv_df,
     Rcpp::CharacterMatrix rel_mat (Rcpp::Dimension (nrow_memb, 3));
     // rel_mat has [rel ID, member ID, member role]
 
+    unsigned int i_rel_mat = 0, i_kv_mat = 0; // explicit loop indices
     for (auto itr = rels.begin (); itr != rels.end (); ++itr)
     {
         Rcpp::checkUserInterrupt ();
@@ -83,20 +84,18 @@ void osm_sc::get_osm_relations (Rcpp::DataFrame &rel_df, Rcpp::DataFrame &kv_df,
 
         unsigned int i = std::distance (rels.begin (), itr);
         ids [i] = itr->id;
-        unsigned int j = i; // explicit loop index
         for (auto r = relation_ways.begin (); r != relation_ways.end (); ++r)
         {
-            rel_mat (j, 0) = std::to_string (itr->id); // relation ID
-            rel_mat (j, 1) = std::to_string (r->first); // ref ID of component obj
-            rel_mat (j++, 2) = r->second; // role of component
+            rel_mat (i_rel_mat, 0) = std::to_string (itr->id); // relation ID
+            rel_mat (i_rel_mat, 1) = std::to_string (r->first); // ref ID of component obj
+            rel_mat (i_rel_mat++, 2) = r->second; // role of component
         }
 
-        j = i;
         for (auto k = itr->key_val.begin (); k != itr->key_val.end (); ++k)
         {
-            kv_mat (j, 0) = std::to_string (itr->id);
-            kv_mat (j, 1) = k->first;
-            kv_mat (j++, 2) = k->second;
+            kv_mat (i_kv_mat, 0) = std::to_string (itr->id);
+            kv_mat (i_kv_mat, 1) = k->first;
+            kv_mat (i_kv_mat++, 2) = k->second;
         }
     }
     rel_df = Rcpp::DataFrame::create (Rcpp::Named ("object_") = rel_mat (Rcpp::_, 0),

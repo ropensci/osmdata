@@ -381,7 +381,7 @@ osmdata_sc <- function(q, doc, directed = FALSE, quiet=TRUE, encoding) {
         message ('converting OSM data to sc format')
     res <- rcpp_osmdata_sc (temp$doc)
 
-    # rel has the $vertex, $edge and $object_link_edge tables ready to go.  The
+    # res has the $vertex, $edge and $object_link_edge tables ready to go.  The
     # $object table is mostly just key-val pairs, but the relations have
     # additional members - called "ref" and "role" entries. The key-val tables
     # are therefore expanded to add these two columns before rbind-ing the whole
@@ -429,8 +429,8 @@ add_ref_role_cols <- function (x)
 {
     if (nrow (x) == 0)
     {
-        x <- data.frame (matrix (ncol = 5, nrow = 0))
-        names (x) <- c ("object_", "ref", "role", "key", "value")
+        x <- data.frame (matrix (ncol = 6, nrow = 0))
+        names (x) <- c ("object_", "ref", "role", "key", "value", "obj_type")
     } else
     {
         x <- data.frame (object_ = x$object_,
@@ -438,6 +438,7 @@ add_ref_role_cols <- function (x)
                          role = NA_character_,
                          key = x$key,
                          value = x$value,
+                         obj_type = x$obj_type,
                          stringsAsFactors = FALSE)
     }
     return (x)

@@ -161,7 +161,7 @@ NULL
 #' Extracts all polygons from an overpass API query
 #'
 #' @param st Text contents of an overpass API query
-#' @return A `SpatialLinesDataFrame` contains all polygons and associated data
+#' @return A \code{SpatialLinesDataFrame} contains all polygons and associated data
 #' 
 #' @noRd 
 rcpp_osmdata_sp <- function(st) {
