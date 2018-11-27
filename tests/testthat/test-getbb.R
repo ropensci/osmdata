@@ -36,7 +36,7 @@ if (get_local) {
         stub1 () -> cfm_output_bb
     save (cfm_output_bb, file = '../cfm_output_bb1.rda')
     list (q = 'Salzburg', viewbox = NULL, format = 'json',
-          polygon_geojson = 1,
+          polygon_text = 1,
           featuretype = 'settlement', key = NULL, limit = 10) %>%
         stub1 () -> cfm_output_bb
     save (cfm_output_bb, file = '../cfm_output_bb2.rda')
@@ -56,7 +56,7 @@ test_that ('getbb-place_name', {
                if (has_internet) {
                    if (!test_all)
                    {
-                       load("../cfm_output_bb2.rda")
+                       load("../cfm_output_bb1.rda")
                        stub (getbb, 'httr::GET', function (x) cfm_output_bb )
                    }
                    res <- getbb (place_name = "Salzburg")
@@ -64,6 +64,20 @@ test_that ('getbb-place_name', {
                    expect_length (res, 4)
                    res <- getbb (place_name = "Salzburg", format_out = "string")
                    expect_is (res, "character")
+               }
+          })
+
+test_that ('getbb-polygon', {
+               if (has_internet) {
+                   if (!test_all)
+                   {
+                       load("../cfm_output_bb2.rda")
+                       stub (getbb, 'httr::GET', function (x) cfm_output_bb )
+                   }
+                   res <- getbb (place_name = "Salzburg", format_out = "polygon")
+                   expect_is (res, "list")
+                   expect_true (all (lapply (res, nrow) > 2))
+                   expect_true (all (lapply (res, class) == "matrix"))
                }
           })
 
