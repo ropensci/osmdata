@@ -5,7 +5,6 @@ Status](https://travis-ci.org/ropensci/osmdata.svg?branch=master)](https://travi
 status](https://ci.appveyor.com/api/projects/status/github/ropensci/osmdata?svg=true)](https://ci.appveyor.com/project/ropensci/osmdata)
 [![codecov](https://codecov.io/gh/ropensci/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/osmdata)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/osmdata)](http://cran.r-project.org/web/packages/osmdata)
-[![status](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3/status.svg)](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3)
 [![CRAN
 Downloads](http://cranlogs.r-pkg.org/badges/grand-total/osmdata?color=orange)](http://cran.r-project.org/package=osmdata)
 [![Project Status:
@@ -13,6 +12,7 @@ Active](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostat
 
 ![](./fig/title.png)
 [![](https://badges.ropensci.org/103_status.svg)](https://github.com/ropensci/onboarding/issues/103)
+[![status](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3/status.svg)](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3)
 
 `osmdata` is an R package for accessing the raw vector data underlying
 OpenStreetMap (OSM) via the [Overpass
