@@ -78,6 +78,10 @@ test_that ('getbb-polygon', {
                    expect_is (res, "list")
                    expect_true (all (lapply (res, nrow) > 2))
                    expect_true (all (lapply (res, class) == "matrix"))
+                   res <- getbb (place_name = "Salzburg", format_out = "sf_polygon")
+                   expect_is (res, "sf")
+                   expect_is (res$geometry, "sfc_POLYGON")
+                   expect_length (res$geometry, 1)
                }
           })
 
