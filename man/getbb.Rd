@@ -19,7 +19,7 @@ returned by \url{http://wiki.openstreetmap.org/wiki/Nominatim}}
 \item{viewbox}{The bounds in which you're searching}
 
 \item{format_out}{Character string indicating output format: matrix (default),
-string (see \code{\link{bbox_to_string}}), data.frame (all 'hits' returned
+string (see \code{\link[=bbox_to_string]{bbox_to_string()}}), data.frame (all 'hits' returned
 by Nominatim), sf_polygon (for polygons that work with the sf package)
 or polygon (full polygonal bounding boxes for each match).}
 

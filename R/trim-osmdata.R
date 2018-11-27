@@ -5,13 +5,13 @@
 #' @param dat An \link{osmdata} object returned from \link{osmdata_sf} or
 #' \link{osmdata_sp}.
 #' @param bb_poly A matrix representing a bounding polygon obtained with
-#' \code{getbb (..., format_out = "polygon")} (and possibly selected from
+#' `getbb (..., format_out = "polygon")` (and possibly selected from
 #' resultant list where multiple polygons are returned).
 #' @param exclude If TRUE, objects are trimmed exclusively, only retaining those
 #' strictly within the bounding polygon; otherwise all objects which partly
 #' extend within the bounding polygon are retained.
 #'
-#' @return A trimmed version of \code{dat}, reduced only to those components
+#' @return A trimmed version of `dat`, reduced only to those components
 #' lying within the bounding polygon.
 #'
 #' @note It will generally be necessary to pre-load the \pkg{sf} package for
@@ -64,7 +64,7 @@ trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE)
 #' Index of finite objects (lines, polygons, multi*) in the list g which are
 #' contained within the polygon bb
 #'
-#' @param g An \code{sf::sfc} list of geometries
+#' @param g An `sf::sfc` list of geometries
 #' @param bb Polygonal bounding box
 #' @param exclude binary parameter determining exclusive or inclusive inclusion
 #'      in polygon

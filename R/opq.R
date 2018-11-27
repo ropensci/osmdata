@@ -4,20 +4,20 @@
 #'             longitudes and latitudes; (ii) a character string passed to
 #'             \link{getbb} to be converted to a numerical bounding box; or
 #'             (iii) a matrix representing a bounding polygon as returned from
-#'             \code{getbb(..., format_out = "polygon")}.
+#'             `getbb(..., format_out = "polygon")`.
 #' @param timeout It may be necessary to ncrease this value for large queries,
 #'             because the server may time out before all data are delivered.
 #' @param memsize The default memory size for the 'overpass' server in
-#'              \emph{bytes}; may need to be increased in order to handle large
+#'              *bytes*; may need to be increased in order to handle large
 #'              queries. 
 #'
-#' @return An \code{overpass_query} object
+#' @return An `overpass_query` object
 #'
 #' @note See
-#' \url{https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29}
-#' for explanation of \code{timeout} and \code{memsize} (or \code{maxsize} in
+#' <https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29>
+#' for explanation of `timeout` and `memsize` (or `maxsize` in
 #' overpass terms). Note in particular the comment that queries with arbitrarily
-#' large \code{memsize} are likely to be rejeted.
+#' large `memsize` are likely to be rejeted.
 #'
 #' @export
 #'
@@ -53,31 +53,31 @@ opq <- function (bbox = NULL, timeout = 25, memsize)
 
 #' Add a feature to an Overpass query
 #'
-#' @param opq An \code{overpass_query} object
+#' @param opq An `overpass_query` object
 #' @param key feature key
 #' @param value value for feature key; can be negated with an initial
-#' exclamation mark, \code{value = "!this"}, and can also be a vector,
-#' \code{value = c ("this", "that")}.
-#' @param key_exact If FALSE, \code{key} is not interpreted exactly; see
-#' \url{https://wiki.openstreetmap.org/wiki/Overpass_API}
-#' @param value_exact If FALSE, \code{value} is not interpreted exactly
-#' @param match_case If FALSE, matching for both \code{key} and \code{value} is
+#' exclamation mark, `value = "!this"`, and can also be a vector,
+#' `value = c ("this", "that")`.
+#' @param key_exact If FALSE, `key` is not interpreted exactly; see
+#' <https://wiki.openstreetmap.org/wiki/Overpass_API>
+#' @param value_exact If FALSE, `value` is not interpreted exactly
+#' @param match_case If FALSE, matching for both `key` and `value` is
 #' not sensitive to case
 #' @param bbox optional bounding box for the feature query; must be set if no
 #'        opq query bbox has been set
 #' @return \link{opq} object
 #' 
-#' @note \code{key_exact} should generally be \code{TRUE}, because OSM uses a
+#' @note `key_exact` should generally be `TRUE`, because OSM uses a
 #' reasonably well defined set of possible keys, as returned by
-#' \link{available_features}. Setting \code{key_exact = FALSE} allows matching
+#' \link{available_features}. Setting `key_exact = FALSE` allows matching
 #' of regular expressions on OSM keys, as described in Section 6.1.5 of
-#' \url{http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL}. The actual
+#' <http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL>. The actual
 #' query submitted to the overpass API can be obtained from
 #' \link{opq_string}.
 #'
 #' @note \link{add_feature} is deprecated; please use \link{add_osm_feature}.
 #'
-#' @references \url{http://wiki.openstreetmap.org/wiki/Map_Features}
+#' @references <http://wiki.openstreetmap.org/wiki/Map_Features>
 #'
 #' @export
 #'
@@ -180,7 +180,7 @@ add_osm_feature <- function (opq, key, value, key_exact = TRUE,
 #' @return \link{opq} object
 #' 
 #' @references
-#' \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_element_id}
+#' <https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_element_id>
 #'
 #' @note Extracting elements by ID requires explicitly specifying the type of
 #' element. Only elements of one of the three given types can be extracted in a
@@ -239,7 +239,7 @@ add_feature <- function (opq, key, value, key_exact = TRUE,
 #' Convert an osmdata query of class opq to a character string query to
 #' be submitted to the overpass API.
 #'
-#' @param opq An \code{overpass_query} object
+#' @param opq An `overpass_query` object
 #' @return Character string to be submitted to the overpass API
 #' 
 #' @export

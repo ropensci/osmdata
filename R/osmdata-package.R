@@ -36,11 +36,11 @@
 #'
 #' @section Functions to Search Data:
 #' \itemize{
-#' \item \code{osm_points}: Extract all \code{osm_points} objects
-#' \item \code{osm_lines}: Extract all \code{osm_lines} objects
-#' \item \code{osm_polygons}: Extract all \code{osm_polygons} objects
-#' \item \code{osm_multilines}: Extract all \code{osm_multilines} objects
-#' \item \code{osm_multipolygons}: Extract all \code{osm_multipolygons} objects
+#' \item `osm_points`: Extract all `osm_points` objects
+#' \item `osm_lines`: Extract all `osm_lines` objects
+#' \item `osm_polygons`: Extract all `osm_polygons` objects
+#' \item `osm_multilines`: Extract all `osm_multilines` objects
+#' \item `osm_multipolygons`: Extract all `osm_multipolygons` objects
 #' }
 #'
 #' @name osmdata

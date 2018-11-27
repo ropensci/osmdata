@@ -32,5 +32,5 @@ For further details, see
 \url{http://wiki.openstreetmap.org/wiki/Overpass_API}
 }
 \seealso{
-\code{\link{get_overpass_url}}
+\code{\link[=get_overpass_url]{get_overpass_url()}}
 }

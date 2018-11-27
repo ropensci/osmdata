@@ -14,5 +14,5 @@ Return the URL of the specified overpass API. Default is
 \url{http://overpass-api.de/api/interpreter}.
 }
 \seealso{
-\code{\link{set_overpass_url}}
+\code{\link[=set_overpass_url]{set_overpass_url()}}
 }

@@ -3,7 +3,7 @@
 #' @return character vector of all known features
 #'
 #' @note requires internet access
-#' @references \url{http://wiki.openstreetmap.org/wiki/Map_Features}
+#' @references <http://wiki.openstreetmap.org/wiki/Map_Features>
 #'
 #' @export
 #'
@@ -32,7 +32,7 @@ available_features <- function() {
 #' @return character vector of all known tags for a feature
 #'
 #' @note requires internet access
-#' @references \url{http://wiki.openstreetmap.org/wiki/Map_Features}
+#' @references <http://wiki.openstreetmap.org/wiki/Map_Features>
 #'
 #' @export
 #'

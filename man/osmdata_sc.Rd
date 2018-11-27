@@ -8,7 +8,7 @@
 osmdata_sc(q, doc, directed = FALSE, quiet = TRUE, encoding)
 }
 \arguments{
-\item{q}{An object of class `overpass_query` constructed with
+\item{q}{An object of class \code{overpass_query} constructed with
 \link{opq} and \link{add_osm_feature}. May be be omitted,
 in which case the \link{osmdata} object will not include the
 query.}
@@ -27,8 +27,8 @@ encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
 an explicit encoding directive, this allows you to supply a default.}
 }
 \value{
-An object of class `osmdata` representing the original OSM hierarchy
-     of nodes, ways, and relations.
+An object of class \code{osmdata} representing the original OSM hierarchy
+of nodes, ways, and relations.
 }
 \description{
 Return an OSM Overpass query as an \link{osmdata} object in
@@ -36,16 +36,16 @@ Return an OSM Overpass query as an \link{osmdata} object in
 }
 \note{
 The \code{silicate} format is currently highly experimental, and
-     recommended for use only if you really know what you're doing.
+recommended for use only if you really know what you're doing.
 
 If \code{directed = TRUE}, all edges that are not explicitly designated
-     as one-way are duplicated in the `sc$object_link_edge` table to
-     represent bi-directional flow. This is useful for routing, for example
-     through converting the result to an \pkg{igraph} or \pkg{dodgr} object.
-     Note that other text values such as \code{directed = "bicycle"} are also
-     acceptable, in which case values for the OSM key "oneway:bicycle" -
-     rather than the generic "oneway" key - will be used to determine
-     directionality of flow.
+as one-way are duplicated in the \code{sc$object_link_edge} table to
+represent bi-directional flow. This is useful for routing, for example
+through converting the result to an \pkg{igraph} or \pkg{dodgr} object.
+Note that other text values such as \code{directed = "bicycle"} are also
+acceptable, in which case values for the OSM key "oneway:bicycle" -
+rather than the generic "oneway" key - will be used to determine
+directionality of flow.
 }
 \examples{
 \dontrun{

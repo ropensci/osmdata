@@ -7,7 +7,7 @@
 osmdata_pbf(q, filename, quiet = TRUE)
 }
 \arguments{
-\item{q}{An object of class `overpass_query` constructed with
+\item{q}{An object of class \code{overpass_query} constructed with
 \link{opq} and \link{add_osm_feature}.}
 
 \item{filename}{If given, OSM data are saved to the named file}

@@ -1,16 +1,16 @@
 #' Convert osmdata polygons into lines
 #'
-#' Street networks downloaded with \code{add_osm_object(key = "highway")} will
-#' store any circular highways in \code{$osm_polygons}. this function combines
-#' those with the \code{$osm_lines} component to yield a single \pkg{sf}
-#' \code{data.frame} of all highways, whether polygonal or not.
+#' Street networks downloaded with `add_osm_object(key = "highway")` will
+#' store any circular highways in `$osm_polygons`. this function combines
+#' those with the `$osm_lines` component to yield a single \pkg{sf}
+#' `data.frame` of all highways, whether polygonal or not.
 #'
 #' @param osmdat An \link{osmdata} object.
-#' @return Modified version of same object with all \code{$osm_polygons}
-#' objeccts merged into \code{$osm_lines}.
+#' @return Modified version of same object with all `$osm_polygons`
+#' objeccts merged into `$osm_lines`.
 #'
-#' @note The \code{$osm_polygons} field is retained, with those features also
-#' repeated as \code{LINESTRING} objects in \code{$osm_lines}.
+#' @note The `$osm_polygons` field is retained, with those features also
+#' repeated as `LINESTRING` objects in `$osm_lines`.
 #'
 #' @export
 #' @examples

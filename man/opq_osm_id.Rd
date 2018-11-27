@@ -9,10 +9,10 @@ opq_osm_id(id = NULL, type = NULL, open_url = FALSE)
 \arguments{
 \item{id}{One or more official OSM identifiers (long-form integers)}
 
-\item{type}{Type of object; must be either `node`, `way`, or `relation`}
+\item{type}{Type of object; must be either \code{node}, \code{way}, or \code{relation}}
 
-\item{open_url}{If `TRUE`, open the OSM page of the specified object in web
-browser. Multiple objects (`id` values) will be opened in multiple pages.}
+\item{open_url}{If \code{TRUE}, open the OSM page of the specified object in web
+browser. Multiple objects (\code{id} values) will be opened in multiple pages.}
 }
 \value{
 \link{opq} object

@@ -30,11 +30,11 @@
 #' get_overpass_url
 #'
 #' Return the URL of the specified overpass API. Default is
-#' \url{http://overpass-api.de/api/interpreter}.
+#' <http://overpass-api.de/api/interpreter>.
 #'
 #' @return The overpass API URL
 #'
-#' @seealso \code{\link{set_overpass_url}}
+#' @seealso [set_overpass_url()]
 #'
 #' @export
 get_overpass_url <- function ()
@@ -62,13 +62,13 @@ get_overpass_url <- function ()
 #' }
 #'
 #' For further details, see
-#' \url{http://wiki.openstreetmap.org/wiki/Overpass_API}
+#' <http://wiki.openstreetmap.org/wiki/Overpass_API>
 #'
 #' @param overpass_url The desired overpass API URL
 #'
 #' @return The overpass API URL
 #'
-#' @seealso \code{\link{get_overpass_url}}
+#' @seealso [get_overpass_url()]
 #'
 #' @export
 set_overpass_url <- function (overpass_url)

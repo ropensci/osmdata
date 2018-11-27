@@ -1,10 +1,10 @@
 #' unique_osmdata
 #'
 #' Reduce the components of an \link{osmdata} object to only unique items of
-#' each type. That is, reduce \code{$osm_points} to only those points not
-#' present in other objects (lines, polygons, etc.); reduce \code{$osm_lines} to
+#' each type. That is, reduce `$osm_points` to only those points not
+#' present in other objects (lines, polygons, etc.); reduce `$osm_lines` to
 #' only those lines not present in multiline objects; and reduce
-#' \code{$osm_polygons} to only those polygons not present in multipolygon
+#' `$osm_polygons` to only those polygons not present in multipolygon
 #' objects. This renders an \link{osmdata} object more directly compatible with
 #' typical output of \pkg{sf}.
 #'
@@ -36,7 +36,7 @@ unique_osmdata <- function (dat)
 }
 
 #' unique_points_sf
-#' get index of unique points in the \code{$osm_points} object
+#' get index of unique points in the `$osm_points` object
 #' @noRd
 unique_points_sf <- function (dat)
 {
@@ -56,7 +56,7 @@ unique_points_sf <- function (dat)
 }
 
 #' unique_points_sp
-#' get index of unique points in the \code{$osm_points} object
+#' get index of unique points in the `$osm_points` object
 #' @noRd
 unique_points_sp <- function (dat)
 {
@@ -80,7 +80,7 @@ unique_points_sp <- function (dat)
 }
 
 #' unique_lines_sf
-#' get index of unique lines in the \code{$osm_lines} object
+#' get index of unique lines in the `$osm_lines` object
 #' @noRd
 unique_lines_sf <- function (dat)
 {
@@ -94,7 +94,7 @@ unique_lines_sf <- function (dat)
 }
 
 #' unique_lines_sp
-#' get index of unique lines in the \code{$osm_lines} object
+#' get index of unique lines in the `$osm_lines` object
 #' @noRd
 unique_lines_sp <- function (dat)
 {
@@ -108,7 +108,7 @@ unique_lines_sp <- function (dat)
 }
 
 #' unique_polygons_sf
-#' get index of unique polygons in the \code{$osm_polygons} object
+#' get index of unique polygons in the `$osm_polygons` object
 #' @noRd
 unique_polygons_sf <- function (dat)
 {
@@ -123,7 +123,7 @@ unique_polygons_sf <- function (dat)
 }
 
 #' unique_polygons_sp
-#' get index of unique polygons in the \code{$osm_polygons} object
+#' get index of unique polygons in the `$osm_polygons` object
 #' @noRd
 unique_polygons_sp <- function (dat)
 {

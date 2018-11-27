@@ -72,19 +72,19 @@ bbox_to_string <- function(bbox) {
 #' the bounding box (bb) associated with place names.
 #' 
 #' It was inspired by the functions
-#' \code{bbox} from the \pkg{sp} package,
-#' \code{bb} from the \pkg{tmaptools} package and
-#' \code{bb_lookup} from the github package \pkg{nominatim} package,
-#' which can be found at \url{https://github.com/hrbrmstr/nominatim}.
+#' `bbox` from the \pkg{sp} package,
+#' `bb` from the \pkg{tmaptools} package and
+#' `bb_lookup` from the github package \pkg{nominatim} package,
+#' which can be found at <https://github.com/hrbrmstr/nominatim>.
 #' 
-#' See \url{http://wiki.openstreetmap.org/wiki/Nominatim} for details.
+#' See <http://wiki.openstreetmap.org/wiki/Nominatim> for details.
 #' 
 #' @param place_name The name of the place you're searching for
 #' @param display_name_contains Text string to match with display_name field
-#' returned by \url{http://wiki.openstreetmap.org/wiki/Nominatim}
+#' returned by <http://wiki.openstreetmap.org/wiki/Nominatim>
 #' @param viewbox The bounds in which you're searching
 #' @param format_out Character string indicating output format: matrix (default),
-#' string (see \code{\link{bbox_to_string}}), data.frame (all 'hits' returned
+#' string (see [bbox_to_string()]), data.frame (all 'hits' returned
 #' by Nominatim), sf_polygon (for polygons that work with the sf package)
 #' or polygon (full polygonal bounding boxes for each match).
 #' @param base_url Base website from where data is queried
@@ -93,25 +93,25 @@ bbox_to_string <- function(bbox) {
 #' @param key The API key to use for services that require it
 #' @param silent Should the API be printed to screen? TRUE by default
 #' @param poly_num Which of matching polygons should be used?
-#' The first polygon in the first match is the default (\code{c(1, 1)}).
+#' The first polygon in the first match is the default (`c(1, 1)`).
 #'
-#' @return Unless \code{format_out = "polygon"}, a numeric bounding box as min
-#' and max of latitude and longitude. If \code{format_out = "polygon"}, one or
+#' @return Unless `format_out = "polygon"`, a numeric bounding box as min
+#' and max of latitude and longitude. If `format_out = "polygon"`, one or
 #' more two-columns matrices of polygonal longitude-latitude points. Where
-#' multiple \code{place_name} occurrences are found within \code{nominatim},
+#' multiple `place_name` occurrences are found within `nominatim`,
 #' each item of the list of coordinates may itself contain multiple coordinate
 #' matrices where multiple exact matches exist. If one one exact match exists
 #' with potentially multiple polygonal boundaries (for example, "london uk" is
 #' an exact match, but can mean either greater London or the City of London),
 #' only the first is returned. See examples below for illustration.
 #' 
-#' @note Specific values of \code{featuretype} include "street", "city",
+#' @note Specific values of `featuretype` include "street", "city",
 #" "county", "state", and "country" (see
-#' \url{http://wiki.openstreetmap.org/wiki/Nominatim} for details). The default
-#' \code{featuretype = "settlement"} combines results from all intermediate
+#' <http://wiki.openstreetmap.org/wiki/Nominatim> for details). The default
+#' `featuretype = "settlement"` combines results from all intermediate
 #' levels below "country" and above "streets". If the bounding box or polygon of
 #' a city is desired, better results will usually be obtained with
-#' \code{featuretype = "city"}.
+#' `featuretype = "city"`.
 #' 
 #' @export
 #' 

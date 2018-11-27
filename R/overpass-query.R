@@ -1,6 +1,6 @@
 #' Retrieve status of the Overpass API
 #'
-#' @param quiet if \code{FALSE} display a status message
+#' @param quiet if `FALSE` display a status message
 #' @return an invisible list of whether the API is available along with the
 #'         text of the message from Overpass and the timestamp of the
 #'         next available slot
@@ -81,8 +81,8 @@ get_slot_timestamp <- function (status)
 
 #' Check for error issued by overpass server, even though status = 200
 #'
-#' @param doc Character string returned by \code{httr::content} call in
-#' following \code{overpass_query} function.
+#' @param doc Character string returned by `httr::content` call in
+#' following `overpass_query` function.
 #' @param return Nothing; stops execution if error encountered.
 #'
 #' @noRd
@@ -115,12 +115,12 @@ check_for_error <- function (doc)
 #' @param quiet suppress status messages. OSM Overpass queries may not return
 #'        quickly. The package will display status messages by default showing
 #'        when the query started/completed.  You can disable these messages by
-#'        setting this value to \code{TRUE}.
-#' @param wait if \code{TRUE} and if there is a queue at the Overpass API
+#'        setting this value to `TRUE`.
+#' @param wait if `TRUE` and if there is a queue at the Overpass API
 #'        server, should this function wait and try again at the next available
 #'        slot time or should it throw a an exception?
-#' @param pad_wait if there is a queue and \code{wait} is \code{TRUE}, pad the
-#'        next query start time by \code{pad_wait} seconds (default = 5 seconds).
+#' @param pad_wait if there is a queue and `wait` is `TRUE`, pad the
+#'        next query start time by `pad_wait` seconds (default = 5 seconds).
 #' @param encoding Unless otherwise specified XML documents are assumed to be
 #'        encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
 #'        an explicit encoding directive, this allows you to supply a default.

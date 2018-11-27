@@ -1,6 +1,6 @@
 #' Get timestamp from system or optional OSM XML document
 #'
-#' @param doc OSM XML document. If missing, \code{Sys.time()} is used.
+#' @param doc OSM XML document. If missing, `Sys.time()` is used.
 #'
 #' @return An R timestamp object
 #'
@@ -66,8 +66,8 @@ get_overpass_version <- function (doc)
 #' @return An object of class `XML::xml_document` containing the result of the
 #'         overpass API query.  
 #'
-#' @note Objects of class \code{xml_document} can be saved as \code{.xml} or
-#' \code{.osm} files with \code{xml2::write_xml}.
+#' @note Objects of class `xml_document` can be saved as `.xml` or
+#' `.osm` files with `xml2::write_xml`.
 #'
 #' @export
 #'
@@ -97,10 +97,7 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
 
 #' Return an OSM Overpass query in PBF (Protocol Buffer Format).
 #'
-#' @param q An object of class `overpass_query` constructed with
-#' \link{opq} and \link{add_osm_feature}.
-#' @param filename If given, OSM data are saved to the named file
-#' @param quiet suppress status messages. 
+#' @inheritParams osmdata_xml
 #'
 #' @return An binary Protocol Buffer Format (PBF) object.
 #'
@@ -134,8 +131,8 @@ osmdata_pbf <- function(q, filename, quiet=TRUE) {
 #'      \link{opq} and \link{add_osm_feature}. May be be omitted,
 #'      in which case the \link{osmdata} object will not include the
 #'      query.
-#' @param doc If missing, \code{doc} is obtained by issuing the overpass query,
-#'        \code{q}, otherwise either the name of a file from which to read data,
+#' @param doc If missing, `doc` is obtained by issuing the overpass query,
+#'        `q`, otherwise either the name of a file from which to read data,
 #'        or an object of class \pkg{XML} returned from
 #'        \link{osmdata_xml}. 
 #' @param quiet suppress status messages. 
@@ -194,8 +191,8 @@ osmdata_sp <- function(q, doc, quiet = TRUE, encoding = 'UTF-8')
 #' @param obj Initial \link{osmdata} object
 #' @param doc Document contain XML-formatted version of OSM data
 #' @inheritParams osmdata_sp
-#' @return List of an \link{osmdata} object (\code{obj}), and XML
-#'      document (\code{doc})
+#' @return List of an \link{osmdata} object (`obj`), and XML
+#'      document (`doc`)
 #' @noRd
 fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8")
 {
@@ -231,8 +228,8 @@ fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8")
 #' @return An object of class `sf` 
 #'
 #' @note Most of this code written by Edzer Pebesma, and taken from 
-#' \url{https://github.com/edzer/sfr/blob/master/R/agr.R} and 
-#' \url{https://github.com/edzer/sfr/blob/master/R/sfc.R}
+#' <https://github.com/edzer/sfr/blob/master/R/agr.R> and 
+#' <https://github.com/edzer/sfr/blob/master/R/sfc.R>
 #'
 #' @noRd
 make_sf <- function (...)
@@ -270,17 +267,7 @@ sf_types <- c ("points", "lines", "polygons", "multilines", "multipolygons")
 #' Return an OSM Overpass query as an \link{osmdata} object in \pkg{sf}
 #' format.
 #'
-#' @param q An object of class `overpass_query` constructed with \link{opq} and
-#'      \link{add_osm_feature}. May be be omitted, in which case the
-#'      \link{osmdata} object will not include the query.
-#' @param doc If missing, \code{doc} is obtained by issuing the overpass query,
-#'        \code{q}, otherwise either the name of a file from which to read data,
-#'        or an object of class \pkg{XML} returned from
-#'        \link{osmdata_xml}. 
-#' @param quiet suppress status messages. 
-#' @param encoding Unless otherwise specified XML documents are assumed to be
-#'        encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
-#'        an explicit encoding directive, this allows you to supply a default.
+#' @inheritParams osmdata_sp
 #' @return An object of class `osmdata` with the OSM components (points, lines,
 #'         and polygons) represented in \pkg{sf} format.
 #' @export
@@ -341,32 +328,22 @@ fill_objects <- function (res, obj, type = "points")
 }
 
 #' Return an OSM Overpass query as an \link{osmdata} object in
-#' \code{silicate} (\code{SC}) format.
+#' `silicate` (`SC`) format.
 #'
-#' @param q An object of class `overpass_query` constructed with
-#'      \link{opq} and \link{add_osm_feature}. May be be omitted,
-#'      in which case the \link{osmdata} object will not include the
-#'      query.
-#' @param doc If missing, \code{doc} is obtained by issuing the overpass query,
-#'      \code{q}, otherwise either the name of a file from which to read data,
-#'      or an object of class \pkg{XML} returned from \link{osmdata_xml}. 
+#' @inheritParams osmdata_sp
 #' @param directed Should edges be considered directed where not otherwise
 #'      labelled?  (See Note).
-#' @param quiet suppress status messages. 
-#' @param encoding Unless otherwise specified XML documents are assumed to be
-#'      encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
-#'      an explicit encoding directive, this allows you to supply a default.
 #' @return An object of class `osmdata` representing the original OSM hierarchy
 #'      of nodes, ways, and relations.
 #' @export
 #'
-#' @note The \code{silicate} format is currently highly experimental, and
+#' @note The `silicate` format is currently highly experimental, and
 #'      recommended for use only if you really know what you're doing.
-#' @note If \code{directed = TRUE}, all edges that are not explicitly designated
+#' @note If `directed = TRUE`, all edges that are not explicitly designated
 #'      as one-way are duplicated in the `sc$object_link_edge` table to
 #'      represent bi-directional flow. This is useful for routing, for example
 #'      through converting the result to an \pkg{igraph} or \pkg{dodgr} object.
-#'      Note that other text values such as \code{directed = "bicycle"} are also
+#'      Note that other text values such as `directed = "bicycle"` are also
 #'      acceptable, in which case values for the OSM key "oneway:bicycle" -
 #'      rather than the generic "oneway" key - will be used to determine
 #'      directionality of flow.

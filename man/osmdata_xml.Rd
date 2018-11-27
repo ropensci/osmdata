@@ -2,14 +2,14 @@
 % Please edit documentation in R/get-osmdata.R
 \name{osmdata_xml}
 \alias{osmdata_xml}
-\title{Return an OSM Overpass query in XML format 
+\title{Return an OSM Overpass query in XML format
 Read an (XML format) OSM Overpass response from a string, a connection,
 or a raw vector.}
 \usage{
 osmdata_xml(q, filename, quiet = TRUE, encoding)
 }
 \arguments{
-\item{q}{An object of class `overpass_query` constructed with
+\item{q}{An object of class \code{overpass_query} constructed with
 \link{opq} and \link{add_osm_feature}.}
 
 \item{filename}{If given, OSM data are saved to the named file}
@@ -21,11 +21,11 @@ encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
 an explicit encoding directive, this allows you to supply a default.}
 }
 \value{
-An object of class `XML::xml_document` containing the result of the
-        overpass API query.
+An object of class \code{XML::xml_document} containing the result of the
+overpass API query.
 }
 \description{
-Return an OSM Overpass query in XML format 
+Return an OSM Overpass query in XML format
 Read an (XML format) OSM Overpass response from a string, a connection,
 or a raw vector.
 }
