@@ -15,7 +15,8 @@ query.}
 
 \item{doc}{If missing, \code{doc} is obtained by issuing the overpass query,
 \code{q}, otherwise either the name of a file from which to read data,
-or an object of class \pkg{XML} returned from \link{osmdata_xml}.}
+or an object of class \pkg{XML} returned from
+\link{osmdata_xml}.}
 
 \item{directed}{Should edges be considered directed where not otherwise
 labelled?  (See Note).}

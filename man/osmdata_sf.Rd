@@ -8,9 +8,10 @@ format.}
 osmdata_sf(q, doc, quiet = TRUE, encoding)
 }
 \arguments{
-\item{q}{An object of class \code{overpass_query} constructed with \link{opq} and
-\link{add_osm_feature}. May be be omitted, in which case the
-\link{osmdata} object will not include the query.}
+\item{q}{An object of class \code{overpass_query} constructed with
+\link{opq} and \link{add_osm_feature}. May be be omitted,
+in which case the \link{osmdata} object will not include the
+query.}
 
 \item{doc}{If missing, \code{doc} is obtained by issuing the overpass query,
 \code{q}, otherwise either the name of a file from which to read data,
