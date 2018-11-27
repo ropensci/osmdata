@@ -2,19 +2,20 @@
 % Please edit documentation in R/get-osmdata.R
 \name{osmdata_sc}
 \alias{osmdata_sc}
-\title{Return an OSM Overpass query as an \code{osmdata} object in \code{silicate}
-(\code{SC}) format.}
+\title{Return an OSM Overpass query as an \link{osmdata} object in
+\code{silicate} (\code{SC}) format.}
 \usage{
 osmdata_sc(q, doc, directed = FALSE, quiet = TRUE, encoding)
 }
 \arguments{
-\item{q}{An object of class `overpass_query` constructed with \code{opq} and
-\code{add_osm_feature}. May be be omitted, in which case the
-\code{osmdata} object will not include the query.}
+\item{q}{An object of class `overpass_query` constructed with
+\link{opq} and \link{add_osm_feature}. May be be omitted,
+in which case the \link{osmdata} object will not include the
+query.}
 
 \item{doc}{If missing, \code{doc} is obtained by issuing the overpass query,
 \code{q}, otherwise either the name of a file from which to read data,
-or an object of class \code{XML} returned from \code{osmdata_xml}.}
+or an object of class \pkg{XML} returned from \link{osmdata_xml}.}
 
 \item{directed}{Should edges be considered directed where not otherwise
 labelled?  (See Note).}
@@ -30,8 +31,8 @@ An object of class `osmdata` representing the original OSM hierarchy
      of nodes, ways, and relations.
 }
 \description{
-Return an OSM Overpass query as an \code{osmdata} object in \code{silicate}
-(\code{SC}) format.
+Return an OSM Overpass query as an \link{osmdata} object in
+\code{silicate} (\code{SC}) format.
 }
 \note{
 The \code{silicate} format is currently highly experimental, and

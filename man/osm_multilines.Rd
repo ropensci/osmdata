@@ -7,17 +7,17 @@
 osm_multilines(dat, id)
 }
 \arguments{
-\item{dat}{An object of class \code{osmdata}}
+\item{dat}{An object of class \link{osmdata}}
 
 \item{id}{OSM identification of one of more objects for which multilines are
 to be extracted}
 }
 \value{
-An \code{sf} Simple Features Collection of multilines
+An \pkg{sf} Simple Features Collection of multilines
 }
 \description{
-\code{id} must be of an \code{osm_point} or \code{osm_line} object (and can
-not be the \code{id} of an \code{osm_polygon} object because multilines by
+\code{id} must be of an \code{osm_points} or \code{osm_lines} object (and can
+not be the \code{id} of an \code{osm_polygons} object because multilines by
 definition contain no polygons.  \code{osm_multilines} returns any multiline
 object(s) which contain the object specified by \code{id}.
 }

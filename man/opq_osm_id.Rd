@@ -15,7 +15,7 @@ opq_osm_id(id = NULL, type = NULL, open_url = FALSE)
 browser. Multiple objects (`id` values) will be opened in multiple pages.}
 }
 \value{
-\code{opq} object
+\link{opq} object
 }
 \description{
 Add a feature specified by OSM ID to an Overpass query
@@ -24,7 +24,7 @@ Add a feature specified by OSM ID to an Overpass query
 Extracting elements by ID requires explicitly specifying the type of
 element. Only elements of one of the three given types can be extracted in a
 single query, but the results of multiple types can neverthelss be combined
-with the \code{c} operation of \code{osmdata}.
+with the \link{c} operation of \link{osmdata}.
 }
 \examples{
 \dontrun{

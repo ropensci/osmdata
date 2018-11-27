@@ -7,13 +7,13 @@
 osm_polygons(dat, id)
 }
 \arguments{
-\item{dat}{An object of class \code{osmdata}}
+\item{dat}{An object of class \link{osmdata}}
 
 \item{id}{OSM identification of one or more objects for which polygons are to
 be extracted}
 }
 \value{
-An \code{sf} Simple Features Collection of polygons
+An \pkg{sf} Simple Features Collection of polygons
 }
 \description{
 If \code{id} is of a point object, \code{osm_polygons} will return all

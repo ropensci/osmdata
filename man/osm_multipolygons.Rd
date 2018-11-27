@@ -7,17 +7,17 @@
 osm_multipolygons(dat, id)
 }
 \arguments{
-\item{dat}{An object of class \code{osmdata}}
+\item{dat}{An object of class \link{osmdata}}
 
 \item{id}{OSM identification of one or more objects for which multipolygons
 are to be extracted}
 }
 \value{
-An \code{sf} Simple Features Collection of multipolygons
+An \pkg{sf} Simple Features Collection of multipolygons
 }
 \description{
-\code{id} must be of an \code{osm_point}, \code{osm_line}, or
-\code{osm_polygon} object. \code{osm_multipolygons} returns any multipolygon
+\code{id} must be of an \code{osm_points}, \code{osm_lines}, or
+\code{osm_polygons} object. \code{osm_multipolygons} returns any multipolygon
 object(s) which contain the object specified by \code{id}.
 }
 \examples{

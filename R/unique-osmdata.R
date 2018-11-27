@@ -1,14 +1,14 @@
 #' unique_osmdata
 #'
-#' Reduce the components of an \code{osmdata} object to only unique items of
+#' Reduce the components of an \link{osmdata} object to only unique items of
 #' each type. That is, reduce \code{$osm_points} to only those points not
 #' present in other objects (lines, polygons, etc.); reduce \code{$osm_lines} to
 #' only those lines not present in multiline objects; and reduce
 #' \code{$osm_polygons} to only those polygons not present in multipolygon
-#' objects. This renders an \code{osmdata} object more directly compatible with
-#' typical output of \code{sf}.
+#' objects. This renders an \link{osmdata} object more directly compatible with
+#' typical output of \pkg{sf}.
 #'
-#' @param dat An \code{osmdata} object
+#' @param dat An \link{osmdata} object
 #' @return Equivalent object reduced to only unique objects of each type
 #' @export
 unique_osmdata <- function (dat)

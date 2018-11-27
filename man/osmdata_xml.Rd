@@ -9,8 +9,8 @@ or a raw vector.}
 osmdata_xml(q, filename, quiet = TRUE, encoding)
 }
 \arguments{
-\item{q}{An object of class `overpass_query` constructed with \code{opq} and
-\code{add_osm_feature}.}
+\item{q}{An object of class `overpass_query` constructed with
+\link{opq} and \link{add_osm_feature}.}
 
 \item{filename}{If given, OSM data are saved to the named file}
 
@@ -31,7 +31,7 @@ or a raw vector.
 }
 \note{
 Objects of class \code{xml_document} can be saved as \code{.xml} or
-\code{.osm} files with code{xml2::write_xml}.
+\code{.osm} files with \code{xml2::write_xml}.
 }
 \examples{
 \dontrun{

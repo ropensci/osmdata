@@ -3,7 +3,7 @@
 #' This function converts a bounding box into a string for use in web apis
 #' 
 #' @param bbox bounding box as character, matrix or vector. If character,
-#' numeric bbox will be extracted with \code{getbb} Unnamed vectors will be
+#' numeric bbox will be extracted with \link{getbb} Unnamed vectors will be
 #' sorted appropriately and must merely be in the order (x, y, x, y).
 #'
 #' @export

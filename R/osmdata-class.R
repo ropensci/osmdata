@@ -4,16 +4,16 @@
 #' @param overpass_call overpass_call
 #' @param meta metadata of overpass query, including timestamps and version
 #' numbers
-#' @param osm_points OSM nodes as \code{sf} Simple Features Collection of points
-#'                   or \code{sp} SpatialPointsDataFrame
-#' @param osm_lines OSM ways \code{sf} Simple Features Collection of linestrings
-#'                  or \code{sp} SpatialLinesDataFrame
-#' @param osm_polygons OSM ways as \code{sf} Simple Features Collection of
-#'                     polygons or \code{sp} SpatialPolygonsDataFrame
-#' @param osm_multilines OSM relations as \code{sf} Simple Features Collection
-#'                       of multilinestrings or \code{sp} SpatialLinesDataFrame
-#' @param osm_multipolygons OSM relations as \code{sf} Simple Features
-#'                          Collection of multipolygons or \code{sp}
+#' @param osm_points OSM nodes as \pkg{sf} Simple Features Collection of points
+#'                   or \pkg{sp} SpatialPointsDataFrame
+#' @param osm_lines OSM ways \pkg{sf} Simple Features Collection of linestrings
+#'                  or \pkg{sp} SpatialLinesDataFrame
+#' @param osm_polygons OSM ways as \pkg{sf} Simple Features Collection of
+#'                     polygons or \pkg{sp} SpatialPolygonsDataFrame
+#' @param osm_multilines OSM relations as \pkg{sf} Simple Features Collection
+#'                       of multilinestrings or \pkg{sp} SpatialLinesDataFrame
+#' @param osm_multipolygons OSM relations as \pkg{sf} Simple Features
+#'                          Collection of multipolygons or \pkg{sp}
 #'                          SpatialPolygonsDataFrame 
 #' @param ... other options ignored
 #'

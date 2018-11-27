@@ -1,9 +1,9 @@
 #' trim_osmdata
 #'
-#' Trim an \code{osmdata} object to within a bounding polygon
+#' Trim an \link{osmdata} object to within a bounding polygon
 #'
-#' @param dat An \code{osmdata} object returned from \code{osmdata_sf()} or
-#' \code{osmdata_sp()}.
+#' @param dat An \link{osmdata} object returned from \link{osmdata_sf} or
+#' \link{osmdata_sp}.
 #' @param bb_poly A matrix representing a bounding polygon obtained with
 #' \code{getbb (..., format_out = "polygon")} (and possibly selected from
 #' resultant list where multiple polygons are returned).
@@ -64,7 +64,7 @@ trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE)
 #' Index of finite objects (lines, polygons, multi*) in the list g which are
 #' contained within the polygon bb
 #'
-#' @param g An \code{sfc} list of geometries
+#' @param g An \code{sf::sfc} list of geometries
 #' @param bb Polygonal bounding box
 #' @param exclude binary parameter determining exclusive or inclusive inclusion
 #'      in polygon

@@ -7,13 +7,13 @@
 osm_points(dat, id)
 }
 \arguments{
-\item{dat}{An object of class \code{osmdata}}
+\item{dat}{An object of class \link{osmdata}}
 
 \item{id}{OSM identification of one or more objects for which points are to
 be extracted}
 }
 \value{
-An \code{sf} Simple Features Collection of points
+An \pkg{sf} Simple Features Collection of points
 }
 \description{
 Extract all \code{osm_points} from an osmdata object

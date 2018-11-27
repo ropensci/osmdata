@@ -7,8 +7,8 @@
 osmdata_pbf(q, filename, quiet = TRUE)
 }
 \arguments{
-\item{q}{An object of class `overpass_query` constructed with \code{opq} and
-\code{add_osm_feature}.}
+\item{q}{An object of class `overpass_query` constructed with
+\link{opq} and \link{add_osm_feature}.}
 
 \item{filename}{If given, OSM data are saved to the named file}
 
@@ -21,7 +21,7 @@ An binary Protocol Buffer Format (PBF) object.
 Return an OSM Overpass query in PBF (Protocol Buffer Format).
 }
 \note{
-This function is experimental, and \code{osmdata} can currently NOT do
+This function is experimental, and \pkg{osmdata} can currently NOT do
 anything with PBF files.
 }
 \examples{

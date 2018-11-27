@@ -7,13 +7,13 @@
 osm_lines(dat, id)
 }
 \arguments{
-\item{dat}{An object of class \code{osmdata}}
+\item{dat}{An object of class \link{osmdata}}
 
 \item{id}{OSM identification of one or more objects for which lines are to be
 extracted}
 }
 \value{
-An \code{sf} Simple Features Collection of linestrings
+An \pkg{sf} Simple Features Collection of linestrings
 }
 \description{
 If \code{id} is of a point object, \code{osm_lines} will return all lines

@@ -65,17 +65,17 @@ opq <- function (bbox = NULL, timeout = 25, memsize)
 #' not sensitive to case
 #' @param bbox optional bounding box for the feature query; must be set if no
 #'        opq query bbox has been set
-#' @return \code{opq} object
+#' @return \link{opq} object
 #' 
 #' @note \code{key_exact} should generally be \code{TRUE}, because OSM uses a
 #' reasonably well defined set of possible keys, as returned by
-#' \code{available_features}. Setting \code{key_exact = FALSE} allows matching
+#' \link{available_features}. Setting \code{key_exact = FALSE} allows matching
 #' of regular expressions on OSM keys, as described in Section 6.1.5 of
 #' \url{http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL}. The actual
 #' query submitted to the overpass API can be obtained from
 #' \link{opq_string}.
 #'
-#' @note \code{add_feature} is deprecated; please use \code{add_osm_feature}.
+#' @note \link{add_feature} is deprecated; please use \link{add_osm_feature}.
 #'
 #' @references \url{http://wiki.openstreetmap.org/wiki/Map_Features}
 #'
@@ -177,7 +177,7 @@ add_osm_feature <- function (opq, key, value, key_exact = TRUE,
 #' @param type Type of object; must be either `node`, `way`, or `relation`
 #' @param open_url If `TRUE`, open the OSM page of the specified object in web
 #' browser. Multiple objects (`id` values) will be opened in multiple pages.
-#' @return \code{opq} object
+#' @return \link{opq} object
 #' 
 #' @references
 #' \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_element_id}
@@ -185,7 +185,7 @@ add_osm_feature <- function (opq, key, value, key_exact = TRUE,
 #' @note Extracting elements by ID requires explicitly specifying the type of
 #' element. Only elements of one of the three given types can be extracted in a
 #' single query, but the results of multiple types can neverthelss be combined
-#' with the \code{c} operation of \code{osmdata}.
+#' with the \link{c} operation of \link{osmdata}.
 #'
 #' @export
 #'

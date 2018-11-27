@@ -32,7 +32,7 @@ not sensitive to case}
 opq query bbox has been set}
 }
 \value{
-\code{opq} object
+\link{opq} object
 }
 \description{
 Add a feature to an Overpass query
@@ -40,13 +40,13 @@ Add a feature to an Overpass query
 \note{
 \code{key_exact} should generally be \code{TRUE}, because OSM uses a
 reasonably well defined set of possible keys, as returned by
-\code{available_features}. Setting \code{key_exact = FALSE} allows matching
+\link{available_features}. Setting \code{key_exact = FALSE} allows matching
 of regular expressions on OSM keys, as described in Section 6.1.5 of
 \url{http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL}. The actual
 query submitted to the overpass API can be obtained from
 \link{opq_string}.
 
-\code{add_feature} is deprecated; please use \code{add_osm_feature}.
+\link{add_feature} is deprecated; please use \link{add_osm_feature}.
 }
 \examples{
 \dontrun{

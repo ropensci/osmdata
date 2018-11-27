@@ -2,18 +2,20 @@
 % Please edit documentation in R/get-osmdata.R
 \name{osmdata_sf}
 \alias{osmdata_sf}
-\title{Return an OSM Overpass query as an \code{osmdata} object in \code{sf} format.}
+\title{Return an OSM Overpass query as an \link{osmdata} object in \pkg{sf}
+format.}
 \usage{
 osmdata_sf(q, doc, quiet = TRUE, encoding)
 }
 \arguments{
-\item{q}{An object of class `overpass_query` constructed with \code{opq} and
-\code{add_osm_feature}. May be be omitted, in which case the
-\code{osmdata} object will not include the query.}
+\item{q}{An object of class `overpass_query` constructed with \link{opq} and
+\link{add_osm_feature}. May be be omitted, in which case the
+\link{osmdata} object will not include the query.}
 
 \item{doc}{If missing, \code{doc} is obtained by issuing the overpass query,
 \code{q}, otherwise either the name of a file from which to read data,
-or an object of class \code{XML} returned from \code{osmdata_xml}.}
+or an object of class \pkg{XML} returned from
+\link{osmdata_xml}.}
 
 \item{quiet}{suppress status messages.}
 
@@ -23,10 +25,11 @@ an explicit encoding directive, this allows you to supply a default.}
 }
 \value{
 An object of class `osmdata` with the OSM components (points, lines,
-        and polygons) represented in \code{sf} format.
+        and polygons) represented in \pkg{sf} format.
 }
 \description{
-Return an OSM Overpass query as an \code{osmdata} object in \code{sf} format.
+Return an OSM Overpass query as an \link{osmdata} object in \pkg{sf}
+format.
 }
 \examples{
 \dontrun{
