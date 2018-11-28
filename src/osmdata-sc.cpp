@@ -30,6 +30,7 @@
  ***************************************************************************/
 
 #include "osmdata.h"
+#include "osmdata-sc.h"
 
 #include <Rcpp.h>
 
@@ -279,42 +280,54 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
     }
 #endif
 
-    XmlData xml (st);
+    XmlDataSC xml (st);
 
-    const std::map <osmid_t, Node>& nodes = xml.nodes ();
-    const std::map <osmid_t, OneWay>& ways = xml.ways ();
-    const std::vector <Relation>& rels = xml.relations ();
+    Rcpp::DataFrame vertex = Rcpp::DataFrame::create (
+            Rcpp::Named ("x") = xml.vx (),
+            Rcpp::Named ("y") = xml.vy (),
+            Rcpp::Named ("vertex_") = xml.vert_id (),
+            Rcpp::_["stringsAsFactors"] = false );
 
-    std::vector <double> lons, lats;
-    std::set <std::string> keyset; // must be ordered!
-    Rcpp::List dimnames (0);
-    Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
+    Rcpp::DataFrame edge = Rcpp::DataFrame::create (
+            Rcpp::Named (".vx0") = xml.vx0 (),
+            Rcpp::Named (".vx1") = xml.vx1 (),
+            Rcpp::Named ("edge_") = xml.edge (),
+            Rcpp::_["stringsAsFactors"] = false );
 
-    // ------- 1. Extract OSM Relations
-    Rcpp::DataFrame rel_df, rel_kv_df;
-    osm_sc::get_osm_relations (rel_df, rel_kv_df, rels);
+    Rcpp::DataFrame oXe = Rcpp::DataFrame::create (
+            Rcpp::Named ("edge_") = xml.edge (),
+            Rcpp::Named ("object_") = xml.object (),
+            Rcpp::_["stringsAsFactors"] = false );
 
-    // ------- 2. Extract OSM ways
-    Rcpp::DataFrame edge, object_link_edge, way_kv_df;
-    osm_sc::get_osm_ways (edge, object_link_edge, way_kv_df, ways);
+    Rcpp::DataFrame obj_node = Rcpp::DataFrame::create (
+            Rcpp::Named ("object_") = xml.node_id (),
+            Rcpp::Named ("key") = xml.node_key (),
+            Rcpp::Named ("val") = xml.node_val (),
+            Rcpp::_["stringsAsFactors"] = false );
 
-    // ------- 3. Extract OSM nodes
-    Rcpp::DataFrame node_df, node_kv_df;
-    osm_sc::get_osm_nodes (node_df, node_kv_df, nodes);
+    Rcpp::DataFrame obj_way = Rcpp::DataFrame::create (
+            Rcpp::Named ("object_") = xml.way_id (),
+            Rcpp::Named ("key") = xml.way_key (),
+            Rcpp::Named ("val") = xml.way_val (),
+            Rcpp::_["stringsAsFactors"] = false );
 
-    // ------- 4. Collate all data
-    Rcpp::List ret (7);
-    ret [0] = rel_df;
-    ret [1] = rel_kv_df;
-    ret [2] = edge;
-    ret [3] = object_link_edge;
-    ret [4] = way_kv_df;
-    ret [5] = node_df;
-    ret [6] = node_kv_df;
+    Rcpp::DataFrame obj_rel = Rcpp::DataFrame::create (
+            Rcpp::Named ("object_") = xml.rel_id (),
+            Rcpp::Named ("key") = xml.rel_key (),
+            Rcpp::Named ("val") = xml.rel_val (),
+            Rcpp::_["stringsAsFactors"] = false );
 
-    std::vector <std::string> retnames {"rel", "rel_kv",
+    Rcpp::List ret (6);
+    ret [0] = vertex;
+    ret [1] = edge;
+    ret [2] = oXe;
+    ret [3] = obj_node;
+    ret [4] = obj_way;
+    ret [5] = obj_rel;
+
+    std::vector <std::string> retnames {"vertex", 
                                         "edge", "object_link_edge",
-                                        "way_kv", "vertex", "node_kv"};
+                                        "obj_node", "obj_way", "obj_rel"};
     ret.attr ("names") = retnames;
     
     return ret;
