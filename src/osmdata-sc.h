@@ -166,6 +166,9 @@ class XmlDataSC
     private:
 
         void getSizes (XmlNodePtr pt);
+        void countRelation (XmlNodePtr pt);
+        void countWay (XmlNodePtr pt);
+        void countNode (XmlNodePtr pt);
         void traverseWays (XmlNodePtr pt);
         void traverseRelation (XmlNodePtr pt, RawRelation& rrel);
         void traverseWay (XmlNodePtr pt, RawWay& rway);
@@ -184,58 +187,21 @@ class XmlDataSC
 
 inline void XmlDataSC::getSizes (XmlNodePtr pt)
 {
-    RawRelation rrel;
-    RawWay rway;
-    RawNode rnode;
-
     for (XmlNodePtr it = pt->first_node (); it != nullptr;
             it = it->next_sibling())
     {
         if (!strcmp (it->name(), "node"))
         {
-            nnodes++;
-            rnode.key.clear ();
-            rnode.value.clear ();
-            if (rnode.key.size () != rnode.value.size ())
-                throw std::runtime_error ("sizes of keys and values differ");
-
-            traverseNode (it, rnode);
-            nnode_kv += rnode.key.size ();
+            countNode (it);
         }
         else if (!strcmp (it->name(), "way"))
         {
-            nways++;
-            rway.key.clear ();
-            rway.value.clear ();
-            rway.nodes.clear ();
-
-            traverseWay (it, rway);
-            if (rway.key.size () != rway.value.size ())
-                throw std::runtime_error ("sizes of keys and values differ");
-            nway_kv += rway.key.size ();
-
-            nedges += rway.nodes.size () - 1;
+            countWay (it);
+            nedges--; // counts nodes, so each way has nedges = 1 - nnodes
         }
         else if (!strcmp (it->name(), "relation"))
         {
-            nrels++;
-            rrel.key.clear();
-            rrel.value.clear();
-            rrel.role_way.clear();
-            rrel.role_node.clear();
-            rrel.ways.clear();
-            rrel.nodes.clear();
-            rrel.member_type = "";
-            rrel.ispoly = false;
-
-            traverseRelation (it, rrel);
-            if (rrel.key.size () != rrel.value.size ())
-                throw std::runtime_error ("sizes of keys and values differ");
-            if (rrel.ways.size () != rrel.role_way.size ())
-                throw std::runtime_error ("size of ways and roles differ");
-            if (rrel.nodes.size () != rrel.role_node.size ())
-                throw std::runtime_error ("size of nodes and roles differ");
-            nrel_kv += rrel.key.size ();
+            countRelation (it);
         }
         else
         {
@@ -243,6 +209,86 @@ inline void XmlDataSC::getSizes (XmlNodePtr pt)
         }
     }
 } // end function XmlDataSC::getSizes
+
+
+/************************************************************************
+ ************************************************************************
+ **                                                                    **
+ **                       FUNCTION::COUNTRELATION                      **
+ **                                                                    **
+ ************************************************************************
+ ************************************************************************/
+
+inline void XmlDataSC::countRelation (XmlNodePtr pt)
+{
+    for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
+            it = it->next_attribute())
+    {
+        if (!strcmp (it->name(), "id"))
+            nrels++;
+        else if (!strcmp (it->name(), "k"))
+            nrel_kv++;
+    }
+    // allows for >1 child nodes
+    for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
+    {
+        countRelation (it);
+    }
+} // end function XmlDataSC::countRelation
+
+
+/************************************************************************
+ ************************************************************************
+ **                                                                    **
+ **                          FUNCTION::COUNTWAY                        **
+ **                                                                    **
+ ************************************************************************
+ ************************************************************************/
+
+inline void XmlDataSC::countWay (XmlNodePtr pt)
+{
+    for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
+            it = it->next_attribute())
+    {
+        if (!strcmp (it->name(), "id"))
+            nways++;
+        else if (!strcmp (it->name(), "k"))
+            nway_kv++;
+        else if (!strcmp (it->name(), "ref"))
+            nedges++;
+    }
+    // allows for >1 child nodes
+    for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
+    {
+        countWay (it);
+    }
+} // end function XmlDataSC::countWay
+
+
+/************************************************************************
+ ************************************************************************
+ **                                                                    **
+ **                        FUNCTION::COUNTNODE                         **
+ **                                                                    **
+ ************************************************************************
+ ************************************************************************/
+
+inline void XmlDataSC::countNode (XmlNodePtr pt)
+{
+    for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
+            it = it->next_attribute())
+    {
+        if (!strcmp (it->name(), "id"))
+            nnodes++;
+        else if (!strcmp (it->name(), "k"))
+            nnode_kv++;
+    }
+    // allows for >1 child nodes
+    for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
+    {
+        countNode (it);
+    }
+} // end function XmlDataSC::countNode
 
 
 /************************************************************************
