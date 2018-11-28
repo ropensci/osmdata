@@ -274,13 +274,13 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
             if (rnode.lat < ymin) ymin = rnode.lat;
             if (rnode.lat > ymax) ymax = rnode.lat;
 
-            m_vert_id [nnodes] = rnode.id;
+            m_vert_id [nnodes] = std::to_string (rnode.id);
             m_vx [nnodes] = rnode.lon;
             m_vy [nnodes++] = rnode.lat;
 
             for (size_t i=0; i<rnode.key.size (); i++)
             {
-                m_node_id [nnode_kv] = rnode.id;
+                m_node_id [nnode_kv] = std::to_string (rnode.id);
                 m_node_key [nnode_kv] = rnode.key [i];
                 m_node_val [nnode_kv++] = rnode.value [i];
             }
@@ -294,7 +294,7 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
 
             for (size_t i=0; i<rway.key.size (); i++)
             {
-                m_way_id [nway_kv] = rway.id;
+                m_way_id [nway_kv] = std::to_string (rway.id);
                 m_way_key [nway_kv] = rway.key [i];
                 m_way_val [nway_kv++] = rway.value [i];
             }
@@ -302,10 +302,10 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
             for (auto n = rway.nodes.begin ();
                     n != std::prev (rway.nodes.end ()); n++)
             {
-                m_vx0 [nedges] = (*n);
-                m_vx1 [nedges] = (*std::next (n));
+                m_vx0 [nedges] = std::to_string (*n);
+                m_vx1 [nedges] = std::to_string (*std::next (n));
                 m_edge [nedges] = random_id (10);
-                m_object [nedges++] = rway.id;
+                m_object [nedges++] = std::to_string (rway.id);
             }
         }
         else if (!strcmp (it->name(), "relation"))
@@ -323,7 +323,7 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
 
             for (size_t i=0; i<rrel.key.size (); i++)
             {
-                m_rel_id [nrel_kv] = rrel.id;
+                m_rel_id [nrel_kv] = std::to_string (rrel.id);
                 m_rel_key [nrel_kv] = rrel.key [i];
                 m_rel_val [nrel_kv++] = rrel.value [i];
             }

@@ -386,29 +386,31 @@ osmdata_sc <- function(q, doc, directed = FALSE, quiet=TRUE, encoding) {
     # additional members - called "ref" and "role" entries. The key-val tables
     # are therefore expanded to add these two columns before rbind-ing the whole
     # lot to the one table:
-    if (nrow (res$rel_kv) > 0)
+    if (nrow (res$obj_rel) > 0)
+        res$obj_rel$obj_type <- "relation"
         res$rel_kv$obj_type <- "relation"
-    if (nrow (res$way_kv) > 0)
-        res$way_kv$obj_type <- "way"
-    if (nrow (res$node_kv) > 0)
-        res$node_kv$obj_type <- "node"
+    if (nrow (res$obj_way) > 0)
+        res$obj_way$obj_type <- "way"
+    if (nrow (res$obj_node) > 0)
+        res$obj_node$obj_type <- "node"
 
-    if (nrow (res$rel) > 0)
-    {
-        # Change res$rel from ("ref", "role") to ("value", "key")
-        res$rel <- data.frame (object_ = res$rel$object,
-                               key = paste0 ("rel_role_", res$rel$role),
-                               value = res$rel$ref,
-                               obj_type = "relation",
-                               stringsAsFactors = FALSE)
-    }
+    #if (nrow (res$rel) > 0)
+    #{
+    #    # Change res$rel from ("ref", "role") to ("value", "key")
+    #    res$rel <- data.frame (object_ = res$rel$object,
+    #                           key = paste0 ("rel_role_", res$rel$role),
+    #                           value = res$rel$ref,
+    #                           obj_type = "relation",
+    #                           stringsAsFactors = FALSE)
+    #}
 
     res$object_link_edge$native_ <- TRUE
-    res <- duplicate_twoway_edges (res, directed)
+    #res <- duplicate_twoway_edges (res, directed)
 
     obj <- list () # SC **does not** use osmdata class definition
-    obj$object <- tibble::as.tibble (rbind (res$rel, res$rel_kv,
-                                            res$way_kv, res$node_kv))
+    obj$object <- tibble::as.tibble (rbind (res$obj_rel,
+                                            res$obj_way,
+                                            res$obj_node))
     obj$object_link_edge <- tibble::as.tibble (res$object_link_edge)
     obj$edge <- tibble::as.tibble (res$edge)
     obj$vertex <- tibble::as.tibble (res$vertex)

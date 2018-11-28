@@ -283,8 +283,8 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
     XmlDataSC xml (st);
 
     Rcpp::DataFrame vertex = Rcpp::DataFrame::create (
-            Rcpp::Named ("x") = xml.vx (),
-            Rcpp::Named ("y") = xml.vy (),
+            Rcpp::Named ("x_") = xml.vx (),
+            Rcpp::Named ("y_") = xml.vy (),
             Rcpp::Named ("vertex_") = xml.vert_id (),
             Rcpp::_["stringsAsFactors"] = false );
 
