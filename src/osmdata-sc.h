@@ -52,14 +52,32 @@ class XmlDataSC
 {
     public:
         struct Counters {
+            // Initial function getSizes does an initial scan of the XML doc and
+            // establishes the sizes of everything with these counters
             int nnodes, nnode_kv,
                 nways, nway_kv,
                 nrels, nrel_kv, nrel_memb,
                 nedges;
         };
+        struct Vectors {
+            // Vectors used to store the data, with sizes allocated according to
+            // the values of Counters
+            //
+            // vectors for key-val pairs in object table:
+            std::vector <std::string> rel_id, rel_key, rel_val,
+                way_id, way_key, way_val,
+                node_id, node_key, node_val;
+
+            // vectors for edge and object_link_edge tables:
+            std::vector <std::string> vx0, vx1, edge, object;
+            // vectors for vertex table
+            std::vector <double> vx, vy;
+            std::vector <std::string> vert_id;
+        };
 
     private:
         Counters counters;
+        Vectors vectors;
 
         /* Two main options to efficiently store-on-reading are:
          * 1. Use std::maps for everything, but this would ultimately require
@@ -70,17 +88,6 @@ class XmlDataSC
          * ungainly, and so is implemented here, via an initial read to
          * determine the sizes of the vectors, then a second read to store them.
          */
-
-        // vectors for key-val pairs in object table:
-        std::vector <std::string> m_rel_id, m_rel_key, m_rel_val,
-            m_way_id, m_way_key, m_way_val,
-            m_node_id, m_node_key, m_node_val;
-
-        // vectors for edge and object_link_edge tables:
-        std::vector <std::string> m_vx0, m_vx1, m_edge, m_object;
-        // vectors for vertex table
-        std::vector <double> m_vx, m_vy;
-        std::vector <std::string> m_vert_id;
 
         // Number of nodes in each way
         std::unordered_map <int, int> waySizes;
@@ -102,24 +109,24 @@ class XmlDataSC
                 counters.nnode_kv << ", " << counters.nway_kv << ", " << counters.nrel_kv << ")" <<
                 std::endl;
 
-            m_rel_id.resize (counters.nrel_kv);
-            m_rel_key.resize (counters.nrel_kv);
-            m_rel_val.resize (counters.nrel_kv);
-            m_way_id.resize (counters.nway_kv);
-            m_way_key.resize (counters.nway_kv);
-            m_way_val.resize (counters.nway_kv);
-            m_node_id.resize (counters.nnode_kv);
-            m_node_key.resize (counters.nnode_kv);
-            m_node_val.resize (counters.nnode_kv);
+            vectors.rel_id.resize (counters.nrel_kv);
+            vectors.rel_key.resize (counters.nrel_kv);
+            vectors.rel_val.resize (counters.nrel_kv);
+            vectors.way_id.resize (counters.nway_kv);
+            vectors.way_key.resize (counters.nway_kv);
+            vectors.way_val.resize (counters.nway_kv);
+            vectors.node_id.resize (counters.nnode_kv);
+            vectors.node_key.resize (counters.nnode_kv);
+            vectors.node_val.resize (counters.nnode_kv);
 
-            m_vx0.resize (counters.nedges);
-            m_vx1.resize (counters.nedges);
-            m_edge.resize (counters.nedges);
-            m_object.resize (counters.nedges);
+            vectors.vx0.resize (counters.nedges);
+            vectors.vx1.resize (counters.nedges);
+            vectors.edge.resize (counters.nedges);
+            vectors.object.resize (counters.nedges);
 
-            m_vx.resize (counters.nnodes);
-            m_vy.resize (counters.nnodes);
-            m_vert_id.resize (counters.nnodes);
+            vectors.vx.resize (counters.nnodes);
+            vectors.vy.resize (counters.nnodes);
+            vectors.vert_id.resize (counters.nnodes);
 
             zeroCounters (counters);
             traverseWays (p->first_node ());
@@ -137,26 +144,26 @@ class XmlDataSC
         double y_min() { return ymin;  }
         double y_max() { return ymax;  }
 
-        const std::vector <std::string>& get_rel_id() const { return m_rel_id;  }
-        const std::vector <std::string>& get_rel_key() const { return m_rel_key;  }
-        const std::vector <std::string>& get_rel_val() const { return m_rel_val;  }
-        const std::vector <std::string>& get_way_id() const { return m_way_id;  }
-        const std::vector <std::string>& get_way_key() const { return m_way_key;  }
-        const std::vector <std::string>& get_way_val() const { return m_way_val;  }
-        const std::vector <std::string>& get_node_id() const { return m_node_id;  }
-        const std::vector <std::string>& get_node_key() const { return m_node_key;  }
-        const std::vector <std::string>& get_node_val() const { return m_node_val;  }
+        const std::vector <std::string>& get_rel_id() const { return vectors.rel_id;  }
+        const std::vector <std::string>& get_rel_key() const { return vectors.rel_key;  }
+        const std::vector <std::string>& get_rel_val() const { return vectors.rel_val;  }
+        const std::vector <std::string>& get_way_id() const { return vectors.way_id;  }
+        const std::vector <std::string>& get_way_key() const { return vectors.way_key;  }
+        const std::vector <std::string>& get_way_val() const { return vectors.way_val;  }
+        const std::vector <std::string>& get_node_id() const { return vectors.node_id;  }
+        const std::vector <std::string>& get_node_key() const { return vectors.node_key;  }
+        const std::vector <std::string>& get_node_val() const { return vectors.node_val;  }
 
         // vectors for edge and object_link_edge tables:
-        const std::vector <std::string>& get_vx0 () const { return m_vx0;  }
-        const std::vector <std::string>& get_vx1 () const { return m_vx1;  }
-        const std::vector <std::string>& get_edge () const { return m_edge;  }
-        const std::vector <std::string>& get_object () const { return m_object;  }
+        const std::vector <std::string>& get_vx0 () const { return vectors.vx0;  }
+        const std::vector <std::string>& get_vx1 () const { return vectors.vx1;  }
+        const std::vector <std::string>& get_edge () const { return vectors.edge;  }
+        const std::vector <std::string>& get_object () const { return vectors.object;  }
 
         // vectors for vertex table
-        const std::vector <std::string>& get_vert_id () const { return m_vert_id;  }
-        const std::vector <double>& get_vx () const { return m_vx;  }
-        const std::vector <double>& get_vy () const { return m_vy;  }
+        const std::vector <std::string>& get_vert_id () const { return vectors.vert_id;  }
+        const std::vector <double>& get_vx () const { return vectors.vx;  }
+        const std::vector <double>& get_vy () const { return vectors.vy;  }
 
     private:
 
@@ -338,18 +345,18 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
 
             for (size_t i=0; i<rway.key.size (); i++)
             {
-                m_way_id [counters.nway_kv] = std::to_string (rway.id);
-                m_way_key [counters.nway_kv] = rway.key [i];
-                m_way_val [counters.nway_kv++] = rway.value [i];
+                vectors.way_id [counters.nway_kv] = std::to_string (rway.id);
+                vectors.way_key [counters.nway_kv] = rway.key [i];
+                vectors.way_val [counters.nway_kv++] = rway.value [i];
             }
 
             for (auto n = rway.nodes.begin ();
                     n != std::prev (rway.nodes.end ()); n++)
             {
-                m_vx0 [counters.nedges] = std::to_string (*n);
-                m_vx1 [counters.nedges] = std::to_string (*std::next (n));
-                m_edge [counters.nedges] = random_id (10);
-                m_object [counters.nedges++] = std::to_string (rway.id);
+                vectors.vx0 [counters.nedges] = std::to_string (*n);
+                vectors.vx1 [counters.nedges] = std::to_string (*std::next (n));
+                vectors.edge [counters.nedges] = random_id (10);
+                vectors.object [counters.nedges++] = std::to_string (rway.id);
             }
         }
         else if (!strcmp (it->name(), "relation"))
@@ -367,9 +374,9 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
 
             for (size_t i=0; i<rrel.key.size (); i++)
             {
-                m_rel_id [counters.nrel_kv] = std::to_string (rrel.id);
-                m_rel_key [counters.nrel_kv] = rrel.key [i];
-                m_rel_val [counters.nrel_kv++] = rrel.value [i];
+                vectors.rel_id [counters.nrel_kv] = std::to_string (rrel.id);
+                vectors.rel_key [counters.nrel_kv] = rrel.key [i];
+                vectors.rel_val [counters.nrel_kv++] = rrel.value [i];
             }
         }
         else
@@ -482,17 +489,17 @@ inline void XmlDataSC::traverseNode (XmlNodePtr pt)
             it = it->next_attribute())
     {
         if (!strcmp (it->name(), "id"))
-            m_vert_id [counters.nnodes] = it->value();
+            vectors.vert_id [counters.nnodes] = it->value();
         else if (!strcmp (it->name(), "lat"))
-            m_vy [counters.nnodes] = std::stod(it->value());
+            vectors.vy [counters.nnodes] = std::stod(it->value());
         else if (!strcmp (it->name(), "lon"))
-            m_vx [counters.nnodes] = std::stod(it->value());
+            vectors.vx [counters.nnodes] = std::stod(it->value());
         else if (!strcmp (it->name(), "k"))
-            m_node_key [counters.nnode_kv] = it->value();
+            vectors.node_key [counters.nnode_kv] = it->value();
         else if (!strcmp (it->name(), "v"))
         {
-            m_node_val [counters.nnode_kv] = it->value();
-            m_node_id [counters.nnode_kv] = m_vert_id [counters.nnodes]; // will always be pre-set
+            vectors.node_val [counters.nnode_kv] = it->value();
+            vectors.node_id [counters.nnode_kv] = vectors.vert_id [counters.nnodes]; // will always be pre-set
         }
     }
     // allows for >1 child nodes
