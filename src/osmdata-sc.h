@@ -60,10 +60,6 @@ class XmlDataSC
 
     private:
         Counters counters;
-        int nnodes, nnode_kv,
-            nways, nway_kv,
-            nrels, nrel_kv, nrel_memb,
-            nedges;
 
         /* Two main options to efficiently store-on-reading are:
          * 1. Use std::maps for everything, but this would ultimately require
@@ -98,48 +94,34 @@ class XmlDataSC
         {
             // APS empty m_nodes/m_ways/m_relations constructed here, no need to explicitly clear
             XmlDocPtr p = parseXML (str);
-            nnodes = 0;
-            nways = 0;
-            nrels = 0;
-            nnode_kv = 0;
-            nway_kv = 0;
-            nrel_kv = 0;
-            nrel_memb = 0;
-            nedges = 0;
+
+            zeroCounters (counters);
             getSizes (p->first_node ());
-            Rcpp::Rcout << "n(nodes, ways, rels, edges) = (" << nnodes << ", " <<
-                nways << ", " << nrels << ", " << nedges << "); kv = (" <<
-                nnode_kv << ", " << nway_kv << ", " << nrel_kv << ")" <<
+            Rcpp::Rcout << "n(nodes, ways, rels, edges) = (" << counters.nnodes << ", " <<
+                counters.nways << ", " << counters.nrels << ", " << counters.nedges << "); kv = (" <<
+                counters.nnode_kv << ", " << counters.nway_kv << ", " << counters.nrel_kv << ")" <<
                 std::endl;
 
-            m_rel_id.resize (nrel_kv);
-            m_rel_key.resize (nrel_kv);
-            m_rel_val.resize (nrel_kv);
-            m_way_id.resize (nway_kv);
-            m_way_key.resize (nway_kv);
-            m_way_val.resize (nway_kv);
-            m_node_id.resize (nnode_kv);
-            m_node_key.resize (nnode_kv);
-            m_node_val.resize (nnode_kv);
+            m_rel_id.resize (counters.nrel_kv);
+            m_rel_key.resize (counters.nrel_kv);
+            m_rel_val.resize (counters.nrel_kv);
+            m_way_id.resize (counters.nway_kv);
+            m_way_key.resize (counters.nway_kv);
+            m_way_val.resize (counters.nway_kv);
+            m_node_id.resize (counters.nnode_kv);
+            m_node_key.resize (counters.nnode_kv);
+            m_node_val.resize (counters.nnode_kv);
 
-            m_vx0.resize (nedges);
-            m_vx1.resize (nedges);
-            m_edge.resize (nedges);
-            m_object.resize (nedges);
+            m_vx0.resize (counters.nedges);
+            m_vx1.resize (counters.nedges);
+            m_edge.resize (counters.nedges);
+            m_object.resize (counters.nedges);
 
-            m_vx.resize (nnodes);
-            m_vy.resize (nnodes);
-            m_vert_id.resize (nnodes);
+            m_vx.resize (counters.nnodes);
+            m_vy.resize (counters.nnodes);
+            m_vert_id.resize (counters.nnodes);
 
-            nnodes = 0;
-            nways = 0;
-            nrels = 0;
-            nnode_kv = 0;
-            nway_kv = 0;
-            nrel_kv = 0;
-            nrel_memb = 0;
-            nedges = 0;
-
+            zeroCounters (counters);
             traverseWays (p->first_node ());
         }
 
@@ -218,21 +200,21 @@ inline void XmlDataSC::getSizes (XmlNodePtr pt)
         if (!strcmp (it->name(), "node"))
         {
             countNode (it); // increments nnode_kv
-            nnodes++;
+            counters.nnodes++;
         }
         else if (!strcmp (it->name(), "way"))
         {
-            int wayLength = nedges;
+            int wayLength = counters.nedges;
             countWay (it); // increments nway_kv, nedges
-            wayLength = nedges - wayLength;
-            nedges--; // counts nodes, so each way has nedges = 1 - nnodes
-            waySizes.emplace (nways, wayLength);
-            nways++;
+            wayLength = counters.nedges - wayLength;
+            counters.nedges--; // counts nodes, so each way has nedges = 1 - nnodes
+            waySizes.emplace (counters.nways, wayLength);
+            counters.nways++;
         }
         else if (!strcmp (it->name(), "relation"))
         {
             countRelation (it); // increments nrel_kv, nrel_memb
-            nrels++;
+            counters.nrels++;
         }
         else
         {
@@ -256,9 +238,9 @@ inline void XmlDataSC::countRelation (XmlNodePtr pt)
             it = it->next_attribute())
     {
         if (!strcmp (it->name(), "rel"))
-            nrel_memb++;
+            counters.nrel_memb++;
         if (!strcmp (it->name(), "k"))
-            nrel_kv++;
+            counters.nrel_kv++;
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
@@ -282,9 +264,9 @@ inline void XmlDataSC::countWay (XmlNodePtr pt)
             it = it->next_attribute())
     {
         if (!strcmp (it->name(), "k"))
-            nway_kv++;
+            counters.nway_kv++;
         else if (!strcmp (it->name(), "ref"))
-            nedges++;
+            counters.nedges++;
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
@@ -308,7 +290,7 @@ inline void XmlDataSC::countNode (XmlNodePtr pt)
             it = it->next_attribute())
     {
         if (!strcmp (it->name(), "k"))
-            nnode_kv++;
+            counters.nnode_kv++;
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
@@ -337,7 +319,7 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
         if (!strcmp (it->name(), "node"))
         {
             traverseNode (it);
-            nnodes++;
+            counters.nnodes++;
 
             /*
             if (rnode.lon < xmin) xmin = rnode.lon;
@@ -356,18 +338,18 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
 
             for (size_t i=0; i<rway.key.size (); i++)
             {
-                m_way_id [nway_kv] = std::to_string (rway.id);
-                m_way_key [nway_kv] = rway.key [i];
-                m_way_val [nway_kv++] = rway.value [i];
+                m_way_id [counters.nway_kv] = std::to_string (rway.id);
+                m_way_key [counters.nway_kv] = rway.key [i];
+                m_way_val [counters.nway_kv++] = rway.value [i];
             }
 
             for (auto n = rway.nodes.begin ();
                     n != std::prev (rway.nodes.end ()); n++)
             {
-                m_vx0 [nedges] = std::to_string (*n);
-                m_vx1 [nedges] = std::to_string (*std::next (n));
-                m_edge [nedges] = random_id (10);
-                m_object [nedges++] = std::to_string (rway.id);
+                m_vx0 [counters.nedges] = std::to_string (*n);
+                m_vx1 [counters.nedges] = std::to_string (*std::next (n));
+                m_edge [counters.nedges] = random_id (10);
+                m_object [counters.nedges++] = std::to_string (rway.id);
             }
         }
         else if (!strcmp (it->name(), "relation"))
@@ -385,9 +367,9 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
 
             for (size_t i=0; i<rrel.key.size (); i++)
             {
-                m_rel_id [nrel_kv] = std::to_string (rrel.id);
-                m_rel_key [nrel_kv] = rrel.key [i];
-                m_rel_val [nrel_kv++] = rrel.value [i];
+                m_rel_id [counters.nrel_kv] = std::to_string (rrel.id);
+                m_rel_key [counters.nrel_kv] = rrel.key [i];
+                m_rel_val [counters.nrel_kv++] = rrel.value [i];
             }
         }
         else
@@ -500,17 +482,17 @@ inline void XmlDataSC::traverseNode (XmlNodePtr pt)
             it = it->next_attribute())
     {
         if (!strcmp (it->name(), "id"))
-            m_vert_id [nnodes] = it->value();
+            m_vert_id [counters.nnodes] = it->value();
         else if (!strcmp (it->name(), "lat"))
-            m_vy [nnodes] = std::stod(it->value());
+            m_vy [counters.nnodes] = std::stod(it->value());
         else if (!strcmp (it->name(), "lon"))
-            m_vx [nnodes] = std::stod(it->value());
+            m_vx [counters.nnodes] = std::stod(it->value());
         else if (!strcmp (it->name(), "k"))
-            m_node_key [nnode_kv] = it->value();
+            m_node_key [counters.nnode_kv] = it->value();
         else if (!strcmp (it->name(), "v"))
         {
-            m_node_val [nnode_kv] = it->value();
-            m_node_id [nnode_kv] = m_vert_id [nnodes]; // will always be pre-set
+            m_node_val [counters.nnode_kv] = it->value();
+            m_node_id [counters.nnode_kv] = m_vert_id [counters.nnodes]; // will always be pre-set
         }
     }
     // allows for >1 child nodes
