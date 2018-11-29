@@ -168,7 +168,7 @@ class XmlDataSC
         void traverseWays (XmlNodePtr pt); // The primary function
 
         void traverseRelation (XmlNodePtr pt);
-        void traverseWay (XmlNodePtr pt, RawWay& rway);
+        void traverseWay (XmlNodePtr pt, int& node_num);
         void traverseNode (XmlNodePtr pt);
 
 }; // end Class::XmlDataSC
@@ -364,27 +364,10 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
 
         } else if (!strcmp (it->name(), "way"))
         {
-            rway.key.clear ();
-            rway.value.clear ();
-            rway.nodes.clear ();
-
-            traverseWay (it, rway);
-
-            for (size_t i=0; i<rway.key.size (); i++)
-            {
-                vectors.way_id [counters.nway_kv] = std::to_string (rway.id);
-                vectors.way_key [counters.nway_kv] = rway.key [i];
-                vectors.way_val [counters.nway_kv++] = rway.value [i];
-            }
-
-            for (auto n = rway.nodes.begin ();
-                    n != std::prev (rway.nodes.end ()); n++)
-            {
-                vectors.vx0 [counters.nedges] = std::to_string (*n);
-                vectors.vx1 [counters.nedges] = std::to_string (*std::next (n));
-                vectors.edge [counters.nedges] = random_id (10);
-                vectors.object [counters.nedges++] = std::to_string (rway.id);
-            }
+            int node_num = 0;
+            traverseWay (it, node_num);
+            counters.nedges--;
+            counters.nways++;
         }
         else if (!strcmp (it->name(), "relation"))
         {
@@ -444,24 +427,39 @@ inline void XmlDataSC::traverseRelation (XmlNodePtr pt)
  ************************************************************************
  ************************************************************************/
 
-inline void XmlDataSC::traverseWay (XmlNodePtr pt, RawWay& rway)
+inline void XmlDataSC::traverseWay (XmlNodePtr pt, int& node_num)
 {
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
-        if (!strcmp (it->name(), "k"))
-            rway.key.push_back (it->value());
+        if (!strcmp (it->name(), "id"))
+        {
+            vectors.way_id [counters.nway_kv] = it->value();
+            vectors.object [counters.nedges] = it->value();
+        } else if (!strcmp (it->name(), "k"))
+            vectors.way_key [counters.nway_kv] = it->value();
         else if (!strcmp (it->name(), "v"))
-            rway.value.push_back (it->value());
-        else if (!strcmp (it->name(), "id"))
-            rway.id = std::stoll(it->value());
+            vectors.way_val [counters.nway_kv++] = it->value();
         else if (!strcmp (it->name(), "ref"))
-            rway.nodes.push_back (std::stoll(it->value()));
+        {
+            if (node_num == 0)
+                vectors.vx0 [counters.nedges] = it->value();
+            else
+            {
+                vectors.vx1 [counters.nedges] = it->value();
+                vectors.edge [counters.nedges] = random_id (10);
+                if (node_num != waySizes.at (counters.nways))
+                    vectors.vx0 [counters.nedges + 1] = it->value();
+                counters.nedges++;
+            }
+            node_num++;
+        }
     }
+
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
     {
-        traverseWay (it, rway);
+        traverseWay (it, node_num);
     }
 } // end function XmlDataSC::traverseWay
 
