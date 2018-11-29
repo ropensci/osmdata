@@ -54,7 +54,7 @@ class XmlDataSC
 
         int nnodes, nnode_kv,
             nways, nway_kv,
-            nrels, nrel_kv,
+            nrels, nrel_kv, nrel_memb,
             nedges;
 
         /* Two main options to efficiently store-on-reading are:
@@ -78,6 +78,9 @@ class XmlDataSC
         std::vector <double> m_vx, m_vy;
         std::vector <std::string> m_vert_id;
 
+        // Number of nodes in each way
+        std::unordered_map <int, int> waySizes;
+
     public:
 
         double xmin = DOUBLE_MAX, xmax = -DOUBLE_MAX,
@@ -93,6 +96,7 @@ class XmlDataSC
             nnode_kv = 0;
             nway_kv = 0;
             nrel_kv = 0;
+            nrel_memb = 0;
             nedges = 0;
             getSizes (p->first_node ());
             Rcpp::Rcout << "n(nodes, ways, rels, edges) = (" << nnodes << ", " <<
@@ -125,6 +129,7 @@ class XmlDataSC
             nnode_kv = 0;
             nway_kv = 0;
             nrel_kv = 0;
+            nrel_memb = 0;
             nedges = 0;
 
             traverseWays (p->first_node ());
@@ -172,7 +177,7 @@ class XmlDataSC
         void traverseWays (XmlNodePtr pt);
         void traverseRelation (XmlNodePtr pt, RawRelation& rrel);
         void traverseWay (XmlNodePtr pt, RawWay& rway);
-        void traverseNode (XmlNodePtr pt, RawNode& rnode);
+        void traverseNode (XmlNodePtr pt);
 
 }; // end Class::XmlDataSC
 
@@ -192,16 +197,22 @@ inline void XmlDataSC::getSizes (XmlNodePtr pt)
     {
         if (!strcmp (it->name(), "node"))
         {
-            countNode (it);
+            countNode (it); // increments nnode_kv
+            nnodes++;
         }
         else if (!strcmp (it->name(), "way"))
         {
-            countWay (it);
+            int wayLength = nedges;
+            countWay (it); // increments nway_kv, nedges
+            wayLength = nedges - wayLength;
             nedges--; // counts nodes, so each way has nedges = 1 - nnodes
+            waySizes.emplace (nways, wayLength);
+            nways++;
         }
         else if (!strcmp (it->name(), "relation"))
         {
-            countRelation (it);
+            countRelation (it); // increments nrel_kv, nrel_memb
+            nrels++;
         }
         else
         {
@@ -224,9 +235,9 @@ inline void XmlDataSC::countRelation (XmlNodePtr pt)
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
-        if (!strcmp (it->name(), "id"))
-            nrels++;
-        else if (!strcmp (it->name(), "k"))
+        if (!strcmp (it->name(), "rel"))
+            nrel_memb++;
+        if (!strcmp (it->name(), "k"))
             nrel_kv++;
     }
     // allows for >1 child nodes
@@ -250,9 +261,7 @@ inline void XmlDataSC::countWay (XmlNodePtr pt)
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
-        if (!strcmp (it->name(), "id"))
-            nways++;
-        else if (!strcmp (it->name(), "k"))
+        if (!strcmp (it->name(), "k"))
             nway_kv++;
         else if (!strcmp (it->name(), "ref"))
             nedges++;
@@ -278,9 +287,7 @@ inline void XmlDataSC::countNode (XmlNodePtr pt)
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
-        if (!strcmp (it->name(), "id"))
-            nnodes++;
-        else if (!strcmp (it->name(), "k"))
+        if (!strcmp (it->name(), "k"))
             nnode_kv++;
     }
     // allows for >1 child nodes
@@ -303,33 +310,22 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
 {
     RawRelation rrel;
     RawWay rway;
-    RawNode rnode;
 
     for (XmlNodePtr it = pt->first_node (); it != nullptr;
             it = it->next_sibling())
     {
         if (!strcmp (it->name(), "node"))
         {
-            rnode.key.clear ();
-            rnode.value.clear ();
+            traverseNode (it);
+            nnodes++;
 
-            traverseNode (it, rnode);
-
+            /*
             if (rnode.lon < xmin) xmin = rnode.lon;
             if (rnode.lon > xmax) xmax = rnode.lon;
             if (rnode.lat < ymin) ymin = rnode.lat;
             if (rnode.lat > ymax) ymax = rnode.lat;
+            */
 
-            m_vert_id [nnodes] = std::to_string (rnode.id);
-            m_vx [nnodes] = rnode.lon;
-            m_vy [nnodes++] = rnode.lat;
-
-            for (size_t i=0; i<rnode.key.size (); i++)
-            {
-                m_node_id [nnode_kv] = std::to_string (rnode.id);
-                m_node_key [nnode_kv] = rnode.key [i];
-                m_node_val [nnode_kv++] = rnode.value [i];
-            }
         } else if (!strcmp (it->name(), "way"))
         {
             rway.key.clear ();
@@ -478,25 +474,28 @@ inline void XmlDataSC::traverseWay (XmlNodePtr pt, RawWay& rway)
  ************************************************************************
  ************************************************************************/
 
-inline void XmlDataSC::traverseNode (XmlNodePtr pt, RawNode& rnode)
+inline void XmlDataSC::traverseNode (XmlNodePtr pt)
 {
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
         if (!strcmp (it->name(), "id"))
-            rnode.id = std::stoll(it->value());
+            m_vert_id [nnodes] = it->value();
         else if (!strcmp (it->name(), "lat"))
-            rnode.lat = std::stod(it->value());
+            m_vy [nnodes] = std::stod(it->value());
         else if (!strcmp (it->name(), "lon"))
-            rnode.lon = std::stod(it->value());
+            m_vx [nnodes] = std::stod(it->value());
         else if (!strcmp (it->name(), "k"))
-            rnode.key.push_back (it->value ());
+            m_node_key [nnode_kv] = it->value();
         else if (!strcmp (it->name(), "v"))
-            rnode.value.push_back (it->value ());
+        {
+            m_node_val [nnode_kv] = it->value();
+            m_node_id [nnode_kv] = m_vert_id [nnodes]; // will always be pre-set
+        }
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
     {
-        traverseNode (it, rnode);
+        traverseNode (it);
     }
 } // end function XmlDataSC::traverseNode
