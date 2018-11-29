@@ -311,23 +311,32 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
             Rcpp::Named ("val") = xml.get_way_val (),
             Rcpp::_["stringsAsFactors"] = false );
 
-    Rcpp::DataFrame obj_rel = Rcpp::DataFrame::create (
+    Rcpp::DataFrame obj_rel_memb = Rcpp::DataFrame::create (
+            Rcpp::Named ("object_") = xml.get_rel_memb_id (),
+            Rcpp::Named ("type") = xml.get_rel_memb_type (),
+            Rcpp::Named ("ref") = xml.get_rel_ref (),
+            Rcpp::Named ("role") = xml.get_rel_role (),
+            Rcpp::_["stringsAsFactors"] = false );
+
+    Rcpp::DataFrame obj_rel_kv = Rcpp::DataFrame::create (
             Rcpp::Named ("object_") = xml.get_rel_kv_id (),
             Rcpp::Named ("key") = xml.get_rel_key (),
             Rcpp::Named ("val") = xml.get_rel_val (),
             Rcpp::_["stringsAsFactors"] = false );
 
-    Rcpp::List ret (6);
+    Rcpp::List ret (7);
     ret [0] = vertex;
     ret [1] = edge;
     ret [2] = oXe;
     ret [3] = obj_node;
     ret [4] = obj_way;
-    ret [5] = obj_rel;
+    ret [5] = obj_rel_memb;
+    ret [6] = obj_rel_kv;
 
     std::vector <std::string> retnames {"vertex", 
                                         "edge", "object_link_edge",
-                                        "obj_node", "obj_way", "obj_rel"};
+                                        "obj_node", "obj_way",
+                                        "obj_rel_memb", "obj_rel_kv"};
     ret.attr ("names") = retnames;
     
     return ret;

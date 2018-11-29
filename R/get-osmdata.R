@@ -381,34 +381,32 @@ osmdata_sc <- function(q, doc, directed = FALSE, quiet=TRUE, encoding) {
         message ('converting OSM data to sc format')
     res <- rcpp_osmdata_sc (temp$doc)
 
-    # res has the $vertex, $edge and $object_link_edge tables ready to go.  The
-    # $object table is mostly just key-val pairs, but the relations have
-    # additional members - called "ref" and "role" entries. The key-val tables
-    # are therefore expanded to add these two columns before rbind-ing the whole
-    # lot to the one table:
-    if (nrow (res$obj_rel) > 0)
-        res$obj_rel$obj_type <- "relation"
-        res$rel_kv$obj_type <- "relation"
+    # res has the $vertex, $edge and $object_link_edge tables ready to go.
+    # The rest are (node, way, rel) key-val tables which can just be rbind-ed,
+    # except for `obj_rel_memb`, which maps relations members onto roles and
+    # requires this bit of fidding:
+    if (nrow (res$obj_rel_memb) > 0)
+    {
+        res$obj_rel_memb <-  data.frame ("object_" = res$obj_rel_memb$object_,
+                                 "key" = paste0 (res$obj_rel_memb$type, "_",
+                                                 res$obj_rel_memb$role),
+                                 "val" = res$obj_rel_memb$ref,
+                                 "obj_type" = "relation",
+                                 stringsAsFactors = FALSE)
+    }
+    if (nrow (res$obj_rel_kv) > 0)
+        res$obj_rel_kv$obj_type <- "relation"
     if (nrow (res$obj_way) > 0)
         res$obj_way$obj_type <- "way"
     if (nrow (res$obj_node) > 0)
         res$obj_node$obj_type <- "node"
 
-    #if (nrow (res$rel) > 0)
-    #{
-    #    # Change res$rel from ("ref", "role") to ("value", "key")
-    #    res$rel <- data.frame (object_ = res$rel$object,
-    #                           key = paste0 ("rel_role_", res$rel$role),
-    #                           value = res$rel$ref,
-    #                           obj_type = "relation",
-    #                           stringsAsFactors = FALSE)
-    #}
-
     res$object_link_edge$native_ <- TRUE
     #res <- duplicate_twoway_edges (res, directed)
 
     obj <- list () # SC **does not** use osmdata class definition
-    obj$object <- tibble::as.tibble (rbind (res$obj_rel,
+    obj$object <- tibble::as.tibble (rbind (res$obj_rel_memb,
+                                            res$obj_rel_kv,
                                             res$obj_way,
                                             res$obj_node))
     obj$object_link_edge <- tibble::as.tibble (res$object_link_edge)

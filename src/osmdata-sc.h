@@ -109,10 +109,6 @@ class XmlDataSC
             zeroCounters (counters);
             getSizes (p->first_node ());
             vectorsResize (vectors, counters);
-            Rcpp::Rcout << "n(nodes, ways, rels, edges) = (" << counters.nnodes << ", " <<
-                counters.nways << ", " << counters.nrels << ", " << counters.nedges << "); kv = (" <<
-                counters.nnode_kv << ", " << counters.nway_kv << ", " << counters.nrel_kv << ")" <<
-                std::endl;
 
             zeroCounters (counters);
             traverseWays (p->first_node ());
@@ -133,13 +129,16 @@ class XmlDataSC
         const std::vector <std::string>& get_rel_kv_id() const { return vectors.rel_kv_id;  }
         const std::vector <std::string>& get_rel_key() const { return vectors.rel_key;  }
         const std::vector <std::string>& get_rel_val() const { return vectors.rel_val;  }
+
         const std::vector <std::string>& get_rel_memb_id() const { return vectors.rel_memb_id;  }
         const std::vector <std::string>& get_rel_memb_type() const { return vectors.rel_memb_type;  }
         const std::vector <std::string>& get_rel_ref() const { return vectors.rel_ref;  }
         const std::vector <std::string>& get_rel_role() const { return vectors.rel_role;  }
+
         const std::vector <std::string>& get_way_id() const { return vectors.way_id;  }
         const std::vector <std::string>& get_way_key() const { return vectors.way_key;  }
         const std::vector <std::string>& get_way_val() const { return vectors.way_val;  }
+
         const std::vector <std::string>& get_node_id() const { return vectors.node_id;  }
         const std::vector <std::string>& get_node_key() const { return vectors.node_key;  }
         const std::vector <std::string>& get_node_val() const { return vectors.node_val;  }
@@ -167,8 +166,8 @@ class XmlDataSC
 
         void traverseWays (XmlNodePtr pt); // The primary function
 
-        void traverseRelation (XmlNodePtr pt);
-        void traverseWay (XmlNodePtr pt, int& node_num);
+        void traverseRelation (XmlNodePtr pt, std::string &id);
+        void traverseWay (XmlNodePtr pt, int& node_num, std::string& id);
         void traverseNode (XmlNodePtr pt);
 
 }; // end Class::XmlDataSC
@@ -345,7 +344,7 @@ inline void XmlDataSC::countNode (XmlNodePtr pt)
 
 inline void XmlDataSC::traverseWays (XmlNodePtr pt)
 {
-    RawWay rway;
+    std::string this_id;
 
     for (XmlNodePtr it = pt->first_node (); it != nullptr;
             it = it->next_sibling())
@@ -365,13 +364,12 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
         } else if (!strcmp (it->name(), "way"))
         {
             int node_num = 0;
-            traverseWay (it, node_num);
-            counters.nedges--;
+            traverseWay (it, node_num, this_id);
             counters.nways++;
         }
         else if (!strcmp (it->name(), "relation"))
         {
-            traverseRelation (it);
+            traverseRelation (it, this_id);
             counters.nrels++;
         }
         else
@@ -391,22 +389,27 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
  ************************************************************************
  ************************************************************************/
 
-inline void XmlDataSC::traverseRelation (XmlNodePtr pt)
+inline void XmlDataSC::traverseRelation (XmlNodePtr pt, std::string& id)
 {
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
         if (!strcmp (it->name(), "id"))
         {
-            vectors.rel_kv_id [counters.nrel_kv] = it->value();
-            vectors.rel_memb_id [counters.nrel_memb] = it->value();
+            // These values are always first, so all other clauses are executed
+            // after this one
+            id = it->value();
         } else if (!strcmp (it->name(), "k"))
+        {
+            vectors.rel_kv_id [counters.nrel_kv] = id;
             vectors.rel_key [counters.nrel_kv] = it->value();
-        else if (!strcmp (it->name(), "v"))
+        } else if (!strcmp (it->name(), "v"))
             vectors.rel_val [counters.nrel_kv++] = it->value();
         else if (!strcmp (it->name(), "type"))
+        {
             vectors.rel_memb_type [counters.nrel_memb] = it->value();
-        else if (!strcmp (it->name(), "ref"))
+            vectors.rel_memb_id [counters.nrel_memb] = id;
+        } else if (!strcmp (it->name(), "ref"))
             vectors.rel_ref [counters.nrel_memb] = it->value();
         else if (!strcmp (it->name(), "role"))
             vectors.rel_role [counters.nrel_memb++] = it->value();
@@ -414,7 +417,7 @@ inline void XmlDataSC::traverseRelation (XmlNodePtr pt)
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
     {
-        traverseRelation (it);
+        traverseRelation (it, id);
     }
 } // end function XmlDataSC::traverseRelation
 
@@ -427,18 +430,22 @@ inline void XmlDataSC::traverseRelation (XmlNodePtr pt)
  ************************************************************************
  ************************************************************************/
 
-inline void XmlDataSC::traverseWay (XmlNodePtr pt, int& node_num)
+inline void XmlDataSC::traverseWay (XmlNodePtr pt, int& node_num,
+        std::string& id)
 {
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
         if (!strcmp (it->name(), "id"))
         {
-            vectors.way_id [counters.nway_kv] = it->value();
-            vectors.object [counters.nedges] = it->value();
+            // These values are always first, so all other clauses are executed
+            // after this one
+            id = it->value();
         } else if (!strcmp (it->name(), "k"))
+        {
+            vectors.way_id [counters.nway_kv] = id;
             vectors.way_key [counters.nway_kv] = it->value();
-        else if (!strcmp (it->name(), "v"))
+        } else if (!strcmp (it->name(), "v"))
             vectors.way_val [counters.nway_kv++] = it->value();
         else if (!strcmp (it->name(), "ref"))
         {
@@ -447,10 +454,15 @@ inline void XmlDataSC::traverseWay (XmlNodePtr pt, int& node_num)
             else
             {
                 vectors.vx1 [counters.nedges] = it->value();
+                vectors.object [counters.nedges] = id;
                 vectors.edge [counters.nedges] = random_id (10);
-                if (node_num != waySizes.at (counters.nways))
-                    vectors.vx0 [counters.nedges + 1] = it->value();
                 counters.nedges++;
+                // TODO: Very last value has nedges > vx0.size() - why?
+                if (node_num < waySizes.at (counters.nways) &
+                        counters.nedges < vectors.vx0.size ())
+                {
+                    vectors.vx0 [counters.nedges] = it->value();
+                }
             }
             node_num++;
         }
@@ -459,7 +471,7 @@ inline void XmlDataSC::traverseWay (XmlNodePtr pt, int& node_num)
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
     {
-        traverseWay (it, node_num);
+        traverseWay (it, node_num, id);
     }
 } // end function XmlDataSC::traverseWay
 
@@ -489,6 +501,7 @@ inline void XmlDataSC::traverseNode (XmlNodePtr pt)
         {
             vectors.node_val [counters.nnode_kv] = it->value();
             vectors.node_id [counters.nnode_kv] = vectors.vert_id [counters.nnodes]; // will always be pre-set
+            counters.nnode_kv++;
         }
     }
     // allows for >1 child nodes
