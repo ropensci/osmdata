@@ -98,9 +98,6 @@ class XmlDataSC
 
     public:
 
-        double xmin = DOUBLE_MAX, xmax = -DOUBLE_MAX,
-              ymin = DOUBLE_MAX, ymax = -DOUBLE_MAX;
-
         XmlDataSC (const std::string& str)
         {
             // APS empty m_nodes/m_ways/m_relations constructed here, no need to explicitly clear
@@ -117,14 +114,7 @@ class XmlDataSC
         // APS make the dtor virtual since compiler support for "final" is limited
         virtual ~XmlDataSC ()
         {
-          // APS m_nodes/m_ways/m_relations destructed here, no need to explicitly clear
         }
-
-        // Const accessors for members
-        double x_min() { return xmin;  }
-        double x_max() { return xmax;  }
-        double y_min() { return ymin;  }
-        double y_max() { return ymax;  }
 
         const std::vector <std::string>& get_rel_kv_id() const { return vectors.rel_kv_id;  }
         const std::vector <std::string>& get_rel_key() const { return vectors.rel_key;  }
@@ -353,14 +343,6 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
         {
             traverseNode (it);
             counters.nnodes++;
-
-            /*
-            if (rnode.lon < xmin) xmin = rnode.lon;
-            if (rnode.lon > xmax) xmax = rnode.lon;
-            if (rnode.lat < ymin) ymin = rnode.lat;
-            if (rnode.lat > ymax) ymax = rnode.lat;
-            */
-
         } else if (!strcmp (it->name(), "way"))
         {
             int node_num = 0;
