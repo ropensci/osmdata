@@ -50,21 +50,34 @@ std::string random_id (size_t len);
 
 class XmlDataSC
 {
+    /* Two main options to efficiently store-on-reading are:
+     * 1. Use std::maps for everything, but this would ultimately require
+     * copying all entries over to an appropriate Rcpp::Matrix class; or
+     * 2. Setting up individual vectors for each (id, key, val), and just
+     * Rcpp::wrap-ing them for return.
+     * The second is more efficient, and so is implemented here, via an initial
+     * read to determine the sizes of the vectors (in Counters), then a second
+     * read to store them.
+     */
+
     public:
+
         struct Counters {
             // Initial function getSizes does an initial scan of the XML doc and
             // establishes the sizes of everything with these counters
             int nnodes, nnode_kv,
-                nways, nway_kv,
-                nrels, nrel_kv, nrel_memb,
-                nedges;
+                nways, nway_kv, nedges,
+                nrels, nrel_kv, nrel_memb;
         };
+
         struct Vectors {
             // Vectors used to store the data, with sizes allocated according to
             // the values of Counters
             //
             // vectors for key-val pairs in object table:
-            std::vector <std::string> rel_id, rel_key, rel_val,
+            std::vector <std::string>
+                rel_kv_id, rel_key, rel_val,
+                rel_memb_id, rel_memb_type, rel_ref, rel_role,
                 way_id, way_key, way_val,
                 node_id, node_key, node_val;
 
@@ -76,18 +89,9 @@ class XmlDataSC
         };
 
     private:
+
         Counters counters;
         Vectors vectors;
-
-        /* Two main options to efficiently store-on-reading are:
-         * 1. Use std::maps for everything, but this would ultimately require
-         * copying all entries over to an appropriate Rcpp::Matrix class; or
-         * 2. Setting up individual vectors for each (id, key, val), and just
-         * Rcpp::wrap-ing them for return.
-         * The second is more efficient, even though the code is somewhat
-         * ungainly, and so is implemented here, via an initial read to
-         * determine the sizes of the vectors, then a second read to store them.
-         */
 
         // Number of nodes in each way
         std::unordered_map <int, int> waySizes;
@@ -126,9 +130,13 @@ class XmlDataSC
         double y_min() { return ymin;  }
         double y_max() { return ymax;  }
 
-        const std::vector <std::string>& get_rel_id() const { return vectors.rel_id;  }
+        const std::vector <std::string>& get_rel_kv_id() const { return vectors.rel_kv_id;  }
         const std::vector <std::string>& get_rel_key() const { return vectors.rel_key;  }
         const std::vector <std::string>& get_rel_val() const { return vectors.rel_val;  }
+        const std::vector <std::string>& get_rel_memb_id() const { return vectors.rel_memb_id;  }
+        const std::vector <std::string>& get_rel_memb_type() const { return vectors.rel_memb_type;  }
+        const std::vector <std::string>& get_rel_ref() const { return vectors.rel_ref;  }
+        const std::vector <std::string>& get_rel_role() const { return vectors.rel_role;  }
         const std::vector <std::string>& get_way_id() const { return vectors.way_id;  }
         const std::vector <std::string>& get_way_key() const { return vectors.way_key;  }
         const std::vector <std::string>& get_way_val() const { return vectors.way_val;  }
@@ -152,11 +160,14 @@ class XmlDataSC
         void zeroCounters (Counters& counters);
         void getSizes (XmlNodePtr pt);
         void vectorsResize (Vectors& vectors, Counters &counters);
+
         void countRelation (XmlNodePtr pt);
         void countWay (XmlNodePtr pt);
         void countNode (XmlNodePtr pt);
-        void traverseWays (XmlNodePtr pt);
-        void traverseRelation (XmlNodePtr pt, RawRelation& rrel);
+
+        void traverseWays (XmlNodePtr pt); // The primary function
+
+        void traverseRelation (XmlNodePtr pt);
         void traverseWay (XmlNodePtr pt, RawWay& rway);
         void traverseNode (XmlNodePtr pt);
 
@@ -165,23 +176,32 @@ class XmlDataSC
 inline void XmlDataSC::zeroCounters (Counters& counters)
 {
     counters.nnodes = 0;
-    counters.nways = 0;
-    counters.nrels = 0;
     counters.nnode_kv = 0;
+
+    counters.nways = 0;
     counters.nway_kv = 0;
+    counters.nedges = 0;
+
+    counters.nrels = 0;
     counters.nrel_kv = 0;
     counters.nrel_memb = 0;
-    counters.nedges = 0;
 }
 
 inline void XmlDataSC::vectorsResize (Vectors& vectors, Counters &counters)
 {
-    vectors.rel_id.resize (counters.nrel_kv);
+    vectors.rel_kv_id.resize (counters.nrel_kv);
     vectors.rel_key.resize (counters.nrel_kv);
     vectors.rel_val.resize (counters.nrel_kv);
+
+    vectors.rel_memb_id.resize (counters.nrel_memb);
+    vectors.rel_memb_type.resize (counters.nrel_memb);
+    vectors.rel_ref.resize (counters.nrel_memb);
+    vectors.rel_role.resize (counters.nrel_memb);
+
     vectors.way_id.resize (counters.nway_kv);
     vectors.way_key.resize (counters.nway_kv);
     vectors.way_val.resize (counters.nway_kv);
+
     vectors.node_id.resize (counters.nnode_kv);
     vectors.node_key.resize (counters.nnode_kv);
     vectors.node_val.resize (counters.nnode_kv);
@@ -246,10 +266,12 @@ inline void XmlDataSC::getSizes (XmlNodePtr pt)
 
 inline void XmlDataSC::countRelation (XmlNodePtr pt)
 {
+    // Relations can have either members or key-val pairs, counted here with
+    // seperate counters
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
-        if (!strcmp (it->name(), "rel"))
+        if (!strcmp (it->name(), "type"))
             counters.nrel_memb++;
         if (!strcmp (it->name(), "k"))
             counters.nrel_kv++;
@@ -272,6 +294,7 @@ inline void XmlDataSC::countRelation (XmlNodePtr pt)
 
 inline void XmlDataSC::countWay (XmlNodePtr pt)
 {
+    // Ways can have either member nodes, called "ref", or key-val pairs
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
@@ -322,7 +345,6 @@ inline void XmlDataSC::countNode (XmlNodePtr pt)
 
 inline void XmlDataSC::traverseWays (XmlNodePtr pt)
 {
-    RawRelation rrel;
     RawWay rway;
 
     for (XmlNodePtr it = pt->first_node (); it != nullptr;
@@ -366,23 +388,8 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
         }
         else if (!strcmp (it->name(), "relation"))
         {
-            rrel.key.clear();
-            rrel.value.clear();
-            rrel.role_way.clear();
-            rrel.role_node.clear();
-            rrel.ways.clear();
-            rrel.nodes.clear();
-            rrel.member_type = "";
-            rrel.ispoly = false;
-
-            traverseRelation (it, rrel);
-
-            for (size_t i=0; i<rrel.key.size (); i++)
-            {
-                vectors.rel_id [counters.nrel_kv] = std::to_string (rrel.id);
-                vectors.rel_key [counters.nrel_kv] = rrel.key [i];
-                vectors.rel_val [counters.nrel_kv++] = rrel.value [i];
-            }
+            traverseRelation (it);
+            counters.nrels++;
         }
         else
         {
@@ -401,51 +408,30 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
  ************************************************************************
  ************************************************************************/
 
-inline void XmlDataSC::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
+inline void XmlDataSC::traverseRelation (XmlNodePtr pt)
 {
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {
-        if (!strcmp (it->name(), "k"))
-            rrel.key.push_back (it->value());
+        if (!strcmp (it->name(), "id"))
+        {
+            vectors.rel_kv_id [counters.nrel_kv] = it->value();
+            vectors.rel_memb_id [counters.nrel_memb] = it->value();
+        } else if (!strcmp (it->name(), "k"))
+            vectors.rel_key [counters.nrel_kv] = it->value();
         else if (!strcmp (it->name(), "v"))
-            rrel.value.push_back (it->value());
-        else if (!strcmp (it->name(), "id"))
-            rrel.id = std::stoll(it->value());
+            vectors.rel_val [counters.nrel_kv++] = it->value();
         else if (!strcmp (it->name(), "type"))
-            rrel.member_type = it->value ();
+            vectors.rel_memb_type [counters.nrel_memb] = it->value();
         else if (!strcmp (it->name(), "ref"))
-        {
-            if (rrel.member_type == "node")
-                rrel.nodes.push_back (std::stoll (it->value ()));
-            else if (rrel.member_type == "way")
-                rrel.ways.push_back (std::stoll (it->value ()));
-            else if (rrel.member_type == "relation")
-                rrel.relations.push_back (std::stoll (it->value ()));
-            else
-                throw std::runtime_error ("unknown member_type");
-        } else if (!strcmp (it->name(), "role"))
-        {
-            if (rrel.member_type == "node")
-                rrel.role_node.push_back (it->value ());
-            else if (rrel.member_type == "way")
-                rrel.role_way.push_back (it->value ());
-            else if (rrel.member_type == "relation")
-                rrel.role_relation.push_back (it->value ());
-            else
-                throw std::runtime_error ("unknown member_type");
-            // Not all OSM Multipolygons have (key="type",
-            // value="multipolygon"): For example, (key="type",
-            // value="boundary") are often multipolygons. The things they all
-            // have are "inner" and "outer" roles.
-            if (!strcmp (it->value(), "inner") || !strcmp (it->value(), "outer"))
-                rrel.ispoly = true;
-        }
+            vectors.rel_ref [counters.nrel_memb] = it->value();
+        else if (!strcmp (it->name(), "role"))
+            vectors.rel_role [counters.nrel_memb++] = it->value();
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
     {
-        traverseRelation (it, rrel);
+        traverseRelation (it);
     }
 } // end function XmlDataSC::traverseRelation
 

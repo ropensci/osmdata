@@ -312,7 +312,7 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
             Rcpp::_["stringsAsFactors"] = false );
 
     Rcpp::DataFrame obj_rel = Rcpp::DataFrame::create (
-            Rcpp::Named ("object_") = xml.get_rel_id (),
+            Rcpp::Named ("object_") = xml.get_rel_kv_id (),
             Rcpp::Named ("key") = xml.get_rel_key (),
             Rcpp::Named ("val") = xml.get_rel_val (),
             Rcpp::_["stringsAsFactors"] = false );
