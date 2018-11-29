@@ -50,8 +50,16 @@ std::string random_id (size_t len);
 
 class XmlDataSC
 {
-    private:
+    public:
+        struct Counters {
+            int nnodes, nnode_kv,
+                nways, nway_kv,
+                nrels, nrel_kv, nrel_memb,
+                nedges;
+        };
 
+    private:
+        Counters counters;
         int nnodes, nnode_kv,
             nways, nway_kv,
             nrels, nrel_kv, nrel_memb,
@@ -170,6 +178,7 @@ class XmlDataSC
 
     private:
 
+        void zeroCounters (Counters& counters);
         void getSizes (XmlNodePtr pt);
         void countRelation (XmlNodePtr pt);
         void countWay (XmlNodePtr pt);
@@ -181,6 +190,17 @@ class XmlDataSC
 
 }; // end Class::XmlDataSC
 
+inline void XmlDataSC::zeroCounters (Counters& counters)
+{
+    counters.nnodes = 0;
+    counters.nways = 0;
+    counters.nrels = 0;
+    counters.nnode_kv = 0;
+    counters.nway_kv = 0;
+    counters.nrel_kv = 0;
+    counters.nrel_memb = 0;
+    counters.nedges = 0;
+}
 
 /************************************************************************
  ************************************************************************
