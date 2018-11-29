@@ -147,26 +147,26 @@ class XmlDataSC
         double y_min() { return ymin;  }
         double y_max() { return ymax;  }
 
-        const std::vector <std::string>& rel_id() const { return m_rel_id;  }
-        const std::vector <std::string>& rel_key() const { return m_rel_key;  }
-        const std::vector <std::string>& rel_val() const { return m_rel_val;  }
-        const std::vector <std::string>& way_id() const { return m_way_id;  }
-        const std::vector <std::string>& way_key() const { return m_way_key;  }
-        const std::vector <std::string>& way_val() const { return m_way_val;  }
-        const std::vector <std::string>& node_id() const { return m_node_id;  }
-        const std::vector <std::string>& node_key() const { return m_node_key;  }
-        const std::vector <std::string>& node_val() const { return m_node_val;  }
+        const std::vector <std::string>& get_rel_id() const { return m_rel_id;  }
+        const std::vector <std::string>& get_rel_key() const { return m_rel_key;  }
+        const std::vector <std::string>& get_rel_val() const { return m_rel_val;  }
+        const std::vector <std::string>& get_way_id() const { return m_way_id;  }
+        const std::vector <std::string>& get_way_key() const { return m_way_key;  }
+        const std::vector <std::string>& get_way_val() const { return m_way_val;  }
+        const std::vector <std::string>& get_node_id() const { return m_node_id;  }
+        const std::vector <std::string>& get_node_key() const { return m_node_key;  }
+        const std::vector <std::string>& get_node_val() const { return m_node_val;  }
 
         // vectors for edge and object_link_edge tables:
-        const std::vector <std::string>& vx0 () const { return m_vx0;  }
-        const std::vector <std::string>& vx1 () const { return m_vx1;  }
-        const std::vector <std::string>& edge () const { return m_edge;  }
-        const std::vector <std::string>& object () const { return m_object;  }
+        const std::vector <std::string>& get_vx0 () const { return m_vx0;  }
+        const std::vector <std::string>& get_vx1 () const { return m_vx1;  }
+        const std::vector <std::string>& get_edge () const { return m_edge;  }
+        const std::vector <std::string>& get_object () const { return m_object;  }
 
         // vectors for vertex table
-        const std::vector <std::string>& vert_id () const { return m_vert_id;  }
-        const std::vector <double>& vx () const { return m_vx;  }
-        const std::vector <double>& vy () const { return m_vy;  }
+        const std::vector <std::string>& get_vert_id () const { return m_vert_id;  }
+        const std::vector <double>& get_vx () const { return m_vx;  }
+        const std::vector <double>& get_vy () const { return m_vy;  }
 
     private:
 

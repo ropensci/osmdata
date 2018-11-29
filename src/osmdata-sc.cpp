@@ -283,38 +283,38 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
     XmlDataSC xml (st);
 
     Rcpp::DataFrame vertex = Rcpp::DataFrame::create (
-            Rcpp::Named ("x_") = xml.vx (),
-            Rcpp::Named ("y_") = xml.vy (),
-            Rcpp::Named ("vertex_") = xml.vert_id (),
+            Rcpp::Named ("x_") = xml.get_vx (),
+            Rcpp::Named ("y_") = xml.get_vy (),
+            Rcpp::Named ("vertex_") = xml.get_vert_id (),
             Rcpp::_["stringsAsFactors"] = false );
 
     Rcpp::DataFrame edge = Rcpp::DataFrame::create (
-            Rcpp::Named (".vx0") = xml.vx0 (),
-            Rcpp::Named (".vx1") = xml.vx1 (),
-            Rcpp::Named ("edge_") = xml.edge (),
+            Rcpp::Named (".vx0") = xml.get_vx0 (),
+            Rcpp::Named (".vx1") = xml.get_vx1 (),
+            Rcpp::Named ("edge_") = xml.get_edge (),
             Rcpp::_["stringsAsFactors"] = false );
 
     Rcpp::DataFrame oXe = Rcpp::DataFrame::create (
-            Rcpp::Named ("edge_") = xml.edge (),
-            Rcpp::Named ("object_") = xml.object (),
+            Rcpp::Named ("edge_") = xml.get_edge (),
+            Rcpp::Named ("object_") = xml.get_object (),
             Rcpp::_["stringsAsFactors"] = false );
 
     Rcpp::DataFrame obj_node = Rcpp::DataFrame::create (
-            Rcpp::Named ("object_") = xml.node_id (),
-            Rcpp::Named ("key") = xml.node_key (),
-            Rcpp::Named ("val") = xml.node_val (),
+            Rcpp::Named ("object_") = xml.get_node_id (),
+            Rcpp::Named ("key") = xml.get_node_key (),
+            Rcpp::Named ("val") = xml.get_node_val (),
             Rcpp::_["stringsAsFactors"] = false );
 
     Rcpp::DataFrame obj_way = Rcpp::DataFrame::create (
-            Rcpp::Named ("object_") = xml.way_id (),
-            Rcpp::Named ("key") = xml.way_key (),
-            Rcpp::Named ("val") = xml.way_val (),
+            Rcpp::Named ("object_") = xml.get_way_id (),
+            Rcpp::Named ("key") = xml.get_way_key (),
+            Rcpp::Named ("val") = xml.get_way_val (),
             Rcpp::_["stringsAsFactors"] = false );
 
     Rcpp::DataFrame obj_rel = Rcpp::DataFrame::create (
-            Rcpp::Named ("object_") = xml.rel_id (),
-            Rcpp::Named ("key") = xml.rel_key (),
-            Rcpp::Named ("val") = xml.rel_val (),
+            Rcpp::Named ("object_") = xml.get_rel_id (),
+            Rcpp::Named ("key") = xml.get_rel_key (),
+            Rcpp::Named ("val") = xml.get_rel_val (),
             Rcpp::_["stringsAsFactors"] = false );
 
     Rcpp::List ret (6);
