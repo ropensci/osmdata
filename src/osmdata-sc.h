@@ -104,29 +104,11 @@ class XmlDataSC
 
             zeroCounters (counters);
             getSizes (p->first_node ());
+            vectorsResize (vectors, counters);
             Rcpp::Rcout << "n(nodes, ways, rels, edges) = (" << counters.nnodes << ", " <<
                 counters.nways << ", " << counters.nrels << ", " << counters.nedges << "); kv = (" <<
                 counters.nnode_kv << ", " << counters.nway_kv << ", " << counters.nrel_kv << ")" <<
                 std::endl;
-
-            vectors.rel_id.resize (counters.nrel_kv);
-            vectors.rel_key.resize (counters.nrel_kv);
-            vectors.rel_val.resize (counters.nrel_kv);
-            vectors.way_id.resize (counters.nway_kv);
-            vectors.way_key.resize (counters.nway_kv);
-            vectors.way_val.resize (counters.nway_kv);
-            vectors.node_id.resize (counters.nnode_kv);
-            vectors.node_key.resize (counters.nnode_kv);
-            vectors.node_val.resize (counters.nnode_kv);
-
-            vectors.vx0.resize (counters.nedges);
-            vectors.vx1.resize (counters.nedges);
-            vectors.edge.resize (counters.nedges);
-            vectors.object.resize (counters.nedges);
-
-            vectors.vx.resize (counters.nnodes);
-            vectors.vy.resize (counters.nnodes);
-            vectors.vert_id.resize (counters.nnodes);
 
             zeroCounters (counters);
             traverseWays (p->first_node ());
@@ -169,6 +151,7 @@ class XmlDataSC
 
         void zeroCounters (Counters& counters);
         void getSizes (XmlNodePtr pt);
+        void vectorsResize (Vectors& vectors, Counters &counters);
         void countRelation (XmlNodePtr pt);
         void countWay (XmlNodePtr pt);
         void countNode (XmlNodePtr pt);
@@ -189,6 +172,28 @@ inline void XmlDataSC::zeroCounters (Counters& counters)
     counters.nrel_kv = 0;
     counters.nrel_memb = 0;
     counters.nedges = 0;
+}
+
+inline void XmlDataSC::vectorsResize (Vectors& vectors, Counters &counters)
+{
+    vectors.rel_id.resize (counters.nrel_kv);
+    vectors.rel_key.resize (counters.nrel_kv);
+    vectors.rel_val.resize (counters.nrel_kv);
+    vectors.way_id.resize (counters.nway_kv);
+    vectors.way_key.resize (counters.nway_kv);
+    vectors.way_val.resize (counters.nway_kv);
+    vectors.node_id.resize (counters.nnode_kv);
+    vectors.node_key.resize (counters.nnode_kv);
+    vectors.node_val.resize (counters.nnode_kv);
+
+    vectors.vx0.resize (counters.nedges);
+    vectors.vx1.resize (counters.nedges);
+    vectors.edge.resize (counters.nedges);
+    vectors.object.resize (counters.nedges);
+
+    vectors.vx.resize (counters.nnodes);
+    vectors.vy.resize (counters.nnodes);
+    vectors.vert_id.resize (counters.nnodes);
 }
 
 /************************************************************************
