@@ -5,7 +5,7 @@
 \title{Return an OSM Overpass query as an \link{osmdata} object in
 \code{silicate} (\code{SC}) format.}
 \usage{
-osmdata_sc(q, doc, directed = FALSE, quiet = TRUE, encoding)
+osmdata_sc(q, doc, quiet = TRUE, encoding)
 }
 \arguments{
 \item{q}{An object of class \code{overpass_query} constructed with
@@ -17,9 +17,6 @@ query.}
 \code{q}, otherwise either the name of a file from which to read data,
 or an object of class \pkg{XML} returned from
 \link{osmdata_xml}.}
-
-\item{directed}{Should edges be considered directed where not otherwise
-labelled?  (See Note).}
 
 \item{quiet}{suppress status messages.}
 
@@ -38,15 +35,6 @@ Return an OSM Overpass query as an \link{osmdata} object in
 \note{
 The \code{silicate} format is currently highly experimental, and
 recommended for use only if you really know what you're doing.
-
-If \code{directed = TRUE}, all edges that are not explicitly designated
-as one-way are duplicated in the \code{sc$object_link_edge} table to
-represent bi-directional flow. This is useful for routing, for example
-through converting the result to an \pkg{igraph} or \pkg{dodgr} object.
-Note that other text values such as \code{directed = "bicycle"} are also
-acceptable, in which case values for the OSM key "oneway:bicycle" -
-rather than the generic "oneway" key - will be used to determine
-directionality of flow.
 }
 \examples{
 \dontrun{

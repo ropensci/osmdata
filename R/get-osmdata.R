@@ -331,22 +331,12 @@ fill_objects <- function (res, obj, type = "points")
 #' `silicate` (`SC`) format.
 #'
 #' @inheritParams osmdata_sp
-#' @param directed Should edges be considered directed where not otherwise
-#'      labelled?  (See Note).
 #' @return An object of class `osmdata` representing the original OSM hierarchy
 #'      of nodes, ways, and relations.
 #' @export
 #'
 #' @note The `silicate` format is currently highly experimental, and
 #'      recommended for use only if you really know what you're doing.
-#' @note If `directed = TRUE`, all edges that are not explicitly designated
-#'      as one-way are duplicated in the `sc$object_link_edge` table to
-#'      represent bi-directional flow. This is useful for routing, for example
-#'      through converting the result to an \pkg{igraph} or \pkg{dodgr} object.
-#'      Note that other text values such as `directed = "bicycle"` are also
-#'      acceptable, in which case values for the OSM key "oneway:bicycle" -
-#'      rather than the generic "oneway" key - will be used to determine
-#'      directionality of flow.
 #'
 #' @examples
 #' \dontrun{
@@ -354,7 +344,7 @@ fill_objects <- function (res, obj, type = "points")
 #'             add_osm_feature (key="historic", value="ruins") %>%
 #'             osmdata_sc ()
 #' }
-osmdata_sc <- function(q, doc, directed = FALSE, quiet=TRUE, encoding) {
+osmdata_sc <- function(q, doc, quiet=TRUE, encoding) {
     if (missing (encoding))
         encoding <- 'UTF-8'
 
@@ -402,7 +392,6 @@ osmdata_sc <- function(q, doc, directed = FALSE, quiet=TRUE, encoding) {
         res$obj_node$obj_type <- "node"
 
     res$object_link_edge$native_ <- TRUE
-    #res <- duplicate_twoway_edges (res, directed)
 
     obj <- list () # SC **does not** use osmdata class definition
     obj$object <- tibble::as.tibble (rbind (res$obj_rel_memb,
@@ -424,48 +413,4 @@ osmdata_sc <- function(q, doc, directed = FALSE, quiet=TRUE, encoding) {
     attr (obj, "class") <- c ("SC", "sc")
 
     return (obj)
-}
-
-duplicate_twoway_edges <- function (x, directed)
-{
-    if (is.logical (directed))
-    {
-        if (!directed)
-            return (x)
-        else
-            directed <- "oneway"
-    } else
-    {
-        directed <- paste0 ("oneway:", directed)
-    }
-    indx <- which (x$way_kv$key == directed)
-    # Values for oneway tags are generally "yes" and "no", but the former can
-    # also include specific directives such as "use_sidepath", so it's safer
-    # here to set all ways with oneway != "no" as oneway
-    oneway_objs <- x$way_kv$object_ [which (x$way_kv$value [indx] != "no")]
-    if (length (oneway_objs) == 0)
-    {
-        message ("There are no oneway entries for key = [", directed, "]")
-        return (x)
-    }
-
-    # A non-dplyr way to re-join the two object_link_edge tables by their
-    # $object_ columns, retaining original sorting
-    ole1 <- split (x$object_link_edge, f = x$object_link_edge$object_)
-
-    ole2 <- x$object_link_edge
-    ole2$native_ <- FALSE
-    ole2 <- ole2 [which (!ole2$object_ %in% oneway_objs), ]
-    ole2 <- split (ole2, f = ole2$object_)
-
-    oles <- c (ole1, ole2)
-    nms <- unique (names (oles))
-    ole <- lapply (nms, function (i) do.call (rbind,
-                                              oles [grep (i, names (oles))]))
-    ole <- do.call (rbind, ole)
-    rownames (ole) <- NULL
-
-    x$object_link_edge <- ole
-
-    return (x)
 }
