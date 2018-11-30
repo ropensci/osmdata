@@ -364,9 +364,6 @@ osmdata_sc <- function(q, doc, quiet=TRUE, encoding) {
     obj <- temp$obj
     doc <- temp$doc
 
-    if (!(is.logical (directed) | is.character (directed)))
-        stop ("directed must be either logical or character")
-
     if (!quiet)
         message ('converting OSM data to sc format')
     res <- rcpp_osmdata_sc (temp$doc)
@@ -404,8 +401,7 @@ osmdata_sc <- function(q, doc, quiet=TRUE, encoding) {
     obj$meta <- tibble::tibble (proj = NA_character_,
                                 ctime = temp$obj$meta$timestamp,
                                 OSM_version = temp$obj$meta$OSM_version,
-                                overpass_version = temp$obj$meta$overpass_version,
-                                directed = directed)
+                                overpass_version = temp$obj$meta$overpass_version)
     #if (missing (q)) # TODO: Implement this!
     #    obj$meta$bbox <- paste (res$bbox, collapse = ' ')
 
