@@ -402,11 +402,19 @@ osmdata_sc <- function(q, doc, quiet=TRUE, encoding) {
                                 ctime = temp$obj$meta$timestamp,
                                 OSM_version = temp$obj$meta$OSM_version,
                                 overpass_version = temp$obj$meta$overpass_version)
-    #if (missing (q)) # TODO: Implement this!
-    #    obj$meta$bbox <- paste (res$bbox, collapse = ' ')
+    if (!missing (q))
+        obj$meta$bbox <- q$bbox
+    else
+        obj$meta$bbox <- bbox_to_string (obj)
 
     attr (obj, "join_ramp") <- c ("object", "object_link_edge", "edge", "vertex")
     attr (obj, "class") <- c ("SC", "sc")
 
     return (obj)
+}
+
+getbb_sc <- function (x)
+{
+    apply (x$vertex [, 1:2], 2, range) %>%
+        bbox_to_string ()
 }
