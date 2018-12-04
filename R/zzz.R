@@ -2,13 +2,11 @@
 {
     op <- options ()
 	
-	## Added and edited code here by JimShady to use random API each time.
+    ## https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
+    ## see https://github.com/ropensci/osmdata/pull/149
+    ## Added and edited code here by JimShady to use random API each time.
 	available_apis <- c('http://overpass-api.de/api/interpreter',
-						'https://lz4.overpass-api.de/api/interpreter',
-						'https://z.overpass-api.de/api/interpreter',
 						'https://overpass.kumi.systems/api/interpreter')
-	
-	
 	
     op.osmdata <- list (osmdata.base_url =
                         sample(available_apis, 1))
