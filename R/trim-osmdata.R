@@ -36,32 +36,9 @@
 trim_osmdata <- function (dat, bb_poly, exclude = TRUE)
 {
     is_sf_loaded ()
-    if (is (bb_poly, "sf"))
-    {
-        if (nrow (bb_poly) > 1)
-        {
-            message ("bb_poly has more than one polygon; ",
-                     "the first will be selected.")
-            bb_poly <- bb_poly [1, ]
-        }
-        bb_poly <- bb_poly [[attr (bb_poly, "sf_column")]]
-        bb_poly <- as.matrix (bb_poly [[1]])
-    } else if (is (bb_poly, "Spatial"))
-    {
-        bb_poly <- slot (bb_poly, "polygons")
-        if (length (bb_poly) > 1)
-            message ("bb_poly has more than one polygon; ",
-                     "the first will be selected.")
-        bb_poly <- slot (bb_poly [[1]], "Polygons")
-        if (length (bb_poly) > 1)
-            message ("bb_poly has more than one polygon; ",
-                     "the first will be selected.")
-        bb_poly <- slot (bb_poly [[1]], "coords")
-    } else if (is.list (bb_poly) & length (bb_poly) > 1)
-    {
-        message ("bb_poly has more than one polygon; the first will be selected.")
-        bb_poly <- bb_poly [[1]]
-    }
+    if (!is (bb_poly, "matrix"))
+        bb_poly <- bb_poly_to_mat (bb_poly)
+
     if (nrow (bb_poly) > 1)
     {
         dat <- trim_to_poly_pts (dat, bb_poly, exclude = exclude) %>%
@@ -78,6 +55,60 @@ is_sf_loaded <- function ()
     if (!any (grepl ("package:sf", search ())))
         message ("It is generally necessary to pre-load the sf package ",
                  "for this function to work correctly")
+}
+
+bb_poly_to_mat <- function (x)
+{
+    UseMethod ("bb_poly_to_mat")
+}
+
+bb_poly_to_mat.default <- function (x)
+{
+    stop ("bb_poly is of unknown class; please use matrix or a spatial class")
+}
+
+more_than_one <- function ()
+{
+    message ("bb_poly has more than one polygon; the first will be selected.")
+}
+
+bb_poly_to_mat.sf <- function (x)
+{
+    if (nrow (x) > 1)
+    {
+        more_than_one ()
+        x <- x [1, ]
+    }
+    x <- x [[attr (x, "sf_column")]]
+    bb_poly_to_mat.sfc (x)
+}
+
+bb_poly_to_mat.sfc <- function (x)
+{
+    if (length (x) > 1)
+    {
+        more_than_one ()
+        x <- x [[1]]
+    }
+    as.matrix (x [[1]] [[1]])
+}
+
+bb_poly_to_mat.SpatialPolygonsDataFrame <- function (x)
+{
+    x <- slot (x, "polygons")
+    if (length (x) > 1)
+        more_than_one ()
+    x <- slot (x [[1]], "Polygons")
+    if (length (x) > 1)
+        more_than_one ()
+    slot (x [[1]], "coords")
+}
+
+bb_poly_to_mat.list <- function (x)
+{
+    if (length (x) > 1)
+        more_than_one ()
+    x [[1]]
 }
 
 trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE)
