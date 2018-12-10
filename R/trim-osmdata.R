@@ -18,10 +18,46 @@
 #' this function to work correctly.
 #'
 #' @export
+#' @examples
+#' \dontrun{
+#' dat <- opq ("colchester uk") %>%
+#'             add_osm_feature (key="highway") %>%
+#'             osmdata_sf (quiet = FALSE)
+#' bb <- getbb ("colchester uk", format_out = "polygon")
+#' library (sf) # required for this function to work
+#' dat_tr <- trim_osmdata (dat, bb)
+#' bb <- getbb ("colchester uk", format_out = "sf_polygon")
+#' class (bb) # sf data.frame
+#' dat_tr <- trim_osmdata (dat, bb)
+#' bb <- as (bb, "Spatial")
+#' class (bb) # SpatialPolygonsDataFrame
+#' dat_tr <- trim_osmdata (dat, bb)
+#' }
 trim_osmdata <- function (dat, bb_poly, exclude = TRUE)
 {
     is_sf_loaded ()
-    if (is.list (bb_poly) & length (bb_poly) > 1)
+    if (is (bb_poly, "sf"))
+    {
+        if (nrow (bb_poly) > 1)
+        {
+            message ("bb_poly has more than one polygon; ",
+                     "the first will be selected.")
+            bb_poly <- bb_poly [1, ]
+        }
+        bb_poly <- bb_poly [[attr (bb_poly, "sf_column")]]
+        bb_poly <- as.matrix (bb_poly [[1]])
+    } else if (is (bb_poly, "Spatial"))
+    {
+        bb_poly <- slot (bb_poly, "polygons")
+        if (length (bb_poly) > 1)
+            message ("bb_poly has more than one polygon; ",
+                     "the first will be selected.")
+        bb_poly <- slot (bb_poly [[1]], "Polygons")
+        if (length (bb_poly) > 1)
+            message ("bb_poly has more than one polygon; ",
+                     "the first will be selected.")
+        bb_poly <- slot (bb_poly [[1]], "coords")
+    } else if (is.list (bb_poly) & length (bb_poly) > 1)
     {
         message ("bb_poly has more than one polygon; the first will be selected.")
         bb_poly <- bb_poly [[1]]
@@ -31,7 +67,9 @@ trim_osmdata <- function (dat, bb_poly, exclude = TRUE)
         dat <- trim_to_poly_pts (dat, bb_poly, exclude = exclude) %>%
             trim_to_poly (bb_poly = bb_poly, exclude = exclude) %>%
             trim_to_poly_multi (bb_poly = bb_poly, exclude = exclude)
-    }
+    } else
+        message ("bb_poly must be a matrix with > 2 columns; ",
+                 " data will not be trimmed.")
     return (dat)
 }
 
