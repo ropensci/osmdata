@@ -62,13 +62,13 @@ trim_osmdata <- function (dat, bb_poly, exclude = TRUE)
         message ("bb_poly has more than one polygon; the first will be selected.")
         bb_poly <- bb_poly [[1]]
     }
-    if (nrow (bb_poly) > 2)
+    if (nrow (bb_poly) > 1)
     {
         dat <- trim_to_poly_pts (dat, bb_poly, exclude = exclude) %>%
             trim_to_poly (bb_poly = bb_poly, exclude = exclude) %>%
             trim_to_poly_multi (bb_poly = bb_poly, exclude = exclude)
     } else
-        message ("bb_poly must be a matrix with > 2 columns; ",
+        message ("bb_poly must be a matrix with > 1 row; ",
                  " data will not be trimmed.")
     return (dat)
 }
