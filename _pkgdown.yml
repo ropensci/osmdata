@@ -7,25 +7,31 @@ templates:
 reference:
   - title: Package doc and class
     contents:
-    - osmdata-class
-    - osmdata-package
+    - osmdata
+  - title: Overpass server
+    contents:
+    - get_overpass_url
+    - set_overpass_url
   - title: Prepare queries
     contents:
     - getbb
     - bbox_to_string
     - overpass_status
     - opq
-    - add_feature
+    - add_osm_feature
     - opq_string
+    - opq_osm_id
   - title: Get additional OSM info
     contents:
     - available_features
     - available_tags
   - title: Extract data
     contents:
+    - osmdata_sc
     - osmdata_sf
     - osmdata_sp
     - osmdata_xml
+    - osmdata_pbf
   - title: Search data
     contents:
     - osm_points
@@ -33,6 +39,11 @@ reference:
     - osm_polygons
     - osm_multilines
     - osm_multipolygons
+  - title: Transform data
+    contents:
+    - osm_poly2line
+    - trim_osmdata
+    - unique_osmdata
     
 articles:
   - title: The osmdata package
