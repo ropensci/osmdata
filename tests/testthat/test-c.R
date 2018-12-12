@@ -9,7 +9,8 @@ test_that ("c-method", {
                for (i in osm_indx)
                {
                    expect_true (nrow (x [[i]]) >= nrow (x1 [[i]]))
-                   expect_true (nrow (x [[i]]) >= nrow (x2 [[i]]))
+                   if (!is.null (x2 [[i]])) 
+                       expect_true (nrow (x [[i]]) >= nrow (x2 [[i]]))
                }
 })
 

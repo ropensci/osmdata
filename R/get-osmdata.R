@@ -225,6 +225,8 @@ fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8")
 #' from 'rcpp_osmdata_sf'
 #'
 #' @param ... list of objects, at least one of which must be of class 'sfc'
+#' @param stringsAsFactors Should character strings in 'sf' 'data.frame' be
+#' coerced to factors?
 #' @return An object of class `sf` 
 #'
 #' @note Most of this code written by Edzer Pebesma, and taken from 
@@ -232,7 +234,7 @@ fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8")
 #' <https://github.com/edzer/sfr/blob/master/R/sfc.R>
 #'
 #' @noRd
-make_sf <- function (...)
+make_sf <- function (..., stringsAsFactors = FALSE)
 {
     x <- list (...)
     sf <- vapply(x, function(i) inherits(i, "sfc"),
@@ -246,7 +248,7 @@ make_sf <- function (...)
         data.frame(row.names = row.names)
     else # create a data.frame from list:
         data.frame(x[-sf_column], row.names = row.names,
-                   stringsAsFactors = TRUE)
+                   stringsAsFactors = stringsAsFactors)
 
     object <- as.list(substitute(list(...)))[-1L]
     arg_nm <- sapply(object, function(x) deparse(x)) # nolint
@@ -268,6 +270,8 @@ sf_types <- c ("points", "lines", "polygons", "multilines", "multipolygons")
 #' format.
 #'
 #' @inheritParams osmdata_sp
+#' @param stringsAsFactors Should character strings in 'sf' 'data.frame' be
+#' coerced to factors?
 #' @return An object of class `osmdata` with the OSM components (points, lines,
 #'         and polygons) represented in \pkg{sf} format.
 #' @export
@@ -278,10 +282,7 @@ sf_types <- c ("points", "lines", "polygons", "multilines", "multipolygons")
 #'             add_osm_feature (key="historic", value="ruins") %>%
 #'             osmdata_sf ()
 #' }
-osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
-    if (missing (encoding))
-        encoding <- 'UTF-8'
-
+osmdata_sf <- function(q, doc, quiet=TRUE, stringsAsFactors = FALSE) {
     obj <- osmdata () # uses class def
     if (missing (q) & !quiet)
         message ('q missing: osmdata object will not include query')
@@ -305,13 +306,15 @@ osmdata_sf <- function(q, doc, quiet=TRUE, encoding) {
         obj$bbox <- paste (res$bbox, collapse = ' ')
 
     for (ty in sf_types)
-        obj <- fill_objects (res, obj, type = ty)
+        obj <- fill_objects (res, obj, type = ty,
+                             stringsAsFactors = stringsAsFactors)
     class (obj) <- c (class (obj), "osmdata_sf")
 
     return (obj)
 }
 
-fill_objects <- function (res, obj, type = "points")
+fill_objects <- function (res, obj, type = "points",
+                          stringsAsFactors = FALSE)
 {
     if (!type %in% sf_types)
         stop ("type must be one of ", paste (sf_types, collapse = " "))
@@ -320,9 +323,11 @@ fill_objects <- function (res, obj, type = "points")
     obj_name <- paste0 ("osm_", type)
     kv_name <- paste0 (type, "_kv")
     if (length (res [[kv_name]]) > 0)
-        obj [[obj_name]] <- make_sf (geometry, res [[kv_name]])
-    else
-        obj [[obj_name]] <- make_sf (geometry)
+        obj [[obj_name]] <- make_sf (geometry, res [[kv_name]],
+                                     stringsAsFactors = stringsAsFactors)
+    else if (length (obj [[obj_name]]) > 0)
+        obj [[obj_name]] <- make_sf (geometry,
+                                     stringsAsFactors = stringsAsFactors)
 
     return (obj)
 }
