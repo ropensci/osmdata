@@ -51,6 +51,43 @@ std::string random_id (size_t len) {
     return str;
 }
 
+Rcpp::List rel_membs_as_list (XmlDataSC &xml)
+{
+    std::unordered_map <std::string, std::vector <std::string> >
+        rel_membs = xml.get_rel_membs ();
+
+    Rcpp::List ret (rel_membs.size ());
+    std::vector <std::string> retnames (rel_membs.size ());
+
+    int i = 0;
+    for (auto m: rel_membs)
+    {
+        retnames [i] = m.first;
+        ret [i++] = m.second;
+    }
+    ret.attr ("names") = retnames;
+
+    return ret;
+}
+
+Rcpp::List way_membs_as_list (XmlDataSC &xml)
+{
+    std::unordered_map <std::string, std::vector <std::string> >
+        way_membs = xml.get_way_membs ();
+
+    Rcpp::List ret (way_membs.size ());
+    std::vector <std::string> retnames (way_membs.size ());
+
+    int i = 0;
+    for (auto m: way_membs)
+    {
+        retnames [i] = m.first;
+        ret [i++] = m.second;
+    }
+    ret.attr ("names") = retnames;
+
+    return ret;
+}
 
 //' rcpp_osmdata_sc
 //'
@@ -74,6 +111,9 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
 #endif
 
     XmlDataSC xml (st);
+
+    Rcpp::List rel_membs = rel_membs_as_list (xml),
+        way_membs = way_membs_as_list (xml);
 
     Rcpp::DataFrame vertex = Rcpp::DataFrame::create (
             Rcpp::Named ("x_") = xml.get_vx (),

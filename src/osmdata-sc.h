@@ -151,6 +151,11 @@ class XmlDataSC
         const std::vector <double>& get_vx () const { return vectors.vx;  }
         const std::vector <double>& get_vy () const { return vectors.vy;  }
 
+        const std::unordered_map <std::string, std::vector <std::string> >&
+            get_rel_membs () const { return maps.rel_membs; }
+        const std::unordered_map <std::string, std::vector <std::string> >&
+            get_way_membs () const { return maps.way_membs; }
+
     private:
 
         void zeroCounters (Counters& counters);
@@ -515,3 +520,15 @@ inline void XmlDataSC::traverseNode (XmlNodePtr pt)
         traverseNode (it);
     }
 } // end function XmlDataSC::traverseNode
+
+
+/************************************************************************
+ ************************************************************************
+ **                                                                    **
+ **                       ADDITIONAL FUNCTIONS                         **
+ **                                                                    **
+ ************************************************************************
+ ************************************************************************/
+
+Rcpp::List rel_membs_as_list (XmlDataSC &xml);
+Rcpp::List way_membs_as_list (XmlDataSC &xml);
