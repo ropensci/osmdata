@@ -5,7 +5,7 @@
 \title{Return an OSM Overpass query as an \link{osmdata} object in \pkg{sf}
 format.}
 \usage{
-osmdata_sf(q, doc, quiet = TRUE, encoding, stringsAsFactors = FALSE)
+osmdata_sf(q, doc, quiet = TRUE, stringsAsFactors = FALSE)
 }
 \arguments{
 \item{q}{An object of class \code{overpass_query} constructed with
@@ -19,10 +19,6 @@ or an object of class \pkg{XML} returned from
 \link{osmdata_xml}.}
 
 \item{quiet}{suppress status messages.}
-
-\item{encoding}{Unless otherwise specified XML documents are assumed to be
-encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
-an explicit encoding directive, this allows you to supply a default.}
 
 \item{stringsAsFactors}{Should character strings in 'sf' 'data.frame' be
 coerced to factors?}
