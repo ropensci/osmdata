@@ -4,21 +4,22 @@ context ("trim-osm-data")
 test_that ('trim_osm_data', {
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x0 <- osmdata_sf (q0, "../osm-multi.osm")
-               expect_message (x1 <- trim_osmdata (x0,
-                                    bb_poly = cbind (c (2, 3), c (2, 3))),
+               bb <- cbind (c (2, 3), c (2, 3))
+               if (!any (grepl ("package:sf", search ())))
+                   expect_message (x1 <- trim_osmdata (x0, bb_poly = bb),
                        "It is generally necessary to pre-load the sf package")
+               else
+                   expect_silent (x1 <- trim_osmdata (x0, bb_poly = bb))
                require (sf)
-               expect_silent (x1 <- trim_osmdata (x0,
-                                    bb_poly = cbind (c (2, 3), c (2, 3))))
+               expect_silent (x1 <- trim_osmdata (x0, bb_poly = bb))
                expect_equal (nrow (x1$osm_points), 0)
                expect_equal (nrow (x1$osm_lines), 0)
                expect_equal (nrow (x1$osm_polygons), 0)
                expect_equal (nrow (x1$osm_multilines), 0)
                expect_equal (nrow (x1$osm_multipolygons), 0)
 
-               expect_silent (x1 <- trim_osmdata (x0,
-                                    bb_poly = cbind (c (2, 3), c (2, 3)),
-                                    exclude = FALSE))
+               expect_silent (x1 <- trim_osmdata (x0, bb_poly = bb,
+                                                  exclude = FALSE))
                expect_equal (nrow (x1$osm_points), 2)
                expect_equal (nrow (x1$osm_lines), 1)
                expect_equal (nrow (x1$osm_polygons), 1)
