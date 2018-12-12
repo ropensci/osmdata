@@ -49,6 +49,7 @@ get_overpass_url <- function ()
 #' are:
 #' \itemize{
 #' \item 'http://overpass-api.de/api/interpreter' (default)
+#' \item 'https://overpass.kumi.systems/api/interpreter'
 #' \item 'http://overpass.osm.rambler.ru/cgi/interpreter'
 #' \item 'http://api.openstreetmap.fr/oapi/interpreter'
 #' \item 'https://overpass.osm.vi-di.fr/api/interpreter'
