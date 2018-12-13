@@ -136,9 +136,6 @@ osmdata_pbf <- function(q, filename, quiet=TRUE) {
 #'        or an object of class \pkg{XML} returned from
 #'        \link{osmdata_xml}. 
 #' @param quiet suppress status messages. 
-#' @param encoding Unless otherwise specified XML documents are assumed to be
-#'        encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
-#'        an explicit encoding directive, this allows you to supply a default.
 #'
 #' @return An object of class `osmdata` with the OSM components (points, lines,
 #'         and polygons) represented in \pkg{sp} format.
@@ -151,7 +148,7 @@ osmdata_pbf <- function(q, filename, quiet=TRUE) {
 #'             add_osm_feature (key="historic", value="ruins") %>%
 #'             osmdata_sp ()
 #' }
-osmdata_sp <- function(q, doc, quiet = TRUE, encoding = 'UTF-8')
+osmdata_sp <- function(q, doc, quiet = TRUE)
 {
     obj <- osmdata () # uses class def
     if (missing (q) & !quiet)
@@ -349,9 +346,7 @@ fill_objects <- function (res, obj, type = "points",
 #'             add_osm_feature (key="historic", value="ruins") %>%
 #'             osmdata_sc ()
 #' }
-osmdata_sc <- function(q, doc, quiet=TRUE, encoding) {
-    if (missing (encoding))
-        encoding <- 'UTF-8'
+osmdata_sc <- function(q, doc, quiet=TRUE) {
 
     obj <- osmdata () # class def used here to for fill_overpass_data fn
     if (missing (q) & !quiet)

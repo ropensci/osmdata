@@ -5,7 +5,7 @@
 \title{Return an OSM Overpass query as an \link{osmdata} object in \pkg{sp}
 format.}
 \usage{
-osmdata_sp(q, doc, quiet = TRUE, encoding = "UTF-8")
+osmdata_sp(q, doc, quiet = TRUE)
 }
 \arguments{
 \item{q}{An object of class \code{overpass_query} constructed with
@@ -19,10 +19,6 @@ or an object of class \pkg{XML} returned from
 \link{osmdata_xml}.}
 
 \item{quiet}{suppress status messages.}
-
-\item{encoding}{Unless otherwise specified XML documents are assumed to be
-encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
-an explicit encoding directive, this allows you to supply a default.}
 }
 \value{
 An object of class \code{osmdata} with the OSM components (points, lines,
