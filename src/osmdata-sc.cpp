@@ -165,8 +165,8 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
     ret [4] = obj_way; // The SC object table
     ret [5] = obj_rel_memb;
     ret [6] = obj_rel_kv;
-    ret [7] = rel_membs;
-    ret [8] = way_membs;
+    ret [7] = Rcpp::as <Rcpp::List> (way_membs);
+    ret [8] = Rcpp::as <Rcpp::List> (rel_membs);
 
     std::vector <std::string> retnames {"vertex", 
                                         "edge", "object_link_edge",

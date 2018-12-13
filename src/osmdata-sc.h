@@ -168,7 +168,7 @@ class XmlDataSC
 
         void traverseWays (XmlNodePtr pt); // The primary function
 
-        void traverseRelation (XmlNodePtr pt, int i);
+        void traverseRelation (XmlNodePtr pt, int &memb_num);
         void traverseWay (XmlNodePtr pt, int& node_num);
         void traverseNode (XmlNodePtr pt);
 
@@ -377,8 +377,8 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
         }
         else if (!strcmp (it->name(), "relation"))
         {
-            int i = 0;
-            traverseRelation (it, i);
+            int memb_num = 0;
+            traverseRelation (it, memb_num);
             counters.nrels++;
         }
         else
@@ -398,7 +398,7 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
  ************************************************************************
  ************************************************************************/
 
-inline void XmlDataSC::traverseRelation (XmlNodePtr pt, int i)
+inline void XmlDataSC::traverseRelation (XmlNodePtr pt, int &memb_num)
 {
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
@@ -422,14 +422,14 @@ inline void XmlDataSC::traverseRelation (XmlNodePtr pt, int i)
         {
             vectors.rel_ref [counters.nrel_memb] = it->value();
             // TODO: Is there a safer alternative to next line?
-            maps.rel_membs.at (counters.id) [i++] = it->value();
+            maps.rel_membs.at (counters.id) [memb_num++] = it->value();
         } else if (!strcmp (it->name(), "role"))
             vectors.rel_role [counters.nrel_memb++] = it->value();
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
     {
-        traverseRelation (it, i);
+        traverseRelation (it, memb_num);
     }
 } // end function XmlDataSC::traverseRelation
 
