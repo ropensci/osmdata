@@ -130,28 +130,28 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
             Rcpp::_["stringsAsFactors"] = false );
 
     Rcpp::DataFrame obj_node = Rcpp::DataFrame::create (
-            Rcpp::Named ("object_") = xml.get_node_id (),
+            Rcpp::Named ("vertex_") = xml.get_node_id (),
             Rcpp::Named ("key") = xml.get_node_key (),
-            Rcpp::Named ("val") = xml.get_node_val (),
+            Rcpp::Named ("value") = xml.get_node_val (),
             Rcpp::_["stringsAsFactors"] = false );
 
     Rcpp::DataFrame obj_way = Rcpp::DataFrame::create (
             Rcpp::Named ("object_") = xml.get_way_id (),
             Rcpp::Named ("key") = xml.get_way_key (),
-            Rcpp::Named ("val") = xml.get_way_val (),
+            Rcpp::Named ("value") = xml.get_way_val (),
             Rcpp::_["stringsAsFactors"] = false );
 
     Rcpp::DataFrame obj_rel_memb = Rcpp::DataFrame::create (
-            Rcpp::Named ("object_") = xml.get_rel_memb_id (),
+            Rcpp::Named ("relation_") = xml.get_rel_memb_id (),
+            Rcpp::Named ("member") = xml.get_rel_ref (),
             Rcpp::Named ("type") = xml.get_rel_memb_type (),
-            Rcpp::Named ("ref") = xml.get_rel_ref (),
             Rcpp::Named ("role") = xml.get_rel_role (),
             Rcpp::_["stringsAsFactors"] = false );
 
     Rcpp::DataFrame obj_rel_kv = Rcpp::DataFrame::create (
-            Rcpp::Named ("object_") = xml.get_rel_kv_id (),
+            Rcpp::Named ("relation_") = xml.get_rel_kv_id (),
             Rcpp::Named ("key") = xml.get_rel_key (),
-            Rcpp::Named ("val") = xml.get_rel_val (),
+            Rcpp::Named ("value") = xml.get_rel_val (),
             Rcpp::_["stringsAsFactors"] = false );
 
     Rcpp::List rel_membs = rel_membs_as_list (xml),
@@ -162,7 +162,7 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
     ret [1] = edge;
     ret [2] = oXe;
     ret [3] = obj_node;
-    ret [4] = obj_way;
+    ret [4] = obj_way; // The SC object table
     ret [5] = obj_rel_memb;
     ret [6] = obj_rel_kv;
     ret [7] = rel_membs;
@@ -170,8 +170,9 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
 
     std::vector <std::string> retnames {"vertex", 
                                         "edge", "object_link_edge",
-                                        "obj_node", "obj_way",
-                                        "obj_rel_memb", "obj_rel_kv",
+                                        "nodes", "object",
+                                        "relation_members",
+                                        "relation_properties",
                                         "way_membs", "rel_membs"};
     ret.attr ("names") = retnames;
     

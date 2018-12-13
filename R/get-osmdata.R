@@ -368,33 +368,13 @@ osmdata_sc <- function(q, doc, quiet=TRUE) {
         message ('converting OSM data to sc format')
     res <- rcpp_osmdata_sc (temp$doc)
 
-    # res has the $vertex, $edge and $object_link_edge tables ready to go.
-    # The rest are (node, way, rel) key-val tables which can just be rbind-ed,
-    # except for `obj_rel_memb`, which maps relations members onto roles and
-    # requires this bit of fidding:
-    if (nrow (res$obj_rel_memb) > 0)
-    {
-        res$obj_rel_memb <-  data.frame ("object_" = res$obj_rel_memb$object_,
-                                 "key" = paste0 (res$obj_rel_memb$type, "_",
-                                                 res$obj_rel_memb$role),
-                                 "val" = res$obj_rel_memb$ref,
-                                 "obj_type" = "relation",
-                                 stringsAsFactors = FALSE)
-    }
-    if (nrow (res$obj_rel_kv) > 0)
-        res$obj_rel_kv$obj_type <- "relation"
-    if (nrow (res$obj_way) > 0)
-        res$obj_way$obj_type <- "way"
-    if (nrow (res$obj_node) > 0)
-        res$obj_node$obj_type <- "node"
-
     res$object_link_edge$native_ <- TRUE
 
     obj <- list () # SC **does not** use osmdata class definition
-    obj$object <- tibble::as.tibble (rbind (res$obj_rel_memb,
-                                            res$obj_rel_kv,
-                                            res$obj_way,
-                                            res$obj_node))
+    obj$nodes <- tibble::as.tibble (res$nodes)
+    obj$relation_members <- tibble::as.tibble (res$relation_members)
+    obj$relation_properties <- tibble::as.tibble (res$relation_properties)
+    obj$object <- tibble::as.tibble (res$object)
     obj$object_link_edge <- tibble::as.tibble (res$object_link_edge)
     obj$edge <- tibble::as.tibble (res$edge)
     obj$vertex <- tibble::as.tibble (res$vertex)
@@ -407,7 +387,13 @@ osmdata_sc <- function(q, doc, quiet=TRUE) {
     else
         obj$meta$bbox <- bbox_to_string (obj)
 
-    attr (obj, "join_ramp") <- c ("object", "object_link_edge", "edge", "vertex")
+    attr (obj, "join_ramp") <- c ("nodes",
+                                  "relation_members",
+                                  "relation_properties",
+                                  "object",
+                                  "object_link_edge",
+                                  "edge",
+                                  "vertex")
     attr (obj, "class") <- c ("SC", "sc")
 
     return (obj)
