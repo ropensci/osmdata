@@ -112,9 +112,6 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
 
     XmlDataSC xml (st);
 
-    Rcpp::List rel_membs = rel_membs_as_list (xml),
-        way_membs = way_membs_as_list (xml);
-
     Rcpp::DataFrame vertex = Rcpp::DataFrame::create (
             Rcpp::Named ("x_") = xml.get_vx (),
             Rcpp::Named ("y_") = xml.get_vy (),
@@ -157,7 +154,10 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
             Rcpp::Named ("val") = xml.get_rel_val (),
             Rcpp::_["stringsAsFactors"] = false );
 
-    Rcpp::List ret (7);
+    Rcpp::List rel_membs = rel_membs_as_list (xml),
+        way_membs = way_membs_as_list (xml);
+
+    Rcpp::List ret (9);
     ret [0] = vertex;
     ret [1] = edge;
     ret [2] = oXe;
@@ -165,11 +165,14 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st)
     ret [4] = obj_way;
     ret [5] = obj_rel_memb;
     ret [6] = obj_rel_kv;
+    ret [7] = rel_membs;
+    ret [8] = way_membs;
 
     std::vector <std::string> retnames {"vertex", 
                                         "edge", "object_link_edge",
                                         "obj_node", "obj_way",
-                                        "obj_rel_memb", "obj_rel_kv"};
+                                        "obj_rel_memb", "obj_rel_kv",
+                                        "way_membs", "rel_membs"};
     ret.attr ("names") = retnames;
     
     return ret;
