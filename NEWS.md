@@ -1,4 +1,4 @@
-0.0.8.099
+0.0.9
 ===================
 Major changes:
 - New function `osmdata_sc` to return data in `silicate::SC` format (see
