@@ -1,4 +1,4 @@
-# CRAN notes for osmdata_0.0.6 submission
+# CRAN notes for osmdata_0.0.9 submission
 
 Passes all tests on the listed test environments. Generates the single note regarding large package size which is unavoidable due to internally-bundled C++ libraries.
 
