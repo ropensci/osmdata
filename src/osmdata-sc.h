@@ -65,7 +65,7 @@ class XmlDataSC
         struct Counters {
             // Initial function getSizes does an initial scan of the XML doc and
             // establishes the sizes of everything with these counters
-            int nnodes, nnode_kv,
+            size_t nnodes, nnode_kv,
                 nways, nway_kv, nedges,
                 nrels, nrel_kv, nrel_memb;
             std::string id;
@@ -101,7 +101,7 @@ class XmlDataSC
         Maps maps;
 
         // Number of nodes in each way, and ways in each rel
-        std::unordered_map <std::string, int> waySizes, relSizes;
+        std::unordered_map <std::string, size_t> waySizes, relSizes;
 
     public:
 
@@ -110,11 +110,11 @@ class XmlDataSC
             // APS empty m_nodes/m_ways/m_relations constructed here, no need to explicitly clear
             XmlDocPtr p = parseXML (str);
 
-            zeroCounters (counters);
+            zeroCounters ();
             getSizes (p->first_node ());
-            vectorsResize (vectors, counters);
+            vectorsResize ();
 
-            zeroCounters (counters);
+            zeroCounters ();
             traverseWays (p->first_node ());
         }
 
@@ -158,9 +158,9 @@ class XmlDataSC
 
     private:
 
-        void zeroCounters (Counters& counters);
+        void zeroCounters ();
         void getSizes (XmlNodePtr pt);
-        void vectorsResize (Vectors& vectors, Counters &counters);
+        void vectorsResize ();
 
         void countRelation (XmlNodePtr pt);
         void countWay (XmlNodePtr pt);
@@ -168,13 +168,13 @@ class XmlDataSC
 
         void traverseWays (XmlNodePtr pt); // The primary function
 
-        void traverseRelation (XmlNodePtr pt, int &memb_num);
-        void traverseWay (XmlNodePtr pt, int& node_num);
+        void traverseRelation (XmlNodePtr pt, size_t &memb_num);
+        void traverseWay (XmlNodePtr pt, size_t& node_num);
         void traverseNode (XmlNodePtr pt);
 
 }; // end Class::XmlDataSC
 
-inline void XmlDataSC::zeroCounters (Counters& counters)
+inline void XmlDataSC::zeroCounters ()
 {
     counters.nnodes = 0;
     counters.nnode_kv = 0;
@@ -188,7 +188,7 @@ inline void XmlDataSC::zeroCounters (Counters& counters)
     counters.nrel_memb = 0;
 }
 
-inline void XmlDataSC::vectorsResize (Vectors& vectors, Counters &counters)
+inline void XmlDataSC::vectorsResize ()
 {
     vectors.rel_kv_id.resize (counters.nrel_kv);
     vectors.rel_key.resize (counters.nrel_kv);
@@ -246,7 +246,7 @@ inline void XmlDataSC::getSizes (XmlNodePtr pt)
         }
         else if (!strcmp (it->name(), "way"))
         {
-            int wayLength = counters.nedges;
+            size_t wayLength = counters.nedges;
             countWay (it); // increments nway_kv, nedges
             wayLength = counters.nedges - wayLength;
             counters.nedges--; // counts nodes, so each way has nedges = 1 - nnodes
@@ -255,7 +255,7 @@ inline void XmlDataSC::getSizes (XmlNodePtr pt)
         }
         else if (!strcmp (it->name(), "relation"))
         {
-            int relLength = counters.nrel_memb;
+            size_t relLength = counters.nrel_memb;
             countRelation (it); // increments nrel_kv, nrel_memb
             relLength = counters.nrel_memb - relLength;
             relSizes.emplace (counters.id, relLength);
@@ -371,13 +371,13 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
             counters.nnodes++;
         } else if (!strcmp (it->name(), "way"))
         {
-            int node_num = 0;
+            size_t node_num = 0;
             traverseWay (it, node_num);
             counters.nways++;
         }
         else if (!strcmp (it->name(), "relation"))
         {
-            int memb_num = 0;
+            size_t memb_num = 0;
             traverseRelation (it, memb_num);
             counters.nrels++;
         }
@@ -398,7 +398,7 @@ inline void XmlDataSC::traverseWays (XmlNodePtr pt)
  ************************************************************************
  ************************************************************************/
 
-inline void XmlDataSC::traverseRelation (XmlNodePtr pt, int &memb_num)
+inline void XmlDataSC::traverseRelation (XmlNodePtr pt, size_t &memb_num)
 {
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
@@ -442,7 +442,7 @@ inline void XmlDataSC::traverseRelation (XmlNodePtr pt, int &memb_num)
  ************************************************************************
  ************************************************************************/
 
-inline void XmlDataSC::traverseWay (XmlNodePtr pt, int& node_num)
+inline void XmlDataSC::traverseWay (XmlNodePtr pt, size_t& node_num)
 {
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
@@ -510,7 +510,8 @@ inline void XmlDataSC::traverseNode (XmlNodePtr pt)
         else if (!strcmp (it->name(), "v"))
         {
             vectors.node_val [counters.nnode_kv] = it->value();
-            vectors.node_id [counters.nnode_kv] = vectors.vert_id [counters.nnodes]; // will always be pre-set
+            vectors.node_id [counters.nnode_kv] =
+                vectors.vert_id [counters.nnodes]; // will always be pre-set
             counters.nnode_kv++;
         }
     }

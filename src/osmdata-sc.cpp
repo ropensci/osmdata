@@ -59,11 +59,12 @@ Rcpp::List rel_membs_as_list (XmlDataSC &xml)
     Rcpp::List ret (rel_membs.size ());
     std::vector <std::string> retnames (rel_membs.size ());
 
-    int i = 0;
+    size_t i1 = 0; // std::vector index is size_t
+    int i2 = 0; // Rcpp index is int
     for (auto m: rel_membs)
     {
-        retnames [i] = m.first;
-        ret [i++] = m.second;
+        retnames [i1++] = m.first;
+        ret [i2++] = m.second;
     }
     ret.attr ("names") = retnames;
 
@@ -78,11 +79,12 @@ Rcpp::List way_membs_as_list (XmlDataSC &xml)
     Rcpp::List ret (way_membs.size ());
     std::vector <std::string> retnames (way_membs.size ());
 
-    int i = 0;
+    size_t i1 = 0;
+    int i2 = 0;
     for (auto m: way_membs)
     {
-        retnames [i] = m.first;
-        ret [i++] = m.second;
+        retnames [i1] = m.first;
+        ret [i2++] = m.second;
     }
     ret.attr ("names") = retnames;
 
