@@ -165,7 +165,7 @@ add_osm_feature <- function (opq, key, value, key_exact = TRUE,
     opq$features <- c(opq$features, feature)
 
     if (is.null (opq$suffix))
-        opq$suffix <- ");\n(._;>);\nout body;"
+        opq$suffix <- ");\n(._;>;);\nout body;"
     #opq$suffix <- ");\n(._;>);\nout qt body;"
     # qt option is not compatible with sf because GDAL requires nodes to be
     # numerically sorted
