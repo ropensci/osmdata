@@ -320,9 +320,12 @@ fill_objects <- function (res, obj, type = "points",
     obj_name <- paste0 ("osm_", type)
     kv_name <- paste0 (type, "_kv")
     if (length (res [[kv_name]]) > 0)
+    {
+        if (!stringsAsFactors)
+            res [[kv_name]] [] <- lapply (res [[kv_name]], as.character)
         obj [[obj_name]] <- make_sf (geometry, res [[kv_name]],
                                      stringsAsFactors = stringsAsFactors)
-    else if (length (obj [[obj_name]]) > 0)
+    } else if (length (obj [[obj_name]]) > 0)
         obj [[obj_name]] <- make_sf (geometry,
                                      stringsAsFactors = stringsAsFactors)
 

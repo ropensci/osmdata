@@ -541,6 +541,10 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st)
      * --------------------------------------------------------------*/
 
     Rcpp::List pointList (nodes.size ());
+    // NOTE: kv_df_points is actually an Rcpp::CharacterMatrix, and the
+    // following line *should* construct the wrapped data.frame version with
+    // strings not factors, yet this does not work.
+    //Rcpp::DataFrame kv_df_points = Rcpp::DataFrame::create (Rcpp::_["stringsAsFactors"] = false);
     Rcpp::DataFrame kv_df_points;
     osm_sf::get_osm_nodes (pointList, kv_df_points, nodes, unique_vals, bbox, crs);
 
