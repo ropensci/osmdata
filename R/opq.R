@@ -142,6 +142,8 @@ add_osm_feature <- function (opq, key, value, key_exact = TRUE,
         {
             # convert to OR'ed regex:
             value <- paste0 (value, collapse = "|")
+            if (value_exact)
+                value <- paste0 ("^(", value, ")$")
             bind <- "~"
         } else if (substring (value, 1, 1) == "!")
         {

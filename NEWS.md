@@ -1,3 +1,10 @@
+0.0.9.001
+===================
+
+Minor changes:
+- Bux fix for vectorized lists of values in `add_osm_feature`, so only listed
+  items are returns (see #139; thanks @loreabad6)
+
 0.0.9
 ===================
 Major changes:
