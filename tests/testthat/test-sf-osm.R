@@ -7,7 +7,9 @@ test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
 
 test_that ("multipolygon", {
                x_sf <- sf::st_read ("../osm-multi.osm",
-                                    layer = "multipolygons", quiet = TRUE)
+                                    layer = "multipolygons",
+                                    stringsAsFactors = FALSE,
+                                    quiet = TRUE)
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-multi.osm")$osm_multipolygons
                # GDAL spits out a whole lot of generic field names, so first the
@@ -45,7 +47,9 @@ test_that ("multipolygon", {
 
 test_that ("multilinestring", {
                x_sf <- sf::st_read ("../osm-multi.osm",
-                                    layer = "multilinestrings", quiet = TRUE)
+                                    layer = "multilinestrings",
+                                    stringsAsFactors = FALSE,
+                                    quiet = TRUE)
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-multi.osm")$osm_multilines
                x <- x [, which (names (x) %in% names (x_sf))]
@@ -75,7 +79,9 @@ test_that ("multilinestring", {
 
 test_that ("ways", {
                x_sf <- sf::st_read ("../osm-ways.osm",
-                                    layer = "lines", quiet = TRUE)
+                                    layer = "lines",
+                                    stringsAsFactors = FALSE,
+                                    quiet = TRUE)
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-ways.osm")$osm_lines
                x <- x [, which (names (x) %in% names (x_sf))]
