@@ -71,6 +71,16 @@ print.osmdata <- function (x, ...)
 c.osmdata <- function (...)
 {
     x <- list (...)
+    cl_null <- vapply (x, function (i)
+                       is.null (i$osm_points) &
+                           is.null (i$osm_lines) &
+                           is.null (i$osm_polygons) &
+                           is.null (i$osm_multilines) &
+                           is.null (i$osm_multipolygons),
+                       FUN.VALUE = logical (1))
+    x <- x [which (!cl_null)]
+    if (length (x) < 1)
+        stop ("osmdata object is entirely NULL")
     cl_sf <- vapply (x, function (i)
                      any (grep ('sf', lapply (i, class))),
                      FUN.VALUE = logical (1))
