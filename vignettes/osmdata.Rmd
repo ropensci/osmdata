@@ -42,19 +42,18 @@ and then loaded in the usual way:
 ```{r}
 library(osmdata)
 ```
-The development version of `osmdata` can be installed with the `devtools`
+The development version of `osmdata` can be installed with the `remotes`
 package using the following command:
 
 ```{r install, eval = FALSE}
-devtools::install_github('ropensci/osmdata')
+remotes::install_github('ropensci/osmdata')
 ```
 
-This vignette also uses the [`magrittr`](https://github.com/tidyverse/magrittr) pipe, `%>%`, for 'pipy' workflows.
-
 `osmdata` uses the [`overpass` API](http://overpass-api.de) to download
-OpenStreetMap (OSM) data and can convert the results to either Simple Features
-(typically of class `sf`) or Spatial objects (e.g. `SpatialPointsDataFrame`), as
-defined by the packages [`sf`](https://cran.r-project.org/package=sf) and
+OpenStreetMap (OSM) data and can convert the results to a variety of formats,
+including both Simple Features (typically of class `sf`) and Spatial objects
+(e.g. `SpatialPointsDataFrame`), as defined by the packages
+[`sf`](https://cran.r-project.org/package=sf) and
 [`sp`](https://cran.r-project.org/package=sp) packages respectively.
 
 `overpass` is a C++ library that serves OSM data over the web.  All `overpass`
