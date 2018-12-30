@@ -83,21 +83,20 @@ opq <- function (bbox = NULL, timeout = 25, memsize)
 #'
 #' @examples
 #' \dontrun{
-#' q <- getbb ("portsmouth", display_name_contains = "United States") %>%
-#'                 opq () %>% 
-#'                 add_osm_feature("amenity", "restaurant") %>%
-#'                 add_osm_feature("amenity", "pub") 
+#' q <- opq ("portsmouth usa") %>%
+#'                 add_osm_feature(key = "amenity",
+#'                                 value = "restaurant") %>%
+#'                 add_osm_feature(key = "amenity", value = "pub") 
 #' osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
-#' q1 <- getbb ("portsmouth", display_name_contains = "United States") %>%
-#'                 opq () %>% 
-#'                 add_osm_feature("amenity", "restaurant") 
-#' q2 <- getbb ("portsmouth", display_name_contains = "United States") %>%
-#'                 opq () %>% 
-#'                 add_osm_feature("amenity", "pub") 
+#' q1 <- opq ("portsmouth usa") %>%
+#'                 add_osm_feature(key = "amenity",
+#'                                 value = "restaurant") 
+#' q2 <- opq ("portsmouth usa") %>%
+#'                 add_osm_feature(key = "amenity", value = "pub") 
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all objects that are restaurants OR pubs
 #' # Use of negation to extract all non-primary highways
 #' q <- opq ("portsmouth uk") %>%
-#'         add_osm_feature (key="highway", value = "!primary") 
+#'         add_osm_feature (key = "highway", value = "!primary") 
 #' }
 add_osm_feature <- function (opq, key, value, key_exact = TRUE,
                              value_exact = TRUE, match_case = TRUE, bbox = NULL)
