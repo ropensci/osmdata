@@ -38,7 +38,7 @@ install.packages("osmdata")
 
 # Alternatively, install the development version
 # install.packages("remotes")
-devtools::install_github("ropensci/osmdata")
+remotes::install_github("ropensci/osmdata")
 ```
 
 To load the package and check the version:
