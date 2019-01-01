@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">osmdata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.8.99</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9.1</span>
       </span>
     </div>
 
@@ -69,7 +69,7 @@
                         <h4 class="author">Mark Padgham</h4>
                         <h4 class="author">Robin Lovelace</h4>
             
-            <h4 class="date">2018-12-12</h4>
+            <h4 class="date">2019-01-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/osmdata/blob/master/vignettes/osmdata.Rmd"><code>vignettes/osmdata.Rmd</code></a></small>
       <div class="hidden name"><code>osmdata.Rmd</code></div>
@@ -88,10 +88,9 @@
 <p>and then loaded in the usual way:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(osmdata)</a></code></pre></div>
 <pre><code>## Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright</code></pre>
-<p>The development version of <code>osmdata</code> can be installed with the <code>devtools</code> package using the following command:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">'ropensci/osmdata'</span>)</a></code></pre></div>
-<p>This vignette also uses the <a href="https://github.com/tidyverse/magrittr"><code>magrittr</code></a> pipe, <code>%&gt;%</code>, for ‘pipy’ workflows.</p>
-<p><code>osmdata</code> uses the <a href="http://overpass-api.de"><code>overpass</code> API</a> to download OpenStreetMap (OSM) data and can convert the results to either Simple Features (typically of class <code>sf</code>) or Spatial objects (e.g. <code>SpatialPointsDataFrame</code>), as defined by the packages <a href="https://cran.r-project.org/package=sf"><code>sf</code></a> and <a href="https://cran.r-project.org/package=sp"><code>sp</code></a> packages respectively.</p>
+<p>The development version of <code>osmdata</code> can be installed with the <code>remotes</code> package using the following command:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">'ropensci/osmdata'</span>)</a></code></pre></div>
+<p><code>osmdata</code> uses the <a href="http://overpass-api.de"><code>overpass</code> API</a> to download OpenStreetMap (OSM) data and can convert the results to a variety of formats, including both Simple Features (typically of class <code>sf</code>) and Spatial objects (e.g. <code>SpatialPointsDataFrame</code>), as defined by the packages <a href="https://cran.r-project.org/package=sf"><code>sf</code></a> and <a href="https://cran.r-project.org/package=sp"><code>sp</code></a> packages respectively.</p>
 <p><code>overpass</code> is a C++ library that serves OSM data over the web. All <code>overpass</code> queries begin with a bounding box, defined in <code>osmdata</code> with the function <code><a href="../reference/opq.html">opq()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/opq.html">opq</a></span>(<span class="dt">bbox =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="fl">51.1</span>, <span class="fl">0.1</span>, <span class="fl">51.2</span>, <span class="fl">0.2</span>))</a></code></pre></div>
 <p>The following sub-section provides more detail on bounding boxes. Following the initial <code><a href="../reference/opq.html">opq()</a></code> call, <code>osmdata</code> queries are built by adding one or more ‘features’, which are specified in terms of <code>key-value</code> pairs. For example, all paths, ways, and roads are designated in OSM with <code>key=highway</code>, so that a query all motorways in greater London (UK) can be constructed as follows:</p>
@@ -139,7 +138,7 @@
 <p><code>osmdata</code> simplifies queries so that OSM data can be extracted with very little understanding of the <code>overpass</code> query syntax, although it is still possible to submit arbitrarily complex <code>overpass</code> queries via <code>osmdata</code>. An excellent place to explore <code>overpass</code> queries specifically and OSM data in general is the online interactive query builder at <a href="http://overpass-turbo.eu/">overpass-turbo</a>, which includes a helpful corrector function for incorrectly formatted queries. Examples of its functionality in action can be found on the <a href="http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_API_by_Example">OpenStreetMap wiki</a>, with full details of the <code>overpass</code> query language given in the <a href="http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL">Query Language Guide</a> as well as the <a href="http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide">overpass API Language Guide</a>.</p>
 <p>By default, <code>osmdata</code> sends queries to one of the four main <a href="https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances"><code>overpass</code> server instances</a>, such as <code>http://overpass-api.de/api/interpreter</code> but other servers listed on the page linked to above can be used, thanks to functions that <em>get</em> and <em>set</em> the base url:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw"><a href="../reference/get_overpass_url.html">get_overpass_url</a></span>()</a></code></pre></div>
-<pre><code>## [1] "http://overpass-api.de/api/interpreter"</code></pre>
+<pre><code>## [1] "https://overpass.kumi.systems/api/interpreter"</code></pre>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">new_url &lt;-<span class="st"> "http://overpass.openstreetmap.ie/api/interpreter"</span></a></code></pre></div>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw"><a href="../reference/set_overpass_url.html">set_overpass_url</a></span>(new_url) <span class="co"># reset the base url (not run)</span></a></code></pre></div>
 <p><code>osmdata</code> queries are lists of class <code>overpass_query</code>. The actual query passed to the <code>overpass API</code> with a query can be obtained with the function <code><a href="../reference/opq_string.html">opq_string()</a></code>. Applied to the preceding query, this function gives:</p>

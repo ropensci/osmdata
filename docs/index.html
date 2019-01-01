@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">osmdata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.8.99</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9.1</span>
       </span>
     </div>
 
@@ -73,27 +73,27 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 <p><img src="fig/title.png"><a href="https://github.com/ropensci/onboarding/issues/103"><img src="https://badges.ropensci.org/103_status.svg"></a> <a href="http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3"><img src="http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3/status.svg" alt="status"></a></p>
-<p><code>osmdata</code> is an R package for accessing the raw vector data underlying OpenStreetMap (OSM) via the <a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a>. (Other packages such as <a href="https://cran.r-project.org/web/packages/OpenStreetMap/index.html"><code>OpenStreetMap</code></a> can be used to download raster tiles based on OSM data.) The Overpass API (or OSM3S) is a read-only API that serves up custom selected parts of the OSM map data. Map data can be returned either as <a href="https://cran.r-project.org/package=sf">Simple Features (<code>sf</code>)</a> or <a href="https://cran.r-project.org/package=sp">Spatial (<code>sp</code>)</a> objects.</p>
-<div id="installation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h3>
-<p>To install (note that the CRAN version does not currently work with the Overpass API):</p>
+<p><code>osmdata</code> is an R package for accessing the data underlying OpenStreetMap (OSM), delivered via the <a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a>. (Other packages such as <a href="https://cran.r-project.org/web/packages/OpenStreetMap/index.html"><code>OpenStreetMap</code></a> can be used to download raster tiles based on OSM data.) <a href="https://overpass-turbo.eu">Overpass</a> is a read-only API that extracts custom selected parts of OSM data. Data can be returned in a variety of formats, including as <a href="https://cran.r-project.org/package=sf">Simple Features (<code>sf</code>)</a> or <a href="https://cran.r-project.org/package=sp">Spatial (<code>sp</code>)</a> objects.</p>
+<div id="installation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h2>
+<p>To install:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># Install from CRAN </span></a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"osmdata"</span>)</a>
 <a class="sourceLine" id="cb1-3" title="3"></a>
 <a class="sourceLine" id="cb1-4" title="4"><span class="co"># Alternatively, install the development version</span></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="co"># install.packages("devtools")</span></a>
-<a class="sourceLine" id="cb1-6" title="6">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ropensci/osmdata"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb1-5" title="5"><span class="co"># install.packages("remotes")</span></a>
+<a class="sourceLine" id="cb1-6" title="6">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ropensci/osmdata"</span>)</a></code></pre></div>
 <p>To load the package and check the version:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(osmdata)</a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="co">#&gt; Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright</span></a>
 <a class="sourceLine" id="cb2-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/packageDescription">packageVersion</a></span>(<span class="st">"osmdata"</span>)</a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt; [1] '0.0.8.99'</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt; [1] '0.0.9'</span></a></code></pre></div>
 </div>
-<div id="usage" class="section level3">
-<h3 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h3>
-<p><a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a> queries can be built from a base query constructed with <code>opq</code> followed by <code>add_osm_feature</code>. The corresponding OSM objects are then downloaded and converted to <code>R Simple Features (sf)</code> objects with <code><a href="reference/osmdata_sf.html">osmdata_sf()</a></code> or to <code>R Spatial (sp)</code> objects with <code><a href="reference/osmdata_sp.html">osmdata_sp()</a></code>. For example,</p>
+<div id="usage" class="section level2">
+<h2 class="hasAnchor">
+<a href="#usage" class="anchor"></a>Usage</h2>
+<p><a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a> queries can be built from a base query constructed with <code>opq</code> followed by <code>add_osm_feature</code>. The corresponding OSM objects are then downloaded and converted to <a href="https://cran.r-project.org/package=sf"><code>R Simple Features (sf)</code></a> objects with <code><a href="reference/osmdata_sf.html">osmdata_sf()</a></code> or to <a href="https://cran.r-project.org/package=sp"><code>R Spatial (sp)</code></a> objects with <code><a href="reference/osmdata_sp.html">osmdata_sp()</a></code>. For example,</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span>(<span class="dt">bbox =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="op">-</span><span class="fl">0.27</span>, <span class="fl">51.47</span>, <span class="fl">-0.20</span>, <span class="fl">51.50</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># Chiswick Eyot in London, U.K.</span></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="st">    </span><span class="kw"><a href="reference/add_osm_feature.html">add_osm_feature</a></span>(<span class="dt">key =</span> <span class="st">'name'</span>, <span class="dt">value =</span> <span class="st">"Thames"</span>, <span class="dt">value_exact =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb3-3" title="3"><span class="st">    </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>()</a>
@@ -108,56 +108,116 @@
 #&gt;        $osm_multilines : 'sf' Simple Features Collection with 6 multilinestrings
 #&gt;     $osm_multipolygons : 'sf' Simple Features Collection with 3 multipolygons</code></pre>
 <p>OSM data can also be downloaded in OSM XML format with <code><a href="reference/osmdata_xml.html">osmdata_xml()</a></code> and saved for use with other software.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="reference/osmdata_xml.html">osmdata_xml</a></span>(q1, <span class="st">"data.xml"</span>)</a></code></pre></div>
-<p>The <code>XML</code> document is returned silently and may be passed directly to <code><a href="reference/osmdata_sp.html">osmdata_sp()</a></code> or <code><a href="reference/osmdata_sf.html">osmdata_sf()</a></code></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">doc &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_xml.html">osmdata_xml</a></span>(q1, <span class="st">"data.xml"</span>)</a>
-<a class="sourceLine" id="cb6-2" title="2">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>(q1, doc)</a></code></pre></div>
-<p>Or data can be read from a previously downloaded file:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>(q1, <span class="st">"data.xml"</span>)</a></code></pre></div>
-<p>For more details, see the <a href="https://ropensci.github.io/osmdata/">website</a></p>
-</div>
-<div id="style-guide" class="section level3">
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="reference/osmdata_xml.html">osmdata_xml</a></span>(q1, <span class="st">"data.osm"</span>)</a></code></pre></div>
+<div id="bounding-boxes" class="section level3">
 <h3 class="hasAnchor">
-<a href="#style-guide" class="anchor"></a>Style guide</h3>
-<p>We appreciate any contributions; those that comply with our general coding style even more. In four short points:</p>
+<a href="#bounding-boxes" class="anchor"></a>Bounding Boxes</h3>
+<p>All <code>osmdata</code> queries begin with a bounding box defining the area of the query. The <a href="https://ropensci.github.io/osmdata/reference/getbb.html"><code><a href="reference/getbb.html">getbb()</a></code> function</a> can be used to extract bounding boxes for specified place names.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="reference/getbb.html">getbb</a></span> (<span class="st">"astana kazakhstan"</span>)</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="co">#&gt;        min      max</span></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt; x 71.22217 71.78519</span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt; y 51.00068 51.35111</span></a></code></pre></div>
+<p>The next step is to convert that to an overpass query object with the <a href="https://ropensci.github.io/osmdata/reference/opq.html"><code><a href="reference/opq.html">opq()</a></code> function</a>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">q &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span> (<span class="kw"><a href="reference/getbb.html">getbb</a></span> (<span class="st">"astana kazakhstan"</span>))</a>
+<a class="sourceLine" id="cb7-2" title="2">q &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span> (<span class="st">"astana kazakhstan"</span>) <span class="co"># identical result</span></a></code></pre></div>
+<p>It is also possible to use bounding polygons rather than rectangular boxes:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">b &lt;-<span class="st"> </span><span class="kw"><a href="reference/getbb.html">getbb</a></span> (<span class="st">"bangalore"</span>, <span class="dt">format_out =</span> <span class="st">"polygon"</span>)</a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span> (b); <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span> (b [[<span class="dv">1</span>]])</a>
+<a class="sourceLine" id="cb8-3" title="3"><span class="co">#&gt; [1] "list"</span></a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="co">#&gt;          [,1]     [,2]</span></a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="co">#&gt; [1,] 77.46010 12.90384</span></a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="co">#&gt; [2,] 77.46022 12.90045</span></a>
+<a class="sourceLine" id="cb8-7" title="7"><span class="co">#&gt; [3,] 77.46211 12.89759</span></a>
+<a class="sourceLine" id="cb8-8" title="8"><span class="co">#&gt; [4,] 77.46246 12.89686</span></a>
+<a class="sourceLine" id="cb8-9" title="9"><span class="co">#&gt; [5,] 77.46499 12.89312</span></a>
+<a class="sourceLine" id="cb8-10" title="10"><span class="co">#&gt; [6,] 77.46547 12.89238</span></a></code></pre></div>
+</div>
+<div id="features" class="section level3">
+<h3 class="hasAnchor">
+<a href="#features" class="anchor"></a>Features</h3>
+<p>The next step is to define features of interest using the <a href="https://ropensci.github.io/osmdata/reference/add_osm_feature.html"><code><a href="reference/add_osm_feature.html">add_osm_feature()</a></code> function</a>. This function accepts <code>key</code> and <code>value</code> parameters specifying desired features in the <a href="https://wiki.openstreetmap.org/wiki/Map_Features">OSM key-vale schema</a>. Multiple <code><a href="reference/add_osm_feature.html">add_osm_feature()</a></code> calls may be combined as illustrated below, with the result being a logical AND operation, thus returning all amenities that are lebelled both as restaurants and also as pubs:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">q &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span> (<span class="st">"portsmouth usa"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="st">    </span><span class="kw"><a href="reference/add_osm_feature.html">add_osm_feature</a></span>(<span class="dt">key =</span> <span class="st">"amenity"</span>, <span class="dt">value =</span> <span class="st">"restaurant"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="st">    </span><span class="kw"><a href="reference/add_osm_feature.html">add_osm_feature</a></span>(<span class="dt">key =</span> <span class="st">"amenity"</span>, <span class="dt">value =</span> <span class="st">"pub"</span>) <span class="co"># There are none of these</span></a></code></pre></div>
+<p>(Logical OR combinations are demonstrated below.) Negation can also be specified by pre-prending an exclamation mark so that the following requests all amenities that are NOT labelled as restaurants and that are not labelled as pubs:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">q &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span> (<span class="st">"portsmouth usa"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="st">    </span><span class="kw"><a href="reference/add_osm_feature.html">add_osm_feature</a></span>(<span class="dt">key =</span> <span class="st">"amenity"</span>, <span class="dt">value =</span> <span class="st">"!restaurant"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-3" title="3"><span class="st">    </span><span class="kw"><a href="reference/add_osm_feature.html">add_osm_feature</a></span>(<span class="dt">key =</span> <span class="st">"amenity"</span>, <span class="dt">value =</span> <span class="st">"!pub"</span>) <span class="co"># There are a lot of these</span></a></code></pre></div>
+<p>Additional arguments allow for more refined matching, such as the following requrest for all pubs with “irish” in the name:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">q &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span> (<span class="st">"washington dc"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="st">    </span><span class="kw"><a href="reference/add_osm_feature.html">add_osm_feature</a></span>(<span class="dt">key =</span> <span class="st">"amenity"</span>, <span class="dt">value =</span> <span class="st">"pub"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb11-3" title="3"><span class="st">    </span><span class="kw"><a href="reference/add_osm_feature.html">add_osm_feature</a></span>(<span class="dt">key =</span> <span class="st">"name"</span>, <span class="dt">value =</span> <span class="st">"irish"</span>,</a>
+<a class="sourceLine" id="cb11-4" title="4">                    <span class="dt">value_exact =</span> <span class="ot">FALSE</span>, <span class="dt">match_case =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<p>See <a href="https://ropensci.github.io/osmdata/reference/available_features.html"><code><a href="reference/available_features.html">?available_features</a></code></a> and <a href="https://ropensci.github.io/osmdata/reference/available_tags.html"><code><a href="reference/available_tags.html">?available_tags</a></code></a> for further information.</p>
+</div>
+<div id="data-formats" class="section level3">
+<h3 class="hasAnchor">
+<a href="#data-formats" class="anchor"></a>Data Formats</h3>
+<p>An overpass query constructed with the <code><a href="reference/opq.html">opq()</a></code> and <code><a href="reference/add_osm_feature.html">add_osm_feature()</a></code> functions is then sent to the <a href="https://overpass-turbo.eu">overpass server</a> to request data. These data may be returned in a variety of formats, currently including:</p>
 <ol style="list-style-type: decimal">
+<li>XML data (downloaded locally) via <a href="https://ropensci.github.io/osmdata/reference/osmdata_xml.html"><code><a href="reference/osmdata_xml.html">osmdata_xml()</a></code></a>;</li>
 <li>
-<code>&lt;-</code> not <code>=</code>
-</li>
-<li>Indent with four spaces</li>
-<li>Be generous with other white spaces - you’ve got plenty of real estate on that big screen of yours.</li>
-<li>Code is much easier to read when braces are vertically aligned, so please put <code>{</code> in the same vertical position as <code>}</code>.</li>
+<a href="https://cran.r-project.org/package=sf">Simple Features (sf)</a> format via <a href="https://ropensci.github.io/osmdata/reference/osmdata_sf.html"><code><a href="reference/osmdata_sf.html">osmdata_sf()</a></code></a>;</li>
+<li>
+<a href="https://cran.r-project.org/package=sp">R Spatial (sp)</a> format via <a href="https://ropensci.github.io/osmdata/reference/osmdata_sp.html"><code><a href="reference/osmdata_sp.html">osmdata_sp()</a></code></a>;</li>
+<li>
+<a href="https://developers.google.com/protocol-buffers/">Google Protocol Buffer</a> (<code>pbf</code>; downloaded locally)) via <a href="https://ropensci.github.io/osmdata/reference/osmdata_pbf.html"><code><a href="reference/osmdata_pbf.html">osmdata_pbf()</a></code></a>; and</li>
+<li>
+<a href="https://github.com/hypertidy/silicate">Silicate (SC)</a> format via <a href="https://ropensci.github.io/osmdata/reference/osmdata_sc.html"><code><a href="reference/osmdata_sc.html">osmdata_sc()</a></code></a>.</li>
 </ol>
 </div>
-<div id="citation" class="section level3">
+<div id="additional-functionality" class="section level3">
 <h3 class="hasAnchor">
-<a href="#citation" class="anchor"></a>Citation</h3>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/citation">citation</a></span> (<span class="st">"osmdata"</span>)</a>
-<a class="sourceLine" id="cb8-2" title="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-3" title="3"><span class="co">#&gt; To cite osmdata in publications use:</span></a>
-<a class="sourceLine" id="cb8-4" title="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-5" title="5"><span class="co">#&gt;   Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon (2017).</span></a>
-<a class="sourceLine" id="cb8-6" title="6"><span class="co">#&gt;   osmdata Journal of Open Source Software, 2(14). URL</span></a>
-<a class="sourceLine" id="cb8-7" title="7"><span class="co">#&gt;   https://doi.org/10.21105/joss.00305</span></a>
-<a class="sourceLine" id="cb8-8" title="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-9" title="9"><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></a>
-<a class="sourceLine" id="cb8-10" title="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-11" title="11"><span class="co">#&gt;   @Article{,</span></a>
-<a class="sourceLine" id="cb8-12" title="12"><span class="co">#&gt;     title = {osmdata},</span></a>
-<a class="sourceLine" id="cb8-13" title="13"><span class="co">#&gt;     author = {Mark Padgham and Bob Rudis and Robin Lovelace and Maëlle Salmon},</span></a>
-<a class="sourceLine" id="cb8-14" title="14"><span class="co">#&gt;     journal = {The Journal of Open Source Software},</span></a>
-<a class="sourceLine" id="cb8-15" title="15"><span class="co">#&gt;     year = {2017},</span></a>
-<a class="sourceLine" id="cb8-16" title="16"><span class="co">#&gt;     volume = {2},</span></a>
-<a class="sourceLine" id="cb8-17" title="17"><span class="co">#&gt;     number = {14},</span></a>
-<a class="sourceLine" id="cb8-18" title="18"><span class="co">#&gt;     month = {jun},</span></a>
-<a class="sourceLine" id="cb8-19" title="19"><span class="co">#&gt;     publisher = {The Open Journal},</span></a>
-<a class="sourceLine" id="cb8-20" title="20"><span class="co">#&gt;     url = {https://doi.org/10.21105/joss.00305},</span></a>
-<a class="sourceLine" id="cb8-21" title="21"><span class="co">#&gt;     doi = {10.21105/joss.00305},</span></a>
-<a class="sourceLine" id="cb8-22" title="22"><span class="co">#&gt;   }</span></a></code></pre></div>
+<a href="#additional-functionality" class="anchor"></a>Additional Functionality</h3>
+<p>Logical OR combinations can be implemented with the package’s internal <code>c</code> method, so that the above example can be extended to all amenities that are either restanrants OR pubs with</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">pubs &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span> (<span class="st">"portsmouth usa"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="st">    </span><span class="kw"><a href="reference/add_osm_feature.html">add_osm_feature</a></span>(<span class="dt">key =</span> <span class="st">"amenity"</span>, <span class="dt">value =</span> <span class="st">"pub"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-3" title="3"><span class="st">    </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>()</a>
+<a class="sourceLine" id="cb12-4" title="4">restaurants &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span> (<span class="st">"portsmouth usa"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-5" title="5"><span class="st">    </span><span class="kw"><a href="reference/add_osm_feature.html">add_osm_feature</a></span>(<span class="dt">key =</span> <span class="st">"amenity"</span>, <span class="dt">value =</span> <span class="st">"restaurant"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-6" title="6"><span class="st">    </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>()</a>
+<a class="sourceLine" id="cb12-7" title="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span> (pubs, restaurants)</a>
+<a class="sourceLine" id="cb12-8" title="8"><span class="co">#&gt; Object of class 'osmdata' with:</span></a>
+<a class="sourceLine" id="cb12-9" title="9"><span class="co">#&gt;                  $bbox : 43.0135509,-70.8229994,43.0996118,-70.7279298</span></a>
+<a class="sourceLine" id="cb12-10" title="10"><span class="co">#&gt;         $overpass_call : The call submitted to the overpass API</span></a>
+<a class="sourceLine" id="cb12-11" title="11"><span class="co">#&gt;                  $meta : metadata including timestamp and version numbers</span></a>
+<a class="sourceLine" id="cb12-12" title="12"><span class="co">#&gt;            $osm_points : 'sf' Simple Features Collection with 340 points</span></a>
+<a class="sourceLine" id="cb12-13" title="13"><span class="co">#&gt;             $osm_lines : NULL</span></a>
+<a class="sourceLine" id="cb12-14" title="14"><span class="co">#&gt;          $osm_polygons : 'sf' Simple Features Collection with 26 polygons</span></a>
+<a class="sourceLine" id="cb12-15" title="15"><span class="co">#&gt;        $osm_multilines : NULL</span></a>
+<a class="sourceLine" id="cb12-16" title="16"><span class="co">#&gt;     $osm_multipolygons : NULL</span></a></code></pre></div>
+<p>Data may also be trimmed to within a defined polygonal shape with the <a href="https://ropensci.github.io/osmdata/reference/trim_osmdata.html"><code><a href="reference/trim_osmdata.html">trim_osmdata()</a></code></a> function. Full package functionality is described on the <a href="https://ropensci.github.io/osmdata/">website</a></p>
 </div>
-<div id="code-of-conduct" class="section level3">
-<h3 class="hasAnchor">
-<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h3>
+</div>
+<div id="citation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#citation" class="anchor"></a>Citation</h2>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/citation">citation</a></span> (<span class="st">"osmdata"</span>)</a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb13-3" title="3"><span class="co">#&gt; To cite osmdata in publications use:</span></a>
+<a class="sourceLine" id="cb13-4" title="4"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb13-5" title="5"><span class="co">#&gt;   Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon (2017).</span></a>
+<a class="sourceLine" id="cb13-6" title="6"><span class="co">#&gt;   osmdata Journal of Open Source Software, 2(14). URL</span></a>
+<a class="sourceLine" id="cb13-7" title="7"><span class="co">#&gt;   https://doi.org/10.21105/joss.00305</span></a>
+<a class="sourceLine" id="cb13-8" title="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb13-9" title="9"><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></a>
+<a class="sourceLine" id="cb13-10" title="10"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb13-11" title="11"><span class="co">#&gt;   @Article{,</span></a>
+<a class="sourceLine" id="cb13-12" title="12"><span class="co">#&gt;     title = {osmdata},</span></a>
+<a class="sourceLine" id="cb13-13" title="13"><span class="co">#&gt;     author = {Mark Padgham and Bob Rudis and Robin Lovelace and Maëlle Salmon},</span></a>
+<a class="sourceLine" id="cb13-14" title="14"><span class="co">#&gt;     journal = {The Journal of Open Source Software},</span></a>
+<a class="sourceLine" id="cb13-15" title="15"><span class="co">#&gt;     year = {2017},</span></a>
+<a class="sourceLine" id="cb13-16" title="16"><span class="co">#&gt;     volume = {2},</span></a>
+<a class="sourceLine" id="cb13-17" title="17"><span class="co">#&gt;     number = {14},</span></a>
+<a class="sourceLine" id="cb13-18" title="18"><span class="co">#&gt;     month = {jun},</span></a>
+<a class="sourceLine" id="cb13-19" title="19"><span class="co">#&gt;     publisher = {The Open Journal},</span></a>
+<a class="sourceLine" id="cb13-20" title="20"><span class="co">#&gt;     url = {https://doi.org/10.21105/joss.00305},</span></a>
+<a class="sourceLine" id="cb13-21" title="21"><span class="co">#&gt;     doi = {10.21105/joss.00305},</span></a>
+<a class="sourceLine" id="cb13-22" title="22"><span class="co">#&gt;   }</span></a></code></pre></div>
+</div>
+<div id="code-of-conduct" class="section level2">
+<h2 class="hasAnchor">
+<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h2>
 <p>Please note that this project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
 <p><a href="http://ropensci.org"><img src="http://ropensci.org/public_images/github_footer.png" alt="ropensci_footer"></a></p>
 </div>

@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">osmdata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.8.99</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9.1</span>
       </span>
     </div>
 
@@ -176,15 +176,15 @@ query submitted to the overpass API can be obtained from
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='getbb.html'>getbb</a></span> (<span class='st'>"portsmouth"</span>, <span class='kw'>display_name_contains</span> <span class='kw'>=</span> <span class='st'>"United States"</span>) <span class='kw'>%&gt;%</span>
+<span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='getbb.html'>getbb</a></span> (<span class='st'>"portsmouth usa"</span>) <span class='kw'>%&gt;%</span>
                 <span class='fu'><a href='opq.html'>opq</a></span> () <span class='kw'>%&gt;%</span>
                 <span class='fu'>add_osm_feature</span>(<span class='st'>"amenity"</span>, <span class='st'>"restaurant"</span>) <span class='kw'>%&gt;%</span>
                 <span class='fu'>add_osm_feature</span>(<span class='st'>"amenity"</span>, <span class='st'>"pub"</span>)
 <span class='fu'><a href='osmdata_sf.html'>osmdata_sf</a></span> (<span class='no'>q</span>) <span class='co'># all objects that are restaurants AND pubs (there are none!)</span>
-<span class='no'>q1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='getbb.html'>getbb</a></span> (<span class='st'>"portsmouth"</span>, <span class='kw'>display_name_contains</span> <span class='kw'>=</span> <span class='st'>"United States"</span>) <span class='kw'>%&gt;%</span>
+<span class='no'>q1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='getbb.html'>getbb</a></span> (<span class='st'>"portsmouth usa"</span>) <span class='kw'>%&gt;%</span>
                 <span class='fu'><a href='opq.html'>opq</a></span> () <span class='kw'>%&gt;%</span>
                 <span class='fu'>add_osm_feature</span>(<span class='st'>"amenity"</span>, <span class='st'>"restaurant"</span>)
-<span class='no'>q2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='getbb.html'>getbb</a></span> (<span class='st'>"portsmouth"</span>, <span class='kw'>display_name_contains</span> <span class='kw'>=</span> <span class='st'>"United States"</span>) <span class='kw'>%&gt;%</span>
+<span class='no'>q2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='getbb.html'>getbb</a></span> (<span class='st'>"portsmouth usa"</span>) <span class='kw'>%&gt;%</span>
                 <span class='fu'><a href='opq.html'>opq</a></span> () <span class='kw'>%&gt;%</span>
                 <span class='fu'>add_osm_feature</span>(<span class='st'>"amenity"</span>, <span class='st'>"pub"</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span> (<span class='fu'><a href='osmdata_sf.html'>osmdata_sf</a></span> (<span class='no'>q1</span>), <span class='fu'><a href='osmdata_sf.html'>osmdata_sf</a></span> (<span class='no'>q2</span>)) <span class='co'># all objects that are restaurants OR pubs</span>
