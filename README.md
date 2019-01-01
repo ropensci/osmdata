@@ -27,8 +27,7 @@ formats, including as [Simple Features
 (`sf`)](https://cran.r-project.org/package=sf) or [Spatial
 (`sp`)](https://cran.r-project.org/package=sp) objects.
 
-Installation
-------------
+## Installation
 
 To install:
 
@@ -50,17 +49,17 @@ packageVersion("osmdata")
 #> [1] '0.0.9'
 ```
 
-Usage
------
+## Usage
 
 [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries
 can be built from a base query constructed with `opq` followed by
 `add_osm_feature`. The corresponding OSM objects are then downloaded and
-converted to
-[`R Simple Features (sf)`](https://cran.r-project.org/package=sf)
-objects with `osmdata_sf()` or to
-[`R Spatial (sp)`](https://cran.r-project.org/package=sp) objects with
-`osmdata_sp()`. For example,
+converted to [`R Simple Features
+(sf)`](https://cran.r-project.org/package=sf) objects with
+`osmdata_sf()` or to [`R Spatial
+(sp)`](https://cran.r-project.org/package=sp) objects with
+`osmdata_sp()`. For
+example,
 
 ``` r
 x <- opq(bbox = c(-0.27, 51.47, -0.20, 51.50)) %>% # Chiswick Eyot in London, U.K.
@@ -173,7 +172,7 @@ for further information.
 ### Data Formats
 
 An overpass query constructed with the `opq()` and `add_osm_feature()`
-functionsis then sent to the [overpass
+functions is then sent to the [overpass
 server](https://overpass-turbo.eu) to request data. These data may be
 returned in a variety of formats, currently including:
 
@@ -222,8 +221,7 @@ Data may also be trimmed to within a defined polygonal shape with the
 function. Full package functionality is described on the
 [website](https://ropensci.github.io/osmdata/)
 
-Citation
---------
+## Citation
 
 ``` r
 citation ("osmdata")
@@ -250,11 +248,11 @@ citation ("osmdata")
 #>   }
 ```
 
-Code of Conduct
----------------
+## Code of Conduct
 
 Please note that this project is released with a [Contributor Code of
 Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree
-to abide by its terms.
+to abide by its
+terms.
 
 [![ropensci\_footer](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)

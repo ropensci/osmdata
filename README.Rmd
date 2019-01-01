@@ -162,7 +162,7 @@ for further information.
 ### Data Formats
 
 An overpass query constructed with the `opq()` and `add_osm_feature()`
-functionsis then sent to the [overpass server](https://overpass-turbo.eu) to
+functions is then sent to the [overpass server](https://overpass-turbo.eu) to
 request data. These data may be returned in a variety of formats, currently
 including:
 
