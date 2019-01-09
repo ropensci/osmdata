@@ -2,9 +2,14 @@
 #'
 #' This function converts a bounding box into a string for use in web apis
 #' 
-#' @param bbox bounding box as character, matrix or vector. If character,
-#' numeric bbox will be extracted with \link{getbb} Unnamed vectors will be
+#' @param bbox bounding box as character, matrix or vector.
+#' If character, the bbox will be found (geocoded) and extracted with \link{getbb}.
+#' Unnamed vectors will be
 #' sorted appropriately and must merely be in the order (x, y, x, y).
+#' 
+#' @return A character string representing min x, min y, max x, and max y bounds.
+#' For example: \code{"15.3152361,76.4406446,15.3552361,76.4806446"} is the 
+#' bounding box for Hampi, India.
 #'
 #' @export
 #'
@@ -95,8 +100,13 @@ bbox_to_string <- function(bbox) {
 #' @param poly_num Which of matching polygons should be used?
 #' The first polygon in the first match is the default (`c(1, 1)`).
 #'
-#' @return Unless `format_out = "polygon"`, a numeric bounding box as min
-#' and max of latitude and longitude. If `format_out = "polygon"`, one or
+#' @return Defaults to a matrix in the form:
+#' \code{
+#'   min   max
+#' x ...   ...
+#' y ...   ...
+#' }
+#' If `format_out = "polygon"`, one or
 #' more two-columns matrices of polygonal longitude-latitude points. Where
 #' multiple `place_name` occurrences are found within `nominatim`,
 #' each item of the list of coordinates may itself contain multiple coordinate
@@ -119,12 +129,12 @@ bbox_to_string <- function(bbox) {
 #' \dontrun{
 #' getbb("Salzburg")
 #' # select based on display_name, print query url
-#' getbb("Hereford", display_name_contains = "United States", silent = FALSE)
+#' getbb("Hereford", display_name_contains = "USA", silent = FALSE)
 #' # top 3 matches as data frame
 #' getbb("Hereford", format_out = "data.frame", limit = 3)
 #' # Examples of polygonal boundaries
 #' bb <- getbb ("london uk", format_out = "polygon") # single match
-#' dim(bb[[1]]) # matrix of longitude/latitude pairs
+#' dim(bb[[1]][[1]]) # matrix of longitude/latitude pairs
 #' bb_sf = getbb("kathmandu", format_out = "sf_polygon") 
 #' # sf:::plot.sf(bb_sf) # can be plotted if sf is installed
 #' getbb("london", format_out = "sf_polygon") # only selects 1st of multipolygons

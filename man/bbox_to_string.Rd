@@ -7,9 +7,15 @@
 bbox_to_string(bbox)
 }
 \arguments{
-\item{bbox}{bounding box as character, matrix or vector. If character,
-numeric bbox will be extracted with \link{getbb} Unnamed vectors will be
+\item{bbox}{bounding box as character, matrix or vector.
+If character, the bbox will be found (geocoded) and extracted with \link{getbb}.
+Unnamed vectors will be
 sorted appropriately and must merely be in the order (x, y, x, y).}
+}
+\value{
+A character string representing min x, min y, max x, and max y bounds.
+For example: \code{"15.3152361,76.4406446,15.3552361,76.4806446"} is the
+bounding box for Hampi, India.
 }
 \description{
 This function converts a bounding box into a string for use in web apis
