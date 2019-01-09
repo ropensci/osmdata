@@ -3,7 +3,7 @@
 #' @param bbox Either (i) four numeric values specifying the maximal and minimal
 #'             longitudes and latitudes, in the form \code{c(xmin, ymin, xmax, ymax)} or
 #'             (ii) a character string in the form \code{xmin,ymin,xmax,ymax}.
-#'              These will be passed to \link{\code{getbb}} to be converted
+#'              These will be passed to \link{getbb} to be converted
 #'              to a numerical bounding box.
 #'              Can also be (iii) a matrix representing a bounding polygon
 #'              as returned from `getbb(..., format_out = "polygon")`.
