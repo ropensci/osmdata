@@ -7,7 +7,7 @@
 #'              to a numerical bounding box.
 #'              Can also be (iii) a matrix representing a bounding polygon
 #'              as returned from `getbb(..., format_out = "polygon")`.
-#' @param timeout It may be necessary to ncrease this value for large queries,
+#' @param timeout It may be necessary to increase this value for large queries,
 #'             because the server may time out before all data are delivered.
 #' @param memsize The default memory size for the 'overpass' server in
 #'              *bytes*; may need to be increased in order to handle large
@@ -19,7 +19,7 @@
 #' <https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29>
 #' for explanation of `timeout` and `memsize` (or `maxsize` in
 #' overpass terms). Note in particular the comment that queries with arbitrarily
-#' large `memsize` are likely to be rejeted.
+#' large `memsize` are likely to be rejected.
 #'
 #' @export
 #'
