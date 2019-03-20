@@ -2,23 +2,21 @@ language: r
 warnings_are_errors: true
 sudo: required
 cache: packages
-#group: edge # https://blog.travis-ci.com/2017-06-19-trusty-updates-2017-Q2
 
-# precise fails because unmet deps in libgdal-dev can not be insalled
-
-env:
 matrix:
     include:
-        - os: linux
-          r: release
-          dist: trusty # 14.04
-          env: R_CODECOV=true
-        - os: linux
-          r: devel
-          dist: trusty
-        - os: linux
-          r: oldrel
-          dist: trusty
+        - r: release
+          after_success:
+              - Rscript -e "covr::codecov(line_exclusions = list("\
+                        "'src/rapidxml.h','src/rapidxml_print.h'),"\
+                        "function_exlusions=c('overpass_query'))"
+          before_deploy: Rscript -e 'remotes::install_cran("pkgdown")'
+          deploy:
+              provider: script
+              script: Rscript -e 'pkgdown::deploy_site_github(verbose = TRUE)'
+              skip_cleanup: true
+        - r: devel
+        - r: oldrel
         - os: osx
           r: release
           before_install: ''
@@ -27,7 +25,7 @@ matrix:
           #r: devel
           #before_install: ''
           #disable_homebrew: true
-    allow_failures: # temporarily enabled. TODO: disable
+    allow_failures:
         - os: osx
           r: release
           before_install: ''
@@ -44,18 +42,5 @@ notifications:
     on_failure: change
 
 r_packages:
-    - devtools
-r_github_packages:
-      - jimhester/covr
+      - covr
 
-after_success:
-    - Rscript -e "covr::codecov(line_exclusions = list('src/rapidxml.h','src/rapidxml_print.h'),function_exlusions=c('overpass_query'))"
-
-      #before_deploy: Rscript -e 'remotes::install_cran("pkgdown")'
-      #deploy:
-      #  provider: script
-      #  script: Rscript -e 'pkgdown::deploy_site_github()'
-      #  skip_cleanup: true
-      #  on:
-      #      os: linux
-      #      r: release
