@@ -11,7 +11,7 @@ Downloads](http://cranlogs.r-pkg.org/badges/grand-total/osmdata?color=orange)](h
 [![Project Status:
 Active](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 
-![](./fig/title.png)
+![](./vignettes/title.png)
 [![](https://badges.ropensci.org/103_status.svg)](https://github.com/ropensci/onboarding/issues/103)
 [![status](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3/status.svg)](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3)
 
@@ -46,7 +46,7 @@ To load the package and check the version:
 library(osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
 packageVersion("osmdata")
-#> [1] '0.0.9'
+#> [1] '0.0.9.1'
 ```
 
 ## Usage
@@ -95,7 +95,7 @@ be used to extract bounding boxes for specified place names.
 ``` r
 getbb ("astana kazakhstan")
 #>        min      max
-#> x 71.22217 71.78519
+#> x 71.22193 71.78519
 #> y 51.00068 51.35111
 ```
 
@@ -205,16 +205,17 @@ restaurants <- opq ("portsmouth usa") %>%
     add_osm_feature(key = "amenity", value = "restaurant") %>%
     osmdata_sf()
 c (pubs, restaurants)
-#> Object of class 'osmdata' with:
-#>                  $bbox : 43.0135509,-70.8229994,43.0996118,-70.7279298
-#>         $overpass_call : The call submitted to the overpass API
-#>                  $meta : metadata including timestamp and version numbers
-#>            $osm_points : 'sf' Simple Features Collection with 340 points
-#>             $osm_lines : NULL
-#>          $osm_polygons : 'sf' Simple Features Collection with 26 polygons
-#>        $osm_multilines : NULL
-#>     $osm_multipolygons : NULL
 ```
+
+    #> Object of class 'osmdata' with:
+    #>                  $bbox : 43.0135509,-70.8229994,43.0996118,-70.7279298
+    #>         $overpass_call : The call submitted to the overpass API
+    #>                  $meta : metadata including timestamp and version numbers
+    #>            $osm_points : 'sf' Simple Features Collection with 325 points
+    #>             $osm_lines : NULL
+    #>          $osm_polygons : 'sf' Simple Features Collection with 24 polygons
+    #>        $osm_multilines : NULL
+    #>     $osm_multipolygons : NULL
 
 Data may also be trimmed to within a defined polygonal shape with the
 [`trim_osmdata()`](https://ropensci.github.io/osmdata/reference/trim_osmdata.html)
