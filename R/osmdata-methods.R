@@ -95,13 +95,14 @@ c.osmdata <- function (...)
 
     if (sf)
     {
-        osm_indx <- which (grepl ('osm_', names (x [[1]])))
+        osm_names <- names (x [[1]]) [which (grepl ('osm_', names (x [[1]])))]
         core_names <- c ('osm_id', 'name', 'geometry')
-        for (i in osm_indx)
+        for (i in osm_names)
         {
             xi <- lapply (x, function (j) j [[i]])
             indx <- which (unlist (lapply (xi, nrow)) > 0)
             xi <- xi [indx]
+            xi [vapply (xi, is.null, logical (1))] <- NULL
             if (length (xi) > 0)
             {
                 ids <- cnames <- NULL
@@ -156,7 +157,8 @@ c.osmdata <- function (...)
                 attr (res [[i]], "sf_column") <- attr (resi, "sf_column")
                 attr (res [[i]], "agr") <- attr (resi, "agr")
             } # end if length (xi) > 0
-        } # end for i in osm_indx
+        } # end for i in osm_names
+        class (res) <- c (class (res), "osmdata_sf")
     } else
     {
         # TODO: implement sp version

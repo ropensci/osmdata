@@ -281,9 +281,11 @@ sf_types <- c ("points", "lines", "polygons", "multilines", "multipolygons")
 #' }
 osmdata_sf <- function(q, doc, quiet=TRUE, stringsAsFactors = FALSE) {
     obj <- osmdata () # uses class def
-    if (missing (q) & !quiet)
-        message ('q missing: osmdata object will not include query')
-    else if (is (q, 'overpass_query'))
+    if (missing (q))
+    {
+        if (!quiet)
+            message ('q missing: osmdata object will not include query')
+    } else if (is (q, 'overpass_query'))
     {
         obj$bbox <- q$bbox
         obj$overpass_call <- opq_string (q)
