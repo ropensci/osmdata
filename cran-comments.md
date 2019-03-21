@@ -1,6 +1,7 @@
 # CRAN notes for osmdata_0.0.10 submission
 
-Note that one of the vignettes currently generates several NOTEs about "libcurl error code 7: failed to connect to www.opengeospatial.org". As the time of this submission, this website appears to be down, but I hope we may confidently assume the problem will be rectified as soon as possible.
+Only NOTE generated on some systems regards installed size, which is unavoidable
+due to very large C++ code base.
 
 ## Test environments
 
