@@ -11,7 +11,7 @@ Downloads](http://cranlogs.r-pkg.org/badges/grand-total/osmdata?color=orange)](h
 [![Project Status:
 Active](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 
-![](./vignettes/title.png)
+![](./man/figures/title.png)
 [![](https://badges.ropensci.org/103_status.svg)](https://github.com/ropensci/onboarding/issues/103)
 [![status](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3/status.svg)](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3)
 
