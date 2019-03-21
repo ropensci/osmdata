@@ -14,7 +14,7 @@
 #' @export
 osm_elevation <- function (dat, elev_file)
 {
-    requireNamespace (raster)
+    requireNamespace ("raster")
 
     elev_file <- check_elev_file (elev_file)
     if (length (elev_file) > 1)
