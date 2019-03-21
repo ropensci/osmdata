@@ -1,6 +1,6 @@
-# CRAN notes for osmdata_0.0.9 submission
+# CRAN notes for osmdata_0.0.10 submission
 
-Passes all tests on the listed test environments. Generates the single note regarding large package size which is unavoidable due to internally-bundled C++ libraries.
+Note that one of the vignettes currently generates several NOTEs about "libcurl error code 7: failed to connect to www.opengeospatial.org". As the time of this submission, this website appears to be down, but I hope we may confidently assume the problem will be rectified as soon as possible.
 
 ## Test environments
 
