@@ -41,6 +41,7 @@ Suggests:
     devtools,
     knitr,
     pkgdown,
+    raster,
     rmarkdown,
     roxygen2,
     sf,

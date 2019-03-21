@@ -14,6 +14,8 @@
 #' @export
 osm_elevation <- function (dat, elev_file)
 {
+    requireNamespace (raster)
+
     elev_file <- check_elev_file (elev_file)
     if (length (elev_file) > 1)
         stop ("not yet")
@@ -51,7 +53,7 @@ check_elev_file <- function (elev_file)
             {
                 message ("File ", f, " has not been unzipped; ",
                          "this may take a while ... ", appendLF = FALSE)
-                unzip (f, exdir = base_dir)
+                utils::unzip (f, exdir = base_dir)
                 message ("done.")
                 lf <- list.files (base_dir, full.names = TRUE)
                 index <- grepl (ftif, lf, ignore.case = TRUE)
