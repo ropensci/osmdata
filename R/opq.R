@@ -44,8 +44,8 @@ opq <- function (bbox = NULL, timeout = 25, memsize)
     prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
     suffix <- ");\n(._;>;);\nout body;" # recurse down
     if (!missing (memsize))
-        prefix <- paste0 (prefix, "[maxsize:",
-                          format (memsize, scientific = FALSE), "]")
+        prefix <- paste0 (prefix, "[maxsize:",                          # nocov
+                          format (memsize, scientific = FALSE), "]")    # nocov
     res <- list (bbox = bbox_to_string (bbox),
               prefix = paste0 (prefix, ";\n(\n"),
               suffix = suffix, features = NULL)

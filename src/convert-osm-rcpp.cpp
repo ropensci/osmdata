@@ -230,7 +230,7 @@ template <typename T> Rcpp::List osm_convert::convert_poly_linestring_to_sf (
         const std::vector <std::string> &rel_id, const std::string type)
 {
     if (!(type == "MULTILINESTRING" || type == "MULTIPOLYGON"))
-        throw std::runtime_error ("type must be multilinestring/polygon");
+        throw std::runtime_error ("type must be multilinestring/polygon"); // # nocov
     Rcpp::List outList (lon_arr.size ()); 
     Rcpp::NumericMatrix nmat (Rcpp::Dimension (0, 0));
     Rcpp::List dimnames (0);
@@ -318,7 +318,7 @@ void osm_convert::convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relati
         if (itr->ispoly)
             npolys++;
     if (npolys != lon_arr.size ())
-        throw std::runtime_error ("polygons must be same size as geometries");
+        throw std::runtime_error ("polygons must be same size as geometries"); // # nocov
     rel_id.reserve (npolys);
 
     unsigned int i = 0;
