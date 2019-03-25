@@ -81,3 +81,24 @@ check_bbox <- function (dat, r)
         bb [2, 2] > bbr [2, 2])
         message ("Elevation file does not cover OSM data file")
 }
+
+# elevation tiles from http://srtm.csi.cgiar.org/srtmdata
+# names are srtm_XX_YY.zip
+# XX is 01 for (-180, -175) and 72 for (175, 180)
+# so xx <- 36 + floor (-175:180 / 5)
+# YY is 01 for (50, 55) and 25 for (-75, -70)
+# so yy <- 14 + floor (-65:55 / 5)
+get_tile_index <- function (bb)
+{
+    bb <- as.numeric (strsplit (bb, ",") [[1]])
+    xi_min <- 36 + floor (bb [2] / 5)
+    xi_max <- 36 + floor (bb [4] / 5)
+    yi_min <- 14 + floor (bb [1] / 5)
+    yi_max <- 14 + floor (bb [3] / 5)
+
+    xi <- unique (c (xi_min, xi_max))
+    yi <- unique (c (yi_min, yi_max))
+
+    data.frame ("xi" = rep (xi, each = length (yi)),
+                       "yi" = rep (yi, times = length (xi)))
+}
