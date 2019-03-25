@@ -14,7 +14,12 @@
 #' @export
 osm_elevation <- function (dat, elev_file)
 {
-    requireNamespace ("raster")
+    if (!"raster" %in% loadedNamespaces ())
+    {
+        requireNamespace ("raster")
+        message ("Elevation data from Consortium for Spatial Information; ",
+                 "see http://srtm.csi.cgiar.org/srtmdata/")
+    }
 
     elev_file <- check_elev_file (elev_file)
     if (length (elev_file) > 1)
