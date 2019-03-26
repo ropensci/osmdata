@@ -399,7 +399,7 @@ osmdata_sc <- function(q, doc, quiet=TRUE) {
                                   "object_link_edge",
                                   "edge",
                                   "vertex")
-    attr (obj, "class") <- c ("SC", "sc", "osmdata", "osmdata_sc")
+    attr (obj, "class") <- c ("SC", "sc", "osmdata_sc")
 
     return (obj)
 }
