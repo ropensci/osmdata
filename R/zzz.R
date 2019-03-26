@@ -1,3 +1,4 @@
+# nocov start
 .onLoad <- function (libname, pkgname)
 {
     op <- options ()
@@ -18,6 +19,7 @@
         options (op.osmdata [toset])
     invisible ()
 }
+# nocov end
 
 .onAttach <- function(libname, pkgname) {
     msg <- paste0 ("Data (c) OpenStreetMap contributors,",
@@ -42,6 +44,8 @@ get_overpass_url <- function ()
         stop ('overpass can not be retrieved')
     options ()$osmdata.base_url
 }
+
+# nocov start
 
 #' set_overpass_url
 #'
@@ -90,3 +94,4 @@ set_overpass_url <- function (overpass_url)
 
     invisible ()
 }
+# nocov end
