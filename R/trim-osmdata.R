@@ -108,7 +108,9 @@ bb_poly_to_mat.list <- function (x)
 {
     if (length (x) > 1)
         more_than_one ()
-    x [[1]]
+    while (is.list (x))
+        x <- x [[1]]
+    return (x)
 }
 
 trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE)
@@ -163,12 +165,15 @@ get_trim_indx <- function (g, bb, exclude)
 
 trim_to_poly <- function (dat, bb_poly, exclude = TRUE)
 {
-    if (is (dat$osm_lines, 'sf'))
+    if (is (dat$osm_lines, 'sf') | is (dat$osm_polygons, 'sf'))
     {
         gnms <- c ("osm_lines", "osm_polygons")
+        index <- vapply (gnms, function (i) !is.null (dat [[i]]),
+                         logical (1))
+        gnms <- gnms [index]
         for (g in gnms)
         {
-            if (nrow (dat [[g]]) > 0)
+            if (!is.null (dat [[g]]) & nrow (dat [[g]]) > 0)
             {
                 indx <- get_trim_indx (dat [[g]]$geometry, bb_poly,
                                        exclude = exclude)
@@ -190,7 +195,7 @@ trim_to_poly <- function (dat, bb_poly, exclude = TRUE)
 
 trim_to_poly_multi <- function (dat, bb_poly, exclude = TRUE)
 {
-    if (is (dat$osm_multilines, 'sf'))
+    if (is (dat$osm_multilines, 'sf') | is (dat$osm_multipolygons, 'sf'))
     {
         gnms <- c ("osm_multilines", "osm_multipolygons")
         for (g in gnms)

@@ -24,14 +24,16 @@ bbox_to_string <- function(bbox) {
     if (is.character (bbox))
         bbox <- getbb (bbox)
 
+    if (is.list (bbox))
+        bbox <- bb_poly_to_mat (bbox)
+
     if (!is.numeric (bbox)) stop ("bbox must be numeric")
 
     if (inherits(bbox, "matrix"))
     {
         if (nrow (bbox) > 2)
         {
-            bbox <- c (min (bbox [, 1]), min (bbox [, 2]),
-                       max (bbox [, 1]), max (bbox [, 2]))
+            bbox <- apply (bbox, 2, range)
         }
 
         if (all (c("x", "y") %in% tolower (rownames (bbox))) &
