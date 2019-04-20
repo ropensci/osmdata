@@ -69,7 +69,7 @@
                         <h4 class="author">Mark Padgham</h4>
                         <h4 class="author">Robin Lovelace</h4>
             
-            <h4 class="date">2019-03-26</h4>
+            <h4 class="date">2019-04-20</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/osmdata/blob/master/vignettes/osmdata.Rmd"><code>vignettes/osmdata.Rmd</code></a></small>
       <div class="hidden name"><code>osmdata.Rmd</code></div>
@@ -118,7 +118,7 @@
 <a class="sourceLine" id="cb12-2" data-line-number="2">bb_poly =<span class="st"> </span><span class="kw"><a href="../reference/getbb.html">getbb</a></span>(<span class="dt">place_name =</span> <span class="st">"london"</span>, <span class="dt">format_out =</span> <span class="st">"polygon"</span>)</a></code></pre></div>
 <p>The <a href="www.overpass-api.de"><code>overpass API</code></a> only accepts simple rectangular bounding boxes, and so data requested with a bounding polygon will actually be all data within the corresponding rectangular bounding box, but such data may be subsequently trimmed to within the polygon with the <code><a href="../reference/trim_osmdata.html">trim_osmdata()</a></code> function, demonstrated in the code immediately below.</p>
 <p>All highways from within the polygonal boundary of Greater London can be extracted with,</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">bb &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getbb.html">getbb</a></span> (<span class="st">'greater london uk'</span>, <span class="dt">format_out =</span> <span class="st">'polygon'</span>)</a>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">bb &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getbb.html">getbb</a></span> (<span class="st">'london uk'</span>, <span class="dt">format_out =</span> <span class="st">'polygon'</span>)</a>
 <a class="sourceLine" id="cb13-2" data-line-number="2">x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/opq.html">opq</a></span>(<span class="dt">bbox =</span> bb) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb13-3" data-line-number="3"><span class="st">    </span><span class="kw"><a href="../reference/add_osm_feature.html">add_osm_feature</a></span>(<span class="dt">key =</span> <span class="st">'highway'</span>, <span class="dt">value =</span> <span class="st">'motorway'</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb13-4" data-line-number="4"><span class="st">    </span><span class="kw"><a href="../reference/osmdata_sf.html">osmdata_sf</a></span> () <span class="op">%&gt;%</span></a>
