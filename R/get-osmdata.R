@@ -376,13 +376,13 @@ osmdata_sc <- function(q, doc, quiet=TRUE) {
     res$object_link_edge$native_ <- TRUE
 
     obj <- list () # SC **does not** use osmdata class definition
-    obj$nodes <- tibble::as.tibble (res$nodes)
-    obj$relation_members <- tibble::as.tibble (res$relation_members)
-    obj$relation_properties <- tibble::as.tibble (res$relation_properties)
-    obj$object <- tibble::as.tibble (res$object)
-    obj$object_link_edge <- tibble::as.tibble (res$object_link_edge)
-    obj$edge <- tibble::as.tibble (res$edge)
-    obj$vertex <- tibble::as.tibble (res$vertex)
+    obj$nodes <- tibble::as_tibble (res$nodes)
+    obj$relation_members <- tibble::as_tibble (res$relation_members)
+    obj$relation_properties <- tibble::as_tibble (res$relation_properties)
+    obj$object <- tibble::as_tibble (res$object)
+    obj$object_link_edge <- tibble::as_tibble (res$object_link_edge)
+    obj$edge <- tibble::as_tibble (res$edge)
+    obj$vertex <- tibble::as_tibble (res$vertex)
     obj$meta <- tibble::tibble (proj = NA_character_,
                                 ctime = temp$obj$meta$timestamp,
                                 OSM_version = temp$obj$meta$OSM_version,
