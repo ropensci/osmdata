@@ -35,7 +35,7 @@
 #' }
 trim_osmdata <- function (dat, bb_poly, exclude = TRUE)
 {
-    is_sf_loaded ()
+    requireNamespace ("sf")
     if (!is (bb_poly, "matrix"))
         bb_poly <- bb_poly_to_mat (bb_poly)
 
@@ -48,13 +48,6 @@ trim_osmdata <- function (dat, bb_poly, exclude = TRUE)
         message ("bb_poly must be a matrix with > 1 row; ",
                  " data will not be trimmed.")
     return (dat)
-}
-
-is_sf_loaded <- function ()
-{
-    if (!any (grepl ("package:sf", search ())))
-        message ("It is generally necessary to pre-load the sf package ",
-                 "for this function to work correctly")
 }
 
 bb_poly_to_mat <- function (x)
