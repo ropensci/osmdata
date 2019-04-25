@@ -1,5 +1,5 @@
 Package: osmdata
-Version: 0.0.10.001
+Version: 0.1.0
 Authors@R: c(
     person("Mark", "Padgham", email="mark.padgham@email.com", role=c("aut", "cre")),
     person("Bob", "Rudis", role="aut"),
@@ -45,7 +45,8 @@ Suggests:
     rmarkdown,
     roxygen2,
     sf,
-    testthat
+    testthat,
+    tibble
 LinkingTo: Rcpp
 URL: https://github.com/ropensci/osmdata
 BugReports: https://github.com/ropensci/osmdata/issues

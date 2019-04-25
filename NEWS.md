@@ -1,4 +1,4 @@
-0.0.10.001
+0.1.0
 ===================
 
 Major changes:
@@ -7,8 +7,6 @@ Major changes:
 - New vignette on `osmdata_sc` function and elevation data.
 - `opq()` function now accepts polygonal bounding boxes generated with
   `getbb(..., format_out = "polygon")`.
-
-Minor changes:
 
 0.0.10
 ===================
