@@ -1,4 +1,4 @@
-# CRAN notes for osmdata_0.0.10 submission
+# CRAN notes for osmdata_0.1.0 submission
 
 Only NOTE generated on some systems regards installed size, which is unavoidable
 due to very large C++ code base.
