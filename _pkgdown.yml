@@ -49,6 +49,7 @@ articles:
   - title: The osmdata package
     contents:
     - osmdata
+    - osmdata-sc
     - osm-sf-translation
 
 navbar:

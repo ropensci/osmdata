@@ -8,7 +8,7 @@ output:
         toc_float: true
         theme: flatly
 vignette: >
-  %\VignetteIndexEntry{2. OSM to Simple Features}
+  %\VignetteIndexEntry{3. OSM to Simple Features}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

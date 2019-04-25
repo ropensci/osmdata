@@ -140,7 +140,7 @@ demonstrated in the code immediately below.
 All highways from within the polygonal boundary of Greater London can be
 extracted with,
 ```{r trim-osmdata, eval = FALSE}
-bb <- getbb ('greater london uk', format_out = 'polygon')
+bb <- getbb ('london uk', format_out = 'polygon')
 x <- opq(bbox = bb) %>%
     add_osm_feature(key = 'highway', value = 'motorway') %>%
     osmdata_sf () %>%
