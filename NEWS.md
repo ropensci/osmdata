@@ -1,3 +1,11 @@
+0.0.10.001
+===================
+
+Major changes:
+- New vignette on `osmdata_sc` function and elevation data.
+
+Minor changes:
+
 0.0.10
 ===================
 

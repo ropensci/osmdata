@@ -1,0 +1,71 @@
+---
+title: "2. Elevation data and OSM: The osmdata_sc function"
+author: 
+  - "Mark Padgham"
+date: "`r Sys.Date()`"
+output: 
+    html_document:
+        toc: true
+        toc_float: true
+        number_sections: false
+        theme: flatly
+vignette: >
+  %\VignetteIndexEntry{2. osmdata_sc}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## 1. Introduction
+
+
+[`silicate`](https://github.com/hypertidy/silicate) is a new, largely
+experimental form for representing spatial data in **R**. In contrast to all
+other forms (such as [`sp`](https://cran.r-project.org/package=sp) or
+[`sf`](https://cran.r-project.org/package=sf)),
+[`silicate`](https://github.com/hypertidy/silicate) is *multi-tabular*, and
+primarily consists of one table for point entities; one table for binary
+relationships between these point entities -- spatial ''edges'' -- and
+additional tables for higher-order inter-relationships between these objects.
+The new `osmdata` function `osmdata_sc()` returns Open Street Map (OSM) data in
+[`silicate`](https://github.com/hypertidy/silicate) form. This form also closely
+resembles the data storage scheme of Open Street Map itself, and in this case
+consists of the following tables:
+
+1. A `vertex` table holding the coordinates of all OSM nodes;
+2. An `edge` table mapping all edge connections between vertices;
+3. An `object_link_edge` table linking all `edge` entities to the OSM objects of
+   which they are part;
+4. An `object` table holding all 'key'--'value' pairs for each OSM *way* object;
+5. A `relation_properties` table holding all 'key'--'value' pairs for each OSM
+   *relation* object;
+6. A `relation_members` table holding all members of each OSM relation; and
+7. A `nodes` table holding all 'key'--'value' pairs for each OSM *node* object.
+
+The translation of the underlying OSM data structure -- consisting of nodes,
+way, and relations -- into 
+[Simple Features (SF)](http://www.opengeospatial.org/standards/sfa) via the
+[`osmdata_sf()`](https://ropensci.github.io/osmdata/reference/osmdata_sf.html)
+function is less than 100% faithful, and results in some representational loss
+compared with the original OSM structure (for details, see the [vignette on
+translation of OSM into
+SF](https://ropensci.github.io/osmdata/articles/osm-sf-translation.html)). In
+constrast, the [`osmdata_sc()`
+function](https://ropensci.github.io/osmdata/reference/osmdata_sc.html) delivers
+a representation that is entirely faithful to the underlying OSM representation.
+
+The [`silicate`](https://github.com/hypertidy/silicate) format itself is
+currently highly experimental, and is therefore not expected to gain widespread
+use just yet. It nevertheless offers the single advantage in the `osmdata`
+package of enabling elevation data to be combined with OSM data. The result is a 
+[`silicate`](https://github.com/hypertidy/silicate)-format object which may
+currently be of limited general utility, but is nevertheless able to be
+submitted directly to the [`dodgr` package](https://github.com/ATFutures/dodgr)
+to enable routing on street networks that accounts for elevation changes.
+
+
+## 2. Elevation Data
+
+Incorporating elevation data with OSM data currently requires local storage of
+desired elevation data. 
+
+[`silicate`](https://github.com/hypertidy/silicate) 
