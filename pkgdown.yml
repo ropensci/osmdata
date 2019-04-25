@@ -3,5 +3,6 @@ pkgdown: 1.3.0
 pkgdown_sha: ~
 articles:
   osm-sf-translation: osm-sf-translation.html
+  osmdata-sc: osmdata-sc.html
   osmdata: osmdata.html
 
