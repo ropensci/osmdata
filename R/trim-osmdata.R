@@ -191,6 +191,9 @@ trim_to_poly_multi <- function (dat, bb_poly, exclude = TRUE)
     if (is (dat$osm_multilines, 'sf') | is (dat$osm_multipolygons, 'sf'))
     {
         gnms <- c ("osm_multilines", "osm_multipolygons")
+        index <- vapply (gnms, function (i) !is.null (dat [[i]]),
+                         logical (1))
+        gnms <- gnms [index]
         for (g in gnms)
         {
             if (nrow (dat [[g]]) > 0)
