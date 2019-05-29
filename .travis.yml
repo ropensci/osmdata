@@ -3,6 +3,11 @@ warnings_are_errors: true
 sudo: required
 cache: packages
 
+addons:
+    apt:
+        packages:
+            - valgrind
+
 matrix:
     include:
         - r: release
