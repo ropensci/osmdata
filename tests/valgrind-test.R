@@ -21,6 +21,7 @@ vg_check <- function ()
 
 if (identical (Sys.getenv ("TRAVIS"), "true"))
 {
+    library (osmdata)
     chk <- opq ("hampi india") %>%
         add_osm_feature (key = "highway") %>%
         osmdata_xml ("hampi.osm")
