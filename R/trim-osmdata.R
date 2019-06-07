@@ -35,6 +35,35 @@
 #' }
 trim_osmdata <- function (dat, bb_poly, exclude = TRUE)
 {
+    UseMethod ("trim_osmdata")
+}
+
+trim_osmdata.default <- function (dat, bb_poly, exclude = TRUE)
+{
+    stop ("unrecognised format: ", paste0 (class (dat), collapse = " "))
+}
+
+trim_osmdata.osmdata_sf <- function (dat, bb_poly, exclude = TRUE)
+{
+    trip_osmdata_sfp (dat = dat, bb_poly = bb_poly, exclude = exclude)
+}
+
+trim_osmdata.osmdata_sp <- function (dat, bb_poly, exclude = TRUE)
+{
+    trip_osmdata_sfp (dat = dat, bb_poly = bb_poly, exclude = exclude)
+}
+
+trim_osmdata.osmdata_sc <- function (dat, bb_poly, exclude = TRUE)
+{
+        stop ("trim_osmdata not yet implemented for osmdata_sc")
+}
+
+# ***************************************************************
+# **********************   sf/sp methods   **********************
+# ***************************************************************
+
+trim_osmdata_sfp <- function (dat, bb_poly, exclude = TRUE)
+{
     requireNamespace ("sf")
     if (!is (bb_poly, "matrix"))
         bb_poly <- bb_poly_to_mat (bb_poly)
@@ -229,3 +258,8 @@ trim_to_poly_multi <- function (dat, bb_poly, exclude = TRUE)
 
     return (dat)
 }
+
+# ***************************************************************
+# ************************   sc methods   ***********************
+# ***************************************************************
+

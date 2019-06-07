@@ -41,7 +41,7 @@ get_overpass_url <- function ()
 {
     op <- options ()
     if (!'osmdata.base_url' %in% names (op))
-        stop ('overpass can not be retrieved')
+        stop ('overpass can not be retrieved') # nocov
     options ()$osmdata.base_url
 }
 
