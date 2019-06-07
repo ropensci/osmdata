@@ -1,5 +1,7 @@
 0.1.1.00x
 ===================
+Minor changes:
+- Impelement `trim_osmdata.sc` method
 
 0.1.1
 ===================
