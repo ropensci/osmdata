@@ -92,28 +92,28 @@ test_that ("points-from-multipolygons", {
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-multi.osm")
                pts <- osm_points (x, rownames (x$osm_multipolygons))
-               expect_equal (dim (pts), c (16, 4))
+               expect_equal (dim (pts), c (16, 5))
 })
 
 test_that ("points-from-multilines", {
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-multi.osm")
                pts <- osm_points (x, rownames (x$osm_multilines))
-               expect_equal (dim (pts), c (10, 4))
+               expect_equal (dim (pts), c (10, 5))
 })
 
 test_that ("points-from-polygons", {
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-multi.osm")
                pts <- osm_points (x, rownames (x$osm_polygons))
-               expect_equal (dim (pts), c (4, 4))
+               expect_equal (dim (pts), c (4, 5))
 })
 
 test_that ("points-from-lines", {
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-multi.osm")
                pts <- osm_points (x, rownames (x$osm_lines))
-               expect_equal (dim (pts), c (12, 4))
+               expect_equal (dim (pts), c (12, 5))
 
                # Only lines have multiples features
                ids <- lapply (seq (x$osm_lines$geometry), function (i)
