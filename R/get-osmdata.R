@@ -301,6 +301,17 @@ osmdata_sf <- function(q, doc, quiet=TRUE, stringsAsFactors = FALSE) {
     if (!quiet)
         message ('converting OSM data to sf format')
     res <- rcpp_osmdata_sf (doc)
+    # some objects don't have names, but only points so far - amend if any
+    # instances of ways or rels are subsequently found. As explained in 
+    # src/osm_convert::restructure_kv_mat, these instances do not get an osm_id
+    # column, so this is appended here:
+    if (!"osm_id" %in% names (res$points_kv))
+    {
+        res$points_kv <- data.frame (osm_id = rownames (res$points_kv),
+                                     res$points_kv,
+                                     stringsAsFactors = stringsAsFactors)
+    }
+
     if (missing (q))
         obj$bbox <- paste (res$bbox, collapse = ' ')
 

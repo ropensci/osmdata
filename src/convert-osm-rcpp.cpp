@@ -156,6 +156,9 @@ Rcpp::CharacterMatrix osm_convert::restructure_kv_mat (Rcpp::CharacterMatrix &kv
     if (ls)
         add_lines++;
 
+    // This only processes entries that have key = "name". Those that don't do
+    // not get their osm_id values appended. It's then easier to post-append
+    // these, rather than modify this code
     if (ni < static_cast <int> (varnames.size ()))
     {
         Rcpp::CharacterVector name_vals = kv.column (ni);
