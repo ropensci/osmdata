@@ -301,22 +301,13 @@ osmdata_sf <- function(q, doc, quiet=TRUE, stringsAsFactors = FALSE) {
     if (!quiet)
         message ('converting OSM data to sf format')
     res <- rcpp_osmdata_sf (doc)
-    # some objects don't have names, but only points so far - amend if any
-    # instances of ways or rels are subsequently found. As explained in 
+    # some objects don't have names. As explained in
     # src/osm_convert::restructure_kv_mat, these instances do not get an osm_id
     # column, so this is appended here:
     if (!"osm_id" %in% names (res$points_kv))
-    {
-        if (nrow (res$points_kv) == 0)
-        {
-            res$points_kv <- data.frame (osm_id = names (res$points),
-                                         stringsAsFactors = stringsAsFactors)
-        } else {
-            res$points_kv <- data.frame (osm_id = rownames (res$points_kv),
-                                         res$points_kv,
-                                         stringsAsFactors = stringsAsFactors)
-        }
-    }
+        res <- fill_kv (res, "points_kv", "points", stringsAsFactors)
+    if (!"osm_id" %in% names (res$polygons_kv))
+        res <- fill_kv (res, "polygons_kv", "polygons", stringsAsFactors)
 
     if (missing (q))
         obj$bbox <- paste (res$bbox, collapse = ' ')
@@ -327,6 +318,23 @@ osmdata_sf <- function(q, doc, quiet=TRUE, stringsAsFactors = FALSE) {
     class (obj) <- c (class (obj), "osmdata_sf")
 
     return (obj)
+}
+
+fill_kv <- function (res, kv_name, g_name, stringsAsFactors)
+{
+    if (!"osm_id" %in% names (res [[kv_name]]))
+    {
+        if (nrow (res [[kv_name]]) == 0)
+        {
+            res [[kv_name]] <- data.frame (osm_id = names (res [[g_name]]),
+                                           stringsAsFactors = stringsAsFactors)
+        } else {
+            res [[kv_name]] <- data.frame (osm_id = rownames (res [[kv_name]]),
+                                           res [[kv_name]],
+                                           stringsAsFactors = stringsAsFactors)
+        }
+    }
+    return (res)
 }
 
 fill_objects <- function (res, obj, type = "points",
