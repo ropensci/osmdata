@@ -307,9 +307,15 @@ osmdata_sf <- function(q, doc, quiet=TRUE, stringsAsFactors = FALSE) {
     # column, so this is appended here:
     if (!"osm_id" %in% names (res$points_kv))
     {
-        res$points_kv <- data.frame (osm_id = rownames (res$points_kv),
-                                     res$points_kv,
-                                     stringsAsFactors = stringsAsFactors)
+        if (nrow (res$points_kv) == 0)
+        {
+            res$points_kv <- data.frame (osm_id = names (res$points),
+                                         stringsAsFactors = stringsAsFactors)
+        } else {
+            res$points_kv <- data.frame (osm_id = rownames (res$points_kv),
+                                         res$points_kv,
+                                         stringsAsFactors = stringsAsFactors)
+        }
     }
 
     if (missing (q))

@@ -1,6 +1,7 @@
 0.1.1.00x
 ===================
 Minor changes:
+- Fix bug in `osmdata_sf` for data with no names and/or no key-val pairs
 - Impelement `trim_osmdata.sc` method
 
 0.1.1
