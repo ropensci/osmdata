@@ -184,7 +184,7 @@ including:
 
 Logical OR combinations can be implemented with the package's internal `c`
 method, so that the above example can be extended to all amenities that are
-either restanrants OR pubs with
+either restaurants OR pubs with
 ```{r OR-fakey, eval = FALSE}
 pubs <- opq ("portsmouth usa") %>%
     add_osm_feature(key = "amenity", value = "pub") %>%
