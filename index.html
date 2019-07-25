@@ -163,7 +163,7 @@
 <div id="additional-functionality" class="section level3">
 <h3 class="hasAnchor">
 <a href="#additional-functionality" class="anchor"></a>Additional Functionality</h3>
-<p>Logical OR combinations can be implemented with the package’s internal <code>c</code> method, so that the above example can be extended to all amenities that are either restanrants OR pubs with</p>
+<p>Logical OR combinations can be implemented with the package’s internal <code>c</code> method, so that the above example can be extended to all amenities that are either restaurants OR pubs with</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">pubs &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span> (<span class="st">"portsmouth usa"</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">    </span><span class="kw"><a href="reference/add_osm_feature.html">add_osm_feature</a></span>(<span class="dt">key =</span> <span class="st">"amenity"</span>, <span class="dt">value =</span> <span class="st">"pub"</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">    </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>()</a>
