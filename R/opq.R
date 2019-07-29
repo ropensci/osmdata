@@ -269,6 +269,9 @@ opq_string <- function (opq)
         res <- paste0 (opq$prefix, id, opq$suffix)
     }
     if (is.null (res))
-        res <- paste0 (opq$prefix, opq$suffix) # to ensure a non-null return
+        bbox <- paste0 (sprintf (' node (%s);\n', opq$bbox),
+                            sprintf (' way (%s);\n', opq$bbox),
+                            sprintf (' relation (%s);\n', opq$bbox))
+        res <- paste0 (opq$prefix, bbox,opq$suffix) # to ensure a non-null return
     return (res)
 }
