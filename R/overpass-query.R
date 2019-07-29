@@ -19,8 +19,8 @@ overpass_status <- function (quiet=FALSE)
 
     if (!curl::has_internet ())
     {
-        status <- 'No internet connection'
-        if (!quiet) message (status)
+        status <- 'No internet connection'      # nocov
+        if (!quiet) message (status)            # nocov
     } else
     {
         status <- httr::RETRY ("GET", status_url, timeout = 100,
@@ -158,7 +158,8 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
     }
 
     if (!curl::has_internet ())
-        stop ('Overpass query unavailable without internet', call. = FALSE)
+        stop ('Overpass query unavailable without internet',    # nocov
+              call. = FALSE)                                    # nocov
 
     if (!quiet) message('Issuing query to Overpass API ...')
 
@@ -167,7 +168,8 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
     if (encoding != 'pbf')
         overpass_url <- get_overpass_url ()
     else
-        overpass_url <- 'http://dev.overpass-api.de/test753/interpreter'
+        overpass_url <- paste0 ("http://dev.overpass-api.de",   # ncov
+                                "/test753/interpreter")         # ncov
 
     if (o_stat$available) {
         res <- httr::RETRY ("POST", overpass_url, body = query)
@@ -185,10 +187,10 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
     if (!quiet) message ('Query complete!')
 
     if (class (res) == 'result') # differs only for mock tests
-        httr::stop_for_status (res)
+        httr::stop_for_status (res)                             # nocov
 
     if (encoding == 'pbf')
-        doc <- httr::content (res, as = 'raw')
+        doc <- httr::content (res, as = 'raw')                  # nocov
     else if (class (res) == 'raw') # for mock tests
         doc <- rawToChar (res)
     else
