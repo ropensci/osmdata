@@ -5,10 +5,7 @@ matrix:
     include:
         - r: release
           after_success:
-              - Rscript -e "covr::codecov(line_exclusions = list(\
-                        'src/rapidxml.h','src/rapidxml_print.h'),\
-                        function_exlusions=c('overpass_query',\
-                        'osm_elevation', 'check_elev_file'))"
+              - Rscript -e "covr::codecov(line_exclusions = list('src/rapidxml.h','src/rapidxml_print.h'),function_exlusions=c('overpass_query','osm_elevation', 'check_elev_file'))"
           before_deploy: Rscript -e 'remotes::install_cran("pkgdown")'
           deploy:
               provider: script
