@@ -6,6 +6,8 @@ test_that ('trim_osm_data', {
                x0 <- osmdata_sf (q0, "../osm-multi.osm")
                bb <- cbind (c (2, 3), c (2, 3))
                require (sf)
+               expect_error (trim_osmdata (1, bb_poly = bb),
+                             "unrecognised format: numeric")
                expect_silent (x1 <- trim_osmdata (x0, bb_poly = bb))
                expect_equal (nrow (x1$osm_points), 0)
                expect_equal (nrow (x1$osm_lines), 0)
@@ -26,6 +28,8 @@ test_that ('trim_osm_data', {
                expect_true (nrow (x1$osm_polygons) == nrow (x0$osm_polygons))
                expect_true (nrow (x1$osm_multilines) < nrow (x0$osm_multilines))
                expect_true (nrow (x1$osm_multipolygons) == nrow (x0$osm_multipolygons))
+
+               expect_silent (x0_sc <- osmdata_sc (q0, "../osm-multi.osm"))
 
                bb <- list (cbind (c (0, 0),
                                   c (0, 1),
