@@ -290,6 +290,13 @@ verts_in_bpoly <- function (dat, bb_poly)
 {
     bb_poly_to_sf <- function (bb_poly)
     {
+        if (nrow (bb_poly) == 2)
+        {
+            bb_poly <- rbind (bb_poly [1, ],
+                              c (bb_poly [1, 1], bb_poly [2, 2]),
+                              bb_poly [2, ],
+                              c (bb_poly [2, 1], bb_poly [1, 2]))
+        }
         if (!identical (as.numeric (head (bb_poly, 1)),
                         as.numeric (tail (bb_poly, 1))))
             bb_poly <- rbind (bb_poly, bb_poly [1, ])

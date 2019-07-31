@@ -30,6 +30,11 @@ test_that ('trim_osm_data', {
                expect_true (nrow (x1$osm_multipolygons) == nrow (x0$osm_multipolygons))
 
                expect_silent (x0_sc <- osmdata_sc (q0, "../osm-multi.osm"))
+               expect_silent (x1 <- trim_osmdata (x0_sc, bb_poly = bb))
+               expect_equal (nrow (x1$object), 0)
+               expect_equal (nrow (x1$object_link_edge), 0)
+               expect_equal (nrow (x1$edge), 0)
+               expect_equal (nrow (x1$vertex), 0)
 
                bb <- list (cbind (c (0, 0),
                                   c (0, 1),
