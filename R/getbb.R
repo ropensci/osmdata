@@ -194,19 +194,23 @@ getbb <- function(place_name,
                     },
                     error = function(cond)
                     {
+            # nocov start
             message(paste0("Nominatim did respond as expected ",
                            "(e.g. due to excessive use of their api).\n",
                            "Please try again or use a different base_url\n",
                            "The url that failed was:\n", q_url))
+            # nocov end
                     }
     )
 
     # Code optionally select more things stored in obj...
     if (!is.null(display_name_contains))
     {
+        # nocov start
         obj <- obj[grepl(display_name_contains, obj$display_name), ]
         if (nrow (obj) == 0)
             stop ("No locations include display name ", display_name_contains)
+        # nocov end
     }
 
     if (format_out == "data.frame") {
@@ -225,6 +229,8 @@ getbb <- function(place_name,
         . <- NULL # suppress R CMD check note
         indx_multi <- which (grepl ("MULTIPOLYGON", obj$geotext))
         gt_p <- gt_mp <- NULL
+        # nocov start
+        # TODO: Test this
         if (length (indx_multi) > 0)
         {
             gt_mp <- obj$geotext [indx_multi] %>%
@@ -235,6 +241,7 @@ getbb <- function(place_name,
             for (i in indx_na)
                 gt_mp [[i]] <- NULL
         }
+        # nocov end
 
         indx <- which (!(seq (obj) %in% indx_multi))
         gt_p <- obj$geotext [indx] %>%
