@@ -267,11 +267,12 @@ opq_string <- function (opq)
         id <- paste (opq$id$id, collapse = ',')
         id <- sprintf(' %s(id:%s);\n', opq$id$type, id)
         res <- paste0 (opq$prefix, id, opq$suffix)
-    }
-    if (is.null (res))
+    } else if (is.null (res))
+    {
         bbox <- paste0 (sprintf (' node (%s);\n', opq$bbox),
                             sprintf (' way (%s);\n', opq$bbox),
                             sprintf (' relation (%s);\n', opq$bbox))
         res <- paste0 (opq$prefix, bbox,opq$suffix) # to ensure a non-null return
+    }
     return (res)
 }

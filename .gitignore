@@ -12,3 +12,5 @@ inst/doc
 # vim files
 .*.un~
 .*.swp
+src-x64
+src-i386
