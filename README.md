@@ -25,7 +25,8 @@ can be used to download raster tiles based on OSM data.)
 custom selected parts of OSM data. Data can be returned in a variety of
 formats, including as [Simple Features
 (`sf`)](https://cran.r-project.org/package=sf) or [Spatial
-(`sp`)](https://cran.r-project.org/package=sp) objects.
+[Spatial (`sp`)](https://cran.r-project.org/package=sp), or [Silicate
+(`sc`)](https://github.com/hypertidy/silicate) objects.
 
 ## Installation
 
