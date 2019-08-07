@@ -62,6 +62,18 @@ test_that ('query-construction', {
                                        key_exact = FALSE, value_exact = FALSE))
           })
 
+test_that ("add feature", {
+    qry <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517))
+    qry1 <- add_osm_feature (qry, key = 'highway')
+    qry2 <- add_osm_feature (qry, key = 'highway', value = "primary")
+    qry3 <- add_osm_feature (qry, key = 'highway',
+                             value = c ("primary", "tertiary"))
+    expect_identical (qry1$features, " [\"highway\"]")
+    expect_identical (qry2$features, " [\"highway\"=\"primary\"]")
+    expect_identical (qry3$features,
+                      " [\"highway\"~\"^(primary|tertiary)$\"]")
+          })
+
 test_that ('make_query', {
     qry <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517))
     qry <- add_osm_feature (qry, key = 'highway')
@@ -72,6 +84,8 @@ test_that ('make_query', {
         expect_error (osmdata_sf (qry),
                       'Overpass query unavailable without internet')
         expect_error (osmdata_sp (qry),
+                      'Overpass query unavailable without internet')
+        expect_error (osmdata_sc (qry),
                       'Overpass query unavailable without internet')
     } else
     {
