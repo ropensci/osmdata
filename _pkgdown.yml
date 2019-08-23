@@ -41,10 +41,11 @@ reference:
     - osm_multipolygons
   - title: Transform data
     contents:
+    - osm_elevation
     - osm_poly2line
     - trim_osmdata
     - unique_osmdata
-    
+
 articles:
   - title: The osmdata package
     contents:
