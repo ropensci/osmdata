@@ -47,7 +47,8 @@ Suggests:
     sf,
     testthat
 LinkingTo: Rcpp
-URL: https://github.com/ropensci/osmdata
+URL: https://docs.ropensci.org/osmdata (website)
+    https://github.com/ropensci/osmdata (devel)
 BugReports: https://github.com/ropensci/osmdata/issues
 Encoding: UTF-8
 RoxygenNote: 6.1.1
