@@ -308,10 +308,6 @@ And there are, for example, the considerably lower number of 2,029 points
 describing objects in Kunming that are **both** natural waterbodies **and** that
 include 'Dian' in their English name.
 
-Each successive feature added with `add_osm_feature()` is added to previous
-features, so, for example, extending the previous query by an additional
-`key-value` pair to:
-
 Both `key` and `value` fields may be matched either exactly or approximately.
 The previous query is repeated here for convenience:
 ```{r kunming4, eval = FALSE}
