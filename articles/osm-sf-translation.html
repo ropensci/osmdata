@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>3. Translation of OSM to Simple Features • osmdata</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="3. Translation of OSM to Simple Features">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -62,13 +63,14 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>3. Translation of OSM to Simple Features</h1>
                         <h4 class="author">Mark Padgham</h4>
             
-            <h4 class="date">2019-08-23</h4>
+            <h4 class="date">2019-09-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/osmdata/blob/master/vignettes/osm-sf-translation.Rmd"><code>vignettes/osm-sf-translation.Rmd</code></a></small>
       <div class="hidden name"><code>osm-sf-translation.Rmd</code></div>
@@ -87,7 +89,7 @@
 <li>
 <p><code>relations</code> which are higher-level objects used to specify relationships between collections of ways and nodes. While there are several recognised categories of <code>relations</code>, in spatial terms these may be reduced to a binary distinction between:</p>
 <ul>
-<li><p><code>multipolygon</code> relations, which specify relationships between an exterior polygon (through designating <code>role='outer'</code>) and possible inner polygons (<code>role='inner'</code>). These may or may not be designated with <code>type=multipolygon</code>. Political boundaries, for example, often have <code>type=boundary</code> rather than explicit <code>type-multipolygon</code>. <code>osmdata</code> identifies multioplygons as those <code>relation</code> objects having at least one member with <code>role=outer</code> or <code>role=inner</code>.</p></li>
+<li><p><code>multipolygon</code> relations, which specify relationships between an exterior polygon (through designating <code>role='outer'</code>) and possible inner polygons (<code>role='inner'</code>). These may or may not be designated with <code>type=multipolygon</code>. Political boundaries, for example, often have <code>type=boundary</code> rather than explicit <code>type-multipolygon</code>. <code>osmdata</code> identifies multipolygons as those <code>relation</code> objects having at least one member with <code>role=outer</code> or <code>role=inner</code>.</p></li>
 <li><p>In the absence of <code>inner</code> and <code>outer</code> roles, an OSM relation is assumed to be non-polygonal, and to instead form a collection of non-enclosing lines.</p></li>
 </ul>
 </li>
@@ -149,22 +151,22 @@
 <a href="#gdal-translation-of-osm-into-simple-features" class="anchor"></a>4. <code>GDAL</code> Translation of OSM into Simple Features</h2>
 <p>The <code>R</code> package <a href="https://cran.r-project.org/package=sf"><code>sf</code></a> provide an <code>R</code> implementation of Spatial Features, and provides a wrapper around GDAL for reading geospatial data. <code>GDAL</code> provides a <a href="http://www.gdal.org/drv_osm.html">‘driver’ to read OSM data</a>, and thus <code>sf</code> can also be used to read <code>OSM</code> data in <code>R</code>, <a href="https://ropensci.github.io/osmdata/articles/osmdata.html">as detailed in the main <code>osmdata</code> vignette</a>. However, the <code>GDAL</code> translation of OSM data differs in several important ways from the <code>osmdata</code> translation.</p>
 <p>The primary difference is that GDAL only returns <em>unique</em> objects of each spatial (SF) type. Thus <code>sf::POINT</code> objects consist of only those points that are not otherwise members of some ‘higher’ object (<code>line</code>, <code>polygon</code>, or <code>relation</code> objects). Although a given set of OSM data may actually contain a great many points, attempting to load these with</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">sf<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_read">st_read</a></span> (file, <span class="dt">layer =</span> <span class="st">'points'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">sf<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/sf/man/st_read.html">st_read</a></span> (file, <span class="dt">layer =</span> <span class="st">'points'</span>)</a></code></pre></div>
 <p>will generally return surprisingly few points.</p>
 <div id="osm-nodes-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#osm-nodes-1" class="anchor"></a>4.1. OSM Nodes</h3>
-<p>Apart from the numerical difference arising through <code>osmdata</code> returning an <code>sf::POINTS</code> structure containing <strong>all</strong> nodes within a given set of OSM data, while <code><a href="https://www.rdocumentation.org/packages/sf/topics/st_read">sf::st_read (file, layer='points')</a></code> returns only those points not represented in other structure, the representation of points remains otherwise broadly similar. The only other major difference is that <code>osmdata</code> retains all <code>key-value</code> pairs present in a given set of OSM data, whereas <code>GDAL/sf</code> only retains a select few of these. Moreover, the <code>keys</code> returned by <code>GDAL/sf</code> are pre-defined and invariant, meaning that data returned from <code><a href="https://www.rdocumentation.org/packages/sf/topics/st_read">sf::st_read (...)</a></code> may often contain <code>key</code> columns in the resultant <code>data.frame</code> which contain no (non-<code>NA</code>) data. This difference is illustrated in an example repeated here from the<br><a href="https://ropensci.github.io/osmdata/articles/osmdata.html">main <code>osmdata</code> vignette</a>, with the same principles applying to all of the following classes of OSM data.</p>
+<p>Apart from the numerical difference arising through <code>osmdata</code> returning an <code>sf::POINTS</code> structure containing <strong>all</strong> nodes within a given set of OSM data, while <code><a href="https://rdrr.io/pkg/sf/man/st_read.html">sf::st_read (file, layer='points')</a></code> returns only those points not represented in other structure, the representation of points remains otherwise broadly similar. The only other major difference is that <code>osmdata</code> retains all <code>key-value</code> pairs present in a given set of OSM data, whereas <code>GDAL/sf</code> only retains a select few of these. Moreover, the <code>keys</code> returned by <code>GDAL/sf</code> are pre-defined and invariant, meaning that data returned from <code><a href="https://rdrr.io/pkg/sf/man/st_read.html">sf::st_read (...)</a></code> may often contain <code>key</code> columns in the resultant <code>data.frame</code> which contain no (non-<code>NA</code>) data. This difference is illustrated in an example repeated here from the<br><a href="https://ropensci.github.io/osmdata/articles/osmdata.html">main <code>osmdata</code> vignette</a>, with the same principles applying to all of the following classes of OSM data.</p>
 <p>The following three lines define a query and download the resultant data to an <code>XML</code> file.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/opq.html">opq</a></span> (<span class="dt">bbox =</span> <span class="st">'Trentham, Australia'</span>)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">q &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_osm_feature.html">add_osm_feature</a></span> (q, <span class="dt">key =</span> <span class="st">'name'</span>) <span class="co"># any named objects</span></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="../reference/osmdata_xml.html">osmdata_xml</a></span> (q, <span class="st">'trentham.osm'</span>)</a></code></pre></div>
 <p>These data may then be converted into SF representations using either <code>R::sf</code> or <code>osmdata</code>, with OSM <code>keys</code> being the column names of the resultant <code>data.frame</code> objects.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span> (sf<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_read">st_read</a></span> (<span class="st">'trentham.osm'</span>, <span class="dt">layer =</span> <span class="st">'points'</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span> (sf<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/sf/man/st_read.html">st_read</a></span> (<span class="st">'trentham.osm'</span>, <span class="dt">layer =</span> <span class="st">'points'</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
 <pre><code>##  [1] "osm_id"     "name"       "barrier"    "highway"    "ref"       
 ##  [6] "address"    "is_in"      "place"      "man_made"   "other_tags"
 ## [11] "geometry"</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span> (<span class="kw"><a href="../reference/osmdata_sf.html">osmdata_sf</a></span> (q, <span class="st">'trentham.osm'</span>)<span class="op">$</span>osm_points)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span> (<span class="kw"><a href="../reference/osmdata_sf.html">osmdata_sf</a></span> (q, <span class="st">'trentham.osm'</span>)<span class="op">$</span>osm_points)</a></code></pre></div>
 <pre><code>##  [1] "osm_id"           "name"             "X_description_"  
 ##  [4] "X_waypoint_"      "addr.city"        "addr.housenumber"
 ##  [7] "addr.postcode"    "addr.street"      "amenity"         
@@ -175,15 +177,15 @@
 ## [22] "religion"         "shop"             "source"          
 ## [25] "tourism"          "waterway"         "geometry"</code></pre>
 <p><code>osmdata</code> returns far more <code>key</code> fields than does <code>GDAL/sf</code>. More importantly, however, <code>GDAL/sf</code> returns pre-defined <code>key</code> fields regardless of whether they contain any data:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">addr &lt;-<span class="st"> </span>sf<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_read">st_read</a></span> (<span class="st">'trentham.osm'</span>, <span class="dt">layer =</span> <span class="st">'points'</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)<span class="op">$</span>address</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/all">all</a></span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span> (addr))</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">addr &lt;-<span class="st"> </span>sf<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/sf/man/st_read.html">st_read</a></span> (<span class="st">'trentham.osm'</span>, <span class="dt">layer =</span> <span class="st">'points'</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)<span class="op">$</span>address</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/all.html">all</a></span> (<span class="kw"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span> (addr))</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>In contrast, <code>osmdata</code> returns only those <code>key</code> fields which contain data (and so excludes <code>address</code> in the above example).</p>
 </div>
 <div id="osm-ways-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#osm-ways-1" class="anchor"></a>4.2. OSM Ways</h3>
-<p>As for points, <code>GDAL/sf</code> only returns those ways that are not represented or contained in ‘higher’ objects (OSM relations interpreted as <code>SF::MULTIPOLYGON</code> or <code>SF::MULTILINESTRING</code> objects). <code>osmdata</code> returns all ways, and thus enables, for example, examination of the full attributes of any member of a multigeometry object. This is not possible with the <code>GDAL/sf</code> translation. As for points, the only additional difference between <code>osmdata</code> adn <code>GDAL/sf</code> is that <code>osmdata</code> retains all <code>key-value</code> pairs, whereas <code>GDAL</code> retains only a select few.</p>
+<p>As for points, <code>GDAL/sf</code> only returns those ways that are not represented or contained in ‘higher’ objects (OSM relations interpreted as <code>SF::MULTIPOLYGON</code> or <code>SF::MULTILINESTRING</code> objects). <code>osmdata</code> returns all ways, and thus enables, for example, examination of the full attributes of any member of a multigeometry object. This is not possible with the <code>GDAL/sf</code> translation. As for points, the only additional difference between <code>osmdata</code> and <code>GDAL/sf</code> is that <code>osmdata</code> retains all <code>key-value</code> pairs, whereas <code>GDAL</code> retains only a select few.</p>
 </div>
 <div id="osm-relations-1" class="section level3">
 <h3 class="hasAnchor">
@@ -235,6 +237,7 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -251,17 +254,20 @@
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>
