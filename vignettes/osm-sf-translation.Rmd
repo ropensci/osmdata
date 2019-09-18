@@ -39,7 +39,7 @@ The three primary spatial objects of OSM are:
    polygons (`role='inner'`). These may or may not be designated with
    `type=multipolygon`. Political boundaries, for example, often have
    `type=boundary` rather than explicit `type-multipolygon`. `osmdata`
-   identifies multioplygons as those `relation` objects having at least one
+   identifies multipolygons as those `relation` objects having at least one
    member with `role=outer` or `role=inner`.
 
    - In the absence of `inner` and `outer` roles, an OSM relation is assumed to
@@ -252,7 +252,7 @@ contained in 'higher' objects (OSM relations interpreted as `SF::MULTIPOLYGON`
 or `SF::MULTILINESTRING` objects). `osmdata` returns all ways, and thus enables,
 for example, examination of the full attributes of any member of a multigeometry
 object. This is not possible with the `GDAL/sf` translation.  As for points, the
-only additional difference between `osmdata` adn `GDAL/sf` is that `osmdata`
+only additional difference between `osmdata` and `GDAL/sf` is that `osmdata`
 retains all `key-value` pairs, whereas `GDAL` retains only a select few.
 
 ### 4.3 OSM Relations

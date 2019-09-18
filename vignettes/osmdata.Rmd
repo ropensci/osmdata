@@ -228,7 +228,7 @@ the format typically used in `overpass-turbo`.)
 
 As demonstrated above, an `osmdata` query begins by specifying a bounding box
 with the function `opq()`, followed by specifying desired OSM features with
-`add_feature()`.  
+`add_osm_feature()`.  
 
 ```{r kunming1, eval = FALSE}
 q <- opq(bbox = 'Kunming, China') %>%
@@ -308,10 +308,6 @@ And there are, for example, the considerably lower number of 2,029 points
 describing objects in Kunming that are **both** natural waterbodies **and** that
 include 'Dian' in their English name.
 
-Each successive feature added with `add_feature()` is added to previous
-features, so, for example, extending the previous query by an additional
-`key-value` pair to:
-
 Both `key` and `value` fields may be matched either exactly or approximately.
 The previous query is repeated here for convenience:
 ```{r kunming4, eval = FALSE}
@@ -320,7 +316,7 @@ q <- opq(bbox = 'Kunming, China') %>%
     add_osm_feature(key = 'name:en', value = 'Dian', value_exact = FALSE)
 ```
 
-In addtion to `value_exact`, `add_osm_feature` also offers the additional two
+In addition to `value_exact`, `add_osm_feature` also offers the additional two
 options of `key_exact` and `match_case`. The former functions just like
 `value_exact`, but is applied to the specified `key` parameter, while
 `match_case` (default `TRUE`) specifies whether case should also be matched.
@@ -373,7 +369,7 @@ lots_of_data <- osmdata_sf(q)
 ```
 
 Queries are, however, usually more useful when refined through using
-`add_feature()`, which minimally requires a single `key` and returns all objects
+`add_osm_feature()`, which minimally requires a single `key` and returns all objects
 specifying any value for that `key`: 
 
 ```{r opq-london, eval = FALSE}
@@ -408,9 +404,9 @@ cycleways or those which are bridges. Combining these into one query will return
 only those that are designated cycleways **AND** that are bridges:
 
 ```{r des-bike1, eval=FALSE}
-q2 <- add_feature(q1, key = 'bicycle', value = 'designated')
+q2 <- add_osm_feature(q1, key = 'bicycle', value = 'designated')
 des_bike <- osmdata_sf(q2)
-q3 <- add_feature(q2, key = 'bridge', value = 'yes')
+q3 <- add_osm_feature(q2, key = 'bridge', value = 'yes')
 des_bike_and_bridge <- osmdata_sf(q3)
 nrow(des_bike_and_bridge$osm_points); nrow(des_bike_and_bridge$osm_lines)
 ## [1] 7
@@ -422,7 +418,7 @@ can be obtained through simply combining multiple `osmdata` objects with the `c`
 operator:
 
 ```{r, des-bike2, eval=FALSE}
-q4 <- add_feature(q1, key = 'bridge', value = 'yes')
+q4 <- add_osm_feature(q1, key = 'bridge', value = 'yes')
 bridge <- osmdata_sf(q4)
 des_bike_or_bridge <- c(des_bike, bridge)
 nrow(des_bike_or_bridge$osm_points); nrow(des_bike_or_bridge$osm_lines)
@@ -462,8 +458,8 @@ As the results show, all `osmdata` objects should contain:
 - The spatial data, consisting of `osm_points`, `osm_lines`, `osm_polygons`,
   `osm_multilines` and `osm_multipolygons`.
 
- hese some or all of these can be empty: the example printed above contains only
- points and linesThe more complex features of `osm_multilines` and
+ Some or all of these can be empty: the example printed above contains only
+ points and lines. The more complex features of `osm_multilines` and
  `osm_multipolygons` refer to OSM relations than contain multiple lines and
  polygons.
 
