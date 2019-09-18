@@ -316,7 +316,7 @@ q <- opq(bbox = 'Kunming, China') %>%
     add_osm_feature(key = 'name:en', value = 'Dian', value_exact = FALSE)
 ```
 
-In addtion to `value_exact`, `add_osm_feature` also offers the additional two
+In addition to `value_exact`, `add_osm_feature` also offers the additional two
 options of `key_exact` and `match_case`. The former functions just like
 `value_exact`, but is applied to the specified `key` parameter, while
 `match_case` (default `TRUE`) specifies whether case should also be matched.
