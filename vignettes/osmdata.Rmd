@@ -458,8 +458,8 @@ As the results show, all `osmdata` objects should contain:
 - The spatial data, consisting of `osm_points`, `osm_lines`, `osm_polygons`,
   `osm_multilines` and `osm_multipolygons`.
 
- hese some or all of these can be empty: the example printed above contains only
- points and linesThe more complex features of `osm_multilines` and
+ Some or all of these can be empty: the example printed above contains only
+ points and lines. The more complex features of `osm_multilines` and
  `osm_multipolygons` refer to OSM relations than contain multiple lines and
  polygons.
 
