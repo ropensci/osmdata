@@ -1,6 +1,9 @@
 0.1.1.00x
 ===================
 Minor changes:
+- available_tags returns tags with underscore precisely as required for
+  `add_osm_feature` - previous version returned text values with spaces instead
+  of underscore.
 - Fix bug in `osmdata_sf` for data with no names and/or no key-val pairs
 - Impelement `trim_osmdata.sc` method
 

@@ -49,10 +49,14 @@ available_tags <- function(feature) {
             stop ("Please specify feature")
 
         pg <- xml2::read_html (httr::GET (url_ftrs))
-        tags <- xml2::xml_attr (rvest::html_nodes (pg,
-                           sprintf("a[title^='Tag:%s']", feature)), "title")
-        unique (sort (gsub (sprintf ("Tag:%s=", feature), "",
-                            tags, fixed = TRUE)))
+        #tags <- xml2::xml_attr (rvest::html_nodes (pg,
+        #                   sprintf("a[title^='Tag:%s']", feature)), "title")
+        #unique (sort (gsub (sprintf ("Tag:%s=", feature), "",
+        #                    tags, fixed = TRUE)))
+        tags <- rvest::html_nodes (pg, sprintf("a[title^='Tag:%s']", feature))
+        tags <- vapply (strsplit (xml2::xml_attr (tags, "href"), "%3D"),
+                        function (i) i [2], character (1))
+        unique (sort (tags))
     } else {
         message ("No internet connection")
     }
