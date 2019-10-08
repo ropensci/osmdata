@@ -297,8 +297,8 @@ verts_in_bpoly <- function (dat, bb_poly)
                               bb_poly [2, ],
                               c (bb_poly [2, 1], bb_poly [1, 2]))
         }
-        if (!identical (as.numeric (head (bb_poly, 1)),
-                        as.numeric (tail (bb_poly, 1))))
+        if (!identical (as.numeric (utils::head (bb_poly, 1)),
+                        as.numeric (utils::tail (bb_poly, 1))))
             bb_poly <- rbind (bb_poly, bb_poly [1, ])
         sf::st_polygon (list (bb_poly)) %>%
             sf::st_sfc (crs = 4326) %>%
