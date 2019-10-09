@@ -68,10 +68,14 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
+<div id="osmdata" class="section level1">
+<div class="page-header"><h1 class="hasAnchor">
+<a href="#osmdata" class="anchor"></a>osmdata <a href="https://docs.ropensci.org/osmdata/"><img src="reference/figures/osmhex.png" align="right" height="210" width="182/"></a>
+</h1></div>
 
-
-<p><img src="./man/figures/title.png"><a href="https://github.com/ropensci/onboarding/issues/103"><img src="https://badges.ropensci.org/103_status.svg"></a> <a href="http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3"><img src="http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3/status.svg" alt="status"></a></p>
-<p><code>osmdata</code> is an R package for accessing the data underlying OpenStreetMap (OSM), delivered via the <a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a>. (Other packages such as <a href="https://cran.r-project.org/web/packages/OpenStreetMap/index.html"><code>OpenStreetMap</code></a> can be used to download raster tiles based on OSM data.) <a href="https://overpass-turbo.eu">Overpass</a> is a read-only API that extracts custom selected parts of OSM data. Data can be returned in a variety of formats, including as <a href="https://cran.r-project.org/package=sf">Simple Features (<code>sf</code>)</a> or [Spatial <a href="https://cran.r-project.org/package=sp">Spatial (<code>sp</code>)</a>, or <a href="https://github.com/hypertidy/silicate">Silicate (<code>sc</code>)</a> objects.</p>
+<!--![](./man/figures/title.png)-->
+<p><a href="https://github.com/ropensci/onboarding/issues/103"><img src="https://badges.ropensci.org/103_status.svg"></a> <a href="http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3"><img src="http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3/status.svg" alt="status"></a></p>
+<p><code>osmdata</code> is an R package for accessing the data underlying OpenStreetMap (OSM), delivered via the <a href="http://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a>. (Other packages such as <a href="https://cran.r-project.org/web/packages/OpenStreetMap/index.html"><code>OpenStreetMap</code></a> can be used to download raster tiles based on OSM data.) <a href="https://overpass-turbo.eu">Overpass</a> is a read-only API that extracts custom selected parts of OSM data. Data can be returned in a variety of formats, including as <a href="https://cran.r-project.org/package=sf">Simple Features (<code>sf</code>)</a>, <a href="https://cran.r-project.org/package=sp">Spatial (<code>sp</code>)</a>, or <a href="https://github.com/hypertidy/silicate">Silicate (<code>sc</code>)</a> objects.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -86,7 +90,7 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(osmdata)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt; Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright</span></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span>(<span class="st">"osmdata"</span>)</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; [1] '0.0.9.1'</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; [1] '0.1.1.4'</span></a></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
@@ -121,14 +125,8 @@
 <p>It is also possible to use bounding polygons rather than rectangular boxes:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">b &lt;-<span class="st"> </span><span class="kw"><a href="reference/getbb.html">getbb</a></span> (<span class="st">"bangalore"</span>, <span class="dt">format_out =</span> <span class="st">"polygon"</span>)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span> (b); <span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span> (b [[<span class="dv">1</span>]])</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; [1] "list"</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt;          [,1]     [,2]</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; [1,] 77.46010 12.90384</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; [2,] 77.46022 12.90045</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; [3,] 77.46211 12.89759</span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; [4,] 77.46246 12.89686</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; [5,] 77.46499 12.89312</span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt; [6,] 77.46547 12.89238</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; [1] "matrix"</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; [1] 77.4601</span></a></code></pre></div>
 </div>
 <div id="features" class="section level3">
 <h3 class="hasAnchor">
@@ -167,7 +165,7 @@
 <div id="additional-functionality" class="section level3">
 <h3 class="hasAnchor">
 <a href="#additional-functionality" class="anchor"></a>Additional Functionality</h3>
-<p>Logical OR combinations can be implemented with the package’s internal <code>c</code> method, so that the above example can be extended to all amenities that are either restanrants OR pubs with</p>
+<p>Logical OR combinations can be implemented with the package’s internal <code>c</code> method, so that the above example can be extended to all amenities that are either restaurants OR pubs with</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">pubs &lt;-<span class="st"> </span><span class="kw"><a href="reference/opq.html">opq</a></span> (<span class="st">"portsmouth usa"</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">    </span><span class="kw"><a href="reference/add_osm_feature.html">add_osm_feature</a></span>(<span class="dt">key =</span> <span class="st">"amenity"</span>, <span class="dt">value =</span> <span class="st">"pub"</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">    </span><span class="kw"><a href="reference/osmdata_sf.html">osmdata_sf</a></span>()</a>
@@ -219,7 +217,7 @@
 <p>Please note that this project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
 <p><a href="http://ropensci.org"><img src="http://ropensci.org/public_images/github_footer.png" alt="ropensci_footer"></a></p>
 </div>
-
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
