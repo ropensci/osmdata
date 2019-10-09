@@ -16,6 +16,7 @@ makefile$
 ^src/Makevars$
 ^src/Makevars.in$
 ^tests/timing-benchmark.R$
+data-raw/
 ^\.travis\.yml$
 ^\.Rproj\.user$
 ^codemeta\.json$

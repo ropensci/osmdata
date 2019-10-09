@@ -1,5 +1,7 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+# osmdata <a href='https://docs.ropensci.org/osmdata/'><img src='man/figures/osmhex.png' align="right" height=210 width=182/></a>
+
 [![Build
 Status](https://travis-ci.org/ropensci/osmdata.svg?branch=master)](https://travis-ci.org/ropensci/osmdata)
 [![Build
@@ -11,7 +13,9 @@ Downloads](http://cranlogs.r-pkg.org/badges/grand-total/osmdata?color=orange)](h
 [![Project Status:
 Active](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 
-![](./man/figures/title.png)
+<!--![](./man/figures/title.png)-->
+
+\<\>
 [![](https://badges.ropensci.org/103_status.svg)](https://github.com/ropensci/onboarding/issues/103)
 [![status](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3/status.svg)](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3)
 
@@ -24,8 +28,8 @@ can be used to download raster tiles based on OSM data.)
 [Overpass](https://overpass-turbo.eu) is a read-only API that extracts
 custom selected parts of OSM data. Data can be returned in a variety of
 formats, including as [Simple Features
-(`sf`)](https://cran.r-project.org/package=sf) or [Spatial
-[Spatial (`sp`)](https://cran.r-project.org/package=sp), or [Silicate
+(`sf`)](https://cran.r-project.org/package=sf), [Spatial
+(`sp`)](https://cran.r-project.org/package=sp), or [Silicate
 (`sc`)](https://github.com/hypertidy/silicate) objects.
 
 ## Installation
@@ -47,7 +51,7 @@ To load the package and check the version:
 library(osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
 packageVersion("osmdata")
-#> [1] '0.0.9.1'
+#> [1] '0.1.1.4'
 ```
 
 ## Usage
@@ -59,8 +63,7 @@ converted to [`R Simple Features
 (sf)`](https://cran.r-project.org/package=sf) objects with
 `osmdata_sf()` or to [`R Spatial
 (sp)`](https://cran.r-project.org/package=sp) objects with
-`osmdata_sp()`. For
-example,
+`osmdata_sp()`. For example,
 
 ``` r
 x <- opq(bbox = c(-0.27, 51.47, -0.20, 51.50)) %>% # Chiswick Eyot in London, U.K.
@@ -115,14 +118,8 @@ boxes:
 ``` r
 b <- getbb ("bangalore", format_out = "polygon")
 class (b); head (b [[1]])
-#> [1] "list"
-#>          [,1]     [,2]
-#> [1,] 77.46010 12.90384
-#> [2,] 77.46022 12.90045
-#> [3,] 77.46211 12.89759
-#> [4,] 77.46246 12.89686
-#> [5,] 77.46499 12.89312
-#> [6,] 77.46547 12.89238
+#> [1] "matrix"
+#> [1] 77.4601
 ```
 
 ### Features
@@ -196,7 +193,7 @@ returned in a variety of formats, currently including:
 
 Logical OR combinations can be implemented with the package’s internal
 `c` method, so that the above example can be extended to all amenities
-that are either restanrants OR pubs with
+that are either restaurants OR pubs with
 
 ``` r
 pubs <- opq ("portsmouth usa") %>%
@@ -254,7 +251,6 @@ citation ("osmdata")
 
 Please note that this project is released with a [Contributor Code of
 Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree
-to abide by its
-terms.
+to abide by its terms.
 
 [![ropensci\_footer](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)

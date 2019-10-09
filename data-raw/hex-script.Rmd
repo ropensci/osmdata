@@ -1,0 +1,200 @@
+
+# hex sticker script (issue 185)
+
+## Get a background map, here of Kichijoji in Tokyo
+
+```{r}
+library (osmdata)
+library (osmplotr)
+library (magrittr)
+bb <- getbb ("kichijoji japan")
+bb [2, 1] <- bb [2, 1] - 0.2 * diff (bb [2, ])
+bb [2, 2] <- mean (bb [2, ])
+hw <- opq (bb) %>%
+    add_osm_feature (key = "highway") %>%
+    osmdata_sf (quiet = FALSE) %>%
+    osm_poly2line () %>%
+    extract2 ("osm_lines")
+b <- opq (bb) %>%
+    add_osm_feature (key = "building") %>%
+    osmdata_sf (quiet = FALSE) %>%
+    extract2 ("osm_polygons")
+g1 <- opq (bb) %>%
+    add_osm_feature (key = "landuse", value = "grass") %>%
+    osmdata_sf (quiet = FALSE) %>%
+    extract2 ("osm_polygons")
+g2 <- opq (bb) %>%
+    add_osm_feature (key = "leisure", value = "park") %>%
+    osmdata_sf (quiet = FALSE) %>%
+    extract2 ("osm_polygons")
+g <- sf::st_sf (osm_id = c (g1$osm_id, g2$osm_id),
+                 geometry = c (g1$geometry, g2$geometry))
+w <- opq (bb) %>%
+    add_osm_feature (key = "natural", value = "water") %>%
+    osmdata_sf (quiet = FALSE) %>%
+    extract2 ("osm_polygons")
+
+#osm_structures (col_scheme = "light")
+map <- osm_basemap (bbox = bb, bg = "gray95") %>%
+    add_osm_objects (hw, col = "#969696FF") %>%
+    add_osm_objects (b, col = "#C8C8C8FF") %>%
+    add_osm_objects (g, col = "#C8FFC8FF") %>%
+    add_osm_objects (w, col = "#C8C8DCFF")
+#print_osm_map (map, filename = "kichijoji.png")
+saveRDS (map, file = "map.Rds")
+```
+
+Reduce image to square:
+```{r}
+library (magrittr)
+map <- readRDS ("map.Rds")
+f <- "kichijoji.png"
+osmplotr::print_osm_map (map, filename = f)
+magick::image_read (f) %>%
+    magick::image_trim () %>%
+    magick::image_write (f)
+i <- magick::image_read (f) %>%
+    magick::image_info ()
+chop <- floor (i$width - i$height) / 2
+chop <- paste0 (i$height, "x", i$height, "+", chop, "+0")
+magick::image_read (f) %>%
+    magick::image_crop (chop) %>%
+    magick::image_write (f)
+```
+
+
+
+# crop image to hex
+
+image is 1260 h X 2100 w
+
+```{r}
+f <- "kichijoji.png"
+library (magrittr)
+img <- png::readPNG (f)
+# define hexagon and set all outer pixels to 1
+s3 <- sqrt (3) / 2
+border <- data.frame (x = 1 + c (rep (-s3, 2), 0, rep (s3, 2), 0, -s3),
+                      y = 1 + c (0.5, -0.5, -1, -0.5, 0.5, 1, 0.5))
+border$x <- round (dim (img) [2] * border$x / 2)
+border$y <- round (dim (img) [1] * border$y / 2)
+
+#h <- 7
+#w <- h * diff (range (border$x)) / diff (range (border$y))
+#x11 (width = w, height = h)
+#plot (border, type = "l")
+border
+
+library (sp)
+library (raster)
+p <- Polygon (border)
+p <- SpatialPolygons (list (Polygons (list (p), "p")))
+
+n1 <- dim (img) [1]
+n2 <- dim (img) [2]
+r <- raster  (nrows = n1, ncols = n2, xmn = 1, xmx = n2, ymn = 1, ymx = n1,
+              vals = TRUE)
+r [mask (r, p)] <- FALSE
+r <- !r
+#plot (r)
+r <- as.matrix (r)
+index <- which (!r)
+index_not <- which (r)
+
+for (i in 1:3) {
+    i1 <- img [, , i]
+    i1 [index] <- 0
+    img [, , i] <- i1
+}
+mmand::display (img)
+# Then add a 4th channel for alpha values
+img4 <- array (dim = c (dim (img) [1:2], 4))
+for (i in 1:3) {
+    i1 <- img [, , i]
+    img4 [, , i] <- i1
+    i1 [index] <- 0
+    i1 [index_not] <- 1
+    img4 [, , 4] <- i1
+}
+png::writePNG (img4, f)
+```
+
+## make the hex logo
+
+```{r}
+library (ggplot2)
+# trace outline of hexagon from centre bottom point in anti-clockwise direction
+s3 <- sqrt (3) / 2
+border <- data.frame (x = 1 + c (rep (-s3, 2), 0, rep (s3, 2), 0, -s3),
+                      y = 1 + c (0.5, -0.5, -1, -0.5, 0.5, 1, 0.5))
+asp <- diff (range (border$x)) / diff (range (border$y)) # aspect ratio for image
+
+f <- "kichijoji.png"
+d <- data.frame(x = 1, y = 1, image = f)
+size <- 1.0
+hex <- ggplot() +
+    ggimage::geom_image (aes_ (x = ~x, y = ~y, image = ~image), d,
+                         size = 1.05, asp = asp) +
+    geom_polygon (aes_ (x = ~x, y = ~y), data = border,
+                 size = 5, fill = NA, color = "#555555")
+
+#extrafont::loadfonts ()
+lab_dat <- data.frame (x = 1 - 0.0001,
+                       y = 1 + 0.0001,
+                       lab = 'osmdata')
+aes <- ggplot2::aes (x, y, label = lab)
+fs <- 30 # font size
+hex <- hex + ggplot2::geom_text (dat = lab_dat,
+                                 mapping = aes,
+                                 size = fs,
+                                 colour = 'gray80',
+                                 family = 'SF Alien Encounters', 
+                                 fontface = 1,
+                                 nudge_y = 0.0001,
+                                 nudge_x = 0.0001)
+hex <- hex + ggplot2::geom_text (dat = lab_dat,
+                                 mapping = aes,
+                                 size = fs,
+                                 colour = 'black',
+                                 fontface = 1,
+                                 family = 'SF Alien Encounters')
+
+th <- theme_minimal ()
+th$panel.background <- element_rect (fill = "transparent", size = 0)
+th$line <- element_blank ()
+th$axis.text <- element_blank ()
+th$axis.title <- element_blank ()
+th$plot.margin <- margin (rep (unit (0, 'null'), 4))
+#th$plot.margin <- margin (rep (unit (-0.5, 'line'), 4))
+th$legend.position <- 'none'
+th$axis.ticks.length <- unit (0, 'null')
+
+hex <- hex + th
+
+print (hex)
+```
+```{r}
+fname <- file.path (here::here (), "man", "figures", "osmhex.png")
+ggsave (hex, filename = fname, width = 7, height = 7 * asp)
+```
+
+it is then necessary to read the png back in and re-convert the border pixels
+to alpha = 0
+```{r}
+fname <- file.path (here::here (), "man", "figures", "osmhex.png")
+img <- png::readPNG (fname)
+img4 <- array (1, dim = c (dim (img) [1:2], 4))
+index_out <- which (img [, , 1] == 1 & img [, , 2] == 1 & img [, , 3] == 1)
+index_in <- which (!seq (img [, , 1]) %in% index_out)
+for (i in 1:3) {
+    i1 <- img [, , i]
+    img4 [, , i] <- i1
+    i1 [index_in] <- 1
+    i1 [index_out] <- 0
+    img4 [, , 4] <- i1
+}
+fname <- file.path (here::here (), "man", "figures", "osmhex.png")
+png::writePNG (img4, fname)
+```
+
+
