@@ -1,6 +1,8 @@
 0.1.1.00x
 ===================
 Minor changes:
+- `getbb` now allows arbitrary `featuretype` specification, no longer just
+  those pertaining to settlement forms.
 - available_tags returns tags with underscore precisely as required for
   `add_osm_feature` - previous version returned text values with spaces instead
   of underscore.

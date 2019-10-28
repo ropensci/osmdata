@@ -70,8 +70,6 @@ test_that ('getbb-place_name', {
 
                    expect_silent (res <- getbb (place_name = "Salzburg",
                                                 featuretype = "state"))
-                   expect_error (res <- getbb (place_name = "Salzburg",
-                                               featuretype = "no type"))
                    expect_output (res <- getbb (place_name = "Salzburg",
                                                 silent = FALSE))
                    expect_silent (res <- getbb (place_name = "Salzburg",

@@ -160,15 +160,8 @@ getbb <- function(place_name,
     is_polygon <- grepl("polygon", format_out)
     query <- list (q = place_name)
     featuretype <- tolower (featuretype)
-    if (featuretype == "settlement")
-        query <- c (query, list (featuretype = "settlement"))
-    else if (featuretype %in% c ("city", "county", "state", "country"))
-    {
-        query <- c (query, list (place_name))
-        names (query) <- c ("q", featuretype)
-    } else
-        stop ("featuretype ", featuretype, " not recognised;\n",
-              "please use one of (settlement, city, county, state, country)")
+
+    query <- c (query, list (featuretype = featuretype))
 
     if (is_polygon)
         query <- c (query, list (polygon_text = 1))

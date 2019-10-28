@@ -1,5 +1,8 @@
 {
-  "@context": ["http://purl.org/codemeta/2.0", "http://schema.org"],
+  "@context": [
+    "http://purl.org/codemeta/2.0",
+    "http://schema.org"
+  ],
   "@type": "SoftwareSourceCode",
   "identifier": "osmdata",
   "description": "Download and import of 'OpenStreetMap' ('OSM') data as 'sf' or 'sp'\n    objects.  'OSM' data are extracted from the 'Overpass' web server and\n    processed with very fast 'C++' routines for return to 'R'.",
@@ -7,14 +10,14 @@
   "codeRepository": "https://github.com/ropensci/osmdata",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.0.5.100",
+  "version": "0.1.1.7",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.4.1",
+    "version": "3.6.1",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.4.1 (2017-06-30)",
+  "runtimePlatform": "R version 3.6.1 (2019-07-05)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -52,6 +55,11 @@
     },
     {
       "@type": "Person",
+      "givenName": "James",
+      "familyName": "Smith"
+    },
+    {
+      "@type": "Person",
       "givenName": "Marcin",
       "familyName": "Kalicinski"
     },
@@ -83,12 +91,14 @@
       "familyName": "Lukasz"
     }
   ],
-  "maintainer": {
-    "@type": "Person",
-    "givenName": "Mark",
-    "familyName": "Padgham",
-    "email": "mark.padgham@email.com"
-  },
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Mark",
+      "familyName": "Padgham",
+      "email": "mark.padgham@email.com"
+    }
+  ],
   "softwareSuggestions": [
     {
       "@type": "SoftwareApplication",
@@ -97,9 +107,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=devtools"
     },
     {
       "@type": "SoftwareApplication",
@@ -108,9 +119,34 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=knitr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "pkgdown",
+      "name": "pkgdown",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=pkgdown"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "raster",
+      "name": "raster",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=raster"
     },
     {
       "@type": "SoftwareApplication",
@@ -119,9 +155,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
     },
     {
       "@type": "SoftwareApplication",
@@ -130,9 +167,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=roxygen2"
     },
     {
       "@type": "SoftwareApplication",
@@ -141,9 +179,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=sf"
     },
     {
       "@type": "SoftwareApplication",
@@ -152,12 +191,19 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=testthat"
     }
   ],
   "softwareRequirements": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "R",
+      "name": "R",
+      "version": ">= 3.2.4"
+    },
     {
       "@type": "SoftwareApplication",
       "identifier": "curl",
@@ -165,9 +211,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=curl"
     },
     {
       "@type": "SoftwareApplication",
@@ -176,9 +223,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=httr"
     },
     {
       "@type": "SoftwareApplication",
@@ -187,9 +235,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=lubridate"
     },
     {
       "@type": "SoftwareApplication",
@@ -198,9 +247,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=magrittr"
     },
     {
       "@type": "SoftwareApplication",
@@ -211,13 +261,14 @@
       "@type": "SoftwareApplication",
       "identifier": "Rcpp",
       "name": "Rcpp",
-      "version": "0.12.4",
+      "version": ">= 0.12.4",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=Rcpp"
     },
     {
       "@type": "SoftwareApplication",
@@ -226,9 +277,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rvest"
     },
     {
       "@type": "SoftwareApplication",
@@ -237,9 +289,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=jsonlite"
     },
     {
       "@type": "SoftwareApplication",
@@ -248,9 +301,22 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=sp"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "tibble",
+      "name": "tibble",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
     {
       "@type": "SoftwareApplication",
@@ -264,25 +330,20 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "R",
-      "name": "R",
-      "version": "3.2.4"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=xml2"
     }
   ],
   "applicationCategory": "DataAccess",
   "isPartOf": "https://ropensci.org",
-  "keywords": ["open0street0map", "openstreetmap", "overpass0API", "OSM"],
+  "keywords": ["open0street0map", "openstreetmap", "overpass0API", "OSM", "overpass-api", "r", "cpp", "rstats", "osm", "osm-data", "r-package", "peer-reviewed"],
   "contIntegration": "https://travis-ci.org/ropensci/osmdata",
   "developmentStatus": "active",
   "releaseNotes": "https://github.com/ropensci/osmdata/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/osmdata/blob/master/README.md",
-  "fileSize": "282.801KB",
+  "fileSize": "1169.024KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
@@ -325,5 +386,12 @@
         }
       }
     }
-  ]
+  ],
+  "relatedLink": ["https://docs.ropensci.org/osmdata", "https://CRAN.R-project.org/package=osmdata"],
+  "funder": {},
+  "review": {
+    "@type": "Review",
+    "url": "https://github.com/ropensci/onboarding/issues/103",
+    "provider": "http://ropensci.org"
+  }
 }
