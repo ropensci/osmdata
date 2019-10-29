@@ -5,7 +5,7 @@
 #' @return An R timestamp object
 #'
 #' @note This defines the timestamp format for \pkg{osmdata} objects, which
-#' includes months as text to ensure umambiguous timestamps 
+#' includes months as text to ensure umambiguous timestamps
 #'
 #' @noRd
 get_timestamp <- function (doc)
@@ -52,19 +52,19 @@ get_overpass_version <- function (doc)
     xml2::xml_text (xml2::xml_find_all (doc, "//osm/@generator"))
 }
 
-#' Return an OSM Overpass query in XML format 
+#' Return an OSM Overpass query in XML format
 #' Read an (XML format) OSM Overpass response from a string, a connection,
 #' or a raw vector.
 #'
 #' @param q An object of class `overpass_query` constructed with
 #' \link{opq} and \link{add_osm_feature}.
 #' @param filename If given, OSM data are saved to the named file
-#' @param quiet suppress status messages. 
+#' @param quiet suppress status messages.
 #' @param encoding Unless otherwise specified XML documents are assumed to be
 #'        encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
 #'        an explicit encoding directive, this allows you to supply a default.
 #' @return An object of class `XML::xml_document` containing the result of the
-#'         overpass API query.  
+#'         overpass API query.
 #'
 #' @note Objects of class `xml_document` can be saved as `.xml` or
 #' `.osm` files with `xml2::write_xml`.
@@ -84,7 +84,7 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
     if (missing (q) & !quiet)
         message ('q missing: osmdata object will not include query')
     else if (is (q, 'overpass_query'))
-        q <- opq_string (q)
+        q <- opq_string_intern (q, quiet = quiet)
     else if (!is.character (q))
         stop ('q must be an overpass query or a character string')
 
@@ -116,7 +116,8 @@ osmdata_pbf <- function(q, filename, quiet=TRUE) {
     q$prefix <- gsub ("xml", "pbf", q$prefix)
     q$suffix <- gsub ("body", "meta", q$suffix)
 
-    pbf <- overpass_query (query = opq_string (q), quiet = quiet,
+    pbf <- overpass_query (query = opq_string_intern (q, quiet = quiet),
+                           quiet = quiet,
                            encoding = 'pbf')
     if (!missing (filename))
         write (pbf, file = filename)
@@ -134,8 +135,8 @@ osmdata_pbf <- function(q, filename, quiet=TRUE) {
 #' @param doc If missing, `doc` is obtained by issuing the overpass query,
 #'        `q`, otherwise either the name of a file from which to read data,
 #'        or an object of class \pkg{XML} returned from
-#'        \link{osmdata_xml}. 
-#' @param quiet suppress status messages. 
+#'        \link{osmdata_xml}.
+#' @param quiet suppress status messages.
 #'
 #' @return An object of class `osmdata` with the OSM components (points, lines,
 #'         and polygons) represented in \pkg{sp} format.
@@ -156,7 +157,7 @@ osmdata_sp <- function(q, doc, quiet = TRUE)
     else if (is (q, 'overpass_query'))
     {
         obj$bbox <- q$bbox
-        obj$overpass_call <- opq_string (q)
+        obj$overpass_call <- opq_string_intern (q, quiet = quiet)
     } else if (is.character (q))
         obj$overpass_call <- q
     else
@@ -224,10 +225,10 @@ fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8")
 #' @param ... list of objects, at least one of which must be of class 'sfc'
 #' @param stringsAsFactors Should character strings in 'sf' 'data.frame' be
 #' coerced to factors?
-#' @return An object of class `sf` 
+#' @return An object of class `sf`
 #'
-#' @note Most of this code written by Edzer Pebesma, and taken from 
-#' <https://github.com/edzer/sfr/blob/master/R/agr.R> and 
+#' @note Most of this code written by Edzer Pebesma, and taken from
+#' <https://github.com/edzer/sfr/blob/master/R/agr.R> and
 #' <https://github.com/edzer/sfr/blob/master/R/sfc.R>
 #'
 #' @noRd
@@ -288,7 +289,7 @@ osmdata_sf <- function(q, doc, quiet=TRUE, stringsAsFactors = FALSE) {
     } else if (is (q, 'overpass_query'))
     {
         obj$bbox <- q$bbox
-        obj$overpass_call <- opq_string (q)
+        obj$overpass_call <- opq_string_intern (q, quiet = quiet)
     } else if (is.character (q))
         obj$overpass_call <- q
     else
@@ -384,7 +385,7 @@ osmdata_sc <- function(q, doc, quiet=TRUE) {
     else if (is (q, 'overpass_query'))
     {
         obj$bbox <- q$bbox
-        obj$overpass_call <- opq_string (q)
+        obj$overpass_call <- opq_string_intern (q, quiet = quiet)
     } else if (is.character (q))
         obj$overpass_call <- q
     else
@@ -411,7 +412,7 @@ osmdata_sc <- function(q, doc, quiet=TRUE) {
     obj$meta <- tibble::tibble (proj = NA_character_,
                                 ctime = temp$obj$meta$timestamp,
                                 OSM_version = temp$obj$meta$OSM_version,
-                                overpass_version = temp$obj$meta$overpass_version)
+                            overpass_version = temp$obj$meta$overpass_version)
     if (!missing (q))
         obj$meta$bbox <- q$bbox
     else

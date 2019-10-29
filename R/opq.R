@@ -251,6 +251,14 @@ add_feature <- function (opq, key, value, key_exact = TRUE,
 #' opq_string (q)
 opq_string <- function (opq)
 {
+    opq_string_intern (opq, quiet = TRUE)
+}
+
+# The quiet param is not exposed here, but is passed through by the various
+# `osmdata_s*` functions, to issue messages when neither features nor ID
+# specified.
+opq_string_intern <- function (opq, quiet = TRUE)
+{
     res <- NULL
     if (!is.null (opq$features)) # opq with add_osm_feature
     {
@@ -267,6 +275,11 @@ opq_string <- function (opq)
         res <- paste0 (opq$prefix, id, opq$suffix)
     } else # straight opq with neither features nor ID specified
     {
+        if (!quiet)
+            message ("The overpass server is intended to be used to extract ",
+                     "specific features;\nthis query may place an undue ",
+                     "burden on server resources.\nPlease consider specifying ",
+                     "features via 'add_osm_feature' or 'opq_osm_id'.")
         bbox <- paste0 (sprintf (' node (%s);\n', opq$bbox),
                             sprintf (' way (%s);\n', opq$bbox),
                             sprintf (' relation (%s);\n', opq$bbox))
