@@ -1,42 +1,40 @@
 #' Build an Overpass query
 #'
 #' @param bbox Either (i) four numeric values specifying the maximal and minimal
-#'             longitudes and latitudes, in the form \code{c(xmin, ymin, xmax, ymax)} or
-#'             (ii) a character string in the form \code{xmin,ymin,xmax,ymax}.
-#'              These will be passed to \link{getbb} to be converted
-#'              to a numerical bounding box.
-#'              Can also be (iii) a matrix representing a bounding polygon
-#'              as returned from `getbb(..., format_out = "polygon")`.
+#'      longitudes and latitudes, in the form \code{c(xmin, ymin, xmax, ymax)}
+#'      or (ii) a character string in the form \code{xmin,ymin,xmax,ymax}. These
+#'      will be passed to \link{getbb} to be converted to a numerical bounding
+#'      box. Can also be (iii) a matrix representing a bounding polygon as
+#'      returned from `getbb(..., format_out = "polygon")`.
 #' @param timeout It may be necessary to increase this value for large queries,
-#'             because the server may time out before all data are delivered.
-#' @param memsize The default memory size for the 'overpass' server in
-#'              *bytes*; may need to be increased in order to handle large
-#'              queries. 
+#'      because the server may time out before all data are delivered.
+#' @param memsize The default memory size for the 'overpass' server in *bytes*;
+#'      may need to be increased in order to handle large queries.
 #'
 #' @return An `overpass_query` object
 #'
 #' @note See
 #' <https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29>
-#' for explanation of `timeout` and `memsize` (or `maxsize` in
-#' overpass terms). Note in particular the comment that queries with arbitrarily
-#' large `memsize` are likely to be rejected.
+#' for explanation of `timeout` and `memsize` (or `maxsize` in overpass terms).
+#' Note in particular the comment that queries with arbitrarily large `memsize`
+#' are likely to be rejected.
 #'
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' q <- getbb ("portsmouth", display_name_contains = "USA") %>%
-#'             opq () %>% 
+#'             opq () %>%
 #'             add_osm_feature("amenity", "restaurant") %>%
-#'             add_osm_feature("amenity", "pub") 
+#'             add_osm_feature("amenity", "pub")
 #' osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
 #' q1 <- getbb ("portsmouth", display_name_contains = "USA") %>%
-#'                 opq () %>% 
-#'                 add_osm_feature("amenity", "restaurant") 
+#'                 opq () %>%
+#'                 add_osm_feature("amenity", "restaurant")
 #' q2 <- getbb ("portsmouth", display_name_contains = "USA") %>%
-#'                 opq () %>% 
-#'                 add_osm_feature("amenity", "pub") 
-#' c (osmdata_sf (q1), osmdata_sf (q2)) # all objects that are restaurants OR pubs
+#'                 opq () %>%
+#'                 add_osm_feature("amenity", "pub")
+#' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 #' }
 opq <- function (bbox = NULL, timeout = 25, memsize)
 {
@@ -68,7 +66,7 @@ opq <- function (bbox = NULL, timeout = 25, memsize)
 #' @param bbox optional bounding box for the feature query; must be set if no
 #'        opq query bbox has been set
 #' @return \link{opq} object
-#' 
+#'
 #' @note `key_exact` should generally be `TRUE`, because OSM uses a
 #' reasonably well defined set of possible keys, as returned by
 #' \link{available_features}. Setting `key_exact = FALSE` allows matching
@@ -88,17 +86,17 @@ opq <- function (bbox = NULL, timeout = 25, memsize)
 #' q <- opq ("portsmouth usa") %>%
 #'                 add_osm_feature(key = "amenity",
 #'                                 value = "restaurant") %>%
-#'                 add_osm_feature(key = "amenity", value = "pub") 
+#'                 add_osm_feature(key = "amenity", value = "pub")
 #' osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
 #' q1 <- opq ("portsmouth usa") %>%
 #'                 add_osm_feature(key = "amenity",
-#'                                 value = "restaurant") 
+#'                                 value = "restaurant")
 #' q2 <- opq ("portsmouth usa") %>%
-#'                 add_osm_feature(key = "amenity", value = "pub") 
-#' c (osmdata_sf (q1), osmdata_sf (q2)) # all objects that are restaurants OR pubs
+#'                 add_osm_feature(key = "amenity", value = "pub")
+#' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 #' # Use of negation to extract all non-primary highways
 #' q <- opq ("portsmouth uk") %>%
-#'         add_osm_feature (key = "highway", value = "!primary") 
+#'         add_osm_feature (key = "highway", value = "!primary")
 #' }
 add_osm_feature <- function (opq, key, value, key_exact = TRUE,
                              value_exact = TRUE, match_case = TRUE, bbox = NULL)
@@ -119,9 +117,9 @@ add_osm_feature <- function (opq, key, value, key_exact = TRUE,
 
     if (!key_exact & value_exact)
     {
-        message ("key_exact = FALSE can only combined with value_exact = FALSE; ",
-                 "setting value_exact = FALSE")
-        value_exact = FALSE
+        message ("key_exact = FALSE can only combined with ",
+                 "value_exact = FALSE; setting value_exact = FALSE")
+        value_exact <- FALSE
     }
 
     if (value_exact)
@@ -181,7 +179,7 @@ add_osm_feature <- function (opq, key, value, key_exact = TRUE,
 #' @param open_url If `TRUE`, open the OSM page of the specified object in web
 #' browser. Multiple objects (`id` values) will be opened in multiple pages.
 #' @return \link{opq} object
-#' 
+#'
 #' @references
 #' <https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_element_id>
 #'
@@ -244,7 +242,7 @@ add_feature <- function (opq, key, value, key_exact = TRUE,
 #'
 #' @param opq An `overpass_query` object
 #' @return Character string to be submitted to the overpass API
-#' 
+#'
 #' @export
 #' @aliases opq_to_string
 #'
@@ -254,7 +252,7 @@ add_feature <- function (opq, key, value, key_exact = TRUE,
 opq_string <- function (opq)
 {
     res <- NULL
-    if (!is.null (opq$features))
+    if (!is.null (opq$features)) # opq with add_osm_feature
     {
         features <- paste (opq$features, collapse = '')
         features <- paste0 (sprintf (' node %s (%s);\n', features, opq$bbox),
@@ -262,17 +260,17 @@ opq_string <- function (opq)
                             sprintf (' relation %s (%s);\n\n', features,
                                      opq$bbox))
         res <- paste0 (opq$prefix, features, opq$suffix)
-    } else if (!is.null (opq$id))
+    } else if (!is.null (opq$id)) # opq with opq_osm_id
     {
         id <- paste (opq$id$id, collapse = ',')
         id <- sprintf(' %s(id:%s);\n', opq$id$type, id)
         res <- paste0 (opq$prefix, id, opq$suffix)
-    } else if (is.null (res))
+    } else # straight opq with neither features nor ID specified
     {
         bbox <- paste0 (sprintf (' node (%s);\n', opq$bbox),
                             sprintf (' way (%s);\n', opq$bbox),
                             sprintf (' relation (%s);\n', opq$bbox))
-        res <- paste0 (opq$prefix, bbox,opq$suffix) # to ensure a non-null return
+        res <- paste0 (opq$prefix, bbox, opq$suffix)
     }
     return (res)
 }

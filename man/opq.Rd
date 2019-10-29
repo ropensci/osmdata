@@ -8,19 +8,17 @@ opq(bbox = NULL, timeout = 25, memsize)
 }
 \arguments{
 \item{bbox}{Either (i) four numeric values specifying the maximal and minimal
-longitudes and latitudes, in the form \code{c(xmin, ymin, xmax, ymax)} or
-(ii) a character string in the form \code{xmin,ymin,xmax,ymax}.
-These will be passed to \link{getbb} to be converted
-to a numerical bounding box.
-Can also be (iii) a matrix representing a bounding polygon
-as returned from \code{getbb(..., format_out = "polygon")}.}
+longitudes and latitudes, in the form \code{c(xmin, ymin, xmax, ymax)}
+or (ii) a character string in the form \code{xmin,ymin,xmax,ymax}. These
+will be passed to \link{getbb} to be converted to a numerical bounding
+box. Can also be (iii) a matrix representing a bounding polygon as
+returned from \code{getbb(..., format_out = "polygon")}.}
 
 \item{timeout}{It may be necessary to increase this value for large queries,
 because the server may time out before all data are delivered.}
 
-\item{memsize}{The default memory size for the 'overpass' server in
-\emph{bytes}; may need to be increased in order to handle large
-queries.}
+\item{memsize}{The default memory size for the 'overpass' server in \emph{bytes};
+may need to be increased in order to handle large queries.}
 }
 \value{
 An \code{overpass_query} object
@@ -31,23 +29,23 @@ Build an Overpass query
 \note{
 See
 \url{https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29}
-for explanation of \code{timeout} and \code{memsize} (or \code{maxsize} in
-overpass terms). Note in particular the comment that queries with arbitrarily
-large \code{memsize} are likely to be rejected.
+for explanation of \code{timeout} and \code{memsize} (or \code{maxsize} in overpass terms).
+Note in particular the comment that queries with arbitrarily large \code{memsize}
+are likely to be rejected.
 }
 \examples{
 \dontrun{
 q <- getbb ("portsmouth", display_name_contains = "USA") \%>\%
-            opq () \%>\% 
+            opq () \%>\%
             add_osm_feature("amenity", "restaurant") \%>\%
-            add_osm_feature("amenity", "pub") 
+            add_osm_feature("amenity", "pub")
 osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
 q1 <- getbb ("portsmouth", display_name_contains = "USA") \%>\%
-                opq () \%>\% 
-                add_osm_feature("amenity", "restaurant") 
+                opq () \%>\%
+                add_osm_feature("amenity", "restaurant")
 q2 <- getbb ("portsmouth", display_name_contains = "USA") \%>\%
-                opq () \%>\% 
-                add_osm_feature("amenity", "pub") 
-c (osmdata_sf (q1), osmdata_sf (q2)) # all objects that are restaurants OR pubs
+                opq () \%>\%
+                add_osm_feature("amenity", "pub")
+c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 }
 }
