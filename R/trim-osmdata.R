@@ -225,8 +225,8 @@ trim_to_poly_multi <- function (dat, bb_poly, exclude = TRUE)
                                     get_trim_indx (g = gi [[1]], bb = bb_poly,
                                                    exclude = exclude))
                 ilens <- vapply (indx, length, 1L, USE.NAMES = FALSE)
-                glens <- vapply (dat [[g]]$geometry, length,
-                                 1L, USE.NAMES = FALSE)
+                glens <- vapply (dat [[g]]$geometry, function (i)
+                                 length (i [[1]]), 1L, USE.NAMES = FALSE)
                 if (exclude)
                     indx <- which (ilens == glens)
                 else

@@ -7,6 +7,7 @@ Minor changes:
   `add_osm_feature` - previous version returned text values with spaces instead
   of underscore.
 - Fix bug in `osmdata_sf` for data with no names and/or no key-val pairs
+- Fix bug in `trim_osmdata` for multi* objects; thanks to @stragu
 - Impelement `trim_osmdata.sc` method
 
 0.1.1

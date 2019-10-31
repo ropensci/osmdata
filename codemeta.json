@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/ropensci/osmdata",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.1.7",
+  "version": "0.1.1.8",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -334,6 +334,10 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=xml2"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "https://sysreqs.r-hub.io/get/cxx11"
     }
   ],
   "applicationCategory": "DataAccess",
@@ -343,7 +347,7 @@
   "developmentStatus": "active",
   "releaseNotes": "https://github.com/ropensci/osmdata/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/osmdata/blob/master/README.md",
-  "fileSize": "1169.024KB",
+  "fileSize": "1169.358KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
@@ -387,7 +391,10 @@
       }
     }
   ],
-  "relatedLink": ["https://docs.ropensci.org/osmdata", "https://CRAN.R-project.org/package=osmdata"],
+  "relatedLink": [
+    "https://docs.ropensci.org/osmdata",
+    "https://CRAN.R-project.org/package=osmdata"
+  ],
   "funder": {},
   "review": {
     "@type": "Review",
