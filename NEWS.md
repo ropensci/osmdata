@@ -9,6 +9,7 @@ Minor changes:
 - Fix bug in `osmdata_sf` for data with no names and/or no key-val pairs
 - Fix bug in `trim_osmdata` for multi* objects; thanks to @stragu
 - Impelement `trim_osmdata.sc` method
+- retry httr calls to nominatim, which has lately been timing out quite often
 
 0.1.1
 ===================
