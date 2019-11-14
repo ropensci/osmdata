@@ -177,8 +177,8 @@ getbb <- function(place_name,
     if (!silent)
         print(q_url)
 
-    res <- httr::GET (q_url)
     #res <- httr::POST(base_url, query = query, httr::timeout (100))
+    res <- httr::RETRY ("POST", base_url, body = query, times = 10)
     txt <- httr::content(res, as = "text", encoding = "UTF-8",
                          type = "application/xml")
     obj <- tryCatch(expr =
