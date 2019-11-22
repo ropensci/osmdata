@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">osmdata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.9</span>
       </span>
     </div>
 
@@ -70,7 +70,7 @@
       <h1>3. Translation of OSM to Simple Features</h1>
                         <h4 class="author">Mark Padgham</h4>
             
-            <h4 class="date">2019-10-29</h4>
+            <h4 class="date">2019-11-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/osmdata/blob/master/vignettes/osm-sf-translation.Rmd"><code>vignettes/osm-sf-translation.Rmd</code></a></small>
       <div class="hidden name"><code>osm-sf-translation.Rmd</code></div>
@@ -167,14 +167,12 @@
 ##  [6] "address"    "is_in"      "place"      "man_made"   "other_tags"
 ## [11] "geometry"</code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span> (<span class="kw"><a href="../reference/osmdata_sf.html">osmdata_sf</a></span> (q, <span class="st">'trentham.osm'</span>)<span class="op">$</span>osm_points)</a></code></pre></div>
-<pre><code>##  [1] "osm_id"           "name"             "X_description_"  
-##  [4] "X_waypoint_"      "addr.city"        "addr.housenumber"
-##  [7] "addr.postcode"    "addr.street"      "amenity"         
-## [10] "barrier"          "denomination"     "foot"            
-## [13] "ford"             "highway"          "leisure"         
-## [16] "note_1"           "phone"            "place"           
-## [19] "railway"          "railway.historic" "ref"             
-## [22] "religion"         "shop"             "source"          
+<pre><code>##  [1] "osm_id"           "name"             "X_description_"   "X_waypoint_"     
+##  [5] "addr.city"        "addr.housenumber" "addr.postcode"    "addr.street"     
+##  [9] "amenity"          "barrier"          "denomination"     "foot"            
+## [13] "ford"             "highway"          "leisure"          "note_1"          
+## [17] "phone"            "place"            "railway"          "railway.historic"
+## [21] "ref"              "religion"         "shop"             "source"          
 ## [25] "tourism"          "waterway"         "geometry"</code></pre>
 <p><code>osmdata</code> returns far more <code>key</code> fields than does <code>GDAL/sf</code>. More importantly, however, <code>GDAL/sf</code> returns pre-defined <code>key</code> fields regardless of whether they contain any data:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">addr &lt;-<span class="st"> </span>sf<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/sf/man/st_read.html">st_read</a></span> (<span class="st">'trentham.osm'</span>, <span class="dt">layer =</span> <span class="st">'points'</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)<span class="op">$</span>address</a>
