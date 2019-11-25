@@ -142,8 +142,8 @@ are to be extracted</p></td>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># find all multipolygons which contain the single polygon called </span>
 <span class='co'># "Chiswick Eyot" (which is an island).</span>
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='opq.html'>opq</a></span> (<span class='st'>"London UK"</span>) <span class='kw'>%&gt;%</span>
-    <span class='fu'><a href='add_osm_feature.html'>add_osm_feature</a></span> (<span class='kw'>key</span><span class='kw'>=</span><span class='st'>"name"</span>, <span class='kw'>value</span><span class='kw'>=</span><span class='st'>"Thames"</span>, <span class='kw'>exact</span><span class='kw'>=</span><span class='fl'>FALSE</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='osmdata_sf.html'>osmdata_sf</a></span> ()
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='opq.html'>opq</a></span> (<span class='st'>"London UK"</span>)
+    <span class='fu'><a href='add_osm_feature.html'>add_osm_feature</a></span> (<span class='kw'>key</span><span class='kw'>=</span><span class='st'>"name"</span>, <span class='kw'>value</span><span class='kw'>=</span><span class='st'>"Thames"</span>, <span class='kw'>exact</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
 <span class='no'>id</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span> (<span class='no'>dat</span>$<span class='no'>osm_polygons</span> [<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span> (<span class='no'>dat</span>$<span class='no'>osm_polygons</span>$<span class='no'>name</span> <span class='kw'>==</span> <span class='st'>"Chiswick Eyot"</span>),])
 <span class='fu'>osm_multipolygons</span> (<span class='no'>dat</span>, <span class='no'>id</span>)
 <span class='co'># That multipolygon is the Thames itself, but note that</span>

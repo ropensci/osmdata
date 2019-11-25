@@ -142,8 +142,8 @@ to be extracted</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='opq.html'>opq</a></span> (<span class='st'>"London UK"</span>) <span class='kw'>%&gt;%</span>
-    <span class='fu'><a href='add_osm_feature.html'>add_osm_feature</a></span> (<span class='kw'>key</span><span class='kw'>=</span><span class='st'>"name"</span>, <span class='kw'>value</span><span class='kw'>=</span><span class='st'>"Thames"</span>, <span class='kw'>exact</span><span class='kw'>=</span><span class='fl'>FALSE</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='osmdata_sf.html'>osmdata_sf</a></span> ()
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='opq.html'>opq</a></span> (<span class='st'>"London UK"</span>)
+    <span class='fu'><a href='add_osm_feature.html'>add_osm_feature</a></span> (<span class='kw'>key</span><span class='kw'>=</span><span class='st'>"name"</span>, <span class='kw'>value</span><span class='kw'>=</span><span class='st'>"Thames"</span>, <span class='kw'>exact</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
 <span class='co'># Get ids of lines called "The Thames":</span>
 <span class='no'>id</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span> (<span class='no'>dat</span>$<span class='no'>osm_lines</span> [<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span> (<span class='no'>dat</span>$<span class='no'>osm_lines</span>$<span class='no'>name</span> <span class='kw'>==</span> <span class='st'>"The Thames"</span>),])
 <span class='co'># and find all multilinestring objects which include those lines:</span>

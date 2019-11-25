@@ -37,8 +37,8 @@
 
 <meta property="og:title" content="Convert osmdata polygons into lines — osm_poly2line" />
 <meta property="og:description" content="Street networks downloaded with add_osm_object(key = &quot;highway&quot;) will
-store any circular highways in $osm_polygons. this function combines
-those with the $osm_lines component to yield a single sf
+store any circular highways in osm_polygons. this function combines
+those with the osm_lines component to yield a single sf
 data.frame of all highways, whether polygonal or not." />
 <meta name="twitter:card" content="summary" />
 
@@ -115,8 +115,8 @@ data.frame of all highways, whether polygonal or not." />
 
     <div class="ref-description">
     <p>Street networks downloaded with <code>add_osm_object(key = "highway")</code> will
-store any circular highways in <code>$osm_polygons</code>. this function combines
-those with the <code>$osm_lines</code> component to yield a single <span class="pkg">sf</span>
+store any circular highways in <code>osm_polygons</code>. this function combines
+those with the <code>osm_lines</code> component to yield a single <span class="pkg">sf</span>
 <code>data.frame</code> of all highways, whether polygonal or not.</p>
     </div>
 
@@ -142,8 +142,8 @@ repeated as <code>LINESTRING</code> objects in <code>$osm_lines</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='opq.html'>opq</a></span> (<span class='st'>"colchester uk"</span>) <span class='kw'>%&gt;%</span>
-            <span class='fu'><a href='add_osm_feature.html'>add_osm_feature</a></span> (<span class='kw'>key</span><span class='kw'>=</span><span class='st'>"highway"</span>) <span class='kw'>%&gt;%</span>
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='opq.html'>opq</a></span> (<span class='st'>"colchester uk"</span>)
+            <span class='fu'><a href='add_osm_feature.html'>add_osm_feature</a></span> (<span class='kw'>key</span><span class='kw'>=</span><span class='st'>"highway"</span>)
             <span class='fu'><a href='osmdata_sf.html'>osmdata_sf</a></span> ()
 <span class='co'># colchester has lots of roundabouts, and these are stored in 'osm_polygons'</span>
 <span class='co'># rather than 'osm_lines'. The former can be merged with the latter by:</span>

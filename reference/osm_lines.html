@@ -142,14 +142,14 @@ extracted</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='opq.html'>opq</a></span> (<span class='st'>"hengelo nl"</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='add_osm_feature.html'>add_osm_feature</a></span> (<span class='kw'>key</span><span class='kw'>=</span><span class='st'>"highway"</span>) <span class='kw'>%&gt;%</span>
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='opq.html'>opq</a></span> (<span class='st'>"hengelo nl"</span>)
      <span class='fu'><a href='osmdata_sf.html'>osmdata_sf</a></span> ()
-<span class='no'>bus</span> <span class='kw'>&lt;-</span> <span class='no'>dat</span>$<span class='no'>osm_points</span> [<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span> (<span class='no'>dat</span>$<span class='no'>osm_points</span>$<span class='no'>highway</span> <span class='kw'>==</span> <span class='st'>'bus_stop'</span>),] <span class='kw'>%&gt;%</span>
+<span class='no'>bus</span> <span class='kw'>&lt;-</span> <span class='no'>dat</span>$<span class='no'>osm_points</span> [<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span> (<span class='no'>dat</span>$<span class='no'>osm_points</span>$<span class='no'>highway</span> <span class='kw'>==</span> <span class='st'>'bus_stop'</span>),]
         <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span> () <span class='co'># all OSM IDs of bus stops</span>
 <span class='fu'>osm_lines</span> (<span class='no'>dat</span>, <span class='no'>bus</span>) <span class='co'># all highways containing bus stops</span>
 
 <span class='co'># All lines which intersect with Piccadilly Circus in London, UK</span>
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='opq.html'>opq</a></span> (<span class='st'>"Fitzrovia London"</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='add_osm_feature.html'>add_osm_feature</a></span> (<span class='kw'>key</span><span class='kw'>=</span><span class='st'>"highway"</span>) <span class='kw'>%&gt;%</span>
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='opq.html'>opq</a></span> (<span class='st'>"Fitzrovia London"</span>)
     <span class='fu'><a href='osmdata_sf.html'>osmdata_sf</a></span> ()
 <span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span> (<span class='no'>dat</span>$<span class='no'>osm_polygons</span>$<span class='no'>name</span> <span class='kw'>==</span> <span class='st'>"Piccadilly Circus"</span>)
 <span class='no'>id</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span> (<span class='no'>dat</span>$<span class='no'>osm_polygons</span> [<span class='no'>i</span>,])

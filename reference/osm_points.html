@@ -136,7 +136,7 @@ be extracted</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>tr</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='opq.html'>opq</a></span> (<span class='st'>"trentham australia"</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='osmdata_sf.html'>osmdata_sf</a></span> ()
+<span class='no'>tr</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='opq.html'>opq</a></span> (<span class='st'>"trentham australia"</span>)
 <span class='no'>coliban</span> <span class='kw'>&lt;-</span> <span class='no'>tr</span>$<span class='no'>osm_lines</span> [<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span> (<span class='no'>tr</span>$<span class='no'>osm_lines</span>$<span class='no'>name</span> <span class='kw'>==</span> <span class='st'>'Coliban River'</span>),]
 <span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'>osm_points</span> (<span class='no'>tr</span>, <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span> (<span class='no'>coliban</span>)) <span class='co'># all points of river</span>
 <span class='no'>waterfall</span> <span class='kw'>&lt;-</span> <span class='no'>pts</span> [<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span> (<span class='no'>pts</span>$<span class='no'>waterway</span> <span class='kw'>==</span> <span class='st'>'waterfall'</span>),] <span class='co'># the waterfall point</span>
