@@ -6,8 +6,8 @@
 #' `data.frame` of all highways, whether polygonal or not.
 #'
 #' @param osmdat An \link{osmdata} object.
-#' @return Modified version of same object with all `$osm_polygons`
-#' objeccts merged into `$osm_lines`.
+#' @return Modified version of same object with all `osm_polygons`
+#' objeccts merged into `osm_lines`.
 #'
 #' @note The `osm_polygons` field is retained, with those features also
 #' repeated as `LINESTRING` objects in `osm_lines`.

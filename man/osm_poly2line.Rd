@@ -10,8 +10,8 @@ osm_poly2line(osmdat)
 \item{osmdat}{An \link{osmdata} object.}
 }
 \value{
-Modified version of same object with all \verb{$osm_polygons}
-objeccts merged into \verb{$osm_lines}.
+Modified version of same object with all \code{osm_polygons}
+objeccts merged into \code{osm_lines}.
 }
 \description{
 Street networks downloaded with \code{add_osm_object(key = "highway")} will
