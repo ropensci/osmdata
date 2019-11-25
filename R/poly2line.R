@@ -1,8 +1,8 @@
 #' Convert osmdata polygons into lines
 #'
 #' Street networks downloaded with `add_osm_object(key = "highway")` will
-#' store any circular highways in `$osm_polygons`. this function combines
-#' those with the `$osm_lines` component to yield a single \pkg{sf}
+#' store any circular highways in `osm_polygons`. this function combines
+#' those with the `osm_lines` component to yield a single \pkg{sf}
 #' `data.frame` of all highways, whether polygonal or not.
 #'
 #' @param osmdat An \link{osmdata} object.
