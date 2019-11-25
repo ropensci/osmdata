@@ -20,8 +20,8 @@ those with the \code{osm_lines} component to yield a single \pkg{sf}
 \code{data.frame} of all highways, whether polygonal or not.
 }
 \note{
-The \verb{$osm_polygons} field is retained, with those features also
-repeated as \code{LINESTRING} objects in \verb{$osm_lines}.
+The \code{osm_polygons} field is retained, with those features also
+repeated as \code{LINESTRING} objects in \code{osm_lines}.
 }
 \examples{
 \dontrun{
