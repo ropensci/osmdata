@@ -30,8 +30,8 @@ format.
 }
 \examples{
 \dontrun{
-hampi_sp <- opq ("hampi india") \%>\%
-            add_osm_feature (key="historic", value="ruins") \%>\%
+hampi_sp <- opq ("hampi india") %>%
+            add_osm_feature (key="historic", value="ruins") %>%
             osmdata_sp ()
 }
 }

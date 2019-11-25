@@ -5,11 +5,25 @@
 \alias{add_feature}
 \title{Add a feature to an Overpass query}
 \usage{
-add_osm_feature(opq, key, value, key_exact = TRUE, value_exact = TRUE,
-  match_case = TRUE, bbox = NULL)
+add_osm_feature(
+  opq,
+  key,
+  value,
+  key_exact = TRUE,
+  value_exact = TRUE,
+  match_case = TRUE,
+  bbox = NULL
+)
 
-add_feature(opq, key, value, key_exact = TRUE, value_exact = TRUE,
-  match_case = TRUE, bbox = NULL)
+add_feature(
+  opq,
+  key,
+  value,
+  key_exact = TRUE,
+  value_exact = TRUE,
+  match_case = TRUE,
+  bbox = NULL
+)
 }
 \arguments{
 \item{opq}{An \code{overpass_query} object}
@@ -50,19 +64,19 @@ query submitted to the overpass API can be obtained from
 }
 \examples{
 \dontrun{
-q <- opq ("portsmouth usa") \%>\%
+q <- opq ("portsmouth usa") %>%
                 add_osm_feature(key = "amenity",
-                                value = "restaurant") \%>\%
+                                value = "restaurant") %>%
                 add_osm_feature(key = "amenity", value = "pub")
 osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
-q1 <- opq ("portsmouth usa") \%>\%
+q1 <- opq ("portsmouth usa") %>%
                 add_osm_feature(key = "amenity",
                                 value = "restaurant")
-q2 <- opq ("portsmouth usa") \%>\%
+q2 <- opq ("portsmouth usa") %>%
                 add_osm_feature(key = "amenity", value = "pub")
 c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 # Use of negation to extract all non-primary highways
-q <- opq ("portsmouth uk") \%>\%
+q <- opq ("portsmouth uk") %>%
         add_osm_feature (key = "highway", value = "!primary")
 }
 }

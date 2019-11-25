@@ -10,23 +10,23 @@ osm_poly2line(osmdat)
 \item{osmdat}{An \link{osmdata} object.}
 }
 \value{
-Modified version of same object with all \code{$osm_polygons}
-objeccts merged into \code{$osm_lines}.
+Modified version of same object with all \verb{$osm_polygons}
+objeccts merged into \verb{$osm_lines}.
 }
 \description{
 Street networks downloaded with \code{add_osm_object(key = "highway")} will
-store any circular highways in \code{$osm_polygons}. this function combines
-those with the \code{$osm_lines} component to yield a single \pkg{sf}
+store any circular highways in \verb{$osm_polygons}. this function combines
+those with the \verb{$osm_lines} component to yield a single \pkg{sf}
 \code{data.frame} of all highways, whether polygonal or not.
 }
 \note{
-The \code{$osm_polygons} field is retained, with those features also
-repeated as \code{LINESTRING} objects in \code{$osm_lines}.
+The \verb{$osm_polygons} field is retained, with those features also
+repeated as \code{LINESTRING} objects in \verb{$osm_lines}.
 }
 \examples{
 \dontrun{
-dat <- opq ("colchester uk") \%>\%
-            add_osm_feature (key="highway") \%>\%
+dat <- opq ("colchester uk") %>%
+            add_osm_feature (key="highway") %>%
             osmdata_sf ()
 # colchester has lots of roundabouts, and these are stored in 'osm_polygons'
 # rather than 'osm_lines'. The former can be merged with the latter by:

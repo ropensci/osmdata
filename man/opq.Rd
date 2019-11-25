@@ -35,16 +35,16 @@ are likely to be rejected.
 }
 \examples{
 \dontrun{
-q <- getbb ("portsmouth", display_name_contains = "USA") \%>\%
-            opq () \%>\%
-            add_osm_feature("amenity", "restaurant") \%>\%
+q <- getbb ("portsmouth", display_name_contains = "USA") %>%
+            opq () %>%
+            add_osm_feature("amenity", "restaurant") %>%
             add_osm_feature("amenity", "pub")
 osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
-q1 <- getbb ("portsmouth", display_name_contains = "USA") \%>\%
-                opq () \%>\%
+q1 <- getbb ("portsmouth", display_name_contains = "USA") %>%
+                opq () %>%
                 add_osm_feature("amenity", "restaurant")
-q2 <- getbb ("portsmouth", display_name_contains = "USA") \%>\%
-                opq () \%>\%
+q2 <- getbb ("portsmouth", display_name_contains = "USA") %>%
+                opq () %>%
                 add_osm_feature("amenity", "pub")
 c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 }

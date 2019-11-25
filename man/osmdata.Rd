@@ -3,12 +3,18 @@
 \docType{package}
 \name{osmdata}
 \alias{osmdata}
-\alias{osmdata-package}
 \title{osmdata class def}
 \usage{
-osmdata(bbox = NULL, overpass_call = NULL, meta = NULL,
-  osm_points = NULL, osm_lines = NULL, osm_polygons = NULL,
-  osm_multilines = NULL, osm_multipolygons = NULL)
+osmdata(
+  bbox = NULL,
+  overpass_call = NULL,
+  meta = NULL,
+  osm_points = NULL,
+  osm_lines = NULL,
+  osm_polygons = NULL,
+  osm_multilines = NULL,
+  osm_multipolygons = NULL
+)
 }
 \arguments{
 \item{bbox}{bounding box}

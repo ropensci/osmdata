@@ -347,7 +347,7 @@
   "developmentStatus": "active",
   "releaseNotes": "https://github.com/ropensci/osmdata/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/osmdata/blob/master/README.md",
-  "fileSize": "1169.44KB",
+  "fileSize": "1169.451KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",

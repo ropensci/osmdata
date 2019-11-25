@@ -24,8 +24,8 @@ object(s) which contain the object specified by \code{id}.
 \dontrun{
 # find all multipolygons which contain the single polygon called 
 # "Chiswick Eyot" (which is an island).
-dat <- opq ("London UK") \%>\% 
-    add_osm_feature (key="name", value="Thames", exact=FALSE) \%>\% osmdata_sf ()
+dat <- opq ("London UK") %>% 
+    add_osm_feature (key="name", value="Thames", exact=FALSE) %>% osmdata_sf ()
 id <- rownames (dat$osm_polygons [which (dat$osm_polygons$name == "Chiswick Eyot"),])
 osm_multipolygons (dat, id)
 # That multipolygon is the Thames itself, but note that
