@@ -6,11 +6,11 @@ matrix:
         - r: release
           after_success:
               - Rscript -e "covr::codecov(line_exclusions = list('src/rapidxml.h','src/rapidxml_print.h'),function_exlusions=c('overpass_query','osm_elevation', 'check_elev_file'))"
-          before_deploy: Rscript -e 'remotes::install_cran("pkgdown")'
-          deploy:
-              provider: script
-              script: Rscript -e 'pkgdown::deploy_site_github(verbose = TRUE)'
-              skip_cleanup: true
+                #before_deploy: Rscript -e 'remotes::install_cran("pkgdown")'
+                #deploy:
+                #provider: script
+                #script: Rscript -e 'pkgdown::deploy_site_github(verbose = TRUE)'
+                #              skip_cleanup: true
         - r: devel
         - r: oldrel
         - os: osx
