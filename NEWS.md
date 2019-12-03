@@ -1,5 +1,10 @@
 0.1.1.00x
 ===================
+Major changes:
+- New function `unname_osmdata_sf`, to remove row names from `sf`-format
+  geometry objects that may cause issues with some plotting routines such as
+  leaflet.
+
 Minor changes:
 - `getbb` now allows arbitrary `featuretype` specification, no longer just
   those pertaining to settlement forms.

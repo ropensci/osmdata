@@ -45,6 +45,7 @@ reference:
     - osm_poly2line
     - trim_osmdata
     - unique_osmdata
+    - unname_osmdata_sf
 
 articles:
   - title: The osmdata package
