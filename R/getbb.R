@@ -220,7 +220,7 @@ getbb <- function(place_name,
     else if (is_polygon)
     {
         . <- NULL # suppress R CMD check note
-        indx_multi <- which (grepl ("MULTIPOLYGON", obj$geotext))
+        indx_multi <- grep ("MULTIPOLYGON", obj$geotext)
         gt_p <- gt_mp <- NULL
         # nocov start
         # TODO: Test this
@@ -312,12 +312,12 @@ get1bdypoly <- function (p)
                  character (1), USE.NAMES = FALSE)
 
     ret <- list ()
-    i <- which (grepl ("\\)", p))
+    i <- grep ("\\)", p)
     while (length (i) > 0)
     {
         ret [[length (ret) + 1]] <- rm_bracket (p [1:i [1]])
         p <- p [(i [1] + 1):length (p)]
-        i <- which (grepl ("\\)", p))
+        i <- grep ("\\)", p)
     }
     ret [[length (ret) + 1]] <- rm_bracket (p)
 
@@ -342,7 +342,7 @@ get1bdypoly <- function (p)
 #' @noRd
 get1bdymultipoly <- function (p)
 {
-    p <- p [1:min (which (grepl (")", p)))]
+    p <- p [1:min (grep (")", p))]
 
     p <- vapply (p, function (i) gsub (")", "", i),
                    character (1), USE.NAMES = FALSE)
