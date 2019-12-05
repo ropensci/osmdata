@@ -92,7 +92,7 @@ osmdata_xml(q1, "data.osm")
 
 All `osmdata` queries begin with a bounding box defining the area of the
 query. The [`getbb()`
-function](https://ropensci.github.io/osmdata/reference/getbb.html) can
+function](https://docs.ropensci.org/osmdata/reference/getbb.html) can
 be used to extract bounding boxes for specified place names.
 
 ``` r
@@ -104,7 +104,7 @@ getbb ("astana kazakhstan")
 
 The next step is to convert that to an overpass query object with the
 [`opq()`
-function](https://ropensci.github.io/osmdata/reference/opq.html):
+function](https://docs.ropensci.org/osmdata/reference/opq.html):
 
 ``` r
 q <- opq (getbb ("astana kazakhstan"))
@@ -125,7 +125,7 @@ class (b); head (b [[1]])
 
 The next step is to define features of interest using the
 [`add_osm_feature()`
-function](https://ropensci.github.io/osmdata/reference/add_osm_feature.html).
+function](https://docs.ropensci.org/osmdata/reference/add_osm_feature.html).
 This function accepts `key` and `value` parameters specifying desired
 features in the [OSM key-vale
 schema](https://wiki.openstreetmap.org/wiki/Map_Features). Multiple
@@ -161,9 +161,9 @@ q <- opq ("washington dc") %>%
 ```
 
 See
-[`?available_features`](https://ropensci.github.io/osmdata/reference/available_features.html)
+[`?available_features`](https://docs.ropensci.org/osmdata/reference/available_features.html)
 and
-[`?available_tags`](https://ropensci.github.io/osmdata/reference/available_tags.html)
+[`?available_tags`](https://docs.ropensci.org/osmdata/reference/available_tags.html)
 for further information.
 
 ### Data Formats
@@ -174,19 +174,19 @@ server](https://overpass-turbo.eu) to request data. These data may be
 returned in a variety of formats, currently including:
 
 1.  XML data (downloaded locally) via
-    [`osmdata_xml()`](https://ropensci.github.io/osmdata/reference/osmdata_xml.html);
+    [`osmdata_xml()`](https://docs.ropensci.org/osmdata/reference/osmdata_xml.html);
 2.  [Simple Features (sf)](https://cran.r-project.org/package=sf) format
     via
-    [`osmdata_sf()`](https://ropensci.github.io/osmdata/reference/osmdata_sf.html);
+    [`osmdata_sf()`](https://docs.ropensci.org/osmdata/reference/osmdata_sf.html);
 3.  [R Spatial (sp)](https://cran.r-project.org/package=sp) format via
-    [`osmdata_sp()`](https://ropensci.github.io/osmdata/reference/osmdata_sp.html);
+    [`osmdata_sp()`](https://docs.ropensci.org/osmdata/reference/osmdata_sp.html);
 4.  [Google Protocol
     Buffer](https://developers.google.com/protocol-buffers/) (`pbf`;
     downloaded locally)) via
-    [`osmdata_pbf()`](https://ropensci.github.io/osmdata/reference/osmdata_pbf.html);
+    [`osmdata_pbf()`](https://docs.ropensci.org/osmdata/reference/osmdata_pbf.html);
     and
 5.  [Silicate (SC)](https://github.com/hypertidy/silicate) format via
-    [`osmdata_sc()`](https://ropensci.github.io/osmdata/reference/osmdata_sc.html).
+    [`osmdata_sc()`](https://docs.ropensci.org/osmdata/reference/osmdata_sc.html).
 
 ### Additional Functionality
 
@@ -215,9 +215,9 @@ c (pubs, restaurants)
     #>     $osm_multipolygons : NULL
 
 Data may also be trimmed to within a defined polygonal shape with the
-[`trim_osmdata()`](https://ropensci.github.io/osmdata/reference/trim_osmdata.html)
+[`trim_osmdata()`](https://docs.ropensci.org/osmdata/reference/trim_osmdata.html)
 function. Full package functionality is described on the
-[website](https://ropensci.github.io/osmdata/)
+[website](https://docs.ropensci.org/osmdata/)
 
 ## Citation
 
