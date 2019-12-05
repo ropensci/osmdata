@@ -91,7 +91,10 @@ test_that ('getbb-polygon', {
                    res <- getbb (place_name = "Salzburg", format_out = "polygon")
                    expect_is (res, "list")
                    expect_true (all (lapply (res, nrow) > 2))
-                   expect_true (all (lapply (res, class) == "matrix"))
+                   expect_true (all (vapply (res, function (i)
+                                             methods::is (i, "matrix"),
+                                             logical (1))))
+
                    expect_silent (res_str <- bbox_to_string (res [[1]]))
                    expect_is (res_str, "character")
 
