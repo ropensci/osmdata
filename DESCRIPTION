@@ -1,5 +1,5 @@
 Package: osmdata
-Version: 0.1.1.011
+Version: 0.1.1.012
 Authors@R: c(
     person("Mark", "Padgham", email="mark.padgham@email.com", role=c("aut", "cre")),
     person("Bob", "Rudis", role="aut"),
