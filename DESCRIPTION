@@ -1,5 +1,5 @@
 Package: osmdata
-Version: 0.1.1.012
+Version: 0.1.2
 Authors@R: c(
     person("Mark", "Padgham", email="mark.padgham@email.com", role=c("aut", "cre")),
     person("Bob", "Rudis", role="aut"),
@@ -51,7 +51,7 @@ URL: https://docs.ropensci.org/osmdata (website)
     https://github.com/ropensci/osmdata (devel)
 BugReports: https://github.com/ropensci/osmdata/issues
 Encoding: UTF-8
-RoxygenNote: 7.0.1
+RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 X-schema.org-applicationCategory: Data Access
 X-schema.org-keywords: open0street0map, openstreetmap, overpass0API, OSM

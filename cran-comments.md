@@ -1,7 +1,11 @@
-# CRAN notes for osmdata_0.1.1 submission
+# CRAN notes for osmdata_0.1.2 submission
 
-Only NOTE generated on some systems regards installed size, which is unavoidable
-due to very large C++ code base.
+This submission rectifies the two previous issues identified in recent CRAN emails:
+
+1. The 'class(obj)=="matrix"' calls have been rectified to ensure return values of 'c("matrix","array")' are anticipated
+2. Previously unreliable http calls performed during testing are now all mocked, so testing on CRAN should perform no actual calls at all.
+
+Other than that, only NOTE generated on some systems regards installed size, which is unavoidable due to very large C++ code base.
 
 ## Test environments
 
