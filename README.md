@@ -20,7 +20,7 @@ Active](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostat
 
 `osmdata` is an R package for accessing the data underlying
 OpenStreetMap (OSM), delivered via the [Overpass
-API](http://wiki.openstreetmap.org/wiki/Overpass_API). (Other packages
+API](https://wiki.openstreetmap.org/wiki/Overpass_API). (Other packages
 such as
 [`OpenStreetMap`](https://cran.r-project.org/web/packages/OpenStreetMap/index.html)
 can be used to download raster tiles based on OSM data.)
@@ -55,7 +55,7 @@ packageVersion("osmdata")
 
 ## Usage
 
-[Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries
+[Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API) queries
 can be built from a base query constructed with `opq` followed by
 `add_osm_feature`. The corresponding OSM objects are then downloaded and
 converted to [`R Simple Features
@@ -92,13 +92,13 @@ osmdata_xml(q1, "data.osm")
 
 All `osmdata` queries begin with a bounding box defining the area of the
 query. The [`getbb()`
-function](https://docs.ropensci.org/osmdata/reference/getbb.html) can
-be used to extract bounding boxes for specified place names.
+function](https://docs.ropensci.org/osmdata/reference/getbb.html) can be
+used to extract bounding boxes for specified place names.
 
 ``` r
 getbb ("astana kazakhstan")
 #>        min      max
-#> x 71.22193 71.78519
+#> x 71.22444 71.78519
 #> y 51.00068 51.35111
 ```
 
@@ -252,4 +252,4 @@ Please note that this project is released with a [Contributor Code of
 Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree
 to abide by its terms.
 
-[![ropensci\_footer](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+[![ropensci\_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)

@@ -24,5 +24,5 @@ available_tags("aerialway")
 }
 }
 \references{
-\url{http://wiki.openstreetmap.org/wiki/Map_Features}
+\url{https://wiki.openstreetmap.org/wiki/Map_Features}
 }

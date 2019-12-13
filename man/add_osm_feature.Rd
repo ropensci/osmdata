@@ -56,7 +56,7 @@ Add a feature to an Overpass query
 reasonably well defined set of possible keys, as returned by
 \link{available_features}. Setting \code{key_exact = FALSE} allows matching
 of regular expressions on OSM keys, as described in Section 6.1.5 of
-\url{http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL}. The actual
+\url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL}. The actual
 query submitted to the overpass API can be obtained from
 \link{opq_string}.
 
@@ -81,5 +81,5 @@ q <- opq ("portsmouth uk") \%>\%
 }
 }
 \references{
-\url{http://wiki.openstreetmap.org/wiki/Map_Features}
+\url{https://wiki.openstreetmap.org/wiki/Map_Features}
 }

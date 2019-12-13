@@ -18,7 +18,7 @@ get_local <- FALSE
 if (get_local)
 {
     #trace ( curl::curl_fetch_memory, exit = function() { })
-    url_ftrs <- "http://wiki.openstreetmap.org/wiki/Map_Features"
+    url_ftrs <- "https://wiki.openstreetmap.org/wiki/Map_Features"
     cfm_output_af <- NULL
     trace(
           curl::curl_fetch_memory,

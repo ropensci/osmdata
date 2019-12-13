@@ -168,7 +168,7 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
     if (encoding != 'pbf')
         overpass_url <- get_overpass_url ()
     else
-        overpass_url <- paste0 ("http://dev.overpass-api.de",   # ncov
+        overpass_url <- paste0 ("https://dev.overpass-api.de",   # ncov
                                 "/test753/interpreter")         # ncov
 
     if (o_stat$available) {

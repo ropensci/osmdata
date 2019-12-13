@@ -20,14 +20,14 @@ vignette: >
 ## 1. Introduction
 
 `osmdata` is an R package for downloading and using data from OpenStreetMap
-([OSM](www.openstreetmap.org/)).  OSM is a global open access mapping project,
+([OSM](https://www.openstreetmap.org/)).  OSM is a global open access mapping project,
 which is free and open under the 
-[ODbL licence](http://www.openstreetmap.org/copyright) [@OpenStreetMap].  This
+[ODbL licence](https://www.openstreetmap.org/copyright) [@OpenStreetMap].  This
 has many benefits, ensuring transparent data provenance and ownership, enabling
 real-time evolution of the database and, by allowing anyone to contribute,
 encouraging democratic decision making and citizen science
 [@johnson_models_2017].  See the 
-[OSM wiki](http://wiki.openstreetmap.org/wiki/Contribute_map_data) to find out
+[OSM wiki](https://wiki.openstreetmap.org/wiki/Contribute_map_data) to find out
 how to contribute to the world's open geographical data commons. 
 
 Unlike the [`OpenStreetMap`](https://cran.r-project.org/package=OpenStreetMap)
@@ -49,7 +49,8 @@ package using the following command:
 remotes::install_github('ropensci/osmdata')
 ```
 
-`osmdata` uses the [`overpass` API](http://overpass-api.de) to download
+`osmdata` uses the [`overpass` API](https://overpass-api.de) to download
+
 OpenStreetMap (OSM) data and can convert the results to a variety of formats,
 including both Simple Features (typically of class `sf`) and Spatial objects
 (e.g. `SpatialPointsDataFrame`), as defined by the packages
@@ -131,7 +132,7 @@ matrices representing bounding polygons of matches:
 bb_df = getbb(place_name = "london", format_out = "data.frame")
 bb_poly = getbb(place_name = "london", format_out = "polygon")
 ```
-The [`overpass API`](www.overpass-api.de) only accepts simple rectangular
+The [`overpass API`](https://www.overpass-api.de) only accepts simple rectangular
 bounding boxes, and so data requested with a bounding polygon will actually be
 all data within the corresponding rectangular bounding box, but such data may be
 subsequently trimmed to within the polygon with the `trim_osmdata()` function,
@@ -158,8 +159,8 @@ for more details.
 ## 2. The overpass API
 
 As mentioned, `osmdata` obtains OSM data from the 
-[`overpass API`](www.overpass-api.de), 
-[which is](http://wiki.openstreetmap.org/wiki/Overpass_API)
+[`overpass API`](https://www.overpass-api.de), 
+[which is](https://wiki.openstreetmap.org/wiki/Overpass_API)
 
 > a read-only API that serves up custom selected parts of the OSM map data.
 
@@ -173,25 +174,25 @@ below](#query-example).
 understanding of the `overpass` query syntax, although it is still possible to
 submit arbitrarily complex `overpass`  queries via `osmdata`.  An excellent
 place to explore `overpass` queries specifically and OSM data in general is the 
-online interactive query builder at [overpass-turbo](http://overpass-turbo.eu/),
+online interactive query builder at [overpass-turbo](https://overpass-turbo.eu/),
 which includes a helpful corrector function for incorrectly formatted queries.
 Examples of its functionality in action can be found on the 
-[OpenStreetMap wiki](http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_API_by_Example),
+[OpenStreetMap wiki](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_API_by_Example),
 with full details of the `overpass`
 query language given in the 
-[Query Language Guide](http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL) 
+[Query Language Guide](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL) 
 as well as the 
-[overpass API Language Guide](http://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide).
+[overpass API Language Guide](https://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide).
 
 By default, `osmdata` sends queries to one of the four main [`overpass` server
 instances](https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances),
-such as `http://overpass-api.de/api/interpreter` but other servers listed on the
+such as `https://overpass-api.de/api/interpreter` but other servers listed on the
 page linked to above can be used, thanks to functions that *get* and *set* the
 base url:
 
 ```{r}
 get_overpass_url()
-new_url <- "http://overpass.openstreetmap.ie/api/interpreter"
+new_url <- "https://overpass.openstreetmap.ie/api/interpreter"
 ```
 
 ```{r, eval=FALSE}
@@ -220,7 +221,7 @@ opq_string(q)
 ```
 
 The resultant output may be pasted directly into the 
-[overpass-turbo](http://overpass-turbo.eu/) online interactive query builder.
+[overpass-turbo](https://overpass-turbo.eu/) online interactive query builder.
 (The output of `opq_string` has been somewhat reformatted here to reflect
 the format typically used in `overpass-turbo`.)
 
@@ -532,8 +533,8 @@ readLines('buildings.osm')[1:6]
 ```
 
 These data can be used in any other programs able to read and process XML data,
-such as the open source GIS [QGIS](http://qgis.org/en/site/) or the OSM data
-editor [JOSM](http://wiki.openstreetmap.org/wiki/JOSM).  The remainder of this
+such as the open source GIS [QGIS](https://qgis.org/en/site/) or the OSM data
+editor [JOSM](https://wiki.openstreetmap.org/wiki/JOSM).  The remainder of this
 vignette assumes that not only do you want to get OSM data using R, you also
 want to import and eventually process it, using R. For that you'll need to
 import the data into a native R class.
@@ -550,18 +551,18 @@ dat_sf <- osmdata_sf(q, 'buildings.osm')
 ### 3.2. The `osmdata_sf()` function
 
 `osmdata_sf()` returns OSM data in 
-[Simple Features (SF)](http://www.opengeospatial.org/standards/sfo) 
+[Simple Features (SF)](https://www.opengeospatial.org/standards/sfo) 
 format, defined by the
-[Open Geospatial Consortium](http://www.opengeospatial.org), and implemented in
+[Open Geospatial Consortium](https://www.opengeospatial.org), and implemented in
 the `R` package [`sf`](https://cran.r-project.org/package=sf). This package
 provides a direct interface to the `C++` 
-[Graphical Data Abstraction Library (GDAL)](http://gdal.org) which also includes
-a so-called ['driver' for OSM data](http://www.gdal.org/drv_osm.html). This
+[Graphical Data Abstraction Library (GDAL)](https://gdal.org) which also includes
+a so-called ['driver' for OSM data](https://www.gdal.org/drv_osm.html). This
 means that OSM data may also be read directly with `sf`, rather than using
 `osmdata`. In this case, data must first be saved to disk, which can 
 be readily achieved using `osmdata_xml()` described above, or through
 downloading directly from the [overpass interactive query
-builder](http://overpass-turbo.eu). 
+builder](https://overpass-turbo.eu). 
 
 The following example is based on this query:
 
@@ -875,7 +876,7 @@ detail provided in the help files for each of these function.
 @eugster_osmar:_2012 describe `osmar`, an R package for handling OSM data
 that enables visualisation, search and even rudimentary routing operations.
 `osmar` is not user friendly or able to download OSM data flexibly,
-as reported in an [early tutorial](http://eprints.whiterose.ac.uk/77643/)
+as reported in an [early tutorial](https://eprints.whiterose.ac.uk/77643/)
 comparing R and QGIS for handling OSM data [@lovelace_harnessing_2014]. Note
 also that the `osmar` package does not work at present, and can not be used for
 accessing OSM data.
@@ -885,6 +886,6 @@ accessing OSM data.
 for accessing and plotting OSM data [@osmplotr]
 and `overpass`, a [GitHub package](https://github.com/hrbrmstr/overpass)
 by Bob Rudis that provides an R interface to the 
-[overpass](http://overpass-api.de/) API.
+[overpass](https://overpass-api.de/) API.
 
 ## 7. References

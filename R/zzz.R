@@ -6,7 +6,7 @@
     ## https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
     ## see https://github.com/ropensci/osmdata/pull/149
     ## Added and edited code here by JimShady to use random API each time.
-	available_apis <- c('http://overpass-api.de/api/interpreter',
+	available_apis <- c('https://overpass-api.de/api/interpreter',
 						'https://overpass.kumi.systems/api/interpreter')
 	
     op.osmdata <- list (osmdata.base_url =
@@ -23,14 +23,14 @@
 
 .onAttach <- function(libname, pkgname) {
     msg <- paste0 ("Data (c) OpenStreetMap contributors,",
-                   " ODbL 1.0. http://www.openstreetmap.org/copyright")
+                   " ODbL 1.0. https://www.openstreetmap.org/copyright")
     packageStartupMessage (msg)
 }
 
 #' get_overpass_url
 #'
 #' Return the URL of the specified overpass API. Default is
-#' <http://overpass-api.de/api/interpreter>.
+#' <https://overpass-api.de/api/interpreter>.
 #'
 #' @return The overpass API URL
 #'
@@ -52,20 +52,20 @@ get_overpass_url <- function ()
 #' Set the URL of the specified overpass API. Possible APIs with global coverage
 #' are:
 #' \itemize{
-#' \item 'http://overpass-api.de/api/interpreter' (default)
+#' \item 'https://overpass-api.de/api/interpreter' (default)
 #' \item 'https://overpass.kumi.systems/api/interpreter'
-#' \item 'http://overpass.osm.rambler.ru/cgi/interpreter'
-#' \item 'http://api.openstreetmap.fr/oapi/interpreter'
+#' \item 'https://overpass.osm.rambler.ru/cgi/interpreter'
+#' \item 'https://api.openstreetmap.fr/oapi/interpreter'
 #' \item 'https://overpass.osm.vi-di.fr/api/interpreter'
 #' }
 #' Additional APIs with limited local coverage include:
 #' \itemize{
-#' \item 'http://overpass.osm.ch/api/interpreter' (Switzerland)
-#' \item 'http://overpass.openstreetmap.ie/api/interpreter' (Ireland)
+#' \item 'https://overpass.osm.ch/api/interpreter' (Switzerland)
+#' \item 'https://overpass.openstreetmap.ie/api/interpreter' (Ireland)
 #' }
 #'
 #' For further details, see
-#' <http://wiki.openstreetmap.org/wiki/Overpass_API>
+#' <https://wiki.openstreetmap.org/wiki/Overpass_API>
 #'
 #' @param overpass_url The desired overpass API URL
 #'

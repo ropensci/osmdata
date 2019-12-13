@@ -71,13 +71,13 @@ opq <- function (bbox = NULL, timeout = 25, memsize)
 #' reasonably well defined set of possible keys, as returned by
 #' \link{available_features}. Setting `key_exact = FALSE` allows matching
 #' of regular expressions on OSM keys, as described in Section 6.1.5 of
-#' <http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL>. The actual
+#' <https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL>. The actual
 #' query submitted to the overpass API can be obtained from
 #' \link{opq_string}.
 #'
 #' @note \link{add_feature} is deprecated; please use \link{add_osm_feature}.
 #'
-#' @references <http://wiki.openstreetmap.org/wiki/Map_Features>
+#' @references <https://wiki.openstreetmap.org/wiki/Map_Features>
 #'
 #' @export
 #'

@@ -43,7 +43,7 @@ knitr::opts_chunk$set(
 
 `osmdata` is an R package for accessing the data underlying
 OpenStreetMap (OSM), delivered via the [Overpass
-API](http://wiki.openstreetmap.org/wiki/Overpass_API).  (Other packages such as
+API](https://wiki.openstreetmap.org/wiki/Overpass_API).  (Other packages such as
 [`OpenStreetMap`](https://cran.r-project.org/web/packages/OpenStreetMap/index.html)
 can be used to download raster tiles based on OSM data.)
 [Overpass](https://overpass-turbo.eu) is a read-only API that extracts custom
@@ -73,7 +73,7 @@ packageVersion("osmdata")
 
 ## Usage
 
-[Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) queries can be
+[Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API) queries can be
 built from a base query constructed with `opq` followed by `add_osm_feature`. The
 corresponding OSM objects are then downloaded and converted to [`R Simple
 Features (sf)`](https://cran.r-project.org/package=sf) objects with
@@ -231,4 +231,4 @@ Please note that this project is released with a [Contributor Code of
 Conduct](CODE_OF_CONDUCT.md).  By participating in this project you agree to
 abide by its terms.
 
-[![ropensci\_footer](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+[![ropensci\_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)

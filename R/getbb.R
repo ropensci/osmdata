@@ -84,11 +84,11 @@ bbox_to_string <- function(bbox) {
 #' `bb_lookup` from the github package \pkg{nominatim} package,
 #' which can be found at <https://github.com/hrbrmstr/nominatim>.
 #' 
-#' See <http://wiki.openstreetmap.org/wiki/Nominatim> for details.
+#' See <https://wiki.openstreetmap.org/wiki/Nominatim> for details.
 #' 
 #' @param place_name The name of the place you're searching for
 #' @param display_name_contains Text string to match with display_name field
-#' returned by <http://wiki.openstreetmap.org/wiki/Nominatim>
+#' returned by <https://wiki.openstreetmap.org/wiki/Nominatim>
 #' @param viewbox The bounds in which you're searching
 #' @param format_out Character string indicating output format: matrix (default),
 #' string (see [bbox_to_string()]), data.frame (all 'hits' returned
@@ -119,7 +119,7 @@ bbox_to_string <- function(bbox) {
 #' 
 #' @note Specific values of `featuretype` include "street", "city",
 #" "county", "state", and "country" (see
-#' <http://wiki.openstreetmap.org/wiki/Nominatim> for details). The default
+#' <https://wiki.openstreetmap.org/wiki/Nominatim> for details). The default
 #' `featuretype = "settlement"` combines results from all intermediate
 #' levels below "country" and above "streets". If the bounding box or polygon of
 #' a city is desired, better results will usually be obtained with
@@ -144,7 +144,7 @@ bbox_to_string <- function(bbox) {
 #' # Using an alternative service (locationiq requires an API key)
 #' key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
 #' if(nchar(key) ==  32) {
-#'   getbb(place_name, base_url = "http://locationiq.org/v1/search.php", key = key)
+#'   getbb(place_name, base_url = "https://locationiq.org/v1/search.php", key = key)
 #' }
 #' }
 getbb <- function(place_name,
