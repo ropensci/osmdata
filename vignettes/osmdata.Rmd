@@ -115,7 +115,7 @@ strings. As illustrated in the above example, the `opq()` function also accepts
 character strings, which are simply passed directly to `getbb()` to convert them
 to rectangular bounding boxes.
 ```{r opq2, eval = FALSE}
-bb = getbb('Greater London, U.K.')
+bb <- getbb('Greater London, U.K.')
 q <- opq(bbox = bb)
 ```
 
@@ -129,8 +129,8 @@ identical(q, opq(bbox = 'greater london uk'))
 Note also that `getbb()` can return a data frame reporting multiple matches or
 matrices representing bounding polygons of matches:
 ```{r, eval=FALSE}
-bb_df = getbb(place_name = "london", format_out = "data.frame")
-bb_poly = getbb(place_name = "london", format_out = "polygon")
+bb_df <- getbb(place_name = "london", format_out = "data.frame")
+bb_poly <- getbb(place_name = "london", format_out = "polygon")
 ```
 The [`overpass API`](https://www.overpass-api.de) only accepts simple rectangular
 bounding boxes, and so data requested with a bounding polygon will actually be
@@ -210,10 +210,10 @@ opq_string(q)
 ##   node
 ##     ["highway"="motorway"]
 ##     (51.2867602,-0.510375,51.6918741,0.3340155);
-##   way  
+##   way
 ##     ["highway"="motorway"]
 ##     (51.2867602,-0.510375,51.6918741,0.3340155);
-##   relation  
+##   relation
 ##     ["highway"="motorway"]
 ##     (51.2867602,-0.510375,51.6918741,0.3340155);
 ## );
@@ -335,7 +335,7 @@ The primary `osmdata` functions `osmdata_sf()` or `osmdata_sp()` pass these
 queries to `overpass` and return OSM data in corresponding `sf` or `sp` format,
 respectively.  Both of these functions also accept direct `overpass` queries,
 such as those produced by the `osmdata` function `opq_string()`, or copied
-directly from the [`overpass-turbo` query builder](overpass-turbo.eu).
+directly from the [`overpass-turbo` query builder](https://overpass-turbo.eu).
 
 ```{r, eval=FALSE}
 osmdata_sf(opq_string(q))
@@ -524,12 +524,12 @@ The first few lines of the XML data downloaded above look like this:
 
 ```{r, eval=FALSE}
 readLines('buildings.osm')[1:6]
-## [1] "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"                                                                             
-## [2] "<osm version=\"0.6\" generator=\"Overpass API\">"                                                                       
+## [1] "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+## [2] "<osm version=\"0.6\" generator=\"Overpass API\">"
 ## [3] "  <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>"
-## [4] "  <meta osm_base=\"2017-03-07T09:28:03Z\"/>"                                                                            
-## [5] "  <node id=\"21593231\" lat=\"51.5149566\" lon=\"-0.1134203\"/>"                                            
-## [6] "  <node id=\"25378129\" lat=\"51.5135870\" lon=\"-0.1115193\"/>"                                                        
+## [4] "  <meta osm_base=\"2017-03-07T09:28:03Z\"/>"
+## [5] "  <node id=\"21593231\" lat=\"51.5149566\" lon=\"-0.1134203\"/>"
+## [6] "  <node id=\"25378129\" lat=\"51.5135870\" lon=\"-0.1115193\"/>"
 ```
 
 These data can be used in any other programs able to read and process XML data,
@@ -650,20 +650,20 @@ extracts only a restricted list of OSM `keys`, whereas `osmdata` returns all
 
 ```{r, eval=FALSE}
 names(sf::st_read('trentham.osm', layer = 'points', quiet = TRUE)) # the keys
-## [1] "osm_id"     "name"       "barrier"    "highway"   
-## [5] "ref"        "address"    "is_in"      "place"     
-## [9] "man_made"   "other_tags" "geometry"  
+## [1] "osm_id"     "name"       "barrier"    "highway"
+## [5] "ref"        "address"    "is_in"      "place"
+## [9] "man_made"   "other_tags" "geometry"
 ```
 
 ```{r, eval=FALSE}
 names(osmdata_sf(q, 'trentham.osm')$osm_points)
-## [1] "osm_id"           "name"             "X_description_"   "X_waypoint_"     
-## [5] "addr.city"        "addr.housenumber" "addr.postcode"    "addr.street"     
-## [9] "amenity"          "barrier"          "denomination"     "foot"            
-## [13] "ford"             "highway"          "leisure"          "note_1"          
+## [1] "osm_id"           "name"             "X_description_"   "X_waypoint_"
+## [5] "addr.city"        "addr.housenumber" "addr.postcode"    "addr.street"
+## [9] "amenity"          "barrier"          "denomination"     "foot"
+## [13] "ford"             "highway"          "leisure"          "note_1"
 ## [17] "phone"            "place"            "railway"          "railway.historic"
-## [21] "ref"              "religion"         "shop"             "source"          
-## [25] "tourism"          "waterway"         "geometry" 
+## [21] "ref"              "religion"         "shop"             "source"
+## [25] "tourism"          "waterway"         "geometry"
 ```
 
 `key` fields which are not specified in a given set of OSM data are not returned
