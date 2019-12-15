@@ -1,4 +1,4 @@
-0.1.1.00x
+0.1.2
 ===================
 Major changes:
 - New function `unname_osmdata_sf`, to remove row names from `sf`-format
