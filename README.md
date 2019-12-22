@@ -48,9 +48,9 @@ To load the package and check the version:
 
 ``` r
 library(osmdata)
-#> Data (c) OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
+#> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
 packageVersion("osmdata")
-#> [1] '0.1.1.4'
+#> [1] '0.1.2'
 ```
 
 ## Usage
@@ -180,12 +180,8 @@ returned in a variety of formats, currently including:
     [`osmdata_sf()`](https://docs.ropensci.org/osmdata/reference/osmdata_sf.html);
 3.  [R Spatial (sp)](https://cran.r-project.org/package=sp) format via
     [`osmdata_sp()`](https://docs.ropensci.org/osmdata/reference/osmdata_sp.html);
-4.  [Google Protocol
-    Buffer](https://developers.google.com/protocol-buffers/) (`pbf`;
-    downloaded locally)) via
-    [`osmdata_pbf()`](https://docs.ropensci.org/osmdata/reference/osmdata_pbf.html);
     and
-5.  [Silicate (SC)](https://github.com/hypertidy/silicate) format via
+4.  [Silicate (SC)](https://github.com/hypertidy/silicate) format via
     [`osmdata_sc()`](https://docs.ropensci.org/osmdata/reference/osmdata_sc.html).
 
 ### Additional Functionality

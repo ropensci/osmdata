@@ -95,36 +95,6 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
     invisible (doc)
 }
 
-#' Return an OSM Overpass query in PBF (Protocol Buffer Format).
-#'
-#' @inheritParams osmdata_xml
-#'
-#' @return An binary Protocol Buffer Format (PBF) object.
-#'
-#' @note This function is experimental, and \pkg{osmdata} can currently NOT do
-#' anything with PBF files.
-#'
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' q <- opq ("hampi india")
-#' q <- add_osm_feature (q, key="historic", value="ruins")
-#' osmdata_pdf (q, filename="hampi.pbf")
-#' }
-osmdata_pbf <- function(q, filename, quiet=TRUE) {
-    q$prefix <- gsub ("xml", "pbf", q$prefix)
-    q$suffix <- gsub ("body", "meta", q$suffix)
-
-    pbf <- overpass_query (query = opq_string_intern (q, quiet = quiet),
-                           quiet = quiet,
-                           encoding = 'pbf')
-    if (!missing (filename))
-        write (pbf, file = filename)
-
-    invisible (pbf)
-}
-
 #' Return an OSM Overpass query as an \link{osmdata} object in \pkg{sp}
 #' format.
 #'

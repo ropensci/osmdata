@@ -1,3 +1,9 @@
+0.1.2.x
+===================
+Major changes:
+- `osmdata_pbf` function removed as the overpass server no longer provides the
+  experimental API for pbf-format data.
+
 0.1.2
 ===================
 Major changes:

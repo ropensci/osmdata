@@ -31,7 +31,6 @@ reference:
     - osmdata_sf
     - osmdata_sp
     - osmdata_xml
-    - osmdata_pbf
   - title: Search data
     contents:
     - osm_points

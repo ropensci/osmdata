@@ -165,11 +165,7 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
 
     o_stat <- overpass_status (quiet)
 
-    if (encoding != 'pbf')
-        overpass_url <- get_overpass_url ()
-    else
-        overpass_url <- paste0 ("https://dev.overpass-api.de",   # ncov
-                                "/test753/interpreter")         # ncov
+    overpass_url <- get_overpass_url ()
 
     if (o_stat$available) {
         res <- httr::RETRY ("POST", overpass_url, body = query)
@@ -189,8 +185,6 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
     if (class (res) == 'result') # differs only for mock tests
         httr::stop_for_status (res)                             # nocov
 
-    if (encoding == 'pbf')
-        doc <- httr::content (res, as = 'raw')                  # nocov
     else if (class (res) == 'raw') # for mock tests
         doc <- rawToChar (res)
     else
@@ -198,8 +192,7 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
                               type = "application/xml")
     # TODO: Just return the direct httr::POST result here and convert in the
     # subsequent functions (`osmdata_xml/csv/sp/sf`)?
-    if (encoding != 'pbf')
-        check_for_error (doc)
+    check_for_error (doc)
 
     return (doc)
 }
