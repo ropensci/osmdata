@@ -18,8 +18,8 @@ vignette: >
 ## 1. Introduction
 
 
-[`silicate`](https://github.com/hypertidy/silicate) is a new, largely
-experimental form for representing spatial data in **R**. In contrast to all
+[`silicate`](https://github.com/hypertidy/silicate) is a new
+form for representing spatial data in **R**. In contrast to all
 other forms (such as [`sp`](https://cran.r-project.org/package=sp) or
 [`sf`](https://cran.r-project.org/package=sf)),
 [`silicate`](https://github.com/hypertidy/silicate) is *multi-tabular*, and
@@ -53,14 +53,13 @@ contrast, the [`osmdata_sc()`
 function](https://docs.ropensci.org/osmdata/reference/osmdata_sc.html) delivers
 a representation that is entirely faithful to the underlying OSM representation.
 
-The [`silicate`](https://github.com/hypertidy/silicate) format itself is
-currently highly experimental, and is therefore not expected to gain widespread
-use just yet. It nevertheless offers the single advantage in the `osmdata`
-package of enabling elevation data to be combined with OSM data. The result is a 
-[`silicate`](https://github.com/hypertidy/silicate)-format object which may
-currently be of limited general utility, but is nevertheless able to be
-submitted directly to the [`dodgr` package](https://github.com/ATFutures/dodgr)
-to enable routing on street networks that accounts for elevation changes.
+One of the advantages of [`silicate`](https://github.com/hypertidy/silicate)
+format offered by the `osmdata` package is enabling elevation data to be
+combined with OSM data. The result is
+a [`silicate`](https://github.com/hypertidy/silicate)-format object which is
+able to be submitted directly to the [`dodgr`
+package](https://github.com/ATFutures/dodgr) to enable routing on street
+networks that accounts for elevation changes.
 
 
 ## 2. Elevation Data
