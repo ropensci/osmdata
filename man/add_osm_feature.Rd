@@ -2,20 +2,9 @@
 % Please edit documentation in R/opq.R
 \name{add_osm_feature}
 \alias{add_osm_feature}
-\alias{add_feature}
 \title{Add a feature to an Overpass query}
 \usage{
 add_osm_feature(
-  opq,
-  key,
-  value,
-  key_exact = TRUE,
-  value_exact = TRUE,
-  match_case = TRUE,
-  bbox = NULL
-)
-
-add_feature(
   opq,
   key,
   value,

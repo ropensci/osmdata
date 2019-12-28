@@ -3,6 +3,8 @@
 Major changes:
 - `osmdata_pbf` function removed as the overpass server no longer provides the
   experimental API for pbf-format data.
+- Remove deprecated `add_feature()` function; entirely replaced by
+  `add_osm_feature()`.
 
 0.1.2
 ===================
