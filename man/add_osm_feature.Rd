@@ -48,8 +48,6 @@ of regular expressions on OSM keys, as described in Section 6.1.5 of
 \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL}. The actual
 query submitted to the overpass API can be obtained from
 \link{opq_string}.
-
-\link{add_feature} is deprecated; please use \link{add_osm_feature}.
 }
 \examples{
 \dontrun{
