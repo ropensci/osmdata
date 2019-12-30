@@ -18,7 +18,6 @@ matrix:
           #- os: osx
           #r: devel
     allow_failures:
-        - r: devel
         - os: osx
           r: release
 
