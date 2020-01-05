@@ -100,7 +100,8 @@ c.osmdata <- function (...)
         for (i in osm_names)
         {
             xi <- lapply (x, function (j) j [[i]])
-            indx <- which (unlist (lapply (xi, nrow)) > 0)
+            nrows <- lapply (xi, function (j) ifelse (is.null (j), 0, nrow (j)))
+            indx <- which (unlist (nrows) > 0)
             xi <- xi [indx]
             xi [vapply (xi, is.null, logical (1))] <- NULL
             if (length (xi) > 0)
