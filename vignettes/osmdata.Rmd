@@ -277,21 +277,22 @@ unlist (lapply (dat2, nrow) [4:8])
 unlist (lapply (dat, nrow) [4:8])
 ```
 ```{r, echo = FALSE}
-dat1 <- c (51327, 186, 901, 0, 47)
+dat1 <- c (51399, 186, 905, 0, 47)
 dat2 <- c (4473, 55, 4, 1, 3)
-dat <- c (53705, 238, 904, 0, 49)
+dat <- c (53777, 238, 908, 1, 49)
 names (dat1) <- names (dat2) <- names (dat) <- c ('osm_points', 'osm_lines',
                                                   'osm_polygons',
                                                   'osm_multilines',
                                                   'osm_multipolygons')
-dat <- dat [c (1:3, 5)]
+dat1 <- dat1 [c (1:3, 5)]
 dat1
 dat2
 dat
 ```
 The number of resultant objects is less than the sum of the individual
 components because the `c` operator only combines unique objects. There are
-thus, for example, 7,590 points corresponding to objects in Kunming, China that
+thus, for example, `r formatC(unname(dat[1]), format = "d", big.mark = ",")` 
+points corresponding to objects in Kunming, China that
 are **either** natural waterbodies **or** that include 'Dian' in their English
 name.  Compare this with the result of the equivalent `AND` operation
 ```{r, eval = FALSE}
@@ -305,7 +306,8 @@ names (dat1) <- names (dat2) <- names (dat) <- c ('osm_points', 'osm_lines',
                                                   'osm_multipolygons')
 dat
 ```
-And there are, for example, the considerably lower number of 2,029 points
+And there are, for example, the considerably lower number of 
+`r formatC(unname(dat[1]), format = "d", big.mark = ",")` points
 describing objects in Kunming that are **both** natural waterbodies **and** that
 include 'Dian' in their English name.
 
