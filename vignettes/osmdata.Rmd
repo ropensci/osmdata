@@ -414,7 +414,7 @@ nrow(des_bike_and_bridge$osm_points); nrow(des_bike_and_bridge$osm_lines)
 ## [1] 32
 ```
 
-That query returns only 7 points and 3 lines.  Designed cycleways **OR** bridges
+That query returns only 99 points and 32 lines.  Designed cycleways **OR** bridges
 can be obtained through simply combining multiple `osmdata` objects with the `c`
 operator:
 
