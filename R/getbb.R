@@ -253,8 +253,9 @@ getbb <- function(place_name,
 
         if (length (gt_p) > 0)
             gt_p <- lapply (gt_p, function (i) get1bdypoly (i))
+        # Extract all multipolygon components (see issue #195)
         if (length (gt_mp) > 0)
-            gt_mp <- lapply (gt_mp, function (i) get1bdymultipoly (i))
+            gt_mp <- lapply (gt_mp, function (i) get1bdypoly (i))
 
         gt <- c (gt_p, gt_mp)
         # multipolys below are not strict SF MULTIPOLYGONs, rather just cases
@@ -330,26 +331,6 @@ get1bdypoly <- function (p)
     return (ret)
 }
 
-#' get1bdymultipoly
-#'
-#' Select first enclosing polygon from lists of multiple char MULTIPOLYGON
-#' objects returned by nominatim
-#'
-#' @param p One multipolygon returned by nominatim
-#'
-#' @return A single coordinate matrix
-#'
-#' @noRd
-get1bdymultipoly <- function (p)
-{
-    p <- p [1:min (grep (")", p))]
-
-    p <- vapply (p, function (i) gsub (")", "", i),
-                   character (1), USE.NAMES = FALSE)
-    t (cbind (vapply (p, function (i)
-                      as.numeric (strsplit (i, split = ' ') [[1]]),
-                      numeric (2), USE.NAMES = FALSE)))
-}
 #' convert a matrix to an sf polygon
 #'
 #' Select first enclosing polygon from lists of multiple char MULTIPOLYGON
