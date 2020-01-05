@@ -405,13 +405,12 @@ cycleways or those which are bridges. Combining these into one query will return
 only those that are designated cycleways **AND** that are bridges:
 
 ```{r des-bike1, eval=FALSE}
-q2 <- add_osm_feature(q1, key = 'bicycle', value = 'designated')
-des_bike <- osmdata_sf(q2)
-q3 <- add_osm_feature(q2, key = 'bridge', value = 'yes')
-des_bike_and_bridge <- osmdata_sf(q3)
+des_bike <- osmdata_sf(q1)
+q2 <- add_osm_feature(q1, key = 'bridge', value = 'yes')
+des_bike_and_bridge <- osmdata_sf(q2)
 nrow(des_bike_and_bridge$osm_points); nrow(des_bike_and_bridge$osm_lines)
-## [1] 7
-## [1] 3
+## [1] 99
+## [1] 32
 ```
 
 That query returns only 7 points and 3 lines.  Designed cycleways **OR** bridges
@@ -419,12 +418,13 @@ can be obtained through simply combining multiple `osmdata` objects with the `c`
 operator:
 
 ```{r, des-bike2, eval=FALSE}
-q4 <- add_osm_feature(q1, key = 'bridge', value = 'yes')
-bridge <- osmdata_sf(q4)
+q2 <- opq('Sevilla') %>%
+    add_osm_feature(key = 'bridge', value = 'yes')
+bridge <- osmdata_sf(q2)
 des_bike_or_bridge <- c(des_bike, bridge)
 nrow(des_bike_or_bridge$osm_points); nrow(des_bike_or_bridge$osm_lines)
-## [1] 208
-## [1] 40
+## [1] 9757
+## [1] 1061
 ```
 
 And as expected, the `OR` operation produces more data than the equivalent
