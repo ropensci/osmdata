@@ -277,9 +277,9 @@ unlist (lapply (dat2, nrow) [4:8])
 unlist (lapply (dat, nrow) [4:8])
 ```
 ```{r, echo = FALSE}
-dat1 <- c (7373, 31, 118, 0, 10)
-dat2 <- c (2254, 30, 2, 0, 1)
-dat <- c (7590, 46, 119, 0, 10)
+dat1 <- c (51327, 186, 901, 0, 47)
+dat2 <- c (4473, 55, 4, 1, 3)
+dat <- c (53705, 238, 904, 0, 49)
 names (dat1) <- names (dat2) <- names (dat) <- c ('osm_points', 'osm_lines',
                                                   'osm_polygons',
                                                   'osm_multilines',
@@ -298,7 +298,7 @@ name.  Compare this with the result of the equivalent `AND` operation
 unlist (lapply (osmdata_sf (q), nrow) [4:8])
 ```
 ```{r, echo = FALSE}
-dat <- c (2029, 15, 1, 0, 1)
+dat <- c (2087, 3, 1, 0, 1)
 names (dat1) <- names (dat2) <- names (dat) <- c ('osm_points', 'osm_lines',
                                                   'osm_polygons',
                                                   'osm_multilines',
