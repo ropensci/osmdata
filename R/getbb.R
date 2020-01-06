@@ -236,7 +236,7 @@ getbb <- function(place_name,
         }
         # nocov end
 
-        indx <- which (!(seq (obj) %in% indx_multi))
+        indx <- which (!(seq (nrow(obj)) %in% indx_multi))
         gt_p <- obj$geotext [indx] %>%
             gsub ("POLYGON\\(\\(", "", .) %>%
             gsub ("\\)\\)", "", .) %>%
