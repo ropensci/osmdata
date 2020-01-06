@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/ropensci/osmdata",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.2.5",
+  "version": "0.1.2.6",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -57,6 +57,11 @@
       "@type": "Person",
       "givenName": "James",
       "familyName": "Smith"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Andrea",
+      "familyName": "Gilardi"
     },
     {
       "@type": "Person",
@@ -347,7 +352,7 @@
   "developmentStatus": "active",
   "releaseNotes": "https://github.com/ropensci/osmdata/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/osmdata/blob/master/README.md",
-  "fileSize": "1169.801KB",
+  "fileSize": "1169.845KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",

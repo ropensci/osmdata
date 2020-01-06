@@ -6,6 +6,9 @@ Major changes:
 - Remove deprecated `add_feature()` function; entirely replaced by
   `add_osm_feature()`.
 
+Minor changes:
+- New Contributors: Andrea Gilardi (@agila5)
+
 0.1.2
 ===================
 Major changes:

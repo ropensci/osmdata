@@ -1,5 +1,5 @@
 Package: osmdata
-Version: 0.1.2.005
+Version: 0.1.2.006
 Authors@R: c(
     person("Mark", "Padgham", email="mark.padgham@email.com", role=c("aut", "cre")),
     person("Bob", "Rudis", role="aut"),
@@ -7,6 +7,7 @@ Authors@R: c(
     person("Maëlle", "Salmon", role="aut"),
     person("Andrew", "Smith", role="ctb"),
     person("James", "Smith", role="ctb"),
+    person("Andrea", "Gilardi", role="ctb"),
     person("Marcin", "Kalicinski", role=c("ctb", "cph"),
         comment="Author of included RapidXML code"),
     person("Finkelstein", "Noam", role=c("ctb","cph"),
