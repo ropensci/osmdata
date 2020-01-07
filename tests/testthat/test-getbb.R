@@ -101,7 +101,7 @@ test_that ('getbb-polygon', {
                    res <- getbb (place_name = "Salzburg", format_out = "sf_polygon")
                    expect_is (res, "sf")
                    expect_is (res$geometry, "sfc_POLYGON")
-                   expect_length (res$geometry, 1)
+                   expect_true (length (res$geometry) > 1)
                }
           })
 

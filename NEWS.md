@@ -5,6 +5,8 @@ Major changes:
   experimental API for pbf-format data.
 - Remove deprecated `add_feature()` function; entirely replaced by
   `add_osm_feature()`.
+- `get_bb()` with polygon output formats now returns ALL polygon and
+  multipolygon objects by default (issue#195)
 
 Minor changes:
 - New Contributors: Andrea Gilardi (@agila5)

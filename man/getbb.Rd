@@ -25,10 +25,10 @@ returned by \url{https://wiki.openstreetmap.org/wiki/Nominatim}}
 
 \item{viewbox}{The bounds in which you're searching}
 
-\item{format_out}{Character string indicating output format: matrix (default),
-string (see \code{\link[=bbox_to_string]{bbox_to_string()}}), data.frame (all 'hits' returned
-by Nominatim), sf_polygon (for polygons that work with the sf package)
-or polygon (full polygonal bounding boxes for each match).}
+\item{format_out}{Character string indicating output format: matrix
+(default), string (see \code{\link[=bbox_to_string]{bbox_to_string()}}), data.frame (all 'hits' returned
+by Nominatim), sf_polygon (for polygons that work with the sf package) or
+polygon (full polygonal bounding boxes for each match).}
 
 \item{base_url}{Base website from where data is queried}
 
@@ -50,14 +50,14 @@ Defaults to a matrix in the form:
 x ...   ...
 y ...   ...
 }
-If \code{format_out = "polygon"}, one or
-more two-columns matrices of polygonal longitude-latitude points. Where
-multiple \code{place_name} occurrences are found within \code{nominatim},
-each item of the list of coordinates may itself contain multiple coordinate
-matrices where multiple exact matches exist. If one one exact match exists
-with potentially multiple polygonal boundaries (for example, "london uk" is
-an exact match, but can mean either greater London or the City of London),
-only the first is returned. See examples below for illustration.
+If \code{format_out = "polygon"}, one or more two-columns matrices of polygonal
+longitude-latitude points. Where multiple \code{place_name} occurrences are found
+within \code{nominatim}, each item of the list of coordinates may itself contain
+multiple coordinate matrices where multiple exact matches exist. If one one
+exact match exists with potentially multiple polygonal boundaries (for
+example, "london uk" is an exact match, but can mean either greater London or
+the City of London), only the first is returned. See examples below for
+illustration.
 }
 \description{
 This function uses the free Nominatim API provided by OpenStreetMap to find
@@ -90,14 +90,17 @@ getbb("Hereford", format_out = "data.frame", limit = 3)
 # Examples of polygonal boundaries
 bb <- getbb ("london uk", format_out = "polygon") # single match
 dim(bb[[1]][[1]]) # matrix of longitude/latitude pairs
-bb_sf = getbb("kathmandu", format_out = "sf_polygon") 
+bb_sf = getbb("kathmandu", format_out = "sf_polygon")
 # sf:::plot.sf(bb_sf) # can be plotted if sf is installed
-getbb("london", format_out = "sf_polygon") # only selects 1st of multipolygons
+getbb("london", format_out = "sf_polygon")
 getbb("accra", format_out = "sf_polygon") # rectangular bb
 # Using an alternative service (locationiq requires an API key)
-key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
+# add LOCATIONIQ=type_your_api_key_here to .Renviron:
+key <- Sys.getenv("LOCATIONIQ")
 if(nchar(key) ==  32) {
-  getbb(place_name, base_url = "https://locationiq.org/v1/search.php", key = key)
+  getbb(place_name,
+        base_url = "https://locationiq.org/v1/search.php",
+        key = key)
 }
 }
 }

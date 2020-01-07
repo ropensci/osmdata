@@ -1,15 +1,15 @@
-#' Convert a named matrix or a named vector (or an unnamed vector) return a string
+#' Convert a named matrix or a named or unnamed vector to a string
 #'
 #' This function converts a bounding box into a string for use in web apis
-#' 
+#'
 #' @param bbox bounding box as character, matrix or vector.
-#' If character, the bbox will be found (geocoded) and extracted with \link{getbb}.
-#' Unnamed vectors will be
-#' sorted appropriately and must merely be in the order (x, y, x, y).
-#' 
-#' @return A character string representing min x, min y, max x, and max y bounds.
-#' For example: \code{"15.3152361,76.4406446,15.3552361,76.4806446"} is the 
-#' bounding box for Hampi, India.
+#' If character, the bbox will be found (geocoded) and extracted with
+#' \link{getbb}. Unnamed vectors will be sorted appropriately and must merely be
+#' in the order (x, y, x, y).
+#'
+#' @return A character string representing min x, min y, max x, and max y
+#' bounds. For example: \code{"15.3152361,76.4406446,15.3552361,76.4806446"} is
+#' the bounding box for Hampi, India.
 #'
 #' @export
 #'
@@ -74,26 +74,26 @@ bbox_to_string <- function(bbox) {
 }
 
 #' Get bounding box for a given place name
-#' 
+#'
 #' This function uses the free Nominatim API provided by OpenStreetMap to find
 #' the bounding box (bb) associated with place names.
-#' 
+#'
 #' It was inspired by the functions
 #' `bbox` from the \pkg{sp} package,
 #' `bb` from the \pkg{tmaptools} package and
 #' `bb_lookup` from the github package \pkg{nominatim} package,
 #' which can be found at <https://github.com/hrbrmstr/nominatim>.
-#' 
+#'
 #' See <https://wiki.openstreetmap.org/wiki/Nominatim> for details.
-#' 
+#'
 #' @param place_name The name of the place you're searching for
 #' @param display_name_contains Text string to match with display_name field
 #' returned by <https://wiki.openstreetmap.org/wiki/Nominatim>
 #' @param viewbox The bounds in which you're searching
-#' @param format_out Character string indicating output format: matrix (default),
-#' string (see [bbox_to_string()]), data.frame (all 'hits' returned
-#' by Nominatim), sf_polygon (for polygons that work with the sf package)
-#' or polygon (full polygonal bounding boxes for each match).
+#' @param format_out Character string indicating output format: matrix
+#' (default), string (see [bbox_to_string()]), data.frame (all 'hits' returned
+#' by Nominatim), sf_polygon (for polygons that work with the sf package) or
+#' polygon (full polygonal bounding boxes for each match).
 #' @param base_url Base website from where data is queried
 #' @param featuretype The type of OSM feature (settlement is default; see Note)
 #' @param limit How many results should the API return?
@@ -108,15 +108,15 @@ bbox_to_string <- function(bbox) {
 #' x ...   ...
 #' y ...   ...
 #' }
-#' If `format_out = "polygon"`, one or
-#' more two-columns matrices of polygonal longitude-latitude points. Where
-#' multiple `place_name` occurrences are found within `nominatim`,
-#' each item of the list of coordinates may itself contain multiple coordinate
-#' matrices where multiple exact matches exist. If one one exact match exists
-#' with potentially multiple polygonal boundaries (for example, "london uk" is
-#' an exact match, but can mean either greater London or the City of London),
-#' only the first is returned. See examples below for illustration.
-#' 
+#' If `format_out = "polygon"`, one or more two-columns matrices of polygonal
+#' longitude-latitude points. Where multiple `place_name` occurrences are found
+#' within `nominatim`, each item of the list of coordinates may itself contain
+#' multiple coordinate matrices where multiple exact matches exist. If one one
+#' exact match exists with potentially multiple polygonal boundaries (for
+#' example, "london uk" is an exact match, but can mean either greater London or
+#' the City of London), only the first is returned. See examples below for
+#' illustration.
+#'
 #' @note Specific values of `featuretype` include "street", "city",
 #" "county", "state", and "country" (see
 #' <https://wiki.openstreetmap.org/wiki/Nominatim> for details). The default
@@ -124,9 +124,9 @@ bbox_to_string <- function(bbox) {
 #' levels below "country" and above "streets". If the bounding box or polygon of
 #' a city is desired, better results will usually be obtained with
 #' `featuretype = "city"`.
-#' 
+#'
 #' @export
-#' 
+#'
 #' @examples
 #' \dontrun{
 #' getbb("Salzburg")
@@ -137,14 +137,17 @@ bbox_to_string <- function(bbox) {
 #' # Examples of polygonal boundaries
 #' bb <- getbb ("london uk", format_out = "polygon") # single match
 #' dim(bb[[1]][[1]]) # matrix of longitude/latitude pairs
-#' bb_sf = getbb("kathmandu", format_out = "sf_polygon") 
+#' bb_sf = getbb("kathmandu", format_out = "sf_polygon")
 #' # sf:::plot.sf(bb_sf) # can be plotted if sf is installed
-#' getbb("london", format_out = "sf_polygon") # only selects 1st of multipolygons
+#' getbb("london", format_out = "sf_polygon")
 #' getbb("accra", format_out = "sf_polygon") # rectangular bb
 #' # Using an alternative service (locationiq requires an API key)
-#' key <- Sys.getenv("LOCATIONIQ") # add LOCATIONIQ=type_your_api_key_here to .Renviron
+#' # add LOCATIONIQ=type_your_api_key_here to .Renviron:
+#' key <- Sys.getenv("LOCATIONIQ")
 #' if(nchar(key) ==  32) {
-#'   getbb(place_name, base_url = "https://locationiq.org/v1/search.php", key = key)
+#'   getbb(place_name,
+#'         base_url = "https://locationiq.org/v1/search.php",
+#'         key = key)
 #' }
 #' }
 getbb <- function(place_name,
@@ -276,15 +279,24 @@ getbb <- function(place_name,
         stop (paste0 ('format_out not recognised; please specify one of ',
                       '[data.frame, matrix, string, polygon]'))
     }
-    
-    if(format_out == "sf_polygon") {
-      if(is(ret, "matrix")) {
-        ret = mat2sf_poly(ret, pname = place_name)
-      } else if(is(ret[[poly_num[1]]], "matrix")) {
-        ret = mat2sf_poly(ret[[poly_num[1]]], pname = place_name)
-      } else {
-        ret = mat2sf_poly(ret[[poly_num[1]]][[poly_num[2]]], pname = place_name)
-      }
+
+    if (format_out == "sf_polygon") {
+        if (!is.null (gt_p))
+            gt_p <- lapply (gt_p, function (i)
+                            mat2sf_poly (i, pname = place_name))
+        if (!is.null (gt_mp))
+            gt_mp <- lapply (gt_mp, function (i)
+                             mat2sf_multipoly (list (i), mpname = place_name))
+
+        if (is.null (gt_p) & is.null (gt_mp))
+            stop ("Query returned no polygons")
+        else if (is.null (gt_mp))
+            ret <- do.call (rbind, gt_p)
+        else if (is.null (gt_p))
+            ret <- do.call (rbind, gt_mp)
+        else
+            ret <- list ("polygon" = do.call (rbind, gt_p),
+                         "multipolygon" = do.call (rbind, gt_mp))
     }
 
     return (ret)
@@ -333,20 +345,17 @@ get1bdypoly <- function (p)
 
 #' convert a matrix to an sf polygon
 #'
-#' Select first enclosing polygon from lists of multiple char MULTIPOLYGON
-#' objects returned by nominatim
-#'
 #' @param mat A matrix
-#' @param mat The name of the polygon
+#' @param pname The name of the polygon
 #'
 #' @return A list that can be converted into a simple features geometry
 #' @noRd
 mat2sf_poly <- function (mat, pname)
 {
-  if(nrow(mat) == 2) {
-    x = c(mat[1, 1], mat[1, 2], mat[1, 2], mat[1, 1], mat[1, 1])
-    y = c(mat[2, 2], mat[2, 2], mat[2, 1], mat[2, 1], mat[2, 2])
-    mat = cbind(x, y)
+  if (nrow(mat) == 2) {
+    x <- c(mat[1, 1], mat[1, 2], mat[1, 2], mat[1, 1], mat[1, 1])
+    y <- c(mat[2, 2], mat[2, 2], mat[2, 1], mat[2, 1], mat[2, 2])
+    mat <- cbind(x, y)
   }
   mat_sf <- list (mat)
   class (mat_sf) <- c ("XY", "POLYGON", "sfg")
@@ -366,4 +375,34 @@ mat2sf_poly <- function (mat, pname)
   names (mat_sf) <- "geometry"
   attr (mat_sf, "sf_column") <- "geometry"
   return (mat_sf)
+}
+
+#' convert a list of matrices to an sf mulipolygon
+#'
+#' @param x A list of matrices
+#' @param mpname The name of the multipolygon
+#'
+#' @return A list that can be converted into a simple features geometry
+#' @noRd
+mat2sf_multipoly <- function (x, mpname)
+{
+    # get bbox from matrices
+    bb <- as.vector (t (apply (do.call (rbind, x [[1]]), 2, range)))
+    names (bb) <- c ("xmin", "ymin", "xmax", "ymax")
+    class (bb) <- "bbox"
+
+    class (x) <- c ("XY", "MULTIPOLYGON", "sfg")
+    xsf <- list (x)
+    attr (xsf, "class") <- c ("sfc_MULTIPOLYGON", "sfc")
+    attr (xsf, "precision") <- 0
+    attr (xsf, "bbox") <- bb
+    crs <- list (epsg = 4326L,
+                 proj4string = "+proj=longlat +datum=WGS84 +no_defs")
+    class (crs) <- "crs"
+    attr (xsf, "crs") <- crs
+    attr (xsf, "n_empty") <- 0L
+    xsf <- make_sf (xsf)
+    names (xsf) <- "geometry"
+    attr (xsf, "sf_column") <- "geometry"
+    return (xsf)
 }
