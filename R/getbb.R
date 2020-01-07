@@ -99,8 +99,6 @@ bbox_to_string <- function(bbox) {
 #' @param limit How many results should the API return?
 #' @param key The API key to use for services that require it
 #' @param silent Should the API be printed to screen? TRUE by default
-#' @param poly_num Which of matching polygons should be used?
-#' The first polygon in the first match is the default (`c(1, 1)`).
 #'
 #' @return Defaults to a matrix in the form:
 #' \code{
@@ -158,8 +156,7 @@ getbb <- function(place_name,
                   featuretype = "settlement",
                   limit = 10,
                   key = NULL,
-                  silent = TRUE,
-                  poly_num = c(1, 1)) {
+                  silent = TRUE) {
     is_polygon <- grepl("polygon", format_out)
     query <- list (q = place_name)
     featuretype <- tolower (featuretype)

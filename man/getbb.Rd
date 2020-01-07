@@ -13,8 +13,7 @@ getbb(
   featuretype = "settlement",
   limit = 10,
   key = NULL,
-  silent = TRUE,
-  poly_num = c(1, 1)
+  silent = TRUE
 )
 }
 \arguments{
@@ -39,9 +38,6 @@ polygon (full polygonal bounding boxes for each match).}
 \item{key}{The API key to use for services that require it}
 
 \item{silent}{Should the API be printed to screen? TRUE by default}
-
-\item{poly_num}{Which of matching polygons should be used?
-The first polygon in the first match is the default (\code{c(1, 1)}).}
 }
 \value{
 Defaults to a matrix in the form:

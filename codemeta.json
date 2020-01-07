@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/ropensci/osmdata",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.2.7",
+  "version": "0.1.2.8",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -352,7 +352,7 @@
   "developmentStatus": "active",
   "releaseNotes": "https://github.com/ropensci/osmdata/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/osmdata/blob/master/README.md",
-  "fileSize": "1169.946KB",
+  "fileSize": "1499.192KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
