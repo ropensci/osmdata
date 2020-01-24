@@ -1,6 +1,6 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-# osmdata <a href='https://docs.ropensci.org/osmdata/'><img src='man/figures/osmhex.png' align="right" height=210 width=182/></a>
+osmdata <a href='https://docs.ropensci.org/osmdata/'><img src='man/figures/osmhex.png' align="right" height=210 width=182/></a>
+===============================================================================================================================
 
 [![Build
 Status](https://travis-ci.org/ropensci/osmdata.svg?branch=master)](https://travis-ci.org/ropensci/osmdata)
@@ -14,7 +14,6 @@ Downloads](http://cranlogs.r-pkg.org/badges/grand-total/osmdata?color=orange)](h
 Active](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 
 <!--![](./man/figures/title.png)-->
-
 [![](https://badges.ropensci.org/103_status.svg)](https://github.com/ropensci/onboarding/issues/103)
 [![status](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3/status.svg)](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3)
 
@@ -29,9 +28,13 @@ custom selected parts of OSM data. Data can be returned in a variety of
 formats, including as [Simple Features
 (`sf`)](https://cran.r-project.org/package=sf), [Spatial
 (`sp`)](https://cran.r-project.org/package=sp), or [Silicate
-(`sc`)](https://github.com/hypertidy/silicate) objects.
+(`sc`)](https://github.com/hypertidy/silicate) objects. The package is
+designed to allow access to small-to-medium-sized OSM datasets (see
+[`geofabrik`](https://github.com/ITSLeeds/geofabrik) for an approach for
+reading-in bulk OSM data extracts).
 
-## Installation
+Installation
+------------
 
 To install:
 
@@ -53,15 +56,16 @@ packageVersion("osmdata")
 #> [1] '0.1.2'
 ```
 
-## Usage
+Usage
+-----
 
 [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API) queries
 can be built from a base query constructed with `opq` followed by
 `add_osm_feature`. The corresponding OSM objects are then downloaded and
-converted to [`R Simple Features
-(sf)`](https://cran.r-project.org/package=sf) objects with
-`osmdata_sf()` or to [`R Spatial
-(sp)`](https://cran.r-project.org/package=sp) objects with
+converted to
+[`R Simple Features (sf)`](https://cran.r-project.org/package=sf)
+objects with `osmdata_sf()` or to
+[`R Spatial (sp)`](https://cran.r-project.org/package=sp) objects with
 `osmdata_sp()`. For example,
 
 ``` r
@@ -215,7 +219,8 @@ Data may also be trimmed to within a defined polygonal shape with the
 function. Full package functionality is described on the
 [website](https://docs.ropensci.org/osmdata/)
 
-## Citation
+Citation
+--------
 
 ``` r
 citation ("osmdata")
@@ -242,7 +247,8 @@ citation ("osmdata")
 #>   }
 ```
 
-## Code of Conduct
+Code of Conduct
+---------------
 
 Please note that this project is released with a [Contributor Code of
 Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree
