@@ -390,8 +390,8 @@ void osm_convert::convert_multipoly_to_sp (Rcpp::S4 &multipolygons, const Relati
     // Fill plotOrder slot with int vector - this has to be int, not
     // unsigned int!
     std::vector <int> plotord (rels.size ());
-    for (int j = 0; j < static_cast <int> (rels.size ()); j++)
-        plotord [j] = j + 1;
+    for (size_t j = 0; j < rels.size (); j++)
+        plotord [j] = static_cast <int> (j + 1);
     multipolygons.slot ("plotOrder") = plotord;
     plotord.clear ();
 
@@ -513,7 +513,7 @@ void osm_convert::convert_relation_to_sc (string_arr2 &members_out,
         string_arr2 &kv_out, const Relations &rels,
         const UniqueVals &unique_vals)
 {
-    int nmembers = 0;
+    size_t nmembers = 0;
     for (auto itr = rels.begin (); itr != rels.end (); itr++)
         nmembers += itr->relations.size ();
 
@@ -549,8 +549,9 @@ void osm_convert::convert_relation_to_sc (string_arr2 &members_out,
                 kv_iter != itr->key_val.end (); ++kv_iter)
         {
             const std::string &key = kv_iter->first;
-            long int coli = static_cast <long int> (
-                    unique_vals.k_rel_index.at (key));
+            //long int coli = static_cast <long int> (
+            //        unique_vals.k_rel_index.at (key));
+            unsigned int coli = unique_vals.k_rel_index.at (key);
             kv_out [coli] [rowi] = kv_iter->second;
         }
         rowi++;
