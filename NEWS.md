@@ -1,4 +1,4 @@
-0.1.2.x
+0.1.3
 ===================
 Major changes:
 - `osmdata_pbf` function removed as the overpass server no longer provides the
@@ -10,6 +10,7 @@ Major changes:
 
 Minor changes:
 - New Contributors: Andrea Gilardi (@agila5)
+- Bug fix for issue#205
 
 0.1.2
 ===================

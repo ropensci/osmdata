@@ -1,12 +1,8 @@
-# CRAN notes for osmdata_0.1.2 submission
+# CRAN notes for osmdata_0.1.3 submission
 
-This submission rectifies the three previous issues identified in recent CRAN emails:
+This submission rectifies the issue identified in recent CRAN email regarding "..." arguments "not in \usage"
 
-1. All URLs now fully specified with protocol.
-2. The 'class(obj)=="matrix"' calls have been rectified to ensure return values of 'c("matrix","array")' are anticipated.
-3. Previously unreliable http calls performed during testing are now all mocked, so testing on CRAN should perform no actual calls at all.
-
-Other than that, only NOTE generated on some systems regards installed size, which is unavoidable due to very large C++ code base.
+One NOTE is generated on some systems regarding installed size, which is unavoidable due to very large C++ code base.
 
 ## Test environments
 

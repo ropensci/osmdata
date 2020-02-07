@@ -39,8 +39,6 @@ of multilinestrings or \pkg{sp} SpatialLinesDataFrame}
 \item{osm_multipolygons}{OSM relations as \pkg{sf} Simple Features
 Collection of multipolygons or \pkg{sp}
 SpatialPolygonsDataFrame}
-
-\item{...}{other options ignored}
 }
 \description{
 Imports OpenStreetMap (OSM) data into R as either 'sf' or 'sp' objects.  OSM
