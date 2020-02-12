@@ -3,7 +3,9 @@
 
 0.1.3
 ===================
+
 Major changes:
+
 - `osmdata_pbf` function removed as the overpass server no longer provides the
   experimental API for pbf-format data.
 - Remove deprecated `add_feature()` function; entirely replaced by
@@ -12,17 +14,21 @@ Major changes:
   multipolygon objects by default (issue#195)
 
 Minor changes:
+
 - New Contributors: Andrea Gilardi (@agila5)
 - Bug fix for issue#205
 
 0.1.2
 ===================
+
 Major changes:
+
 - New function `unname_osmdata_sf`, to remove row names from `sf`-format
   geometry objects that may cause issues with some plotting routines such as
   leaflet.
 
 Minor changes:
+
 - `getbb` now allows arbitrary `featuretype` specification, no longer just
   those pertaining to settlement forms.
 - available_tags returns tags with underscore precisely as required for
@@ -37,12 +43,14 @@ Minor changes:
 ===================
 
 Minor changes:
+
 - bug fix in `trim_osmdata` function
 
 0.1.0
 ===================
 
 Major changes:
+
 - New function, `osm_elevation` to insert elevation data into `SC`-format data
   returned by `osmdata_sc` function.
 - New vignette on `osmdata_sc` function and elevation data.
@@ -53,6 +61,7 @@ Major changes:
 ===================
 
 Minor changes:
+
 - Bux fix for vectorized lists of values in `add_osm_feature`, so only listed
   items are returns (see #139; thanks @loreabad6)
 - But fix to ensure all `sf` `data.frame` objects have `stringsAsFactors =
@@ -60,7 +69,9 @@ Minor changes:
 
 0.0.9
 ===================
+
 Major changes:
+
 - New function `osmdata_sc` to return data in `silicate::SC` format (see
   github.com/hypertidy/silicate; this also requires additional dependency on
   `tibble`)
@@ -71,6 +82,7 @@ Major changes:
 - osmdata_sf() objects default to character vectors, not factors (see #44).
 
 Minor changes:
+
 - vignette updated
 - Overpass URL now randomly selected from the four primary servers (see
   https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances),
