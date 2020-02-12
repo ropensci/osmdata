@@ -1,6 +1,6 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-osmdata <a href='https://docs.ropensci.org/osmdata/'><img src='man/figures/osmhex.png' align="right" height=210 width=182/></a>
-===============================================================================================================================
+
+# osmdata <a href='https://docs.ropensci.org/osmdata/'><img src='man/figures/osmhex.png' align="right" height=210 width=182/></a>
 
 [![Build
 Status](https://travis-ci.org/ropensci/osmdata.svg?branch=master)](https://travis-ci.org/ropensci/osmdata)
@@ -14,6 +14,7 @@ Downloads](http://cranlogs.r-pkg.org/badges/grand-total/osmdata?color=orange)](h
 Active](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 
 <!--![](./man/figures/title.png)-->
+
 [![](https://badges.ropensci.org/103_status.svg)](https://github.com/ropensci/onboarding/issues/103)
 [![status](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3/status.svg)](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3)
 
@@ -33,8 +34,7 @@ designed to allow access to small-to-medium-sized OSM datasets (see
 [`geofabrik`](https://github.com/ITSLeeds/geofabrik) for an approach for
 reading-in bulk OSM data extracts).
 
-Installation
-------------
+## Installation
 
 To install:
 
@@ -53,20 +53,21 @@ To load the package and check the version:
 library(osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
 packageVersion("osmdata")
-#> [1] '0.1.2'
+#> [1] '0.1.3'
 ```
 
-Usage
------
+## Usage
 
 [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API) queries
 can be built from a base query constructed with `opq` followed by
 `add_osm_feature`. The corresponding OSM objects are then downloaded and
-converted to
-[`R Simple Features (sf)`](https://cran.r-project.org/package=sf)
-objects with `osmdata_sf()` or to
-[`R Spatial (sp)`](https://cran.r-project.org/package=sp) objects with
-`osmdata_sp()`. For example,
+converted to [Simple Feature
+(`sf`)](https://cran.r-project.org/package=sf) objects with
+`osmdata_sf()`, [Spatial (`sp`)](https://cran.r-project.org/package=sp)
+objects with `osmdata_sp()` or [Silicate
+(`sc`)](https://github.com/hypertidy/silicate) objects with
+`osmdata_sc()`. For
+example,
 
 ``` r
 x <- opq(bbox = c(-0.27, 51.47, -0.20, 51.50)) %>% # Chiswick Eyot in London, U.K.
@@ -100,7 +101,7 @@ function](https://docs.ropensci.org/osmdata/reference/getbb.html) can be
 used to extract bounding boxes for specified place names.
 
 ``` r
-getbb ("astana kazakhstan")
+getbb("astana kazakhstan")
 #>        min      max
 #> x 71.22444 71.78519
 #> y 51.00068 51.35111
@@ -111,16 +112,16 @@ The next step is to convert that to an overpass query object with the
 function](https://docs.ropensci.org/osmdata/reference/opq.html):
 
 ``` r
-q <- opq (getbb ("astana kazakhstan"))
-q <- opq ("astana kazakhstan") # identical result
+q <- opq(getbb("astana kazakhstan"))
+q <- opq("astana kazakhstan") # identical result
 ```
 
 It is also possible to use bounding polygons rather than rectangular
 boxes:
 
 ``` r
-b <- getbb ("bangalore", format_out = "polygon")
-class (b); head (b [[1]])
+b <- getbb("bangalore", format_out = "polygon")
+class(b); head(b [[1]])
 #> [1] "matrix"
 #> [1] 77.4601
 ```
@@ -138,18 +139,18 @@ result being a logical AND operation, thus returning all amenities that
 are lebelled both as restaurants and also as pubs:
 
 ``` r
-q <- opq ("portsmouth usa") %>%
+q <- opq("portsmouth usa") %>%
     add_osm_feature(key = "amenity", value = "restaurant") %>%
     add_osm_feature(key = "amenity", value = "pub") # There are none of these
 ```
 
-(Logical OR combinations are demonstrated below.) Negation can also be
-specified by pre-prending an exclamation mark so that the following
-requests all amenities that are NOT labelled as restaurants and that are
-not labelled as pubs:
+(Logical OR combinations are demonstrated [below](#additional).)
+Negation can also be specified by pre-prending an exclamation mark so
+that the following requests all amenities that are NOT labelled as
+restaurants and that are not labelled as pubs:
 
 ``` r
-q <- opq ("portsmouth usa") %>%
+q <- opq("portsmouth usa") %>%
     add_osm_feature(key = "amenity", value = "!restaurant") %>%
     add_osm_feature(key = "amenity", value = "!pub") # There are a lot of these
 ```
@@ -158,7 +159,7 @@ Additional arguments allow for more refined matching, such as the
 following requrest for all pubs with “irish” in the name:
 
 ``` r
-q <- opq ("washington dc") %>%
+q <- opq("washington dc") %>%
     add_osm_feature(key = "amenity", value = "pub") %>%
     add_osm_feature(key = "name", value = "irish",
                     value_exact = FALSE, match_case = FALSE)
@@ -195,13 +196,13 @@ Logical OR combinations can be implemented with the package’s internal
 that are either restaurants OR pubs with
 
 ``` r
-pubs <- opq ("portsmouth usa") %>%
+pubs <- opq("portsmouth usa") %>%
     add_osm_feature(key = "amenity", value = "pub") %>%
     osmdata_sf()
-restaurants <- opq ("portsmouth usa") %>%
+restaurants <- opq("portsmouth usa") %>%
     add_osm_feature(key = "amenity", value = "restaurant") %>%
     osmdata_sf()
-c (pubs, restaurants)
+c(pubs, restaurants)
 ```
 
     #> Object of class 'osmdata' with:
@@ -219,11 +220,10 @@ Data may also be trimmed to within a defined polygonal shape with the
 function. Full package functionality is described on the
 [website](https://docs.ropensci.org/osmdata/)
 
-Citation
---------
+## Citation
 
 ``` r
-citation ("osmdata")
+citation("osmdata")
 #> 
 #> To cite osmdata in publications use:
 #> 
@@ -247,11 +247,11 @@ citation ("osmdata")
 #>   }
 ```
 
-Code of Conduct
----------------
+## Code of Conduct
 
 Please note that this project is released with a [Contributor Code of
 Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree
-to abide by its terms.
+to abide by its
+terms.
 
 [![ropensci\_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)

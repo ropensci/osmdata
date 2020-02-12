@@ -76,10 +76,11 @@ packageVersion("osmdata")
 
 [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API) queries can be
 built from a base query constructed with `opq` followed by `add_osm_feature`. The
-corresponding OSM objects are then downloaded and converted to [`R Simple
-Features (sf)`](https://cran.r-project.org/package=sf) objects with
-`osmdata_sf()` or to [`R Spatial (sp)`](https://cran.r-project.org/package=sp)
-objects with `osmdata_sp()`.  For example, 
+corresponding OSM objects are then downloaded and converted to [Simple
+Feature (`sf`)](https://cran.r-project.org/package=sf) objects with
+`osmdata_sf()`, [Spatial (`sp`)](https://cran.r-project.org/package=sp)
+objects with `osmdata_sp()` or [Silicate (`sc`)](https://github.com/hypertidy/silicate)
+objects with `osmdata_sc()`.  For example, 
 
 ```{r query-thames, eval=FALSE}
 x <- opq(bbox = c(-0.27, 51.47, -0.20, 51.50)) %>% # Chiswick Eyot in London, U.K.
@@ -88,7 +89,7 @@ x <- opq(bbox = c(-0.27, 51.47, -0.20, 51.50)) %>% # Chiswick Eyot in London, U.
 x
 ```
 ```{r, echo=FALSE}
-msg <- c ("Object of class 'osmdata' with:\n",
+msg <- c("Object of class 'osmdata' with:\n",
 "                 $bbox : 51.47,-0.27,51.5,-0.2\n",
 "        $overpass_call : The call submitted to the overpass API\n",
 "                 $meta : metadata including timestamp and version numbers\n",
@@ -97,7 +98,7 @@ msg <- c ("Object of class 'osmdata' with:\n",
 "         $osm_polygons : 'sf' Simple Features Collection with 33 polygons\n",
 "       $osm_multilines : 'sf' Simple Features Collection with 6 multilinestrings\n",
 "    $osm_multipolygons : 'sf' Simple Features Collection with 3 multipolygons")
-message (msg)
+message(msg)
 ```
 
 OSM data can also be downloaded in OSM XML format with `osmdata_xml()` and saved
@@ -114,18 +115,18 @@ The [`getbb()`
 function](https://docs.ropensci.org/osmdata/reference/getbb.html) can be used
 to extract bounding boxes for specified place names.
 ```{r getbb-astana}
-getbb ("astana kazakhstan")
+getbb("astana kazakhstan")
 ```
 The next step is to convert that to an overpass query object with the [`opq()`
 function](https://docs.ropensci.org/osmdata/reference/opq.html):
 ```{r opq}
-q <- opq (getbb ("astana kazakhstan"))
-q <- opq ("astana kazakhstan") # identical result
+q <- opq(getbb("astana kazakhstan"))
+q <- opq("astana kazakhstan") # identical result
 ```
 It is also possible to use bounding polygons rather than rectangular boxes:
 ```{r getbb-haines}
-b <- getbb ("bangalore", format_out = "polygon")
-class (b); head (b [[1]])
+b <- getbb("bangalore", format_out = "polygon")
+class(b); head(b [[1]])
 ```
 
 ### Features
@@ -138,15 +139,15 @@ Multiple `add_osm_feature()` calls may be combined as illustrated below, with
 the result being a logical AND operation, thus returning all amenities that
 are lebelled both as restaurants and also as pubs:
 ```{r key-val1}
-q <- opq ("portsmouth usa") %>%
+q <- opq("portsmouth usa") %>%
     add_osm_feature(key = "amenity", value = "restaurant") %>%
     add_osm_feature(key = "amenity", value = "pub") # There are none of these
 ```
-(Logical OR combinations are demonstrated below.) Negation can also be specified
+(Logical OR combinations are demonstrated [below](#additional).) Negation can also be specified
 by pre-prending an exclamation mark so that the following requests all amenities
 that are NOT labelled as restaurants and that are not labelled as pubs:
 ```{r key-val2}
-q <- opq ("portsmouth usa") %>%
+q <- opq("portsmouth usa") %>%
     add_osm_feature(key = "amenity", value = "!restaurant") %>%
     add_osm_feature(key = "amenity", value = "!pub") # There are a lot of these
 ```
@@ -154,7 +155,7 @@ q <- opq ("portsmouth usa") %>%
 Additional arguments allow for more refined matching, such as the following
 requrest for all pubs with "irish" in the name:
 ```{r key-val3}
-q <- opq ("washington dc") %>%
+q <- opq("washington dc") %>%
     add_osm_feature(key = "amenity", value = "pub") %>%
     add_osm_feature(key = "name", value = "irish",
                     value_exact = FALSE, match_case = FALSE)
@@ -184,22 +185,22 @@ including:
    [`osmdata_sc()`](https://docs.ropensci.org/osmdata/reference/osmdata_sc.html).
 
 
-### Additional Functionality
+### Additional Functionality {#additional}
 
 Logical OR combinations can be implemented with the package's internal `c`
 method, so that the above example can be extended to all amenities that are
 either restaurants OR pubs with
 ```{r OR-fakey, eval = FALSE}
-pubs <- opq ("portsmouth usa") %>%
+pubs <- opq("portsmouth usa") %>%
     add_osm_feature(key = "amenity", value = "pub") %>%
     osmdata_sf()
-restaurants <- opq ("portsmouth usa") %>%
+restaurants <- opq("portsmouth usa") %>%
     add_osm_feature(key = "amenity", value = "restaurant") %>%
     osmdata_sf()
-c (pubs, restaurants)
+c(pubs, restaurants)
 ```
 ```{r OR, echo = FALSE}
-message (paste0 ("Object of class 'osmdata' with:\n",
+message(paste0("Object of class 'osmdata' with:\n",
 "                 $bbox : 43.0135509,-70.8229994,43.0996118,-70.7279298\n",
 "        $overpass_call : The call submitted to the overpass API\n",
 "                 $meta : metadata including timestamp and version numbers\n",
@@ -220,7 +221,7 @@ function.  Full package functionality is described on the
 ## Citation
 
 ```{r}
-citation ("osmdata")
+citation("osmdata")
 ```
 
 ## Code of Conduct
