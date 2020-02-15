@@ -18,8 +18,12 @@ available_features <- function() {
     {
         pg <- xml2::read_html (httr::GET (url_ftrs))
         keys <- xml2::xml_attr (rvest::html_nodes (pg, "a[href^='/wiki/Key']"), #nolint
-                                "title")
-        unique (sort (gsub ("^Key:", "", keys)))
+                                "href") %>% 
+            strsplit("/wiki/Key:") %>% 
+            unlist()
+        keys[keys != ""] %>%
+            sort() %>% 
+            unique()
     } else {
         message ("No internet connection")
     }
