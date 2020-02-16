@@ -2,18 +2,25 @@
 % Please edit documentation in R/features.R
 \name{available_features}
 \alias{available_features}
-\title{List recognized features in OSM}
+\title{List features in OSM}
 \usage{
-available_features()
+available_features(taginfo = FALSE)
+}
+\arguments{
+\item{taginfo}{If TRUE retrieve the full list of OSM features.
+\strong{NOTE}: it can be slow, ca. 60 seconds.}
 }
 \value{
-character vector of all known features
+Character vector of OSM features.
 }
 \description{
-List recognized features in OSM
+List most commonly used features in OSM as described in OSM's
+\href{https://wiki.openstreetmap.org/wiki/Map_Features}{Map Features page}.
+Optionally return the full list of features via the
+\href{https://taginfo.openstreetmap.org/}{\code{taginfo} API}.
 }
 \note{
-requires internet access
+Requires internet access.
 }
 \examples{
 \dontrun{

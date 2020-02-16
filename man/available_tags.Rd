@@ -4,16 +4,21 @@
 \alias{available_tags}
 \title{List tags associated with a feature}
 \usage{
-available_tags(feature)
+available_tags(feature, taginfo = FALSE)
 }
 \arguments{
 \item{feature}{feature to retrieve}
+
+\item{taginfo}{If TRUE retrieve the full list of OSM tags for \code{feature}.}
 }
 \value{
-character vector of all known tags for a feature
+Character vector of all known tags for a feature.
 }
 \description{
-List tags associated with a feature
+List most commonly used tags asociated to a \code{feature} as described in OSM's
+\href{https://wiki.openstreetmap.org/wiki/Map_Features}{Map Features page}.
+Optionally return the full list of tags used for \code{feature} via the
+\href{https://taginfo.openstreetmap.org/}{\code{taginfo} API}.
 }
 \note{
 requires internet access
