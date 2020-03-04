@@ -56,13 +56,17 @@ The package is designed to allow access to small-to-medium-sized OSM datasets (s
 
 ## Installation
 
-To install:
-```{r, eval=FALSE}
-# Install from CRAN 
+To install latest CRAN version:
+```{r cran-install, eval=FALSE}
 install.packages("osmdata")
-
-# Alternatively, install the development version
+```
+Alternatively, install the development version with any one of the following
+options:
+```{r remotes, eval = FALSE}
 # install.packages("remotes")
+remotes::install_git("https://git.sr.ht/~mpadge/osmdata")
+remotes::install_bitbucket("mpadge/osmdata")
+remotes::install_gitlab("mpadge/osmdata")
 remotes::install_github("ropensci/osmdata")
 ```
 
