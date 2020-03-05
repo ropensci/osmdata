@@ -6,6 +6,15 @@
 #'      will be passed to \link{getbb} to be converted to a numerical bounding
 #'      box. Can also be (iii) a matrix representing a bounding polygon as
 #'      returned from `getbb(..., format_out = "polygon")`.
+#' @param datetime If specified, a date and time to extract data from the OSM
+#'      database as it was up to the specified date and time, as described at
+#'      \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#date}.
+#'      This \emph{must} be in ISO8601 format ("YYYY-MM-DDThh:mm:ssZ"), where
+#'      both the "T" and "Z" characters must be present.
+#' @param datetime2 If specified, return the \emph{difference} in the OSM
+#'      database between \code{datetime} and \code{datetime2}, where
+#'      \code{datetime2 > datetime}. See
+#'      \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Delta_between_two_dates_.28.22diff.22.29}.
 #' @param timeout It may be necessary to increase this value for large queries,
 #'      because the server may time out before all data are delivered.
 #' @param memsize The default memory size for the 'overpass' server in *bytes*;
@@ -36,7 +45,8 @@
 #'                 add_osm_feature("amenity", "pub")
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 #' }
-opq <- function (bbox = NULL, timeout = 25, memsize)
+opq <- function (bbox = NULL, datetime = NULL, datetime2 = NULL,
+                 timeout = 25, memsize)
 {
     timeout <- format (timeout, scientific = FALSE)
     prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
@@ -44,11 +54,51 @@ opq <- function (bbox = NULL, timeout = 25, memsize)
     if (!missing (memsize))
         prefix <- paste0 (prefix, "[maxsize:",                          # nocov
                           format (memsize, scientific = FALSE), "]")    # nocov
+    if (!is.null (datetime))
+    {
+        datetime <- check_datetime (datetime)
+        if (!is.null (datetime2))
+        {
+            datetime2 <- check_datetime (datetime2)
+            prefix <- paste0 ('[diff:\"', datetime,'\",\"', datetime2, '\"]',
+                              prefix)
+        } else
+        {
+            prefix <- paste0 ('[date:\"', datetime,'\"]', prefix)
+        }
+    }
+
     res <- list (bbox = bbox_to_string (bbox),
               prefix = paste0 (prefix, ";\n(\n"),
               suffix = suffix, features = NULL)
     class (res) <- c (class (res), "overpass_query")
     return (res)
+}
+
+check_datetime <- function (x)
+{
+    if (nchar (x) != 20 &
+        substring (x, 5, 5) != "-" &
+        substring (x, 8, 8) != "-" &
+        substring (x, 11, 11) != "T" &
+        substring (x, 14, 14) != ":" &
+        substring (x, 17, 17) != ":" &
+        substring (x, 20, 20) != "Z")
+        stop ("x is not is ISO8601 format ('YYYY-MM-DDThh:mm:ssZ')")
+    YY <- substring (x, 1, 4)
+    MM <- substring (x, 6, 7)
+    DD <- substring (x, 9, 10)
+    hh <- substring (x, 12, 13)
+    mm <- substring (x, 15, 16)
+    ss <- substring (x, 18, 19)
+    if (formatC (as.integer (YY), width = 4, flag = "0") != YY |
+        formatC (as.integer (MM), width = 2, flag = "0") != MM |
+        formatC (as.integer (DD), width = 2, flag = "0") != DD |
+        formatC (as.integer (hh), width = 2, flag = "0") != hh |
+        formatC (as.integer (mm), width = 2, flag = "0") != mm |
+        formatC (as.integer (ss), width = 2, flag = "0") != ss)
+        stop ("x is not is ISO8601 format ('YYYY-MM-DDThh:mm:ssZ')")
+    invisible (x)
 }
 
 #' Add a feature to an Overpass query

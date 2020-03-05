@@ -1,6 +1,13 @@
 0.1.3.00x
 ===================
 
+Major changes:
+
+- `opq()` now has additional `datetime` and `datetime2` parameters which can be
+  used to extract historical data prior to `datetime`, or differences between
+  two datetimes by specifying `datetime2`; thanks to @neogeomat for the idea in
+  issue#179.
+
 0.1.3
 ===================
 
