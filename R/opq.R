@@ -60,11 +60,11 @@ opq <- function (bbox = NULL, datetime = NULL, datetime2 = NULL,
         if (!is.null (datetime2))
         {
             datetime2 <- check_datetime (datetime2)
-            prefix <- paste0 ('[diff:\"', datetime,'\",\"', datetime2, '\"]',
+            prefix <- paste0 ('[diff:\"', datetime, '\",\"', datetime2, '\"]',
                               prefix)
         } else
         {
-            prefix <- paste0 ('[date:\"', datetime,'\"]', prefix)
+            prefix <- paste0 ('[date:\"', datetime, '\"]', prefix)
         }
     }
 
@@ -72,6 +72,9 @@ opq <- function (bbox = NULL, datetime = NULL, datetime2 = NULL,
               prefix = paste0 (prefix, ";\n(\n"),
               suffix = suffix, features = NULL)
     class (res) <- c (class (res), "overpass_query")
+    attr (res, "datetime") <- datetime
+    attr (res, "datetime2") <- datetime
+
     return (res)
 }
 
@@ -85,9 +88,9 @@ check_datetime <- function (x)
         substring (x, 17, 17) != ":" &
         substring (x, 20, 20) != "Z")
         stop ("x is not is ISO8601 format ('YYYY-MM-DDThh:mm:ssZ')")
-    YY <- substring (x, 1, 4)
-    MM <- substring (x, 6, 7)
-    DD <- substring (x, 9, 10)
+    YY <- substring (x, 1, 4) # nolint
+    MM <- substring (x, 6, 7) # nolint
+    DD <- substring (x, 9, 10) # nolint
     hh <- substring (x, 12, 13)
     mm <- substring (x, 15, 16)
     ss <- substring (x, 18, 19)
