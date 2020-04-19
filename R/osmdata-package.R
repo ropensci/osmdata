@@ -48,7 +48,7 @@
 #' @author Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon
 #' @import sp
 #' @importFrom curl has_internet
-#' @importFrom httr content GET POST stop_for_status
+#' @importFrom httr content RETRY stop_for_status
 #' @importFrom jsonlite fromJSON
 #' @importFrom lubridate force_tz ymd_hms wday day month year
 #' @importFrom magrittr %>%

@@ -175,7 +175,7 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
                                                  units = 'secs'))) + pad_wait
             message (sprintf ('Waiting %s seconds', wait))
             Sys.sleep (wait)
-            res <- httr::POST (overpass_url, body = query)
+            res <- httr::RETRY ("POST", overpass_url, body = query, terminate_on = c(403, 404))
         } else {
             stop ('Overpass query unavailable', call. = FALSE)
         }
@@ -190,7 +190,7 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
     else
         doc <- httr::content (res, as = 'text', encoding = encoding,
                               type = "application/xml")
-    # TODO: Just return the direct httr::POST result here and convert in the
+    # TODO: Just return the direct httr::RETRY() result here and convert in the
     # subsequent functions (`osmdata_xml/csv/sp/sf`)?
     check_for_error (doc)
 

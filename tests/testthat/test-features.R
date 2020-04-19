@@ -26,7 +26,7 @@ if (get_local)
               cfm_output_af <<- returnValue()
           }
           )
-    res <- httr::GET (url_ftrs)
+    res <- httr::RETRY ("GET", url_ftrs, terminate_on = c(403, 404))
     untrace (curl::curl_fetch_memory)
     save (cfm_output_af, file = "../cfm_output_af.rda")
 }
@@ -42,7 +42,7 @@ test_that ("available_features", {
                    if (!test_all)
                    {
                        load ("../cfm_output_af.rda")
-                       stub (available_features, 'httr::GET', function (x)
+                       stub (available_features, 'httr::RETRY', function (...)
                              cfm_output_af$content )
                    }
                    expect_is (available_features (), "character")
@@ -57,7 +57,7 @@ test_that ("available_tags", {
                    if (!test_all)
                    {
                        load ("../cfm_output_af.rda")
-                       stub (available_tags, 'httr::GET', function (x)
+                       stub (available_tags, 'httr::RETRY', function (...)
                              cfm_output_af$content )
                    }
                    expect_that (length (available_tags ("junk")), equals (0))

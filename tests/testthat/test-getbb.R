@@ -25,7 +25,7 @@ if (get_local) {
               exit = function() {
                   cfm_output <<- returnValue()
               })
-        res <- httr::GET (the_url)
+        res <- httr::RETRY ("POST", the_url, terminate_on = c(403, 404))
         class (cfm_output) <- 'response'
         untrace (curl::curl_fetch_memory)
         return (cfm_output)
@@ -58,7 +58,7 @@ test_that ('getbb-place_name', {
                    if (!test_all)
                    {
                        load("../cfm_output_bb1.rda")
-                       stub (getbb, 'httr::GET', function (x) cfm_output_bb )
+                       stub (getbb, 'httr::RETRY', function (...) cfm_output_bb )
                    }
                    res <- getbb (place_name = "Salzburg")
                    expect_is (res, "matrix")
@@ -86,7 +86,7 @@ test_that ('getbb-polygon', {
                    if (!test_all)
                    {
                        load("../cfm_output_bb2.rda")
-                       stub (getbb, 'httr::GET', function (x) cfm_output_bb )
+                       stub (getbb, 'httr::RETRY', function (...) cfm_output_bb )
                    }
                    res <- getbb (place_name = "Salzburg", format_out = "polygon")
                    expect_is (res, "list")

@@ -18,7 +18,7 @@ get_local <- FALSE
 if (get_local)
 {
     # This test needs to return the results of overpass_query(), not the direct
-    # httr::POST call, so can't be grabbed with curl_fetch_memory
+    # httr::RETRY call, so can't be grabbed with curl_fetch_memory
     qry <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517))
     qry <- add_osm_feature (qry, key = 'highway')
     overpass_query_result <- overpass_query (opq_string (qry),
@@ -33,7 +33,7 @@ if (get_local)
           exit = function() {
               cfm_output_overpass_query <<- returnValue()
           })
-    res <- httr::POST (base_url, body = opq_string (qry))
+    res <- httr::RETRY ("POST", base_url, body = opq_string (qry), terminate_on = c(403, 404))
     untrace (curl::curl_fetch_memory)
     class (cfm_output_overpass_query) <- 'response'
     save (cfm_output_overpass_query, file = '../cfm_output_overpass_query.rda')
