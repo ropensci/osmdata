@@ -251,6 +251,13 @@ citation ("osmdata")
 #>   }
 ```
 
+## Data licensing
+
+All data that you access using `osmdata` is licensed under
+[OpenStreetMap's license, the Open Database Licence](https://wiki.osmfoundation.org/wiki/Licence).
+You should make sure you understand that licence before publishing any derived datasets.
+
+
 ## Code of Conduct
 
 Please note that this project is released with a [Contributor Code of
