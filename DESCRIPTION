@@ -17,8 +17,9 @@ Authors@R: c(
 Maintainer: Mark Padgham <mark.padgham@email.com>
 Title: Import 'OpenStreetMap' Data as Simple Features or Spatial Objects
 Description: Download and import of 'OpenStreetMap' ('OSM') data as 'sf' or 'sp'
-    objects.  'OSM' data are extracted from the 'Overpass' web server and
-    processed with very fast 'C++' routines for return to 'R'.
+    objects.  'OSM' data are extracted from the 'Overpass' web server 
+    (<http://overpass-api.de/>) and processed with very fast 'C++' routines for
+    return to 'R'.
 Depends:
     R (>= 3.2.4)
 License: GPL-3
