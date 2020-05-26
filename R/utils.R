@@ -48,7 +48,7 @@ unname_osm <- function (x, what = "osm_lines")
                             function (j) unname (j))))
     else if (what == "osm_multipolygons")
         g <- lapply (g, function (i)
-                     sf::st_polygon (lapply (i, function (j) unname (j))))
+                     sf::st_multipolygon (lapply (i, function (j) unname (j))))
     x [[what]]$geometry <- sf::st_sfc (g, crs = 4326)
     return (x)
 }
