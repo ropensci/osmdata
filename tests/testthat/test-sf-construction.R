@@ -33,10 +33,16 @@ make_sfc <- function (x, type) {
     attr(x, "precision") <- 0.0
     class(x) <- c(paste0("sfc_", class(x[[1L]])[2L]), "sfc")
     attr(x, "bbox") <- bb
-    NA_crs_ <- structure(list(epsg = NA_integer_,
-                              proj4string = NA_character_), class = "crs")
+
+    if (packageVersion ("sf") < 0.9)
+        NA_crs_ <- structure(list(epsg = NA_integer_,
+                                  proj4string = NA_character_), class = "crs")
+    else
+        NA_crs_ <- structure (list (input = NA_character_,
+                                    wkt = NA_character_), class = "crs")
     attr(x, "crs") <- NA_crs_
-    x
+
+    return (x)
 }
 
 
