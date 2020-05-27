@@ -170,9 +170,7 @@ fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8")
                                encoding = encoding)
 
         docx <- xml2::read_xml (doc)
-        obj$meta <- list (timestamp = get_timestamp (docx),
-                      OSM_version = get_osm_version (docx),
-                      overpass_version = get_overpass_version (docx))
+        obj <- get_metadata (obj, docx)
     } else
     {
         if (is.character (doc))
@@ -181,12 +179,57 @@ fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8")
                 stop ("file ", doc, " does not exist")
             doc <- xml2::read_xml (doc)
         }
-        obj$meta <- list (timestamp = get_timestamp (doc),
-                      OSM_version = get_osm_version (doc),
-                      overpass_version = get_overpass_version (doc))
+        obj <- get_metadata (obj, doc)
         doc <- as.character (doc)
     }
     list (obj = obj, doc = doc)
+}
+
+get_metadata <- function (obj, doc)
+{
+    meta <- list (timestamp = get_timestamp (doc),
+                  OSM_version = get_osm_version (doc),
+                  overpass_version = get_overpass_version (doc))
+    q <- obj$overpass_call
+
+    # q is mostly passed as result of opq_string_intern, so date and diff query
+    # metadata must be extracted from string
+    if (is.character (q))
+    {
+        x <- strsplit (q, "\"") [[1]]
+        if (grepl ("date", x [1]))
+        {
+            if (length (x) < 2)
+                stop ("unrecongised query format")
+            meta$datetime_to <- x [2]
+            meta$query_type <- "date"
+        } else if (grepl ("diff", x [1]))
+        {
+            if (length (x) < 4)
+                stop ("unrecongised query format")
+            meta$datetime_from <- x [2]
+            meta$datetime_to <- x [4]
+            meta$query_type <- "diff"
+        }
+    } else
+    {
+        if (!is.null (attr (q, "datetime2")))
+        {
+            meta$datetime_to <- attr (q, "datetime2")
+            meta$datetime_from <- attr (q, "datetime")
+            meta$query_type <- "diff"
+        } else if (!is.null (attr (q, "datetime")))
+        {
+            meta$datetime_to <- attr (q, "datetime")
+            meta$query_type <- "date"
+        }
+    }
+    obj$meta <- meta
+    attr (q, "datetime") <- attr (q, "datetime2") <- NULL
+
+    obj$overpass_call <- q
+
+    return (obj)
 }
 
 #' Make an 'sf' object from an 'sfc' list and associated data matrix returned

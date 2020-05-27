@@ -12,8 +12,6 @@ output:
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 
-
-
 # osmdata <a href='https://docs.ropensci.org/osmdata/'><img src='man/figures/osmhex.png' align="right" height=210 width=182/></a>
 
 
@@ -36,24 +34,32 @@ OpenStreetMap (OSM), delivered via the [Overpass
 API](https://wiki.openstreetmap.org/wiki/Overpass_API).  (Other packages such as
 [`OpenStreetMap`](https://cran.r-project.org/web/packages/OpenStreetMap/index.html)
 can be used to download raster tiles based on OSM data.)
-[Overpass](https://overpass-turbo.eu) is a read-only API that extracts custom
-selected parts of OSM data. Data can be returned in a variety of formats,
-including as [Simple Features (`sf`)](https://cran.r-project.org/package=sf),
-[Spatial (`sp`)](https://cran.r-project.org/package=sp), or [Silicate
-(`sc`)](https://github.com/hypertidy/silicate) objects.
-The package is designed to allow access to small-to-medium-sized OSM datasets (see [`geofabrik`](https://github.com/ITSLeeds/geofabrik) for an approach for reading-in bulk OSM data extracts).
-
+[Overpass](https://overpass-turbo.eu) is a read-only API that extracts
+custom selected parts of OSM data. Data can be returned in a variety of
+formats, including as [Simple Features
+(`sf`)](https://cran.r-project.org/package=sf), [Spatial
+(`sp`)](https://cran.r-project.org/package=sp), or [Silicate
+(`sc`)](https://github.com/hypertidy/silicate) objects. The package is
+designed to allow access to small-to-medium-sized OSM datasets (see
+[`geofabrik`](https://github.com/ITSLeeds/geofabrik) for an approach for
+reading-in bulk OSM data extracts).
 
 ## Installation
 
-To install:
+To install latest CRAN version:
 
-```r
-# Install from CRAN 
+``` r
 install.packages("osmdata")
+```
 
-# Alternatively, install the development version
+Alternatively, install the development version with any one of the
+following options:
+
+``` r
 # install.packages("remotes")
+remotes::install_git("https://git.sr.ht/~mpadge/osmdata")
+remotes::install_bitbucket("mpadge/osmdata")
+remotes::install_gitlab("mpadge/osmdata")
 remotes::install_github("ropensci/osmdata")
 ```
 
@@ -62,7 +68,7 @@ To load the package and check the version:
 ```r
 library(osmdata)
 packageVersion("osmdata")
-#> [1] '0.1.3.1'
+#> [1] '0.1.3'
 ```
 
 ## Usage
@@ -252,10 +258,185 @@ citation ("osmdata")
 #>   }
 ```
 
+## Data licensing
+
+All data that you access using `osmdata` is licensed under
+[OpenStreetMap's license, the Open Database Licence](https://wiki.osmfoundation.org/wiki/Licence).
+You should make sure you understand that licence before publishing any derived datasets.
+
+
 ## Code of Conduct
 
 Please note that this project is released with a [Contributor Code of
 Conduct](CODE_OF_CONDUCT.md).  By participating in this project you agree to
 abide by its terms.
+
+## Contributors
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+This project follows the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
+
+<table>
+
+<tr>
+<td align="center">
+<a href="https://github.com/mpadge">
+<img src="https://avatars1.githubusercontent.com/u/6697851?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=mpadge">mpadge</a>
+</td>
+<td align="center">
+<a href="https://github.com/Robinlovelace">
+<img src="https://avatars2.githubusercontent.com/u/1825120?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=Robinlovelace">Robinlovelace</a>
+</td>
+<td align="center">
+<a href="https://github.com/hrbrmstr">
+<img src="https://avatars2.githubusercontent.com/u/509878?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=hrbrmstr">hrbrmstr</a>
+</td>
+<td align="center">
+<a href="https://github.com/virgesmith">
+<img src="https://avatars3.githubusercontent.com/u/19323577?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=virgesmith">virgesmith</a>
+</td>
+<td align="center">
+<a href="https://github.com/maelle">
+<img src="https://avatars0.githubusercontent.com/u/8360597?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=maelle">maelle</a>
+</td>
+<td align="center">
+<a href="https://github.com/agila5">
+<img src="https://avatars1.githubusercontent.com/u/22221146?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=agila5">agila5</a>
+</td>
+<td align="center">
+<a href="https://github.com/jeroen">
+<img src="https://avatars3.githubusercontent.com/u/216319?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=jeroen">jeroen</a>
+</td>
+</tr>
+
+
+<tr>
+<td align="center">
+<a href="https://github.com/neogeomat">
+<img src="https://avatars1.githubusercontent.com/u/2562658?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=neogeomat">neogeomat</a>
+</td>
+<td align="center">
+<a href="https://github.com/angela-li">
+<img src="https://avatars3.githubusercontent.com/u/15808896?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=angela-li">angela-li</a>
+</td>
+<td align="center">
+<a href="https://github.com/Tazinho">
+<img src="https://avatars1.githubusercontent.com/u/11295192?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=Tazinho">Tazinho</a>
+</td>
+<td align="center">
+<a href="https://github.com/karpfen">
+<img src="https://avatars3.githubusercontent.com/u/11758039?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=karpfen">karpfen</a>
+</td>
+<td align="center">
+<a href="https://github.com/arfon">
+<img src="https://avatars1.githubusercontent.com/u/4483?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=arfon">arfon</a>
+</td>
+<td align="center">
+<a href="https://github.com/brry">
+<img src="https://avatars0.githubusercontent.com/u/8860095?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=brry">brry</a>
+</td>
+<td align="center">
+<a href="https://github.com/ccamara">
+<img src="https://avatars1.githubusercontent.com/u/706549?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=ccamara">ccamara</a>
+</td>
+</tr>
+
+
+<tr>
+<td align="center">
+<a href="https://github.com/danstowell">
+<img src="https://avatars1.githubusercontent.com/u/202965?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=danstowell">danstowell</a>
+</td>
+<td align="center">
+<a href="https://github.com/dpprdan">
+<img src="https://avatars2.githubusercontent.com/u/1423562?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=dpprdan">dpprdan</a>
+</td>
+<td align="center">
+<a href="https://github.com/JimShady">
+<img src="https://avatars1.githubusercontent.com/u/2901470?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=JimShady">JimShady</a>
+</td>
+<td align="center">
+<a href="https://github.com/karthik">
+<img src="https://avatars2.githubusercontent.com/u/138494?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=karthik">karthik</a>
+</td>
+<td align="center">
+<a href="https://github.com/MHenderson">
+<img src="https://avatars0.githubusercontent.com/u/23988?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=MHenderson">MHenderson</a>
+</td>
+<td align="center">
+<a href="https://github.com/patperu">
+<img src="https://avatars0.githubusercontent.com/u/82020?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=patperu">patperu</a>
+</td>
+<td align="center">
+<a href="https://github.com/stragu">
+<img src="https://avatars0.githubusercontent.com/u/1747497?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=stragu">stragu</a>
+</td>
+</tr>
+
+
+<tr>
+<td align="center">
+<a href="https://github.com/fzenoni">
+<img src="https://avatars3.githubusercontent.com/u/6040873?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=fzenoni">fzenoni</a>
+</td>
+<td align="center">
+<a href="https://github.com/rgzn">
+<img src="https://avatars2.githubusercontent.com/u/1675905?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=rgzn">rgzn</a>
+</td>
+</tr>
+
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 [![ropensci\_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)

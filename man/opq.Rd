@@ -4,7 +4,7 @@
 \alias{opq}
 \title{Build an Overpass query}
 \usage{
-opq(bbox = NULL, timeout = 25, memsize)
+opq(bbox = NULL, datetime = NULL, datetime2 = NULL, timeout = 25, memsize)
 }
 \arguments{
 \item{bbox}{Either (i) four numeric values specifying the maximal and minimal
@@ -13,6 +13,17 @@ or (ii) a character string in the form \code{xmin,ymin,xmax,ymax}. These
 will be passed to \link{getbb} to be converted to a numerical bounding
 box. Can also be (iii) a matrix representing a bounding polygon as
 returned from \code{getbb(..., format_out = "polygon")}.}
+
+\item{datetime}{If specified, a date and time to extract data from the OSM
+database as it was up to the specified date and time, as described at
+\url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#date}.
+This \emph{must} be in ISO8601 format ("YYYY-MM-DDThh:mm:ssZ"), where
+both the "T" and "Z" characters must be present.}
+
+\item{datetime2}{If specified, return the \emph{difference} in the OSM
+database between \code{datetime} and \code{datetime2}, where
+\code{datetime2 > datetime}. See
+\url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Delta_between_two_dates_.28.22diff.22.29}.}
 
 \item{timeout}{It may be necessary to increase this value for large queries,
 because the server may time out before all data are delivered.}
