@@ -48,6 +48,7 @@ available_features <- function() {
 available_tags <- function(feature) {
     url_ftrs <- "https://wiki.openstreetmap.org/wiki/Map_Features"
 
+    ret <- NULL
     if (curl::has_internet ())
     {
         if (missing (feature))
@@ -76,14 +77,15 @@ available_tags <- function(feature) {
             tags <- rvest::html_nodes (pg, sprintf ("a[title^='Tag:%s']", feature))
             tags <- vapply (strsplit (xml2::xml_attr (tags, "href"), "%3D"),
                             function (i) i [2], character (1))
-            unique (sort (tags))
+            ret <- unique (sort (tags))
         } else 
         {
             taglists <- setNames (do.call (mapply, c(FUN=c, lapply (taglists, `[`, keys))), keys)
             taglists <- mapply (unique, taglists)
-            taglists [[feature]] %>% sort ()
+            ret <- taglists [[feature]] %>% sort ()
         }
     } else {
         message ("No internet connection")
     }
+    return (ret)
 }
