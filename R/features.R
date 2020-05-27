@@ -18,9 +18,14 @@ available_features <- function() {
     {
         pg <- xml2::read_html (httr::GET (url_ftrs))
         keys <- xml2::xml_attr (rvest::html_nodes (pg, "a[href^='/wiki/Key']"), #nolint
-                                "title")
-        unique (sort (gsub ("^Key:", "", keys)))
-    } else {
+                                "href") %>% 
+            strsplit ("/wiki/Key:") %>% 
+            unlist ()
+        keys [keys != ""] %>%
+            sort () %>% 
+            unique ()
+    } else
+    {
         message ("No internet connection")
     }
 }
@@ -49,14 +54,35 @@ available_tags <- function(feature) {
             stop ("Please specify feature")
 
         pg <- xml2::read_html (httr::GET (url_ftrs))
-        #tags <- xml2::xml_attr (rvest::html_nodes (pg,
-        #                   sprintf("a[title^='Tag:%s']", feature)), "title")
-        #unique (sort (gsub (sprintf ("Tag:%s=", feature), "",
-        #                    tags, fixed = TRUE)))
-        tags <- rvest::html_nodes (pg, sprintf("a[title^='Tag:%s']", feature))
-        tags <- vapply (strsplit (xml2::xml_attr (tags, "href"), "%3D"),
-                        function (i) i [2], character (1))
-        unique (sort (tags))
+        taglists <- rvest::html_nodes (pg, "div[class='taglist']") %>%
+            rvest::html_attr ("data-taginfo-taglist-tags")
+        taglists <- lapply (taglists, function (i)
+        {
+            temp <- strsplit (i, "=") [[1]]
+            res <- NULL
+            if (length (temp) == 2)
+            {
+                res <- strsplit (temp [2], ",")
+                names (res) <- temp [1]
+            }
+            return (res)
+        })
+        taglists [vapply (taglists, is.null, logical (1))] <- NULL
+        keys <- unique (unlist (lapply (taglists, names)))
+        
+        if (!(feature %in% keys))
+        {
+            # try old style tables
+            tags <- rvest::html_nodes (pg, sprintf ("a[title^='Tag:%s']", feature))
+            tags <- vapply (strsplit (xml2::xml_attr (tags, "href"), "%3D"),
+                            function (i) i [2], character (1))
+            unique (sort (tags))
+        } else 
+        {
+            taglists <- setNames (do.call (mapply, c(FUN=c, lapply (taglists, `[`, keys))), keys)
+            taglists <- mapply (unique, taglists)
+            taglists [[feature]] %>% sort ()
+        }
     } else {
         message ("No internet connection")
     }
