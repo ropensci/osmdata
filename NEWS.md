@@ -8,6 +8,11 @@ Major changes:
   two datetimes by specifying `datetime2`; thanks to @neogeomat for the idea in
   issue#179.
 
+Minor changes:
+
+- New contributor Enrico Spinielli (@espinielli), via #207, #210, #211, #212 - Thanks!
+
+
 0.1.3
 ===================
 

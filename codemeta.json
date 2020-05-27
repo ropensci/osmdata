@@ -5,7 +5,7 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "osmdata",
-  "description": "Download and import of 'OpenStreetMap' ('OSM') data as 'sf' or 'sp'\n    objects.  'OSM' data are extracted from the 'Overpass' web server and\n    processed with very fast 'C++' routines for return to 'R'.",
+  "description": "Download and import of 'OpenStreetMap' ('OSM') data as 'sf' or 'sp'\n    objects.  'OSM' data are extracted from the 'Overpass' web server \n    (<http://overpass-api.de/>) and processed with very fast 'C++' routines for\n    return to 'R'.",
   "name": "osmdata: Import 'OpenStreetMap' Data as Simple Features or Spatial Objects",
   "codeRepository": "https://github.com/ropensci/osmdata",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
@@ -14,10 +14,10 @@
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.6.2",
+    "version": "4.0.0",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.2 (2019-12-12)",
+  "runtimePlatform": "R version 4.0.0 (2020-04-24)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -62,6 +62,11 @@
       "@type": "Person",
       "givenName": "Andrea",
       "familyName": "Gilardi"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Enrico",
+      "familyName": "Spinielli"
     },
     {
       "@type": "Person",
@@ -352,7 +357,7 @@
   "developmentStatus": "active",
   "releaseNotes": "https://github.com/ropensci/osmdata/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/osmdata/blob/master/README.md",
-  "fileSize": "3531.16KB",
+  "fileSize": "1172.237KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
