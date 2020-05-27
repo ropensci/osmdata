@@ -38,7 +38,8 @@ test_that ("multipolygon", {
                g <- x$geometry
                g_sf <- x_sf$geometry
                attrs <- names (attributes (g))
-               if (!test_all)
+               #if (!test_all) # CRS is no longer idencial because x has
+               # proj4strin
                    attrs <- attrs [attrs != 'crs']
                for (a in attrs)
                    expect_identical (attr (g, a), attr (g_sf, a))
@@ -71,7 +72,7 @@ test_that ("multilinestring", {
                g <- x$geometry
                g_sf <- x_sf$geometry
                attrs <- names (attributes (g))
-               if (!test_all)
+               #if (!test_all)
                    attrs <- attrs [attrs != 'crs']
                for (a in attrs)
                    expect_identical (attr (g, a), attr (g_sf, a))
@@ -106,7 +107,7 @@ test_that ("ways", {
                g <- x$geometry
                g_sf <- x_sf$geometry
                attrs <- names (attributes (g))
-               if (!test_all)
+               #if (!test_all)
                    attrs <- attrs [attrs != 'crs']
                for (a in attrs)
                    expect_identical (attr (g, a), attr (g_sf, a))
