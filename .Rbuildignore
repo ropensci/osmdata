@@ -20,3 +20,4 @@ data-raw/
 ^\.travis\.yml$
 ^\.Rproj\.user$
 ^codemeta\.json$
+^\.github$
