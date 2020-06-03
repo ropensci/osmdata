@@ -80,7 +80,9 @@ available_tags <- function(feature) {
             ret <- unique (sort (tags))
         } else 
         {
-            taglists <- setNames (do.call (mapply, c(FUN=c, lapply (taglists, `[`, keys))), keys)
+            taglists <- stats::setNames (do.call (mapply,
+                              c (FUN = c, lapply (taglists, `[`, keys))), keys)
+
             taglists <- mapply (unique, taglists)
             ret <- taglists [[feature]] %>% sort ()
         }
