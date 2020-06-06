@@ -6,6 +6,12 @@
 #'      will be passed to \link{getbb} to be converted to a numerical bounding
 #'      box. Can also be (iii) a matrix representing a bounding polygon as
 #'      returned from `getbb(..., format_out = "polygon")`.
+#' @param nodes_only If `TRUE`, query OSM nodes only. Some OSM structures such
+#'      as `place = "city"` or `highway = "traffic_signals"` are represented by
+#'      nodes only. Queries are built by default to return all nodes, ways, and
+#'      relation, but this can be very inefficient for node-only queries.
+#'      Setting this value to `TRUE` for such cases makes queries more
+#'      efficient, with data returned in the `osm_points` list item.
 #' @param datetime If specified, a date and time to extract data from the OSM
 #'      database as it was up to the specified date and time, as described at
 #'      \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#date}.
@@ -44,13 +50,22 @@
 #'                 opq () %>%
 #'                 add_osm_feature("amenity", "pub")
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
+#'
+#' # Use nodes_only to retrieve single point data only, such as for central
+#' # locations of cities.
+#' opq <- opq (bbox, nodes_only = TRUE) %>%
+#'     add_osm_feature (key = "place", value = "city") %>%
+#'     osmdata_sf (quiet = FALSE)
 #' }
-opq <- function (bbox = NULL, datetime = NULL, datetime2 = NULL,
+opq <- function (bbox = NULL, nodes_only = FALSE,
+                 datetime = NULL, datetime2 = NULL,
                  timeout = 25, memsize)
 {
     timeout <- format (timeout, scientific = FALSE)
     prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
-    suffix <- ");\n(._;>;);\nout body;" # recurse down
+    suffix <- ifelse (nodes_only,
+                      "); out;", 
+                      ");\n(._;>;);\nout body;") # recurse down
     if (!missing (memsize))
         prefix <- paste0 (prefix, "[maxsize:",                          # nocov
                           format (memsize, scientific = FALSE), "]")    # nocov
@@ -74,6 +89,7 @@ opq <- function (bbox = NULL, datetime = NULL, datetime2 = NULL,
     class (res) <- c (class (res), "overpass_query")
     attr (res, "datetime") <- datetime
     attr (res, "datetime2") <- datetime
+    attr (res, "nodes_only") <- nodes_only
 
     return (res)
 }
@@ -304,10 +320,21 @@ opq_string_intern <- function (opq, quiet = TRUE)
     if (!is.null (opq$features)) # opq with add_osm_feature
     {
         features <- paste (opq$features, collapse = '')
-        features <- paste0 (sprintf (' node %s (%s);\n', features, opq$bbox),
-                            sprintf (' way %s (%s);\n', features, opq$bbox),
-                            sprintf (' relation %s (%s);\n\n', features,
-                                     opq$bbox))
+        if (attr (opq, "nodes_only"))
+            features <- paste0 (sprintf (' node %s (%s);\n',
+                                         features,
+                                         opq$bbox))
+        else
+            features <- paste0 (sprintf (' node %s (%s);\n',
+                                         features,
+                                         opq$bbox),
+                                sprintf (' way %s (%s);\n',
+                                         features,
+                                         opq$bbox),
+                                sprintf (' relation %s (%s);\n\n',
+                                         features,
+                                         opq$bbox))
+
         res <- paste0 (opq$prefix, features, opq$suffix)
     } else if (!is.null (opq$id)) # opq with opq_osm_id
     {

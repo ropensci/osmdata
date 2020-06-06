@@ -4,7 +4,14 @@
 \alias{opq}
 \title{Build an Overpass query}
 \usage{
-opq(bbox = NULL, datetime = NULL, datetime2 = NULL, timeout = 25, memsize)
+opq(
+  bbox = NULL,
+  nodes_only = FALSE,
+  datetime = NULL,
+  datetime2 = NULL,
+  timeout = 25,
+  memsize
+)
 }
 \arguments{
 \item{bbox}{Either (i) four numeric values specifying the maximal and minimal
@@ -13,6 +20,13 @@ or (ii) a character string in the form \code{xmin,ymin,xmax,ymax}. These
 will be passed to \link{getbb} to be converted to a numerical bounding
 box. Can also be (iii) a matrix representing a bounding polygon as
 returned from \code{getbb(..., format_out = "polygon")}.}
+
+\item{nodes_only}{If \code{TRUE}, query OSM nodes only. Some OSM structures such
+as \code{place = "city"} or \code{highway = "traffic_signals"} are represented by
+nodes only. Queries are built by default to return all nodes, ways, and
+relation, but this can be very inefficient for node-only queries.
+Setting this value to \code{TRUE} for such cases makes queries more
+efficient, with data returned in the \code{osm_points} list item.}
 
 \item{datetime}{If specified, a date and time to extract data from the OSM
 database as it was up to the specified date and time, as described at
@@ -58,5 +72,11 @@ q2 <- getbb ("portsmouth", display_name_contains = "USA") \%>\%
                 opq () \%>\%
                 add_osm_feature("amenity", "pub")
 c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
+
+# Use nodes_only to retrieve single point data only, such as for central
+# locations of cities.
+opq <- opq (bbox, nodes_only = TRUE) \%>\%
+    add_osm_feature (key = "place", value = "city") \%>\%
+    osmdata_sf (quiet = FALSE)
 }
 }

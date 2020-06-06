@@ -7,6 +7,9 @@ Major changes:
   used to extract historical data prior to `datetime`, or differences between
   two datetimes by specifying `datetime2`; thanks to @neogeomat for the idea in
   issue#179.
+# opq() also has additional `nodes_only` parameter to return nodes as points
+  only, for efficient extraction of strictly point-based OSM data; thanks to
+  @gdkrmr for the idea in issue#221.
 
 Minor changes:
 
