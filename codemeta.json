@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/ropensci/osmdata",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.3.4",
+  "version": "0.1.3.5",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
