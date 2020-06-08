@@ -305,7 +305,10 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE)
 #' opq_enclosing
 #'
 #' Find all features which enclose a given point, and optionally match specific
-#' 'key'-'value' pairs.
+#' 'key'-'value' pairs. This function is \emph{not} intended to be combined with
+#' \link{add_osm_feature}, rather is only to be used in the sequence
+#' \link{opq_enclosing} -> \link{opq_string} -> \link{osmdata_xml} (or other
+#' extraction function). See examples for how to use.
 #'
 #' @param lon Longitude of desired point
 #' @param lat Latitude of desired point
@@ -323,9 +326,9 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE)
 #' lon <- -3.07677
 #' key <- "natural"
 #' value <- "water"
-#' q <- opq_enclosing (lon, lat, key, value) %>%
-#'     opq_string ()
-#' x <- osmdata_sf (q)
+#' x <- opq_enclosing (lon, lat, key, value) %>%
+#'     opq_string () %>%
+#'     osmdata_sf ()
 #' }
 #' @export
 opq_enclosing <- function (lon, lat, key = NULL, value = NULL,
