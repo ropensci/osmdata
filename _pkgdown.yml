@@ -21,6 +21,7 @@ reference:
     - add_osm_feature
     - opq_string
     - opq_osm_id
+    - opq_enclosing
   - title: Get additional OSM info
     contents:
     - available_features
