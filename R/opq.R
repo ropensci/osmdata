@@ -199,6 +199,23 @@ add_osm_feature <- function (opq, key, value, key_exact = TRUE,
 
     if (missing (value))
         value <- NULL
+
+    feature <- paste_features (key, value, key_pre, bind,
+                               match_case, value_exact)
+
+    opq$features <- c(opq$features, feature)
+
+    if (is.null (opq$suffix))
+        opq$suffix <- ");\n(._;>;);\nout body;"
+    #opq$suffix <- ");\n(._;>);\nout qt body;"
+    # qt option is not compatible with sf because GDAL requires nodes to be
+    # numerically sorted
+
+    opq
+}
+
+paste_features <- function (key, value, key_pre = "", bind = "=",
+                            match_case = FALSE, value_exact = FALSE) {
     if (is.null (value))
     {
         feature <- paste0 (sprintf (' ["%s"]', key))
@@ -228,15 +245,7 @@ add_osm_feature <- function (opq, key, value, key_exact = TRUE,
         feature <- paste0 (feature, "]")
     }
 
-    opq$features <- c(opq$features, feature)
-
-    if (is.null (opq$suffix))
-        opq$suffix <- ");\n(._;>;);\nout body;"
-    #opq$suffix <- ");\n(._;>);\nout qt body;"
-    # qt option is not compatible with sf because GDAL requires nodes to be
-    # numerically sorted
-
-    opq
+    return (feature)
 }
 
 #' Add a feature specified by OSM ID to an Overpass query
