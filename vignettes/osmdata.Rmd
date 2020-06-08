@@ -871,6 +871,16 @@ detail provided in the help files for each of these function.
    lines which are not part of any higher-level objects, and `$osm_points` only
    contains points which are not part of any higher-level objects.
 
+A further additional function is the ability to extract data as represented in
+the OSM database prior to a specified date, or within a specified range of
+dates. This is achieved by passing one or both values to the [`opq()`
+function](https://docs.ropensci.org/osmdata/reference/opq.html) of `datetime1`
+and `datetime2`. The resultant data extracted with one or more
+`add_osm_feature()` calls and an extraction function (`osmdata_sf/sp/sc/xml`)
+will then contain only those data present prior to the specified date (when
+`datetime1` only given), or between the two specified dates (when both
+`datetime1` and `datetime2` given).
+
 
 ## 6. Related Packages
 
