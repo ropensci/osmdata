@@ -88,7 +88,7 @@ opq <- function (bbox = NULL, nodes_only = FALSE,
               suffix = suffix, features = NULL)
     class (res) <- c (class (res), "overpass_query")
     attr (res, "datetime") <- datetime
-    attr (res, "datetime2") <- datetime
+    attr (res, "datetime2") <- datetime2
     attr (res, "nodes_only") <- nodes_only
 
     return (res)
