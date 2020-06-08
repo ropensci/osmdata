@@ -4,7 +4,14 @@
 \alias{opq_enclosing}
 \title{opq_enclosing}
 \usage{
-opq_enclosing(lon, lat, key = NULL, value = NULL, timeout = 25)
+opq_enclosing(
+  lon,
+  lat,
+  key = NULL,
+  value = NULL,
+  enclosing = "relation",
+  timeout = 25
+)
 }
 \arguments{
 \item{lon}{Longitude of desired point}
@@ -14,6 +21,10 @@ opq_enclosing(lon, lat, key = NULL, value = NULL, timeout = 25)
 \item{key}{(Optional) OSM key of enclosing data}
 
 \item{value}{(Optional) OSM value matching 'key' of enclosing data}
+
+\item{enclosing}{Either 'relation' or 'way' for whether to return enclosing
+objects of those respective types (where generally 'relation' will correspond
+to multipolygon objects, and 'way' to polygon objects).}
 
 \item{timeout}{It may be necessary to increase this value for large queries,
 because the server may time out before all data are delivered.}

@@ -311,6 +311,9 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE)
 #' @param lat Latitude of desired point
 #' @param key (Optional) OSM key of enclosing data
 #' @param value (Optional) OSM value matching 'key' of enclosing data
+#' @param enclosing Either 'relation' or 'way' for whether to return enclosing
+#' objects of those respective types (where generally 'relation' will correspond
+#' to multipolygon objects, and 'way' to polygon objects).
 #' @inheritParams opq
 #'
 #' @examples
@@ -325,7 +328,10 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE)
 #' x <- osmdata_sf (q)
 #' }
 #' @export
-opq_enclosing <- function (lon, lat, key = NULL, value = NULL, timeout = 25) {
+opq_enclosing <- function (lon, lat, key = NULL, value = NULL,
+                           enclosing = "relation", timeout = 25) {
+    enclosing <- match.arg (tolower (enclosing), c ("relation", "way"))
+
     bbox <- bbox_to_string (c (lon, lat, lon, lat))
     timeout <- format (timeout, scientific = FALSE)
     prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
@@ -339,7 +345,7 @@ opq_enclosing <- function (lon, lat, key = NULL, value = NULL, timeout = 25) {
     class (res) <- c (class (res), "overpass_query")
     attr (res, "datetime") <- attr (res, "datetime2") <- NULL
     attr (res, "nodes_only") <- FALSE
-    attr (res, "enclosing") <- TRUE
+    attr (res, "enclosing") <- enclosing
 
     return (res)
 }
@@ -376,9 +382,9 @@ opq_string_intern <- function (opq, quiet = TRUE)
             features <- paste0 (sprintf (' node %s (%s);\n',
                                          features,
                                          opq$bbox))
-        else if (attr (opq, "enclosing"))
+        else if (!is.null (attr (opq, "enclosing")))
             features <- paste0 ("is_in(", lat, ",", lon, ")->.a;",
-                                "relation(pivot.a)",
+                                attr (opq, "enclosing"), "(pivot.a)",
                                 features,
                                 ";")
         else
