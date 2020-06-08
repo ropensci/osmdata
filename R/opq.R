@@ -120,6 +120,41 @@ check_datetime <- function (x)
     invisible (x)
 }
 
+# used in the following add_osm_feature fn
+paste_features <- function (key, value, key_pre = "", bind = "=",
+                            match_case = FALSE, value_exact = FALSE) {
+    if (is.null (value))
+    {
+        feature <- paste0 (sprintf (' ["%s"]', key))
+    } else
+    {
+        if (length (value) > 1)
+        {
+            # convert to OR'ed regex:
+            value <- paste0 (value, collapse = "|")
+            if (value_exact)
+                value <- paste0 ("^(", value, ")$")
+            bind <- "~"
+        } else if (substring (value, 1, 1) == "!")
+        {
+            bind <- paste0 ("!", bind)
+            value <- substring (value, 2, nchar (value))
+            if (key_pre == "~")
+            {
+                message ("Value negation only possible for exact keys")
+                key_pre <- ""
+            }
+        }
+        feature <- paste0 (sprintf (' [%s"%s"%s"%s"',
+                                    key_pre, key, bind, value))
+        if (!match_case)
+            feature <- paste0 (feature, ",i")
+        feature <- paste0 (feature, "]")
+    }
+
+    return (feature)
+}
+
 #' Add a feature to an Overpass query
 #'
 #' @param opq An `overpass_query` object
@@ -214,40 +249,6 @@ add_osm_feature <- function (opq, key, value, key_exact = TRUE,
     opq
 }
 
-paste_features <- function (key, value, key_pre = "", bind = "=",
-                            match_case = FALSE, value_exact = FALSE) {
-    if (is.null (value))
-    {
-        feature <- paste0 (sprintf (' ["%s"]', key))
-    } else
-    {
-        if (length (value) > 1)
-        {
-            # convert to OR'ed regex:
-            value <- paste0 (value, collapse = "|")
-            if (value_exact)
-                value <- paste0 ("^(", value, ")$")
-            bind <- "~"
-        } else if (substring (value, 1, 1) == "!")
-        {
-            bind <- paste0 ("!", bind)
-            value <- substring (value, 2, nchar (value))
-            if (key_pre == "~")
-            {
-                message ("Value negation only possible for exact keys")
-                key_pre <- ""
-            }
-        }
-        feature <- paste0 (sprintf (' [%s"%s"%s"%s"',
-                                    key_pre, key, bind, value))
-        if (!match_case)
-            feature <- paste0 (feature, ",i")
-        feature <- paste0 (feature, "]")
-    }
-
-    return (feature)
-}
-
 #' Add a feature specified by OSM ID to an Overpass query
 #'
 #' @param id One or more official OSM identifiers (long-form integers)
@@ -301,6 +302,48 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE)
     opq
 }
 
+#' opq_enclosing
+#'
+#' Find all features which enclose a given point, and optionally match specific
+#' 'key'-'value' pairs.
+#'
+#' @param lon Longitude of desired point
+#' @param lat Latitude of desired point
+#' @param key (Optional) OSM key of enclosing data
+#' @param value (Optional) OSM value matching 'key' of enclosing data
+#' @inheritParams opq
+#'
+#' @examples
+#' \dontrun{
+#' # Get water body surrounding a particular point:
+#' lat <- 54.33601
+#' lon <- -3.07677
+#' key <- "natural"
+#' value <- "water"
+#' q <- opq_enclosing (lon, lat, key, value) %>%
+#'     opq_string ()
+#' x <- osmdata_sf (q)
+#' }
+#' @export
+opq_enclosing <- function (lon, lat, key = NULL, value = NULL, timeout = 25) {
+    bbox <- bbox_to_string (c (lon, lat, lon, lat))
+    timeout <- format (timeout, scientific = FALSE)
+    prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
+    suffix <- ");\n(._;>;);\nout;"
+
+    features <- paste_features (key, value, value_exact = TRUE, match_case = TRUE)
+    res <- list (bbox = bbox,
+                 prefix = paste0 (prefix, ";\n(\n"),
+                 suffix = suffix,
+                 features = features)
+    class (res) <- c (class (res), "overpass_query")
+    attr (res, "datetime") <- attr (res, "datetime2") <- NULL
+    attr (res, "nodes_only") <- FALSE
+    attr (res, "enclosing") <- TRUE
+
+    return (res)
+}
+
 #' Convert an overpass query into a text string
 #'
 #' Convert an osmdata query of class opq to a character string query to
@@ -333,6 +376,11 @@ opq_string_intern <- function (opq, quiet = TRUE)
             features <- paste0 (sprintf (' node %s (%s);\n',
                                          features,
                                          opq$bbox))
+        else if (attr (opq, "enclosing"))
+            features <- paste0 ("is_in(", lat, ",", lon, ")->.a;",
+                                "relation(pivot.a)",
+                                features,
+                                ";")
         else
             features <- paste0 (sprintf (' node %s (%s);\n',
                                          features,

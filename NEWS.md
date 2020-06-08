@@ -3,6 +3,7 @@
 
 Major changes:
 
+- New `osm_enclosing()` function; thanks to @barryrowlingson via #199
 - `opq()` now has additional `datetime` and `datetime2` parameters which can be
   used to extract historical data prior to `datetime`, or differences between
   two datetimes by specifying `datetime2`; thanks to @neogeomat for the idea in
