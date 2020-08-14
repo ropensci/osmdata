@@ -245,9 +245,12 @@ getbb <- function(place_name,
         for (i in indx_na)
             gt_p [[i]] <- NULL
 
+        # points and linestrings may be present in result, and will be prepended
+        # by sf-standard prefixes, while (multi)polygons will have been stripped
+        # to numeric values only.
         # TDOD: Do the following lines need to be repeated for _mp?
         indx <- which (vapply (gt_p, function (i)
-                               substring (i [1], 1, 1) == "P", logical (1)))
+                               substring (i [1], 1, 1) %in% c ("L", "P"), logical (1)))
         if (length (indx) > 0)
             gt_p <- gt_p [-indx]
 
