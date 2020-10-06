@@ -1,6 +1,6 @@
 #' unname_osmdata_sf
 #'
-#' Remove names from 'osmdata` geometry objects, for cases in which these cause
+#' Remove names from `osmdata` geometry objects, for cases in which these cause
 #' issues, particularly with plotting, such as
 #' \url{https://github.com/rstudio/leaflet/issues/631}, or
 #' \url{https://github.com/r-spatial/sf/issues/1177}. Note that removing these
