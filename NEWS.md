@@ -1,4 +1,4 @@
-0.1.3.00x
+0.1.4
 ===================
 
 Major changes:
@@ -51,8 +51,8 @@ Minor changes:
   `add_osm_feature` - previous version returned text values with spaces instead
   of underscore.
 - Fix bug in `osmdata_sf` for data with no names and/or no key-val pairs
-- Fix bug in `trim_osmdata` for multi* objects; thanks to @stragu
-- Impelement `trim_osmdata.sc` method
+- Fix bug in `trim_osmdata` for multi\* objects; thanks to @stragu
+- Implement `trim_osmdata.sc` method
 - retry httr calls to nominatim, which has lately been timing out quite often
 
 0.1.1
@@ -78,7 +78,7 @@ Major changes:
 
 Minor changes:
 
-- Bux fix for vectorized lists of values in `add_osm_feature`, so only listed
+- Bug fix for vectorized lists of values in `add_osm_feature`, so only listed
   items are returns (see #139; thanks @loreabad6)
 - But fix to ensure all `sf` `data.frame` objects have `stringsAsFactors =
   FALSE`
