@@ -379,6 +379,8 @@ opq_string <- function (opq)
 # specified.
 opq_string_intern <- function (opq, quiet = TRUE)
 {
+    lat <- lon <- NULL # suppress no visible binding messages
+
     res <- NULL
     if (!is.null (opq$features)) # opq with add_osm_feature
     {
