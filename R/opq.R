@@ -365,8 +365,10 @@ opq_enclosing <- function (lon, lat, key = NULL, value = NULL,
 #' @aliases opq_to_string
 #'
 #' @examples
+#' \dontrun{
 #' q <- opq ("hampi india")
 #' opq_string (q)
+#' }
 opq_string <- function (opq)
 {
     opq_string_intern (opq, quiet = TRUE)
