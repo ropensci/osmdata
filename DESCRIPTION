@@ -1,7 +1,7 @@
 Package: osmdata
 Title: Import 'OpenStreetMap' Data as Simple Features or Spatial
     Objects
-Version: 0.1.3.011
+Version: 0.1.3.012
 Authors@R: 
     c(person(given = "Mark",
              family = "Padgham",
@@ -81,7 +81,7 @@ Encoding: UTF-8
 LazyData: true
 NeedsCompilation: yes
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 SystemRequirements: C++11
 X-schema.org-applicationCategory: Data Access
 X-schema.org-isPartOf: https://ropensci.org

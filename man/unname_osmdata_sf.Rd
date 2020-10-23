@@ -13,6 +13,11 @@ unname_osmdata_sf(x)
 Same object, yet with no row names on geometry objects.
 }
 \description{
-Remove names from 'osmdata\verb{geometry objects, for cases in which these cause issues, particularly with plotting, such as \url{https://github.com/rstudio/leaflet/issues/631}, or \url{https://github.com/r-spatial/sf/issues/1177}. Note that removing these names also removes any ability to inter-relate the different components of an}osmdata` object, so use of this function is only recommended to resolve
+Remove names from \code{osmdata} geometry objects, for cases in which these cause
+issues, particularly with plotting, such as
+\url{https://github.com/rstudio/leaflet/issues/631}, or
+\url{https://github.com/r-spatial/sf/issues/1177}. Note that removing these
+names also removes any ability to inter-relate the different components of an
+\code{osmdata} object, so use of this function is only recommended to resolve
 issues such as those linked to above.
 }
