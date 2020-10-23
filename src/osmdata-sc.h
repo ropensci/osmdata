@@ -14,7 +14,7 @@
  *  details.
  *
  *  You should have received a copy of the GNU General Public License along with
- *  osm-router.  If not, see <http://www.gnu.org/licenses/>.
+ *  osm-router.  If not, see <https://www.gnu.org/licenses/>.
  *
  *  Author:     Mark Padgham
  *  E-Mail:     mark.padgham@email.com
@@ -280,7 +280,7 @@ inline void XmlDataSC::getSizes (XmlNodePtr pt)
 inline void XmlDataSC::countRelation (XmlNodePtr pt)
 {
     // Relations can have either members or key-val pairs, counted here with
-    // seperate counters
+    // separate counters
     for (XmlAttrPtr it = pt->first_attribute (); it != nullptr;
             it = it->next_attribute())
     {

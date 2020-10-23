@@ -26,7 +26,7 @@ if (get_local)
     save (overpass_query_result, file = "../overpass_query_result.rda")
     # but then overpass_query itself needs to be tested, so fetch_memory is used
     # here
-    base_url <- 'http://overpass-api.de/api/interpreter'
+    base_url <- 'https://overpass-api.de/api/interpreter'
     cfm_output_overpass_query <- NULL
     trace(
           curl::curl_fetch_memory,

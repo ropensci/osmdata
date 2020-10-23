@@ -2,7 +2,7 @@
 #'
 #' Add elevation data to a previously-extracted OSM data set, using a
 #' pre-downloaded global elevation file from
-#' \url{http://srtm.csi.cgiar.org/srtmdata}. Currently only works for `SC`-class
+#' \url{https://srtm.csi.cgiar.org/srtmdata}. Currently only works for `SC`-class
 #' objects returned from \link{osmdata_sc}.
 #'
 #' @param dat An `SC` object produced by \link{osmdata_sc}.

@@ -9,15 +9,15 @@ osmdata <a href='https://docs.ropensci.org/osmdata/'><img src='man/figures/osmhe
 status](https://github.com/ropensci/osmdata/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/osmdata/actions?query=workflow%3AR-CMD-check)
 [![codecov](https://codecov.io/gh/ropensci/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/osmdata)
 [![Project Status:
-Active](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/osmdata)](http://cran.r-project.org/web/packages/osmdata)
+Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/osmdata)](https://cran.r-project.org/web/packages/osmdata)
 [![CRAN
-Downloads](http://cranlogs.r-pkg.org/badges/grand-total/osmdata?color=orange)](http://cran.r-project.org/package=osmdata)
+Downloads](https://cranlogs.r-pkg.org/badges/grand-total/osmdata?color=orange)](https://cran.r-project.org/package=osmdata)
 
 <!--![](./man/figures/title.png)-->
 
 [![](https://badges.ropensci.org/103_status.svg)](https://github.com/ropensci/onboarding/issues/103)
-[![status](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3/status.svg)](http://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3)
+[![status](https://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3/status.svg)](https://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3)
 
 <!-- badges: end -->
 
@@ -251,20 +251,19 @@ to abide by its terms.
 Contributors
 ------------
 
-
-## Contributors
-
-
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-This project uses the [`allcontributor` package](https://github.com/mpadge/allcontributor) following the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
+This project uses the [`allcontributor`
+package](https://github.com/mpadge/allcontributor) following the
+[all-contributors](https://allcontributors.org) specification.
+Contributions of any kind are welcome!
 
-## Code
+Code
+----
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/mpadge">
@@ -309,8 +308,6 @@ This project uses the [`allcontributor` package](https://github.com/mpadge/allco
 <a href="https://github.com/ropensci/osmdata/commits?author=agila5">agila5</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/jeroen">
@@ -355,8 +352,6 @@ This project uses the [`allcontributor` package](https://github.com/mpadge/allco
 <a href="https://github.com/ropensci/osmdata/commits?author=brry">brry</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/ccamara">
@@ -401,8 +396,6 @@ This project uses the [`allcontributor` package](https://github.com/mpadge/allco
 <a href="https://github.com/ropensci/osmdata/commits?author=patperu">patperu</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/stragu">
@@ -423,14 +416,12 @@ This project uses the [`allcontributor` package](https://github.com/mpadge/allco
 <a href="https://github.com/ropensci/osmdata/commits?author=rgzn">rgzn</a>
 </td>
 </tr>
-
 </table>
 
-
-## Issue Authors
+Issue Authors
+-------------
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/lbuk">
@@ -475,8 +466,6 @@ This project uses the [`allcontributor` package](https://github.com/mpadge/allco
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Atbuckl">tbuckl</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/morellek">
@@ -521,8 +510,6 @@ This project uses the [`allcontributor` package](https://github.com/mpadge/allco
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amroorda">mroorda</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/MiKatt">
@@ -567,8 +554,6 @@ This project uses the [`allcontributor` package](https://github.com/mpadge/allco
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aedzer">edzer</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/marcusyoung">
@@ -613,8 +598,6 @@ This project uses the [`allcontributor` package](https://github.com/mpadge/allco
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Adipenpatel235">dipenpatel235</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/matkoniecz">
@@ -641,14 +624,12 @@ This project uses the [`allcontributor` package](https://github.com/mpadge/allco
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aorlandoandradeb">orlandoandradeb</a>
 </td>
 </tr>
-
 </table>
 
-
-## Issue Contributors
+Issue Contributors
+------------------
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/nsfinkelstein">
@@ -693,8 +674,6 @@ This project uses the [`allcontributor` package](https://github.com/mpadge/allco
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Alrob">lrob</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/mem48">
@@ -739,8 +718,6 @@ This project uses the [`allcontributor` package](https://github.com/mpadge/allco
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Agregor-d">gregor-d</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/gregmacfarlane">
@@ -767,12 +744,9 @@ This project uses the [`allcontributor` package](https://github.com/mpadge/allco
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Amtennekes">mtennekes</a>
 </td>
 </tr>
-
 </table>
-
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-
 
 [![ropensci\_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)

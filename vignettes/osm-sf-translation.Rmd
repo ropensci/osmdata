@@ -16,12 +16,12 @@ vignette: >
 
 ## 1. OpenStreetMap Data Structure
 
-[OpenStreetMap (OSM)](http://openstreetmap.org) data has a unique structure that
+[OpenStreetMap (OSM)](https://openstreetmap.org) data has a unique structure that
 is not directly reconcilable with other modes of representing spatial data,
 notably including the widely-adopted 
-[Simple Features (SF)](http://www.opengeospatial.org/standards/sfa) 
+[Simple Features (SF)](https://www.opengeospatial.org/standards/sfa) 
 scheme of the 
-[Open Geospatial Consortium (OGC)](http://www.opengeospatial.org). 
+[Open Geospatial Consortium (OGC)](https://www.opengeospatial.org). 
 The three primary spatial objects of OSM are:
 
 1. `nodes`, which are directly translatable to spatial points
@@ -50,7 +50,7 @@ The three primary spatial objects of OSM are:
 ## 2. Simple Features Data Structure
 
 The representation of spatial objects as Simple Features is 
-[described at length by the OGC](http://www.opengeospatial.org/standards/sfo),
+[described at length by the OGC](https://www.opengeospatial.org/standards/sfo),
 with this document merely reviewing relevant aspects. The SF system assumes that
 spatial features can be represented in one of seven distinct primary classes,
 which by convention are referred to in all capital letters.  Relevant classes
@@ -81,7 +81,7 @@ letters (such as `POLYGON`), while OSM geometries use lower case (such as
 `SF`, while the `R` package of the same name is referred to as `R::sf`--upper
 case `R` followed by lower case `sf`. Much functionality of `R::sf` is
 determined by the underlying 
-[Geospatial Data Abstraction Library](http://gdal.org) (`GDAL`; described
+[Geospatial Data Abstraction Library](https://gdal.org) (`GDAL`; described
 below). Representations of data are often discussed here with reference to
 `GDAL/sf`, in which case it may always be assumed that the translation and
 representation of data are determined by `GDAL` and not directly by the creators
@@ -169,7 +169,7 @@ for each member of the multilinestring.
 The `R` package [`sf`](https://cran.r-project.org/package=sf) provide an `R`
 implementation of Spatial Features, and provides a wrapper around GDAL for
 reading geospatial data. `GDAL` provides a ['driver' to read OSM
-data](http://www.gdal.org/drv_osm.html), and thus `sf` can also be used to read
+data](https://www.gdal.org/drv_osm.html), and thus `sf` can also be used to read
 `OSM` data in `R`, 
 [as detailed in the main `osmdata` vignette](https://docs.ropensci.org/osmdata/articles/osmdata.html).
 However, the `GDAL` translation of OSM data differs in several important ways

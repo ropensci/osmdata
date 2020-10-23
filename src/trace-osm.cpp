@@ -14,7 +14,7 @@
  *  details.
  *
  *  You should have received a copy of the GNU General Public License along with
- *  osm-router.  If not, see <http://www.gnu.org/licenses/>.
+ *  osm-router.  If not, see <https://www.gnu.org/licenses/>.
  *
  *  Author:     Mark Padgham 
  *  E-Mail:     mark.padgham@email.com 
@@ -56,7 +56,7 @@ void trace_relation (Relations::const_iterator &itr_rel,
  * @param &ways pointer to Ways structure
  * @param &nodes pointer to Nodes structure
  * @param &lon_vec pointer to 2D array of longitudes
- * @param &lat_vec pointer to 2D array of latitutdes
+ * @param &lat_vec pointer to 2D array of latitudes
  * @param &rowname_vec pointer to 2D array of rownames for each node.
  * @param &id_vec pointer to 2D array of OSM IDs for each way in relation
  */
@@ -172,7 +172,7 @@ void trace_multipolygon (Relations::const_iterator &itr_rel, const Ways &ways,
  * @param &ways pointer to Ways structure
  * @param &nodes pointer to Nodes structure
  * @param &lon_vec pointer to 2D array of longitudes
- * @param &lat_vec pointer to 2D array of latitutdes
+ * @param &lat_vec pointer to 2D array of latitudes
  * @param &rowname_vec pointer to 2D array of rownames for each node.
  * @param &id_vec pointer to 2D array of OSM IDs for each way in relation
  */
@@ -232,7 +232,7 @@ void trace_multilinestring (Relations::const_iterator &itr_rel,
  * @param first_node Last node of previous way to find in current
  * @param &wayi_id pointer to ID of current way
  * @lons pointer to vector of longitudes
- * @lats pointer to vector of latitutdes
+ * @lats pointer to vector of latitudes
  * @rownames pointer to vector of rownames for each node.
  *       
  * @returnn ID of final node in way, or a negative number if first_node does not
@@ -290,4 +290,3 @@ osmid_t trace_way (const Ways &ways, const Nodes &nodes, osmid_t first_node,
 
     return last_node;
 }
-

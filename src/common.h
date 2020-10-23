@@ -14,7 +14,7 @@
  *  details.
  *
  *  You should have received a copy of the GNU General Public License along with
- *  osm-router.  If not, see <http://www.gnu.org/licenses/>.
+ *  osm-router.  If not, see <https://www.gnu.org/licenses/>.
  *
  *  Author:     Mark Padgham / Andrew Smith
  *  E-Mail:     mark.padgham@email.com / andrew@casacazaz.net
@@ -160,4 +160,3 @@ typedef std::map <osmid_t, OneWay> Ways;
 // to store the ID in the Node struct first, before this can be used to make the
 // map of Nodes. TODO: Is there a better way?
 typedef std::map <osmid_t, Node> Nodes;
-
