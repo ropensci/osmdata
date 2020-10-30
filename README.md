@@ -255,8 +255,8 @@ Contributors
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-This project uses the [`allcontributor`
-package](https://github.com/mpadge/allcontributor) following the
+This project uses the [`allcontributors`
+package](https://github.com/mpadge/allcontributors) following the
 [all-contributors](https://allcontributors.org) specification.
 Contributions of any kind are welcome!
 
