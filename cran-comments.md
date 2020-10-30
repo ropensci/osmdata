@@ -1,6 +1,6 @@
 # CRAN notes for osmdata_0.1.4 submission
 
-This package fixes an intermittent error in previous version which called an occasionally unreliable URL in one example. That call has now been \dontrun{}.
+This package fixes URL redirects, along with an intermittent error in previous version which called an occasionally unreliable URL in one example. That call has now been \dontrun{}.
 
 One NOTE is generated on some systems regarding installed size, which is unavoidable due to very large C++ code base.
 

@@ -16,7 +16,7 @@ vignette: >
 
 ## 1. OpenStreetMap Data Structure
 
-[OpenStreetMap (OSM)](https://openstreetmap.org/) data has a unique structure that
+[OpenStreetMap (OSM)](https://www.openstreetmap.org/) data has a unique structure that
 is not directly reconcilable with other modes of representing spatial data,
 notably including the widely-adopted 
 [Simple Features (SF)](https://www.ogc.org/standards/sfa) 
