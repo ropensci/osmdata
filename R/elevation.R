@@ -2,7 +2,7 @@
 #'
 #' Add elevation data to a previously-extracted OSM data set, using a
 #' pre-downloaded global elevation file from
-#' \url{http://srtm.csi.cgiar.org/srtmdata}. Currently only works for `SC`-class
+#' \url{https://srtm.csi.cgiar.org/srtmdata/}. Currently only works for `SC`-class
 #' objects returned from \link{osmdata_sc}.
 #'
 #' @param dat An `SC` object produced by \link{osmdata_sc}.
@@ -18,7 +18,7 @@ osm_elevation <- function (dat, elev_file)
     {
         requireNamespace ("raster")
         message ("Elevation data from Consortium for Spatial Information; ",
-                 "see http://srtm.csi.cgiar.org/srtmdata/")
+                 "see https://srtm.csi.cgiar.org/srtmdata/")
     }
 
     elev_file <- check_elev_file (elev_file)

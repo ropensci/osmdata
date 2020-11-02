@@ -1,6 +1,8 @@
 # CRAN notes for osmdata_0.1.4 submission
 
-This package fixes URL redirects, along with an intermittent error in previous version which called an occasionally unreliable URL in one example. That call has now been \dontrun{}.
+This package fixes URL redirects. Please note that this includes complying with instructions from a previous submission to redirect http://srtm.csi.cgiar.org/ to https, even though the https server very frequently times out and returns an error. This error can only be avoided through reverting to https, against your prior instructions.
+
+The submission also fixes an intermittent error in previous version which called an occasionally unreliable URL in one example. That call has now been \dontrun{}.
 
 One NOTE is generated on some systems regarding installed size, which is unavoidable due to very large C++ code base.
 
