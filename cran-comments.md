@@ -1,6 +1,6 @@
 # CRAN notes for osmdata_0.1.4 submission
 
-This package fixes URL redirects. Please note that this includes complying with instructions from a previous submission to redirect http://srtm.csi.cgiar.org/ to https, even though the https server very frequently times out and returns an error. This error can only be avoided through reverting to https, against your prior instructions.
+This submission attempts to once again fix URL redirects. Please note that a previous attempt to submit this version complied with instructions to redirect http://srtm.csi.cgiar.org/ to https, but the https server generally times out and errors. This submission reverts all of those URLs to "http" and not "https". Even then, the server is very slow, and may not respond to automated status queries. This URL is nevertheless only given in documentation, and not directly called by any functions within the package. Slowness or errors in responding to this URL thus do not affect package functionality in any way.
 
 The submission also fixes an intermittent error in previous version which called an occasionally unreliable URL in one example. That call has now been \dontrun{}.
 
