@@ -252,6 +252,7 @@ abide by its terms.
 ## Contributors
 
 
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -310,6 +311,12 @@ This project uses the [`allcontributors` package](https://github.com/mpadge/allc
 
 <tr>
 <td align="center">
+<a href="https://github.com/idshklein">
+<img src="https://avatars3.githubusercontent.com/u/12258810?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=idshklein">idshklein</a>
+</td>
+<td align="center">
 <a href="https://github.com/jeroen">
 <img src="https://avatars3.githubusercontent.com/u/216319?v=4" width="100px;" alt=""/>
 </a><br>
@@ -345,16 +352,16 @@ This project uses the [`allcontributors` package](https://github.com/mpadge/allc
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=arfon">arfon</a>
 </td>
+</tr>
+
+
+<tr>
 <td align="center">
 <a href="https://github.com/brry">
 <img src="https://avatars0.githubusercontent.com/u/8860095?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=brry">brry</a>
 </td>
-</tr>
-
-
-<tr>
 <td align="center">
 <a href="https://github.com/ccamara">
 <img src="https://avatars1.githubusercontent.com/u/706549?v=4" width="100px;" alt=""/>
@@ -391,16 +398,16 @@ This project uses the [`allcontributors` package](https://github.com/mpadge/allc
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=MHenderson">MHenderson</a>
 </td>
+</tr>
+
+
+<tr>
 <td align="center">
 <a href="https://github.com/patperu">
 <img src="https://avatars0.githubusercontent.com/u/82020?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=patperu">patperu</a>
 </td>
-</tr>
-
-
-<tr>
 <td align="center">
 <a href="https://github.com/stragu">
 <img src="https://avatars0.githubusercontent.com/u/1747497?v=4" width="100px;" alt=""/>
@@ -770,6 +777,7 @@ This project uses the [`allcontributors` package](https://github.com/mpadge/allc
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
 
 
 [![ropensci\_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
