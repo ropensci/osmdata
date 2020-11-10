@@ -393,7 +393,7 @@ opq_string_intern <- function (opq, quiet = TRUE)
       lat <- strsplit(opq$bbox,",")[[1]][1]
       lon <- strsplit(opq$bbox,",")[[1]][2]
       features <- paste0("is_in(", lat, ",", 
-                         lon, ")->.a;", attr(opq, "enclosing"), 
+                         lon, ")->.a;", attr(opq, "enclosing"),  "(pivot.a)",
                          features,
                          ";")
       }
