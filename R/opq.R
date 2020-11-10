@@ -389,13 +389,14 @@ opq_string_intern <- function (opq, quiet = TRUE)
             features <- paste0 (sprintf (' node %s (%s);\n',
                                          features,
                                          opq$bbox))
-        else if (!is.null (attr (opq, "enclosing")))
-            lat <- strsplit(opq$bbox,",")[[1]][1]
-            lon <- strsplit(opq$bbox,",")[[1]][2]
-            features <- paste0("is_in(", lat, ",", 
-                       lon, ")->.a;", attr(opq, "enclosing"), 
-                                features,
-                                ";")
+      else if (!is.null (attr (opq, "enclosing"))){
+      lat <- strsplit(opq$bbox,",")[[1]][1]
+      lon <- strsplit(opq$bbox,",")[[1]][2]
+      features <- paste0("is_in(", lat, ",", 
+                         lon, ")->.a;", attr(opq, "enclosing"), 
+                         features,
+                         ";")
+      }
         else
             features <- paste0 (sprintf (' node %s (%s);\n',
                                          features,
