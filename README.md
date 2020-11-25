@@ -251,19 +251,17 @@ to abide by its terms.
 Contributors
 ------------
 
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-This project uses the [`allcontributors`
-package](https://github.com/ropenscilabs/allcontributors) following the
-[all-contributors](https://allcontributors.org) specification.
-Contributions of any kind are welcome!
+All contributions to this project are gratefully acknowledged using the [`allcontributors` package](https://github.com/ropenscilabs/allcontributors) following the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
 
-Code
-----
+### Code
 
 <table>
+
 <tr>
 <td align="center">
 <a href="https://github.com/mpadge">
@@ -308,6 +306,8 @@ Code
 <a href="https://github.com/ropensci/osmdata/commits?author=agila5">agila5</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/idshklein">
@@ -352,6 +352,8 @@ Code
 <a href="https://github.com/ropensci/osmdata/commits?author=arfon">arfon</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/brry">
@@ -396,6 +398,8 @@ Code
 <a href="https://github.com/ropensci/osmdata/commits?author=MHenderson">MHenderson</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/patperu">
@@ -422,12 +426,14 @@ Code
 <a href="https://github.com/ropensci/osmdata/commits?author=rgzn">rgzn</a>
 </td>
 </tr>
+
 </table>
 
-Issue Authors
--------------
+
+### Issue Authors
 
 <table>
+
 <tr>
 <td align="center">
 <a href="https://github.com/lbuk">
@@ -472,6 +478,8 @@ Issue Authors
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Atbuckl">tbuckl</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/morellek">
@@ -516,6 +524,8 @@ Issue Authors
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amroorda">mroorda</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/MiKatt">
@@ -560,6 +570,8 @@ Issue Authors
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aedzer">edzer</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/marcusyoung">
@@ -604,6 +616,8 @@ Issue Authors
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Adipenpatel235">dipenpatel235</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/matkoniecz">
@@ -630,12 +644,14 @@ Issue Authors
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aorlandoandradeb">orlandoandradeb</a>
 </td>
 </tr>
+
 </table>
 
-Issue Contributors
-------------------
+
+### Issue Contributors
 
 <table>
+
 <tr>
 <td align="center">
 <a href="https://github.com/nsfinkelstein">
@@ -680,6 +696,8 @@ Issue Contributors
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Alrob">lrob</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/mem48">
@@ -724,6 +742,8 @@ Issue Contributors
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Agregor-d">gregor-d</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/gregmacfarlane">
@@ -750,9 +770,12 @@ Issue Contributors
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Amtennekes">mtennekes</a>
 </td>
 </tr>
+
 </table>
+
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
 
 [![ropensci\_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
