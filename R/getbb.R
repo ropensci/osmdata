@@ -182,7 +182,7 @@ getbb <- function(place_name,
         # multipolys below are not strict SF MULTIPOLYGONs, rather just cases
         # where nominatim returns lists of multiple items
         if (length (gt) == 0) {
-            message ('No polygonal boundary for ', place_name)
+            message ("No polygonal boundary for ", place_name)
             ret <- bb_mat
         } else if (length (gt) == 1) {
                 ret <- gt [[1]]
@@ -190,8 +190,8 @@ getbb <- function(place_name,
             ret <- gt
         }
     } else {
-        stop (paste0 ('format_out not recognised; please specify one of ',
-                      '[data.frame, matrix, string, polygon]'))
+        stop (paste0 ("format_out not recognised; please specify one of ",
+                      "[data.frame, matrix, string, polygon]"))
     }
 
     if (format_out == "sf_polygon") {
@@ -221,7 +221,7 @@ get_bb_query <- function (place_name,
         query <- c (query, list (polygon_text = 1))
 
     query <- c (query, list (viewbox = viewbox,
-                             format = 'json',
+                             format = "json",
                              key = key,
                              # bounded = 1, # seemingly not working
                              limit = limit))
@@ -274,7 +274,7 @@ get_geotext_poly <- function (obj) {
     gt_p <- obj$geotext [indx] %>%
         gsub ("POLYGON\\(\\(", "", .) %>%
         gsub ("\\)\\)", "", .) %>%
-        strsplit (split = ',')
+        strsplit (split = ",")
     indx_na <- rev (which (is.na (gt_p)))
     for (i in indx_na)
         gt_p [[i]] <- NULL
@@ -317,7 +317,7 @@ get_geotext_multipoly <- function (obj) {
         gt_mp <- obj$geotext [indx_multi] %>%
             gsub ("MULTIPOLYGON\\(\\(\\(", "", .) %>%
             gsub ("\\)\\)\\)", "", .) %>%
-            strsplit (split = ',')
+            strsplit (split = ",")
         indx_na <- rev (which (is.na (gt_mp)))
         for (i in indx_na)
             gt_mp [[i]] <- NULL
@@ -360,7 +360,7 @@ get1bdypoly <- function (p) {
     ret [[length (ret) + 1]] <- rm_bracket (p)
 
     ret <- lapply (ret, function (i)
-                   apply (do.call (rbind, strsplit (i, split = ' ')),
+                   apply (do.call (rbind, strsplit (i, split = " ")),
                           2, as.numeric))
 
     return (ret)
