@@ -149,59 +149,26 @@ getbb <- function(place_name,
                   limit = 10,
                   key = NULL,
                   silent = TRUE) {
+
     is_polygon <- grepl("polygon", format_out)
-    query <- list (q = place_name)
-    featuretype <- tolower (featuretype)
 
-    query <- c (query, list (featuretype = featuretype))
-
-    if (is_polygon)
-        query <- c (query, list (polygon_text = 1))
-
-    query <- c (query, list (viewbox = viewbox,
-                             format = 'json',
-                             key = key,
-                             # bounded = 1, # seemingly not working
-                             limit = limit))
-
-    q_url <- httr::modify_url(base_url, query = query)
-
-    if (!silent)
-        print(q_url)
-
-    #res <- httr::POST(base_url, query = query, httr::timeout (100))
-    res <- httr::RETRY("POST", q_url, times = 10)
-    txt <- httr::content(res, as = "text", encoding = "UTF-8",
-                         type = "application/xml")
-    obj <- tryCatch(expr = {
-                        jsonlite::fromJSON(txt)
-                    },
-                    error = function(cond) {
-            # nocov start
-            message(paste0("Nominatim did respond as expected ",
-                           "(e.g. due to excessive use of their api).\n",
-                           "Please try again or use a different base_url\n",
-                           "The url that failed was:\n", q_url))
-            # nocov end
-                    }
-    )
-
-    # Code optionally select more things stored in obj...
-    if (!is.null(display_name_contains)) {
-        # nocov start
-        obj <- obj[grepl(display_name_contains, obj$display_name), ]
-        if (nrow (obj) == 0)
-            stop ("No locations include display name ", display_name_contains)
-        # nocov end
-    }
+    obj <- get_bb_query (place_name,
+                         featuretype,
+                         is_polygon,
+                         display_name_contains,
+                         viewbox,
+                         key,
+                         limit,
+                         base_url,
+                         silent)
 
     if (format_out == "data.frame") {
       return(obj)
     }
 
-    bn <- as.numeric(obj$boundingbox[[1]])
-    bb_mat <- matrix(c(bn[3:4], bn[1:2]), nrow = 2, byrow = TRUE)
-    dimnames(bb_mat) <- list(c("x", "y"), c("min", "max"))
+    bn <- as.numeric (obj$boundingbox[[1]])
+    bb_mat <- matrix (c (bn [3:4], bn [1:2]), nrow = 2, byrow = TRUE)
+    dimnames (bb_mat) <- list (c ("x", "y"), c ("min", "max"))
     if (format_out == "matrix")
         ret <- bb_mat
     else if (format_out == "string")
@@ -237,7 +204,8 @@ getbb <- function(place_name,
         # to numeric values only.
         # TDOD: Do the following lines need to be repeated for _mp?
         indx <- which (vapply (gt_p, function (i)
-                               substring (i [1], 1, 1) %in% c ("L", "P"), logical (1)))
+                               substring (i [1], 1, 1) %in% c ("L", "P"),
+                               logical (1)))
         if (length (indx) > 0)
             gt_p <- gt_p [-indx]
 
@@ -285,6 +253,64 @@ getbb <- function(place_name,
     }
 
     return (ret)
+}
+
+get_bb_query <- function (place_name,
+                          featuretype,
+                          is_polygon,
+                          display_name_contains,
+                          viewbox,
+                          key,
+                          limit,
+                          base_url,
+                          silent) {
+
+    query <- list (q = place_name)
+
+    featuretype <- tolower (featuretype)
+
+    query <- c (query, list (featuretype = featuretype))
+
+    if (is_polygon)
+        query <- c (query, list (polygon_text = 1))
+
+    query <- c (query, list (viewbox = viewbox,
+                             format = 'json',
+                             key = key,
+                             # bounded = 1, # seemingly not working
+                             limit = limit))
+
+    q_url <- httr::modify_url (base_url, query = query)
+
+    if (!silent)
+        print(q_url)
+
+    res <- httr::RETRY ("POST", q_url, times = 10)
+    txt <- httr::content (res, as = "text", encoding = "UTF-8",
+                          type = "application/xml")
+    obj <- tryCatch(expr = {
+                        jsonlite::fromJSON(txt)
+                    },
+                    error = function(cond) {
+            # nocov start
+            message(paste0("Nominatim did respond as expected ",
+                           "(e.g. due to excessive use of their api).\n",
+                           "Please try again or use a different base_url\n",
+                           "The url that failed was:\n", q_url))
+            # nocov end
+                    }
+    )
+
+    # Code optionally select more things stored in obj...
+    if (!is.null(display_name_contains)) {
+        # nocov start
+        obj <- obj [grepl(display_name_contains, obj$display_name), ]
+        if (nrow (obj) == 0)
+            stop ("No locations include display name ", display_name_contains)
+        # nocov end
+    }
+
+    return (obj)
 }
 
 #' get1bdypoly
