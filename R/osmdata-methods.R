@@ -19,52 +19,64 @@ print.osmdata <- function (x, ...)
         }
 
     # print geometry data
-    indx <- which (grepl ("osm", names (x)))
-
     sf <- any (grep ("sf", lapply (x, class)))
     if (sf)
-    {
-        for (i in names (x) [indx])
-        {
-            xi <- x [[i]]
-            nm <- c (rep (" ", 21 - nchar (i)), "$", i)
-            if (is.null (xi))
-                msg <- c (msg, nm, ' : NULL\n')
-            else if (grepl ("line", i)) # sf "lines" -> "linestrings"
-                msg <- c (msg, nm,
-                               " : 'sf' Simple Features Collection with ",
-                               nrow (xi), ' ', strsplit (i, 'osm_')[[1]][2],
-                               'trings\n')
-            else
-                msg <- c (msg, nm, " : 'sf' Simple Features Collection with ",
-                               nrow (xi), ' ',
-                               strsplit (i, 'osm_')[[1]][2], '\n')
-        }
-    } else
-    {
-        for (i in names (x) [indx])
-        {
-            xi <- x [[i]]
-            nm <- c (rep (" ", 21 - nchar (i)), "$", i)
-            if (is.null (xi))
-                msg <- c (msg, nm, ' : NULL', '\n')
-            else
-            {
-                type <- strsplit (i, 'osm_') [[1]] [2]
-                types <- c ('points', 'lines', 'polygons',
-                            'multlines', 'multipolygons')
-                sp_types <- c ('Points', 'Lines', 'Polygons',
-                               'Lines', 'Polygons')
-                types <- sp_types [match (type, types)]
-                msg <- c (msg, nm, " : 'sp' Spatial", types, 'DataFrame with ',
-                               nrow (xi), ' ', strsplit (i, 'osm_')[[1]][2],
-                               '\n')
-            }
+        msg <- msg_sf (msg, x)
+    else
+        msg <- msg_non_sf (msg, x)
+
+    message (msg)
+}
+
+msg_sf <- function (msg, x) {
+
+    indx <- which (grepl ("osm", names (x)))
+
+    for (i in names (x) [indx]) {
+
+        xi <- x [[i]]
+        nm <- c (rep (" ", 21 - nchar (i)), "$", i)
+        if (is.null (xi))
+            msg <- c (msg, nm, ' : NULL\n')
+        else if (grepl ("line", i)) # sf "lines" -> "linestrings"
+            msg <- c (msg, nm,
+                      " : 'sf' Simple Features Collection with ",
+                      nrow (xi), ' ', strsplit (i, 'osm_')[[1]][2],
+                      'trings\n')
+        else
+            msg <- c (msg, nm, " : 'sf' Simple Features Collection with ",
+                      nrow (xi), ' ',
+                      strsplit (i, 'osm_')[[1]][2], '\n')
+    }
+
+    return (msg)
+}
+
+msg_non_sf <- function (msg, x) {
+
+    indx <- which (grepl ("osm", names (x)))
+
+    for (i in names (x) [indx]) {
+
+        xi <- x [[i]]
+        nm <- c (rep (" ", 21 - nchar (i)), "$", i)
+        if (is.null (xi))
+            msg <- c (msg, nm, ' : NULL', '\n')
+        else {
+
+            type <- strsplit (i, 'osm_') [[1]] [2]
+            types <- c ('points', 'lines', 'polygons',
+                        'multlines', 'multipolygons')
+            sp_types <- c ('Points', 'Lines', 'Polygons',
+                           'Lines', 'Polygons')
+            types <- sp_types [match (type, types)]
+            msg <- c (msg, nm, " : 'sp' Spatial", types, 'DataFrame with ',
+                      nrow (xi), ' ', strsplit (i, 'osm_')[[1]][2],
+                      '\n')
         }
     }
 
-    message (msg)
-    #invisible (x)
+    return (msg)
 }
 
 #' @export
