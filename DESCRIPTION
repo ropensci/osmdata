@@ -1,7 +1,7 @@
 Package: osmdata
 Title: Import 'OpenStreetMap' Data as Simple Features or Spatial
     Objects
-Version: 0.1.4.026
+Version: 0.1.4.027
 Authors@R: 
     c(person(given = "Mark",
              family = "Padgham",

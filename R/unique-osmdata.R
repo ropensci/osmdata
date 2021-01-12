@@ -11,18 +11,18 @@
 #' @param dat An \link{osmdata} object
 #' @return Equivalent object reduced to only unique objects of each type
 #' @export
-unique_osmdata <- function (dat)
-{
-    if (!is (dat, 'osmdata'))
-        stop ('dat must be an osmdata object')
+unique_osmdata <- function (dat) {
 
-    if (is (dat$osm_points, 'sf'))
-    {
+    if (!is (dat, "osmdata"))
+        stop ("dat must be an osmdata object")
+
+    if (is (dat$osm_points, "sf")) {
+
         indx_points <- unique_points_sf (dat)
         indx_lines <- unique_lines_sf (dat)
         indx_polys <- unique_polygons_sf (dat)
-    } else
-    {
+    } else {
+
         indx_points <- unique_points_sp (dat)
         indx_lines <- unique_lines_sp (dat)
         indx_polys <- unique_polygons_sp (dat)
@@ -38,8 +38,8 @@ unique_osmdata <- function (dat)
 #' unique_points_sf
 #' get index of unique points in the `$osm_points` object
 #' @noRd
-unique_points_sf <- function (dat)
-{
+unique_points_sf <- function (dat) {
+
     pts <- paste0 (dat$osm_points$osm_id)
 
     lns_pts <- unlist (lapply (dat$osm_lines$geometry, function (i)
@@ -58,8 +58,8 @@ unique_points_sf <- function (dat)
 #' unique_points_sp
 #' get index of unique points in the `$osm_points` object
 #' @noRd
-unique_points_sp <- function (dat)
-{
+unique_points_sp <- function (dat) {
+
     pts <- rownames (slot (dat$osm_points, "data"))
 
     lns <- slot (dat$osm_lines, "lines")
@@ -82,8 +82,8 @@ unique_points_sp <- function (dat)
 #' unique_lines_sf
 #' get index of unique lines in the `$osm_lines` object
 #' @noRd
-unique_lines_sf <- function (dat)
-{
+unique_lines_sf <- function (dat) {
+
     lns <- paste0 (dat$osm_lines$osm_id)
 
     mlns <- unlist (lapply (dat$osm_multilines$geometry, names))
@@ -96,8 +96,8 @@ unique_lines_sf <- function (dat)
 #' unique_lines_sp
 #' get index of unique lines in the `$osm_lines` object
 #' @noRd
-unique_lines_sp <- function (dat)
-{
+unique_lines_sp <- function (dat) {
+
     lns <- rownames (slot (dat$osm_lines, "data"))
 
     mlns <- slot (dat$osm_multilines, "lines") [[1]]
@@ -110,8 +110,8 @@ unique_lines_sp <- function (dat)
 #' unique_polygons_sf
 #' get index of unique polygons in the `$osm_polygons` object
 #' @noRd
-unique_polygons_sf <- function (dat)
-{
+unique_polygons_sf <- function (dat) {
+
     polys <- paste0 (dat$osm_polygons$osm_id)
 
     mpolys <- unlist (lapply (dat$osm_multipolygons$geometry, function (i)
@@ -125,8 +125,8 @@ unique_polygons_sf <- function (dat)
 #' unique_polygons_sp
 #' get index of unique polygons in the `$osm_polygons` object
 #' @noRd
-unique_polygons_sp <- function (dat)
-{
+unique_polygons_sp <- function (dat) {
+
     polys <- rownames (slot (dat$osm_polygons, "data"))
 
     mpolys <- slot (dat$osm_multipolygons, "polygons")
