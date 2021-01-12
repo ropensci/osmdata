@@ -11,8 +11,8 @@
 #' @param x An 'osmdata_sf' object returned from function of same name
 #' @return Same object, yet with no row names on geometry objects.
 #' @export
-unname_osmdata_sf <- function (x)
-{
+unname_osmdata_sf <- function (x) 
+
     requireNamespace ("sf")
 
     x <- unname_osm_points (x)
@@ -24,15 +24,15 @@ unname_osmdata_sf <- function (x)
     return (x)
 }
 
-unname_osm_points <- function (x)
-{
+unname_osm_points <- function (x) 
+
     if (nrow (x$osm_points) > 0)
         names (x$osm_points$geometry) <- NULL
     return (x)
 }
 
-unname_osm <- function (x, what = "osm_lines")
-{
+unname_osm <- function (x, what = "osm_lines") 
+
     if (is.null (x [[what]]))
         return (x)
 
@@ -52,4 +52,3 @@ unname_osm <- function (x, what = "osm_lines")
     x [[what]]$geometry <- sf::st_sfc (g, crs = 4326)
     return (x)
 }
-
