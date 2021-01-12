@@ -98,9 +98,10 @@ check_for_error <- function (doc) {
     # read data, which would take forever.
     # nocov start
     if (grepl ("error: ", doc, ignore.case = TRUE) &
-        nchar (doc) < 10000)
-    {
+        nchar (doc) < 10000) {
+
         docx <- xml2::read_xml (doc)
+
         if (xml2::xml_length (docx) < 10) { # arbitrarily low value
 
             remark <- xml2::xml_text (xml2::xml_find_all (docx, "remark"))
