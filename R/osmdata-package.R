@@ -56,7 +56,7 @@
 #' @importFrom Rcpp evalCpp
 #' @importFrom rvest html_attr html_nodes
 #' @importFrom tibble as.tibble
-#' @importFrom utils browseURL read.table 
+#' @importFrom utils browseURL read.table
 #' @importFrom xml2 read_html read_xml xml_attr xml_text xml_find_all
 #' @useDynLib osmdata, .registration = TRUE
 NULL
