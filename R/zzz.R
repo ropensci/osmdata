@@ -1,19 +1,19 @@
 # nocov start
-.onLoad <- function (libname, pkgname)
-{
+.onLoad <- function (libname, pkgname) { # nolint
+
     op <- options ()
-	
+
     ## https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
     ## see https://github.com/ropensci/osmdata/pull/149
     ## Added and edited code here by JimShady to use random API each time.
-	available_apis <- c('https://overpass-api.de/api/interpreter',
-						'https://overpass.kumi.systems/api/interpreter')
-	
-    op.osmdata <- list (osmdata.base_url =
+    available_apis <- c("https://overpass-api.de/api/interpreter",
+                        "https://overpass.kumi.systems/api/interpreter")
+
+    op.osmdata <- list (osmdata.base_url =          # nolint
                         sample(available_apis, 1))
-	
-	## End of code edited by JimShady
-	
+
+    ## End of code edited by JimShady
+
     toset <- !(names (op.osmdata) %in% names (op))
     if (any (toset))
         options (op.osmdata [toset])
@@ -21,7 +21,7 @@
 }
 # nocov end
 
-.onAttach <- function(libname, pkgname) {
+.onAttach <- function(libname, pkgname) {       # nolint
     msg <- paste0 ("Data (c) OpenStreetMap contributors,",
                    " ODbL 1.0. https://www.openstreetmap.org/copyright")
     packageStartupMessage (msg)
@@ -37,11 +37,11 @@
 #' @seealso [set_overpass_url()]
 #'
 #' @export
-get_overpass_url <- function ()
-{
+get_overpass_url <- function () {
+
     op <- options ()
-    if (!'osmdata.base_url' %in% names (op))
-        stop ('overpass can not be retrieved') # nocov
+    if (!"osmdata.base_url" %in% names (op))
+        stop ("overpass can not be retrieved") # nocov
     options ()$osmdata.base_url
 }
 
@@ -52,16 +52,16 @@ get_overpass_url <- function ()
 #' Set the URL of the specified overpass API. Possible APIs with global coverage
 #' are:
 #' \itemize{
-#' \item 'https://overpass-api.de/api/interpreter' (default)
-#' \item 'https://overpass.kumi.systems/api/interpreter'
-#' \item 'https://overpass.osm.rambler.ru/cgi/interpreter'
-#' \item 'https://api.openstreetmap.fr/oapi/interpreter'
-#' \item 'https://overpass.osm.vi-di.fr/api/interpreter'
+#' \item "https://overpass-api.de/api/interpreter" (default)
+#' \item "https://overpass.kumi.systems/api/interpreter"
+#' \item "https://overpass.osm.rambler.ru/cgi/interpreter"
+#' \item "https://api.openstreetmap.fr/oapi/interpreter"
+#' \item "https://overpass.osm.vi-di.fr/api/interpreter"
 #' }
 #' Additional APIs with limited local coverage include:
 #' \itemize{
-#' \item 'https://overpass.osm.ch/api/interpreter' (Switzerland)
-#' \item 'https://overpass.openstreetmap.ie/api/interpreter' (Ireland)
+#' \item "https://overpass.osm.ch/api/interpreter" (Switzerland)
+#' \item "https://overpass.openstreetmap.ie/api/interpreter" (Ireland)
 #' }
 #'
 #' For further details, see
@@ -74,22 +74,22 @@ get_overpass_url <- function ()
 #' @seealso [get_overpass_url()]
 #'
 #' @export
-set_overpass_url <- function (overpass_url)
-{
+set_overpass_url <- function (overpass_url) {
+
     # check URL first
-    if (!grepl ('interpreter', overpass_url))
-        stop ('overpass_url not valid - must end with /interpreter')
+    if (!grepl ("interpreter", overpass_url))
+        stop ("overpass_url not valid - must end with /interpreter")
 
     old_url <- get_overpass_url ()
     op <- options () #nolint
-    op.osmdata <- list (osmdata.base_url = overpass_url)
+    op.osmdata <- list (osmdata.base_url = overpass_url) # nolint
     options (op.osmdata)
 
     st <- overpass_status (quiet = TRUE)
-    if (!'available' %in% names (st))
+    if (!"available" %in% names (st))
     {
         set_overpass_url (old_url)
-        stop ('overpass_url not valid')
+        stop ("overpass_url not valid")
     }
 
     invisible ()
