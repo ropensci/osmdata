@@ -234,22 +234,7 @@ getbb <- function(place_name,
     }
 
     if (format_out == "sf_polygon") {
-        if (!is.null (gt_p))
-            gt_p <- lapply (gt_p, function (i)
-                            mat2sf_poly (i, pname = place_name))
-        if (!is.null (gt_mp))
-            gt_mp <- lapply (gt_mp, function (i)
-                             mat2sf_multipoly (list (i), mpname = place_name))
-
-        if (is.null (gt_p) & is.null (gt_mp))
-            stop ("Query returned no polygons")
-        else if (is.null (gt_mp))
-            ret <- do.call (rbind, gt_p)
-        else if (is.null (gt_p))
-            ret <- do.call (rbind, gt_mp)
-        else
-            ret <- list ("polygon" = do.call (rbind, gt_p),
-                         "multipolygon" = do.call (rbind, gt_mp))
+        ret <- bb_as_sf_poly (gt_p, gt_mp, place_name)
     }
 
     return (ret)
@@ -409,4 +394,26 @@ mat2sf_multipoly <- function (x, mpname) {
     names (xsf) <- "geometry"
     attr (xsf, "sf_column") <- "geometry"
     return (xsf)
+}
+
+bb_as_sf_poly <- function (gt_p, gt_mp, place_name) {
+
+    if (!is.null (gt_p))
+        gt_p <- lapply (gt_p, function (i)
+                        mat2sf_poly (i, pname = place_name))
+    if (!is.null (gt_mp))
+        gt_mp <- lapply (gt_mp, function (i)
+                         mat2sf_multipoly (list (i), mpname = place_name))
+
+    if (is.null (gt_p) & is.null (gt_mp))
+        stop ("Query returned no polygons")
+    else if (is.null (gt_mp))
+        ret <- do.call (rbind, gt_p)
+    else if (is.null (gt_p))
+        ret <- do.call (rbind, gt_mp)
+    else
+        ret <- list ("polygon" = do.call (rbind, gt_p),
+                     "multipolygon" = do.call (rbind, gt_mp))
+
+    return (ret)
 }
