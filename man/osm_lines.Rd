@@ -25,7 +25,7 @@ polygon.
 \dontrun{
 dat <- opq ("hengelo nl") \%>\% add_osm_feature (key="highway") \%>\%
      osmdata_sf ()
-bus <- dat$osm_points [which (dat$osm_points$highway == 'bus_stop'),] \%>\%
+bus <- dat$osm_points [which (dat$osm_points$highway == "bus_stop"),] \%>\%
         rownames () # all OSM IDs of bus stops
 osm_lines (dat, bus) # all highways containing bus stops
 
