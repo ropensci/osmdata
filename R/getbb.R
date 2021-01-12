@@ -241,8 +241,10 @@ getbb <- function(place_name,
         if (length (indx) > 0)
             gt_p <- gt_p [-indx]
 
-        if (length (gt_p) > 0)
+        if (length (gt_p) > 0) {
             gt_p <- lapply (gt_p, function (i) get1bdypoly (i))
+            gt_p <- do.call (c, gt_p)
+        }
         # Extract all multipolygon components (see issue #195)
         if (length (gt_mp) > 0)
             gt_mp <- lapply (gt_mp, function (i) get1bdypoly (i))
@@ -317,8 +319,6 @@ get1bdypoly <- function (p) {
     ret <- lapply (ret, function (i)
                    apply (do.call (rbind, strsplit (i, split = ' ')),
                           2, as.numeric))
-    if (length (ret) == 1)
-        ret <- ret [[1]]
 
     return (ret)
 }
