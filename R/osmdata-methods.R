@@ -11,8 +11,7 @@ print.osmdata <- function (x, ...) {
     prnts <- c ("The call submitted to the overpass API",
                 "metadata including timestamp and version numbers")
     for (i in seq (objs))
-        if (!is.null (x [objs [i]]))
-        {
+        if (!is.null (x [objs [i]])) {
             nm <- c (rep (" ", 21 - nchar (objs [i])), "$", objs [i])
             msg <- c (msg, nm, " : ", prnts [i], "\n")
         }
@@ -79,8 +78,8 @@ msg_non_sf <- function (msg, x) {
 }
 
 #' @export
-c.osmdata <- function (...)
-{
+c.osmdata <- function (...) {
+
     x <- list (...)
     cl_null <- vapply (x, function (i)
                        is.null (i$osm_points) &

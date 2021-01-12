@@ -11,7 +11,7 @@ osm_poly2line(osmdat)
 }
 \value{
 Modified version of same object with all \code{osm_polygons}
-objeccts merged into \code{osm_lines}.
+objects merged into \code{osm_lines}.
 }
 \description{
 Street networks downloaded with \code{add_osm_object(key = "highway")} will
@@ -31,7 +31,7 @@ dat <- opq ("colchester uk") \%>\%
 # colchester has lots of roundabouts, and these are stored in 'osm_polygons'
 # rather than 'osm_lines'. The former can be merged with the latter by:
 dat2 <- osm_poly2line (dat)
-# 'dat2' will have more lines than 'dat', but the same number of polygons (they
-# are left unchanged.) 
+# 'dat2' will have more lines than 'dat', but the same number of polygons
+# (they are left unchanged.)
 }
 }

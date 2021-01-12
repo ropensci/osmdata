@@ -3,7 +3,7 @@
 
     op <- options ()
 
-    ## https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
+    ## https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances # nolint
     ## see https://github.com/ropensci/osmdata/pull/149
     ## Added and edited code here by JimShady to use random API each time.
     available_apis <- c("https://overpass-api.de/api/interpreter",
@@ -86,8 +86,7 @@ set_overpass_url <- function (overpass_url) {
     options (op.osmdata)
 
     st <- overpass_status (quiet = TRUE)
-    if (!"available" %in% names (st))
-    {
+    if (!"available" %in% names (st)) {
         set_overpass_url (old_url)
         stop ("overpass_url not valid")
     }

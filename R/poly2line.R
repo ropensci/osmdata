@@ -7,7 +7,7 @@
 #'
 #' @param osmdat An \link{osmdata} object.
 #' @return Modified version of same object with all `osm_polygons`
-#' objeccts merged into `osm_lines`.
+#' objects merged into `osm_lines`.
 #'
 #' @note The `osm_polygons` field is retained, with those features also
 #' repeated as `LINESTRING` objects in `osm_lines`.
@@ -22,7 +22,7 @@
 #' # rather than 'osm_lines'. The former can be merged with the latter by:
 #' dat2 <- osm_poly2line (dat)
 #' # 'dat2' will have more lines than 'dat', but the same number of polygons
-#' # (they are left unchanged.) 
+#' # (they are left unchanged.)
 #' }
 osm_poly2line <- function (osmdat) {
 

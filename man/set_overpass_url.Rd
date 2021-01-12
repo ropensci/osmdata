@@ -16,16 +16,16 @@ The overpass API URL
 Set the URL of the specified overpass API. Possible APIs with global coverage
 are:
 \itemize{
-\item 'https://overpass-api.de/api/interpreter' (default)
-\item 'https://overpass.kumi.systems/api/interpreter'
-\item 'https://overpass.osm.rambler.ru/cgi/interpreter'
-\item 'https://api.openstreetmap.fr/oapi/interpreter'
-\item 'https://overpass.osm.vi-di.fr/api/interpreter'
+\item "https://overpass-api.de/api/interpreter" (default)
+\item "https://overpass.kumi.systems/api/interpreter"
+\item "https://overpass.osm.rambler.ru/cgi/interpreter"
+\item "https://api.openstreetmap.fr/oapi/interpreter"
+\item "https://overpass.osm.vi-di.fr/api/interpreter"
 }
 Additional APIs with limited local coverage include:
 \itemize{
-\item 'https://overpass.osm.ch/api/interpreter' (Switzerland)
-\item 'https://overpass.openstreetmap.ie/api/interpreter' (Ireland)
+\item "https://overpass.osm.ch/api/interpreter" (Switzerland)
+\item "https://overpass.openstreetmap.ie/api/interpreter" (Ireland)
 }
 }
 \details{

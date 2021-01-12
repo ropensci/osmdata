@@ -126,7 +126,7 @@ bb_poly_to_mat.list <- function (x) {
 
 trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE) {
 
-    if (is (dat$osm_points, 'sf')) {
+    if (is (dat$osm_points, "sf")) {
 
         g <- do.call (rbind, dat$osm_points$geometry)
         indx <- sp::point.in.polygon (g [, 1], g [, 2],
@@ -176,7 +176,7 @@ get_trim_indx <- function (g, bb, exclude) {
 
 trim_to_poly <- function (dat, bb_poly, exclude = TRUE) {
 
-    if (is (dat$osm_lines, 'sf') | is (dat$osm_polygons, 'sf')) {
+    if (is (dat$osm_lines, "sf") | is (dat$osm_polygons, "sf")) {
 
         gnms <- c ("osm_lines", "osm_polygons")
         index <- vapply (gnms, function (i) !is.null (dat [[i]]),
@@ -206,7 +206,7 @@ trim_to_poly <- function (dat, bb_poly, exclude = TRUE) {
 
 trim_to_poly_multi <- function (dat, bb_poly, exclude = TRUE) {
 
-    if (is (dat$osm_multilines, 'sf') | is (dat$osm_multipolygons, 'sf')) {
+    if (is (dat$osm_multilines, "sf") | is (dat$osm_multipolygons, "sf")) {
 
         gnms <- c ("osm_multilines", "osm_multipolygons")
         index <- vapply (gnms, function (i) !is.null (dat [[i]]),

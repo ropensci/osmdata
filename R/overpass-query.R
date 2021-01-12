@@ -5,7 +5,7 @@
 #'         text of the message from Overpass and the timestamp of the
 #'         next available slot
 #' @export
-overpass_status <- function (quiet=FALSE)
+overpass_status <- function (quiet=FALSE) {
 
     available <- FALSE
     slot_time <- status <- st_type <- NULL
@@ -51,7 +51,7 @@ overpass_status <- function (quiet=FALSE)
 }
 
 # for APIs with status messages
-get_slot_time <- function (status, quiet) 
+get_slot_time <- function (status, quiet) {
 
     status_now <- strsplit (status, "\n")[[1]][3]
     if (!quiet) message (status_now)
@@ -73,7 +73,7 @@ get_slot_time <- function (status, quiet)
 }
 
 # For APIs with only timestamps but no status
-get_slot_timestamp <- function (status) 
+get_slot_timestamp <- function (status) {
 
     # nocov start
     slot_time <- NA
@@ -92,7 +92,7 @@ get_slot_timestamp <- function (status)
 #' @param return Nothing; stops execution if error encountered.
 #'
 #' @noRd
-check_for_error <- function (doc) 
+check_for_error <- function (doc) {
 
     # the nchar check uses an arbitrary value to avoid trying to `read_xml()`
     # read data, which would take forever.
