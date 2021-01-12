@@ -1,6 +1,10 @@
 0.1.4.00X
 ===================
 
+Minor changes:
+
+- Bug fix in `getbb()` via #232, thanks to @changwoo-lee
+
 0.1.4
 ===================
 
