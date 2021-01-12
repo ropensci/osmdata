@@ -33,14 +33,14 @@
 #' class (bb) # SpatialPolygonsDataFrame
 #' dat_tr <- trim_osmdata (dat, bb)
 #' }
-trim_osmdata <- function (dat, bb_poly, exclude = TRUE)
-{
+trim_osmdata <- function (dat, bb_poly, exclude = TRUE) {
+
     # safer than using method despatch, because these class defs are **not** the
     # first items
     if (methods::is (dat, "osmdata_sf") | methods::is (dat, "osmdata_sp"))
         trim_osmdata_sfp (dat = dat, bb_poly = bb_poly, exclude = exclude)
-    else if (methods::is (dat, "osmdata_sc"))
-    {
+    else if (methods::is (dat, "osmdata_sc")) {
+
         trim_osmdata_sc (dat = dat, bb_poly = bb_poly, exclude = exclude)
     } else
         stop ("unrecognised format: ", paste0 (class (dat), collapse = " "))
@@ -51,14 +51,14 @@ trim_osmdata <- function (dat, bb_poly, exclude = TRUE)
 # **********************   sf/sp methods   **********************
 # ***************************************************************
 
-trim_osmdata_sfp <- function (dat, bb_poly, exclude = TRUE)
-{
+trim_osmdata_sfp <- function (dat, bb_poly, exclude = TRUE) {
+
     requireNamespace ("sf")
     if (!is (bb_poly, "matrix"))
         bb_poly <- bb_poly_to_mat (bb_poly)
 
-    if (nrow (bb_poly) > 1)
-    {
+    if (nrow (bb_poly) > 1) {
+
         dat <- trim_to_poly_pts (dat, bb_poly, exclude = exclude) %>%
             trim_to_poly (bb_poly = bb_poly, exclude = exclude) %>%
             trim_to_poly_multi (bb_poly = bb_poly, exclude = exclude)
@@ -68,25 +68,25 @@ trim_osmdata_sfp <- function (dat, bb_poly, exclude = TRUE)
     return (dat)
 }
 
-bb_poly_to_mat <- function (x)
-{
+bb_poly_to_mat <- function (x) {
+
     UseMethod ("bb_poly_to_mat")
 }
 
-bb_poly_to_mat.default <- function (x)
-{
+bb_poly_to_mat.default <- function (x) {
+
     stop ("bb_poly is of unknown class; please use matrix or a spatial class")
 }
 
-more_than_one <- function ()
-{
+more_than_one <- function () {
+
     message ("bb_poly has more than one polygon; the first will be selected.")
 }
 
-bb_poly_to_mat.sf <- function (x)
-{
-    if (nrow (x) > 1)
-    {
+bb_poly_to_mat.sf <- function (x) {
+
+    if (nrow (x) > 1) {
+
         more_than_one ()
         x <- x [1, ]
     }
@@ -94,18 +94,18 @@ bb_poly_to_mat.sf <- function (x)
     bb_poly_to_mat.sfc (x)
 }
 
-bb_poly_to_mat.sfc <- function (x)
-{
-    if (length (x) > 1)
-    {
+bb_poly_to_mat.sfc <- function (x) {
+
+    if (length (x) > 1) {
+
         more_than_one ()
         x <- x [[1]]
     }
     as.matrix (x [[1]] [[1]])
 }
 
-bb_poly_to_mat.SpatialPolygonsDataFrame <- function (x)
-{
+bb_poly_to_mat.SpatialPolygonsDataFrame <- function (x) { # nolint
+
     x <- slot (x, "polygons")
     if (length (x) > 1)
         more_than_one ()
@@ -115,8 +115,8 @@ bb_poly_to_mat.SpatialPolygonsDataFrame <- function (x)
     slot (x [[1]], "coords")
 }
 
-bb_poly_to_mat.list <- function (x)
-{
+bb_poly_to_mat.list <- function (x) {
+
     if (length (x) > 1)
         more_than_one ()
     while (is.list (x))
@@ -124,10 +124,10 @@ bb_poly_to_mat.list <- function (x)
     return (x)
 }
 
-trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE)
-{
-    if (is (dat$osm_points, 'sf'))
-    {
+trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE) {
+
+    if (is (dat$osm_points, 'sf')) {
+
         g <- do.call (rbind, dat$osm_points$geometry)
         indx <- sp::point.in.polygon (g [, 1], g [, 2],
                                       bb_poly [, 1], bb_poly [, 2])
@@ -154,15 +154,15 @@ trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE)
 #' @return Vector index of items in g which are included in polygon
 #'
 #' @noRd
-get_trim_indx <- function (g, bb, exclude)
-{
-    indx <- lapply (g, function (i)
-                    {
+get_trim_indx <- function (g, bb, exclude) {
+
+    indx <- lapply (g, function (i) {
+
                         if (is.list (i)) # polygons
                             i <- i [[1]]
                         inp <- sp::point.in.polygon (i [, 1], i [, 2],
                                                      bb [, 1], bb [, 2])
-                        if ( (exclude & all (inp > 0)) |
+                        if ((exclude & all (inp > 0)) |
                             (!exclude & any (inp > 0)))
                             return (TRUE)
                         else
@@ -174,18 +174,18 @@ get_trim_indx <- function (g, bb, exclude)
     return (ret)
 }
 
-trim_to_poly <- function (dat, bb_poly, exclude = TRUE)
-{
-    if (is (dat$osm_lines, 'sf') | is (dat$osm_polygons, 'sf'))
-    {
+trim_to_poly <- function (dat, bb_poly, exclude = TRUE) {
+
+    if (is (dat$osm_lines, 'sf') | is (dat$osm_polygons, 'sf')) {
+
         gnms <- c ("osm_lines", "osm_polygons")
         index <- vapply (gnms, function (i) !is.null (dat [[i]]),
                          logical (1))
         gnms <- gnms [index]
-        for (g in gnms)
-        {
-            if (!is.null (dat [[g]]) & nrow (dat [[g]]) > 0)
-            {
+        for (g in gnms) {
+
+            if (!is.null (dat [[g]]) & nrow (dat [[g]]) > 0) {
+
                 indx <- get_trim_indx (dat [[g]]$geometry, bb_poly,
                                        exclude = exclude)
                 #cl <- class (dat [[g]]$geometry) # TODO: Delete
@@ -204,18 +204,18 @@ trim_to_poly <- function (dat, bb_poly, exclude = TRUE)
     return (dat)
 }
 
-trim_to_poly_multi <- function (dat, bb_poly, exclude = TRUE)
-{
-    if (is (dat$osm_multilines, 'sf') | is (dat$osm_multipolygons, 'sf'))
-    {
+trim_to_poly_multi <- function (dat, bb_poly, exclude = TRUE) {
+
+    if (is (dat$osm_multilines, 'sf') | is (dat$osm_multipolygons, 'sf')) {
+
         gnms <- c ("osm_multilines", "osm_multipolygons")
         index <- vapply (gnms, function (i) !is.null (dat [[i]]),
                          logical (1))
         gnms <- gnms [index]
-        for (g in gnms)
-        {
-            if (nrow (dat [[g]]) > 0)
-            {
+        for (g in gnms) {
+
+            if (nrow (dat [[g]]) > 0) {
+
                 if (g == "osm_multilines")
                     indx <- lapply (dat [[g]]$geometry, function (gi)
                                     get_trim_indx (g = gi, bb = bb_poly,
@@ -252,19 +252,24 @@ trim_to_poly_multi <- function (dat, bb_poly, exclude = TRUE)
 # ************************   sc methods   ***********************
 # ***************************************************************
 
-trim_osmdata_sc <- function (dat, bb_poly, exclude = TRUE)
-{
+trim_osmdata_sc <- function (dat, bb_poly, exclude = TRUE) {
+
     v <- verts_in_bpoly (dat, bb_poly)
 
-    if (exclude)
-    {
-        edges_in <- dat$edge$edge_ [which (dat$edge$.vx0 %in% v & dat$edge$.vx1 %in% v)]
-        objs_in <- split (dat$object_link_edge, as.factor (dat$object_link_edge$object_))
-        objs_in <- names (which (unlist (lapply (objs_in, function (i) all (i$edge_ %in% edges_in)))))
-    } else
-    {
-        edges_in <- dat$edge$edge_ [which (dat$edge$.vx0 %in% v | dat$edge$.vx1 %in% v)]
-        objs_in <- unique (dat$object_link_edge$object_ [match (edges_in, dat$object_link_edge$edge_)])
+    if (exclude) {
+
+        index <- which (dat$edge$.vx0 %in% v & dat$edge$.vx1 %in% v)
+        edges_in <- dat$edge$edge_ [index]
+        objs_in <- split (dat$object_link_edge,
+                          as.factor (dat$object_link_edge$object_))
+        objs_in <- apply (objs_in, function (i) all (i$edge_ %in% edges_in))
+        objs_in <- names (which (unlist (objs_in)))
+    } else {
+
+        index <- which (dat$edge$.vx0 %in% v | dat$edge$.vx1 %in% v)
+        edges_in <- dat$edge$edge_ [index]
+        index <- match (edges_in, dat$object_link_edge$edge_)
+        objs_in <- unique (dat$object_link_edge$object_ [index])
     }
 
     rels_in <- dat$relation_ [which (dat$relations_members$member %in% objs_in)]
@@ -276,9 +281,12 @@ trim_osmdata_sc <- function (dat, bb_poly, exclude = TRUE)
 
     dat$edge <- dat$edge [dat$edge$edge_ %in% dat$object_link_edge$edge_, ]
 
-    rels_in <- dat$relation_members$relation_ [which (dat$relation_members$member %in% objs_in)]
-    dat$relation_members <- dat$relation_members [dat$relation_members$relation_ %in% rels_in, ]
-    dat$relation_properties <- dat$relation_properties [dat$relation_properties$relation_ %in% rels_in, ]
+    index <- which (dat$relation_members$member %in% objs_in)
+    rels_in <- dat$relation_members$relation_ [index]
+    index <- which (dat$relation_members$relation_ %in% rels_in)
+    dat$relation_members <- dat$relation_members [index, ]
+    index <- which (dat$relation_properties$relation_ %in% rels_in)
+    dat$relation_properties <- dat$relation_properties [index, ]
 
     verts <- unique (c (dat$edge$.vx0, dat$edge$.vx1))
     dat$vertex <- dat$vertex [which (dat$vertex$vertex_ %in% verts), ]
@@ -286,33 +294,37 @@ trim_osmdata_sc <- function (dat, bb_poly, exclude = TRUE)
     return (dat)
 }
 
-verts_in_bpoly <- function (dat, bb_poly)
-{
-    bb_poly_to_sf <- function (bb_poly)
-    {
-        if (nrow (bb_poly) == 2)
-        {
+verts_in_bpoly <- function (dat, bb_poly) {
+
+    bb_poly_to_sf <- function (bb_poly) {
+
+        if (nrow (bb_poly) == 2) {
+
             bb_poly <- rbind (bb_poly [1, ],
                               c (bb_poly [1, 1], bb_poly [2, 2]),
                               bb_poly [2, ],
                               c (bb_poly [2, 1], bb_poly [1, 2]))
         }
+
         if (!identical (as.numeric (utils::head (bb_poly, 1)),
                         as.numeric (utils::tail (bb_poly, 1))))
             bb_poly <- rbind (bb_poly, bb_poly [1, ])
+
         sf::st_polygon (list (bb_poly)) %>%
             sf::st_sfc (crs = 4326) %>%
             sf::st_sf ()
     }
     bb_poly <- bb_poly_to_sf (bb_poly)
 
-    vert_to_sf <- function (dat)
-    {
+    vert_to_sf <- function (dat) {
+
         v <- data.frame (dat$vertex) [, 1:2]
         sf::st_as_sf (v, coords = c ("x_", "y_"), crs = 4326)
     }
-    # suppress message about st_intersection assuming planar coordinates, because
-    # the inaccuracy may be ignored here
+
+    # suppress message about st_intersection assuming planar coordinates,
+    # because the inaccuracy may be ignored here
     suppressMessages (w <- sf::st_within (vert_to_sf (dat), bb_poly))
+
     dat$vertex$vertex_ [which (as.logical (w))]
 }
