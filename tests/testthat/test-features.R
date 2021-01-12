@@ -15,8 +15,8 @@ source ("../stub.R")
 # large file in the installed package (>2MB), whereas this read_html version
 # yields a file <1/10th the size.
 get_local <- FALSE
-if (get_local)
-{
+if (get_local) {
+
     #trace ( curl::curl_fetch_memory, exit = function() { })
     url_ftrs <- "https://wiki.openstreetmap.org/wiki/Map_Features"
     cfm_output_af <- NULL
@@ -37,13 +37,11 @@ test_that ("available_features", {
                if (!has_internet) {
                    expect_message (available_features (),
                                    "No internet connection")
-               } else
-               {
-                   if (!test_all)
-                   {
+               } else {
+                   if (!test_all) {
                        load ("../cfm_output_af.rda")
-                       stub (available_features, 'httr::GET', function (x)
-                             cfm_output_af$content )
+                       stub (available_features, "httr::GET", function (x)
+                             cfm_output_af$content)
                    }
                    expect_is (available_features (), "character")
                }
@@ -54,11 +52,10 @@ test_that ("available_tags", {
                if (!has_internet) {
                    expect_message (available_tags (), "No internet connection")
                } else {
-                   if (!test_all)
-                   {
+                   if (!test_all) {
                        load ("../cfm_output_af.rda")
-                       stub (available_tags, 'httr::GET', function (x)
-                             cfm_output_af$content )
+                       stub (available_tags, "httr::GET", function (x)
+                             cfm_output_af$content)
                    }
                    expect_that (length (available_tags ("junk")), equals (0))
                    expect_is (available_tags ("highway"), "character")

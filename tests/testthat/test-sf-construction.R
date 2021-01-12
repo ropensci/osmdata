@@ -4,6 +4,7 @@ test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
              identical (Sys.getenv ("TRAVIS"), "true"))
 
 make_sfc <- function (x, type) {
+
     if (!is.list (x)) x <- list (x)
     type <- toupper (type)
     stopifnot (type %in% c ("POINT", "LINESTRING", "POLYGON",
@@ -35,11 +36,13 @@ make_sfc <- function (x, type) {
     attr(x, "bbox") <- bb
 
     if (packageVersion ("sf") < 0.9)
-        NA_crs_ <- structure(list(epsg = NA_integer_,
-                                  proj4string = NA_character_), class = "crs")
+        NA_crs_ <- structure (list (epsg = NA_integer_,             # nolint
+                                    proj4string = NA_character_),   # nolint
+                              class = "crs")
     else
-        NA_crs_ <- structure (list (input = NA_character_,
-                                    wkt = NA_character_), class = "crs")
+        NA_crs_ <- structure (list (input = NA_character_,          # nolint
+                                    wkt = NA_character_),           # nolint
+                              class = "crs")
     attr(x, "crs") <- NA_crs_
 
     return (x)
@@ -50,8 +53,7 @@ make_sfc <- function (x, type) {
 # ***                       POINTS                       ***
 # **********************************************************
 
-if (test_all)
-{
+if (test_all) {
 
 test_that ("sfg-point", {
                x <- structure (1:2, class = c("XY", "POINT", "sfg"))
@@ -97,7 +99,7 @@ test_that ("multiple-points", {
                expect_identical (x0, y0)
                dat <- data.frame (a = 11:12, txt = c("junk", "blah"))
                y0 <- sf::st_sf (x, dat, stringsAsFactors = FALSE)
-               expect_identical (x0, y0) # data.frame yields same results as lists
+               expect_identical (x0, y0) # df yields same results as lists
                x0 <- make_sf (x, dat, stringsAsFactors = FALSE)
                expect_identical (x0, y0)
 })

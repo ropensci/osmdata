@@ -1,89 +1,89 @@
 context ("extract-objects")
 
 # ------------------- void values
-test_that ('osm_points-void', {
+test_that ("osm_points-void", {
                expect_error (osm_points (),
-                             'osm_points can not be extracted without data')
+                             "osm_points can not be extracted without data")
                expect_error (osm_points (1),
-                             'id must be given to extract points')
+                             "id must be given to extract points")
                expect_error (osm_points (1, 1),
-                             'dat must be of class osmdata')
+                             "dat must be of class osmdata")
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-multi.osm")
                expect_error (osm_points (x),
-                             'id must be given to extract points')
+                             "id must be given to extract points")
                expect_error (osm_points (id = x),
-                             'osm_points can not be extracted without data')
+                             "osm_points can not be extracted without data")
                expect_error (osm_points (x, id = x),
-                             'id must be of class character or numeric')
+                             "id must be of class character or numeric")
 })
 
-test_that ('osm_lines-void', {
+test_that ("osm_lines-void", {
                expect_error (osm_lines (),
-                             'osm_lines can not be extracted without data')
+                             "osm_lines can not be extracted without data")
                expect_error (osm_lines (1),
-                             'id must be given to extract lines')
+                             "id must be given to extract lines")
                expect_error (osm_lines (1, 1),
-                             'dat must be of class osmdata')
+                             "dat must be of class osmdata")
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-multi.osm")
                expect_error (osm_lines (x),
-                             'id must be given to extract lines')
+                             "id must be given to extract lines")
                expect_error (osm_lines (id = x),
-                             'osm_lines can not be extracted without data')
+                             "osm_lines can not be extracted without data")
                expect_error (osm_lines (x, id = x),
-                             'id must be of class character or numeric')
+                             "id must be of class character or numeric")
 })
 
-test_that ('osm_polygons-void', {
+test_that ("osm_polygons-void", {
                expect_error (osm_polygons (),
-                             'osm_polygons can not be extracted without data')
+                             "osm_polygons can not be extracted without data")
                expect_error (osm_polygons (1),
-                             'id must be given to extract polygons')
+                             "id must be given to extract polygons")
                expect_error (osm_polygons (1, 1),
-                             'dat must be of class osmdata')
+                             "dat must be of class osmdata")
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-multi.osm")
                expect_error (osm_polygons (x),
-                             'id must be given to extract polygons')
+                             "id must be given to extract polygons")
                expect_error (osm_polygons (id = x),
-                             'osm_polygons can not be extracted without data')
+                             "osm_polygons can not be extracted without data")
                expect_error (osm_polygons (x, id = x),
-                             'id must be of class character or numeric')
+                             "id must be of class character or numeric")
 })
 
-test_that ('osm_multilines-void', {
+test_that ("osm_multilines-void", {
                expect_error (osm_multilines (),
-                             'osm_multilines can not be extracted without data')
+                             "osm_multilines can not be extracted without data")
                expect_error (osm_multilines (1),
-                             'id must be given to extract multilines')
+                             "id must be given to extract multilines")
                expect_error (osm_multilines (1, 1),
-                             'dat must be of class osmdata')
+                             "dat must be of class osmdata")
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-multi.osm")
                expect_error (osm_multilines (x),
-                             'id must be given to extract multilines')
+                             "id must be given to extract multilines")
                expect_error (osm_multilines (id = x),
-                             'osm_multilines can not be extracted without data')
+                             "osm_multilines can not be extracted without data")
                expect_error (osm_multilines (x, id = x),
-                             'id must be of class character or numeric')
+                             "id must be of class character or numeric")
 })
 
-test_that ('osm_multipolygons-void', {
+test_that ("osm_multipolygons-void", {
                expect_error (osm_multipolygons (),
-                         'osm_multipolygons can not be extracted without data')
+                         "osm_multipolygons can not be extracted without data")
                expect_error (osm_multipolygons (1),
-                             'id must be given to extract multipolygons')
+                             "id must be given to extract multipolygons")
                expect_error (osm_multipolygons (1, 1),
-                             'dat must be of class osmdata')
+                             "dat must be of class osmdata")
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-multi.osm")
                expect_error (osm_multipolygons (x),
-                             'id must be given to extract multipolygons')
+                             "id must be given to extract multipolygons")
                expect_error (osm_multipolygons (id = x),
-                         'osm_multipolygons can not be extracted without data')
+                         "osm_multipolygons can not be extracted without data")
                expect_error (osm_multipolygons (x, id = x),
-                             'id must be of class character or numeric')
+                             "id must be of class character or numeric")
 })
 
 # ------------------- points
@@ -167,7 +167,7 @@ test_that ("polygons-from-multilines", {
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x <- osmdata_sf (q0, "../osm-multi.osm")
                expect_error (osm_polygons (x, rownames (x$osm_multilines)),
-                     'MULTILINESTRINGS do not contain polygons by definition')
+                     "MULTILINESTRINGS do not contain polygons by definition")
 })
 
 test_that ("polygons-from-lines", {

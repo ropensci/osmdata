@@ -22,8 +22,7 @@ test_that ("multipolygon", {
                names (slot (x, "polygons")) <- NULL
                names (slot (slot (x, "polygons")[[1]], "Polygons")) <- NULL
                np <- length (slot (slot (x, "polygons")[[1]], "Polygons"))
-               for (i in seq (np))
-               {
+               for (i in seq (np)) {
                    rownames (slot (slot (slot (x, "polygons")[[1]],
                                          "Polygons")[[i]], "coords")) <- NULL
                    colnames (slot (slot (slot (x, "polygons")[[1]],
@@ -33,8 +32,7 @@ test_that ("multipolygon", {
                }
                # sp arbitrarily re-sorts the coordinates, so the following
                # always fails:
-               for (i in seq (np))
-               {
+               for (i in seq (np)) {
                    pi <- slot (slot (x, "polygons")[[1]], "Polygons") [[i]]
                    pi_sp <- slot (slot (x_sp, "polygons")[[1]],
                                   "Polygons") [[i]]
@@ -64,8 +62,7 @@ test_that ("multilinestring", {
                names (slot (x, "lines")) <- NULL
                names (slot (slot (x, "lines")[[1]], "Lines")) <- NULL
                np <- length (slot (slot (x, "lines")[[1]], "Lines"))
-               for (i in seq (np))
-               {
+               for (i in seq (np)) {
                    rownames (slot (slot (slot (x, "lines")[[1]],
                                          "Lines")[[i]], "coords")) <- NULL
                    colnames (slot (slot (slot (x, "lines")[[1]],
@@ -73,8 +70,7 @@ test_that ("multilinestring", {
                    dimnames (slot (slot (slot (x, "lines")[[1]],
                                          "Lines")[[i]], "coords")) <- NULL
                }
-               for (i in seq (np))
-               {
+               for (i in seq (np)) {
                    pi <- slot (slot (x, "lines")[[1]], "Lines") [[i]]
                    pi_sp <- slot (slot (x_sp, "lines")[[1]], "Lines") [[i]]
                    xyi <- slot (pi, "coords")
@@ -92,8 +88,7 @@ test_that ("ways", {
                x <- x [, which (names (x) %in% names (x_sp))]
                x_sp <- x_sp [, which (names (x_sp) %in% names (x))]
                np <- length (slot (slot (x, "lines")[[1]], "Lines"))
-               for (i in seq (np))
-               {
+               for (i in seq (np)) {
                    rownames (slot (slot (slot (x, "lines")[[1]],
                                          "Lines")[[i]], "coords")) <- NULL
                    colnames (slot (slot (slot (x, "lines")[[1]],
@@ -101,8 +96,7 @@ test_that ("ways", {
                    dimnames (slot (slot (slot (x, "lines")[[1]],
                                          "Lines")[[i]], "coords")) <- NULL
                }
-               for (i in seq (np))
-               {
+               for (i in seq (np)) {
                    pi <- slot (slot (x, "lines")[[1]], "Lines") [[i]]
                    pi_sp <- slot (slot (x_sp, "lines")[[1]], "Lines") [[i]]
                    xyi <- slot (pi, "coords")

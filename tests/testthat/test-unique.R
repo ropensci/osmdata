@@ -2,7 +2,7 @@ context ("unique-osm-data")
 
 require (sf)
 
-test_that ('unique sf', {
+test_that ("unique sf", {
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x0 <- osmdata_sf (q0, "../osm-multi.osm")
                x1 <- unique_osmdata (x0)
@@ -18,7 +18,7 @@ test_that ('unique sf', {
                expect_true (nrow (x0$osm_points) > nrow (x1$osm_points))
 })
 
-test_that ('unique sp', {
+test_that ("unique sp", {
                q0 <- opq (bbox = c(1, 1, 5, 5))
                x0 <- osmdata_sp (q0, "../osm-multi.osm")
                x1 <- unique_osmdata (x0)
