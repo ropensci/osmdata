@@ -35,13 +35,16 @@
 #' }
 trim_osmdata <- function (dat, bb_poly, exclude = TRUE) {
 
-    # safer than using method despatch, because these class defs are **not** the
+    # safer than using method despatch, because these class defs are **NOT** the
     # first items
-    if (methods::is (dat, "osmdata_sf") | methods::is (dat, "osmdata_sp"))
+    if (methods::is (dat, "osmdata_sf") | methods::is (dat, "osmdata_sp")) {
+
         trim_osmdata_sfp (dat = dat, bb_poly = bb_poly, exclude = exclude)
-    else if (methods::is (dat, "osmdata_sc")) {
+
+    } else if (methods::is (dat, "osmdata_sc")) {
 
         trim_osmdata_sc (dat = dat, bb_poly = bb_poly, exclude = exclude)
+
     } else
         stop ("unrecognised format: ", paste0 (class (dat), collapse = " "))
 }
@@ -262,8 +265,9 @@ trim_osmdata_sc <- function (dat, bb_poly, exclude = TRUE) {
         edges_in <- dat$edge$edge_ [index]
         objs_in <- split (dat$object_link_edge,
                           as.factor (dat$object_link_edge$object_))
-        objs_in <- apply (objs_in, function (i) all (i$edge_ %in% edges_in))
+        objs_in <- lapply (objs_in, function (i) all (i$edge_ %in% edges_in))
         objs_in <- names (which (unlist (objs_in)))
+
     } else {
 
         index <- which (dat$edge$.vx0 %in% v | dat$edge$.vx1 %in% v)
