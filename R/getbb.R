@@ -174,48 +174,9 @@ getbb <- function(place_name,
     else if (format_out == "string")
         ret <- bbox_to_string (bbox = bb_mat)
     else if (is_polygon) {
-        . <- NULL # suppress R CMD check note
-        indx_multi <- grep ("MULTIPOLYGON", obj$geotext)
-        gt_p <- gt_mp <- NULL
-        # nocov start
-        # TODO: Test this
-        if (length (indx_multi) > 0) {
-            gt_mp <- obj$geotext [indx_multi] %>%
-                gsub ("MULTIPOLYGON\\(\\(\\(", "", .) %>%
-                gsub ("\\)\\)\\)", "", .) %>%
-                strsplit (split = ',')
-            indx_na <- rev (which (is.na (gt_mp)))
-            for (i in indx_na)
-                gt_mp [[i]] <- NULL
-        }
-        # nocov end
 
-        indx <- which (!(seq (nrow(obj)) %in% indx_multi))
-        gt_p <- obj$geotext [indx] %>%
-            gsub ("POLYGON\\(\\(", "", .) %>%
-            gsub ("\\)\\)", "", .) %>%
-            strsplit (split = ',')
-        indx_na <- rev (which (is.na (gt_p)))
-        for (i in indx_na)
-            gt_p [[i]] <- NULL
-
-        # points and linestrings may be present in result, and will be prepended
-        # by sf-standard prefixes, while (multi)polygons will have been stripped
-        # to numeric values only.
-        # TDOD: Do the following lines need to be repeated for _mp?
-        indx <- which (vapply (gt_p, function (i)
-                               substring (i [1], 1, 1) %in% c ("L", "P"),
-                               logical (1)))
-        if (length (indx) > 0)
-            gt_p <- gt_p [-indx]
-
-        if (length (gt_p) > 0) {
-            gt_p <- lapply (gt_p, function (i) get1bdypoly (i))
-            gt_p <- do.call (c, gt_p)
-        }
-        # Extract all multipolygon components (see issue #195)
-        if (length (gt_mp) > 0)
-            gt_mp <- lapply (gt_mp, function (i) get1bdypoly (i))
+        gt_p <- get_geotext_poly (obj)
+        gt_mp <- get_geotext_multipoly (obj)
 
         gt <- c (gt_p, gt_mp)
         # multipolys below are not strict SF MULTIPOLYGONs, rather just cases
@@ -296,6 +257,77 @@ get_bb_query <- function (place_name,
     }
 
     return (obj)
+}
+
+#' Get all polygons from a 'geojson' object
+#'
+#' @param obj A 'geojson' object
+#' @return List of polygon matrices
+#' @noRd
+get_geotext_poly <- function (obj) {
+
+    . <- NULL # suppress R CMD check note
+
+    indx_multi <- grep ("MULTIPOLYGON", obj$geotext)
+    gt_p <- NULL
+    indx <- which (!(seq (nrow(obj)) %in% indx_multi))
+    gt_p <- obj$geotext [indx] %>%
+        gsub ("POLYGON\\(\\(", "", .) %>%
+        gsub ("\\)\\)", "", .) %>%
+        strsplit (split = ',')
+    indx_na <- rev (which (is.na (gt_p)))
+    for (i in indx_na)
+        gt_p [[i]] <- NULL
+
+    # points and linestrings may be present in result, and will be prepended
+    # by sf-standard prefixes, while (multi)polygons will have been stripped
+    # to numeric values only.
+    # TDOD: Do the following lines need to be repeated for _mp?
+    indx <- which (vapply (gt_p, function (i)
+                           substring (i [1], 1, 1) %in% c ("L", "P"),
+                           logical (1)))
+    if (length (indx) > 0)
+        gt_p <- gt_p [-indx]
+
+    if (length (gt_p) > 0) {
+        gt_p <- lapply (gt_p, function (i) get1bdypoly (i))
+        gt_p <- do.call (c, gt_p)
+    }
+
+    return (gt_p)
+}
+
+#' Get all multipolygons from a 'geojson' object
+#'
+#' See Issue #195
+#'
+#' @param obj A 'geojson' object
+#' @return List of multipolygon matrices
+#' @noRd
+get_geotext_multipoly <- function (obj) {
+
+    . <- NULL # suppress R CMD check note
+
+    indx_multi <- grep ("MULTIPOLYGON", obj$geotext)
+    gt_mp <- NULL
+
+    # nocov start
+    # TODO: Test this
+    if (length (indx_multi) > 0) {
+        gt_mp <- obj$geotext [indx_multi] %>%
+            gsub ("MULTIPOLYGON\\(\\(\\(", "", .) %>%
+            gsub ("\\)\\)\\)", "", .) %>%
+            strsplit (split = ',')
+        indx_na <- rev (which (is.na (gt_mp)))
+        for (i in indx_na)
+            gt_mp [[i]] <- NULL
+    }
+    # nocov end
+
+    if (length (gt_mp) > 0)
+        gt_mp <- lapply (gt_mp, function (i) get1bdypoly (i))
+
+    return (gt_mp)
 }
 
 #' get1bdypoly
