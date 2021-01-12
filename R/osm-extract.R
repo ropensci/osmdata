@@ -5,8 +5,7 @@ get_geoms <- function (dat, id) {
     where <- indx [which (vapply (dat [indx], function (i)
                                   any (id %in% rownames (i)),
                                   FUN.VALUE = logical (1)))]
-    lapply (where, function (i)
-            {
+    lapply (where, function (i) {
                 indx <- which (rownames (dat [[i]]) %in% id)
                 nms <- rownames (dat [[i]]) [indx]
                 ret <- dat [[i]] [indx, ]$geometry
