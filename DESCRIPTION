@@ -1,7 +1,6 @@
 Package: osmdata
-Title: Import 'OpenStreetMap' Data as Simple Features or Spatial
-    Objects
-Version: 0.1.4.034
+Title: Import 'OpenStreetMap' Data as Simple Features or Spatial Objects
+Version: 0.1.4.035
 Authors@R: 
     c(person(given = "Mark",
              family = "Padgham",
@@ -41,10 +40,10 @@ Authors@R:
              role = c("ctb", "cph"),
              comment = "Author of included stub.R code"))
 Maintainer: Mark Padgham <mark.padgham@email.com>
-Description: Download and import of 'OpenStreetMap' ('OSM') data
-    as 'sf' or 'sp' objects.  'OSM' data are extracted from the 'Overpass'
-    web server (<https://overpass-api.de/>) and processed with very fast
-    'C++' routines for return to 'R'.
+Description: Download and import of 'OpenStreetMap' ('OSM') data as 'sf'
+    or 'sp' objects.  'OSM' data are extracted from the 'Overpass' web
+    server (<https://overpass-api.de/>) and processed with very fast 'C++'
+    routines for return to 'R'.
 License: GPL-3
 URL: https://docs.ropensci.org/osmdata/ (website)
     https://github.com/ropensci/osmdata/ (devel)
@@ -82,5 +81,4 @@ RoxygenNote: 7.1.1
 SystemRequirements: C++11
 X-schema.org-applicationCategory: Data Access
 X-schema.org-isPartOf: https://ropensci.org
-X-schema.org-keywords: open0street0map, openstreetmap,
-    overpass0API, OSM
+X-schema.org-keywords: open0street0map, openstreetmap, overpass0API, OSM

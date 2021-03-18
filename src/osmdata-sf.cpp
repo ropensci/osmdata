@@ -487,12 +487,12 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st)
 
     Rcpp::NumericVector bbox = rcpp_get_bbox_sf (xml.x_min (), xml.y_min (), 
                                               xml.x_max (), xml.y_max ());
-    Rcpp::List crs = Rcpp::List::create (NA_INTEGER, 
+    Rcpp::List crs = Rcpp::List::create (NA_STRING, 
             Rcpp::CharacterVector::create (NA_STRING));
-    crs (0) = 4326;
-    crs (1) = p4s;
+    crs (0) = "EPSG:4326";
+    crs (1) = wkt;
     //Rcpp::List crs = Rcpp::List::create ((int) 4326, p4s);
-    crs.attr ("names") = Rcpp::CharacterVector::create ("epsg", "proj4string");
+    crs.attr ("names") = Rcpp::CharacterVector::create ("input", "wkt");
     crs.attr ("class") = "crs";
 
     /* --------------------------------------------------------------
