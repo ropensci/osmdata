@@ -4,6 +4,7 @@
 Minor changes:
 
 - Bug fix in `getbb()` via #232, thanks to @changwoo-lee
+- hard-code WKT string for EPSG:4326, to avoid obsolete proj4strings (#218)
 
 0.1.4
 ===================
