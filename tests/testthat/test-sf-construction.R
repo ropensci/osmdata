@@ -1,7 +1,7 @@
 context ("sf-construction")
 
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
-             identical (Sys.getenv ("TRAVIS"), "true"))
+             identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 
 make_sfc <- function (x, type) {
 
