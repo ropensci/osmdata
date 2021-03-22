@@ -19,6 +19,6 @@ appended to the vertices.
 \description{
 Add elevation data to a previously-extracted OSM data set, using a
 pre-downloaded global elevation file from
-\url{http://srtm.csi.cgiar.org/srtmdata/}. Currently only works for
+\url{https://srtm.csi.cgiar.org/srtmdata/}. Currently only works for
 \code{SC}-class objects returned from \link{osmdata_sc}.
 }

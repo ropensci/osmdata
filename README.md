@@ -1,7 +1,6 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-osmdata <a href='https://docs.ropensci.org/osmdata/'><img src='man/figures/osmhex.png' align="right" height=210 width=182/></a>
-===============================================================================================================================
+# osmdata <a href='https://docs.ropensci.org/osmdata/'><img src='man/figures/osmhex.png' align="right" height=210 width=182/></a>
 
 <!-- badges: start -->
 
@@ -10,14 +9,14 @@ status](https://github.com/ropensci/osmdata/workflows/R-CMD-check/badge.svg)](ht
 [![codecov](https://codecov.io/gh/ropensci/osmdata/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/osmdata)
 [![Project Status:
 Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/osmdata)](https://cran.r-project.org/web/packages/osmdata)
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/osmdata)](https://cran.r-project.org/web/packages/osmdata/)
 [![CRAN
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/osmdata?color=orange)](https://cran.r-project.org/package=osmdata)
 
 <!--![](./man/figures/title.png)-->
 
-[![](https://badges.ropensci.org/103_status.svg)](https://github.com/ropensci/onboarding/issues/103)
-[![status](https://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3/status.svg)](https://joss.theoj.org/papers/0f59fb7eaeb2004ea510d38c00051dd3)
+[![](https://badges.ropensci.org/103_status.svg)](https://github.com/ropensci/software-review/issues/103)
+[![status](https://joss.theoj.org/papers/10.21105/joss.00305/status.svg)](https://joss.theoj.org/papers/10.21105/joss.00305)
 
 <!-- badges: end -->
 
@@ -25,8 +24,8 @@ Downloads](https://cranlogs.r-pkg.org/badges/grand-total/osmdata?color=orange)](
 OpenStreetMap (OSM), delivered via the [Overpass
 API](https://wiki.openstreetmap.org/wiki/Overpass_API). (Other packages
 such as
-[`OpenStreetMap`](https://cran.r-project.org/web/packages/OpenStreetMap/index.html)
-can be used to download raster tiles based on OSM data.)
+[`OpenStreetMap`](https://cran.r-project.org/package=OpenStreetMap) can
+be used to download raster tiles based on OSM data.)
 [Overpass](https://overpass-turbo.eu) is a read-only API that extracts
 custom selected parts of OSM data. Data can be returned in a variety of
 formats, including as [Simple Features
@@ -34,34 +33,38 @@ formats, including as [Simple Features
 (`sp`)](https://cran.r-project.org/package=sp), or [Silicate
 (`sc`)](https://github.com/hypertidy/silicate) objects. The package is
 designed to allow access to small-to-medium-sized OSM datasets (see
-[`geofabrik`](https://github.com/ITSLeeds/geofabrik) for an approach for
-reading-in bulk OSM data extracts).
+[`geofabrik`](https://github.com/ropensci/osmextract) for an approach
+for reading-in bulk OSM data extracts).
 
-Installation
-------------
+## Installation
 
 To install latest CRAN version:
 
-    install.packages("osmdata")
+``` r
+install.packages("osmdata")
+```
 
 Alternatively, install the development version with any one of the
 following options:
 
-    # install.packages("remotes")
-    remotes::install_git("https://git.sr.ht/~mpadge/osmdata")
-    remotes::install_bitbucket("mpadge/osmdata")
-    remotes::install_gitlab("mpadge/osmdata")
-    remotes::install_github("ropensci/osmdata")
+``` r
+# install.packages("remotes")
+remotes::install_git("https://git.sr.ht/~mpadge/osmdata")
+remotes::install_bitbucket("mpadge/osmdata")
+remotes::install_gitlab("mpadge/osmdata")
+remotes::install_github("ropensci/osmdata")
+```
 
 To load the package and check the version:
 
-    library(osmdata)
-    #> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
-    packageVersion("osmdata")
-    #> [1] '0.1.4'
+``` r
+library(osmdata)
+#> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
+packageVersion("osmdata")
+#> [1] '0.1.4.34'
+```
 
-Usage
------
+## Usage
 
 [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API) queries
 can be built from a base query constructed with `opq` followed by
@@ -73,10 +76,12 @@ objects with `osmdata_sp()` or [Silicate
 (`sc`)](https://github.com/hypertidy/silicate) objects with
 `osmdata_sc()`. For example,
 
-    x <- opq(bbox = c(-0.27, 51.47, -0.20, 51.50)) %>% # Chiswick Eyot in London, U.K.
-        add_osm_feature(key = 'name', value = "Thames", value_exact = FALSE) %>%
-        osmdata_sf()
-    x
+``` r
+x <- opq(bbox = c(-0.27, 51.47, -0.20, 51.50)) %>% # Chiswick Eyot in London, U.K.
+    add_osm_feature(key = 'name', value = "Thames", value_exact = FALSE) %>%
+    osmdata_sf()
+x
+```
 
     #> Object of class 'osmdata' with:
     #>                  $bbox : 51.47,-0.27,51.5,-0.2
@@ -91,7 +96,9 @@ objects with `osmdata_sp()` or [Silicate
 OSM data can also be downloaded in OSM XML format with `osmdata_xml()`
 and saved for use with other software.
 
-    osmdata_xml(q1, "data.osm")
+``` r
+osmdata_xml(q1, "data.osm")
+```
 
 ### Bounding Boxes
 
@@ -100,25 +107,31 @@ query. The [`getbb()`
 function](https://docs.ropensci.org/osmdata/reference/getbb.html) can be
 used to extract bounding boxes for specified place names.
 
-    getbb ("astana kazakhstan")
-    #>        min      max
-    #> x 71.22444 71.78519
-    #> y 51.00068 51.35111
+``` r
+getbb ("astana kazakhstan")
+#>        min      max
+#> x 71.22444 71.78519
+#> y 51.00068 51.35111
+```
 
 The next step is to convert that to an overpass query object with the
 [`opq()`
 function](https://docs.ropensci.org/osmdata/reference/opq.html):
 
-    q <- opq (getbb ("astana kazakhstan"))
-    q <- opq ("astana kazakhstan") # identical result
+``` r
+q <- opq (getbb ("astana kazakhstan"))
+q <- opq ("astana kazakhstan") # identical result
+```
 
 It is also possible to use bounding polygons rather than rectangular
 boxes:
 
-    b <- getbb ("bangalore", format_out = "polygon")
-    class (b); head (b [[1]])
-    #> [1] "matrix" "array"
-    #> [1] 77.4601
+``` r
+b <- getbb ("bangalore", format_out = "polygon")
+class (b); head (b [[1]])
+#> [1] "matrix" "array"
+#> [1] 77.4601
+```
 
 ### Features
 
@@ -132,26 +145,32 @@ schema](https://wiki.openstreetmap.org/wiki/Map_Features). Multiple
 result being a logical AND operation, thus returning all amenities that
 are labelled both as restaurants and also as pubs:
 
-    q <- opq ("portsmouth usa") %>%
-        add_osm_feature(key = "amenity", value = "restaurant") %>%
-        add_osm_feature(key = "amenity", value = "pub") # There are none of these
+``` r
+q <- opq ("portsmouth usa") %>%
+    add_osm_feature(key = "amenity", value = "restaurant") %>%
+    add_osm_feature(key = "amenity", value = "pub") # There are none of these
+```
 
 (Logical OR combinations are demonstrated [below](#additional).)
 Negation can also be specified by pre-pending an exclamation mark so
 that the following requests all amenities that are NOT labelled as
 restaurants and that are not labelled as pubs:
 
-    q <- opq ("portsmouth usa") %>%
-        add_osm_feature(key = "amenity", value = "!restaurant") %>%
-        add_osm_feature(key = "amenity", value = "!pub") # There are a lot of these
+``` r
+q <- opq ("portsmouth usa") %>%
+    add_osm_feature(key = "amenity", value = "!restaurant") %>%
+    add_osm_feature(key = "amenity", value = "!pub") # There are a lot of these
+```
 
 Additional arguments allow for more refined matching, such as the
 following request for all pubs with “irish” in the name:
 
-    q <- opq ("washington dc") %>%
-        add_osm_feature(key = "amenity", value = "pub") %>%
-        add_osm_feature(key = "name", value = "irish",
-                        value_exact = FALSE, match_case = FALSE)
+``` r
+q <- opq ("washington dc") %>%
+    add_osm_feature(key = "amenity", value = "pub") %>%
+    add_osm_feature(key = "name", value = "irish",
+                    value_exact = FALSE, match_case = FALSE)
+```
 
 See
 [`?available_features`](https://docs.ropensci.org/osmdata/reference/available_features.html)
@@ -183,13 +202,15 @@ Logical OR combinations can be implemented with the package’s internal
 `c` method, so that the above example can be extended to all amenities
 that are either restaurants OR pubs with
 
-    pubs <- opq ("portsmouth usa") %>%
-        add_osm_feature(key = "amenity", value = "pub") %>%
-        osmdata_sf()
-    restaurants <- opq ("portsmouth usa") %>%
-        add_osm_feature(key = "amenity", value = "restaurant") %>%
-        osmdata_sf()
-    c (pubs, restaurants)
+``` r
+pubs <- opq ("portsmouth usa") %>%
+    add_osm_feature(key = "amenity", value = "pub") %>%
+    osmdata_sf()
+restaurants <- opq ("portsmouth usa") %>%
+    add_osm_feature(key = "amenity", value = "restaurant") %>%
+    osmdata_sf()
+c (pubs, restaurants)
+```
 
     #> Object of class 'osmdata' with:
     #>                  $bbox : 43.0135509,-70.8229994,43.0996118,-70.7279298
@@ -206,34 +227,34 @@ Data may also be trimmed to within a defined polygonal shape with the
 function. Full package functionality is described on the
 [website](https://docs.ropensci.org/osmdata/)
 
-Citation
---------
+## Citation
 
-    citation ("osmdata")
-    #> 
-    #> To cite osmdata in publications use:
-    #> 
-    #>   Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon (2017).
-    #>   osmdata Journal of Open Source Software, 2(14). URL
-    #>   https://doi.org/10.21105/joss.00305
-    #> 
-    #> A BibTeX entry for LaTeX users is
-    #> 
-    #>   @Article{,
-    #>     title = {osmdata},
-    #>     author = {Mark Padgham and Bob Rudis and Robin Lovelace and Maëlle Salmon},
-    #>     journal = {The Journal of Open Source Software},
-    #>     year = {2017},
-    #>     volume = {2},
-    #>     number = {14},
-    #>     month = {jun},
-    #>     publisher = {The Open Journal},
-    #>     url = {https://doi.org/10.21105/joss.00305},
-    #>     doi = {10.21105/joss.00305},
-    #>   }
+``` r
+citation ("osmdata")
+#> 
+#> To cite osmdata in publications use:
+#> 
+#>   Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon (2017).
+#>   osmdata Journal of Open Source Software, 2(14). URL
+#>   https://doi.org/10.21105/joss.00305
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Article{,
+#>     title = {osmdata},
+#>     author = {Mark Padgham and Bob Rudis and Robin Lovelace and Maëlle Salmon},
+#>     journal = {The Journal of Open Source Software},
+#>     year = {2017},
+#>     volume = {2},
+#>     number = {14},
+#>     month = {jun},
+#>     publisher = {The Open Journal},
+#>     url = {https://doi.org/10.21105/joss.00305},
+#>     doi = {10.21105/joss.00305},
+#>   }
+```
 
-Data licensing
---------------
+## Data licensing
 
 All data that you access using `osmdata` is licensed under
 [OpenStreetMap’s license, the Open Database
@@ -241,27 +262,27 @@ Licence](https://wiki.osmfoundation.org/wiki/Licence). Any derived data
 and products must also carry the same licence. You should make sure you
 understand that licence before publishing any derived datasets.
 
-Code of Conduct
----------------
+## Code of Conduct
 
 Please note that this project is released with a [Contributor Code of
 Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree
 to abide by its terms.
 
-Contributors
-------------
-
+## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-All contributions to this project are gratefully acknowledged using the [`allcontributors` package](https://github.com/ropenscilabs/allcontributors) following the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
+All contributions to this project are gratefully acknowledged using the
+[`allcontributors`
+package](https://github.com/ropenscilabs/allcontributors) following the
+[all-contributors](https://allcontributors.org) specification.
+Contributions of any kind are welcome!
 
 ### Code
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/mpadge">
@@ -306,8 +327,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=agila5">agila5</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/idshklein">
@@ -352,8 +371,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=arfon">arfon</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/brry">
@@ -398,8 +415,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=MHenderson">MHenderson</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/patperu">
@@ -426,14 +441,11 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=rgzn">rgzn</a>
 </td>
 </tr>
-
 </table>
-
 
 ### Issue Authors
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/lbuk">
@@ -478,8 +490,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Atbuckl">tbuckl</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/morellek">
@@ -524,8 +534,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amroorda">mroorda</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/MiKatt">
@@ -570,8 +578,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aedzer">edzer</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/marcusyoung">
@@ -616,8 +622,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Adipenpatel235">dipenpatel235</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/matkoniecz">
@@ -644,14 +648,11 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aorlandoandradeb">orlandoandradeb</a>
 </td>
 </tr>
-
 </table>
-
 
 ### Issue Contributors
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/nsfinkelstein">
@@ -696,8 +697,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Alrob">lrob</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/mem48">
@@ -742,8 +741,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Agregor-d">gregor-d</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/gregmacfarlane">
@@ -770,12 +767,9 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Amtennekes">mtennekes</a>
 </td>
 </tr>
-
 </table>
-
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-
 
 [![ropensci\_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
