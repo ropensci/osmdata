@@ -11,7 +11,7 @@ The overpass API URL
 }
 \description{
 Return the URL of the specified overpass API. Default is
-\url{https://overpass-api.de/api/interpreter}.
+\url{https://overpass-api.de/api/interpreter/}.
 }
 \seealso{
 \code{\link[=set_overpass_url]{set_overpass_url()}}
