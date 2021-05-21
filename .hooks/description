@@ -1,0 +1,13 @@
+#!/usr/bin/env Rscript
+
+s <- gert::git_status()
+chk <- ("DESCRIPTION" %in% s$file &&
+    (s$status [s$file == "DESCRIPTION"] == "modified" |
+     s$status [s$file == "DESCRIPTION"]  == "new"))
+if (!chk)
+    stop ("DESCRIPTION has not been updated")
+
+f <- file.path (rprojroot::find_root("DESCRIPTION"), "DESCRIPTION")
+x <- system2 ("git", args = c ("diff", "--cached", "-U0", f), stdout = TRUE)
+if (!any (grepl ("^\\+Version", x)))
+    stop ("Version number in DESCRIPTION has not been incremented")

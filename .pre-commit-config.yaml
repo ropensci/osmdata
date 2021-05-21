@@ -48,6 +48,6 @@ repos:
         files: '\.Rhistory|\.RData|\.Rds|\.rds$'
     -   id: description version
         name: Version has been incremeneted in DESCRIPTION
-        entry: /home/smexus/bin/precommit/description
+        entry: .hooks/description
         language: script
         # `exclude: <regex>` to allow committing specific files.
