@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/ropensci/osmdata/",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.5.003",
+  "version": "0.1.5.4",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -120,6 +120,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=knitr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "markdown",
+      "name": "markdown",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=markdown"
     },
     {
       "@type": "SoftwareApplication",
@@ -315,25 +327,12 @@
   ],
   "applicationCategory": "DataAccess",
   "isPartOf": "https://ropensci.org",
-  "keywords": [
-    "open0street0map",
-    "openstreetmap",
-    "overpass0API",
-    "OSM",
-    "overpass-api",
-    "r",
-    "cpp",
-    "rstats",
-    "osm",
-    "osm-data",
-    "r-package",
-    "peer-reviewed"
-  ],
+  "keywords": ["open0street0map", "openstreetmap", "overpass0API", "OSM", "overpass-api", "r", "cpp", "rstats", "osm", "osm-data", "r-package", "peer-reviewed"],
   "contIntegration": "https://codecov.io/gh/ropensci/osmdata",
   "developmentStatus": "https://www.repostatus.org/#active",
   "releaseNotes": "https://github.com/ropensci/osmdata/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/osmdata/blob/main/README.md",
-  "fileSize": "4187.891KB",
+  "fileSize": "4102.047KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
@@ -370,10 +369,7 @@
         "issueNumber": "14",
         "datePublished": "2017",
         "isPartOf": {
-          "@type": [
-            "PublicationVolume",
-            "Periodical"
-          ],
+          "@type": ["PublicationVolume", "Periodical"],
           "volumeNumber": "2",
           "name": "The Journal of Open Source Software"
         }

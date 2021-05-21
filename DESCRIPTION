@@ -1,6 +1,6 @@
 Package: osmdata
 Title: Import 'OpenStreetMap' Data as Simple Features or Spatial Objects
-Version: 0.1.5.003
+Version: 0.1.5.004
 Authors@R: 
     c(person(given = "Mark",
              family = "Padgham",
@@ -65,6 +65,7 @@ Imports:
     xml2
 Suggests:
     knitr,
+    markdown,
     raster,
     rmarkdown,
     sf,
