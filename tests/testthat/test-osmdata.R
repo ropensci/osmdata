@@ -98,6 +98,7 @@ test_that ("make_query", {
 
         if (test_all) {
             res <- osmdata_sp (qry)
+            expect_equal (res, print (res))
             expect_message (print (res), "Object of class 'osmdata' with")
             expect_silent (res <- osmdata_sp (qry, doc))
             expect_message (print (res), "Object of class 'osmdata' with")
