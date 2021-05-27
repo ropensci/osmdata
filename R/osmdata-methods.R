@@ -24,6 +24,7 @@ print.osmdata <- function (x, ...) {
         msg <- msg_non_sf (msg, x)
 
     message (msg)
+    invisible (x)
 }
 
 msg_sf <- function (msg, x) {
