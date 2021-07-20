@@ -20,7 +20,7 @@ jobs:
         config:
           #- {os: macOS-latest,   r: 'devel'} # takes forever to run
           #- {os: macOS-latest,   r: '4.0'} # fails too often
-          - {os: windows-latest, r: 'devel'}
+          #- {os: windows-latest, r: 'devel'}
           - {os: windows-latest, r: '4.0'}
           - {os: windows-latest, r: '3.6'}
           - {os: ubuntu-18.04,   r: '4.0', rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
