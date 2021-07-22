@@ -1,6 +1,11 @@
 0.1.5.00X
 ===================
 
+Major changes:
+
+- New function `add_osm_features` to enable OR-combinations of features in
+  single queries.
+
 0.1.5
 ===================
 
