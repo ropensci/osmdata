@@ -12,3 +12,4 @@ inst/doc
 # vim files
 .*.un~
 .*.swp
+src/*.o
