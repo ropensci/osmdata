@@ -85,11 +85,11 @@ A detailed description of features is provided at the
 `osmdata` function `available_features()` can be used to retrive the
 comprehensive list of feature keys currently used in OSM.
 
-```{r features, eval=FALSE}
+```{r available-features, eval=FALSE}
 head (available_features ())
 ```
 
-```{r, echo=FALSE}
+```{r available-features-results, echo=FALSE}
 c ("4wd only", "abandoned", "abutters", "access", "addr", "addr:city")
 ```
 
@@ -263,7 +263,7 @@ The following query represents the OR-equivalent of the above query, requesting
 data on both all natural features with the value of `"water"` OR all features
 whose English name is `"Dian"`.
 
-```{r features}
+```{r add_osm_features}
 q <- opq(bbox = 'Kunming, China') %>%
     add_osm_features(features = c ("\"natural\"=\"water\"",
                                    "\"name:en\"=\"Dian\""))
