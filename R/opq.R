@@ -467,7 +467,7 @@ opq_string_intern <- function (opq, quiet = TRUE) {
         
         } else if (!is.null (attr (opq, "enclosing"))) {
 
-            if (length (feaures) > 1)
+            if (length (features) > 1)
                 stop ("enclosing queries can only accept one feature")
 
             lat <- strsplit (opq$bbox, ",") [[1]] [1]
