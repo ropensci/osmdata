@@ -1,3 +1,4 @@
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # osmdata <a href='https://docs.ropensci.org/osmdata/'><img src='man/figures/osmhex.png' align="right" height=210 width=182/></a>
@@ -61,7 +62,7 @@ To load the package and check the version:
 library(osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
 packageVersion("osmdata")
-#> [1] '0.1.4.34'
+#> [1] '0.1.5.13'
 ```
 
 ## Usage
@@ -151,7 +152,6 @@ q <- opq ("portsmouth usa") %>%
     add_osm_feature(key = "amenity", value = "pub") # There are none of these
 ```
 
-(Logical OR combinations are demonstrated [below](#additional).)
 Negation can also be specified by pre-pending an exclamation mark so
 that the following requests all amenities that are NOT labelled as
 restaurants and that are not labelled as pubs:
@@ -172,11 +172,30 @@ q <- opq ("washington dc") %>%
                     value_exact = FALSE, match_case = FALSE)
 ```
 
-See
+Logical OR combinations can be constructed using the separate
+[`add_osm_features()`
+function](https://docs.ropensci.org/osmdata/reference/add_osm_features.html).
+The first of the above examples requests all features that are both
+restaurants AND pubs. The following query will request data on
+restaurants OR pubs:
+
+``` r
+q <- opq ("portsmouth usa") %>%
+    add_osm_features(features = c ("\"amenity\"=\"restaurant\"",
+                                   "\"amenity\"=\"pub\""))
+```
+
+The vector of `features` contains key-value pairs separated by an
+[overpass “filter”
+symbol](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_tag_.28has-kv.29)
+such as `=`, `!=`, or `~`. Each key and value must be enclosed in
+escape-delimited quotations as shown above.
+
+Full lists of available features and corresponding tags are available in
+the functions
 [`?available_features`](https://docs.ropensci.org/osmdata/reference/available_features.html)
 and
-[`?available_tags`](https://docs.ropensci.org/osmdata/reference/available_tags.html)
-for further information.
+[`?available_tags`](https://docs.ropensci.org/osmdata/reference/available_tags.html).
 
 ### Data Formats
 
@@ -197,30 +216,6 @@ returned in a variety of formats, currently including:
     [`osmdata_sc()`](https://docs.ropensci.org/osmdata/reference/osmdata_sc.html).
 
 ### Additional Functionality
-
-Logical OR combinations can be implemented with the package’s internal
-`c` method, so that the above example can be extended to all amenities
-that are either restaurants OR pubs with
-
-``` r
-pubs <- opq ("portsmouth usa") %>%
-    add_osm_feature(key = "amenity", value = "pub") %>%
-    osmdata_sf()
-restaurants <- opq ("portsmouth usa") %>%
-    add_osm_feature(key = "amenity", value = "restaurant") %>%
-    osmdata_sf()
-c (pubs, restaurants)
-```
-
-    #> Object of class 'osmdata' with:
-    #>                  $bbox : 43.0135509,-70.8229994,43.0996118,-70.7279298
-    #>         $overpass_call : The call submitted to the overpass API
-    #>                  $meta : metadata including timestamp and version numbers
-    #>            $osm_points : 'sf' Simple Features Collection with 325 points
-    #>             $osm_lines : NULL
-    #>          $osm_polygons : 'sf' Simple Features Collection with 24 polygons
-    #>        $osm_multilines : NULL
-    #>     $osm_multipolygons : NULL
 
 Data may also be trimmed to within a defined polygonal shape with the
 [`trim_osmdata()`](https://docs.ropensci.org/osmdata/reference/trim_osmdata.html)
@@ -270,17 +265,19 @@ to abide by its terms.
 
 ## Contributors
 
-
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-All contributions to this project are gratefully acknowledged using the [`allcontributors` package](https://github.com/ropenscilabs/allcontributors) following the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
+All contributions to this project are gratefully acknowledged using the
+[`allcontributors`
+package](https://github.com/ropenscilabs/allcontributors) following the
+[all-contributors](https://allcontributors.org) specification.
+Contributions of any kind are welcome!
 
 ### Code
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/mpadge">
@@ -325,8 +322,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=espinielli">espinielli</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/idshklein">
@@ -371,8 +366,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=karpfen">karpfen</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/arfon">
@@ -417,8 +410,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=karthik">karthik</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/MHenderson">
@@ -451,14 +442,11 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=rgzn">rgzn</a>
 </td>
 </tr>
-
 </table>
-
 
 ### Issue Authors
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/lbuk">
@@ -503,8 +491,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Atbuckl">tbuckl</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/morellek">
@@ -549,8 +535,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3AMiKatt">MiKatt</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/alanlzl">
@@ -595,8 +579,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amarcusyoung">marcusyoung</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/barryrowlingson">
@@ -641,8 +623,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amatkoniecz">matkoniecz</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/robitalec">
@@ -669,14 +649,11 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Achangwoo-lee">changwoo-lee</a>
 </td>
 </tr>
-
 </table>
-
 
 ### Issue Contributors
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/nsfinkelstein">
@@ -721,8 +698,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Alrob">lrob</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/mem48">
@@ -767,8 +742,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Agregor-d">gregor-d</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/gregmacfarlane">
@@ -795,12 +768,9 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Amtennekes">mtennekes</a>
 </td>
 </tr>
-
 </table>
-
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-
 
 [![ropensci\_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)

@@ -154,9 +154,9 @@ q <- opq ("portsmouth usa") %>%
     add_osm_feature(key = "amenity", value = "restaurant") %>%
     add_osm_feature(key = "amenity", value = "pub") # There are none of these
 ```
-(Logical OR combinations are demonstrated [below](#additional).) Negation can also be specified
-by pre-pending an exclamation mark so that the following requests all amenities
-that are NOT labelled as restaurants and that are not labelled as pubs:
+Negation can also be specified by pre-pending an exclamation mark so that the
+following requests all amenities that are NOT labelled as restaurants and that
+are not labelled as pubs:
 ```{r key-val2}
 q <- opq ("portsmouth usa") %>%
     add_osm_feature(key = "amenity", value = "!restaurant") %>%
@@ -171,11 +171,29 @@ q <- opq ("washington dc") %>%
     add_osm_feature(key = "name", value = "irish",
                     value_exact = FALSE, match_case = FALSE)
 ```
-See
+
+Logical OR combinations can be constructed using the separate
+[`add_osm_features()`
+function](https://docs.ropensci.org/osmdata/reference/add_osm_features.html).
+The first of the above examples requests all features that are both restaurants
+AND pubs. The following query will request data on restaurants OR pubs:
+
+```{r features}
+q <- opq ("portsmouth usa") %>%
+    add_osm_features(features = c ("\"amenity\"=\"restaurant\"",
+                                   "\"amenity\"=\"pub\""))
+```
+
+The vector of `features` contains key-value pairs separated by an [overpass
+"filter"
+symbol](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_tag_.28has-kv.29)
+such as `=`, `!=`, or `~`. Each key and value must be enclosed in
+escape-delimited quotations as shown above.
+
+Full lists of available features and corresponding tags are available in the functions
 [`?available_features`](https://docs.ropensci.org/osmdata/reference/available_features.html)
 and
-[`?available_tags`](https://docs.ropensci.org/osmdata/reference/available_tags.html)
-for further information.
+[`?available_tags`](https://docs.ropensci.org/osmdata/reference/available_tags.html).
 
 
 ### Data Formats
@@ -197,30 +215,6 @@ including:
 
 
 ### Additional Functionality {#additional}
-
-Logical OR combinations can be implemented with the package's internal `c`
-method, so that the above example can be extended to all amenities that are
-either restaurants OR pubs with
-```{r OR-fakey, eval = FALSE}
-pubs <- opq ("portsmouth usa") %>%
-    add_osm_feature(key = "amenity", value = "pub") %>%
-    osmdata_sf()
-restaurants <- opq ("portsmouth usa") %>%
-    add_osm_feature(key = "amenity", value = "restaurant") %>%
-    osmdata_sf()
-c (pubs, restaurants)
-```
-```{r OR, echo = FALSE}
-message (paste0 ("Object of class 'osmdata' with:\n",
-"                 $bbox : 43.0135509,-70.8229994,43.0996118,-70.7279298\n",
-"        $overpass_call : The call submitted to the overpass API\n",
-"                 $meta : metadata including timestamp and version numbers\n",
-"           $osm_points : 'sf' Simple Features Collection with 325 points\n",
-"            $osm_lines : NULL\n",
-"         $osm_polygons : 'sf' Simple Features Collection with 24 polygons\n",
-"       $osm_multilines : NULL\n",
-"    $osm_multipolygons : NULL"))
-```
 
 
 Data may also be trimmed to within a defined polygonal shape with the
