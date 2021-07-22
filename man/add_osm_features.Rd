@@ -7,6 +7,8 @@
 add_osm_features(opq, features, bbox = NULL)
 }
 \arguments{
+\item{opq}{An \code{overpass_query} object}
+
 \item{features}{Character vector of key-value pairs with keys and values
 enclosed in escape-formatted quotations (see examples).}
 

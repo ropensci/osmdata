@@ -260,6 +260,7 @@ add_osm_feature <- function (opq,
 #' the filter symbols described in
 #' \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_tag_.28has-kv.29}.
 #'
+#' @inheritParams add_osm_feature
 #' @param features Character vector of key-value pairs with keys and values
 #' enclosed in escape-formatted quotations (see examples).
 #' @param bbox optional bounding box for the feature query; must be set if no
