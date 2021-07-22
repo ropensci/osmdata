@@ -256,9 +256,31 @@ one of the `osmdata_xml/sp/sf()` functions.
 
 Single queries are always constructed through **adding** features, and therefore
 correspond to logical **AND** operations: natural water bodies **AND** those
-whose names include 'Dian'.  The equivalent **OR** combination requires
-extracting separate data sets and combining then with the inbuilt `c` operator
-of `osmdata`. The following code demonstrates this with `osmdata_sf()`:
+whose names include 'Dian'.  The equivalent **OR** combination can be extracted
+with the [`add_osm_features()`
+function](https://docs.ropensci.org/osmdata/reference/add_osm_features.html).
+The following query represents the OR-equivalent of the above query, requesting
+data on both all natural features with the value of `"water"` OR all features
+whose English name is `"Dian"`.
+
+```{r features}
+q <- opq(bbox = 'Kunming, China') %>%
+    add_osm_features(features = c ("\"natural\"=\"water\"",
+                                   "\"name:en\"=\"Dian\""))
+```
+
+Note that the `"="` symbols here requests features whose values exactly match
+the given values. Other "filter" symbols are possible, as described in the
+[overpass query language
+definition](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_tag_.28has-kv.29),
+including symbols for negation (`!=`), or approximate matching (`~`).
+
+Passing this query to
+[`osmdata_sf()`](https://docs.ropensci.org/osmdata/reference/osmdata_sf.html)
+will return identical data to the following way to explicitly construct an OR
+query through using the inbuilt `c` operator
+of `osmdata`.
+
 ```{r kunming3, eval = FALSE}
 dat1 <- opq(bbox = 'Kunming, China') %>%
     add_osm_feature(key = 'natural', value = 'water') %>%
@@ -268,66 +290,29 @@ dat2 <- opq(bbox = 'Kunming, China') %>%
     osmdata_sf ()
 dat <- c (dat1, dat2)
 ```
-The following code extracted numbers of objects returned in each case (where the
-fourth-to-eighth items of an `osmdata` object are those containing the actual
-spatial data)
-```{r, eval = FALSE}
-unlist (lapply (dat1, nrow) [4:8])
-unlist (lapply (dat2, nrow) [4:8])
-unlist (lapply (dat, nrow) [4:8])
-```
-```{r, echo = FALSE}
-dat1 <- c (51399, 186, 905, 0, 47)
-dat2 <- c (4473, 55, 4, 1, 3)
-dat <- c (53777, 238, 908, 1, 49)
-names (dat1) <- names (dat2) <- names (dat) <- c ('osm_points', 'osm_lines',
-                                                  'osm_polygons',
-                                                  'osm_multilines',
-                                                  'osm_multipolygons')
-dat1 [c (1:3, 5)]
-dat2
-dat
-```
-The number of resultant objects is less than the sum of the individual
-components because the `c` operator only combines unique objects. There are
-thus, for example, `r formatC(unname(dat[1]), format = "d", big.mark = ",")` 
-points corresponding to objects in Kunming, China that
-are **either** natural waterbodies **or** that include 'Dian' in their English
-name.  Compare this with the result of the equivalent `AND` operation
-```{r, eval = FALSE}
-unlist (lapply (osmdata_sf (q), nrow) [4:8])
-```
-```{r, echo = FALSE}
-dat <- c (2087, 3, 1, 0, 1)
-names (dat1) <- names (dat2) <- names (dat) <- c ('osm_points', 'osm_lines',
-                                                  'osm_polygons',
-                                                  'osm_multilines',
-                                                  'osm_multipolygons')
-dat
-```
-And there are, for example, the considerably lower number of 
-`r formatC(unname(dat[1]), format = "d", big.mark = ",")` points
-describing objects in Kunming that are **both** natural waterbodies **and** that
-include 'Dian' in their English name.
 
-Both `key` and `value` fields may be matched either exactly or approximately.
-The previous query is repeated here for convenience:
+While the "filter" symbols may be explicitly specified in 
+[the `add_osm_features()`
+function](https://docs.ropensci.org/osmdata/reference/add_osm_features.html),
+the single-feature version of 
+[`add_osm_feature()`
+function](https://docs.ropensci.org/osmdata/reference/add_osm_feature.html) has
+several logical parameters to control matching without needing to remember
+precise overpass syntax:
+
+- `key_exact` can be set to `FALSE` to approximately match given keys;
+- `value_exact` can be set to `FALSE` to approximately match given values; and
+- `match_case` can be set to `FALSE` to match keys and values in both lower and
+  upper case forms.
+
+The previous query with `key = 'name:end'` and `value = 'Dian'` could thus be
+replaced by the following:
+
 ```{r kunming4, eval = FALSE}
-q <- opq(bbox = 'Kunming, China') %>%
-    add_osm_feature(key = 'natural', value = 'water') %>%
-    add_osm_feature(key = 'name:en', value = 'Dian', value_exact = FALSE)
-```
-
-In addition to `value_exact`, `add_osm_feature` also offers the additional two
-options of `key_exact` and `match_case`. The former functions just like
-`value_exact`, but is applied to the specified `key` parameter, while
-`match_case` (default `TRUE`) specifies whether case should also be matched.
-These options allow the above query to be rewritten,
-```{r, eval = FALSE}
-q <- opq(bbox = 'Kunming, China') %>%
-    add_osm_feature(key = 'natural', value = 'water') %>%
-    add_osm_feature(key = 'name', value = 'dian', key_exact = FALSE,
-                value_exact = FALSE, match_case = FALSE)
+add_osm_feature(key = 'name', value = 'dian',
+                key_exact = FALSE,
+                value_exact = FALSE,
+                match_case = FALSE)
 ```
 
 ### 2.2 Extracting `OSM` data from a query
