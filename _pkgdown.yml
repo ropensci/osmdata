@@ -19,6 +19,7 @@ reference:
     - overpass_status
     - opq
     - add_osm_feature
+    - add_osm_features
     - opq_string
     - opq_osm_id
     - opq_enclosing

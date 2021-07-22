@@ -253,6 +253,69 @@ add_osm_feature <- function (opq,
     opq
 }
 
+#' Add multiple features to an Overpass query
+#'
+#' Alternative version of \link{add_osm_feature} for creating single queries
+#' with multiple features. Key-value matching may be controlled by using
+#' the filter symbols described in
+#' \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_tag_.28has-kv.29}.
+#'
+#' @param features Character vector of key-value pairs with keys and values
+#' enclosed in escape-formatted quotations (see examples).
+#' @param bbox optional bounding box for the feature query; must be set if no
+#'        opq query bbox has been set
+#' @return \link{opq} object
+#'
+#' @references <https://wiki.openstreetmap.org/wiki/Map_Features>
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' q <- opq ("portsmouth usa") %>%
+#'      add_osm_features (features = c ("\"amenity\"=\"restaurant\"",
+#'                                      "\"amenity\"=\"pub\""))
+#' # This extracts in a single query the same result as the following:
+#' q1 <- opq ("portsmouth usa") %>%
+#'                 add_osm_feature(key = "amenity",
+#'                                 value = "restaurant")
+#' q2 <- opq ("portsmouth usa") %>%
+#'                 add_osm_feature(key = "amenity", value = "pub")
+#' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
+#' }
+add_osm_features <- function (opq,
+                              features,
+                              bbox = NULL) {
+
+    if (missing (features))
+        stop ("features must be provided")
+
+    if (is.null (bbox) & is.null (opq$bbox))
+        stop ("Bounding box has to either be set in opq or must be set here")
+
+    if (is.null (bbox))
+        bbox <- opq$bbox
+    else {
+        bbox <- bbox_to_string (bbox)
+        opq$bbox <- bbox
+    }
+
+    if (is.null (opq$suffix))
+        opq$suffix <- ");\n(._;>;);\nout body;"
+
+    if (length (which (!grepl ("\\\"", features))) > 0L)
+        stop ("features must be enclosed in escape-delimited quotations (see example)")
+
+    index <-  which (!grepl ("^\\[", features))
+    features [index] <- paste0 ("[", features [index])
+    index <-  which (!grepl ("\\]$", features))
+    features [index] <- paste0 (features [index], "]")
+
+    opq$features <- features
+
+    opq
+}
+
 #' Add a feature specified by OSM ID to an Overpass query
 #'
 #' @param id One or more official OSM identifiers (long-form integers)
@@ -390,12 +453,22 @@ opq_string_intern <- function (opq, quiet = TRUE) {
     res <- NULL
     if (!is.null (opq$features)) { # opq with add_osm_feature
 
-        features <- paste (opq$features, collapse = "")
-        if (attr (opq, "nodes_only"))
+        features <- vapply (opq$features, function (i)
+                            paste (i, collapse = ""),
+                            character (1),
+                            USE.NAMES = FALSE)
+
+        if (attr (opq, "nodes_only")) {
+
             features <- paste0 (sprintf (" node %s (%s);\n",
                                          features,
                                          opq$bbox))
-        else if (!is.null (attr (opq, "enclosing"))) {
+        
+        } else if (!is.null (attr (opq, "enclosing"))) {
+
+            if (length (feaures) > 1)
+                stop ("enclosing queries can only accept one feature")
+
             lat <- strsplit (opq$bbox, ",") [[1]] [1]
             lon <- strsplit (opq$bbox, ",") [[1]] [2]
             features <- paste0 ("is_in(", lat, ",",
@@ -404,7 +477,9 @@ opq_string_intern <- function (opq, quiet = TRUE) {
                                 "(pivot.a)",
                                 features,
                                 ";")
+
         } else {
+
             features <- paste0 (sprintf (" node %s (%s);\n",
                                          features,
                                          opq$bbox),
@@ -416,7 +491,9 @@ opq_string_intern <- function (opq, quiet = TRUE) {
                                          opq$bbox))
         }
 
-        res <- paste0 (opq$prefix, features, opq$suffix)
+        res <- paste0 (opq$prefix,
+                       paste0 (features, collapse = ""),
+                       opq$suffix)
 
     } else if (!is.null (opq$id)) { # opq with opq_osm_id
 
