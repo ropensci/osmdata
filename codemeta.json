@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/ropensci/osmdata/",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.6",
+  "version": "0.1.6.001",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -327,7 +327,20 @@
   ],
   "applicationCategory": "DataAccess",
   "isPartOf": "https://ropensci.org",
-  "keywords": ["open0street0map", "openstreetmap", "overpass0API", "OSM", "overpass-api", "r", "cpp", "rstats", "osm", "osm-data", "r-package", "peer-reviewed"],
+  "keywords": [
+    "open0street0map",
+    "openstreetmap",
+    "overpass0API",
+    "OSM",
+    "overpass-api",
+    "r",
+    "cpp",
+    "rstats",
+    "osm",
+    "osm-data",
+    "r-package",
+    "peer-reviewed"
+  ],
   "contIntegration": "https://codecov.io/gh/ropensci/osmdata",
   "developmentStatus": "https://www.repostatus.org/#active",
   "releaseNotes": "https://github.com/ropensci/osmdata/blob/master/NEWS.md",
@@ -369,7 +382,10 @@
         "issueNumber": "14",
         "datePublished": "2017",
         "isPartOf": {
-          "@type": ["PublicationVolume", "Periodical"],
+          "@type": [
+            "PublicationVolume",
+            "Periodical"
+          ],
           "volumeNumber": "2",
           "name": "The Journal of Open Source Software"
         }
