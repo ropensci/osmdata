@@ -10,13 +10,13 @@
   "codeRepository": "https://github.com/ropensci/osmdata/",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.6.001",
+  "version": "0.1.6.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.5 (2021-03-31)",
+  "runtimePlatform": "R version 4.1.0 (2021-05-18)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -327,25 +327,12 @@
   ],
   "applicationCategory": "DataAccess",
   "isPartOf": "https://ropensci.org",
-  "keywords": [
-    "open0street0map",
-    "openstreetmap",
-    "overpass0API",
-    "OSM",
-    "overpass-api",
-    "r",
-    "cpp",
-    "rstats",
-    "osm",
-    "osm-data",
-    "r-package",
-    "peer-reviewed"
-  ],
-  "contIntegration": "https://codecov.io/gh/ropensci/osmdata",
+  "keywords": ["open0street0map", "openstreetmap", "overpass0API", "OSM", "overpass-api", "r", "cpp", "rstats", "osm", "osm-data", "r-package", "peer-reviewed"],
+  "contIntegration": ["https://github.com/ropensci/osmdata/actions?query=workflow%3AR-CMD-check", "https://codecov.io/gh/ropensci/osmdata"],
   "developmentStatus": "https://www.repostatus.org/#active",
   "releaseNotes": "https://github.com/ropensci/osmdata/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/osmdata/blob/main/README.md",
-  "fileSize": "4118.449KB",
+  "fileSize": "7736.975KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
@@ -382,10 +369,7 @@
         "issueNumber": "14",
         "datePublished": "2017",
         "isPartOf": {
-          "@type": [
-            "PublicationVolume",
-            "Periodical"
-          ],
+          "@type": ["PublicationVolume", "Periodical"],
           "volumeNumber": "2",
           "name": "The Journal of Open Source Software"
         }

@@ -242,7 +242,7 @@ add_osm_feature <- function (opq,
     feature <- paste_features (key, value, key_pre, bind,
                                match_case, value_exact)
 
-    opq$features <- c(opq$features, feature)
+    opq$features <- paste0 (c (opq$features, feature), collapse = "")
 
     if (is.null (opq$suffix))
         opq$suffix <- ");\n(._;>;);\nout body;"
