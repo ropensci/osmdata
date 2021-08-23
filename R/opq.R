@@ -454,10 +454,15 @@ opq_string_intern <- function (opq, quiet = TRUE) {
     res <- NULL
     if (!is.null (opq$features)) { # opq with add_osm_feature
 
-        features <- vapply (opq$features, function (i)
-                            paste (i, collapse = ""),
-                            character (1),
-                            USE.NAMES = FALSE)
+        features <- opq$features
+
+        if (length (features) > 1L) { # from opq_features fn
+
+            features <- vapply (features, function (i)
+                                paste (i, collapse = ""),
+                                character (1),
+                                USE.NAMES = FALSE)
+        }
 
         if (attr (opq, "nodes_only")) {
 
