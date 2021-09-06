@@ -37,12 +37,19 @@
 #include "trace-osm.h"
 #include "convert-osm-rcpp.h"
 
-//const std::string crs = "EPSG:4326";
+// sf::st_crs(4326)$wkt
 const std::string wkt =
 "GEOGCRS[\"WGS 84\",\n\
-    DATUM[\"World Geodetic System 1984\",\n\
+    ENSEMBLE[\"World Geodetic System 1984 ensemble\",\n\
+        MEMBER[\"World Geodetic System 1984 (Transit)\"],\n\
+        MEMBER[\"World Geodetic System 1984 (G730)\"],\n\
+        MEMBER[\"World Geodetic System 1984 (G873)\"],\n\
+        MEMBER[\"World Geodetic System 1984 (G1150)\"],\n\
+        MEMBER[\"World Geodetic System 1984 (G1674)\"],\n\
+        MEMBER[\"World Geodetic System 1984 (G1762)\"],\n\
         ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n\
-            LENGTHUNIT[\"metre\",1]]],\n\
+            LENGTHUNIT[\"metre\",1]],\n\
+        ENSEMBLEACCURACY[2.0]],\n\
     PRIMEM[\"Greenwich\",0,\n\
         ANGLEUNIT[\"degree\",0.0174532925199433]],\n\
     CS[ellipsoidal,2],\n\
@@ -53,8 +60,8 @@ const std::string wkt =
             ORDER[2],\n\
             ANGLEUNIT[\"degree\",0.0174532925199433]],\n\
     USAGE[\n\
-        SCOPE[\"unknown\"],\n\
-        AREA[\"World\"],\n\
+        SCOPE[\"Horizontal component of 3D system.\"],\n\
+        AREA[\"World.\"],\n\
         BBOX[-90,-180,90,180]],\n\
     ID[\"EPSG\",4326]]";
 
