@@ -388,8 +388,8 @@ mat2sf_poly <- function (mat, pname) {
   names (bb) <- c ("xmin", "ymin", "xmax", "ymax")
   class (bb) <- "bbox"
   attr (mat_sf, "bbox") <- bb
-  crs <- list (epsg = 4326L,
-               proj4string = "+proj=longlat +datum=WGS84 +no_defs")
+  crs <- list (input = "EPSG:4326",
+               wkt = wkt4326)
   class (crs) <- "crs"
   attr (mat_sf, "crs") <- crs
   attr (mat_sf, "n_empty") <- 0L
@@ -417,8 +417,8 @@ mat2sf_multipoly <- function (x, mpname) {
     attr (xsf, "class") <- c ("sfc_MULTIPOLYGON", "sfc")
     attr (xsf, "precision") <- 0
     attr (xsf, "bbox") <- bb
-    crs <- list (epsg = 4326L,
-                 proj4string = "+proj=longlat +datum=WGS84 +no_defs")
+    crs <- list (input = "EPSG:4326",
+                 wkt = wkt4326)
     class (crs) <- "crs"
     attr (xsf, "crs") <- crs
     attr (xsf, "n_empty") <- 0L
