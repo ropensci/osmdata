@@ -236,6 +236,10 @@ All data that you access using `osmdata` is licensed under
 Any derived data and products must also carry the same licence. You should make
 sure you understand that licence before publishing any derived datasets.
 
+## Other approaches
+
+<!-- todo: add links to other packages -->
+- [osmextract](https://docs.ropensci.org/osmextract/) is an R package for downloading and importing compressed 'extracts' of OSM data covering large areas (e.g. all roads in a country)
 
 ## Code of Conduct
 
