@@ -1,7 +1,7 @@
 Package: osmdata
 Title: Import 'OpenStreetMap' Data as Simple Features or Spatial Objects
 Version: 0.1.6.008
-Authors@R: 
+Authors@R:
     c(person(given = "Mark",
              family = "Padgham",
              role = c("aut", "cre"),
@@ -26,6 +26,9 @@ Authors@R:
              role = "ctb"),
       person(given = "Enrico",
              family = "Spinielli",
+             role = "ctb"),
+      person(given = "Anthony",
+             family = "North",
              role = "ctb"),
       person(given = "Marcin",
              family = "Kalicinski",
@@ -70,14 +73,14 @@ Suggests:
     rmarkdown,
     sf,
     testthat
-LinkingTo: 
+LinkingTo:
     Rcpp
-VignetteBuilder: 
+VignetteBuilder:
     knitr
 Encoding: UTF-8
 NeedsCompilation: yes
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 SystemRequirements: C++11
 X-schema.org-applicationCategory: Data Access
 X-schema.org-isPartOf: https://ropensci.org
