@@ -24,6 +24,19 @@ with multiple features. Key-value matching may be controlled by using
 the filter symbols described in
 \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_tag_.28has-kv.29}.
 }
+\section{\code{add_osm_feature} vs \code{add_osm_features}}{
+
+Features defined within an \link{add_osm_features} call are combined with a
+logical OR.
+
+Chained calls to either \link{add_osm_feature} or \code{add_osm_features()} combines
+features from these calls in a logical AND; this is analagous to chaining
+\code{dplyr::filter()} on a data frame.
+
+\code{add_osm_features()} with only one feature is logically equivalent to
+\code{add_osm_feature()}.
+}
+
 \examples{
 \dontrun{
 q <- opq ("portsmouth usa") \%>\%
@@ -40,4 +53,7 @@ c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 }
 \references{
 \url{https://wiki.openstreetmap.org/wiki/Map_Features}
+}
+\seealso{
+\link{add_osm_feature}
 }

@@ -49,6 +49,19 @@ of regular expressions on OSM keys, as described in Section 6.1.5 of
 query submitted to the overpass API can be obtained from
 \link{opq_string}.
 }
+\section{\code{add_osm_feature} vs \code{add_osm_features}}{
+
+Features defined within an \link{add_osm_features} call are combined with a
+logical OR.
+
+Chained calls to either \link{add_osm_feature} or \code{add_osm_features()} combines
+features from these calls in a logical AND; this is analagous to chaining
+\code{dplyr::filter()} on a data frame.
+
+\code{add_osm_features()} with only one feature is logically equivalent to
+\code{add_osm_feature()}.
+}
+
 \examples{
 \dontrun{
 q <- opq ("portsmouth usa") \%>\%
@@ -69,4 +82,7 @@ q <- opq ("portsmouth uk") \%>\%
 }
 \references{
 \url{https://wiki.openstreetmap.org/wiki/Map_Features}
+}
+\seealso{
+\link{add_osm_features}
 }

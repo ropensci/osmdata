@@ -181,6 +181,18 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #' \link{opq_string}.
 #'
 #' @references <https://wiki.openstreetmap.org/wiki/Map_Features>
+#' @seealso [add_osm_features]
+#'
+#' @section `add_osm_feature` vs `add_osm_features`:
+#' Features defined within an [add_osm_features] call are combined with a
+#' logical OR.
+#'
+#' Chained calls to either [add_osm_feature] or `add_osm_features()` combines
+#' features from these calls in a logical AND; this is analagous to chaining
+#' `dplyr::filter()` on a data frame.
+#'
+#' `add_osm_features()` with only one feature is logically equivalent to
+#' `add_osm_feature()`.
 #'
 #' @export
 #'
@@ -261,6 +273,7 @@ add_osm_feature <- function (opq,
 #' \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_tag_.28has-kv.29}.
 #'
 #' @inheritParams add_osm_feature
+#' @inheritSection add_osm_feature `add_osm_feature` vs `add_osm_features`
 #' @param features Character vector of key-value pairs with keys and values
 #' enclosed in escape-formatted quotations (see examples).
 #' @param bbox optional bounding box for the feature query; must be set if no
@@ -268,6 +281,7 @@ add_osm_feature <- function (opq,
 #' @return \link{opq} object
 #'
 #' @references <https://wiki.openstreetmap.org/wiki/Map_Features>
+#' @seealso [add_osm_feature]
 #'
 #' @export
 #'
@@ -469,7 +483,7 @@ opq_string_intern <- function (opq, quiet = TRUE) {
             features <- paste0 (sprintf (" node %s (%s);\n",
                                          features,
                                          opq$bbox))
-        
+
         } else if (!is.null (attr (opq, "enclosing"))) {
 
             if (length (features) > 1)
