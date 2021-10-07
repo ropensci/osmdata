@@ -13,6 +13,7 @@ makefile$
 ^README\.Rmd$
 ^README\.md$
 ^README\.html$
+^inst/WORDLIST$
 ^src/Makevars$
 ^src/Makevars.in$
 ^tests/timing-benchmark.R$
