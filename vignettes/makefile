@@ -1,4 +1,4 @@
-LFILE = osmdata-sc
+LFILE = osmdata
 
 all: knith open 
 

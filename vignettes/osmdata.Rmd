@@ -263,10 +263,20 @@ The following query represents the OR-equivalent of the above query, requesting
 data on both all natural features with the value of `"water"` OR all features
 whose English name is `"Dian"`.
 
-```{r add_osm_features}
+```{r add_osm_features-fakey, eval = FALSE}
 q <- opq(bbox = 'Kunming, China') %>%
     add_osm_features(features = c ("\"natural\"=\"water\"",
                                    "\"name:en\"=\"Dian\""))
+```
+```{r add_osm_features, echo = FALSE}
+q <- list (
+    bbox = "24.388848,102.1697441,26.548485,103.6683522",
+    prefix = "[out:xml][timeout:25];\n(\n",
+    suffix = ");\n(._;>;);\nout body;",
+    features = c ("[\"natural\"=\"water\"]", "[\"name:en\"=\"Dian\"]")
+    )
+attr(q, "class") <- c ("list", "overpass_query")
+attr(q, "nodes_only") <- FALSE
 ```
 
 Note that the `"="` symbols here requests features whose values exactly match
