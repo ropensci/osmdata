@@ -78,6 +78,8 @@ test_that ("getbb-place_name", {
                }
           })
 
+skip_on_cran ()
+
 test_that ("getbb-polygon", {
                if (has_internet) {
                    if (!test_all) {
