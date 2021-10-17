@@ -1,3 +1,11 @@
+0.1.7.00X
+===================
+
+Minor changes:
+
+- Fix some failing CRAN checks (no change to functionality)
+
+
 0.1.7
 ===================
 
