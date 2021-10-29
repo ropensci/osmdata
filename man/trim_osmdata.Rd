@@ -45,3 +45,11 @@ class (bb) # SpatialPolygonsDataFrame
 dat_tr <- trim_osmdata (dat, bb)
 }
 }
+\seealso{
+Other transform: 
+\code{\link{osm_elevation}()},
+\code{\link{osm_poly2line}()},
+\code{\link{unique_osmdata}()},
+\code{\link{unname_osmdata_sf}()}
+}
+\concept{transform}

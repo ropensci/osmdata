@@ -17,3 +17,15 @@ next available slot
 \description{
 Retrieve status of the Overpass API
 }
+\seealso{
+Other queries: 
+\code{\link{add_osm_features}()},
+\code{\link{add_osm_feature}()},
+\code{\link{bbox_to_string}()},
+\code{\link{getbb}()},
+\code{\link{opq_enclosing}()},
+\code{\link{opq_osm_id}()},
+\code{\link{opq_string}()},
+\code{\link{opq}()}
+}
+\concept{queries}

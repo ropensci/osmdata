@@ -11,6 +11,7 @@
 #'
 #' @return A modified version of the input `dat` with an additional `z_` column
 #' appended to the vertices.
+#' @family transform
 #' @export
 osm_elevation <- function (dat, elev_file) {
 

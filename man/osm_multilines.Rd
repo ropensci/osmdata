@@ -36,3 +36,11 @@ nrow (osm_multilines (dat, id)) # = 1 - the recursive search selects the
                                 # single multiline containing "The Thames"
 }
 }
+\seealso{
+Other search: 
+\code{\link{osm_lines}()},
+\code{\link{osm_multipolygons}()},
+\code{\link{osm_points}()},
+\code{\link{osm_polygons}()}
+}
+\concept{search}

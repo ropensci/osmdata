@@ -48,3 +48,15 @@ x <- opq_enclosing (lon, lat, key, value) \%>\%
     osmdata_sf ()
 }
 }
+\seealso{
+Other queries: 
+\code{\link{add_osm_features}()},
+\code{\link{add_osm_feature}()},
+\code{\link{bbox_to_string}()},
+\code{\link{getbb}()},
+\code{\link{opq_osm_id}()},
+\code{\link{opq_string}()},
+\code{\link{opq}()},
+\code{\link{overpass_status}()}
+}
+\concept{queries}

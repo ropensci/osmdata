@@ -10,6 +10,7 @@
 #'
 #' @param dat An \link{osmdata} object
 #' @return Equivalent object reduced to only unique objects of each type
+#' @family transform
 #' @export
 unique_osmdata <- function (dat) {
 

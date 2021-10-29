@@ -35,3 +35,11 @@ dat2 <- osm_poly2line (dat)
 # (they are left unchanged.)
 }
 }
+\seealso{
+Other transform: 
+\code{\link{osm_elevation}()},
+\code{\link{trim_osmdata}()},
+\code{\link{unique_osmdata}()},
+\code{\link{unname_osmdata_sf}()}
+}
+\concept{transform}

@@ -56,4 +56,15 @@ c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 }
 \seealso{
 \link{add_osm_feature}
+
+Other queries: 
+\code{\link{add_osm_feature}()},
+\code{\link{bbox_to_string}()},
+\code{\link{getbb}()},
+\code{\link{opq_enclosing}()},
+\code{\link{opq_osm_id}()},
+\code{\link{opq_string}()},
+\code{\link{opq}()},
+\code{\link{overpass_status}()}
 }
+\concept{queries}

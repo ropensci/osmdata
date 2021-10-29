@@ -35,3 +35,11 @@ nrow (dat$osm_multipolygons) # = 14 multipolygon objects
 nrow (osm_multipolygons (dat, id)) # = 1 - the main Thames multipolygon
 }
 }
+\seealso{
+Other search: 
+\code{\link{osm_lines}()},
+\code{\link{osm_multilines}()},
+\code{\link{osm_points}()},
+\code{\link{osm_polygons}()}
+}
+\concept{search}

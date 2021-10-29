@@ -11,6 +11,7 @@
 #' bounds. For example: \code{"15.3152361,76.4406446,15.3552361,76.4806446"} is
 #' the bounding box for Hampi, India.
 #'
+#' @family queries
 #' @export
 #'
 #' @examples
@@ -98,6 +99,7 @@ bbox_to_string <- function(bbox) {
 #' x ...   ...
 #' y ...   ...
 #' }
+#'
 #' If `format_out = "polygon"`, one or more two-columns matrices of polygonal
 #' longitude-latitude points. Where multiple `place_name` occurrences are found
 #' within `nominatim`, each item of the list of coordinates may itself contain
@@ -115,6 +117,7 @@ bbox_to_string <- function(bbox) {
 #' a city is desired, better results will usually be obtained with
 #' `featuretype = "city"`.
 #'
+#' @family queries
 #' @export
 #'
 #' @examples

@@ -10,6 +10,7 @@
 #'
 #' @param x An 'osmdata_sf' object returned from function of same name
 #' @return Same object, yet with no row names on geometry objects.
+#' @family transform
 #' @export
 unname_osmdata_sf <- function (x) {
 

@@ -26,3 +26,11 @@ pts <- osm_points (tr, rownames (coliban)) # all points of river
 waterfall <- pts [which (pts$waterway == "waterfall"),] # the waterfall point
 }
 }
+\seealso{
+Other search: 
+\code{\link{osm_lines}()},
+\code{\link{osm_multilines}()},
+\code{\link{osm_multipolygons}()},
+\code{\link{osm_polygons}()}
+}
+\concept{search}

@@ -39,3 +39,10 @@ hampi_sf <- opq ("hampi india") \%>\%
             osmdata_sc ()
 }
 }
+\seealso{
+Other extract: 
+\code{\link{osmdata_sf}()},
+\code{\link{osmdata_sp}()},
+\code{\link{osmdata_xml}()}
+}
+\concept{extract}

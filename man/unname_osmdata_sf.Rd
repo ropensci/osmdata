@@ -21,3 +21,11 @@ names also removes any ability to inter-relate the different components of an
 \code{osmdata} object, so use of this function is only recommended to resolve
 issues such as those linked to above.
 }
+\seealso{
+Other transform: 
+\code{\link{osm_elevation}()},
+\code{\link{osm_poly2line}()},
+\code{\link{trim_osmdata}()},
+\code{\link{unique_osmdata}()}
+}
+\concept{transform}

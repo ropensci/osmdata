@@ -12,6 +12,7 @@
 #' @note The `osm_polygons` field is retained, with those features also
 #' repeated as `LINESTRING` objects in `osm_lines`.
 #'
+#' @family transform
 #' @export
 #' @examples
 #' \dontrun{

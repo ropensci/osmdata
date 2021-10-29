@@ -45,6 +45,7 @@
 #'
 #' @name osmdata
 #' @docType package
+#' @family package
 #' @author Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon
 #' @import sp
 #' @importFrom curl has_internet

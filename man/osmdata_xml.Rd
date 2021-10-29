@@ -40,3 +40,10 @@ q <- add_osm_feature (q, key="historic", value="ruins")
 osmdata_xml (q, filename="hampi.osm")
 }
 }
+\seealso{
+Other extract: 
+\code{\link{osmdata_sc}()},
+\code{\link{osmdata_sf}()},
+\code{\link{osmdata_sp}()}
+}
+\concept{extract}

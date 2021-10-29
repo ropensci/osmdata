@@ -17,6 +17,7 @@
 #' @note It will generally be necessary to pre-load the \pkg{sf} package for
 #' this function to work correctly.
 #'
+#' @family transform
 #' @export
 #' @examples
 #' \dontrun{

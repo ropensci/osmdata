@@ -15,4 +15,8 @@ Return the URL of the specified overpass API. Default is
 }
 \seealso{
 \code{\link[=set_overpass_url]{set_overpass_url()}}
+
+Other overpass: 
+\code{\link{set_overpass_url}()}
 }
+\concept{overpass}

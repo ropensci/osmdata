@@ -217,6 +217,7 @@ sanity_check <- function (dat, id) {
 #'
 #' @return An \pkg{sf} Simple Features Collection of points
 #'
+#' @family search
 #' @export
 #'
 #' @examples
@@ -257,6 +258,7 @@ osm_points <- function(dat, id) {
 #' extracted
 #' @return An \pkg{sf} Simple Features Collection of linestrings
 #'
+#' @family search
 #' @export
 #'
 #' @examples
@@ -307,6 +309,7 @@ osm_lines <- function(dat, id) {
 #' be extracted
 #' @return An \pkg{sf} Simple Features Collection of polygons
 #'
+#' @family search
 #' @export
 #'
 #' @examples
@@ -351,6 +354,7 @@ osm_polygons <- function(dat, id) {
 #' to be extracted
 #' @return An \pkg{sf} Simple Features Collection of multilines
 #'
+#' @family search
 #' @export
 #'
 #' @examples
@@ -398,6 +402,7 @@ osm_multilines <- function(dat, id) {
 #' are to be extracted
 #' @return An \pkg{sf} Simple Features Collection of multipolygons
 #'
+#' @family search
 #' @export
 #'
 #' @examples

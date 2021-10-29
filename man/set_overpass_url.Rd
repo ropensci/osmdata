@@ -34,4 +34,8 @@ For further details, see
 }
 \seealso{
 \code{\link[=get_overpass_url]{get_overpass_url()}}
+
+Other overpass: 
+\code{\link{get_overpass_url}()}
 }
+\concept{overpass}

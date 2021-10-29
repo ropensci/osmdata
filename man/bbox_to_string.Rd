@@ -25,3 +25,15 @@ This function converts a bounding box into a string for use in web apis
 bbox_to_string (getbb ("hampi india"))
 }
 }
+\seealso{
+Other queries: 
+\code{\link{add_osm_features}()},
+\code{\link{add_osm_feature}()},
+\code{\link{getbb}()},
+\code{\link{opq_enclosing}()},
+\code{\link{opq_osm_id}()},
+\code{\link{opq_string}()},
+\code{\link{opq}()},
+\code{\link{overpass_status}()}
+}
+\concept{queries}

@@ -46,6 +46,7 @@ Defaults to a matrix in the form:
 x ...   ...
 y ...   ...
 }
+
 If \code{format_out = "polygon"}, one or more two-columns matrices of polygonal
 longitude-latitude points. Where multiple \code{place_name} occurrences are found
 within \code{nominatim}, each item of the list of coordinates may itself contain
@@ -100,3 +101,15 @@ if(nchar(key) ==  32) {
 }
 }
 }
+\seealso{
+Other queries: 
+\code{\link{add_osm_features}()},
+\code{\link{add_osm_feature}()},
+\code{\link{bbox_to_string}()},
+\code{\link{opq_enclosing}()},
+\code{\link{opq_osm_id}()},
+\code{\link{opq_string}()},
+\code{\link{opq}()},
+\code{\link{overpass_status}()}
+}
+\concept{queries}

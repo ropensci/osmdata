@@ -26,3 +26,8 @@ available_tags("aerialway")
 \references{
 \url{https://wiki.openstreetmap.org/wiki/Map_Features}
 }
+\seealso{
+Other osminfo: 
+\code{\link{available_features}()}
+}
+\concept{osminfo}

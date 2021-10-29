@@ -68,6 +68,7 @@ get_overpass_version <- function (doc) {
 #' @note Objects of class `xml_document` can be saved as `.xml` or
 #' `.osm` files with `xml2::write_xml`.
 #'
+#' @family extract
 #' @export
 #'
 #' @examples
@@ -110,6 +111,7 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
 #' @return An object of class `osmdata` with the OSM components (points, lines,
 #'         and polygons) represented in \pkg{sp} format.
 #'
+#' @family extract
 #' @export
 #'
 #' @examples
@@ -274,6 +276,8 @@ sf_types <- c ("points", "lines", "polygons", "multilines", "multipolygons")
 #' coerced to factors?
 #' @return An object of class `osmdata` with the OSM components (points, lines,
 #'         and polygons) represented in \pkg{sf} format.
+#'
+#' @family extract
 #' @export
 #'
 #' @examples
@@ -363,10 +367,12 @@ fill_objects <- function (res, obj, type = "points",
 #' @inheritParams osmdata_sp
 #' @return An object of class `osmdata` representing the original OSM hierarchy
 #'      of nodes, ways, and relations.
-#' @export
 #'
 #' @note The `silicate` format is currently highly experimental, and
 #'      recommended for use only if you really know what you're doing.
+#'
+#' @family extract
+#' @export
 #'
 #' @examples
 #' \dontrun{

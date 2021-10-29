@@ -23,3 +23,8 @@ available_features()
 \references{
 \url{https://wiki.openstreetmap.org/wiki/Map_Features}
 }
+\seealso{
+Other osminfo: 
+\code{\link{available_tags}()}
+}
+\concept{osminfo}

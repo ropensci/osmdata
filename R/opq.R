@@ -34,6 +34,7 @@
 #' Note in particular the comment that queries with arbitrarily large `memsize`
 #' are likely to be rejected.
 #'
+#' @family queries
 #' @export
 #'
 #' @examples
@@ -194,6 +195,7 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #' `add_osm_features()` with only one feature is logically equivalent to
 #' `add_osm_feature()`.
 #'
+#' @family queries
 #' @export
 #'
 #' @examples
@@ -283,6 +285,7 @@ add_osm_feature <- function (opq,
 #' @references <https://wiki.openstreetmap.org/wiki/Map_Features>
 #' @seealso [add_osm_feature]
 #'
+#' @family queries
 #' @export
 #'
 #' @examples
@@ -347,6 +350,7 @@ add_osm_features <- function (opq,
 #' single query, but the results of multiple types can neverthelss be combined
 #' with the \link{c} operation of \link{osmdata}.
 #'
+#' @family queries
 #' @export
 #'
 #' @examples
@@ -411,6 +415,7 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
 #'     opq_string () %>%
 #'     osmdata_sf ()
 #' }
+#' @family queries
 #' @export
 opq_enclosing <- function (lon, lat, key = NULL, value = NULL,
                            enclosing = "relation", timeout = 25) {
@@ -446,6 +451,7 @@ opq_enclosing <- function (lon, lat, key = NULL, value = NULL,
 #' @return Character string to be submitted to the overpass API
 #'
 #' @export
+#' @family queries
 #' @aliases opq_to_string
 #'
 #' @examples

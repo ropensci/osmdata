@@ -5,6 +5,7 @@
 #' @note requires internet access
 #' @references <https://wiki.openstreetmap.org/wiki/Map_Features>
 #'
+#' @family osminfo
 #' @export
 #'
 #' @examples
@@ -38,6 +39,7 @@ available_features <- function() {
 #' @note requires internet access
 #' @references <https://wiki.openstreetmap.org/wiki/Map_Features>
 #'
+#' @family osminfo
 #' @export
 #'
 #' @examples

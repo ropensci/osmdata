@@ -80,3 +80,15 @@ opq <- opq (bbox, nodes_only = TRUE) \%>\%
     osmdata_sf (quiet = FALSE)
 }
 }
+\seealso{
+Other queries: 
+\code{\link{add_osm_features}()},
+\code{\link{add_osm_feature}()},
+\code{\link{bbox_to_string}()},
+\code{\link{getbb}()},
+\code{\link{opq_enclosing}()},
+\code{\link{opq_osm_id}()},
+\code{\link{opq_string}()},
+\code{\link{overpass_status}()}
+}
+\concept{queries}

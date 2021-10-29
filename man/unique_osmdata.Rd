@@ -21,3 +21,11 @@ only those lines not present in multiline objects; and reduce
 objects. This renders an \link{osmdata} object more directly compatible with
 typical output of \pkg{sf}.
 }
+\seealso{
+Other transform: 
+\code{\link{osm_elevation}()},
+\code{\link{osm_poly2line}()},
+\code{\link{trim_osmdata}()},
+\code{\link{unname_osmdata_sf}()}
+}
+\concept{transform}

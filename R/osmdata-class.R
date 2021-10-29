@@ -19,6 +19,7 @@
 #' @note Class constructor should never be used directly, and is only exported
 #' to provide access to the print method
 #'
+#' @family package
 #' @export
 osmdata <- function (bbox = NULL, overpass_call = NULL, meta = NULL,
                      osm_points = NULL, osm_lines = NULL, osm_polygons = NULL,

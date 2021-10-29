@@ -31,3 +31,11 @@ id <- rownames (dat$osm_lines [conway,])
 osm_polygons (dat, id)
 }
 }
+\seealso{
+Other search: 
+\code{\link{osm_lines}()},
+\code{\link{osm_multilines}()},
+\code{\link{osm_multipolygons}()},
+\code{\link{osm_points}()}
+}
+\concept{search}

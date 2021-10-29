@@ -4,6 +4,7 @@
 #' @return an invisible list of whether the API is available along with the
 #'         text of the message from Overpass and the timestamp of the
 #'         next available slot
+#' @family queries
 #' @export
 overpass_status <- function (quiet=FALSE) {
 

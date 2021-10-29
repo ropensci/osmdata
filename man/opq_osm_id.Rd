@@ -44,3 +44,15 @@ dat <- c (dat1, dat2) # The node and way data combined
 \references{
 \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_element_id}
 }
+\seealso{
+Other queries: 
+\code{\link{add_osm_features}()},
+\code{\link{add_osm_feature}()},
+\code{\link{bbox_to_string}()},
+\code{\link{getbb}()},
+\code{\link{opq_enclosing}()},
+\code{\link{opq_string}()},
+\code{\link{opq}()},
+\code{\link{overpass_status}()}
+}
+\concept{queries}

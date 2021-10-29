@@ -22,3 +22,11 @@ pre-downloaded global elevation file from
 \url{https://srtm.csi.cgiar.org/srtmdata/}. Currently only works for
 \code{SC}-class objects returned from \link{osmdata_sc}.
 }
+\seealso{
+Other transform: 
+\code{\link{osm_poly2line}()},
+\code{\link{trim_osmdata}()},
+\code{\link{unique_osmdata}()},
+\code{\link{unname_osmdata_sf}()}
+}
+\concept{transform}

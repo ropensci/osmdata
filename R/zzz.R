@@ -36,6 +36,7 @@
 #'
 #' @seealso [set_overpass_url()]
 #'
+#' @family overpass
 #' @export
 get_overpass_url <- function () {
 
@@ -73,6 +74,7 @@ get_overpass_url <- function () {
 #'
 #' @seealso [get_overpass_url()]
 #'
+#' @family overpass
 #' @export
 set_overpass_url <- function (overpass_url) {
 
