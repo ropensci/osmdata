@@ -347,7 +347,7 @@ add_osm_features <- function (opq,
 #'
 #' @note Extracting elements by ID requires explicitly specifying the type of
 #' element. Only elements of one of the three given types can be extracted in a
-#' single query, but the results of multiple types can neverthelss be combined
+#' single query, but the results of multiple types can nevertheless be combined
 #' with the \link{c} operation of \link{osmdata}.
 #'
 #' @family queries
