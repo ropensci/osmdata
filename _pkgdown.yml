@@ -7,46 +7,25 @@ templates:
 reference:
   - title: Package doc and class
     contents:
-    - osmdata
+    - has_concept("package")
   - title: Overpass server
     contents:
-    - get_overpass_url
-    - set_overpass_url
+    - has_concept("overpass")
   - title: Prepare queries
     contents:
-    - getbb
-    - bbox_to_string
-    - overpass_status
-    - opq
-    - add_osm_feature
-    - add_osm_features
-    - opq_string
-    - opq_osm_id
-    - opq_enclosing
+    - has_concept("queries")
   - title: Get additional OSM info
     contents:
-    - available_features
-    - available_tags
+    - has_concept("osminfo")
   - title: Extract data
     contents:
-    - osmdata_sc
-    - osmdata_sf
-    - osmdata_sp
-    - osmdata_xml
+    - has_concept("extract")
   - title: Search data
     contents:
-    - osm_points
-    - osm_lines
-    - osm_polygons
-    - osm_multilines
-    - osm_multipolygons
+    - has_concept("search")
   - title: Transform data
     contents:
-    - osm_elevation
-    - osm_poly2line
-    - trim_osmdata
-    - unique_osmdata
-    - unname_osmdata_sf
+    - has_concept("transform")
 
 articles:
   - title: The osmdata package
@@ -61,7 +40,7 @@ navbar:
   left:
   - text: Home
     href: index.html
-  - text: Vignettes
+  - text: Articles
     href: articles/index.html
   - text: Functions
     href: reference/index.html
