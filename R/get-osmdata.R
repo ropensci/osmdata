@@ -401,7 +401,9 @@ osmdata_sc <- function(q, doc, quiet=TRUE) {
         message ("converting OSM data to sc format")
     res <- rcpp_osmdata_sc (temp$doc)
 
-    res$object_link_edge$native_ <- TRUE
+    if (nrow (res$object_link_edge) > 0L) {
+        res$object_link_edge$native_ <- TRUE
+    }
 
     obj <- list () # SC **does not** use osmdata class definition
     obj$nodes <- tibble::as_tibble (res$nodes)
@@ -415,10 +417,13 @@ osmdata_sc <- function(q, doc, quiet=TRUE) {
                                 ctime = temp$obj$meta$timestamp,
                                 OSM_version = temp$obj$meta$OSM_version,
                             overpass_version = temp$obj$meta$overpass_version)
-    if (!missing (q))
-        obj$meta$bbox <- q$bbox
-    else
+
+    if (!missing (q)) {
+        if (!is.character (q))
+            obj$meta$bbox <- q$bbox
+    } else {
         obj$meta$bbox <- bbox_to_string (obj)
+    }
 
     attr (obj, "join_ramp") <- c ("nodes",
                                   "relation_members",
