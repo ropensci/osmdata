@@ -1,6 +1,12 @@
 0.1.8.00X
 ===================
 
+Major changes:
+
+- New function `opq_around` to query features within a specified radius
+  *around* a defined location; thanks to @barryrowlingson via #199 and
+  @maellecoursonnais via #238
+
 0.1.8
 ===================
 
