@@ -442,6 +442,56 @@ opq_enclosing <- function (lon, lat, key = NULL, value = NULL,
     return (res)
 }
 
+#' opq_around
+#'
+#' Find all features around a given point, and optionally match specific
+#' 'key'-'value' pairs. This function is \emph{not} intended to be combined with
+#' \link{add_osm_feature}, rather is only to be used in the sequence
+#' \link{opq_around} -> \link{osmdata_xml} (or other extraction function). See
+#' examples for how to use.
+#'
+#' @param radius Radius in metres around the point for which data should be
+#' extracted. Queries with  large values for this parameter may fail.
+#' @inheritParams opq_enclosing
+#'
+#' @examples
+#' \dontrun{
+#' # Get all benches ("amenity=bench") within 100m of a particular point
+#' lat <- 53.94542
+#' lon <- -2.52017
+#' key <- "amenity"
+#' value <- "bench"
+#' radius <- 100
+#' x <- opq_around (lon, lat, radius, key, value) %>%
+#'     osmdata_sf ()
+#' }
+#' @family queries
+#' @export
+opq_around <- function (lon, lat, radius = 15,
+                        key = NULL, value = NULL, timeout = 25) {
+
+    timeout <- format (timeout, scientific = FALSE)
+    prefix <- paste0 ("[out:xml][timeout:", timeout, "];(")
+    suffix <- ");\n(._;>;);\nout;"
+
+    kv <- NULL
+    if (!is.null (key)) {
+        if (!is.null (value)) {
+            kv <- paste0 ("[", key, "=", value, "]")
+        } else {
+            kv <- paste0 ("[", key, "]")
+        }
+    }
+
+    nodes <- paste0 ("node(around:", radius, ",", lat, ", ", lon, ")", kv, ";")
+    ways <- paste0 ("way(around:", radius, ",", lat, ", ", lon, ")", kv, ";")
+    rels <- paste0 ("relation(around:", radius, ",", lat, ", ", lon, ")", kv, ";")
+
+    res <- paste0 (prefix, nodes, ways, rels, suffix)
+
+    return (res)
+}
+
 #' Convert an overpass query into a text string
 #'
 #' Convert an osmdata query of class opq to a character string query to
