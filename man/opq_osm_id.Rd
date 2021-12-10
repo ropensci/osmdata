@@ -54,6 +54,7 @@ Other queries:
 \code{\link{opq_enclosing}()},
 \code{\link{opq_string}()},
 \code{\link{opq}()},
-\code{\link{overpass_status}()}
+\code{\link{overpass_status}()},
+\code{\link{overpass_trim}()}
 }
 \concept{queries}

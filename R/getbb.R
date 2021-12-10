@@ -22,6 +22,8 @@ bbox_to_string <- function(bbox) {
 
     if (missing (bbox)) stop ("bbox must be provided")
 
+    if (is.null (bbox)) return (NULL)
+
     if (is.character (bbox))
         bbox <- getbb (bbox)
 
