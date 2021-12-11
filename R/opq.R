@@ -593,8 +593,8 @@ opq_string <- function (opq) {
 # specified.
 opq_string_intern <- function (opq, quiet = TRUE) {
 
-    if (is.null (opq$bbox) & is.null (opq$trim_area))
-        stop ("Either bbox must to be set in opq() or polygon needs to be specified in overpass_trim()")
+    if (is.null (opq$bbox) & is.null (opq$trim_area) & is.null (opq$id))
+        stop ("Either bbox must to be set in opq(), polygon needs to be specified in overpass_trim() or OSM ID must be provided in opq_osm_id()")
 
     lat <- lon <- NULL # suppress no visible binding messages
 
