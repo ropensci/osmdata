@@ -81,8 +81,8 @@ q <- opq (bbox = c (51.2867602, -0.510375, 51.6918741, 0.3340155)) %>%
 ```
 
 A detailed description of features is provided at the 
-[OSM wiki](https://wiki.openstreetmap.org/wiki/Category:Keys), or the 
-`osmdata` function `available_features()` can be used to retrive the
+[OSM wiki](https://wiki.openstreetmap.org/wiki/Map_Features), or the 
+`osmdata` function `available_features()` can be used to retrieve the
 comprehensive list of feature keys currently used in OSM.
 
 ```{r available-features, eval=FALSE}
