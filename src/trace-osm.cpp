@@ -214,8 +214,8 @@ void trace_multilinestring (Relations::const_iterator &itr_rel,
             lons.clear ();
             lats.clear ();
             rownames.clear ();
-            relation_ways.erase (rwi);
         }
+        relation_ways.erase (rwi);
     } // end while relation_ways.size > 0
 }
 
