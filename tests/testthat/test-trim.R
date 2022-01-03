@@ -37,12 +37,12 @@ test_that ("trim_osm_data", {
                expect_equal (nrow (x1$edge), 0)
                expect_equal (nrow (x1$vertex), 0)
 
-               bb <- list (cbind (c (0, 0),
+               bb <- list (rbind (c (0, 0),
                                   c (0, 1),
                                   c (1, 1),
                                   c (1, 0),
                                   c (0, 0)),
-                           cbind (c (2, 3),
+                           rbind (c (2, 3),
                                   c (2, 4),
                                   c (3, 4),
                                   c (3, 3),

@@ -7,6 +7,11 @@ Major changes:
   *around* a defined location; thanks to @barryrowlingson via #199 and
   @maellecoursonnais via #238
 
+Minor changes:
+
+- New dependency on `reproj` package, so that `trim_osmdata()` can be applied
+  to re-projected coordinates.
+
 0.1.8
 ===================
 

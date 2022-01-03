@@ -10,13 +10,13 @@
   "codeRepository": "https://github.com/ropensci/osmdata/",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.8.010",
+  "version": "0.1.8.11",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.1.1 (2021-08-10)",
+  "runtimePlatform": "R version 4.1.2 (2021-11-01)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -274,6 +274,18 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "reproj",
+      "name": "reproj",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=reproj"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "rvest",
       "name": "rvest",
       "provider": {
@@ -332,28 +344,12 @@
   ],
   "applicationCategory": "DataAccess",
   "isPartOf": "https://ropensci.org",
-  "keywords": [
-    "open0street0map",
-    "openstreetmap",
-    "overpass0API",
-    "OSM",
-    "overpass-api",
-    "r",
-    "cpp",
-    "rstats",
-    "osm",
-    "osm-data",
-    "r-package",
-    "peer-reviewed"
-  ],
-  "contIntegration": [
-    "https://github.com/ropensci/osmdata/actions?query=workflow%3AR-CMD-check",
-    "https://codecov.io/gh/ropensci/osmdata"
-  ],
+  "keywords": ["open0street0map", "openstreetmap", "overpass0API", "OSM", "overpass-api", "r", "cpp", "rstats", "osm", "osm-data", "r-package", "peer-reviewed"],
+  "contIntegration": ["https://github.com/ropensci/osmdata/actions?query=workflow%3AR-CMD-check", "https://codecov.io/gh/ropensci/osmdata"],
   "developmentStatus": "https://www.repostatus.org/#active",
   "releaseNotes": "https://github.com/ropensci/osmdata/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/osmdata/blob/main/README.md",
-  "fileSize": "7782.91KB",
+  "fileSize": "7784.406KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
@@ -390,10 +386,7 @@
         "issueNumber": "14",
         "datePublished": "2017",
         "isPartOf": {
-          "@type": [
-            "PublicationVolume",
-            "Periodical"
-          ],
+          "@type": ["PublicationVolume", "Periodical"],
           "volumeNumber": "2",
           "name": "The Journal of Open Source Software"
         }
