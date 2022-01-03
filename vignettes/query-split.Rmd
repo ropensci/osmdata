@@ -1,0 +1,29 @@
+---
+title: "4. Splitting large queries"
+author: 
+  - "Mark Padgham"
+date: "`r Sys.Date()`"
+bibliography: osmdata-refs.bib
+output: 
+    html_document:
+        toc: true
+        toc_float: true
+        number_sections: false
+        theme: flatly
+vignette: >
+  %\VignetteIndexEntry{4. query-split}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## 1. Introduction
+
+The `osmdata` package retrieves data from the [`overpass`
+server](https://overpass-api.de) which is primarily designed to deliver small
+subsets of the full Open Street Map (OSM) data set, determined both by specific
+bounding coordinates and specific OSM key-value pairs. The server has internal
+routines to limit delivery rates on queries for excessively large data sets,
+and may ultimately fail for large queries. This vignette describes one approach
+for breaking overly large queries into a set of smaller queries, and for
+re-combining the resultant data sets into a single `osmdata` object reflecting
+the desired, large query.

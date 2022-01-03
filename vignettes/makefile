@@ -1,4 +1,4 @@
-LFILE = osmdata
+LFILE = query-split
 
 all: knith open 
 
