@@ -4,6 +4,8 @@
 ^CONTRIBUTING.md$
 ^docs/
 ^fig/
+data-raw/
+hooks/
 makefile$
 ^.*\.Rproj$
 ^paper\.md$
@@ -17,10 +19,8 @@ makefile$
 ^src/Makevars$
 ^src/Makevars.in$
 ^tests/timing-benchmark.R$
-data-raw/
 ^\.travis\.yml$
 ^\.Rproj\.user$
 ^codemeta\.json$
 ^\.github$
 ^\.pre-commit-config\.yaml$
-^\.hooks$
