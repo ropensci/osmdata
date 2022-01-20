@@ -1,16 +1,17 @@
 {
-  "@context": [
-    "http://purl.org/codemeta/2.0",
-    "http://schema.org"
-  ],
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "osmdata",
-  "description": "Download and import of 'OpenStreetMap' ('OSM') data as 'sf'\n    or 'sp' objects.  'OSM' data are extracted from the 'Overpass' web\n    server (<https://overpass-api.de/>) and processed with very fast 'C++'\n    routines for return to 'R'.",
+  "description": "Download and import of 'OpenStreetMap' ('OSM') data as 'sf' or 'sp' objects. 'OSM' data are extracted from the 'Overpass' web server (<https://overpass-api.de/>) and processed with very fast 'C++' routines for return to 'R'.",
   "name": "osmdata: Import 'OpenStreetMap' Data as Simple Features or Spatial Objects",
+  "relatedLink": [
+    "https://docs.ropensci.org/osmdata/",
+    "https://CRAN.R-project.org/package=osmdata"
+  ],
   "codeRepository": "https://github.com/ropensci/osmdata/",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.8.012",
+  "version": "0.1.8.018",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -20,7 +21,7 @@
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
-    "name": "Central R Archive Network (CRAN)",
+    "name": "Comprehensive R Archive Network (CRAN)",
     "url": "https://cran.r-project.org"
   },
   "author": [
@@ -187,14 +188,14 @@
       "sameAs": "https://CRAN.R-project.org/package=testthat"
     }
   ],
-  "softwareRequirements": [
-    {
+  "softwareRequirements": {
+    "1": {
       "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
       "version": ">= 3.2.4"
     },
-    {
+    "2": {
       "@type": "SoftwareApplication",
       "identifier": "curl",
       "name": "curl",
@@ -206,7 +207,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=curl"
     },
-    {
+    "3": {
       "@type": "SoftwareApplication",
       "identifier": "httr",
       "name": "httr",
@@ -218,7 +219,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=httr"
     },
-    {
+    "4": {
       "@type": "SoftwareApplication",
       "identifier": "jsonlite",
       "name": "jsonlite",
@@ -230,7 +231,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=jsonlite"
     },
-    {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "lubridate",
       "name": "lubridate",
@@ -242,7 +243,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=lubridate"
     },
-    {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "magrittr",
       "name": "magrittr",
@@ -254,12 +255,12 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=magrittr"
     },
-    {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "methods",
       "name": "methods"
     },
-    {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "Rcpp",
       "name": "Rcpp",
@@ -272,7 +273,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=Rcpp"
     },
-    {
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "reproj",
       "name": "reproj",
@@ -284,7 +285,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=reproj"
     },
-    {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "rvest",
       "name": "rvest",
@@ -296,7 +297,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rvest"
     },
-    {
+    "11": {
       "@type": "SoftwareApplication",
       "identifier": "sp",
       "name": "sp",
@@ -308,7 +309,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=sp"
     },
-    {
+    "12": {
       "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
@@ -320,12 +321,12 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
-    {
+    "13": {
       "@type": "SoftwareApplication",
       "identifier": "utils",
       "name": "utils"
     },
-    {
+    "14": {
       "@type": "SoftwareApplication",
       "identifier": "xml2",
       "name": "xml2",
@@ -337,11 +338,8 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=xml2"
     },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/cxx11"
-    }
-  ],
+    "SystemRequirements": "C++11"
+  },
   "applicationCategory": "DataAccess",
   "isPartOf": "https://ropensci.org",
   "keywords": [
@@ -358,14 +356,7 @@
     "r-package",
     "peer-reviewed"
   ],
-  "contIntegration": [
-    "https://github.com/ropensci/osmdata/actions?query=workflow%3AR-CMD-check",
-    "https://codecov.io/gh/ropensci/osmdata"
-  ],
-  "developmentStatus": "https://www.repostatus.org/#active",
-  "releaseNotes": "https://github.com/ropensci/osmdata/blob/master/NEWS.md",
-  "readme": "https://github.com/ropensci/osmdata/blob/main/README.md",
-  "fileSize": "7784.406KB",
+  "fileSize": "23876.288KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
@@ -412,12 +403,13 @@
       }
     }
   ],
-  "relatedLink": [
-    "https://docs.ropensci.org/osmdata",
-    "https://CRAN.R-project.org/package=osmdata",
-    "https://docs.ropensci.org/osmdata/"
+  "releaseNotes": "https://github.com/ropensci/osmdata/blob/master/NEWS.md",
+  "readme": "https://github.com/ropensci/osmdata/blob/main/README.md",
+  "contIntegration": [
+    "https://github.com/ropensci/osmdata/actions?query=workflow%3AR-CMD-check",
+    "https://codecov.io/gh/ropensci/osmdata"
   ],
-  "funder": {},
+  "developmentStatus": "https://www.repostatus.org/#active",
   "review": {
     "@type": "Review",
     "url": "https://github.com/ropensci/software-review/issues/103",

@@ -28,6 +28,11 @@ Trim an \link{osmdata} object to within a bounding polygon
 \note{
 It will generally be necessary to pre-load the \pkg{sf} package for
 this function to work correctly.
+
+Caution is advised when using polygons obtained from Nominatim via
+\code{getbb(..., format_out = "polygon"|"sf_polygon")}. These shapes can be
+outdated and thus could cause the trimming operation to not give results
+expected based on the current state of the OSM data.
 }
 \examples{
 \dontrun{
