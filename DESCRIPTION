@@ -11,6 +11,7 @@ Authors@R: c(
     person("Andrea", "Gilardi", role = "ctb"),
     person("Enrico", "Spinielli", role = "ctb"),
     person("Anthony", "North", role = "ctb"),
+    person("Martin", "Machyna", role = "ctb"),
     person("Marcin", "Kalicinski", role = c("ctb", "cph"),
            comment = "Author of included RapidXML code"),
     person("Finkelstein", "Noam", role = c("ctb", "cph"),
