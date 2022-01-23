@@ -11,7 +11,7 @@
   "codeRepository": "https://github.com/ropensci/osmdata/",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.8.018",
+  "version": "0.1.8.020",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -72,6 +72,11 @@
       "@type": "Person",
       "givenName": "Anthony",
       "familyName": "North"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Martin",
+      "familyName": "Machyna"
     },
     {
       "@type": "Person",
@@ -356,7 +361,7 @@
     "r-package",
     "peer-reviewed"
   ],
-  "fileSize": "23876.288KB",
+  "fileSize": "23887.5KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
