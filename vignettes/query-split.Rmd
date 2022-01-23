@@ -32,10 +32,11 @@ the desired, large query.
 
 ## 2. Query splitting
 
-Some more complex or data heavy queries will eventually exhaust the time or memory
-limit of the `overpass` server. One way to get around the problem is to split
-the bounding box (bbox) of the query to several smaller fragments and afterwards
-combinging the data while removing duplicate objects.
+Complex or data-heavy queries may exhaust the time or memory limits of the
+`overpass` server. One way to get around this problem is to split the bounding
+box (bbox) of a query into several smaller fragments, and then to re-combine
+the data and remove duplicate objects. This section demonstrates how that may
+be done, starting with a large bounding box.
 
 ```{r get-bbox, eval = FALSE}
 library(osmdata)
@@ -43,13 +44,14 @@ library(osmdata)
 bb <- getbb("Southeastern Connecticut COG", featuretype = "boundary")
 bb
 ```
-```{out1, eval = FALSE}
+```{r out1, eval = FALSE}
         min       max
 x -72.46677 -71.79315
 y  41.27591  41.75617
 ```
 
-Now let's split the bbox into two smaller areas:
+The following lines then divide that bounding box into two smaller areas:
+
 ```{r bbox-split, eval = FALSE}
 dx <- (bb["x", "max"] - bb["x", "min"]) / 2
 
@@ -60,7 +62,7 @@ bbs[[2]]["x", "min"] <- bb["x", "min"] + dx
 
 bbs
 ```
-```{out2, eval = FALSE}
+```{r out2, eval = FALSE}
 [[1]]
         min       max
 x -72.46677 -72.12996
@@ -72,36 +74,41 @@ x -72.12996 -71.79315
 y  41.27591  41.75617
 ```
 
-We can use them to create two separate overpass queries:
+These two bounding boxes can then be used to submit two separate overpass
+queries:
 
 ```{r opq-2x, eval = FALSE}
-towns <- list()
+res <- list()
 
-towns[[1]] <- opq(bbox = bbs[[1]]) |>
+res[[1]] <- opq(bbox = bbs[[1]]) |>
         add_osm_feature(key="admin_level", value="8") |>
         osmdata_sf()
-towns[[2]] <- opq(bbox = bbs[[2]]) |>
+res[[2]] <- opq(bbox = bbs[[2]]) |>
         add_osm_feature(key="admin_level", value="8") |>
         osmdata_sf()
 ```
 
-The retrieved `osmdata` objects can then be merged usig the`c(...)` function,
-which automatically removes duplicate objects that span across both bboxes.
+The retrieved `osmdata` objects can then be merged using the`c(...)` function,
+which automatically removes duplicate objects.
 
 ```{r opq-merge, eval = FALSE}
-towns2 <- c(towns[[1]], towns[[2]])
+res <- c(res[[1]], res[[2]])
 ```
 
 
 ## 3. Automatic bbox splitting
-Sometimes even the split bboxes can still be too large for a successful query and 
-additional splitting is needed. We can automate this process by monitoring the exit 
-status of `opq() |> osmdata_sf()` and in case of a failed query we can keep recursively
-splitting the current bbox into incresingly smaller fragments until the correct size 
-is reached.
 
-Let's make a function that will split the provided bbox into a list of four equal 
-size bboxes.
+The previous code demonstrated how to divide a bounding box into two, smaller
+regions. It will generally not be possible to know in advance how small a
+bounding box should be for a query for work, and so we need a more general
+version of that functionality to divide a bounding box into a arbitrary number
+of sub-regions.
+
+We can automate this process by monitoring the exit status of `opq() |>
+osmdata_sf()` and in case of a failed query we can keep recursively splitting
+the current bounding box into increasingly smaller fragments until the overpass
+server returns a result. The following function demonstrates splitting a
+bounding box into a list of four equal-sized bounding boxes in a 2-by-2 grid.
 
 ```{r bbox-auto-split, eval = FALSE}
 split_bbox <- function(bbox, grid = 2) {
@@ -128,7 +135,7 @@ split_bbox <- function(bbox, grid = 2) {
 }
 ```
 
-We pre-split our area and create a queue of bboxes that we will use for 
+We pre-split our area and create a queue of bounding boxes that we will use for 
 submitting queries.
 
 ```{r bbox-pre-split, eval = FALSE}
@@ -138,9 +145,10 @@ result <- list()
 ```
 
 Now we can create a loop that will monitor the exit status of our query and in 
-case of success removes the bbox from the queue. If our query fails for 
-some reason, we split the failed bbox into four fragments and add them to
-our queue.
+case of success remove the bounding box from the queue. If our query fails for 
+some reason, we split the failed bounding box into four smaller fragments and
+add them to our queue, repeating until all results have been successfully
+delivered.
 
 ```{r auto-query, eval = FALSE}
 while (length(queue) > 0) {
@@ -164,11 +172,10 @@ while (length(queue) > 0) {
 }
 ```
 
-All retreived `osmdata` objects stored in the `result` list can be combined using
-`c(...)`. Note that for large datasets this process can be quite time consuming.
+All retrieved `osmdata` objects stored in the `result` list can then be
+combined using the `c(...)` operator. Note that for large datasets this process
+can be quite time consuming.
 
 ```{r merge-result-list, eval = FALSE}
 final <- do.call(c, result)
 ```
-
-
