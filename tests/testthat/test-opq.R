@@ -1,5 +1,5 @@
 
-context ("overpass query datetime param")
+context ("opq functions")
 
 test_that ("datetime", {
 
@@ -29,5 +29,27 @@ test_that ("datetime", {
     expect_identical (q0 [!names (q0) == "prefix"],
                       q2 [!names (q2) == "prefix"])
     expect_true (!grepl ("date\\:", q2$prefix))
-    expect_true (!grepl ("diff\\:", q2$prefix))
+    expect_true (grepl ("diff\\:", q2$prefix))
+})
+
+test_that ("opq_osm_id", {
+
+    expect_error (q <-opq_osm_id (),
+                  "type must be specified: one of node, way, or relation")
+    expect_error (opq_osm_id (type = "a"),
+                  "'arg' should be one of")
+    expect_error (opq_osm_id (type = "node"),
+                  "id must be specified")
+    expect_error (opq_osm_id (type = "node", id = 1L),
+                  "id must be character or numeric.")
+    expect_error (opq_osm_id (type = "node", id = 1:2 + 0.1),
+                  "Only a single id may be entered.")
+    expect_s3_class (x <- opq_osm_id (type = "node", id = 123456),
+                     "list")
+    expect_identical (names (x),
+                      c ("prefix", "suffix", "id"))
+    expect_type (x$id, "list")
+    expect_identical (names (x$id), c ("type", "id"))
+    expect_identical (x$id$type, "node")
+    expect_identical (x$id$id, "123456")
 })
