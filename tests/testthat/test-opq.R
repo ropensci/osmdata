@@ -45,11 +45,31 @@ test_that ("opq_osm_id", {
     expect_error (opq_osm_id (type = "node", id = 1:2 + 0.1),
                   "Only a single id may be entered.")
     expect_s3_class (x <- opq_osm_id (type = "node", id = 123456),
-                     "list")
+                     "overpass_query")
     expect_identical (names (x),
                       c ("prefix", "suffix", "id"))
     expect_type (x$id, "list")
     expect_identical (names (x$id), c ("type", "id"))
     expect_identical (x$id$type, "node")
     expect_identical (x$id$id, "123456")
+})
+
+test_that ("opq_enclosing", {
+
+    expect_error (opq_enclosing (),
+                  "'lon' and 'lat' must be provided.")
+    lat <- 54.33601
+    lon <- -3.07677
+    expect_s3_class (x <- opq_enclosing (lon, lat),
+                     "overpass_query")
+    expect_length (x$features, 0L)
+
+    key <- "natural"
+    value <- "water"
+    expect_s3_class (x <- opq_enclosing (lon, lat, key = key, value = value),
+                     "overpass_query")
+    expect_true (length (x$features) == 1L)
+    expect_type (x$features, "character")
+    expect_true (grepl ("natural", x$features))
+    expect_true (grepl ("water", x$features))
 })
