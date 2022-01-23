@@ -104,8 +104,9 @@ check_datetime <- function (x) {
         substring (x, 11, 11) != "T" &
         substring (x, 14, 14) != ":" &
         substring (x, 17, 17) != ":" &
-        substring (x, 20, 20) != "Z")
-        stop ("x is not is ISO8601 format ('YYYY-MM-DDThh:mm:ssZ')")
+        substring (x, 20, 20) != "Z") {
+        stop ("datetime must be in ISO8601 format ('YYYY-MM-DDThh:mm:ssZ')")
+    }
     YY <- substring (x, 1, 4) # nolint
     MM <- substring (x, 6, 7) # nolint
     DD <- substring (x, 9, 10) # nolint
