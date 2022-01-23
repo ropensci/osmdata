@@ -433,9 +433,19 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
 #' }
 #' @family queries
 #' @export
-opq_enclosing <- function (lon, lat, key = NULL, value = NULL,
+opq_enclosing <- function (lon = NULL, lat = NULL,
+                           key = NULL, value = NULL,
                            enclosing = "relation", timeout = 25) {
+
     enclosing <- match.arg (tolower (enclosing), c ("relation", "way"))
+
+    if (is.null (lon) | is.null (lat)) {
+        stop ("'lon' and 'lat' must be provided.")
+    }
+    if (!(is.numeric (lon) & is.numeric (lat) &
+          length (lon) == 1L & length (lat) == 1L)) {
+        stop ("'lon' and 'lat' must both be single numeric values.")
+    }
 
     bbox <- bbox_to_string (c (lon, lat, lon, lat))
     timeout <- format (timeout, scientific = FALSE)
