@@ -337,7 +337,9 @@ add_osm_features <- function (opq,
 
 #' Add a feature specified by OSM ID to an Overpass query
 #'
-#' @param id One or more official OSM identifiers (long-form integers)
+#' @param id One or more official OSM identifiers (long-form integers), which
+#' must be entered as either a character or *numeric* value (because R does not
+#' support long-form integers).
 #' @param type Type of object; must be either `node`, `way`, or `relation`
 #' @param open_url If `TRUE`, open the OSM page of the specified object in web
 #' browser. Multiple objects (`id` values) will be opened in multiple pages.
@@ -374,15 +376,28 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
         stop ("type must be specified: one of node, way, or relation")
     type <- match.arg (tolower (type), c ("node", "way", "relation"))
 
+    if (is.null (id))
+        stop ("id must be specified.")
+    if (!(is.character (id) | storage.mode (id) == "double"))
+        stop ("id must be character or numeric.")
+    if (length (id) != 1L)
+        stop ("Only a single id may be entered.")
+
+    if (!is.character (id)) {
+        id <- paste0 (id)
+    }
+
     opq <- opq (1:4)
     opq$bbox <- NULL
     opq$features <- NULL
     opq$id <- list (type = type, id = id)
 
     if (open_url) {
+        # nocov start
         u <- paste0 ("https://openstreetmap.org/", type [1], "/", id)
         for (i in u)
             browseURL (i)
+        # nocov end
     }
 
     opq

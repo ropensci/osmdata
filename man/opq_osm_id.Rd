@@ -7,7 +7,9 @@
 opq_osm_id(id = NULL, type = NULL, open_url = FALSE)
 }
 \arguments{
-\item{id}{One or more official OSM identifiers (long-form integers)}
+\item{id}{One or more official OSM identifiers (long-form integers), which
+must be entered as either a character or \emph{numeric} value (because R does not
+support long-form integers).}
 
 \item{type}{Type of object; must be either \code{node}, \code{way}, or \code{relation}}
 
