@@ -13,15 +13,15 @@ overpass_status <- function (quiet=FALSE) {
 
     overpass_url <- get_overpass_url ()
     st_type <- "status"
-    if (grepl ("vi-di", overpass_url) | grepl ("rambler", overpass_url)) # nocov
-        st_type <- "timestamp"                                           # nocov
+    if (grepl ("vi-di", overpass_url) | grepl ("rambler", overpass_url))
+        st_type <- "timestamp"
 
     status_url <- gsub ("interpreter", st_type, overpass_url)
 
     if (!curl::has_internet ()) {
 
-        status <- "No internet connection"      # nocov
-        if (!quiet) message (status)            # nocov
+        status <- "No internet connection"
+        if (!quiet) message (status)
     } else {
 
         status <- httr::RETRY ("GET", status_url, timeout = 100,
@@ -31,18 +31,16 @@ overpass_status <- function (quiet=FALSE) {
             status <- httr::content (status, encoding = "UTF-8")
             if (st_type == "status")
                 slt <- get_slot_time (status = status, quiet = quiet)
-            else if (st_type == "timestamp")                # nocov
-                slt <- get_slot_timestamp (status = status) # nocov
+            else if (st_type == "timestamp")
+                slt <- get_slot_timestamp (status = status)
 
             available <- slt$available
             slot_time <- slt$slot_time
         } else {
 
             # status not even returned so pause the whole shebang for 10 seconds
-            # nocov start
             slot_time <- lubridate::ymd_hms (lubridate::now () + 10)
             slot_time <- lubridate::force_tz (slot_time, tz = Sys.timezone ())
-            # nocov end
         }
     }
 
@@ -58,13 +56,11 @@ get_slot_time <- function (status, quiet) {
     if (!quiet) message (status_now)
 
     if (grepl ("after", status_now)) {
-        # nocov start
         available <- FALSE
         slot_time <- lubridate::ymd_hms (gsub ("Slot available after: ",
                                                "", status_now))
         slot_time <- lubridate::force_tz (slot_time,
                                           tz = Sys.timezone ())
-        # nocov end
     } else {
         available <- TRUE
         slot_time <- Sys.time ()
@@ -76,14 +72,12 @@ get_slot_time <- function (status, quiet) {
 # For APIs with only timestamps but no status
 get_slot_timestamp <- function (status) {
 
-    # nocov start
     slot_time <- NA
     available <- FALSE
     if (nchar (status) > 1)
         available <- TRUE
 
     list ("available" = available, "slot_time" = slot_time)
-    # nocov end
 }
 
 #' Check for error issued by overpass server, even though status = 200
@@ -97,7 +91,6 @@ check_for_error <- function (doc) {
 
     # the nchar check uses an arbitrary value to avoid trying to `read_xml()`
     # read data, which would take forever.
-    # nocov start
     if (grepl ("error: ", doc, ignore.case = TRUE) &
         nchar (doc) < 10000) {
 
@@ -113,7 +106,6 @@ check_for_error <- function (doc) {
                       xml2::xml_text (docx))
         }
     }
-    # nocov end
 }
 
 
@@ -160,8 +152,8 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
     }
 
     if (!curl::has_internet ())
-        stop ("Overpass query unavailable without internet",    # nocov
-              call. = FALSE)                                    # nocov
+        stop ("Overpass query unavailable without internet",
+              call. = FALSE)
 
     if (!quiet) message("Issuing query to Overpass API ...")
 
@@ -185,7 +177,7 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
     if (!quiet) message ("Query complete!")
 
     if (class (res) == "result") # differs only for mock tests
-        httr::stop_for_status (res)                             # nocov
+        httr::stop_for_status (res)
 
     else if (class (res) == "raw") # for mock tests
         doc <- rawToChar (res)

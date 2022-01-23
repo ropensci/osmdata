@@ -33,5 +33,5 @@ jobs:
           needs: coverage
 
       - name: Test coverage
-        run: covr::codecov(line_exclusions = list('src/rapidxml.h','src/rapidxml_print.h'),function_exclusions=c('overpass_query','osm_elevation','check_elev_file'))
+        run: covr::codecov(line_exclusions = list('R/overpass-query.R', src/rapidxml.h','src/rapidxml_print.h'),function_exclusions=c(osm_elevation','check_elev_file'))
         shell: Rscript {0}
