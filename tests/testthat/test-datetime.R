@@ -30,4 +30,4 @@ test_that ("datetime", {
                       q2 [!names (q2) == "prefix"])
     expect_true (!grepl ("date\\:", q2$prefix))
     expect_true (!grepl ("diff\\:", q2$prefix))
-}
+})
