@@ -75,6 +75,12 @@ test_that ("add feature", {
                       " [\"highway\"~\"^(primary|tertiary)$\"]")
     expect_identical (qry4$features, " [\"highway\"!=\"primary\"]")
     expect_identical (qry5$features, " [\"highway\"!=\"primary\",i]")
+
+    bbox <- c(-0.118, 51.514, -0.115, 51.517)
+    qry <- opq (bbox = bbox)
+    bbox2 <- bbox + c (0.01, 0.01, -0.01, -0.01)
+    qry6 <- add_osm_feature (qry, bbox = bbox2, key = "highway", value = "!primary")
+    expect_true (!identical (qry$bbox, qry6$bbox))
           })
 
 test_that ("make_query", {
