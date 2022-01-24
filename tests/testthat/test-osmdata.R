@@ -67,11 +67,14 @@ test_that ("add feature", {
     qry3 <- add_osm_feature (qry, key = "highway",
                              value = c ("primary", "tertiary"))
     qry4 <- add_osm_feature (qry, key = "highway", value = "!primary")
+    qry5 <- add_osm_feature (qry, key = "highway", value = "!primary",
+                             match_case = FALSE)
     expect_identical (qry1$features, " [\"highway\"]")
     expect_identical (qry2$features, " [\"highway\"=\"primary\"]")
     expect_identical (qry3$features,
                       " [\"highway\"~\"^(primary|tertiary)$\"]")
     expect_identical (qry4$features, " [\"highway\"!=\"primary\"]")
+    expect_identical (qry5$features, " [\"highway\"!=\"primary\",i]")
           })
 
 test_that ("make_query", {
