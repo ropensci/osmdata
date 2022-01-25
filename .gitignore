@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 inst/doc
+inst/WORDLIST
 # History files
 .Rhistory
 .Rapp.history
