@@ -11,6 +11,18 @@
 #' @param x An 'osmdata_sf' object returned from function of same name
 #' @return Same object, yet with no row names on geometry objects.
 #' @family transform
+#' @examples
+#' \dontrun{
+#' hampi_sf <- opq ("hampi india") %>%
+#'             add_osm_feature (key="historic", value="ruins") %>%
+#'             osmdata_sf ()
+#' hampi_clean <- unname_osmdata_sf (hampi_sf)
+#'
+#' # All coordinate matrices include rownames with OSM ID values:
+#' head (as.matrix (hampi_sf$osm_lines$geometry [[1]]))
+#' # But 'unname_osmdata_sf' removes both row and column names:
+#' head (as.matrix (hampi_clean$osm_lines$geometry [[1]]))
+#' }
 #' @export
 unname_osmdata_sf <- function (x) {
 

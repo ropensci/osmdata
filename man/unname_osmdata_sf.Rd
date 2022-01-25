@@ -21,6 +21,19 @@ names also removes any ability to inter-relate the different components of an
 \code{osmdata} object, so use of this function is only recommended to resolve
 issues such as those linked to above.
 }
+\examples{
+\dontrun{
+hampi_sf <- opq ("hampi india") \%>\%
+            add_osm_feature (key="historic", value="ruins") \%>\%
+            osmdata_sf ()
+hampi_clean <- unname_osmdata_sf (hampi_sf)
+
+# All coordinate matrices include rownames with OSM ID values:
+head (as.matrix (hampi_sf$osm_lines$geometry [[1]]))
+# But 'unname_osmdata_sf' removes both row and column names:
+head (as.matrix (hampi_clean$osm_lines$geometry [[1]]))
+}
+}
 \seealso{
 Other transform: 
 \code{\link{osm_elevation}()},
