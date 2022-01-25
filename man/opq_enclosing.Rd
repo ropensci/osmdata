@@ -5,8 +5,8 @@
 \title{opq_enclosing}
 \usage{
 opq_enclosing(
-  lon,
-  lat,
+  lon = NULL,
+  lat = NULL,
   key = NULL,
   value = NULL,
   enclosing = "relation",
