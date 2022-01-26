@@ -160,3 +160,30 @@ test_that ("query-no-quiet", {
                         "Issuing query to Overpass API")
     }
 })
+
+test_that ("add_osm_features", {
+
+    qry <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517))
+    expect_error (
+        qry <- add_osm_features (qry),
+        "features must be provided")
+
+    qry$bbox <- NULL
+    expect_error (
+        qry <- add_osm_features (qry, features = "a"),
+        "Bounding box has to either be set in opq or must be set here")
+
+    qry <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517))
+    expect_error (
+        qry <- add_osm_features (qry, features = "a"),
+        "features must be enclosed in escape-delimited quotations \\(see example\\)")
+
+    bbox <- c (-0.118, 51.514, -0.115, 51.517)
+    bbox_mod <- bbox + c (-0.001, -0.001, 0.001, 0.001)
+    qry0 <- opq (bbox = bbox)
+    qry1 <- add_osm_features (qry0, features = "\"amenity\"=\"restaurant\"")
+    qry2 <- add_osm_features (qry0, features = "\"amenity\"=\"restaurant\"",
+                              bbox = bbox_mod)
+    expect_false (identical (qry1$bbox, qry2$bbox))
+
+})
