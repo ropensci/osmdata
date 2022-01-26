@@ -1,6 +1,4 @@
-# CRAN notes for osmdata_0.1.8 submission
-
-This submission fixes some check failures on previous version. These were due to external calls in vignettes which have now been switched off, and so will no longer fail.
+# CRAN notes for osmdata_0.1.9 submission
 
 ## Test environments
 
