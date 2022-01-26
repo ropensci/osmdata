@@ -9,7 +9,7 @@ status](https://github.com/ropensci/osmdata/workflows/R-CMD-check/badge.svg)](ht
 [![codecov](https://codecov.io/gh/ropensci/osmdata/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/osmdata)
 [![Project Status:
 Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/osmdata)](https://cran.r-project.org/web/packages/osmdata/)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/osmdata)](https://cran.r-project.org/package=osmdata/)
 [![CRAN
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/osmdata?color=orange)](https://cran.r-project.org/package=osmdata)
 
