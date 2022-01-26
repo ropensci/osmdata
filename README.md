@@ -6,7 +6,7 @@
 
 [![R build
 status](https://github.com/ropensci/osmdata/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/osmdata/actions?query=workflow%3AR-CMD-check)
-[![codecov](https://codecov.io/gh/ropensci/osmdata/branch/main/graph/badge.svg)](https://codecov.io/gh/ropensci/osmdata)
+[![codecov](https://codecov.io/gh/ropensci/osmdata/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/osmdata)
 [![Project Status:
 Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/osmdata)](https://cran.r-project.org/web/packages/osmdata/)
