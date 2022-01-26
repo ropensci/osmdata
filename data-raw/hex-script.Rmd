@@ -174,14 +174,15 @@ hex <- hex + th
 print (hex)
 ```
 ```{r}
-fname <- file.path (here::here (), "man", "figures", "osmhex.png")
+asp <- 1
+fname <- file.path (here::here (), "man", "figures", "logo.png")
 ggsave (hex, filename = fname, width = 7, height = 7 * asp)
 ```
 
 it is then necessary to read the png back in and re-convert the border pixels
 to alpha = 0
 ```{r}
-fname <- file.path (here::here (), "man", "figures", "osmhex.png")
+fname <- file.path (here::here (), "man", "figures", "logo.png")
 img <- png::readPNG (fname)
 img4 <- array (1, dim = c (dim (img) [1:2], 4))
 index_out <- which (img [, , 1] == 1 & img [, , 2] == 1 & img [, , 3] == 1)
@@ -193,8 +194,6 @@ for (i in 1:3) {
     i1 [index_out] <- 0
     img4 [, , 4] <- i1
 }
-fname <- file.path (here::here (), "man", "figures", "osmhex.png")
+fname <- file.path (here::here (), "man", "figures", "logo.png")
 png::writePNG (img4, fname)
 ```
-
-
