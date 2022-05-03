@@ -51,5 +51,5 @@ with a space between `function` and `()`. That's it.
 
 We want to encourage a warm, welcoming, and safe environment for contributing to
 this project. See the [code of
-conduct](https://github.com/ropensci/osmdata/blob/master/CODE_OF_CONDUCT.md) for
+conduct](https://github.com/ropensci/.github/blob/master/CODE_OF_CONDUCT.md) for
 more information.
