@@ -13,26 +13,33 @@ overpass_status <- function (quiet=FALSE) {
 
     overpass_url <- get_overpass_url ()
     st_type <- "status"
-    if (grepl ("vi-di", overpass_url) | grepl ("rambler", overpass_url))
+    if (grepl ("vi-di", overpass_url) | grepl ("rambler", overpass_url)) {
         st_type <- "timestamp"
+    }
 
     status_url <- gsub ("interpreter", st_type, overpass_url)
 
     if (!curl::has_internet ()) {
 
         status <- "No internet connection"
-        if (!quiet) message (status)
+        if (!quiet) {
+            message (status)
+        }
+
     } else {
 
-        status <- httr::RETRY ("GET", status_url, timeout = 100,
-                               times = 10)
+        req <- httr2::request (status_url)
+        req <- httr2::req_retry (req, max_tries = 10L)
+        status <- httr2::req_perform (req)
+
         if (!is.null (status)) {
 
-            status <- httr::content (status, encoding = "UTF-8")
-            if (st_type == "status")
+            status <- httr2::resp_body_string (status)
+            if (st_type == "status") {
                 slt <- get_slot_time (status = status, quiet = quiet)
-            else if (st_type == "timestamp")
+            } else if (st_type == "timestamp") {
                 slt <- get_slot_timestamp (status = status)
+            }
 
             available <- slt$available
             slot_time <- slt$slot_time
