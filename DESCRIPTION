@@ -1,6 +1,6 @@
 Package: osmdata
 Title: Import 'OpenStreetMap' Data as Simple Features or Spatial Objects
-Version: 0.1.9.007
+Version: 0.1.9.008
 Authors@R: c(
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre")),
     person("Bob", "Rudis", role = "aut"),
@@ -13,11 +13,7 @@ Authors@R: c(
     person("Anthony", "North", role = "ctb"),
     person("Martin", "Machyna", role = "ctb"),
     person("Marcin", "Kalicinski", role = c("ctb", "cph"),
-           comment = "Author of included RapidXML code"),
-    person("Finkelstein", "Noam", role = c("ctb", "cph"),
-           comment = "Author of included stub.R code"),
-    person("Bartnik", "Lukasz", role = c("ctb", "cph"),
-           comment = "Author of included stub.R code")
+           comment = "Author of included RapidXML code")
   )
 Maintainer: Mark Padgham <mark.padgham@email.com>
 Description: Download and import of 'OpenStreetMap' ('OSM') data as 'sf'
@@ -32,7 +28,6 @@ Depends:
     R (>= 3.2.4)
 Imports:
     curl,
-    httr,
     httr2,
     jsonlite,
     lubridate,

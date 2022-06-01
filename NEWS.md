@@ -1,3 +1,11 @@
+0.1.9.00X
+===================
+
+Major changes:
+
+- Changed http dependency for http2 (#272)
+- Removed two authors of code formerly including for stubbing results; which is now done via `httptest2` package.
+
 0.1.9
 ===================
 

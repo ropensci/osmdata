@@ -9,16 +9,11 @@ skip_if (!test_all)
 
 require (sf)
 
-source ("../stub.R")
-
 test_that ("unname", {
 
     qry <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517))
     qry <- add_osm_feature (qry, key = "highway")
 
-    load ("../overpass_query_result.rda")
-    stub (osmdata_xml, "overpass_query", function (x, ...)
-          overpass_query_result)
     res <- osmdata_sf (qry)
 
     expect_true (all (nzchar (rownames (res$osm_points))))
