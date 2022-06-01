@@ -9,7 +9,9 @@ test_that ("osmdata_sc", {
         add_osm_feature (key = "highway")
 
     f <- file.path (tempdir (), "junk.osm")
-    doc <- osmdata_xml (qry, file = f)
+    doc <- with_mock_dir ("test_elevation", {
+        osmdata_xml (qry, file = f)
+    })
     expect_silent (x <- osmdata_sc (qry, doc = f))
     expect_true (file.exists (f))
 
