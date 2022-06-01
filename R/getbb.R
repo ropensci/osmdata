@@ -214,40 +214,46 @@ get_bb_query <- function (place_name,
                           base_url,
                           silent) {
 
-    query <- list (q = place_name)
-
     featuretype <- tolower (featuretype)
 
-    query <- c (query, list (featuretype = featuretype))
+    if (base_url == "https://nominatim.openstreetmap.org") {
+        base_url <- "https://nominatim.openstreetmap.org/search"
+    }
 
-    if (is_polygon)
-        query <- c (query, list (polygon_text = 1))
+    req <- httr2::request (base_url)
+    req <- httr2::req_method (req, "POST")
+    req <- httr2::req_url_query (req, format = "json")
+    req <- httr2::req_url_query (req, q = place_name)
+    req <- httr2::req_url_query (req, featuretype = featuretype)
 
-    query <- c (query, list (viewbox = viewbox,
-                             format = "json",
-                             key = key,
-                             # bounded = 1, # seemingly not working
-                             limit = limit))
+    if (is_polygon) {
+        req <- httr2::req_url_query (req, polygon_text = 1)
+    }
 
-    q_url <- httr::modify_url (base_url, query = query)
+    if (!is.null (key)) {
+        req <- httr2::req_url_query (req, key = key)
+    }
+    if (!is.null (limit)) {
+        req <- httr2::req_url_query (req, limit = limit)
+    }
 
-    if (!silent)
-        print(q_url)
+    if (!silent) {
+        print (req$url)
+    }
 
-    res <- httr::RETRY ("POST", q_url, times = 10)
-    txt <- httr::content (res, as = "text", encoding = "UTF-8",
-                          type = "application/xml")
-    obj <- tryCatch(expr = {
-                        jsonlite::fromJSON(txt)
-                    },
-                    error = function(cond) {
+    req <- httr2::req_retry (req, max_tries = 10L)
+
+    resp <- httr2::req_perform (req)
+    obj <- tryCatch (
+        httr2::resp_body_json (resp, simplifyVector = TRUE),
+        error = function (e) {
             # nocov start
             message(paste0("Nominatim did respond as expected ",
                            "(e.g. due to excessive use of their api).\n",
                            "Please try again or use a different base_url\n",
                            "The url that failed was:\n", q_url))
             # nocov end
-                    }
+        }
     )
 
     # Code optionally select more things stored in obj...
