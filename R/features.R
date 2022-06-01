@@ -17,7 +17,11 @@ available_features <- function() {
     url_ftrs <- "https://wiki.openstreetmap.org/wiki/Map_Features"
 
     if (curl::has_internet ()) {
-        pg <- xml2::read_html (httr::GET (url_ftrs))
+
+        req <- httr2::request (url_ftrs)
+        resp <- httr2::req_perform (req)
+        pg <- httr2::resp_body_html (resp)
+
         keys <- xml2::xml_attr (rvest::html_nodes (pg, "a[href^='/wiki/Key']"), #nolint
                                 "href") %>%
             strsplit ("/wiki/Key:") %>%
@@ -55,7 +59,9 @@ available_tags <- function(feature) {
         if (missing (feature))
             stop ("Please specify feature")
 
-        pg <- xml2::read_html (httr::GET (url_ftrs))
+        req <- httr2::request (url_ftrs)
+        resp <- httr2::req_perform (req)
+        pg <- httr2::resp_body_html (resp)
 
         taglists <- rvest::html_nodes (pg, "div[class='taglist']") %>%
             rvest::html_attr ("data-taginfo-taglist-tags")
