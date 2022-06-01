@@ -170,7 +170,12 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
 
     if (o_stat$available) {
 
-        res <- httr::RETRY ("POST", overpass_url, body = query)
+        req <- httr2::request (overpass_url)
+        req <- httr2::req_method (req, "POST")
+        req <- httr2::req_retry (req, max_tries = 10L)
+        req <- httr2::req_body_raw (req, body = query)
+
+        resp <- httr2::req_perform (req)
 
     } else {
 
@@ -180,7 +185,13 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
                                                  units = "secs"))) + pad_wait
             message (sprintf ("Waiting %s seconds", wait))
             Sys.sleep (wait)
-            res <- httr::POST (overpass_url, body = query)
+
+            req <- httr2::request (overpass_url)
+            req <- httr2::req_method (req, "POST")
+            req <- httr2::req_retry (req, max_tries = 10L)
+            req <- httr2::req_body_raw (req, body = query)
+
+            resp <- httr2::req_perform (req)
 
         } else {
 
@@ -192,18 +203,13 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
         message ("Query complete!")
     }
 
-    if (class (res) == "result") { # differs only for mock tests
-        httr::stop_for_status (res)
-    } else if (class (res) == "raw") { # for mock tests
-        doc <- rawToChar (res)
-    } else {
-        doc <- httr::content (res, as = "text", encoding = encoding,
-                              type = "application/xml")
-    }
+    httr2::resp_check_status (resp)
+
+    doc <- httr2::resp_body_xml (resp)
 
     # TODO: Just return the direct httr::POST result here and convert in the
     # subsequent functions (`osmdata_xml/csv/sp/sf`)?
-    check_for_error (doc)
+    check_for_error (paste0 (doc))
 
     return (doc)
 }

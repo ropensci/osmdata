@@ -3,43 +3,8 @@ has_internet <- curl::has_internet ()
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
              identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 
-source ("../stub.R")
-
-# Mock tests as discussed by Noam Ross here:
-# https://discuss.ropensci.org/t/best-practices-for-testing-api-packages/460
-# and demonstrated in detail by Gabor Csardi here:
-# https://github.com/MangoTheCat/blog-with-mock/blob/master/Blogpost1.md
-# Note that file can be downloaded in configure file, but this produces a very
-# large file in the installed package (>2MB), whereas this read_html version
-# yields a file <1/10th the size.
-get_local <- FALSE
-if (get_local) {
-
-    # This test needs to return the results of overpass_query(), not the direct
-    # httr::POST call, so can't be grabbed with curl_fetch_memory
-    qry <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517))
-    qry <- add_osm_feature (qry, key = "highway")
-    overpass_query_result <- overpass_query (opq_string (qry),
-                                             encoding = "UTF-8")
-    save (overpass_query_result, file = "../overpass_query_result.rda")
-    # but then overpass_query itself needs to be tested, so fetch_memory is used
-    # here
-    base_url <- "https://overpass-api.de/api/interpreter"
-    cfm_output_overpass_query <- NULL
-    trace(
-          curl::curl_fetch_memory,
-          exit = function() {
-              cfm_output_overpass_query <<- returnValue()
-          })
-    res <- httr::POST (base_url, body = opq_string (qry))
-    untrace (curl::curl_fetch_memory)
-    class (cfm_output_overpass_query) <- "response"
-    save (cfm_output_overpass_query, file = "../cfm_output_overpass_query.rda")
-}
-
-context ("overpass query")
-
 test_that ("query-construction", {
+
     q0 <- opq (bbox = c(-0.12, 51.51, -0.11, 51.52))
     expect_error (q1 <- add_osm_feature (q0), "key must be provided")
     expect_silent (q1 <- add_osm_feature (q0, key = "aaa")) # bbox from qry
@@ -58,9 +23,10 @@ test_that ("query-construction", {
     expect_silent (
                 q1 <- add_osm_feature (q0, key = "aaa", value = "bbb",
                                        key_exact = FALSE, value_exact = FALSE))
-          })
+})
 
 test_that ("add feature", {
+
     qry <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517))
     qry1 <- add_osm_feature (qry, key = "highway")
     qry2 <- add_osm_feature (qry, key = "highway", value = "primary")
@@ -81,9 +47,10 @@ test_that ("add feature", {
     bbox2 <- bbox + c (0.01, 0.01, -0.01, -0.01)
     qry6 <- add_osm_feature (qry, bbox = bbox2, key = "highway", value = "!primary")
     expect_true (!identical (qry$bbox, qry6$bbox))
-          })
+})
 
 test_that ("make_query", {
+
     qry <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517))
     qry <- add_osm_feature (qry, key = "highway")
 
@@ -98,11 +65,6 @@ test_that ("make_query", {
                       "Overpass query unavailable without internet")
     } else {
 
-        # Test all `osmdata_..` functions by stubbing the results of
-        # `overpass_query()`
-        load ("../overpass_query_result.rda")
-        stub (osmdata_xml, "overpass_query", function (x, ...)
-              overpass_query_result)
         doc <- osmdata_xml (qry)
         expect_true (is (doc, "xml_document"))
         expect_silent (osmdata_xml (qry, file = "junk.osm"))
@@ -142,16 +104,13 @@ test_that ("make_query", {
 })
 
 test_that ("query-no-quiet", {
+
     qry <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517))
     qry <- add_osm_feature (qry, key = "highway")
-    if (!test_all) {
-        load ("../overpass_query_result.rda")
-        stub (osmdata_xml, "overpass_query", function (x, ...)
-              overpass_query_result)
-        expect_silent (x <- osmdata_xml (qry, quiet = FALSE))
-    } else {
-        expect_message (x <- osmdata_xml (qry, quiet = FALSE),
-                        "Issuing query to Overpass API")
+    expect_message (x <- osmdata_xml (qry, quiet = FALSE),
+                    "Issuing query to Overpass API")
+
+    if (test_all) {
         expect_message (x <- osmdata_sp (qry, quiet = FALSE),
                         "Issuing query to Overpass API")
         expect_message (x <- osmdata_sf (qry, quiet = FALSE),

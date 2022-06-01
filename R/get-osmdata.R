@@ -89,7 +89,6 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
         stop ("q must be an overpass query or a character string")
 
     doc <- overpass_query (query = q, quiet = quiet, encoding = encoding)
-    doc <- xml2::read_xml (doc, encoding = encoding)
     if (!missing (filename))
         xml2::write_xml (doc, file = filename)
     invisible (doc)
@@ -139,7 +138,7 @@ osmdata_sp <- function(q, doc, quiet = TRUE) {
 
     if (!quiet)
         message ("converting OSM data to sp format")
-    res <- rcpp_osmdata_sp (doc)
+    res <- rcpp_osmdata_sp (paste0 (doc))
     if (is.null (obj$bbox))
         obj$bbox <- paste (res$bbox, collapse = " ")
     obj$osm_points <- res$points
@@ -168,8 +167,7 @@ fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8") {
         doc <- overpass_query (query = obj$overpass_call, quiet = quiet,
                                encoding = encoding)
 
-        docx <- xml2::read_xml (doc)
-        obj <- get_metadata (obj, docx)
+        obj <- get_metadata (obj, doc)
     } else {
         if (is.character (doc)) {
             if (!file.exists (doc))
@@ -305,7 +303,7 @@ osmdata_sf <- function(q, doc, quiet=TRUE, stringsAsFactors = FALSE) { # nolint
 
     if (!quiet)
         message ("converting OSM data to sf format")
-    res <- rcpp_osmdata_sf (doc)
+    res <- rcpp_osmdata_sf (paste0 (doc))
     # some objects don't have names. As explained in
     # src/osm_convert::restructure_kv_mat, these instances do not get an osm_id
     # column, so this is appended here:
@@ -399,7 +397,7 @@ osmdata_sc <- function(q, doc, quiet=TRUE) {
 
     if (!quiet)
         message ("converting OSM data to sc format")
-    res <- rcpp_osmdata_sc (temp$doc)
+    res <- rcpp_osmdata_sc (paste0 (temp$doc))
 
     if (nrow (res$object_link_edge) > 0L) {
         res$object_link_edge$native_ <- TRUE
