@@ -251,7 +251,7 @@ get_bb_query <- function (place_name,
             message(paste0("Nominatim did respond as expected ",
                            "(e.g. due to excessive use of their api).\n",
                            "Please try again or use a different base_url\n",
-                           "The url that failed was:\n", q_url))
+                           "The url that failed was:\n", req$url))
             # nocov end
         }
     )
