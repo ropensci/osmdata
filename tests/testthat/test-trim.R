@@ -1,5 +1,7 @@
 context ("trim-osm-data")
 
+skip_on_os ("mac")
+skip_on_os ("windows")
 
 test_that ("trim_osm_data", {
                q0 <- opq (bbox = c(1, 1, 5, 5))
