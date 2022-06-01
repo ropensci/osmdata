@@ -14,11 +14,13 @@ get_timestamp <- function (doc) {
         tstmp <- xml2::xml_text (xml2::xml_find_all (doc, "//meta/@osm_base"))
         if (length (tstmp) > 0)
             tstmp <- as.POSIXct (tstmp, format = "%Y-%m-%dT%H:%M:%SZ")
-    } else
+    } else {
         tstmp <- Sys.time ()
+    }
 
-    if (length (tstmp) == 0)
+    if (length (tstmp) == 0) {
         tstmp <- Sys.time ()
+    }
 
     wday_t <- lubridate::wday (tstmp, label = TRUE)
     wday <- lubridate::wday (tstmp, label = FALSE)
@@ -78,19 +80,24 @@ get_overpass_version <- function (doc) {
 #' osmdata_xml (q, filename="hampi.osm")
 #' }
 osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
-    if (missing (encoding))
-        encoding <- "UTF-8"
 
-    if (missing (q) & !quiet)
+    if (missing (encoding)) {
+        encoding <- "UTF-8"
+    }
+
+    if (missing (q) & !quiet) {
         message ("q missing: osmdata object will not include query")
-    else if (is (q, "overpass_query"))
+    } else if (is (q, "overpass_query")) {
         q <- opq_string_intern (q, quiet = quiet)
-    else if (!is.character (q))
+    } else if (!is.character (q)) {
         stop ("q must be an overpass query or a character string")
+    }
 
     doc <- overpass_query (query = q, quiet = quiet, encoding = encoding)
-    if (!missing (filename))
+    if (!missing (filename)) {
         xml2::write_xml (doc, file = filename)
+    }
+
     invisible (doc)
 }
 
@@ -122,25 +129,29 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
 osmdata_sp <- function(q, doc, quiet = TRUE) {
 
     obj <- osmdata () # uses class def
-    if (missing (q) & !quiet)
+    if (missing (q) & !quiet) {
         message ("q missing: osmdata object will not include query")
-    else if (is (q, "overpass_query")) {
+    } else if (is (q, "overpass_query")) {
         obj$bbox <- q$bbox
         obj$overpass_call <- opq_string_intern (q, quiet = quiet)
-    } else if (is.character (q))
+    } else if (is.character (q)) {
         obj$overpass_call <- q
-    else
+    } else {
         stop ("q must be an overpass query or a character string")
+    }
 
     temp <- fill_overpass_data (obj, doc, quiet = quiet)
     obj <- temp$obj
     doc <- temp$doc
 
-    if (!quiet)
+    if (!quiet) {
         message ("converting OSM data to sp format")
+    }
+
     res <- rcpp_osmdata_sp (paste0 (doc))
-    if (is.null (obj$bbox))
+    if (is.null (obj$bbox)) {
         obj$bbox <- paste (res$bbox, collapse = " ")
+    }
     obj$osm_points <- res$points
     obj$osm_lines <- res$lines
     obj$osm_polygons <- res$polygons
@@ -164,11 +175,14 @@ osmdata_sp <- function(q, doc, quiet = TRUE) {
 fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8") {
 
     if (missing (doc)) {
+
         doc <- overpass_query (query = obj$overpass_call, quiet = quiet,
                                encoding = encoding)
 
         obj <- get_metadata (obj, doc)
+
     } else {
+
         if (is.character (doc)) {
             if (!file.exists (doc))
                 stop ("file ", doc, " does not exist")
@@ -177,6 +191,7 @@ fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8") {
         obj <- get_metadata (obj, doc)
         doc <- as.character (doc)
     }
+
     list (obj = obj, doc = doc)
 }
 
@@ -185,34 +200,46 @@ get_metadata <- function (obj, doc) {
     meta <- list (timestamp = get_timestamp (doc),
                   OSM_version = get_osm_version (doc),
                   overpass_version = get_overpass_version (doc))
+
     q <- obj$overpass_call
 
     # q is mostly passed as result of opq_string_intern, so date and diff query
     # metadata must be extracted from string
     if (is.character (q)) {
+
         x <- strsplit (q, "\"") [[1]]
+
         if (grepl ("date", x [1])) {
+
             if (length (x) < 2)
                 stop ("unrecongised query format")
             meta$datetime_to <- x [2]
             meta$query_type <- "date"
+
         } else if (grepl ("diff", x [1])) {
+
             if (length (x) < 4)
                 stop ("unrecongised query format")
             meta$datetime_from <- x [2]
             meta$datetime_to <- x [4]
             meta$query_type <- "diff"
         }
+
     } else {
+
         if (!is.null (attr (q, "datetime2"))) {
+
             meta$datetime_to <- attr (q, "datetime2")
             meta$datetime_from <- attr (q, "datetime")
             meta$query_type <- "diff"
+
         } else if (!is.null (attr (q, "datetime"))) {
+
             meta$datetime_to <- attr (q, "datetime")
             meta$query_type <- "date"
         }
     }
+
     obj$meta <- meta
     attr (q, "datetime") <- attr (q, "datetime2") <- NULL
 
@@ -240,20 +267,25 @@ make_sf <- function (..., stringsAsFactors = FALSE) { # nolint
     sf <- vapply(x, function(i) inherits(i, "sfc"),
                  FUN.VALUE = logical (1))
     sf_column <- which (sf)
-    if (!is.null (names (x [[sf_column]])))
+
+    if (!is.null (names (x [[sf_column]]))) {
         row.names <- names (x [[sf_column]])
-    else
+    } else {
         row.names <- seq_along (x [[sf_column]])
-    df <- if (length(x) == 1) # ONLY sfc
+    }
+
+    df <- if (length(x) == 1) { # ONLY sfc
         data.frame(row.names = row.names)
-    else # create a data.frame from list:
+    } else { # create a data.frame from list:
         data.frame (x [-sf_column], row.names = row.names,
                     stringsAsFactors = stringsAsFactors)
+    }
 
     object <- as.list(substitute(list(...)))[-1L]
     arg_nm <- sapply(object, function(x) deparse(x)) # nolint
     sfc_name <- make.names(arg_nm[sf_column])
     #sfc_name <- "geometry"
+
     df [[sfc_name]] <- x [[sf_column]]
     attr(df, "sf_column") <- sfc_name
     f <- factor(rep(NA_character_, length.out = ncol(df) - 1),
@@ -261,6 +293,7 @@ make_sf <- function (..., stringsAsFactors = FALSE) { # nolint
     names(f) <- names(df)[-ncol (df)]
     attr(df, "agr") <- f
     class(df) <- c("sf", class(df))
+
     return (df)
 }
 
@@ -285,39 +318,48 @@ sf_types <- c ("points", "lines", "polygons", "multilines", "multipolygons")
 #'             osmdata_sf ()
 #' }
 osmdata_sf <- function(q, doc, quiet=TRUE, stringsAsFactors = FALSE) { # nolint
+
     obj <- osmdata () # uses class def
+
     if (missing (q)) {
         if (!quiet)
             message ("q missing: osmdata object will not include query")
     } else if (is (q, "overpass_query")) {
         obj$bbox <- q$bbox
         obj$overpass_call <- opq_string_intern (q, quiet = quiet)
-    } else if (is.character (q))
+    } else if (is.character (q)) {
         obj$overpass_call <- q
-    else
+    } else {
         stop ("q must be an overpass query or a character string")
+    }
 
     temp <- fill_overpass_data (obj, doc, quiet = quiet)
     obj <- temp$obj
     doc <- temp$doc
 
-    if (!quiet)
+    if (!quiet) {
         message ("converting OSM data to sf format")
+    }
     res <- rcpp_osmdata_sf (paste0 (doc))
     # some objects don't have names. As explained in
     # src/osm_convert::restructure_kv_mat, these instances do not get an osm_id
     # column, so this is appended here:
-    if (!"osm_id" %in% names (res$points_kv))
+    if (!"osm_id" %in% names (res$points_kv)) {
         res <- fill_kv (res, "points_kv", "points", stringsAsFactors)
-    if (!"osm_id" %in% names (res$polygons_kv))
+    }
+    if (!"osm_id" %in% names (res$polygons_kv)) {
         res <- fill_kv (res, "polygons_kv", "polygons", stringsAsFactors)
+    }
 
-    if (missing (q))
+    if (missing (q)) {
         obj$bbox <- paste (res$bbox, collapse = " ")
+    }
 
-    for (ty in sf_types)
+    for (ty in sf_types) {
         obj <- fill_objects (res, obj, type = ty,
                              stringsAsFactors = stringsAsFactors)
+    }
+
     class (obj) <- c (class (obj), "osmdata_sf")
 
     return (obj)
@@ -326,6 +368,7 @@ osmdata_sf <- function(q, doc, quiet=TRUE, stringsAsFactors = FALSE) { # nolint
 fill_kv <- function (res, kv_name, g_name, stringsAsFactors) { # nolint
 
     if (!"osm_id" %in% names (res [[kv_name]])) {
+
         if (nrow (res [[kv_name]]) == 0) {
             res [[kv_name]] <- data.frame (osm_id = names (res [[g_name]]),
                                            stringsAsFactors = stringsAsFactors)
@@ -335,26 +378,33 @@ fill_kv <- function (res, kv_name, g_name, stringsAsFactors) { # nolint
                                            stringsAsFactors = stringsAsFactors)
         }
     }
+
     return (res)
 }
 
 fill_objects <- function (res, obj, type = "points",
                           stringsAsFactors = FALSE) { # nolint
 
-    if (!type %in% sf_types)
+    if (!type %in% sf_types) {
         stop ("type must be one of ", paste (sf_types, collapse = " "))
+    }
 
     geometry <- res [[type]]
     obj_name <- paste0 ("osm_", type)
     kv_name <- paste0 (type, "_kv")
+
     if (length (res [[kv_name]]) > 0) {
+
         if (!stringsAsFactors)
             res [[kv_name]] [] <- lapply (res [[kv_name]], as.character)
         obj [[obj_name]] <- make_sf (geometry, res [[kv_name]],
                                      stringsAsFactors = stringsAsFactors)
-    } else if (length (obj [[obj_name]]) > 0)
+
+    } else if (length (obj [[obj_name]]) > 0) {
+
         obj [[obj_name]] <- make_sf (geometry,
                                      stringsAsFactors = stringsAsFactors)
+    }
 
     return (obj)
 }
@@ -381,22 +431,26 @@ fill_objects <- function (res, obj, type = "points",
 osmdata_sc <- function(q, doc, quiet=TRUE) {
 
     obj <- osmdata () # class def used here to for fill_overpass_data fn
-    if (missing (q) & !quiet)
+
+    if (missing (q) & !quiet) {
         message ("q missing: osmdata object will not include query")
-    else if (is (q, "overpass_query")) {
+    } else if (is (q, "overpass_query")) {
         obj$bbox <- q$bbox
         obj$overpass_call <- opq_string_intern (q, quiet = quiet)
-    } else if (is.character (q))
+    } else if (is.character (q)) {
         obj$overpass_call <- q
-    else
+    } else {
         stop ("q must be an overpass query or a character string")
+    }
 
     temp <- fill_overpass_data (obj, doc, quiet = quiet)
     obj <- temp$obj
     doc <- temp$doc
 
-    if (!quiet)
+    if (!quiet) {
         message ("converting OSM data to sc format")
+    }
+
     res <- rcpp_osmdata_sc (paste0 (temp$doc))
 
     if (nrow (res$object_link_edge) > 0L) {
@@ -411,14 +465,17 @@ osmdata_sc <- function(q, doc, quiet=TRUE) {
     obj$object_link_edge <- tibble::as_tibble (res$object_link_edge)
     obj$edge <- tibble::as_tibble (res$edge)
     obj$vertex <- tibble::as_tibble (res$vertex)
-    obj$meta <- tibble::tibble (proj = NA_character_,
-                                ctime = temp$obj$meta$timestamp,
-                                OSM_version = temp$obj$meta$OSM_version,
-                            overpass_version = temp$obj$meta$overpass_version)
+    obj$meta <- tibble::tibble (
+        proj = NA_character_,
+        ctime = temp$obj$meta$timestamp,
+        OSM_version = temp$obj$meta$OSM_version,
+        overpass_version = temp$obj$meta$overpass_version
+    )
 
     if (!missing (q)) {
-        if (!is.character (q))
+        if (!is.character (q)) {
             obj$meta$bbox <- q$bbox
+        }
     } else {
         obj$meta$bbox <- bbox_to_string (obj)
     }
