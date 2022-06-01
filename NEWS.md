@@ -3,8 +3,12 @@
 
 Major changes:
 
-- Changed http dependency for http2 (#272)
+- Changed httr dependency for httr2 (#272)
 - Removed two authors of code formerly including for stubbing results; which is now done via `httptest2` package.
+
+Minor changes:
+
+- Removed jsonlite dependency, because now converted in httr2.
 
 0.1.9
 ===================

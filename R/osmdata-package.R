@@ -48,17 +48,10 @@
 #' @family package
 #' @author Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon
 #' @import sp
-#' @importFrom curl has_internet
-#' @importFrom httr content GET POST stop_for_status
-#' @importFrom jsonlite fromJSON
-#' @importFrom lubridate force_tz ymd_hms wday day month year
 #' @importFrom magrittr %>%
 #' @importFrom methods is slot
 #' @importFrom Rcpp evalCpp
-#' @importFrom rvest html_attr html_nodes
-#' @importFrom tibble as.tibble
 #' @importFrom utils browseURL read.table
-#' @importFrom xml2 read_html read_xml xml_attr xml_text xml_find_all
 #' @useDynLib osmdata, .registration = TRUE
 NULL
 
