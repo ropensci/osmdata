@@ -5,12 +5,23 @@ test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
 test_that ("available_features", {
 
     expect_error (available_features (1), "unused argument")
-    expect_is (available_features (), "character")
+    f <- with_mock_dir ("test_features", {
+        available_features ()
+    })
+    expect_is (f, "character")
+    expect_true (length (f) > 1L)
 })
 
 test_that ("available_tags", {
 
     expect_error (available_tags ("highway", 1), "unused argument")
-    expect_that (length (available_tags ("junk")), equals (0))
-    expect_is (available_tags ("highway"), "character")
+    x <- with_mock_dir ("test_tags_empty", {
+        available_tags ("junk")
+    })
+    expect_length (x, 0L)
+    x <- with_mock_dir ("test_tags", {
+        available_tags ("highway")
+    })
+    expect_is (x, "character")
+    expect_true (length (x) > 1L)
 })
