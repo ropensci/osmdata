@@ -1,7 +1,0 @@
-Connected as: 123456789
-Current time: 2022-01-01T00:00:00Z
-Rate limit: 0
-Currently running queries (pid, space limit, time limit, start time):
-2529922	536870912	180	2022-01-01T00:00:00Z
-2529913	536870912	180	2022-01-01T00:00:00Z
-2529911	536870912	180	2022-01-01T00:00:00Z

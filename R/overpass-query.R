@@ -164,7 +164,13 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
 
     if (!quiet) message("Issuing query to Overpass API ...")
 
-    o_stat <- overpass_status (quiet)
+    local_test_env <- identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
+        identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage")
+    if (local_test_env) {
+        o_stat <- list (available = TRUE)
+    } else {
+        o_stat <- overpass_status (quiet)
+    }
 
     overpass_url <- get_overpass_url ()
 
