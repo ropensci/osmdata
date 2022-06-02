@@ -186,10 +186,10 @@ fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8") {
         if (is.character (doc)) {
             if (!file.exists (doc))
                 stop ("file ", doc, " does not exist")
-            doc <- xml2::read_xml (doc)
+            doc_xml <- xml2::read_xml (doc)
         }
-        obj <- get_metadata (obj, doc)
-        doc <- as.character (doc)
+        obj <- get_metadata (obj, doc_xml)
+        doc <- readChar (doc, file.info (doc)$size)
     }
 
     list (obj = obj, doc = doc)
