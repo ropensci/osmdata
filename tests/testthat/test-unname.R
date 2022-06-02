@@ -11,10 +11,12 @@ require (sf)
 
 test_that ("unname", {
 
-    qry <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517))
+    qry <- opq (bbox = c(-0.116, 51.516, -0.115, 51.517))
     qry <- add_osm_feature (qry, key = "highway")
 
-    res <- osmdata_sf (qry)
+    res <- with_mock_dir ("mock_unname", {
+        osmdata_sf (qry)
+    })
 
     expect_true (all (nzchar (rownames (res$osm_points))))
     m_l <- as.matrix (res$osm_lines$geometry [[1]])
