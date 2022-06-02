@@ -1,4 +1,0 @@
-Connected as: 177471748
-Current time: 2022-06-02T11:50:06Z
-Rate limit: 0
-Currently running queries (pid, space limit, time limit, start time):
