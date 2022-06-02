@@ -51,7 +51,7 @@ test_that ("add feature", {
 
 test_that ("make_query", {
 
-    qry <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517))
+    qry <- opq (bbox = c(-0.116, 51.516, -0.115, 51.517))
     qry <- add_osm_feature (qry, key = "highway")
 
     if (!has_internet) {
@@ -65,13 +65,22 @@ test_that ("make_query", {
                       "Overpass query unavailable without internet")
     } else {
 
-        doc <- osmdata_xml (qry)
+        doc <- with_mock_dir ("mock_osm_xml", {
+            osmdata_xml (qry)
+        })
         expect_true (is (doc, "xml_document"))
-        expect_silent (osmdata_xml (qry, file = "junk.osm"))
+        expect_silent (
+            doc2 <- with_mock_dir ("mock_osm_xml2", {
+                osmdata_xml (qry, file = "junk.osm")
+            })
+        )
+        expect_equal (doc, doc2)
 
         if (test_all) {
-            res <- osmdata_sp (qry)
-            expect_equal (res, print (res))
+
+            res <- with_mock_dir ("mock_osm_sp", {
+                osmdata_sp (qry)
+            })
             expect_message (print (res), "Object of class 'osmdata' with")
             expect_silent (res <- osmdata_sp (qry, doc))
             expect_message (print (res), "Object of class 'osmdata' with")
@@ -86,7 +95,9 @@ test_that ("make_query", {
             nms <- c ("timestamp", "OSM_version", "overpass_version")
             expect_named (res$meta, expected = nms)
 
-            res <- osmdata_sf (qry)
+            res <- with_mock_dir ("mock_osm_sf", {
+                osmdata_sf (qry)
+            })
             expect_message (print (res), "Object of class 'osmdata' with")
             expect_silent (res <- osmdata_sf (qry, doc))
             expect_message (print (res), "Object of class 'osmdata' with")
