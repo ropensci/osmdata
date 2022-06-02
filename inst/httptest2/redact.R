@@ -40,5 +40,13 @@ function (resp) {
         fixed = FALSE
     )
 
+    # overpass status with encoded ip address:
+    resp <- httptest2::gsub_response (
+        resp,
+        "Connected\\sas\\:\\s[0-9]*",
+        "Connected as: 123456789",
+        fixed = FALSE
+    )
+
     return (resp)
 }
