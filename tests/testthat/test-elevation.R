@@ -5,11 +5,14 @@ test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
 
 test_that ("osmdata_sc", {
 
-    qry <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517)) %>%
+    qry <- opq (bbox = c(-0.116, 51.516, -0.115, 51.517)) %>%
         add_osm_feature (key = "highway")
 
     f <- file.path (tempdir (), "junk.osm")
-    doc <- osmdata_xml (qry, file = f)
+    doc <- with_mock_dir ("mock_elevation", {
+        osmdata_xml (qry, file = f)
+    })
+
     expect_silent (x <- osmdata_sc (qry, doc = f))
     expect_true (file.exists (f))
 
