@@ -11,7 +11,7 @@
   "codeRepository": "https://github.com/ropensci/osmdata/",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.9.016",
+  "version": "0.1.9.017",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -100,6 +100,18 @@
     }
   ],
   "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "httptest2",
+      "name": "httptest2",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=httptest2"
+    },
     {
       "@type": "SoftwareApplication",
       "identifier": "knitr",
@@ -329,7 +341,7 @@
     "r-package",
     "peer-reviewed"
   ],
-  "fileSize": "3000.209KB",
+  "fileSize": "3002.605KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
