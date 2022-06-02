@@ -227,12 +227,8 @@ add_osm_feature <- function (opq,
     if (missing (key))
         stop ("key must be provided")
 
-    if (is.null (bbox) & is.null (opq$bbox))
-        stop ("Bounding box has to either be set in opq or must be set here")
 
-    if (is.null (bbox))
-        bbox <- opq$bbox
-    else {
+    if (!is.null (bbox)) {
         bbox <- bbox_to_string (bbox)
         opq$bbox <- bbox
     }
@@ -309,12 +305,7 @@ add_osm_features <- function (opq,
     if (missing (features))
         stop ("features must be provided")
 
-    if (is.null (bbox) & is.null (opq$bbox))
-        stop ("Bounding box has to either be set in opq or must be set here")
-
-    if (is.null (bbox))
-        bbox <- opq$bbox
-    else {
+    if (!is.null (bbox)) {
         bbox <- bbox_to_string (bbox)
         opq$bbox <- bbox
     }
@@ -518,6 +509,89 @@ opq_around <- function (lon, lat, radius = 15,
     return (res)
 }
 
+#' overpass_trim
+#'
+#' Retrive osm data within a bounding polygon insted of bbox.
+#'
+#' @param opq An `overpass_query` object
+#' @param osm_area A data.frame with bounding polygon obtained with
+#' `getbb (..., format_out = "data.frame")`.
+#' @param id Alternatively, bounding polygon can be specified by providing
+#' OSM object ID or list of IDs. Each of these objects must form closed polygon.
+#' @param type Type of OSM object or vector of types matching ids in `id`;
+#' either `way` or `relation`. Must be set when using `id`.
+#' @return \link{opq} object
+#'
+#' @note Restricts returned elemts to those that are found within defined area.
+#' This can be provided by OSM IDs and their type, or by providing data.frame 
+#' returned by \link{getbb}.
+#' If multiple areas are provided in `osm_area`, only the first one will be used.
+#'
+#' @references <https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_area_.28area.29>
+#' @seealso [trim_osm_data]
+#'
+#' @section `overpass_trim` vs `trim_osmdata`:
+#' overpass_trim allows filtering objects that are found within area defined by another object(s). 
+#' This object can be either any closed 'way' or certain 'relations' such as multipolygons, 
+#' admiinistrative boundaries. See Overpass documentation for more details.
+#' 
+#' trim_osmdata trims downloaded data with user defined polyon or one returned by \link{getbb}
+#'
+#' @family queries
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' a <- getbb("portsmouth usa", format_out = "data.frame")
+#' q <- opq() %>%
+#'         add_osm_feature(key = "amenity",
+#'                         value = "restaurant") %>%
+#'         overpass_trim(osm_area = a) %>%
+#'         osmdata_sf()
+#' 
+#' q <- opq() %>%
+#'        add_osm_feature(key = "natural",
+#'                        value = "tree") %>%
+#'        overpass_trim(id = c(11597767, 43437030), 
+#'                      type = c("relation", "way") ) %>%
+#'        osmdata_sf()
+#' }
+overpass_trim <- function (opq, osm_area = NULL, 
+                           id = NULL, type = NULL) {
+
+    if (is.null (osm_area) & is.null (id))
+        stop ("Either osm_area or id must be specified")
+
+    if (!is.null (osm_area) & !is.null (id))
+        stop ("Only one of osm_area or id must be specified")
+
+    if (!is.null (id) & is.null (type))
+        stop ("type must be specified: one of way, or relation")
+    
+    if (!is.null (type))
+        type <- match.arg (tolower (type), c ("way", "relation"), several.ok = TRUE)
+
+    if (!is.null (osm_area)){
+        if (nrow (osm_area) > 1)
+            message ("More than one area with matching name found: only the first is used")
+
+        id <- osm_area$osm_id [1]
+        type <- osm_area$osm_type [1]
+    }
+
+    if (length (id) != length (type))
+        stop ("Number of OSM IDs must match number of OSM object types")
+
+    opq$bbox <- NULL
+            
+    ways <- id [type == "way"]
+    rels <- id [type == "relation"]
+
+    opq$trim_area <- list (ways = ways, relations = rels)
+
+    opq
+}
+
 #' Convert an overpass query into a text string
 #'
 #' Convert an osmdata query of class opq to a character string query to
@@ -545,7 +619,15 @@ opq_string <- function (opq) {
 # specified.
 opq_string_intern <- function (opq, quiet = TRUE) {
 
+    if (is.null (opq$bbox) & is.null (opq$trim_area) & is.null (opq$id))
+        stop ("Either bbox must to be set in opq(), polygon needs to be specified in overpass_trim() or OSM ID must be provided in opq_osm_id()")
+
     lat <- lon <- NULL # suppress no visible binding messages
+
+    if (attr (opq, "nodes_only"))
+            ftype <- "node"
+        else
+            ftype <- "nwr"
 
     res <- NULL
     if (!is.null (opq$features)) { # opq with add_osm_feature
@@ -560,13 +642,8 @@ opq_string_intern <- function (opq, quiet = TRUE) {
                                 USE.NAMES = FALSE)
         }
 
-        if (attr (opq, "nodes_only")) {
 
-            features <- paste0 (sprintf (" node %s (%s);\n",
-                                         features,
-                                         opq$bbox))
-
-        } else if (!is.null (attr (opq, "enclosing"))) {
+        if (!is.null (attr (opq, "enclosing"))) {
 
             if (length (features) > 1)
                 stop ("enclosing queries can only accept one feature")
@@ -580,17 +657,36 @@ opq_string_intern <- function (opq, quiet = TRUE) {
                                 features,
                                 ";")
 
+        } else if (!is.null (opq$trim_area)) { # opq with polygon trimming
+
+            areas <- NULL
+
+            if (length(opq$trim_area$ways) != 0)
+                areas <- paste0 ("way(id:", 
+                                 paste0 (opq$trim_area$ways, collapse = ","),
+                                 ");\n", collapse = "")
+
+            if (length(opq$trim_area$relations) != 0)
+                areas <- paste0 (areas,
+                                 "rel(id:", 
+                                 paste0 (opq$trim_area$relations, collapse = ","),
+                                 ");\n", collapse = "")
+
+            opq$prefix <- paste0 (opq$prefix, 
+                                  areas, 
+                                  ");\n",
+                                  "map_to_area->.a;\n",
+                                  "(\n", collapse = "")
+         
+            features <- paste0 (ftype,
+                                features,
+                                "(area.a);\n", collapse = "")
+
         } else {
 
-            features <- paste0 (sprintf (" node %s (%s);\n",
-                                         features,
-                                         opq$bbox),
-                                sprintf (" way %s (%s);\n",
-                                         features,
-                                         opq$bbox),
-                                sprintf (" relation %s (%s);\n\n",
-                                         features,
-                                         opq$bbox))
+            features <- paste0 (ftype,
+                                features,
+                                "(", opq$bbox, ");\n", collapse = "")
         }
 
         res <- paste0 (opq$prefix,
@@ -611,9 +707,7 @@ opq_string_intern <- function (opq, quiet = TRUE) {
                      "burden on server resources.\nPlease consider specifying ",
                      "features via 'add_osm_feature' or 'opq_osm_id'.")
 
-        bbox <- paste0 (sprintf (" node (%s);\n", opq$bbox),
-                            sprintf (" way (%s);\n", opq$bbox),
-                            sprintf (" relation (%s);\n", opq$bbox))
+        bbox <- sprintf (" %s(%s);\n", ftype, opq$bbox)
 
         res <- paste0 (opq$prefix, bbox, opq$suffix)
     }
