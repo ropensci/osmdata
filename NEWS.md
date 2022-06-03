@@ -8,7 +8,7 @@ Major changes:
 
 Minor changes:
 
-- Removed jsonlite dependency, because now converted in httr2.
+- Moved jsonlite from Imports to Suggests (now only used in tests).
 
 0.1.9
 ===================

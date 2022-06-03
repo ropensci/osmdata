@@ -11,7 +11,7 @@
   "codeRepository": "https://github.com/ropensci/osmdata/",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.9.025",
+  "version": "0.1.9.026",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -111,6 +111,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=httptest2"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "jsonlite",
+      "name": "jsonlite",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=jsonlite"
     },
     {
       "@type": "SoftwareApplication",
@@ -341,7 +353,7 @@
     "r-package",
     "peer-reviewed"
   ],
-  "fileSize": "3002.605KB",
+  "fileSize": "12187.211KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",

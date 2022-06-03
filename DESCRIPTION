@@ -1,6 +1,6 @@
 Package: osmdata
 Title: Import 'OpenStreetMap' Data as Simple Features or Spatial Objects
-Version: 0.1.9.025
+Version: 0.1.9.026
 Authors@R: c(
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre")),
     person("Bob", "Rudis", role = "aut"),
@@ -41,6 +41,7 @@ Imports:
     xml2
 Suggests:
     httptest2,
+    jsonlite,
     knitr,
     markdown,
     raster,
