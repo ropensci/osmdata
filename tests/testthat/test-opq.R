@@ -32,6 +32,62 @@ test_that ("datetime", {
     expect_true (grepl ("diff\\:", q2$prefix))
 })
 
+test_that ("opq_string", {
+
+    # bbox only:
+    expect_silent (
+        q0 <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517))
+    )
+    expect_silent (
+        s0 <- opq_string (q0)
+    )
+    expect_message (
+        s0 <- opq_string_intern (q0, quiet = FALSE),
+        "The overpass server is intended to be used to extract specific features"
+    )
+    expect_type (s0, "character")
+    expect_length (s0, 1L)
+    expect_false (grepl ("key", s0))
+    expect_false (grepl ("value", s0))
+    expect_true (grepl ("out body", s0)) # full data body; (nodes,ways,rels)
+
+    # nodes_only parameter:
+    q1 <- opq (bbox = c(-0.118, 51.514, -0.115, 51.517),
+               nodes_only = TRUE)
+    s1 <- opq_string (q1)
+    # nodes only, so "out" instead of "out body"
+    expect_false (grepl ("out body", s1))
+
+    # key-value pair:
+    q2 <- add_osm_feature (q0, key = "highway", value = "!primary")
+    s2 <- opq_string (q2)
+    expect_true (grepl ("highway", s2))
+    expect_true (grepl ("primary", s2))
+
+    # opq_enclosing:
+    lat <- 54.33601
+    lon <- -3.07677
+    key <- "natural"
+    value <- "water"
+    expect_s3_class (q3 <- opq_enclosing (lon, lat, key = key, value = value),
+                     "overpass_query")
+    expect_length (q3$features, 1L)
+    s3 <- opq_string (q3)
+    expect_true (grepl (key, s3))
+    expect_true (grepl (value, s3))
+    # the object -> pivot calls for an enclosing query:
+    expect_true (grepl ("\\->\\.a", s3))
+    expect_true (grepl ("pivot\\.a", s3))
+
+    # opq_osm_id:
+    q4 <- opq_osm_id (id = 1, type = "node")
+    s4 <- opq_string (q4)
+    expect_true (grepl ("id\\:", s4))
+    expect_true (grepl ("node", s4))
+    expect_false (grepl ("way", s4))
+    expect_false (grepl ("rel", s4))
+})
+
 test_that ("opq_osm_id", {
 
     expect_error (q <-opq_osm_id (),
