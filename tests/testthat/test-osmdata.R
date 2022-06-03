@@ -51,6 +51,27 @@ test_that ("add feature", {
     expect_true (!identical (qry$bbox, qry6$bbox))
 })
 
+test_that ("query_errors", {
+
+    expect_error (osmdata_xml (),
+                  "argument \"q\" is missing, with no default")
+    expect_error (osmdata_sp (),
+                  "argument \"q\" is missing, with no default")
+    expect_error (osmdata_sf (),
+                  "query must be a single character string")
+    expect_error (osmdata_sc (),
+                  "argument \"q\" is missing, with no default")
+
+    expect_error (osmdata_xml (q = NULL),
+                  "q must be an overpass query or a character string")
+    expect_error (osmdata_sp (q = NULL),
+                  "q must be an overpass query or a character string")
+    expect_error (osmdata_sf (q = NULL),
+                  "q must be an overpass query or a character string")
+    expect_error (osmdata_sc (q = NULL),
+                  "q must be an overpass query or a character string")
+})
+
 test_that ("make_query", {
 
     qry <- opq (bbox = c(-0.116, 51.516, -0.115, 51.517))
