@@ -73,3 +73,26 @@ test_that ("opq_enclosing", {
     expect_true (grepl ("natural", x$features))
     expect_true (grepl ("water", x$features))
 })
+
+test_that ("opq_around", {
+
+    expect_error (opq_around (),
+                  "argument \"lat\" is missing, with no default")
+    lat <- 54.33601
+    lon <- -3.07677
+    expect_silent (x <- opq_around (lon, lat))
+    expect_type (x, "character")
+    expect_length (x, 1L)
+    expect_false (grepl ("key", x))
+    expect_false (grepl ("value", x))
+
+    expect_silent (x_key <- opq_around (lon, lat, key = "key"))
+    expect_true (!identical (x_key, x))
+    expect_true (grepl ("key", x_key))
+    expect_false (grepl ("value", x_key))
+
+    expect_silent (x_key_val <- opq_around (lon, lat, key = "key", value = "val"))
+    expect_true (!identical (x_key, x_key_val))
+    expect_true (grepl ("key", x_key_val))
+    expect_true (grepl ("val", x_key_val))
+})
