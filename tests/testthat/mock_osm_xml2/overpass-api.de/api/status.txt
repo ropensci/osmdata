@@ -1,0 +1,7 @@
+Connected as: 123456789
+Current time: 2022-01-01T00:00:00Z
+Announced endpoint: none
+Rate limit: 2
+1 slots available now.
+Slot available after: 2022-01-01T00:00:00Z, in 7 seconds.
+Currently running queries (pid, space limit, time limit, start time):
