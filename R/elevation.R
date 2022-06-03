@@ -100,9 +100,9 @@ get_tile_index <- function (bb) {
     yi_min <- 14 + floor (bb [1] / 5)
     yi_max <- 14 + floor (bb [3] / 5)
 
-    xi <- unique (c (xi_min, xi_max))
-    yi <- unique (c (yi_min, yi_max))
+    xi <- as.integer (unique (c (xi_min, xi_max)))
+    yi <- as.integer (unique (c (yi_min, yi_max)))
 
     data.frame ("xi" = rep (xi, each = length (yi)),
-                       "yi" = rep (yi, times = length (xi)))
+                "yi" = rep (yi, times = length (xi)))
 }
