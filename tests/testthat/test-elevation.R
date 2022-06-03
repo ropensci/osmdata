@@ -3,6 +3,8 @@ has_internet <- curl::has_internet ()
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
              identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 
+set_overpass_url ("https://overpass-api.de/api/interpreter")
+
 test_that ("osmdata_sc", {
 
     qry <- opq (bbox = c(-0.116, 51.516, -0.115, 51.517)) %>%

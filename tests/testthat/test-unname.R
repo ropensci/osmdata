@@ -7,6 +7,8 @@ test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
              identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 skip_if (!test_all)
 
+set_overpass_url ("https://overpass-api.de/api/interpreter")
+
 require (sf)
 
 test_that ("unname", {
