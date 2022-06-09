@@ -61,16 +61,16 @@ are likely to be rejected.
 \examples{
 \dontrun{
 q <- getbb ("portsmouth", display_name_contains = "United States") \%>\%
-            opq () \%>\%
-            add_osm_feature("amenity", "restaurant") \%>\%
-            add_osm_feature("amenity", "pub")
+    opq () \%>\%
+    add_osm_feature ("amenity", "restaurant") \%>\%
+    add_osm_feature ("amenity", "pub")
 osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
 q1 <- getbb ("portsmouth", display_name_contains = "United States") \%>\%
-                opq () \%>\%
-                add_osm_feature("amenity", "restaurant")
+    opq () \%>\%
+    add_osm_feature ("amenity", "restaurant")
 q2 <- getbb ("portsmouth", display_name_contains = "United States") \%>\%
-                opq () \%>\%
-                add_osm_feature("amenity", "pub")
+    opq () \%>\%
+    add_osm_feature ("amenity", "pub")
 c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 
 # Use nodes_only to retrieve single point data only, such as for central

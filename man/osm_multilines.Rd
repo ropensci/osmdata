@@ -24,16 +24,16 @@ object(s) which contain the object specified by \code{id}.
 \examples{
 \dontrun{
 dat <- opq ("London UK") \%>\%
-    add_osm_feature (key="name", value="Thames", exact=FALSE) \%>\%
+    add_osm_feature (key = "name", value = "Thames", exact = FALSE) \%>\%
     osmdata_sf ()
 # Get ids of lines called "The Thames":
-id <- rownames (dat$osm_lines [which (dat$osm_lines$name == "The Thames"),])
+id <- rownames (dat$osm_lines [which (dat$osm_lines$name == "The Thames"), ])
 # and find all multilinestring objects which include those lines:
 osm_multilines (dat, id)
 # Now note that
 nrow (dat$osm_multilines) # = 24 multiline objects
 nrow (osm_multilines (dat, id)) # = 1 - the recursive search selects the
-                                # single multiline containing "The Thames"
+# single multiline containing "The Thames"
 }
 }
 \seealso{

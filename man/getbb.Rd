@@ -79,25 +79,26 @@ a city is desired, better results will usually be obtained with
 }
 \examples{
 \dontrun{
-getbb("Salzburg")
+getbb ("Salzburg")
 # select based on display_name, print query url
-getbb("Hereford", display_name_contains = "USA", silent = FALSE)
+getbb ("Hereford", display_name_contains = "USA", silent = FALSE)
 # top 3 matches as data frame
-getbb("Hereford", format_out = "data.frame", limit = 3)
+getbb ("Hereford", format_out = "data.frame", limit = 3)
 # Examples of polygonal boundaries
 bb <- getbb ("london uk", format_out = "polygon") # single match
-dim(bb[[1]][[1]]) # matrix of longitude/latitude pairs
-bb_sf = getbb("kathmandu", format_out = "sf_polygon")
+dim (bb [[1]] [[1]]) # matrix of longitude/latitude pairs
+bb_sf <- getbb ("kathmandu", format_out = "sf_polygon")
 # sf:::plot.sf(bb_sf) # can be plotted if sf is installed
-getbb("london", format_out = "sf_polygon")
-getbb("accra", format_out = "sf_polygon") # rectangular bb
+getbb ("london", format_out = "sf_polygon")
+getbb ("accra", format_out = "sf_polygon") # rectangular bb
 # Using an alternative service (locationiq requires an API key)
 # add LOCATIONIQ=type_your_api_key_here to .Renviron:
-key <- Sys.getenv("LOCATIONIQ")
-if(nchar(key) ==  32) {
-  getbb(place_name,
+key <- Sys.getenv ("LOCATIONIQ")
+if (nchar (key) == 32) {
+    getbb (place_name,
         base_url = "https://locationiq.org/v1/search.php",
-        key = key)
+        key = key
+    )
 }
 }
 }

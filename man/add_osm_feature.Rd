@@ -65,19 +65,23 @@ features from these calls in a logical AND; this is analagous to chaining
 \examples{
 \dontrun{
 q <- opq ("portsmouth usa") \%>\%
-                add_osm_feature(key = "amenity",
-                                value = "restaurant") \%>\%
-                add_osm_feature(key = "amenity", value = "pub")
+    add_osm_feature (
+        key = "amenity",
+        value = "restaurant"
+    ) \%>\%
+    add_osm_feature (key = "amenity", value = "pub")
 osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
 q1 <- opq ("portsmouth usa") \%>\%
-                add_osm_feature(key = "amenity",
-                                value = "restaurant")
+    add_osm_feature (
+        key = "amenity",
+        value = "restaurant"
+    )
 q2 <- opq ("portsmouth usa") \%>\%
-                add_osm_feature(key = "amenity", value = "pub")
+    add_osm_feature (key = "amenity", value = "pub")
 c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 # Use of negation to extract all non-primary highways
 q <- opq ("portsmouth uk") \%>\%
-        add_osm_feature (key = "highway", value = "!primary")
+    add_osm_feature (key = "highway", value = "!primary")
 }
 }
 \references{

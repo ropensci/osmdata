@@ -34,8 +34,8 @@ format.
 \examples{
 \dontrun{
 hampi_sf <- opq ("hampi india") \%>\%
-            add_osm_feature (key="historic", value="ruins") \%>\%
-            osmdata_sf ()
+    add_osm_feature (key = "historic", value = "ruins") \%>\%
+    osmdata_sf ()
 }
 }
 \seealso{

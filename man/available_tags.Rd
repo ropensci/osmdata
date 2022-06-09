@@ -20,7 +20,7 @@ requires internet access
 }
 \examples{
 \dontrun{
-available_tags("aerialway")
+available_tags ("aerialway")
 }
 }
 \references{

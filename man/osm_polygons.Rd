@@ -23,11 +23,12 @@ or polygon.
 }
 \examples{
 \dontrun{
-Extract polygons which intersect Conway Street in London
-dat <- opq ("Marylebone London") \%>\% add_osm_feature (key="highway") \%>\%
+# Extract polygons which intersect Conway Street in London
+dat <- opq ("Marylebone London") \%>\%
+    add_osm_feature (key = "highway") \%>\%
     osmdata_sf ()
 conway <- which (dat$osm_lines$name == "Conway Street")
-id <- rownames (dat$osm_lines [conway,])
+id <- rownames (dat$osm_lines [conway, ])
 osm_polygons (dat, id)
 }
 }

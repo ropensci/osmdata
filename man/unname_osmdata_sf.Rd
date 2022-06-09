@@ -24,8 +24,8 @@ issues such as those linked to above.
 \examples{
 \dontrun{
 hampi_sf <- opq ("hampi india") \%>\%
-            add_osm_feature (key="historic", value="ruins") \%>\%
-            osmdata_sf ()
+    add_osm_feature (key = "historic", value = "ruins") \%>\%
+    osmdata_sf ()
 hampi_clean <- unname_osmdata_sf (hampi_sf)
 
 # All coordinate matrices include rownames with OSM ID values:

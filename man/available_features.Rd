@@ -17,7 +17,7 @@ requires internet access
 }
 \examples{
 \dontrun{
-available_features()
+available_features ()
 }
 }
 \references{

@@ -36,8 +36,8 @@ Objects of class \code{xml_document} can be saved as \code{.xml} or
 \examples{
 \dontrun{
 q <- opq ("hampi india")
-q <- add_osm_feature (q, key="historic", value="ruins")
-osmdata_xml (q, filename="hampi.osm")
+q <- add_osm_feature (q, key = "historic", value = "ruins")
+osmdata_xml (q, filename = "hampi.osm")
 }
 }
 \seealso{
