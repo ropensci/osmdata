@@ -40,16 +40,16 @@
 #' @examples
 #' \dontrun{
 #' q <- getbb ("portsmouth", display_name_contains = "United States") %>%
-#'             opq () %>%
-#'             add_osm_feature("amenity", "restaurant") %>%
-#'             add_osm_feature("amenity", "pub")
+#'     opq () %>%
+#'     add_osm_feature ("amenity", "restaurant") %>%
+#'     add_osm_feature ("amenity", "pub")
 #' osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
 #' q1 <- getbb ("portsmouth", display_name_contains = "United States") %>%
-#'                 opq () %>%
-#'                 add_osm_feature("amenity", "restaurant")
+#'     opq () %>%
+#'     add_osm_feature ("amenity", "restaurant")
 #' q2 <- getbb ("portsmouth", display_name_contains = "United States") %>%
-#'                 opq () %>%
-#'                 add_osm_feature("amenity", "pub")
+#'     opq () %>%
+#'     add_osm_feature ("amenity", "pub")
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 #'
 #' # Use nodes_only to retrieve single point data only, such as for central
@@ -64,12 +64,17 @@ opq <- function (bbox = NULL, nodes_only = FALSE,
 
     timeout <- format (timeout, scientific = FALSE)
     prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
-    suffix <- ifelse (nodes_only,
-                      "); out;",
-                      ");\n(._;>;);\nout body;") # recurse down
-    if (!missing (memsize))
-        prefix <- paste0 (prefix, "[maxsize:",                          # nocov
-                          format (memsize, scientific = FALSE), "]")    # nocov
+    suffix <- ifelse (
+        nodes_only,
+        "); out;",
+        ");\n(._;>;);\nout body;"
+    ) # recurse down
+    if (!missing (memsize)) {
+        prefix <- paste0 (
+            prefix, "[maxsize:", # nocov
+            format (memsize, scientific = FALSE), "]"
+        )
+    } # nocov
     if (!is.null (datetime)) {
 
         datetime <- check_datetime (datetime)
@@ -77,17 +82,21 @@ opq <- function (bbox = NULL, nodes_only = FALSE,
         if (!is.null (datetime2)) {
 
             datetime2 <- check_datetime (datetime2)
-            prefix <- paste0 ('[diff:\"', datetime, '\",\"', datetime2, '\"]',
-                              prefix)
+            prefix <- paste0 (
+                '[diff:\"', datetime, '\",\"', datetime2, '\"]',
+                prefix
+            )
         } else {
 
             prefix <- paste0 ('[date:\"', datetime, '\"]', prefix)
         }
     }
 
-    res <- list (bbox = bbox_to_string (bbox),
-              prefix = paste0 (prefix, ";\n(\n"),
-              suffix = suffix, features = NULL)
+    res <- list (
+        bbox = bbox_to_string (bbox),
+        prefix = paste0 (prefix, ";\n(\n"),
+        suffix = suffix, features = NULL
+    )
     class (res) <- c (class (res), "overpass_query")
     attr (res, "datetime") <- datetime
     attr (res, "datetime2") <- datetime2
@@ -118,8 +127,9 @@ check_datetime <- function (x) {
         formatC (as.integer (DD), width = 2, flag = "0") != DD |
         formatC (as.integer (hh), width = 2, flag = "0") != hh |
         formatC (as.integer (mm), width = 2, flag = "0") != mm |
-        formatC (as.integer (ss), width = 2, flag = "0") != ss)
+        formatC (as.integer (ss), width = 2, flag = "0") != ss) {
         stop ("x is not is ISO8601 format ('YYYY-MM-DDThh:mm:ssZ')")
+    }
     invisible (x)
 }
 
@@ -135,8 +145,9 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 
             # convert to OR'ed regex:
             value <- paste0 (value, collapse = "|")
-            if (value_exact)
+            if (value_exact) {
                 value <- paste0 ("^(", value, ")$")
+            }
             bind <- "~"
         } else if (substring (value, 1, 1) == "!") {
 
@@ -148,10 +159,13 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
                 key_pre <- ""
             }
         }
-        feature <- paste0 (sprintf (' [%s"%s"%s"%s"',
-                                    key_pre, key, bind, value))
-        if (!match_case)
+        feature <- paste0 (sprintf (
+            ' [%s"%s"%s"%s"',
+            key_pre, key, bind, value
+        ))
+        if (!match_case) {
             feature <- paste0 (feature, ",i")
+        }
         feature <- paste0 (feature, "]")
     }
 
@@ -202,19 +216,23 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #' @examples
 #' \dontrun{
 #' q <- opq ("portsmouth usa") %>%
-#'                 add_osm_feature(key = "amenity",
-#'                                 value = "restaurant") %>%
-#'                 add_osm_feature(key = "amenity", value = "pub")
+#'     add_osm_feature (
+#'         key = "amenity",
+#'         value = "restaurant"
+#'     ) %>%
+#'     add_osm_feature (key = "amenity", value = "pub")
 #' osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
 #' q1 <- opq ("portsmouth usa") %>%
-#'                 add_osm_feature(key = "amenity",
-#'                                 value = "restaurant")
+#'     add_osm_feature (
+#'         key = "amenity",
+#'         value = "restaurant"
+#'     )
 #' q2 <- opq ("portsmouth usa") %>%
-#'                 add_osm_feature(key = "amenity", value = "pub")
+#'     add_osm_feature (key = "amenity", value = "pub")
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 #' # Use of negation to extract all non-primary highways
 #' q <- opq ("portsmouth uk") %>%
-#'         add_osm_feature (key = "highway", value = "!primary")
+#'     add_osm_feature (key = "highway", value = "!primary")
 #' }
 add_osm_feature <- function (opq,
                              key,
@@ -224,44 +242,54 @@ add_osm_feature <- function (opq,
                              match_case = TRUE,
                              bbox = NULL) {
 
-    if (missing (key))
+    if (missing (key)) {
         stop ("key must be provided")
+    }
 
-    if (is.null (bbox) & is.null (opq$bbox))
+    if (is.null (bbox) & is.null (opq$bbox)) {
         stop ("Bounding box has to either be set in opq or must be set here")
+    }
 
-    if (is.null (bbox))
+    if (is.null (bbox)) {
         bbox <- opq$bbox
-    else {
+    } else {
         bbox <- bbox_to_string (bbox)
         opq$bbox <- bbox
     }
 
     if (!key_exact & value_exact) {
-        message ("key_exact = FALSE can only combined with ",
-                 "value_exact = FALSE; setting value_exact = FALSE")
+        message (
+            "key_exact = FALSE can only combined with ",
+            "value_exact = FALSE; setting value_exact = FALSE"
+        )
         value_exact <- FALSE
     }
 
-    if (value_exact)
+    if (value_exact) {
         bind <- "="
-    else
+    } else {
         bind <- "~"
+    }
     key_pre <- ""
-    if (!key_exact)
+    if (!key_exact) {
         key_pre <- "~"
+    }
 
-    if (missing (value))
+    if (missing (value)) {
         value <- NULL
+    }
 
-    feature <- paste_features (key, value, key_pre, bind,
-                               match_case, value_exact)
+    feature <- paste_features (
+        key, value, key_pre, bind,
+        match_case, value_exact
+    )
 
     opq$features <- paste0 (c (opq$features, feature), collapse = "")
 
-    if (is.null (opq$suffix))
+    if (is.null (opq$suffix)) {
         opq$suffix <- ");\n(._;>;);\nout body;"
-    #opq$suffix <- ");\n(._;>);\nout qt body;"
+    }
+    # opq$suffix <- ");\n(._;>);\nout qt body;"
     # qt option is not compatible with sf because GDAL requires nodes to be
     # numerically sorted
 
@@ -292,42 +320,50 @@ add_osm_feature <- function (opq,
 #' @examples
 #' \dontrun{
 #' q <- opq ("portsmouth usa") %>%
-#'      add_osm_features (features = c ("\"amenity\"=\"restaurant\"",
-#'                                      "\"amenity\"=\"pub\""))
+#'     add_osm_features (features = c (
+#'         "\"amenity\"=\"restaurant\"",
+#'         "\"amenity\"=\"pub\""
+#'     ))
 #' # This extracts in a single query the same result as the following:
 #' q1 <- opq ("portsmouth usa") %>%
-#'                 add_osm_feature(key = "amenity",
-#'                                 value = "restaurant")
+#'     add_osm_feature (
+#'         key = "amenity",
+#'         value = "restaurant"
+#'     )
 #' q2 <- opq ("portsmouth usa") %>%
-#'                 add_osm_feature(key = "amenity", value = "pub")
+#'     add_osm_feature (key = "amenity", value = "pub")
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 #' }
 add_osm_features <- function (opq,
                               features,
                               bbox = NULL) {
 
-    if (missing (features))
+    if (missing (features)) {
         stop ("features must be provided")
+    }
 
-    if (is.null (bbox) & is.null (opq$bbox))
+    if (is.null (bbox) & is.null (opq$bbox)) {
         stop ("Bounding box has to either be set in opq or must be set here")
+    }
 
-    if (is.null (bbox))
+    if (is.null (bbox)) {
         bbox <- opq$bbox
-    else {
+    } else {
         bbox <- bbox_to_string (bbox)
         opq$bbox <- bbox
     }
 
-    if (is.null (opq$suffix))
+    if (is.null (opq$suffix)) {
         opq$suffix <- ");\n(._;>;);\nout body;"
+    }
 
-    if (length (which (!grepl ("\\\"", features))) > 0L)
+    if (length (which (!grepl ("\\\"", features))) > 0L) {
         stop ("features must be enclosed in escape-delimited quotations (see example)")
+    }
 
-    index <-  which (!grepl ("^\\[", features))
+    index <- which (!grepl ("^\\[", features))
     features [index] <- paste0 ("[", features [index])
-    index <-  which (!grepl ("\\]$", features))
+    index <- which (!grepl ("\\]$", features))
     features [index] <- paste0 (features [index], "]")
 
     opq$features <- features
@@ -372,16 +408,20 @@ add_osm_features <- function (opq,
 #' }
 opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
 
-    if (is.null (type))
+    if (is.null (type)) {
         stop ("type must be specified: one of node, way, or relation")
+    }
     type <- match.arg (tolower (type), c ("node", "way", "relation"))
 
-    if (is.null (id))
+    if (is.null (id)) {
         stop ("id must be specified.")
-    if (!(is.character (id) | storage.mode (id) == "double"))
+    }
+    if (!(is.character (id) | storage.mode (id) == "double")) {
         stop ("id must be character or numeric.")
-    if (length (id) != 1L)
+    }
+    if (length (id) != 1L) {
         stop ("Only a single id may be entered.")
+    }
 
     if (!is.character (id)) {
         id <- paste0 (id)
@@ -395,8 +435,9 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
     if (open_url) {
         # nocov start
         u <- paste0 ("https://openstreetmap.org/", type [1], "/", id)
-        for (i in u)
+        for (i in u) {
             browseURL (i)
+        }
         # nocov end
     }
 
@@ -443,7 +484,7 @@ opq_enclosing <- function (lon = NULL, lat = NULL,
         stop ("'lon' and 'lat' must be provided.")
     }
     if (!(is.numeric (lon) & is.numeric (lat) &
-          length (lon) == 1L & length (lat) == 1L)) {
+        length (lon) == 1L & length (lat) == 1L)) {
         stop ("'lon' and 'lat' must both be single numeric values.")
     }
 
@@ -453,13 +494,16 @@ opq_enclosing <- function (lon = NULL, lat = NULL,
     suffix <- ");\n(._;>;);\nout;"
 
     features <- paste_features (key,
-                                value,
-                                value_exact = TRUE,
-                                match_case = TRUE)
-    res <- list (bbox = bbox,
-                 prefix = paste0 (prefix, ";\n(\n"),
-                 suffix = suffix,
-                 features = features)
+        value,
+        value_exact = TRUE,
+        match_case = TRUE
+    )
+    res <- list (
+        bbox = bbox,
+        prefix = paste0 (prefix, ";\n(\n"),
+        suffix = suffix,
+        features = features
+    )
     class (res) <- c (class (res), "overpass_query")
     attr (res, "datetime") <- attr (res, "datetime2") <- NULL
     attr (res, "nodes_only") <- FALSE
@@ -554,48 +598,65 @@ opq_string_intern <- function (opq, quiet = TRUE) {
 
         if (length (features) > 1L) { # from opq_features fn
 
-            features <- vapply (features, function (i)
-                                paste (i, collapse = ""),
-                                character (1),
-                                USE.NAMES = FALSE)
+            features <- vapply (features, function (i) {
+                paste (i, collapse = "")
+            },
+            character (1),
+            USE.NAMES = FALSE
+            )
         }
 
         if (attr (opq, "nodes_only")) {
 
-            features <- paste0 (sprintf (" node %s (%s);\n",
-                                         features,
-                                         opq$bbox))
+            features <- paste0 (sprintf (
+                " node %s (%s);\n",
+                features,
+                opq$bbox
+            ))
 
         } else if (!is.null (attr (opq, "enclosing"))) {
 
-            if (length (features) > 1)
+            if (length (features) > 1) {
                 stop ("enclosing queries can only accept one feature")
+            }
 
             lat <- strsplit (opq$bbox, ",") [[1]] [1]
             lon <- strsplit (opq$bbox, ",") [[1]] [2]
-            features <- paste0 ("is_in(", lat, ",",
-                                lon, ")->.a;",
-                                attr (opq, "enclosing"),
-                                "(pivot.a)",
-                                features,
-                                ";")
+            features <- paste0 (
+                "is_in(", lat, ",",
+                lon, ")->.a;",
+                attr (opq, "enclosing"),
+                "(pivot.a)",
+                features,
+                ";"
+            )
 
         } else {
 
-            features <- paste0 (sprintf (" node %s (%s);\n",
-                                         features,
-                                         opq$bbox),
-                                sprintf (" way %s (%s);\n",
-                                         features,
-                                         opq$bbox),
-                                sprintf (" relation %s (%s);\n\n",
-                                         features,
-                                         opq$bbox))
+            features <- paste0 (
+                sprintf (
+                    " node %s (%s);\n",
+                    features,
+                    opq$bbox
+                ),
+                sprintf (
+                    " way %s (%s);\n",
+                    features,
+                    opq$bbox
+                ),
+                sprintf (
+                    " relation %s (%s);\n\n",
+                    features,
+                    opq$bbox
+                )
+            )
         }
 
-        res <- paste0 (opq$prefix,
-                       paste0 (features, collapse = ""),
-                       opq$suffix)
+        res <- paste0 (
+            opq$prefix,
+            paste0 (features, collapse = ""),
+            opq$suffix
+        )
 
     } else if (!is.null (opq$id)) { # opq with opq_osm_id
 
@@ -605,15 +666,20 @@ opq_string_intern <- function (opq, quiet = TRUE) {
 
     } else { # straight opq with neither features nor ID specified
 
-        if (!quiet)
-            message ("The overpass server is intended to be used to extract ",
-                     "specific features;\nthis query may place an undue ",
-                     "burden on server resources.\nPlease consider specifying ",
-                     "features via 'add_osm_feature' or 'opq_osm_id'.")
+        if (!quiet) {
+            message (
+                "The overpass server is intended to be used to extract ",
+                "specific features;\nthis query may place an undue ",
+                "burden on server resources.\nPlease consider specifying ",
+                "features via 'add_osm_feature' or 'opq_osm_id'."
+            )
+        }
 
-        bbox <- paste0 (sprintf (" node (%s);\n", opq$bbox),
-                            sprintf (" way (%s);\n", opq$bbox),
-                            sprintf (" relation (%s);\n", opq$bbox))
+        bbox <- paste0 (
+            sprintf (" node (%s);\n", opq$bbox),
+            sprintf (" way (%s);\n", opq$bbox),
+            sprintf (" relation (%s);\n", opq$bbox)
+        )
 
         res <- paste0 (opq$prefix, bbox, opq$suffix)
     }
