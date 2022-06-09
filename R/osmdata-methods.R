@@ -2,26 +2,31 @@
 print.osmdata <- function (x, ...) {
     msg <- NULL
     # print meta-data
-    if (!all (vapply (x, is.null, FUN.VALUE = logical (1))))
+    if (!all (vapply (x, is.null, FUN.VALUE = logical (1)))) {
         msg <- "Object of class 'osmdata' with:\n"
+    }
 
     msg <- c (msg, c (rep (" ", 17), "$bbox : ", x$bbox, "\n"))
 
     objs <- c ("overpass_call", "meta")
-    prnts <- c ("The call submitted to the overpass API",
-                "metadata including timestamp and version numbers")
-    for (i in seq (objs))
+    prnts <- c (
+        "The call submitted to the overpass API",
+        "metadata including timestamp and version numbers"
+    )
+    for (i in seq (objs)) {
         if (!is.null (x [objs [i]])) {
             nm <- c (rep (" ", 21 - nchar (objs [i])), "$", objs [i])
             msg <- c (msg, nm, " : ", prnts [i], "\n")
         }
+    }
 
     # print geometry data
     sf <- any (grep ("sf", lapply (x, class)))
-    if (sf)
+    if (sf) {
         msg <- msg_sf (msg, x)
-    else
+    } else {
         msg <- msg_non_sf (msg, x)
+    }
 
     message (msg)
     invisible (x)
@@ -35,17 +40,22 @@ msg_sf <- function (msg, x) {
 
         xi <- x [[i]]
         nm <- c (rep (" ", 21 - nchar (i)), "$", i)
-        if (is.null (xi))
+        if (is.null (xi)) {
             msg <- c (msg, nm, " : NULL\n")
-        else if (grepl ("line", i)) # sf "lines" -> "linestrings"
-            msg <- c (msg, nm,
-                      " : 'sf' Simple Features Collection with ",
-                      nrow (xi), " ", strsplit (i, "osm_")[[1]][2],
-                      "trings\n")
-        else
-            msg <- c (msg, nm, " : 'sf' Simple Features Collection with ",
-                      nrow (xi), " ",
-                      strsplit (i, "osm_")[[1]][2], "\n")
+        } else if (grepl ("line", i)) { # sf "lines" -> "linestrings"
+            msg <- c (
+                msg, nm,
+                " : 'sf' Simple Features Collection with ",
+                nrow (xi), " ", strsplit (i, "osm_") [[1]] [2],
+                "trings\n"
+            )
+        } else {
+            msg <- c (
+                msg, nm, " : 'sf' Simple Features Collection with ",
+                nrow (xi), " ",
+                strsplit (i, "osm_") [[1]] [2], "\n"
+            )
+        }
     }
 
     return (msg)
@@ -59,19 +69,25 @@ msg_non_sf <- function (msg, x) {
 
         xi <- x [[i]]
         nm <- c (rep (" ", 21 - nchar (i)), "$", i)
-        if (is.null (xi))
+        if (is.null (xi)) {
             msg <- c (msg, nm, " : NULL", "\n")
-        else {
+        } else {
 
             type <- strsplit (i, "osm_") [[1]] [2]
-            types <- c ("points", "lines", "polygons",
-                        "multlines", "multipolygons")
-            sp_types <- c ("Points", "Lines", "Polygons",
-                           "Lines", "Polygons")
+            types <- c (
+                "points", "lines", "polygons",
+                "multlines", "multipolygons"
+            )
+            sp_types <- c (
+                "Points", "Lines", "Polygons",
+                "Lines", "Polygons"
+            )
             types <- sp_types [match (type, types)]
-            msg <- c (msg, nm, " : 'sp' Spatial", types, "DataFrame with ",
-                      nrow (xi), " ", strsplit (i, "osm_")[[1]][2],
-                      "\n")
+            msg <- c (
+                msg, nm, " : 'sp' Spatial", types, "DataFrame with ",
+                nrow (xi), " ", strsplit (i, "osm_") [[1]] [2],
+                "\n"
+            )
         }
     }
 
@@ -82,21 +98,27 @@ msg_non_sf <- function (msg, x) {
 c.osmdata <- function (...) {
 
     x <- list (...)
-    cl_null <- vapply (x, function (i)
-                       is.null (i$osm_points) &
-                           is.null (i$osm_lines) &
-                           is.null (i$osm_polygons) &
-                           is.null (i$osm_multilines) &
-                           is.null (i$osm_multipolygons),
-                       FUN.VALUE = logical (1))
+    cl_null <- vapply (x, function (i) {
+        is.null (i$osm_points) &
+            is.null (i$osm_lines) &
+            is.null (i$osm_polygons) &
+            is.null (i$osm_multilines) &
+            is.null (i$osm_multipolygons)
+    },
+    FUN.VALUE = logical (1)
+    )
     x <- x [which (!cl_null)]
-    if (length (x) < 1)
+    if (length (x) < 1) {
         stop ("osmdata object is entirely NULL")
-    cl_sf <- vapply (x, function (i)
-                     any (grep ("sf", lapply (i, class))),
-                     FUN.VALUE = logical (1))
-    if (!(all (cl_sf) | all (!cl_sf)))
+    }
+    cl_sf <- vapply (x, function (i) {
+        any (grep ("sf", lapply (i, class)))
+    },
+    FUN.VALUE = logical (1)
+    )
+    if (!(all (cl_sf) | all (!cl_sf))) {
         stop ("All objects must be either osmdata_sf or osmdata_sp")
+    }
 
     sf <- all (cl_sf)
     res <- osmdata ()
@@ -108,9 +130,11 @@ c.osmdata <- function (...) {
         res <- c_sf (res, x)
     } else {
         # TODO: implement sp version
-        stop ("'c' method currently implemented only for osmdata_sf. ",
-              "You could use\n'osmdata_sf()', and convert with ",
-              "'as(x,'Spatial')' from package 'sf'.")
+        stop (
+            "'c' method currently implemented only for osmdata_sf. ",
+            "You could use\n'osmdata_sf()', and convert with ",
+            "'as(x,'Spatial')' from package 'sf'."
+        )
     }
     return (res)
 }
@@ -145,16 +169,19 @@ c_sf <- function (res, x) {
             # then expand resi to final number of columns keeping sf
             # integrity
             cnames_new <- cnames [which (!cnames %in% names (resi))]
-            for (j in cnames_new)
+            for (j in cnames_new) {
                 resi [j] <- rep (NA, nrow (resi))
+            }
 
             # and re-order columns again
             indx1 <- which (names (resi) %in% core_names)
             indx2 <- which (!seq (ncol (resi)) %in% indx1)
-            indx <- c (which (names (resi) == "osm_id"),
-                       which (names (resi) == "name"),
-                       indx2 [order (names (resi) [indx2])],
-                       which (names (resi) == "geometry"))
+            indx <- c (
+                which (names (resi) == "osm_id"),
+                which (names (resi) == "name"),
+                indx2 [order (names (resi) [indx2])],
+                which (names (resi) == "geometry")
+            )
             att <- attributes (resi)
             resi <- resi [, indx, drop = FALSE]
             nms <- names (resi)
@@ -166,17 +193,20 @@ c_sf <- function (res, x) {
             for (j in xi) {
                 rindx <- which (!rownames (j) %in% rownames (resi))
                 # cindx <- which (names (j) %in% names (resi))
-                resj <- j [rindx, , drop = FALSE] #nolint
+                resj <- j [rindx, , drop = FALSE] # nolint
                 # then expand resj as for resi above
                 cnames_new <- cnames [which (!cnames %in% names (resj))]
-                for (k in cnames_new)
+                for (k in cnames_new) {
                     resj [k] <- rep (NA, nrow (resj))
+                }
                 indx1 <- which (names (resj) %in% core_names)
                 indx2 <- which (!seq (ncol (resj)) %in% indx1)
-                indx <- c (which (names (resj) == "osm_id"),
-                           which (names (resj) == "name"),
-                           indx2 [order (names (resj) [indx2])],
-                           which (names (resj) == "geometry"))
+                indx <- c (
+                    which (names (resj) == "osm_id"),
+                    which (names (resj) == "name"),
+                    indx2 [order (names (resj) [indx2])],
+                    which (names (resj) == "geometry")
+                )
                 resj <- resj [, indx]
                 resi <- rbind (resi, resj)
             } # end for j in x
