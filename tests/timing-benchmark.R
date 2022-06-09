@@ -1,5 +1,4 @@
 #library (osmdata)
-# NOTE: Currently requires devtools::load_all ("osmdata", export_all = TRUE)!
 
 benchmark <- function (times = 100) {
 
