@@ -17,8 +17,8 @@
 #' @examples
 #' \dontrun{
 #' dat <- opq ("colchester uk") %>%
-#'             add_osm_feature (key="highway") %>%
-#'             osmdata_sf ()
+#'     add_osm_feature (key = "highway") %>%
+#'     osmdata_sf ()
 #' # colchester has lots of roundabouts, and these are stored in 'osm_polygons'
 #' # rather than 'osm_lines'. The former can be merged with the latter by:
 #' dat2 <- osm_poly2line (dat)
@@ -27,17 +27,18 @@
 #' }
 osm_poly2line <- function (osmdat) {
 
-    if (!is (osmdat, "osmdata_sf"))
+    if (!is (osmdat, "osmdata_sf")) {
         stop ("osm_poly2line only works for objects of class osmdata_sf")
+    }
 
     g <- lapply (osmdat$osm_polygons$geometry, function (i) {
-                     p1 <- i [[1]]
-                     class (p1) <- c ("XY", "LINESTRING", "sfg")
-                     return (p1)
-            })
+        p1 <- i [[1]]
+        class (p1) <- c ("XY", "LINESTRING", "sfg")
+        return (p1)
+    })
     names (g) <- names (osmdat$osm_polygons$geometry)
     # then copy all attributes from the lines
-    attrs  <- attributes (osmdat$osm_lines$geometry)
+    attrs <- attributes (osmdat$osm_lines$geometry)
     attrs <- attrs [names (attrs) != "names"]
     attributes (g) <- c (attributes (g), attrs)
     attr (g, "bbox") <- attr (osmdat$osm_polygons$geometry, "bbox")
@@ -45,7 +46,7 @@ osm_poly2line <- function (osmdat) {
     polys$geometry <- g
 
     # use osmdata.c method to join the two sets of lines
-    newdat <- osmdata()
+    newdat <- osmdata ()
     newdat$osm_lines <- polys
     # This has to be put into newdat to ensure fields with no features are
     # retained as empty data frames rather than NULL objects
