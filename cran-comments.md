@@ -1,4 +1,4 @@
-# CRAN notes for osmdata_0.1.9 submission
+# CRAN notes for osmdata_0.1.10 submission
 
 ## Test environments
 
