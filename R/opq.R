@@ -29,7 +29,7 @@
 #' @return An `overpass_query` object
 #'
 #' @note See
-#' <https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29>
+#' /url{https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29}
 #' for explanation of `timeout` and `memsize` (or `maxsize` in overpass terms).
 #' Note in particular the comment that queries with arbitrarily large `memsize`
 #' are likely to be rejected.
@@ -311,7 +311,7 @@ add_osm_feature <- function (opq,
 #'        opq query bbox has been set
 #' @return \link{opq} object
 #'
-#' @references <https://wiki.openstreetmap.org/wiki/Map_Features>
+#' @references \url{https://wiki.openstreetmap.org/wiki/Map_Features}
 #' @seealso [add_osm_feature]
 #'
 #' @family queries
@@ -358,7 +358,10 @@ add_osm_features <- function (opq,
     }
 
     if (length (which (!grepl ("\\\"", features))) > 0L) {
-        stop ("features must be enclosed in escape-delimited quotations (see example)")
+        stop (
+            "features must be enclosed in escape-delimited ",
+            "quotations (see example)"
+        )
     }
 
     index <- which (!grepl ("^\\[", features))
@@ -382,7 +385,7 @@ add_osm_features <- function (opq,
 #' @return \link{opq} object
 #'
 #' @references
-#' <https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_element_id>
+#' \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_element_id}
 #'
 #' @note Extracting elements by ID requires explicitly specifying the type of
 #' element. Only elements of one of the three given types can be extracted in a
@@ -555,7 +558,10 @@ opq_around <- function (lon, lat, radius = 15,
 
     nodes <- paste0 ("node(around:", radius, ",", lat, ", ", lon, ")", kv, ";")
     ways <- paste0 ("way(around:", radius, ",", lat, ", ", lon, ")", kv, ";")
-    rels <- paste0 ("relation(around:", radius, ",", lat, ", ", lon, ")", kv, ";")
+    rels <- paste0 (
+        "relation(around:",
+        radius, ",", lat, ", ", lon, ")", kv, ";"
+    )
 
     res <- paste0 (prefix, nodes, ways, rels, suffix)
 

@@ -53,7 +53,7 @@ Build an Overpass query
 }
 \note{
 See
-\url{https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29}
+/url{https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29}
 for explanation of \code{timeout} and \code{memsize} (or \code{maxsize} in overpass terms).
 Note in particular the comment that queries with arbitrarily large \code{memsize}
 are likely to be rejected.

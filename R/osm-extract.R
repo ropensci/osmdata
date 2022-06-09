@@ -253,7 +253,8 @@ sanity_check <- function (dat, id) {
 #' tr <- opq ("trentham australia") %>% osmdata_sf ()
 #' coliban <- tr$osm_lines [which (tr$osm_lines$name == "Coliban River"), ]
 #' pts <- osm_points (tr, rownames (coliban)) # all points of river
-#' waterfall <- pts [which (pts$waterway == "waterfall"), ] # the waterfall point
+#' # the waterfall point:
+#' waterfall <- pts [which (pts$waterway == "waterfall"), ]
 #' }
 osm_points <- function (dat, id) {
 

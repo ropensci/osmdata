@@ -11,7 +11,7 @@
         "https://overpass.kumi.systems/api/interpreter"
     )
 
-    op.osmdata <- list (
+    op.osmdata <- list ( # nolint
         osmdata.base_url = # nolint
             sample (available_apis, 1)
     )

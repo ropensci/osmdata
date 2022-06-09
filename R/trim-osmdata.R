@@ -69,9 +69,15 @@ trim_osmdata_sfp <- function (dat, bb_poly, exclude = TRUE) {
 
     if (nrow (bb_poly) > 1) {
 
-        srcproj <- .lonlat () # "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-        crs <- .sph_merc () # "+proj=merc +a=6378137 +b=6378137"
-        bb_poly <- reproj::reproj (bb_poly, target = crs, source = srcproj) [, 1:2]
+        # "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0":
+        srcproj <- .lonlat ()
+        # "+proj=merc +a=6378137 +b=6378137":
+        crs <- .sph_merc ()
+        bb_poly <- reproj::reproj (
+            bb_poly,
+            target = crs,
+            source = srcproj
+        ) [, 1:2]
 
         dat <- trim_to_poly_pts (dat, bb_poly, exclude = exclude) %>%
             trim_to_poly (bb_poly = bb_poly, exclude = exclude) %>%
@@ -149,8 +155,10 @@ trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE) {
 
     if (is (dat$osm_points, "sf")) {
 
-        srcproj <- .lonlat () # "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-        crs <- .sph_merc () # "+proj=merc +a=6378137 +b=6378137"
+        # "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0":
+        srcproj <- .lonlat ()
+        # "+proj=merc +a=6378137 +b=6378137":
+        crs <- .sph_merc ()
 
         g <- do.call (rbind, dat$osm_points$geometry)
         g <- reproj::reproj (g, target = crs, source = srcproj)
@@ -184,8 +192,10 @@ trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE) {
 #' @noRd
 get_trim_indx <- function (g, bb, exclude) {
 
-    srcproj <- .lonlat () # "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-    crs <- .sph_merc () # "+proj=merc +a=6378137 +b=6378137"
+    # "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0":
+    srcproj <- .lonlat ()
+    # "+proj=merc +a=6378137 +b=6378137":
+    crs <- .sph_merc ()
 
     indx <- lapply (g, function (i) {
 
