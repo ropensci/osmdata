@@ -6,24 +6,31 @@
     ## https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances # nolint
     ## see https://github.com/ropensci/osmdata/pull/149
     ## Added and edited code here by JimShady to use random API each time.
-    available_apis <- c("https://overpass-api.de/api/interpreter",
-                        "https://overpass.kumi.systems/api/interpreter")
+    available_apis <- c (
+        "https://overpass-api.de/api/interpreter",
+        "https://overpass.kumi.systems/api/interpreter"
+    )
 
-    op.osmdata <- list (osmdata.base_url =          # nolint
-                        sample(available_apis, 1))
+    op.osmdata <- list (
+        osmdata.base_url = # nolint
+            sample (available_apis, 1)
+    )
 
     ## End of code edited by JimShady
 
     toset <- !(names (op.osmdata) %in% names (op))
-    if (any (toset))
+    if (any (toset)) {
         options (op.osmdata [toset])
+    }
     invisible ()
 }
 # nocov end
 
-.onAttach <- function(libname, pkgname) {       # nolint
-    msg <- paste0 ("Data (c) OpenStreetMap contributors,",
-                   " ODbL 1.0. https://www.openstreetmap.org/copyright")
+.onAttach <- function (libname, pkgname) { # nolint
+    msg <- paste0 (
+        "Data (c) OpenStreetMap contributors,",
+        " ODbL 1.0. https://www.openstreetmap.org/copyright"
+    )
     packageStartupMessage (msg)
 }
 
@@ -41,8 +48,9 @@
 get_overpass_url <- function () {
 
     op <- options ()
-    if (!"osmdata.base_url" %in% names (op))
-        stop ("overpass can not be retrieved") # nocov
+    if (!"osmdata.base_url" %in% names (op)) {
+        stop ("overpass can not be retrieved")
+    } # nocov
     options ()$osmdata.base_url
 }
 
@@ -79,11 +87,12 @@ get_overpass_url <- function () {
 set_overpass_url <- function (overpass_url) {
 
     # check URL first
-    if (!grepl ("interpreter", overpass_url))
+    if (!grepl ("interpreter", overpass_url)) {
         stop ("overpass_url not valid - must end with /interpreter")
+    }
 
     old_url <- get_overpass_url ()
-    op <- options () #nolint
+    op <- options () # nolint
     op.osmdata <- list (osmdata.base_url = overpass_url) # nolint
     options (op.osmdata)
 
