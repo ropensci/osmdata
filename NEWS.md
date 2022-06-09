@@ -1,26 +1,29 @@
+0.1.10.00X (dev)
+===================
+
 0.1.10
 ===================
 
-Major changes:
+## Major changes:
 
 - Changed httr dependency for httr2 (#272)
 - Removed two authors of code formerly including for stubbing results; which is now done via `httptest2` package.
 
-Minor changes:
+## Minor changes:
 
 - Moved jsonlite from Imports to Suggests (now only used in tests).
 
 0.1.9
 ===================
 
-Major changes:
+## Major changes:
 
 - New function `opq_around` to query features within a specified radius
   *around* a defined location; thanks to @barryrowlingson via #199 and
   @maellecoursonnais via #238
 - New vignette on splitting large queries thanks to @Machin6 (via #262)
 
-Minor changes:
+## Minor changes:
 
 - New dependency on `reproj` package, so that `trim_osmdata()` can be applied
   to re-projected coordinates.
@@ -28,7 +31,7 @@ Minor changes:
 0.1.8
 ===================
 
-Minor changes:
+## Minor changes:
 
 - Fix some failing CRAN checks (no change to functionality)
 
@@ -36,14 +39,14 @@ Minor changes:
 0.1.7
 ===================
 
-Minor changes:
+## Minor changes:
 
 - `add_osm_feature` bug fix to revert AND behaviour (#240 thanks to @anthonynorth)
 
 0.1.6
 ===================
 
-Major changes:
+## Major changes:
 
 - New function `add_osm_features` to enable OR-combinations of features in
   single queries.
@@ -51,7 +54,7 @@ Major changes:
 0.1.5
 ===================
 
-Minor changes:
+## Minor changes:
 
 - Bug fix in `getbb()` via #232, thanks to @changwoo-lee
 - hard-code WKT string for EPSG:4326, to avoid obsolete proj4strings (#218)
@@ -60,7 +63,7 @@ Minor changes:
 0.1.4
 ===================
 
-Major changes:
+## Major changes:
 
 - New `osm_enclosing()` function; thanks to @barryrowlingson via #199
 - `opq()` now has additional `datetime` and `datetime2` parameters which can be
@@ -71,7 +74,7 @@ Major changes:
   only, for efficient extraction of strictly point-based OSM data; thanks to
   @gdkrmr for the idea in issue#221.
 
-Minor changes:
+## Minor changes:
 
 - New contributor Enrico Spinielli (@espinielli), via #207, #210, #211, #212 - Thanks!
 
@@ -79,7 +82,7 @@ Minor changes:
 0.1.3
 ===================
 
-Major changes:
+## Major changes:
 
 - `osmdata_pbf` function removed as the overpass server no longer provides the
   experimental API for pbf-format data.
@@ -88,7 +91,7 @@ Major changes:
 - `get_bb()` with polygon output formats now returns ALL polygon and
   multipolygon objects by default (issue#195)
 
-Minor changes:
+## Minor changes:
 
 - New Contributors: Andrea Gilardi (@agila5)
 - Bug fix for issue#205
@@ -96,13 +99,13 @@ Minor changes:
 0.1.2
 ===================
 
-Major changes:
+## Major changes:
 
 - New function `unname_osmdata_sf`, to remove row names from `sf`-format
   geometry objects that may cause issues with some plotting routines such as
   leaflet.
 
-Minor changes:
+## Minor changes:
 
 - `getbb` now allows arbitrary `featuretype` specification, no longer just
   those pertaining to settlement forms.
@@ -117,14 +120,14 @@ Minor changes:
 0.1.1
 ===================
 
-Minor changes:
+## Minor changes:
 
 - bug fix in `trim_osmdata` function
 
 0.1.0
 ===================
 
-Major changes:
+## Major changes:
 
 - New function, `osm_elevation` to insert elevation data into `SC`-format data
   returned by `osmdata_sc` function.
@@ -135,7 +138,7 @@ Major changes:
 0.0.10
 ===================
 
-Minor changes:
+## Minor changes:
 
 - Bug fix for vectorized lists of values in `add_osm_feature`, so only listed
   items are returns (see #139; thanks @loreabad6)
@@ -145,7 +148,7 @@ Minor changes:
 0.0.9
 ===================
 
-Major changes:
+## Major changes:
 
 - New function `osmdata_sc` to return data in `silicate::SC` format (see
   github.com/hypertidy/silicate; this also requires additional dependency on
@@ -156,7 +159,7 @@ Major changes:
 - add_osm_feature() now accepts vectors of multiple values (see #139).
 - osmdata_sf() objects default to character vectors, not factors (see #44).
 
-Minor changes:
+## Minor changes:
 
 - vignette updated
 - Overpass URL now randomly selected from the four primary servers (see
