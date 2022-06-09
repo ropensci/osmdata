@@ -1,6 +1,6 @@
 # sf::st_crs (4326)$wkt
 wkt4326 <-
-"GEOGCRS[\"WGS 84\",
+    "GEOGCRS[\"WGS 84\",
     ENSEMBLE[\"World Geodetic System 1984 ensemble\",
         MEMBER[\"World Geodetic System 1984 (Transit)\"],
         MEMBER[\"World Geodetic System 1984 (G730)\"],
