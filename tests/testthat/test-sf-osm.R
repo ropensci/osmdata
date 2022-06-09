@@ -4,13 +4,16 @@ test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
     identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 
 test_that ("multipolygon", {
-    x_sf <- sf::st_read (test_path ("fixtures", "osm-multi.osm"),
+    osm_multi <- test_path ("fixtures", "osm-multi.osm")
+    x_sf <- sf::st_read (
+        osm_multi,
         layer = "multipolygons",
         stringsAsFactors = FALSE,
         quiet = TRUE
     )
     q0 <- opq (bbox = c (1, 1, 5, 5))
-    x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))$osm_multipolygons
+    x <- osmdata_sf (q0, osm_multi)$osm_multipolygons
+
     # GDAL spits out a whole lot of generic field names, so first the
     # two have to be reduced to common fields.
     x <- x [, which (names (x) %in% names (x_sf))]
@@ -47,13 +50,15 @@ test_that ("multipolygon", {
 
 
 test_that ("multilinestring", {
-    x_sf <- sf::st_read (test_path ("fixtures", "osm-multi.osm"),
+    osm_multi <- test_path ("fixtures", "osm-multi.osm")
+    x_sf <- sf::st_read (
+        osm_multi,
         layer = "multilinestrings",
         stringsAsFactors = FALSE,
         quiet = TRUE
     )
     q0 <- opq (bbox = c (1, 1, 5, 5))
-    x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))$osm_multilines
+    x <- osmdata_sf (q0, osm_multi)$osm_multilines
     x <- x [, which (names (x) %in% names (x_sf))]
     x_sf <- x_sf [, which (names (x_sf) %in% names (x))]
     rownames (x_sf) <- rownames (x)
@@ -80,13 +85,15 @@ test_that ("multilinestring", {
 })
 
 test_that ("ways", {
-    x_sf <- sf::st_read (test_path ("fixtures", "osm-ways.osm"),
+    osm_ways <- test_path ("fixtures", "osm-ways.osm")
+    x_sf <- sf::st_read (
+        osm_ways,
         layer = "lines",
         stringsAsFactors = FALSE,
         quiet = TRUE
     )
     q0 <- opq (bbox = c (1, 1, 5, 5))
-    x <- osmdata_sf (q0, test_path ("fixtures", "osm-ways.osm"))$osm_lines
+    x <- osmdata_sf (q0, osm_ways)$osm_lines
     x <- x [, which (names (x) %in% names (x_sf))]
     x_sf <- x_sf [, which (names (x_sf) %in% names (x))]
     rownames (x_sf) <- rownames (x)

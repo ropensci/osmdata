@@ -59,7 +59,10 @@ test_that ("opq_string", {
     )
     expect_message (
         s0 <- opq_string_intern (q0, quiet = FALSE),
-        "The overpass server is intended to be used to extract specific features"
+        paste0 (
+            "The overpass server is intended to ",
+            "be used to extract specific features"
+        )
     )
     expect_type (s0, "character")
     expect_length (s0, 1L)
@@ -189,7 +192,9 @@ test_that ("opq_around", {
     expect_true (grepl ("key", x_key))
     expect_false (grepl ("value", x_key))
 
-    expect_silent (x_key_val <- opq_around (lon, lat, key = "key", value = "val"))
+    expect_silent (
+        x_key_val <- opq_around (lon, lat, key = "key", value = "val")
+    )
     expect_true (!identical (x_key, x_key_val))
     expect_true (grepl ("key", x_key_val))
     expect_true (grepl ("val", x_key_val))

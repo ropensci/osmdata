@@ -61,7 +61,12 @@ test_that ("add feature", {
     bbox <- c (-0.118, 51.514, -0.115, 51.517)
     qry <- opq (bbox = bbox)
     bbox2 <- bbox + c (0.01, 0.01, -0.01, -0.01)
-    qry6 <- add_osm_feature (qry, bbox = bbox2, key = "highway", value = "!primary")
+    qry6 <- add_osm_feature (
+        qry,
+        bbox = bbox2,
+        key = "highway",
+        value = "!primary"
+    )
     expect_true (!identical (qry$bbox, qry6$bbox))
 })
 
@@ -214,7 +219,10 @@ test_that ("add_osm_features", {
     qry <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
     expect_error (
         qry <- add_osm_features (qry, features = "a"),
-        "features must be enclosed in escape-delimited quotations \\(see example\\)"
+        paste0 (
+            "features must be enclosed in escape-delimited ",
+            "quotations \\(see example\\)"
+        )
     )
 
     bbox <- c (-0.118, 51.514, -0.115, 51.517)

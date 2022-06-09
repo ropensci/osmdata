@@ -1,12 +1,11 @@
 context ("sp-osm")
 
 test_that ("multipolygon", {
-    x_sf <- sf::st_read (test_path ("fixtures", "osm-multi.osm"),
-        layer = "multipolygons", quiet = TRUE
-    )
+    osm_multi <- test_path ("fixtures", "osm-multi.osm")
+    x_sf <- sf::st_read (osm_multi, layer = "multipolygons", quiet = TRUE)
     x_sp <- as (x_sf, "Spatial")
     q0 <- opq (bbox = c (1, 1, 5, 5))
-    x <- osmdata_sp (q0, test_path ("fixtures", "osm-multi.osm"))$osm_multipolygons
+    x <- osmdata_sp (q0, osm_multi)$osm_multipolygons
     # GDAL spits out a whole lot of generic field names, so first the
     # two have to be reduced to common fields.
     x <- x [, which (names (x) %in% names (x_sp))]
@@ -59,12 +58,11 @@ test_that ("multipolygon", {
 
 
 test_that ("multilinestring", {
-    x_sf <- sf::st_read (test_path ("fixtures", "osm-multi.osm"),
-        layer = "multilinestrings", quiet = TRUE
-    )
+    osm_multi <- test_path ("fixtures", "osm-multi.osm")
+    x_sf <- sf::st_read (osm_multi, layer = "multilinestrings", quiet = TRUE)
     x_sp <- as (x_sf, "Spatial")
     q0 <- opq (bbox = c (1, 1, 5, 5))
-    x <- osmdata_sp (q0, test_path ("fixtures", "osm-multi.osm"))$osm_multilines
+    x <- osmdata_sp (q0, osm_multi)$osm_multilines
     x <- x [, which (names (x) %in% names (x_sp))]
     x_sp <- x_sp [, which (names (x_sp) %in% names (x))]
     rownames (slot (x, "data")) <- rownames (slot (x_sp, "data"))
@@ -96,12 +94,11 @@ test_that ("multilinestring", {
 })
 
 test_that ("ways", {
-    x_sf <- sf::st_read (test_path ("fixtures", "osm-ways.osm"),
-        layer = "lines", quiet = TRUE
-    )
+    osm_ways <- test_path ("fixtures", "osm-ways.osm")
+    x_sf <- sf::st_read (osm_ways, layer = "lines", quiet = TRUE)
     x_sp <- as (x_sf, "Spatial")
     q0 <- opq (bbox = c (1, 1, 5, 5))
-    x <- osmdata_sp (q0, test_path ("fixtures", "osm-ways.osm"))$osm_lines
+    x <- osmdata_sp (q0, osm_ways)$osm_lines
     x <- x [, which (names (x) %in% names (x_sp))]
     x_sp <- x_sp [, which (names (x_sp) %in% names (x))]
     np <- length (slot (slot (x, "lines") [[1]], "Lines"))

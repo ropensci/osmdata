@@ -18,7 +18,10 @@ make_sfc <- function (x, type) {
     }
     xvals <- xy [, 1]
     yvals <- xy [, 2]
-    bb <- structure (rep (NA_real_, 4), names = c ("xmin", "ymin", "xmax", "ymax"))
+    bb <- structure (
+        rep (NA_real_, 4),
+        names = c ("xmin", "ymin", "xmax", "ymax")
+    )
     bb [1:4] <- c (min (xvals), min (yvals), max (xvals), max (yvals))
     class (bb) <- "bbox"
     if (type == "POLYGON") {
@@ -45,14 +48,14 @@ make_sfc <- function (x, type) {
     attr (x, "bbox") <- bb
 
     if (packageVersion ("sf") < 0.9) {
-        NA_crs_ <- structure (list (
+        NA_crs_ <- structure (list ( # nolint
             epsg = NA_integer_, # nolint
             proj4string = NA_character_
         ), # nolint
         class = "crs"
         )
     } else {
-        NA_crs_ <- structure (list (
+        NA_crs_ <- structure (list ( # nolint
             input = NA_character_, # nolint
             wkt = NA_character_
         ), # nolint
