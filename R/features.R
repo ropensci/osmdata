@@ -10,9 +10,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' available_features()
+#' available_features ()
 #' }
-available_features <- function() {
+available_features <- function () {
 
     url_ftrs <- "https://wiki.openstreetmap.org/wiki/Map_Features"
 
@@ -22,8 +22,10 @@ available_features <- function() {
         resp <- httr2::req_perform (req)
         pg <- httr2::resp_body_html (resp)
 
-        keys <- xml2::xml_attr (rvest::html_nodes (pg, "a[href^='/wiki/Key']"), #nolint
-                                "href") %>%
+        keys <- xml2::xml_attr (
+            rvest::html_nodes (pg, "a[href^='/wiki/Key']"), # nolint
+            "href"
+        ) %>%
             strsplit ("/wiki/Key:") %>%
             unlist ()
         keys [keys != ""] %>%
@@ -48,16 +50,17 @@ available_features <- function() {
 #'
 #' @examples
 #' \dontrun{
-#' available_tags("aerialway")
+#' available_tags ("aerialway")
 #' }
-available_tags <- function(feature) {
+available_tags <- function (feature) {
     url_ftrs <- "https://wiki.openstreetmap.org/wiki/Map_Features"
 
     ret <- NULL
     if (curl::has_internet ()) {
 
-        if (missing (feature))
+        if (missing (feature)) {
             stop ("Please specify feature")
+        }
 
         req <- httr2::request (url_ftrs)
         resp <- httr2::req_perform (req)
@@ -85,16 +88,22 @@ available_tags <- function(feature) {
         if (!(feature %in% keys)) {
 
             # try old style tables
-            tags <- rvest::html_nodes (pg,
-                           sprintf ("a[title^='Tag:%s']", feature))
-            tags <- vapply (strsplit (xml2::xml_attr (tags, "href"), "%3D"),
-                            function (i) i [2], character (1))
+            tags <- rvest::html_nodes (
+                pg,
+                sprintf ("a[title^='Tag:%s']", feature)
+            )
+            tags <- vapply (
+                strsplit (xml2::xml_attr (tags, "href"), "%3D"),
+                function (i) i [2], character (1)
+            )
             ret <- unique (sort (tags))
 
         } else {
 
-            taglists <- stats::setNames (do.call (mapply,
-                              c (FUN = c, lapply (taglists, `[`, keys))), keys)
+            taglists <- stats::setNames (do.call (
+                mapply,
+                c (FUN = c, lapply (taglists, `[`, keys))
+            ), keys)
 
             taglists <- mapply (unique, taglists)
             ret <- taglists [[feature]] %>% sort ()
