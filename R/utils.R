@@ -14,8 +14,8 @@
 #' @examples
 #' \dontrun{
 #' hampi_sf <- opq ("hampi india") %>%
-#'             add_osm_feature (key="historic", value="ruins") %>%
-#'             osmdata_sf ()
+#'     add_osm_feature (key = "historic", value = "ruins") %>%
+#'     osmdata_sf ()
 #' hampi_clean <- unname_osmdata_sf (hampi_sf)
 #'
 #' # All coordinate matrices include rownames with OSM ID values:
@@ -39,15 +39,17 @@ unname_osmdata_sf <- function (x) {
 
 unname_osm_points <- function (x) {
 
-    if (nrow (x$osm_points) > 0)
+    if (nrow (x$osm_points) > 0) {
         names (x$osm_points$geometry) <- NULL
+    }
     return (x)
 }
 
 unname_osm <- function (x, what = "osm_lines") {
 
-    if (is.null (x [[what]]))
+    if (is.null (x [[what]])) {
         return (x)
+    }
 
     g <- lapply (x [[what]]$geometry, function (i) unname (i))
     names (g) <- NULL
@@ -55,19 +57,23 @@ unname_osm <- function (x, what = "osm_lines") {
     if (what == "osm_polygons") {
 
         g <- lapply (g, function (i) {
-                         rownames (i [[1]]) <- NULL
-                         return (i) })
+            rownames (i [[1]]) <- NULL
+            return (i) })
 
     } else if (what == "osm_multilines") {
 
-        g <- lapply (g, function (i)
-                     sf::st_multilinestring (lapply (i,
-                            function (j) unname (j))))
+        g <- lapply (g, function (i) {
+            sf::st_multilinestring (lapply (
+                i,
+                function (j) unname (j)
+            ))
+        })
 
     } else if (what == "osm_multipolygons") {
 
-        g <- lapply (g, function (i)
-                     sf::st_multipolygon (lapply (i, function (j) unname (j))))
+        g <- lapply (g, function (i) {
+            sf::st_multipolygon (lapply (i, function (j) unname (j)))
+        })
     }
 
     x [[what]]$geometry <- sf::st_sfc (g, crs = 4326)
