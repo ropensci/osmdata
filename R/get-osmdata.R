@@ -12,8 +12,9 @@ get_timestamp <- function (doc) {
 
     if (!missing (doc)) {
         tstmp <- xml2::xml_text (xml2::xml_find_all (doc, "//meta/@osm_base"))
-        if (length (tstmp) > 0)
+        if (length (tstmp) > 0) {
             tstmp <- as.POSIXct (tstmp, format = "%Y-%m-%dT%H:%M:%SZ")
+        }
     } else {
         tstmp <- Sys.time ()
     }
@@ -76,10 +77,10 @@ get_overpass_version <- function (doc) {
 #' @examples
 #' \dontrun{
 #' q <- opq ("hampi india")
-#' q <- add_osm_feature (q, key="historic", value="ruins")
-#' osmdata_xml (q, filename="hampi.osm")
+#' q <- add_osm_feature (q, key = "historic", value = "ruins")
+#' osmdata_xml (q, filename = "hampi.osm")
 #' }
-osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
+osmdata_xml <- function (q, filename, quiet = TRUE, encoding) {
 
     if (missing (encoding)) {
         encoding <- "UTF-8"
@@ -123,10 +124,10 @@ osmdata_xml <- function(q, filename, quiet=TRUE, encoding) {
 #' @examples
 #' \dontrun{
 #' hampi_sp <- opq ("hampi india") %>%
-#'             add_osm_feature (key="historic", value="ruins") %>%
-#'             osmdata_sp ()
+#'     add_osm_feature (key = "historic", value = "ruins") %>%
+#'     osmdata_sp ()
 #' }
-osmdata_sp <- function(q, doc, quiet = TRUE) {
+osmdata_sp <- function (q, doc, quiet = TRUE) {
 
     obj <- osmdata () # uses class def
     if (missing (q) & !quiet) {
@@ -176,16 +177,19 @@ fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8") {
 
     if (missing (doc)) {
 
-        doc <- overpass_query (query = obj$overpass_call, quiet = quiet,
-                               encoding = encoding)
+        doc <- overpass_query (
+            query = obj$overpass_call, quiet = quiet,
+            encoding = encoding
+        )
 
         obj <- get_metadata (obj, doc)
 
     } else {
 
         if (is.character (doc)) {
-            if (!file.exists (doc))
+            if (!file.exists (doc)) {
                 stop ("file ", doc, " does not exist")
+            }
             doc <- xml2::read_xml (doc)
         }
         obj <- get_metadata (obj, doc)
@@ -197,9 +201,11 @@ fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8") {
 
 get_metadata <- function (obj, doc) {
 
-    meta <- list (timestamp = get_timestamp (doc),
-                  OSM_version = get_osm_version (doc),
-                  overpass_version = get_overpass_version (doc))
+    meta <- list (
+        timestamp = get_timestamp (doc),
+        OSM_version = get_osm_version (doc),
+        overpass_version = get_overpass_version (doc)
+    )
 
     q <- obj$overpass_call
 
@@ -211,15 +217,17 @@ get_metadata <- function (obj, doc) {
 
         if (grepl ("date", x [1])) {
 
-            if (length (x) < 2)
+            if (length (x) < 2) {
                 stop ("unrecongised query format")
+            }
             meta$datetime_to <- x [2]
             meta$query_type <- "date"
 
         } else if (grepl ("diff", x [1])) {
 
-            if (length (x) < 4)
+            if (length (x) < 4) {
                 stop ("unrecongised query format")
+            }
             meta$datetime_from <- x [2]
             meta$datetime_to <- x [4]
             meta$query_type <- "diff"
@@ -264,8 +272,9 @@ get_metadata <- function (obj, doc) {
 make_sf <- function (..., stringsAsFactors = FALSE) { # nolint
 
     x <- list (...)
-    sf <- vapply(x, function(i) inherits(i, "sfc"),
-                 FUN.VALUE = logical (1))
+    sf <- vapply (x, function (i) inherits (i, "sfc"),
+        FUN.VALUE = logical (1)
+    )
     sf_column <- which (sf)
 
     if (!is.null (names (x [[sf_column]]))) {
@@ -274,25 +283,28 @@ make_sf <- function (..., stringsAsFactors = FALSE) { # nolint
         row.names <- seq_along (x [[sf_column]])
     }
 
-    df <- if (length(x) == 1) { # ONLY sfc
-        data.frame(row.names = row.names)
+    df <- if (length (x) == 1) { # ONLY sfc
+        data.frame (row.names = row.names)
     } else { # create a data.frame from list:
-        data.frame (x [-sf_column], row.names = row.names,
-                    stringsAsFactors = stringsAsFactors)
+        data.frame (x [-sf_column],
+            row.names = row.names,
+            stringsAsFactors = stringsAsFactors
+        )
     }
 
-    object <- as.list(substitute(list(...)))[-1L]
-    arg_nm <- sapply(object, function(x) deparse(x)) # nolint
-    sfc_name <- make.names(arg_nm[sf_column])
-    #sfc_name <- "geometry"
+    object <- as.list (substitute (list (...))) [-1L]
+    arg_nm <- sapply (object, function (x) deparse (x)) # nolint
+    sfc_name <- make.names (arg_nm [sf_column])
+    # sfc_name <- "geometry"
 
     df [[sfc_name]] <- x [[sf_column]]
-    attr(df, "sf_column") <- sfc_name
-    f <- factor(rep(NA_character_, length.out = ncol(df) - 1),
-                levels = c ("constant", "aggregate", "identity"))
-    names(f) <- names(df)[-ncol (df)]
-    attr(df, "agr") <- f
-    class(df) <- c("sf", class(df))
+    attr (df, "sf_column") <- sfc_name
+    f <- factor (rep (NA_character_, length.out = ncol (df) - 1),
+        levels = c ("constant", "aggregate", "identity")
+    )
+    names (f) <- names (df) [-ncol (df)]
+    attr (df, "agr") <- f
+    class (df) <- c ("sf", class (df))
 
     return (df)
 }
@@ -314,16 +326,17 @@ sf_types <- c ("points", "lines", "polygons", "multilines", "multipolygons")
 #' @examples
 #' \dontrun{
 #' hampi_sf <- opq ("hampi india") %>%
-#'             add_osm_feature (key="historic", value="ruins") %>%
-#'             osmdata_sf ()
+#'     add_osm_feature (key = "historic", value = "ruins") %>%
+#'     osmdata_sf ()
 #' }
-osmdata_sf <- function(q, doc, quiet=TRUE, stringsAsFactors = FALSE) { # nolint
+osmdata_sf <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) { # nolint
 
     obj <- osmdata () # uses class def
 
     if (missing (q)) {
-        if (!quiet)
+        if (!quiet) {
             message ("q missing: osmdata object will not include query")
+        }
     } else if (is (q, "overpass_query")) {
         obj$bbox <- q$bbox
         obj$overpass_call <- opq_string_intern (q, quiet = quiet)
@@ -356,8 +369,12 @@ osmdata_sf <- function(q, doc, quiet=TRUE, stringsAsFactors = FALSE) { # nolint
     }
 
     for (ty in sf_types) {
-        obj <- fill_objects (res, obj, type = ty,
-                             stringsAsFactors = stringsAsFactors)
+        obj <- fill_objects (
+            res,
+            obj,
+            type = ty,
+            stringsAsFactors = stringsAsFactors
+        )
     }
 
     class (obj) <- c (class (obj), "osmdata_sf")
@@ -370,12 +387,16 @@ fill_kv <- function (res, kv_name, g_name, stringsAsFactors) { # nolint
     if (!"osm_id" %in% names (res [[kv_name]])) {
 
         if (nrow (res [[kv_name]]) == 0) {
-            res [[kv_name]] <- data.frame (osm_id = names (res [[g_name]]),
-                                           stringsAsFactors = stringsAsFactors)
+            res [[kv_name]] <- data.frame (
+                osm_id = names (res [[g_name]]),
+                stringsAsFactors = stringsAsFactors
+            )
         } else {
-            res [[kv_name]] <- data.frame (osm_id = rownames (res [[kv_name]]),
-                                           res [[kv_name]],
-                                           stringsAsFactors = stringsAsFactors)
+            res [[kv_name]] <- data.frame (
+                osm_id = rownames (res [[kv_name]]),
+                res [[kv_name]],
+                stringsAsFactors = stringsAsFactors
+            )
         }
     }
 
@@ -395,15 +416,21 @@ fill_objects <- function (res, obj, type = "points",
 
     if (length (res [[kv_name]]) > 0) {
 
-        if (!stringsAsFactors)
+        if (!stringsAsFactors) {
             res [[kv_name]] [] <- lapply (res [[kv_name]], as.character)
-        obj [[obj_name]] <- make_sf (geometry, res [[kv_name]],
-                                     stringsAsFactors = stringsAsFactors)
+        }
+        obj [[obj_name]] <- make_sf (
+            geometry,
+            res [[kv_name]],
+            stringsAsFactors = stringsAsFactors
+        )
 
     } else if (length (obj [[obj_name]]) > 0) {
 
-        obj [[obj_name]] <- make_sf (geometry,
-                                     stringsAsFactors = stringsAsFactors)
+        obj [[obj_name]] <- make_sf (
+            geometry,
+            stringsAsFactors = stringsAsFactors
+        )
     }
 
     return (obj)
@@ -425,10 +452,10 @@ fill_objects <- function (res, obj, type = "points",
 #' @examples
 #' \dontrun{
 #' hampi_sf <- opq ("hampi india") %>%
-#'             add_osm_feature (key="historic", value="ruins") %>%
-#'             osmdata_sc ()
+#'     add_osm_feature (key = "historic", value = "ruins") %>%
+#'     osmdata_sc ()
 #' }
-osmdata_sc <- function(q, doc, quiet=TRUE) {
+osmdata_sc <- function (q, doc, quiet = TRUE) {
 
     obj <- osmdata () # class def used here to for fill_overpass_data fn
 
@@ -480,13 +507,15 @@ osmdata_sc <- function(q, doc, quiet=TRUE) {
         obj$meta$bbox <- bbox_to_string (obj)
     }
 
-    attr (obj, "join_ramp") <- c ("nodes",
-                                  "relation_members",
-                                  "relation_properties",
-                                  "object",
-                                  "object_link_edge",
-                                  "edge",
-                                  "vertex")
+    attr (obj, "join_ramp") <- c (
+        "nodes",
+        "relation_members",
+        "relation_properties",
+        "object",
+        "object_link_edge",
+        "edge",
+        "vertex"
+    )
     attr (obj, "class") <- c ("SC", "sc", "osmdata_sc")
 
     return (obj)
