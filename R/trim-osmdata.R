@@ -16,7 +16,7 @@
 #'
 #' @note It will generally be necessary to pre-load the \pkg{sf} package for
 #' this function to work correctly.
-#' @note Caution is advised when using polygons obtained from Nominatim via 
+#' @note Caution is advised when using polygons obtained from Nominatim via
 #' `getbb(..., format_out = "polygon"|"sf_polygon")`. These shapes can be
 #' outdated and thus could cause the trimming operation to not give results
 #' expected based on the current state of the OSM data.
@@ -26,8 +26,8 @@
 #' @examples
 #' \dontrun{
 #' dat <- opq ("colchester uk") %>%
-#'             add_osm_feature (key="highway") %>%
-#'             osmdata_sf (quiet = FALSE)
+#'     add_osm_feature (key = "highway") %>%
+#'     osmdata_sf (quiet = FALSE)
 #' bb <- getbb ("colchester uk", format_out = "polygon")
 #' library (sf) # required for this function to work
 #' dat_tr <- trim_osmdata (dat, bb)
@@ -50,8 +50,9 @@ trim_osmdata <- function (dat, bb_poly, exclude = TRUE) {
 
         trim_osmdata_sc (dat = dat, bb_poly = bb_poly, exclude = exclude)
 
-    } else
+    } else {
         stop ("unrecognised format: ", paste0 (class (dat), collapse = " "))
+    }
 }
 
 
@@ -62,21 +63,25 @@ trim_osmdata <- function (dat, bb_poly, exclude = TRUE) {
 trim_osmdata_sfp <- function (dat, bb_poly, exclude = TRUE) {
 
     requireNamespace ("sf")
-    if (!is (bb_poly, "matrix"))
+    if (!is (bb_poly, "matrix")) {
         bb_poly <- bb_poly_to_mat (bb_poly)
+    }
 
     if (nrow (bb_poly) > 1) {
 
-        srcproj <- .lonlat() #"+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-        crs <- .sph_merc() # "+proj=merc +a=6378137 +b=6378137"
+        srcproj <- .lonlat () # "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+        crs <- .sph_merc () # "+proj=merc +a=6378137 +b=6378137"
         bb_poly <- reproj::reproj (bb_poly, target = crs, source = srcproj) [, 1:2]
 
         dat <- trim_to_poly_pts (dat, bb_poly, exclude = exclude) %>%
             trim_to_poly (bb_poly = bb_poly, exclude = exclude) %>%
             trim_to_poly_multi (bb_poly = bb_poly, exclude = exclude)
-    } else
-        message ("bb_poly must be a matrix with > 1 row; ",
-                 " data will not be trimmed.")
+    } else {
+        message (
+            "bb_poly must be a matrix with > 1 row; ",
+            " data will not be trimmed."
+        )
+    }
     return (dat)
 }
 
@@ -119,20 +124,24 @@ bb_poly_to_mat.sfc <- function (x) {
 bb_poly_to_mat.SpatialPolygonsDataFrame <- function (x) { # nolint
 
     x <- slot (x, "polygons")
-    if (length (x) > 1)
+    if (length (x) > 1) {
         more_than_one ()
+    }
     x <- slot (x [[1]], "Polygons")
-    if (length (x) > 1)
+    if (length (x) > 1) {
         more_than_one ()
+    }
     slot (x [[1]], "coords")
 }
 
 bb_poly_to_mat.list <- function (x) {
 
-    if (length (x) > 1)
+    if (length (x) > 1) {
         more_than_one ()
-    while (is.list (x))
+    }
+    while (is.list (x)) {
         x <- x [[1]]
+    }
     return (x)
 }
 
@@ -140,17 +149,20 @@ trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE) {
 
     if (is (dat$osm_points, "sf")) {
 
-        srcproj <- .lonlat() #"+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-        crs <- .sph_merc() # "+proj=merc +a=6378137 +b=6378137"
+        srcproj <- .lonlat () # "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+        crs <- .sph_merc () # "+proj=merc +a=6378137 +b=6378137"
 
         g <- do.call (rbind, dat$osm_points$geometry)
         g <- reproj::reproj (g, target = crs, source = srcproj)
-        indx <- sp::point.in.polygon (g [, 1], g [, 2],
-                                      bb_poly [, 1], bb_poly [, 2])
-        if (exclude)
+        indx <- sp::point.in.polygon (
+            g [, 1], g [, 2],
+            bb_poly [, 1], bb_poly [, 2]
+        )
+        if (exclude) {
             indx <- which (indx == 1)
-        else
+        } else {
             indx <- which (indx > 0)
+        }
         dat$osm_points <- dat$osm_points [indx, ]
     }
 
@@ -172,25 +184,30 @@ trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE) {
 #' @noRd
 get_trim_indx <- function (g, bb, exclude) {
 
-    srcproj <- .lonlat() #"+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-    crs <- .sph_merc() # "+proj=merc +a=6378137 +b=6378137"
+    srcproj <- .lonlat () # "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+    crs <- .sph_merc () # "+proj=merc +a=6378137 +b=6378137"
 
     indx <- lapply (g, function (i) {
 
-                        if (is.list (i)) # polygons
-                            i <- i [[1]]
-                        i <- reproj::reproj (as.matrix (i), target = crs, source = srcproj)
-                        inp <- sp::point.in.polygon (i [, 1], i [, 2],
-                                                     bb [, 1], bb [, 2])
-                        if ((exclude & all (inp > 0)) |
-                            (!exclude & any (inp > 0)))
-                            return (TRUE)
-                        else
-                            return (FALSE)
-                    })
+        if (is.list (i)) { # polygons
+            i <- i [[1]]
+        }
+        i <- reproj::reproj (as.matrix (i), target = crs, source = srcproj)
+        inp <- sp::point.in.polygon (
+            i [, 1], i [, 2],
+            bb [, 1], bb [, 2]
+        )
+        if ((exclude & all (inp > 0)) |
+            (!exclude & any (inp > 0))) {
+            return (TRUE)
+        } else {
+            return (FALSE)
+        }
+    })
     ret <- NULL # multi objects can be empty
-    if (length (indx) > 0)
+    if (length (indx) > 0) {
         ret <- which (unlist (indx))
+    }
     return (ret)
 }
 
@@ -199,22 +216,25 @@ trim_to_poly <- function (dat, bb_poly, exclude = TRUE) {
     if (is (dat$osm_lines, "sf") | is (dat$osm_polygons, "sf")) {
 
         gnms <- c ("osm_lines", "osm_polygons")
-        index <- vapply (gnms, function (i) !is.null (dat [[i]]),
-                         logical (1))
+        index <- vapply (
+            gnms, function (i) !is.null (dat [[i]]),
+            logical (1)
+        )
         gnms <- gnms [index]
         for (g in gnms) {
 
             if (!is.null (dat [[g]]) & nrow (dat [[g]]) > 0) {
 
                 indx <- get_trim_indx (dat [[g]]$geometry, bb_poly,
-                                       exclude = exclude)
-                #cl <- class (dat [[g]]$geometry) # TODO: Delete
+                    exclude = exclude
+                )
+                # cl <- class (dat [[g]]$geometry) # TODO: Delete
                 attrs <- attributes (dat [[g]])
                 attrs$row.names <- attrs$row.names [indx]
                 attrs_g <- attributes (dat [[g]]$geometry)
                 attrs_g$names <- attrs_g$names [indx]
                 dat [[g]] <- dat [[g]] [indx, ] # this strips sf class defs
-                #class (dat [[g]]$geometry) <- cl # TODO: Delete
+                # class (dat [[g]]$geometry) <- cl # TODO: Delete
                 attributes (dat [[g]]) <- attrs
                 attributes (dat [[g]]$geometry) <- attrs_g
             }
@@ -229,36 +249,47 @@ trim_to_poly_multi <- function (dat, bb_poly, exclude = TRUE) {
     if (is (dat$osm_multilines, "sf") | is (dat$osm_multipolygons, "sf")) {
 
         gnms <- c ("osm_multilines", "osm_multipolygons")
-        index <- vapply (gnms, function (i) !is.null (dat [[i]]),
-                         logical (1))
+        index <- vapply (
+            gnms, function (i) !is.null (dat [[i]]),
+            logical (1)
+        )
         gnms <- gnms [index]
         for (g in gnms) {
 
             if (nrow (dat [[g]]) > 0) {
 
-                if (g == "osm_multilines")
-                    indx <- lapply (dat [[g]]$geometry, function (gi)
-                                    get_trim_indx (g = gi, bb = bb_poly,
-                                                   exclude = exclude))
-                else
-                    indx <- lapply (dat [[g]]$geometry, function (gi)
-                                    get_trim_indx (g = gi [[1]], bb = bb_poly,
-                                                   exclude = exclude))
+                if (g == "osm_multilines") {
+                    indx <- lapply (dat [[g]]$geometry, function (gi) {
+                        get_trim_indx (
+                            g = gi, bb = bb_poly,
+                            exclude = exclude
+                        )
+                    })
+                } else {
+                    indx <- lapply (dat [[g]]$geometry, function (gi) {
+                        get_trim_indx (
+                            g = gi [[1]], bb = bb_poly,
+                            exclude = exclude
+                        )
+                    })
+                }
                 ilens <- vapply (indx, length, 1L, USE.NAMES = FALSE)
-                glens <- vapply (dat [[g]]$geometry, function (i)
-                                 length (i [[1]]), 1L, USE.NAMES = FALSE)
-                if (exclude)
+                glens <- vapply (dat [[g]]$geometry, function (i) {
+                    length (i [[1]])
+                }, 1L, USE.NAMES = FALSE)
+                if (exclude) {
                     indx <- which (ilens == glens)
-                else
+                } else {
                     indx <- which (ilens > 0)
+                }
 
-                #cl <- class (dat [[g]]$geometry) # TODO: Delete
+                # cl <- class (dat [[g]]$geometry) # TODO: Delete
                 attrs <- attributes (dat [[g]])
                 attrs$row.names <- attrs$row.names [indx]
                 attrs_g <- attributes (dat [[g]]$geometry)
                 attrs_g$names <- attrs_g$names [indx]
                 dat [[g]] <- dat [[g]] [indx, ]
-                #class (dat [[g]]$geometry) <- cl # TODO: Delete
+                # class (dat [[g]]$geometry) <- cl # TODO: Delete
                 attributes (dat [[g]]) <- attrs
                 attributes (dat [[g]]$geometry) <- attrs_g
             }
@@ -280,8 +311,10 @@ trim_osmdata_sc <- function (dat, bb_poly, exclude = TRUE) {
 
         index <- which (dat$edge$.vx0 %in% v & dat$edge$.vx1 %in% v)
         edges_in <- dat$edge$edge_ [index]
-        objs_in <- split (dat$object_link_edge,
-                          as.factor (dat$object_link_edge$object_))
+        objs_in <- split (
+            dat$object_link_edge,
+            as.factor (dat$object_link_edge$object_)
+        )
         objs_in <- lapply (objs_in, function (i) all (i$edge_ %in% edges_in))
         objs_in <- names (which (unlist (objs_in)))
 
@@ -321,15 +354,20 @@ verts_in_bpoly <- function (dat, bb_poly) {
 
         if (nrow (bb_poly) == 2) {
 
-            bb_poly <- rbind (bb_poly [1, ],
-                              c (bb_poly [1, 1], bb_poly [2, 2]),
-                              bb_poly [2, ],
-                              c (bb_poly [2, 1], bb_poly [1, 2]))
+            bb_poly <- rbind (
+                bb_poly [1, ],
+                c (bb_poly [1, 1], bb_poly [2, 2]),
+                bb_poly [2, ],
+                c (bb_poly [2, 1], bb_poly [1, 2])
+            )
         }
 
-        if (!identical (as.numeric (utils::head (bb_poly, 1)),
-                        as.numeric (utils::tail (bb_poly, 1))))
+        if (!identical (
+            as.numeric (utils::head (bb_poly, 1)),
+            as.numeric (utils::tail (bb_poly, 1))
+        )) {
             bb_poly <- rbind (bb_poly, bb_poly [1, ])
+        }
 
         sf::st_polygon (list (bb_poly)) %>%
             sf::st_sfc (crs = 4326) %>%
