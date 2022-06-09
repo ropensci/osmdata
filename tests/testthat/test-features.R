@@ -5,7 +5,7 @@
 # done via separate fn defined below.
 
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
-             identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
+    identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 
 set_overpass_url ("https://overpass-api.de/api/interpreter")
 
@@ -20,8 +20,9 @@ test_that ("available_features", {
 
     if (post_process) {
         fname <- list.files ("mock_features",
-                             full.names = TRUE,
-                             recursive = TRUE) [1]
+            full.names = TRUE,
+            recursive = TRUE
+        ) [1]
         x <- xml2::read_html (fname)
         nodes_all <- rvest::html_nodes (x, "td")
         nodes_sample <- nodes_all [1:20]
@@ -36,8 +37,9 @@ test_that ("available_features", {
 post_process_tags <- function (dir_name, sample_index = 1:10, feature = NULL) {
 
     fname <- list.files (dir_name,
-                         full.names = TRUE,
-                         recursive = TRUE) [1]
+        full.names = TRUE,
+        recursive = TRUE
+    ) [1]
     x <- xml2::read_html (fname)
     nodes_all <- rvest::html_nodes (x, "div[class='taglist']")
     if (!is.null (feature)) {

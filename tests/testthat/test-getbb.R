@@ -1,18 +1,20 @@
 has_internet <- curl::has_internet ()
 
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
-             identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
+    identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 
 set_overpass_url ("https://overpass-api.de/api/interpreter")
 
 test_that ("bbox", {
 
-  expect_error (bbox_to_string (), "bbox must be provided")
-  #expect_error (bbox_to_string ("a"), "bbox must be numeric")
-  expect_error (bbox_to_string (1:3), "bbox must contain four elements")
-  expect_error (bbox_to_string (TRUE), "bbox must be numeric")
-  expect_message (bbox_to_string (1:5),
-                              "only the first four elements of bbox used")
+    expect_error (bbox_to_string (), "bbox must be provided")
+    # expect_error (bbox_to_string ("a"), "bbox must be numeric")
+    expect_error (bbox_to_string (1:3), "bbox must contain four elements")
+    expect_error (bbox_to_string (TRUE), "bbox must be numeric")
+    expect_message (
+        bbox_to_string (1:5),
+        "only the first four elements of bbox used"
+    )
 })
 
 test_that ("getbb-place_name", {
@@ -54,22 +56,25 @@ test_that ("getbb-place_name", {
         res5 <- with_mock_dir ("mock_bb_nope", {
             getbb (place_name = "Salzburg", format_out = "no format")
         }),
-        "format_out not recognised")
+        "format_out not recognised"
+    )
 })
 
 # Note that the polygon calls produce large mock files which are reduced with
 # post-processing routines. See `test-features.R` for explanations.
 post_process_polygons <- function (dir_name, min_polys = 2) {
 
-    fname <- list.files (dir_name,
-                         full.names = TRUE,
-                         recursive = TRUE) [1]
+    fname <- list.files (
+        dir_name,
+        full.names = TRUE,
+        recursive = TRUE
+    ) [1]
     j <- jsonlite::fromJSON (fname)
     sizes <- vapply (
-                     j$geotext,
-                     object.size,
-                     numeric (1L),
-                     USE.NAMES = FALSE
+        j$geotext,
+        object.size,
+        numeric (1L),
+        USE.NAMES = FALSE
     )
     # include smallest objects, but ensure at least 2 polygons:
     ord <- order (sizes)
@@ -93,9 +98,12 @@ test_that ("getbb-polygon", {
 
     expect_is (res, "list")
     expect_true (all (lapply (res, nrow) > 2))
-    expect_true (all (vapply (res, function (i)
-                             methods::is (i, "matrix"),
-                             logical (1))))
+    expect_true (all (vapply (
+        res, function (i) {
+            methods::is (i, "matrix")
+        },
+        logical (1)
+    )))
 
     expect_silent (res_str <- bbox_to_string (res [[1]]))
     expect_is (res_str, "character")
