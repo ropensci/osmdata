@@ -6,7 +6,7 @@
 #'         next available slot
 #' @family queries
 #' @export
-overpass_status <- function (quiet=FALSE) {
+overpass_status <- function (quiet = FALSE) {
 
     available <- FALSE
     slot_time <- status <- st_type <- NULL
@@ -51,23 +51,28 @@ overpass_status <- function (quiet=FALSE) {
         }
     }
 
-    return (invisible (list (available = available, next_slot = slot_time,
-                             msg = status)))
+    return (invisible (list (
+        available = available, next_slot = slot_time,
+        msg = status
+    )))
 
 }
 
 # for APIs with status messages
 get_slot_time <- function (status, quiet) {
 
-    status_now <- strsplit (status, "\n")[[1]][3]
+    status_now <- strsplit (status, "\n") [[1]] [3]
     if (!quiet) message (status_now)
 
     if (grepl ("after", status_now)) {
         available <- FALSE
-        slot_time <- lubridate::ymd_hms (gsub ("Slot available after: ",
-                                               "", status_now))
+        slot_time <- lubridate::ymd_hms (gsub (
+            "Slot available after: ",
+            "", status_now
+        ))
         slot_time <- lubridate::force_tz (slot_time,
-                                          tz = Sys.timezone ())
+            tz = Sys.timezone ()
+        )
     } else {
         available <- TRUE
         slot_time <- Sys.time ()
@@ -81,8 +86,9 @@ get_slot_timestamp <- function (status) {
 
     slot_time <- NA
     available <- FALSE
-    if (nchar (status) > 1)
+    if (nchar (status) > 1) {
         available <- TRUE
+    }
 
     list ("available" = available, "slot_time" = slot_time)
 }
@@ -106,11 +112,14 @@ check_for_error <- function (doc) {
         if (xml2::xml_length (docx) < 10) { # arbitrarily low value
 
             remark <- xml2::xml_text (xml2::xml_find_all (docx, "remark"))
-            if (length (remark) > 1)
+            if (length (remark) > 1) {
                 stop (paste0 ("overpass", remark))
-            else
-                stop ("General overpass server error; returned:\n",
-                      xml2::xml_text (docx))
+            } else {
+                stop (
+                    "General overpass server error; returned:\n",
+                    xml2::xml_text (docx)
+                )
+            }
         }
     }
 }
@@ -138,15 +147,19 @@ check_for_error <- function (doc) {
 overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
                             encoding = "UTF-8") {
 
-    if (missing (query))
+    if (missing (query)) {
         stop ("query must be supplied", call. = FALSE)
-    if (!is.character (query) | length (query) > 1)
+    }
+    if (!is.character (query) | length (query) > 1) {
         stop ("query must be a single character string")
+    }
 
-    if (!is.logical (quiet))
+    if (!is.logical (quiet)) {
         quiet <- FALSE
-    if (!is.logical (wait))
+    }
+    if (!is.logical (wait)) {
         wait <- TRUE
+    }
     if (!is.numeric (pad_wait)) {
 
         message ("pad_wait must be numeric; setting to 5s")
@@ -158,11 +171,13 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
         pad_wait <- 5
     }
 
-    if (!curl::has_internet ())
+    if (!curl::has_internet ()) {
         stop ("Overpass query unavailable without internet",
-              call. = FALSE)
+            call. = FALSE
+        )
+    }
 
-    if (!quiet) message("Issuing query to Overpass API ...")
+    if (!quiet) message ("Issuing query to Overpass API ...")
 
     o_stat <- overpass_status (quiet)
 
@@ -181,8 +196,14 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
 
         if (wait) {
 
-            wait <- max(0, as.numeric (difftime (o_stat$next_slot, Sys.time(),
-                                                 units = "secs"))) + pad_wait
+            wait <- max (
+                0,
+                as.numeric (difftime (
+                    o_stat$next_slot,
+                    Sys.time (),
+                    units = "secs"
+                ))
+            ) + pad_wait
             message (sprintf ("Waiting %s seconds", wait))
             Sys.sleep (wait)
 
