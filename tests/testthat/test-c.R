@@ -2,8 +2,8 @@ context ("c")
 
 test_that ("c-method", {
                q <- opq (bbox = c(1, 1, 5, 5))
-               x1 <- osmdata_sf (q, "../osm-multi.osm")
-               x2 <- osmdata_sf (q, "../osm-ways.osm")
+               x1 <- osmdata_sf (q, test_path ("fixtures", "osm-multi.osm"))
+               x2 <- osmdata_sf (q, test_path ("fixtures", "osm-ways.osm"))
                x <- c (x1, x2)
                osm_indx <- which (grepl ("osm_", names (x)))
                for (i in osm_indx) {
@@ -15,7 +15,7 @@ test_that ("c-method", {
 
 test_that ("poly2line", {
                 q <- opq (bbox = c(1, 1, 5, 5))
-                x <- osmdata_sf (q, "../osm-multi.osm")
+                x <- osmdata_sf (q, test_path ("fixtures", "osm-multi.osm"))
                 nold <- nrow (x$osm_lines)
                 x <- osm_poly2line (x)
                 nnew <- nrow (x$osm_lines)

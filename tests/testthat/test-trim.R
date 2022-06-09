@@ -5,7 +5,7 @@ skip_on_os ("windows")
 
 test_that ("trim_osm_data", {
                q0 <- opq (bbox = c(1, 1, 5, 5))
-               x0 <- osmdata_sf (q0, "../osm-multi.osm")
+               x0 <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
                bb <- cbind (c (2, 3), c (2, 3))
                require (sf)
                expect_error (trim_osmdata (1, bb_poly = bb),
@@ -32,7 +32,7 @@ test_that ("trim_osm_data", {
                expect_true (nrow (x1$osm_multipolygons) ==
                             nrow (x0$osm_multipolygons))
 
-               expect_silent (x0_sc <- osmdata_sc (q0, "../osm-multi.osm"))
+               expect_silent (x0_sc <- osmdata_sc (q0, test_path ("fixtures", "osm-multi.osm")))
                expect_silent (x1 <- trim_osmdata (x0_sc, bb_poly = bb))
                expect_equal (nrow (x1$object), 0)
                expect_equal (nrow (x1$object_link_edge), 0)
@@ -56,7 +56,7 @@ test_that ("trim_osm_data", {
 
 test_that ("bb_poly as sf/sc", {
                q0 <- opq (bbox = c(1, 1, 5, 5))
-               x0 <- osmdata_sf (q0, "../osm-multi.osm")
+               x0 <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
                bb <- rbind (c (2, 2),
                             c (2, 3),
                             c (3, 3),
