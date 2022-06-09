@@ -25,14 +25,16 @@ osmdata <- function (bbox = NULL, overpass_call = NULL, meta = NULL,
                      osm_points = NULL, osm_lines = NULL, osm_polygons = NULL,
                      osm_multilines = NULL, osm_multipolygons = NULL) {
 
-    obj <- list (bbox = bbox,
-                 overpass_call = overpass_call,
-                 meta = meta,
-                 osm_points = osm_points,
-                 osm_lines = osm_lines,
-                 osm_polygons = osm_polygons,
-                 osm_multilines = osm_multilines,
-                 osm_multipolygons = osm_multipolygons)
+    obj <- list (
+        bbox = bbox,
+        overpass_call = overpass_call,
+        meta = meta,
+        osm_points = osm_points,
+        osm_lines = osm_lines,
+        osm_polygons = osm_polygons,
+        osm_multilines = osm_multilines,
+        osm_multipolygons = osm_multipolygons
+    )
     class (obj) <- append (class (obj), "osmdata")
 
     return (obj)
