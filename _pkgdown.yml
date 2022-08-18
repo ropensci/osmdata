@@ -33,6 +33,7 @@ articles:
     - osmdata
     - osmdata-sc
     - osm-sf-translation
+    - query-split
 
 navbar:
   title: osmdata
