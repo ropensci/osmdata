@@ -217,12 +217,10 @@ test_that ("add_osm_features", {
     )
 
     qry <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
+    
     expect_error (
-        qry <- add_osm_features (qry, features = "a"),
-        paste0 (
-            "features must be enclosed in escape-delimited ",
-            "quotations \\(see example\\)"
-        )
+       qry <- add_osm_features (qry, features = "a"),
+        "features must be a named list or vector or a character vector enclosed in escape delimited quotations \\(see examples\\)"
     )
 
     bbox <- c (-0.118, 51.514, -0.115, 51.517)
@@ -235,4 +233,16 @@ test_that ("add_osm_features", {
     )
     expect_false (identical (qry1$bbox, qry2$bbox))
 
+    qry3 <- add_osm_features (qry0, features = c("amenity" = "restaurant"))
+    expect_identical (qry1, qry3)
+    
+    qry4 <- add_osm_features (qry0,
+      features = c("amenity" = "restaurant", "amentity" = "pub")
+      )
+    expect_s3_class (qry4, "overpass_query")
+    
+    qry5 <- add_osm_features (qry0,
+      features = list("amenity" = "restaurant", "amentity" = "pub")
+    )
+    expect_s3_class (qry5, "overpass_query")
 })

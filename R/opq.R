@@ -241,59 +241,128 @@ add_osm_feature <- function (opq,
                              value_exact = TRUE,
                              match_case = TRUE,
                              bbox = NULL) {
+  if (missing(key)) {
+    stop("key must be provided")
+  }
+  
+  if (is.null(bbox) & is.null(opq$bbox)) {
+    stop("Bounding box has to either be set in opq or must be set here")
+  }
+  
+  if (is.null(bbox)) {
+    bbox <- opq$bbox
+  } else {
+    bbox <- bbox_to_string(bbox)
+    opq$bbox <- bbox
+  }
+  
+  bind_key_pre <- set_bind_key_pre(key_exact, value_exact)
+  
+  if (missing(value)) {
+    value <- NULL
+  }
+  
+  feature <- paste_features(
+    key, value, bind_key_pre$key_pre, bind_key_pre$bind,
+    match_case, value_exact
+  )
+  
+  opq$features <- paste0(c(opq$features, feature), collapse = "")
+  
+  if (is.null(opq$suffix)) {
+    opq$suffix <- ");\n(._;>;);\nout body;"
+  }
+  # opq$suffix <- ");\n(._;>);\nout qt body;"
+  # qt option is not compatible with sf because GDAL requires nodes to be
+  # numerically sorted
+  
+  opq
+}
 
-    if (missing (key)) {
-        stop ("key must be provided")
+#' Get conditional operator/prefix values based on value_exact and key_exact
+#' @noRd
+set_bind_key_pre <- function (key_exact = TRUE,
+                              value_exact = TRUE,
+                              features = NULL,
+                              bind = "=",
+                              key_pre = "") {
+  if (!is.null(value_exact)) {
+    value_exact <- check_value_exact(value_exact, key_exact)
+  }
+  
+  check_bind_key_pre(bind, key_pre)
+  
+  if (!is.null(features)) {
+    if (length(bind) == 1) {
+      bind <- rep_len(bind, length(features))
+    } else if (!identical_length(features, bind)) {
+      stop(
+        "bind must be length 1 or the same length as features"
+      )
     }
+    
+    if (length(key_pre) == 1) {
+      key_pre <- rep_len(key_pre, length(features))
+    } else if (!identical_length(features, key_pre)) {
+      stop(
+        "key_pre must be length 1 or the same length as features"
+      )
+    }
+  }
+  
+  features_len <- 1L
+  if (!is.null(features)) {
+    features_len <- length(features)
+  }
+  
+  if (!is.null(value_exact) && !value_exact) {
+    bind <- rep_len("~", features_len)
+  }
+  
+  if (!is.null(key_exact) && !key_exact) {
+    key_pre <- rep_len("~", features_len)
+  }
+  
+  list(
+    "bind" = bind,
+    "key_pre" = key_pre
+  )
+}
 
-    if (is.null (bbox) & is.null (opq$bbox)) {
-        stop ("Bounding box has to either be set in opq or must be set here")
-    }
+#' Are x and y an identical length?
+#'
+#' @noRd
+identical_length <- function (x, y) {
+  identical(length(x), length(y))
+}
 
-    if (is.null (bbox)) {
-        bbox <- opq$bbox
-    } else {
-        bbox <- bbox_to_string (bbox)
-        opq$bbox <- bbox
-    }
-
-    if (!key_exact & value_exact) {
-        message (
-            "key_exact = FALSE can only combined with ",
-            "value_exact = FALSE; setting value_exact = FALSE"
-        )
-        value_exact <- FALSE
-    }
-
-    if (value_exact) {
-        bind <- "="
-    } else {
-        bind <- "~"
-    }
-    key_pre <- ""
-    if (!key_exact) {
-        key_pre <- "~"
-    }
-
-    if (missing (value)) {
-        value <- NULL
-    }
-
-    feature <- paste_features (
-        key, value, key_pre, bind,
-        match_case, value_exact
+#' Check that value_exact can be combined with key_exact
+#'
+#' @noRd
+check_value_exact <- function (value_exact = TRUE, key_exact = TRUE) {
+  if (value_exact && !key_exact) {
+    message(
+      "key_exact = FALSE can only combined with ",
+      "value_exact = FALSE; setting value_exact = FALSE"
     )
+    
+    return(FALSE)
+  }
+  
+  value_exact
+}
 
-    opq$features <- paste0 (c (opq$features, feature), collapse = "")
-
-    if (is.null (opq$suffix)) {
-        opq$suffix <- ");\n(._;>;);\nout body;"
-    }
-    # opq$suffix <- ");\n(._;>);\nout qt body;"
-    # qt option is not compatible with sf because GDAL requires nodes to be
-    # numerically sorted
-
-    opq
+#' Check for valid bind and key_pre values
+#'
+#' @noRd
+check_bind_key_pre <- function (bind = "=", key_pre = "") {
+  if (!all(bind %in% c("=", "!=", "~", "!~"))) {
+    stop('bind must only include "=", "!=", "~", or "!~"')
+  }
+  
+  if (!all(key_pre %in% c("", "~"))) {
+    stop('key_pre must only include "" or "~"')
+  }
 }
 
 #' Add multiple features to an Overpass query
@@ -305,10 +374,15 @@ add_osm_feature <- function (opq,
 #'
 #' @inheritParams add_osm_feature
 #' @inheritSection add_osm_feature `add_osm_feature` vs `add_osm_features`
-#' @param features Character vector of key-value pairs with keys and values
-#' enclosed in escape-formatted quotations (see examples).
+#' @param features A named list or vector with the format `list("<key>" =
+#'   "<value>")` or `c("<key>" = "<value>")` or a character vector of key-value
+#'   pairs with keys and values enclosed in escape-formatted quotations. See
+#'   examples for details.
 #' @param bbox optional bounding box for the feature query; must be set if no
-#'        opq query bbox has been set
+#'        opq query bbox has been set.
+#' @param bind Operator used to combine key and value. Options include "="
+#'   (default - equivalent to `value_exact = TRUE`), "!=", "~" (equivalent to
+#'   `value_exact = FALSE`), or "!~".
 #' @return \link{opq} object
 #'
 #' @references \url{https://wiki.openstreetmap.org/wiki/Map_Features}
@@ -319,67 +393,115 @@ add_osm_feature <- function (opq,
 #'
 #' @examples
 #' \dontrun{
-#' q <- opq ("portsmouth usa") %>%
-#'     add_osm_features (features = c (
-#'         "\"amenity\"=\"restaurant\"",
-#'         "\"amenity\"=\"pub\""
-#'     ))
+#' q <- opq("portsmouth usa") %>%
+#'   add_osm_features(features = list(
+#'     "amenity" = "restaurant",
+#'     "amenity" = "pub"
+#'   ))
+#'
+#' q <- opq("portsmouth usa") %>%
+#'   add_osm_features(features = c(
+#'     "\"amenity\"=\"restaurant\"",
+#'     "\"amenity\"=\"pub\""
+#'   ))
 #' # This extracts in a single query the same result as the following:
-#' q1 <- opq ("portsmouth usa") %>%
-#'     add_osm_feature (
-#'         key = "amenity",
-#'         value = "restaurant"
-#'     )
-#' q2 <- opq ("portsmouth usa") %>%
-#'     add_osm_feature (key = "amenity", value = "pub")
-#' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
+#' q1 <- opq("portsmouth usa") %>%
+#'   add_osm_feature(
+#'     key = "amenity",
+#'     value = "restaurant"
+#'   )
+#' q2 <- opq("portsmouth usa") %>%
+#'   add_osm_feature(key = "amenity", value = "pub")
+#' c(osmdata_sf(q1), osmdata_sf(q2)) # all restaurants OR pubs
 #' }
 add_osm_features <- function (opq,
                               features,
-                              bbox = NULL) {
+                              bbox = NULL,
+                              key_exact = TRUE,
+                              value_exact = TRUE) {
+  if (is.null(bbox) & is.null(opq$bbox)) {
+    stop("Bounding box has to either be set in opq or must be set here")
+  }
+  
+  if (is.null(bbox)) {
+    bbox <- opq$bbox
+  } else {
+    bbox <- bbox_to_string(bbox)
+    opq$bbox <- bbox
+  }
+  
+  if (is.null(opq$suffix)) {
+    opq$suffix <- ");\n(._;>;);\nout body;"
+  }
+  
+  check_features(features)
+  
+  if (is_named(features)) {
+    bind_key_pre <-
+      set_bind_key_pre(
+        features = features,
+        value_exact = value_exact,
+        key_exact = key_exact
+      )
+    
+    features <-
+      paste0(
+        bind_key_pre$key_pre, '\"', names(features), '\"',
+        bind_key_pre$bind, '\"', features, '\"'
+      )
+  }
+  
+  index <- which(!grepl("^\\[", features))
+  features[index] <- paste0(" [", features[index])
+  index <- which(!grepl("\\]$", features))
+  features[index] <- paste0(features[index], "]")
+  
+  opq$features <- features
+  
+  opq
+}
 
-    if (missing (features)) {
-        stop ("features must be provided")
-    }
+#' Is features a named list or character vector?
+#' 
+#' @noRd
+is_named <- function (x) {
+  !is.null(names(x)) && !any("" %in% names(x))
+}
 
-    if (is.null (bbox) & is.null (opq$bbox)) {
-        stop ("Bounding box has to either be set in opq or must be set here")
-    }
+#' Is features an escape-delimited string?
+#' 
+#' @noRd
+is_escape_delimited <- function (x) {
+  length(which(!grepl("\\\"", x))) > 0L
+}
 
-    if (is.null (bbox)) {
-        bbox <- opq$bbox
-    } else {
-        bbox <- bbox_to_string (bbox)
-        opq$bbox <- bbox
-    }
-
-    if (is.null (opq$suffix)) {
-        opq$suffix <- ");\n(._;>;);\nout body;"
-    }
-
-    if (length (which (!grepl ("\\\"", features))) > 0L) {
-        stop (
-            "features must be enclosed in escape-delimited ",
-            "quotations (see example)"
-        )
-    }
-
-    index <- which (!grepl ("^\\[", features))
-    features [index] <- paste0 ("[", features [index])
-    index <- which (!grepl ("\\]$", features))
-    features [index] <- paste0 (features [index], "]")
-
-    opq$features <- features
-
-    opq
+#' Check if features is provided and uses the required class and formatting
+#' 
+#' @noRd
+check_features <- function (features) {
+  if (missing(features)) {
+    stop("features must be provided")
+  }
+  
+  stopifnot(
+    "features must be a list or character vector." = is.character(features) | is.list(features)
+  )
+  
+  if (!is_named(features) && is_escape_delimited(features)) {
+    stop(
+      "features must be a named list or vector or a character vector enclosed in escape delimited quotations (see examples)"
+    )
+  }
 }
 
 #' Add a feature specified by OSM ID to an Overpass query
 #'
 #' @param id One or more official OSM identifiers (long-form integers), which
 #' must be entered as either a character or *numeric* value (because R does not
-#' support long-form integers).
-#' @param type Type of object; must be either `node`, `way`, or `relation`
+#' support long-form integers). id can also be a character string prefixed with
+#' the id type, e.g. "relation/11158003"
+#' @param type Type of object; must be either `node`, `way`, or `relation`.
+#'   Optional if id is prefixed with the type.
 #' @param open_url If `TRUE`, open the OSM page of the specified object in web
 #' browser. Multiple objects (`id` values) will be opened in multiple pages.
 #' @return \link{opq} object
@@ -410,25 +532,32 @@ add_osm_features <- function (opq,
 #' dat <- c (dat1, dat2) # The node and way data combined
 #' }
 opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
-
-    if (is.null (type)) {
-        stop ("type must be specified: one of node, way, or relation")
+  if (is.null(type)) {
+    if (is.null(id) ) {
+      stop(
+        "type must be specified: one of node, way, or relation if id is 'NULL'"
+      )
+    } else if ((length(id) == 1L) && grepl("^node/|^way/|^relation/", id)) {
+      type <- dirname(id)
+      id <- basename(id)
     }
-    type <- match.arg (tolower (type), c ("node", "way", "relation"))
-
-    if (is.null (id)) {
-        stop ("id must be specified.")
-    }
-    if (!(is.character (id) | storage.mode (id) == "double")) {
-        stop ("id must be character or numeric.")
-    }
-    if (length (id) != 1L) {
-        stop ("Only a single id may be entered.")
-    }
-
-    if (!is.character (id)) {
-        id <- paste0 (id)
-    }
+  }
+  
+  type <- match.arg(tolower(type), c("node", "way", "relation"))
+  
+  if (is.null(id)) {
+    stop("id must be specified.")
+  }
+  if (!(is.character(id) | storage.mode(id) == "double")) {
+    stop("id must be character or numeric.")
+  }
+  if (length(id) != 1L) {
+    stop("Only a single id may be entered.")
+  }
+  
+  if (!is.character(id)) {
+    id <- paste0(id)
+  }
 
     opq <- opq (1:4)
     opq$bbox <- NULL
