@@ -280,6 +280,11 @@ add_osm_feature <- function (opq,
 }
 
 #' Get conditional operator/prefix values based on value_exact and key_exact
+#' 
+#' @param bind Operator used to combine key and value. Options include "="
+#'   (default - equivalent to `value_exact = TRUE`), "!=", "~" (equivalent to
+#'   `value_exact = FALSE`), or "!~".
+#' @param key_pre Prefix for key. Options include "" or "~".
 #' @noRd
 set_bind_key_pre <- function (key_exact = TRUE,
                               value_exact = TRUE,
@@ -380,9 +385,6 @@ check_bind_key_pre <- function (bind = "=", key_pre = "") {
 #'   examples for details.
 #' @param bbox optional bounding box for the feature query; must be set if no
 #'        opq query bbox has been set.
-#' @param bind Operator used to combine key and value. Options include "="
-#'   (default - equivalent to `value_exact = TRUE`), "!=", "~" (equivalent to
-#'   `value_exact = FALSE`), or "!~".
 #' @return \link{opq} object
 #'
 #' @references \url{https://wiki.openstreetmap.org/wiki/Map_Features}
@@ -393,26 +395,26 @@ check_bind_key_pre <- function (bind = "=", key_pre = "") {
 #'
 #' @examples
 #' \dontrun{
-#' q <- opq("portsmouth usa") %>%
-#'   add_osm_features(features = list(
+#' q <- opq ("portsmouth usa") %>%
+#'   add_osm_features (features = list(
 #'     "amenity" = "restaurant",
 #'     "amenity" = "pub"
 #'   ))
 #'
-#' q <- opq("portsmouth usa") %>%
-#'   add_osm_features(features = c(
+#' q <- opq ("portsmouth usa") %>%
+#'   add_osm_features (features = c(
 #'     "\"amenity\"=\"restaurant\"",
 #'     "\"amenity\"=\"pub\""
 #'   ))
 #' # This extracts in a single query the same result as the following:
-#' q1 <- opq("portsmouth usa") %>%
-#'   add_osm_feature(
+#' q1 <- opq ("portsmouth usa") %>%
+#'   add_osm_feature (
 #'     key = "amenity",
 #'     value = "restaurant"
 #'   )
-#' q2 <- opq("portsmouth usa") %>%
-#'   add_osm_feature(key = "amenity", value = "pub")
-#' c(osmdata_sf(q1), osmdata_sf(q2)) # all restaurants OR pubs
+#' q2 <- opq ("portsmouth usa") %>%
+#'   add_osm_feature (key = "amenity", value = "pub")
+#' c(osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 #' }
 add_osm_features <- function (opq,
                               features,

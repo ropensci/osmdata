@@ -26,10 +26,6 @@ opq query bbox has been set.}
 \url{https://wiki.openstreetmap.org/wiki/Overpass_API}}
 
 \item{value_exact}{If FALSE, \code{value} is not interpreted exactly}
-
-\item{bind}{Operator used to combine key and value. Options include "="
-(default - equivalent to \code{value_exact = TRUE}), "!=", "~" (equivalent to
-\code{value_exact = FALSE}), or "!~".}
 }
 \value{
 \link{opq} object
@@ -55,26 +51,26 @@ features from these calls in a logical AND; this is analagous to chaining
 
 \examples{
 \dontrun{
-q <- opq("portsmouth usa") \%>\%
-  add_osm_features(features = list(
+q <- opq ("portsmouth usa") \%>\%
+  add_osm_features (features = list(
     "amenity" = "restaurant",
     "amenity" = "pub"
   ))
 
-q <- opq("portsmouth usa") \%>\%
-  add_osm_features(features = c(
+q <- opq ("portsmouth usa") \%>\%
+  add_osm_features (features = c(
     "\"amenity\"=\"restaurant\"",
     "\"amenity\"=\"pub\""
   ))
 # This extracts in a single query the same result as the following:
-q1 <- opq("portsmouth usa") \%>\%
-  add_osm_feature(
+q1 <- opq ("portsmouth usa") \%>\%
+  add_osm_feature (
     key = "amenity",
     value = "restaurant"
   )
-q2 <- opq("portsmouth usa") \%>\%
-  add_osm_feature(key = "amenity", value = "pub")
-c(osmdata_sf(q1), osmdata_sf(q2)) # all restaurants OR pubs
+q2 <- opq ("portsmouth usa") \%>\%
+  add_osm_feature (key = "amenity", value = "pub")
+c(osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 }
 }
 \references{
