@@ -72,6 +72,11 @@ bbox_to_string <- function (bbox) {
             bbox <- c (y [1], x [1], y [2], x [2])
         }
     }
+  
+    if (any (is.na (bbox))) {
+      stop ("bbox contains 'NA' values")
+    }
+    
     return (paste0 (bbox, collapse = ","))
 }
 
@@ -176,7 +181,7 @@ getbb <- function (place_name,
         base_url,
         silent
     )
-
+    
     if (format_out == "data.frame") {
         return (obj)
     }
@@ -184,6 +189,11 @@ getbb <- function (place_name,
     bn <- as.numeric (obj$boundingbox [[1]])
     bb_mat <- matrix (c (bn [3:4], bn [1:2]), nrow = 2, byrow = TRUE)
     dimnames (bb_mat) <- list (c ("x", "y"), c ("min", "max"))
+    
+    if (any (is.na (bb_mat))) {
+      stop (paste0 ("`place_name` '", place_name ,"' can't be found"))
+    }
+    
     if (format_out == "matrix") {
         ret <- bb_mat
     } else if (format_out == "string") {
