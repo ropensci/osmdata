@@ -58,6 +58,8 @@ test_that ("getbb-place_name", {
         }),
         "format_out not recognised"
     )
+    
+    expect_error (getbb ("Salzzburg"), "`place_name` 'Salzzburg' can't be found")
 })
 
 # Note that the polygon calls produce large mock files which are reduced with
