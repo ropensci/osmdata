@@ -13,7 +13,9 @@ Authors@R: c(
     person("Anthony", "North", role = "ctb"),
     person("Martin", "Machyna", role = "ctb"),
     person("Marcin", "Kalicinski", role = c("ctb", "cph"),
-           comment = "Author of included RapidXML code")
+           comment = "Author of included RapidXML code"),
+    person("Eli", "Pousson", , "eli.pousson@gmail.com", role = c("ctb"),
+           comment = c(ORCID = "0000-0001-8280-1706"))
   )
 Maintainer: Mark Padgham <mark.padgham@email.com>
 Description: Download and import of 'OpenStreetMap' ('OSM') data as 'sf'
