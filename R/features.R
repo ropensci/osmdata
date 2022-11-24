@@ -107,6 +107,7 @@ available_tags <- function (feature) {
 
             taglists <- mapply (unique, taglists)
             ret <- taglists [[feature]] %>% sort ()
+            ret <- gsub ("&.*$", "", ret)
         }
     } else {
         message ("No internet connection")

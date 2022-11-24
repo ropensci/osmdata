@@ -115,7 +115,7 @@ test_that ("opq_osm_id", {
 
     expect_error (
         q <- opq_osm_id (),
-        "type must be specified: one of node, way, or relation"
+        "type must be specified: one of node, way, or relation if id is 'NULL'"
     )
     expect_error (
         opq_osm_id (type = "a"),
@@ -132,6 +132,10 @@ test_that ("opq_osm_id", {
     expect_error (
         opq_osm_id (type = "node", id = 1:2 + 0.1),
         "Only a single id may be entered."
+    )
+    expect_identical(
+      opq_osm_id (type = "node", id = 123456),
+      opq_osm_id (id = "node/123456")
     )
     expect_s3_class (
         x <- opq_osm_id (type = "node", id = 123456),

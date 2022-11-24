@@ -4,16 +4,28 @@
 \alias{add_osm_features}
 \title{Add multiple features to an Overpass query}
 \usage{
-add_osm_features(opq, features, bbox = NULL)
+add_osm_features(
+  opq,
+  features,
+  bbox = NULL,
+  key_exact = TRUE,
+  value_exact = TRUE
+)
 }
 \arguments{
 \item{opq}{An \code{overpass_query} object}
 
-\item{features}{Character vector of key-value pairs with keys and values
-enclosed in escape-formatted quotations (see examples).}
+\item{features}{A named list or vector with the format \code{list("<key>" = "<value>")} or \code{c("<key>" = "<value>")} or a character vector of key-value
+pairs with keys and values enclosed in escape-formatted quotations. See
+examples for details.}
 
 \item{bbox}{optional bounding box for the feature query; must be set if no
-opq query bbox has been set}
+opq query bbox has been set.}
+
+\item{key_exact}{If FALSE, \code{key} is not interpreted exactly; see
+\url{https://wiki.openstreetmap.org/wiki/Overpass_API}}
+
+\item{value_exact}{If FALSE, \code{value} is not interpreted exactly}
 }
 \value{
 \link{opq} object
@@ -39,6 +51,12 @@ features from these calls in a logical AND; this is analagous to chaining
 
 \examples{
 \dontrun{
+q <- opq ("portsmouth usa") \%>\%
+    add_osm_features (features = list (
+        "amenity" = "restaurant",
+        "amenity" = "pub"
+    ))
+
 q <- opq ("portsmouth usa") \%>\%
     add_osm_features (features = c (
         "\"amenity\"=\"restaurant\"",
