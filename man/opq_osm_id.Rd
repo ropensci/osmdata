@@ -12,7 +12,7 @@ must be entered as either a character or \emph{numeric} value (because R does no
 support long-form integers). id can also be a character string prefixed with
 the id type, e.g. "relation/11158003"}
 
-\item{type}{Type of object; must be either \code{node}, \code{way}, or \code{relation}.
+\item{type}{Types of objects (recycled); must be either \code{node}, \code{way}, or \code{relation}.
 Optional if id is prefixed with the type.}
 
 \item{open_url}{If \code{TRUE}, open the OSM page of the specified object in web
@@ -43,6 +43,12 @@ dat2 <- opq_osm_id (type = "way", id = id) \%>\%
     osmdata_sf ()
 dat2$osm_lines # the desired ways
 dat <- c (dat1, dat2) # The node and way data combined
+# All in one (same result as dat)
+id <- c(1489221200, 1489221321, 1489221491, 136190595, 136190596)
+type <- c("node", "node", "node", "way", "way")
+datAiO<- opq_osm_id (id = id, type = type) \%>\%
+    opq_string () \%>\%
+    osmdata_sf ()
 }
 }
 \references{
