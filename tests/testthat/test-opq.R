@@ -119,7 +119,7 @@ test_that ("opq_osm_id", {
     )
     expect_error (
         opq_osm_id (type = "a"),
-        "'arg' should be one of"
+        'type items must be "node", "way" or "relation".'
     )
     expect_error (
         opq_osm_id (type = "node"),
