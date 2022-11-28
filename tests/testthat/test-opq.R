@@ -133,6 +133,18 @@ test_that ("opq_osm_id", {
         opq_osm_id (type = "node", id = 1:2 + 0.1),
         "overpass_query"
     )
+    expect_s3_class (
+      opq_osm_id (id = c(paste0("node/", 1:2), "way/1")),
+      "overpass_query"
+    )
+    expect_s3_class (
+      x <- opq_osm_id (type = c("node", "way"), id = 1:4 + 0.1),
+      "overpass_query"
+    )
+    expect_error (
+      x <- opq_osm_id (type = c("node", "way"), id = 1:3 + 0.1),
+      "id length must be a multiple of type length."
+    )
     expect_identical(
       opq_osm_id (type = "node", id = 123456),
       opq_osm_id (id = "node/123456")

@@ -502,7 +502,7 @@ check_features <- function (features) {
 #' must be entered as either a character or *numeric* value (because R does not
 #' support long-form integers). id can also be a character string prefixed with
 #' the id type, e.g. "relation/11158003"
-#' @param type Types of objects (recycled); must be either `node`, `way`, or `relation`.
+#' @param type Type of objects (recycled); must be either `node`, `way`, or `relation`.
 #'   Optional if id is prefixed with the type.
 #' @param open_url If `TRUE`, open the OSM page of the specified object in web
 #' browser. Multiple objects (`id` values) will be opened in multiple pages.
@@ -545,7 +545,7 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
             stop (
                 "type must be specified: one of node, way, or relation if id is 'NULL'"
             )
-        } else if ((length (id) == 1L) && all(grepl ("^node/|^way/|^relation/", id))) {
+        } else if (all(grepl ("^node/|^way/|^relation/", id))) {
             type <- dirname (id)
             id <- basename (id)
         }
@@ -561,6 +561,9 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
     }
     if (!(is.character (id) | storage.mode (id) == "double")) {
         stop ("id must be character or numeric.")
+    }
+    if (length(id) %% length(type) != 0 | length(type) > length(id)){
+      stop ("id length must be a multiple of type length.")
     }
 
     if (!is.character (id)) {
