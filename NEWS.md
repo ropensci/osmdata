@@ -1,6 +1,11 @@
 0.1.10.00X (dev)
 ===================
 
+## Major changes:
+
+- Improved `add_osm_features` so that key-values pairs can be submitted as a list, rather than escape-delimited character strings; thanks to @elipousson (#277, #278).
+- @elipousson is also new package contributor, thanks to the above work.
+
 0.1.10
 ===================
 
