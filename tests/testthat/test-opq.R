@@ -129,9 +129,9 @@ test_that ("opq_osm_id", {
         opq_osm_id (type = "node", id = 1L),
         "id must be character or numeric."
     )
-    expect_error (
+    expect_s3_class (
         opq_osm_id (type = "node", id = 1:2 + 0.1),
-        "Only a single id may be entered."
+        "overpass_query"
     )
     expect_identical(
       opq_osm_id (type = "node", id = 123456),
