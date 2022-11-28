@@ -562,12 +562,12 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
     if (!(is.character (id) | storage.mode (id) == "double")) {
         stop ("id must be character or numeric.")
     }
-    if (length(id) %% length(type) != 0 | length(type) > length(id)){
+    if (length (id) %% length (type) != 0 | length (type) > length (id)){
       stop ("id length must be a multiple of type length.")
     }
 
     if (!is.character (id)) {
-        id <- as.character(id)
+        id <- as.character (id)
     }
 
     opq <- opq (1:4)
@@ -806,13 +806,13 @@ opq_string_intern <- function (opq, quiet = TRUE) {
 
     } else if (!is.null (opq$id)) { # opq with opq_osm_id
 
-        typeId <- data.frame(type=opq$id$type, id=opq$id$id)
+        typeId <- data.frame (type=opq$id$type, id=opq$id$id)
         typeId <- split(typeId, typeId$type)
-        id <- mapply(function(type, ids){
-          paste0(" ", type, "(id:", paste(ids, collapse=","), ");\n")
+        id <- mapply (function(type, ids){
+          paste0 (" ", type, "(id:", paste (ids, collapse=","), ");\n")
         }, type=names(typeId), ids=typeId)
 
-        id <- paste(id, collapse="")
+        id <- paste (id, collapse="")
         res <- paste0 (opq$prefix, id, opq$suffix)
 
     } else { # straight opq with neither features nor ID specified
