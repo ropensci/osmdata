@@ -806,11 +806,11 @@ opq_string_intern <- function (opq, quiet = TRUE) {
 
     } else if (!is.null (opq$id)) { # opq with opq_osm_id
 
-        typeId <- data.frame (type=opq$id$type, id=opq$id$id)
-        typeId <- split(typeId, typeId$type)
+        type_id <- data.frame (type=opq$id$type, id=opq$id$id)
+        type_id <- split(type_id, type_id$type)
         id <- mapply (function(type, ids){
           paste0 (" ", type, "(id:", paste (ids, collapse=","), ");\n")
-        }, type=names(typeId), ids=typeId)
+        }, type=names(type_id), ids=type_id)
 
         id <- paste (id, collapse="")
         res <- paste0 (opq$prefix, id, opq$suffix)
