@@ -803,7 +803,13 @@ opq_string_intern <- function (opq, quiet = TRUE) {
 
     } else if (!is.null (opq$id)) { # opq with opq_osm_id
 
-        id <- paste(sprintf (" %s(id:%s);\n", opq$id$type, opq$id$id), collapse="")
+        typeId <- data.frame(type=opq$id$type, id=opq$id$id)
+        typeId <- split(typeId, typeId$type)
+        id <- mapply(function(type, ids){
+          paste0(" ", type, "(id:", paste(ids, collapse=","), ");\n")
+        }, type=names(typeId), ids=typeId)
+
+        id <- paste(id, collapse="")
         res <- paste0 (opq$prefix, id, opq$suffix)
 
     } else { # straight opq with neither features nor ID specified
