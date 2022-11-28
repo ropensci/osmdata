@@ -553,12 +553,9 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
     if (!(is.character (id) | storage.mode (id) == "double")) {
         stop ("id must be character or numeric.")
     }
-    if (length (id) != 1L) {
-        stop ("Only a single id may be entered.")
-    }
 
     if (!is.character (id)) {
-        id <- paste0 (id)
+        id <- as.character(id)
     }
 
     opq <- opq (1:4)
