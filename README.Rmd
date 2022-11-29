@@ -12,14 +12,14 @@ output:
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r opts, echo = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  warning = TRUE,
-  message = TRUE,
-  width = 120,
-  comment = "#>",
-  fig.retina = 2,
-  fig.path = "README-"
+knitr::opts_chunk$set (
+    collapse = TRUE,
+    warning = TRUE,
+    message = TRUE,
+    width = 120,
+    comment = "#>",
+    fig.retina = 2,
+    fig.path = "README-"
 )
 ```
 
@@ -65,22 +65,22 @@ reading-in bulk OSM data extracts).
 
 To install latest CRAN version:
 ```{r cran-install, eval=FALSE}
-install.packages("osmdata")
+install.packages ("osmdata")
 ```
 Alternatively, install the development version with any one of the following
 options:
 ```{r remotes, eval = FALSE}
 # install.packages("remotes")
-remotes::install_git("https://git.sr.ht/~mpadge/osmdata")
-remotes::install_bitbucket("mpadge/osmdata")
-remotes::install_gitlab("mpadge/osmdata")
-remotes::install_github("ropensci/osmdata")
+remotes::install_git ("https://git.sr.ht/~mpadge/osmdata")
+remotes::install_bitbucket ("mpadge/osmdata")
+remotes::install_gitlab ("mpadge/osmdata")
+remotes::install_github ("ropensci/osmdata")
 ```
 
 To load the package and check the version:
 ```{r, eval=TRUE}
-library(osmdata)
-packageVersion("osmdata")
+library (osmdata)
+packageVersion ("osmdata")
 ```
 
 ## Usage
@@ -94,21 +94,23 @@ objects with `osmdata_sp()` or [Silicate (`sc`)](https://github.com/hypertidy/si
 objects with `osmdata_sc()`.  For example, 
 
 ```{r query-thames, eval=FALSE}
-x <- opq(bbox = c(-0.27, 51.47, -0.20, 51.50)) %>% # Chiswick Eyot in London, U.K.
-    add_osm_feature(key = 'name', value = "Thames", value_exact = FALSE) %>%
-    osmdata_sf()
+x <- opq (bbox = c (-0.27, 51.47, -0.20, 51.50)) %>% # Chiswick Eyot in London, U.K.
+    add_osm_feature (key = "name", value = "Thames", value_exact = FALSE) %>%
+    osmdata_sf ()
 x
 ```
 ```{r, echo=FALSE}
-msg <- c ("Object of class 'osmdata' with:\n",
-"                 $bbox : 51.47,-0.27,51.5,-0.2\n",
-"        $overpass_call : The call submitted to the overpass API\n",
-"                 $meta : metadata including timestamp and version numbers\n",
-"           $osm_points : 'sf' Simple Features Collection with 24548 points\n",
-"            $osm_lines : 'sf' Simple Features Collection with 2219 linestrings\n",
-"         $osm_polygons : 'sf' Simple Features Collection with 33 polygons\n",
-"       $osm_multilines : 'sf' Simple Features Collection with 6 multilinestrings\n",
-"    $osm_multipolygons : 'sf' Simple Features Collection with 3 multipolygons")
+msg <- c (
+    "Object of class 'osmdata' with:\n",
+    "                 $bbox : 51.47,-0.27,51.5,-0.2\n",
+    "        $overpass_call : The call submitted to the overpass API\n",
+    "                 $meta : metadata including timestamp and version numbers\n",
+    "           $osm_points : 'sf' Simple Features Collection with 24548 points\n",
+    "            $osm_lines : 'sf' Simple Features Collection with 2219 linestrings\n",
+    "         $osm_polygons : 'sf' Simple Features Collection with 33 polygons\n",
+    "       $osm_multilines : 'sf' Simple Features Collection with 6 multilinestrings\n",
+    "    $osm_multipolygons : 'sf' Simple Features Collection with 3 multipolygons"
+)
 message (msg)
 ```
 
@@ -137,7 +139,8 @@ q <- opq ("astana kazakhstan") # identical result
 It is also possible to use bounding polygons rather than rectangular boxes:
 ```{r getbb-haines}
 b <- getbb ("bangalore", format_out = "polygon")
-class (b); head (b [[1]])
+class (b)
+head (b [[1]])
 ```
 
 ### Features
@@ -151,25 +154,27 @@ the result being a logical AND operation, thus returning all amenities that
 are labelled both as restaurants and also as pubs:
 ```{r key-val1}
 q <- opq ("portsmouth usa") %>%
-    add_osm_feature(key = "amenity", value = "restaurant") %>%
-    add_osm_feature(key = "amenity", value = "pub") # There are none of these
+    add_osm_feature (key = "amenity", value = "restaurant") %>%
+    add_osm_feature (key = "amenity", value = "pub") # There are none of these
 ```
 Negation can also be specified by pre-pending an exclamation mark so that the
 following requests all amenities that are NOT labelled as restaurants and that
 are not labelled as pubs:
 ```{r key-val2}
 q <- opq ("portsmouth usa") %>%
-    add_osm_feature(key = "amenity", value = "!restaurant") %>%
-    add_osm_feature(key = "amenity", value = "!pub") # There are a lot of these
+    add_osm_feature (key = "amenity", value = "!restaurant") %>%
+    add_osm_feature (key = "amenity", value = "!pub") # There are a lot of these
 ```
 
 Additional arguments allow for more refined matching, such as the following
 request for all pubs with "irish" in the name:
 ```{r key-val3}
 q <- opq ("washington dc") %>%
-    add_osm_feature(key = "amenity", value = "pub") %>%
-    add_osm_feature(key = "name", value = "irish",
-                    value_exact = FALSE, match_case = FALSE)
+    add_osm_feature (key = "amenity", value = "pub") %>%
+    add_osm_feature (
+        key = "name", value = "irish",
+        value_exact = FALSE, match_case = FALSE
+    )
 ```
 
 Logical OR combinations can be constructed using the separate
@@ -180,8 +185,10 @@ AND pubs. The following query will request data on restaurants OR pubs:
 
 ```{r features}
 q <- opq ("portsmouth usa") %>%
-    add_osm_features(features = c ("\"amenity\"=\"restaurant\"",
-                                   "\"amenity\"=\"pub\""))
+    add_osm_features (features = c (
+        "\"amenity\"=\"restaurant\"",
+        "\"amenity\"=\"pub\""
+    ))
 ```
 
 The vector of `features` contains key-value pairs separated by an [overpass
@@ -260,6 +267,7 @@ project, you agree to abide by its terms.
 
 
 
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -302,6 +310,22 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=maelle">maelle</a>
 </td>
 <td align="center">
+<a href="https://github.com/elipousson">
+<img src="https://avatars.githubusercontent.com/u/931136?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=elipousson">elipousson</a>
+</td>
+<td align="center">
+<a href="https://github.com/jmaspons">
+<img src="https://avatars.githubusercontent.com/u/102644?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=jmaspons">jmaspons</a>
+</td>
+</tr>
+
+
+<tr>
+<td align="center">
 <a href="https://github.com/agila5">
 <img src="https://avatars.githubusercontent.com/u/22221146?v=4" width="100px;" alt=""/>
 </a><br>
@@ -313,10 +337,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=espinielli">espinielli</a>
 </td>
-</tr>
-
-
-<tr>
 <td align="center">
 <a href="https://github.com/idshklein">
 <img src="https://avatars.githubusercontent.com/u/12258810?v=4" width="100px;" alt=""/>
@@ -330,6 +350,12 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=anthonynorth">anthonynorth</a>
 </td>
 <td align="center">
+<a href="https://github.com/jeroen">
+<img src="https://avatars.githubusercontent.com/u/216319?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=jeroen">jeroen</a>
+</td>
+<td align="center">
 <a href="https://github.com/neogeomat">
 <img src="https://avatars.githubusercontent.com/u/2562658?v=4" width="100px;" alt=""/>
 </a><br>
@@ -341,6 +367,10 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=angela-li">angela-li</a>
 </td>
+</tr>
+
+
+<tr>
 <td align="center">
 <a href="https://github.com/Mashin6">
 <img src="https://avatars.githubusercontent.com/u/5265707?v=4" width="100px;" alt=""/>
@@ -359,10 +389,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=Tazinho">Tazinho</a>
 </td>
-</tr>
-
-
-<tr>
 <td align="center">
 <a href="https://github.com/ec-nebi">
 <img src="https://avatars.githubusercontent.com/u/48711241?v=4" width="100px;" alt=""/>
@@ -387,6 +413,10 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=brry">brry</a>
 </td>
+</tr>
+
+
+<tr>
 <td align="center">
 <a href="https://github.com/ccamara">
 <img src="https://avatars.githubusercontent.com/u/706549?v=4" width="100px;" alt=""/>
@@ -404,16 +434,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <img src="https://avatars.githubusercontent.com/u/1423562?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=dpprdan">dpprdan</a>
-</td>
-</tr>
-
-
-<tr>
-<td align="center">
-<a href="https://github.com/elipousson">
-<img src="https://avatars.githubusercontent.com/u/931136?v=4" width="100px;" alt=""/>
-</a><br>
-<a href="https://github.com/ropensci/osmdata/commits?author=elipousson">elipousson</a>
 </td>
 <td align="center">
 <a href="https://github.com/JimShady">
@@ -439,6 +459,10 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=MHenderson">MHenderson</a>
 </td>
+</tr>
+
+
+<tr>
 <td align="center">
 <a href="https://github.com/patperu">
 <img src="https://avatars.githubusercontent.com/u/82020?v=4" width="100px;" alt=""/>
@@ -451,10 +475,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=stragu">stragu</a>
 </td>
-</tr>
-
-
-<tr>
 <td align="center">
 <a href="https://github.com/fzenoni">
 <img src="https://avatars.githubusercontent.com/u/6040873?v=4" width="100px;" alt=""/>
@@ -858,6 +878,16 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Aurswilke">urswilke</a>
 </td>
 <td align="center">
+<a href="https://github.com/Robsteranium">
+<img src="https://avatars.githubusercontent.com/u/49654?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3ARobsteranium">Robsteranium</a>
+</td>
+</tr>
+
+
+<tr>
+<td align="center">
 <a href="https://github.com/assignUser">
 <img src="https://avatars.githubusercontent.com/u/16141871?u=bbf2ca4641e8ec034a9cdb583e62e3a94c372824&v=4" width="100px;" alt=""/>
 </a><br>
@@ -870,6 +900,7 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
 
 
 
