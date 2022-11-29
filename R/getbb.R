@@ -72,11 +72,11 @@ bbox_to_string <- function (bbox) {
             bbox <- c (y [1], x [1], y [2], x [2])
         }
     }
-  
+
     if (any (is.na (bbox))) {
       stop ("bbox contains 'NA' values")
     }
-    
+
     return (paste0 (bbox, collapse = ","))
 }
 
@@ -170,7 +170,7 @@ getbb <- function (place_name,
 
     is_polygon <- grepl ("polygon", format_out)
 
-    obj <- get_bb_query (
+    obj <- get_nominatim_query (
         place_name,
         featuretype,
         is_polygon,
@@ -181,7 +181,7 @@ getbb <- function (place_name,
         base_url,
         silent
     )
-    
+
     if (format_out == "data.frame") {
         return (obj)
     }
@@ -189,11 +189,11 @@ getbb <- function (place_name,
     bn <- as.numeric (obj$boundingbox [[1]])
     bb_mat <- matrix (c (bn [3:4], bn [1:2]), nrow = 2, byrow = TRUE)
     dimnames (bb_mat) <- list (c ("x", "y"), c ("min", "max"))
-    
+
     if (any (is.na (bb_mat))) {
       stop (paste0 ("`place_name` '", place_name ,"' can't be found"))
     }
-    
+
     if (format_out == "matrix") {
         ret <- bb_mat
     } else if (format_out == "string") {
@@ -228,7 +228,117 @@ getbb <- function (place_name,
     return (ret)
 }
 
-get_bb_query <- function (place_name,
+#' Convert a data.frame with OSM types and ids to a string
+#'
+#' This function converts areas defined by type and id into a string for use in
+#' opq to delimitate the search area
+#'
+#' @param area \link{data.frame} with `osm_type` and `osm_id` columns.
+#'
+#' @return A character string representing a set of OSM objects in overpass query
+#' language. For example: \code{"relation(id:11747082)"} represents the area of
+#' the Catalan Countries. A set of objects can also be represented for multirow
+#' \code{area} (e.g. "relation(id:11747082,307833); way(id:22422490)")
+#'
+#' @family queries
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' area_to_string(getbb("Catalan Countries", format_out = "data.frame"))
+#' }
+area_to_string <- function (area) {
+
+    if (missing (area)) stop ("area must be provided")
+
+    if (!inherits (area, "data.frame") ||
+        !all (c ("osm_type", "osm_id") %in% names (area))) {
+            stop ("area must be a data.frame with osm_type and osm_id columns.")
+    }
+
+    type_id <- split (area$osm_id, area$osm_type)
+    id <- mapply (function (type, ids){
+        paste0 (type, "(id:", paste (ids, collapse=","), ")")
+    }, type = names (type_id), ids = type_id)
+
+    return ( paste (id, collapse="; "))
+}
+
+#' Get areas for a given place name
+#'
+#' This function uses the free Nominatim API provided by OpenStreetMap to find
+#' the areas associated with place names.
+#'
+#' The OSM objects that can be used as
+#'  [areas in overpass queries](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Map_way/relation_to_area_(map_to_area))
+#'  \emph{must be closed rings} (ways or relations).
+#'
+#' See <https://wiki.openstreetmap.org/wiki/Nominatim> for details.
+#'
+#' @inheritParams getbb
+#'
+#' @return A character string representing a set of OSM objects in overpass query
+#' language. For example: \code{"relation(id:11747082)"} represents the area of
+#' the Catalan Countries. A set of objects can also be represented for multirow
+#' \code{area} (e.g. "relation(id:11747082,307833); way(id:22422490)")
+#'
+#' @note Specific values of `featuretype` include "street", "city",
+# " "county", "state", and "country" (see
+#' <https://wiki.openstreetmap.org/wiki/Nominatim> for details). The default
+#' `featuretype = "settlement"` combines results from all intermediate
+#' levels below "country" and above "streets". If the bounding box or polygon of
+#' a city is desired, better results will usually be obtained with
+#' `featuretype = "city"`.
+#'
+#' @family queries
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' getarea("Salzburg")
+#' # select based on display_name, print query url
+#' getarea("Hereford", display_name_contains = "United States", silent = FALSE)
+#' # select multiple areas
+#' areas <- getbb("Vilafranca", format_out = "data.frame")
+#' area_to_string(areas[areas$osm_type != "node", ]) #
+#' # add LOCATIONIQ=type_your_api_key_here to .Renviron:
+#' key <- Sys.getenv("LOCATIONIQ")
+#' if (nchar(key) == 32) {
+#'     getarea(place_name,
+#'         base_url = "https://locationiq.org/v1/search.php",
+#'         key = key
+#'     )
+#' }
+#' }
+getarea <- function (place_name,
+                     display_name_contains = NULL,
+                     viewbox = NULL,
+                     base_url = "https://nominatim.openstreetmap.org",
+                     featuretype = "settlement",
+                     limit = 10,
+                     key = NULL,
+                     silent = TRUE) {
+
+    obj <- get_nominatim_query (
+        place_name,
+        featuretype,
+        is_polygon = FALSE,
+        display_name_contains,
+        viewbox,
+        key,
+        limit,
+        base_url,
+        silent
+    )
+
+    area <- obj[which (obj$osm_type %in% c ("relation", "way"))[1], ]
+    if (nrow (area) == 0) {
+        stop ("No area found for ", place_name, ".")
+    }
+    area_to_string (area)
+}
+
+get_nominatim_query <- function (place_name,
                           featuretype,
                           is_polygon,
                           display_name_contains,

@@ -81,7 +81,9 @@ c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 
 Other queries: 
 \code{\link{add_osm_feature}()},
+\code{\link{area_to_string}()},
 \code{\link{bbox_to_string}()},
+\code{\link{getarea}()},
 \code{\link{getbb}()},
 \code{\link{opq_around}()},
 \code{\link{opq_enclosing}()},

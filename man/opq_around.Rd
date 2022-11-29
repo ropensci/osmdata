@@ -44,7 +44,9 @@ x <- opq_around (lon, lat, radius, key, value) \%>\%
 Other queries: 
 \code{\link{add_osm_features}()},
 \code{\link{add_osm_feature}()},
+\code{\link{area_to_string}()},
 \code{\link{bbox_to_string}()},
+\code{\link{getarea}()},
 \code{\link{getbb}()},
 \code{\link{opq_enclosing}()},
 \code{\link{opq_osm_id}()},

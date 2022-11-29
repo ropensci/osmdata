@@ -21,7 +21,9 @@ Retrieve status of the Overpass API
 Other queries: 
 \code{\link{add_osm_features}()},
 \code{\link{add_osm_feature}()},
+\code{\link{area_to_string}()},
 \code{\link{bbox_to_string}()},
+\code{\link{getarea}()},
 \code{\link{getbb}()},
 \code{\link{opq_around}()},
 \code{\link{opq_enclosing}()},

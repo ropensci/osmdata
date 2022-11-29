@@ -19,7 +19,11 @@ longitudes and latitudes, in the form \code{c(xmin, ymin, xmax, ymax)}
 or (ii) a character string in the form \code{xmin,ymin,xmax,ymax}. These
 will be passed to \link{getbb} to be converted to a numerical bounding
 box. Can also be (iii) a matrix representing a bounding polygon as
-returned from \code{getbb(..., format_out = "polygon")}.}
+returned from \code{getbb(..., format_out = "polygon")}. To search in an area,
+(iv) a character string with a relation or a (closed) way id in the
+format \code{way(id:1)}, \code{relation(id:1, 2)} or
+\code{relation(id:1, 2, 3); way(id:2)} as returned by \link{getarea} or
+\link{area_to_string}.}
 
 \item{nodes_only}{If \code{TRUE}, query OSM nodes only. Some OSM structures such
 as \code{place = "city"} or \code{highway = "traffic_signals"} are represented by
@@ -78,13 +82,20 @@ c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 opq <- opq (bbox, nodes_only = TRUE) \%>\%
     add_osm_feature (key = "place", value = "city") \%>\%
     osmdata_sf (quiet = FALSE)
+# Filter by a search area
+qa <- getarea ("Catalan Countries") \%>\%
+    opq (nodes_only = TRUE) \%>\%
+    add_osm_feature (key = "capital", value = "4")
+opqa <- osmdata_sf (qa)
 }
 }
 \seealso{
 Other queries: 
 \code{\link{add_osm_features}()},
 \code{\link{add_osm_feature}()},
+\code{\link{area_to_string}()},
 \code{\link{bbox_to_string}()},
+\code{\link{getarea}()},
 \code{\link{getbb}()},
 \code{\link{opq_around}()},
 \code{\link{opq_enclosing}()},

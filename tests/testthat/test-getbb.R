@@ -17,6 +17,15 @@ test_that ("bbox", {
     )
 })
 
+test_that ("area", {
+
+    expect_error (area_to_string (), "area must be provided")
+    expect_error (area_to_string (1:3),
+                  "area must be a data.frame with osm_type and osm_id columns.")
+    expect_error (area_to_string (data.frame(a="type", b="id")),
+                  "area must be a data.frame with osm_type and osm_id columns.")
+})
+
 test_that ("getbb-place_name", {
 
     res0 <- with_mock_dir ("mock_bb", {
@@ -58,7 +67,7 @@ test_that ("getbb-place_name", {
         }),
         "format_out not recognised"
     )
-    
+
     expect_error (getbb ("Salzzburg"), "`place_name` 'Salzzburg' can't be found")
 })
 
@@ -135,4 +144,14 @@ test_that ("bbox-to-string", {
     bb <- 1:4
     names (bb) <- c ("left", "bottom", "right", "top")
     expect_is (bbox_to_string (bb), "character")
+})
+
+test_that ("area-to-string", {
+
+    area <- data.frame (osm_type = "relation", osm_id = "11747082")
+    expect_is (area_to_string (area), "character")
+    area <- data.frame (osm_type = c ("relation", "relation", "way"),
+                        osm_id = c("11747082", "307833", "22422490"))
+    expect_is (area_to_string (area), "character")
+    expect_length (area_to_string (area), 1)
 })

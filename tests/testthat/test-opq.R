@@ -70,6 +70,26 @@ test_that ("opq_string", {
     expect_false (grepl ("value", s0))
     expect_true (grepl ("out body", s0)) # full data body; (nodes,ways,rels)
 
+    # area only:
+    expect_silent (
+        q0 <- opq (bbox = "relation(id:11747082)")
+    )
+    expect_silent (
+        s0 <- opq_string (q0)
+    )
+    expect_message (
+        s0 <- opq_string_intern (q0, quiet = FALSE),
+        paste0 (
+            "The overpass server is intended to ",
+            "be used to extract specific features"
+        )
+    )
+    expect_type (s0, "character")
+    expect_length (s0, 1L)
+    expect_false (grepl ("key", s0))
+    expect_false (grepl ("value", s0))
+    expect_true (grepl ("out body", s0)) # full data body; (nodes,ways,rels)
+
     # nodes_only parameter:
     q1 <- opq (
         bbox = c (-0.118, 51.514, -0.115, 51.517),

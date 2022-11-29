@@ -81,7 +81,7 @@ a city is desired, better results will usually be obtained with
 \dontrun{
 getbb ("Salzburg")
 # select based on display_name, print query url
-getbb ("Hereford", display_name_contains = "USA", silent = FALSE)
+getbb ("Hereford", display_name_contains = "United States", silent = FALSE)
 # top 3 matches as data frame
 getbb ("Hereford", format_out = "data.frame", limit = 3)
 # Examples of polygonal boundaries
@@ -106,7 +106,9 @@ if (nchar (key) == 32) {
 Other queries: 
 \code{\link{add_osm_features}()},
 \code{\link{add_osm_feature}()},
+\code{\link{area_to_string}()},
 \code{\link{bbox_to_string}()},
+\code{\link{getarea}()},
 \code{\link{opq_around}()},
 \code{\link{opq_enclosing}()},
 \code{\link{opq_osm_id}()},
