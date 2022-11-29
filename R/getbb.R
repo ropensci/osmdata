@@ -138,7 +138,7 @@ bbox_to_string <- function (bbox) {
 #' \dontrun{
 #' getbb ("Salzburg")
 #' # select based on display_name, print query url
-#' getbb ("Hereford", display_name_contains = "USA", silent = FALSE)
+#' getbb ("Hereford", display_name_contains = "United States", silent = FALSE)
 #' # top 3 matches as data frame
 #' getbb ("Hereford", format_out = "data.frame", limit = 3)
 #' # Examples of polygonal boundaries
@@ -273,7 +273,7 @@ get_bb_query <- function (place_name,
         error = function (e) {
             # nocov start
             message (paste0 (
-                "Nominatim did respond as expected ",
+                "Nominatim did not respond as expected ",
                 "(e.g. due to excessive use of their api).\n",
                 "Please try again or use a different base_url\n",
                 "The url that failed was:\n", req$url
