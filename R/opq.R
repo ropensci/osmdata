@@ -502,7 +502,7 @@ check_features <- function (features) {
 #' must be entered as either a character or *numeric* value (because R does not
 #' support long-form integers). id can also be a character string prefixed with
 #' the id type, e.g. "relation/11158003"
-#' @param type Type of object; must be either `node`, `way`, or `relation`.
+#' @param type Type of objects (recycled); must be either `node`, `way`, or `relation`.
 #'   Optional if id is prefixed with the type.
 #' @param open_url If `TRUE`, open the OSM page of the specified object in web
 #' browser. Multiple objects (`id` values) will be opened in multiple pages.
@@ -532,6 +532,12 @@ check_features <- function (features) {
 #'     osmdata_sf ()
 #' dat2$osm_lines # the desired ways
 #' dat <- c (dat1, dat2) # The node and way data combined
+#' # All in one (same result as dat)
+#' id <- c(1489221200, 1489221321, 1489221491, 136190595, 136190596)
+#' type <- c("node", "node", "node", "way", "way")
+#' datAiO<- opq_osm_id (id = id, type = type) %>%
+#'     opq_string () %>%
+#'     osmdata_sf ()
 #' }
 opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
     if (is.null (type)) {
@@ -539,13 +545,16 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
             stop (
                 "type must be specified: one of node, way, or relation if id is 'NULL'"
             )
-        } else if ((length (id) == 1L) && grepl ("^node/|^way/|^relation/", id)) {
+        } else if (all(grepl ("^node/|^way/|^relation/", id))) {
             type <- dirname (id)
             id <- basename (id)
         }
     }
 
-    type <- match.arg (tolower (type), c ("node", "way", "relation"))
+    type <- tolower(type)
+    if (!all(type %in% c("node", "way", "relation"))){
+      stop('type items must be "node", "way" or "relation".')
+    }
 
     if (is.null (id)) {
         stop ("id must be specified.")
@@ -553,9 +562,12 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
     if (!(is.character (id) | storage.mode (id) == "double")) {
         stop ("id must be character or numeric.")
     }
+    if (length (id) %% length (type) != 0 | length (type) > length (id)){
+      stop ("id length must be a multiple of type length.")
+    }
 
     if (!is.character (id)) {
-        id <- as.character(id)
+        id <- as.character (id)
     }
 
     opq <- opq (1:4)
@@ -794,8 +806,13 @@ opq_string_intern <- function (opq, quiet = TRUE) {
 
     } else if (!is.null (opq$id)) { # opq with opq_osm_id
 
-        id <- paste (opq$id$id, collapse = ",")
-        id <- sprintf (" %s(id:%s);\n", opq$id$type, id)
+        type_id <- data.frame (type=opq$id$type, id=opq$id$id)
+        type_id <- split(type_id, type_id$type)
+        id <- mapply (function(type, ids){
+          paste0 (" ", type, "(id:", paste (ids, collapse=","), ");\n")
+        }, type=names(type_id), ids=type_id)
+
+        id <- paste (id, collapse="")
         res <- paste0 (opq$prefix, id, opq$suffix)
 
     } else { # straight opq with neither features nor ID specified
