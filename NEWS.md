@@ -6,6 +6,10 @@
 - Improved `add_osm_features` so that key-values pairs can be submitted as a list, rather than escape-delimited character strings; thanks to @elipousson (#277, #278).
 - @elipousson is also new package contributor, thanks to the above work.
 
+## Minor changes:
+
+- Improved `osm_osm_id()` to accept vectors of ids and types; thanks to @jmaspons (#268, #282, #283)
+
 0.1.10
 ===================
 
