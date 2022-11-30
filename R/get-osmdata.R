@@ -526,3 +526,101 @@ getbb_sc <- function (x) {
     apply (x$vertex [, 1:2], 2, range) %>%
         bbox_to_string ()
 }
+
+#' Return an OSM Overpass query as a \link{data.frame} object.
+#'
+# TODO: recommend queries with `out tags;` when implemented.
+#'
+#' @inheritParams osmdata_sp
+#' @param q An object of class `overpass_query` constructed with
+#'      \link{opq} and \link{add_osm_feature}. May be be omitted,
+#'      in which case the attributes of the \link{data.frame} will not include the
+#'      query even if \code{save_attributes} is \code{TRUE}.
+#' @param save_attributes If \code{TRUE}, attach the query bbox, overpass_call,
+#'      and metadata as attributes of the `data.frame`.
+#' @param stringsAsFactors Should character strings in the 'data.frame' be
+#' coerced to factors?
+#' @return A `data.frame` with id, type and tags of the the objects from the query.
+#'
+#' @family extract
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' hampi_df <- opq ("hampi india") %>%
+#'     add_osm_feature (key = "historic", value = "ruins") %>%
+#'     osmdata_data.frame ()
+#' attr (hampi_df, "bbox")
+#' attr (hampi_df, "overpass_call")
+#' attr (hampi_df, "meta")
+#' }
+osmdata_data.frame<- function(q, doc, quiet = TRUE, save_attributes = TRUE,
+                              stringsAsFactors = FALSE) {
+
+    if (missing (doc) && !save_attributes){
+      doc<- osmdata_xml (q, quiet = quiet)
+    } else {
+      obj <- osmdata () # uses class def
+      if (missing (q) & !quiet) {
+        message ("q missing: osmdata object will not include query")
+      } else if (is (q, "overpass_query")) {
+        obj$bbox <- q$bbox
+        obj$overpass_call <- opq_string_intern (q, quiet = quiet)
+      } else if (is.character (q)) {
+        obj$overpass_call <- q
+      } else {
+        stop ("q must be an overpass query or a character string")
+      }
+      
+      temp <- fill_overpass_data (obj, doc, quiet = quiet)
+      obj <- temp$obj
+      doc <- temp$doc
+    }
+
+    osm_obj <- xml2::xml_find_all (doc, ".//node|.//way|.//realtion")
+    
+    osm_type <- xml2::xml_name (osm_obj)
+    osm_id <- xml2::xml_attr (osm_obj, attr = "id")
+    
+    tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = FALSE)
+    tagsL <- lapply (tags, function(x){
+      tag <- xml2::xml_attrs (x)
+      key <- sapply (tag, function(y){
+        y["k"]
+      })
+      value <- sapply (tag, function(y){
+        y["v"]
+      })
+      names (value) <- key
+      data.frame (t (value), stringsAsFactors = stringsAsFactors, check.names = FALSE)
+    })
+    
+    df <- do.call (rbind_addColumns, c(tagsL, list (stringsAsFactors = stringsAsFactors)))
+    df <- df[, order (names (df))]
+    df <- cbind (osm_type, osm_id, df)
+    
+    if (save_attributes){
+      attr (df, "bbox") <- obj$bbox
+      attr (df, "overpass_call") <- obj$overpass_call
+      attr (df, "meta") <- get_metadata (obj, doc)$meta
+    }
+    
+    return (df)
+}
+
+rbind_addColumns<- function(..., deparse.level=1, make.row.names=TRUE, stringsAsFactors=FALSE){
+  input<- list(...)
+  colNameRes<-  unique(unlist(lapply(input, names)))
+
+  res<- lapply(input, function(x){
+    misCols<- setdiff(colNameRes, names(x))
+    misCols<- structure(as.list(rep(NA, length(misCols))), names=misCols)
+    out<- data.frame(c(x, misCols), stringsAsFactors=stringsAsFactors, check.names=FALSE)
+    out<- out[, colNameRes]
+  })
+  
+  res<- c(res, list(deparse.level=deparse.level, make.row.names=make.row.names, stringsAsFactors=stringsAsFactors))
+  res<- do.call(rbind, res)
+  
+  return(res)
+}

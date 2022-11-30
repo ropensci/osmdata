@@ -37,6 +37,7 @@ hampi_sp <- opq ("hampi india") \%>\%
 }
 \seealso{
 Other extract: 
+\code{\link{osmdata_data.frame}()},
 \code{\link{osmdata_sc}()},
 \code{\link{osmdata_sf}()},
 \code{\link{osmdata_xml}()}
