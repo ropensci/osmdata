@@ -12,7 +12,7 @@ test_that ("multipolygon", {
         quiet = TRUE
     )
     q0 <- opq (bbox = c (1, 1, 5, 5))
-    x <- osmdata_data.frame (q0, osm_multi)
+    x <- osmdata_data_frame (q0, osm_multi)
 
     # GDAL spits out a whole lot of generic field names, so first the
     # two have to be reduced to common fields.
@@ -36,7 +36,7 @@ test_that ("multilinestring", {
         quiet = TRUE
     )
     q0 <- opq (bbox = c (1, 1, 5, 5))
-    x <- osmdata_data.frame (q0, osm_multi)
+    x <- osmdata_data_frame (q0, osm_multi)
     x_sf <- sf::st_drop_geometry (x_sf)
     x <- x [, which (names (x) %in% names (x_sf))]
     x_sf <- x_sf [, which (names (x_sf) %in% names (x))]
@@ -56,7 +56,7 @@ test_that ("ways", {
         quiet = TRUE
     )
     q0 <- opq (bbox = c (1, 1, 5, 5))
-    x <- osmdata_data.frame (q0, osm_ways)
+    x <- osmdata_data_frame (q0, osm_ways)
     x_sf <- sf::st_drop_geometry (x_sf)
     x <- x [, which (names (x) %in% names (x_sf))]
     x_sf <- x_sf [, which (names (x_sf) %in% names (x))]
