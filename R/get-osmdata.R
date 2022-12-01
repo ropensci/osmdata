@@ -548,12 +548,12 @@ getbb_sc <- function (x) {
 #' \dontrun{
 #' hampi_df <- opq ("hampi india") %>%
 #'     add_osm_feature (key = "historic", value = "ruins") %>%
-#'     osmdata_data.frame ()
+#'     osmdata_data_frame ()
 #' attr (hampi_df, "bbox")
 #' attr (hampi_df, "overpass_call")
 #' attr (hampi_df, "meta")
 #' }
-osmdata_data.frame<- function(q, doc, quiet = TRUE, save_attributes = TRUE,
+osmdata_data_frame<- function(q, doc, quiet = TRUE, save_attributes = TRUE,
                               stringsAsFactors = FALSE) {
 
     if (missing (doc) && !save_attributes){
