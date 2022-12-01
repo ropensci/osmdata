@@ -88,6 +88,10 @@ test_that ("query_errors", {
         osmdata_sc (),
         "argument \"q\" is missing, with no default"
     )
+    expect_error (
+        osmdata_data.frame (),
+        "argument \"q\" is missing, with no default"
+    )
 
     expect_error (
         osmdata_xml (q = NULL),
@@ -103,6 +107,10 @@ test_that ("query_errors", {
     )
     expect_error (
         osmdata_sc (q = NULL),
+        "q must be an overpass query or a character string"
+    )
+    expect_error (
+        osmdata_data.frame (q = NULL),
         "q must be an overpass query or a character string"
     )
 })
@@ -127,6 +135,10 @@ test_that ("make_query", {
         )
         expect_error (
             osmdata_sc (qry),
+            "Overpass query unavailable without internet"
+        )
+        expect_error (
+            osmdata_data.frame (qry),
             "Overpass query unavailable without internet"
         )
     } else {

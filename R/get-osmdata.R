@@ -193,7 +193,6 @@ fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8") {
             doc <- xml2::read_xml (doc)
         }
         obj <- get_metadata (obj, doc)
-        doc <- as.character (doc)
     }
 
     list (obj = obj, doc = doc)
@@ -478,7 +477,7 @@ osmdata_sc <- function (q, doc, quiet = TRUE) {
         message ("converting OSM data to sc format")
     }
 
-    res <- rcpp_osmdata_sc (paste0 (temp$doc))
+    res <- rcpp_osmdata_sc (paste0 (doc))
 
     if (nrow (res$object_link_edge) > 0L) {
         res$object_link_edge$native_ <- TRUE
@@ -577,7 +576,7 @@ osmdata_data.frame<- function(q, doc, quiet = TRUE, save_attributes = TRUE,
       doc <- temp$doc
     }
 
-    osm_obj <- xml2::xml_find_all (doc, ".//node|.//way|.//realtion")
+    osm_obj <- xml2::xml_find_all (doc, ".//node|.//way|.//relation")
     
     osm_type <- xml2::xml_name (osm_obj)
     osm_id <- xml2::xml_attr (osm_obj, attr = "id")
