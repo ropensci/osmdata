@@ -4,19 +4,13 @@
 \alias{osmdata_data_frame}
 \title{Return an OSM Overpass query as a \link{data.frame} object.}
 \usage{
-osmdata_data_frame(
-  q,
-  doc,
-  quiet = TRUE,
-  save_attributes = TRUE,
-  stringsAsFactors = FALSE
-)
+osmdata_data_frame(q, doc, quiet = TRUE, stringsAsFactors = FALSE)
 }
 \arguments{
 \item{q}{An object of class \code{overpass_query} constructed with
 \link{opq} and \link{add_osm_feature}. May be be omitted,
-in which case the attributes of the \link{data.frame} will not include the
-query even if \code{save_attributes} is \code{TRUE}.}
+in which case the attributes of the \link{data.frame} will not include
+the query.}
 
 \item{doc}{If missing, \code{doc} is obtained by issuing the overpass query,
 \code{q}, otherwise either the name of a file from which to read data,
@@ -24,9 +18,6 @@ or an object of class \pkg{XML} returned from
 \link{osmdata_xml}.}
 
 \item{quiet}{suppress status messages.}
-
-\item{save_attributes}{If \code{TRUE}, attach the query bbox, overpass_call,
-and metadata as attributes of the \code{data.frame}.}
 
 \item{stringsAsFactors}{Should character strings in the 'data.frame' be
 coerced to factors?}
