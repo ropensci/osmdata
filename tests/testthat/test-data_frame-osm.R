@@ -182,7 +182,7 @@ test_that ("out meta & diff", {
     osm_meta_diff <- test_path ("fixtures", "osm-meta_diff.osm")
     doc <- xml2::read_xml (osm_meta_diff)
 
-    x <- osmdata_data_frame (q, doc)
+    x <- osmdata_data_frame (doc = doc, quiet = FALSE)
 
     cols <- c ("osm_type", "osm_id", "osm_version", "osm_timestamp",
                "osm_changeset", "osm_uid", "osm_user", "ele", "name",
@@ -217,7 +217,7 @@ test_that ("out meta & adiff", {
     osm_meta_adiff <- test_path ("fixtures", "osm-meta_adiff.osm")
     doc <- xml2::read_xml (osm_meta_adiff)
 
-    x <- osmdata_data_frame (q, doc)
+    x <- osmdata_data_frame (opq_string_intern (q), doc)
 
     cols <- c ("adiff_action", "adiff_date", "adiff_visible", "osm_type", "osm_id",
                "osm_version", "osm_timestamp", "osm_changeset", "osm_uid", "osm_user",
@@ -241,8 +241,8 @@ test_that ("out meta & adiff", {
 
 test_that ("adiff2", {
     q <- getbb ("Perpinyà", featuretype = "relation") %>%
-      opq (nodes_only = TRUE, datetime = "2012-11-07T00:00:00Z", datetime2 = "2016-11-07T00:00:00Z") %>%
-      add_osm_feature ("amenity", "restaurant")
+        opq (nodes_only = TRUE, datetime = "2012-11-07T00:00:00Z", datetime2 = "2016-11-07T00:00:00Z") %>%
+        add_osm_feature ("amenity", "restaurant")
 
     q$prefix <- gsub ("diff:", "adiff:", q$prefix)
 
