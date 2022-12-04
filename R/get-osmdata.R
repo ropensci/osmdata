@@ -251,7 +251,8 @@ get_metadata <- function (obj, doc) {
             meta$datetime_from <- attr (q, "datetime")
             meta$datetime_to <- attr (q, "datetime2")
 
-            if ("action" %in% xml2::xml_name (xml2::xml_children(doc))) {
+            if (grepl ("adiff", q$prefix) ||
+                    "action" %in% xml2::xml_name (xml2::xml_children (doc))) {
                 meta$query_type <- "adiff"
             } else {
                 meta$query_type <- "diff"
@@ -259,7 +260,8 @@ get_metadata <- function (obj, doc) {
 
         } else if (!is.null (attr (q, "datetime"))) {
 
-            if ("action" %in% xml2::xml_name (xml2::xml_children(doc))) {
+            if (grepl ("adiff", q$prefix) ||
+                    "action" %in% xml2::xml_name (xml2::xml_children (doc))) {
                 meta$datetime_from <- attr (q, "datetime")
                 meta$datetime_to <- xml2::xml_text (xml2::xml_find_all (doc, "//meta/@osm_base"))
                 meta$query_type <- "adiff"
@@ -295,7 +297,7 @@ is_datetime <- function (x) {
         substring (x, 14, 14) != ":" &
         substring (x, 17, 17) != ":" &
         substring (x, 20, 20) != "Z") {
-      return (FALSE)
+        return (FALSE)
     }
     YY <- substring (x, 1, 4) # nolint
     MM <- substring (x, 6, 7) # nolint
@@ -309,7 +311,7 @@ is_datetime <- function (x) {
         formatC (as.integer (hh), width = 2, flag = "0") != hh |
         formatC (as.integer (mm), width = 2, flag = "0") != mm |
         formatC (as.integer (ss), width = 2, flag = "0") != ss) {
-      return (FALSE)
+        return (FALSE)
     }
     return (TRUE)
 }

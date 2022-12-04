@@ -67,19 +67,60 @@ test_that ("ways", {
     expect_true (all (x_sf$highway %in% x$highway))
 })
 
-test_that ("attributes", {
-    osm_multi <- test_path ("fixtures", "osm-multi.osm")
+test_that ("empty result", {
+    q0 <- getbb ("Països Catalans", featuretype = "relation") %>%
+        opq (nodes_only = TRUE, datetime = "1714-09-11T00:00:00Z") %>%
+        add_osm_feature ("does not exist", "&%$")
 
-    q0 <- opq (bbox = c (1, 1, 5, 5))
-    x <- osmdata_data_frame (q0, osm_multi)
-    x_sf <- osmdata_sf (q0, osm_multi)
+    osm_empty <- test_path ("fixtures", "osm-empty.osm")
+    doc <- xml2::read_xml (osm_empty)
 
+    x <- osmdata_data_frame (q0, doc)
+
+    cols <- c ("osm_type", "osm_id")
+    expect_named (x, cols)
     expect_s3_class (x, "data.frame")
-    expect_identical (names (attributes (x)),
-                      c ("names", "class", "row.names", "bbox", "overpass_call", "meta"))
-    expect_identical (attr (x, "bbox"), q0$bbox)
-    expect_identical (attr (x, "overpass_call"), x_sf$overpass_call)
-    expect_identical (attr (x, "meta"), x_sf$meta)
+    expect_identical (nrow (x), 0L)
+
+    obj_overpass_call <- osmdata (bbox = q0$bbox, overpass_call = opq_string_intern (q0))
+    obj_opq <- osmdata (bbox = q0$bbox, overpass_call = q0)
+    obj <- osmdata (bbox = q0$bbox)
+
+    metaL<- list (meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
+                  meta_opq = get_metadata (obj_opq, doc)$meta,
+                  meta_no_call = get_metadata (obj, doc)$meta)
+
+    expect_equal (metaL$meta_overpass_call$query_type, "date")
+    expect_equal (metaL$meta_opq$query_type, "date")
+    expect_null (metaL$meta_no_call$query_type)
+
+    # adiff
+    q0$prefix <- gsub ("date:", "adiff:", q0$prefix)
+
+    # osm_empty <- test_path ("fixtures", "osm-empty.osm") # same result
+    # doc <- xml2::read_xml (osm_empty)
+
+    x <- osmdata_data_frame (q0, doc)
+
+    cols <- c ("osm_type", "osm_id")
+    expect_named (x, cols)
+    expect_s3_class (x, "data.frame")
+    expect_identical (nrow (x), 0L)
+
+    obj_overpass_call <- osmdata (bbox = q0$bbox, overpass_call = opq_string_intern (q0))
+    obj_opq <- osmdata (bbox = q0$bbox, overpass_call = q0)
+    obj <- osmdata (bbox = q0$bbox)
+
+    metaL<- list (meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
+                  meta_opq = get_metadata (obj_opq, doc)$meta,
+                  meta_no_call = get_metadata (obj, doc)$meta)
+
+    expect_equal (metaL$meta_overpass_call$query_type, "adiff")
+    expect_equal (metaL$meta_opq$query_type, "adiff")
+    expect_null (metaL$meta_no_call$query_type)
+
+    expect_identical (metaL$meta_overpass_call, metaL$meta_opq)
+    expect_identical (metaL$meta_overpass_call$datetime_from, attr (q0, "datetime"))
 })
 
 test_that ("attributes", {
@@ -95,6 +136,72 @@ test_that ("attributes", {
     expect_identical (attr (x, "bbox"), q0$bbox)
     expect_identical (attr (x, "overpass_call"), x_sf$overpass_call)
     expect_identical (attr (x, "meta"), x_sf$meta)
+})
+
+test_that ("date", {
+    q <- getbb ("Conflent", featuretype = "relation") %>%
+        opq (nodes_only = TRUE, datetime = "2020-11-07T00:00:00Z") %>%
+        add_osm_feature ("natural", "peak") %>%
+        add_osm_feature ("prominence")  %>%
+        add_osm_feature ("name:ca")
+
+    osm_meta_date <- test_path ("fixtures", "osm-date.osm")
+    doc <- xml2::read_xml (osm_meta_date)
+
+    x <- osmdata_data_frame (q, doc)
+
+    cols <- c ("osm_type", "osm_id", "ele", "name",
+               "name:ca", "natural", "prominence")
+    expect_named (x, cols)
+    expect_s3_class (x, "data.frame")
+
+    obj_overpass_call <- osmdata (bbox = q$bbox, overpass_call = opq_string_intern (q))
+    obj_opq <- osmdata (bbox = q$bbox, overpass_call = q)
+    obj <- osmdata (bbox = q$bbox)
+
+    metaL<- list (meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
+                  meta_opq = get_metadata (obj_opq, doc)$meta,
+                  meta_no_call = get_metadata (obj, doc)$meta)
+
+    expect_identical (metaL$meta_overpass_call, metaL$meta_opq)
+    expect_identical (metaL$meta_overpass_call$datetime_to, attr (q, "datetime"))
+    expect_null (metaL$meta_overpass_call$datetime_from)
+    expect_null (metaL$meta_no_call$query_type)
+})
+
+test_that ("out meta & diff", {
+    q <- getbb ("Conflent", featuretype = "relation") %>%
+        opq (nodes_only = TRUE, datetime = "2020-11-07T00:00:00Z",
+             datetime2 = "2022-12-04T00:00:00Z") %>%
+        add_osm_feature ("natural", "peak") %>%
+        add_osm_feature ("prominence")  %>%
+        add_osm_feature ("name:ca")
+
+    q$suffix <- ");\n(._;>;);\nout meta;"
+
+    osm_meta_diff <- test_path ("fixtures", "osm-meta_diff.osm")
+    doc <- xml2::read_xml (osm_meta_diff)
+
+    x <- osmdata_data_frame (q, doc)
+
+    cols <- c ("osm_type", "osm_id", "osm_version", "osm_timestamp",
+               "osm_changeset", "osm_uid", "osm_user", "ele", "name",
+               "name:ca", "natural", "prominence")
+    expect_named (x, cols)
+    expect_s3_class (x, "data.frame")
+
+    obj_overpass_call <- osmdata (bbox = q$bbox, overpass_call = opq_string_intern (q))
+    obj_opq <- osmdata (bbox = q$bbox, overpass_call = q)
+    obj <- osmdata (bbox = q$bbox)
+
+    metaL<- list (meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
+                  meta_opq = get_metadata (obj_opq, doc)$meta,
+                  meta_no_call = get_metadata (obj, doc)$meta)
+
+    expect_identical (metaL$meta_overpass_call, metaL$meta_opq)
+    expect_identical (metaL$meta_overpass_call$datetime_from, attr (q, "datetime"))
+    expect_identical (metaL$meta_overpass_call$datetime_to, attr (q, "datetime2"))
+    expect_null (metaL$meta_no_call$query_type)
 })
 
 test_that ("out meta & adiff", {
@@ -119,15 +226,15 @@ test_that ("out meta & adiff", {
     expect_named (x, cols)
     expect_s3_class (x, "data.frame")
 
-    obj_overpass_call <- osmdata(bbox = q$bbox, overpass_call = opq_string_intern(q))
-    obj_opq <- osmdata(bbox = q$bbox, overpass_call = q)
-    obj <- osmdata(bbox = q$bbox)
+    obj_overpass_call <- osmdata (bbox = q$bbox, overpass_call = opq_string_intern (q))
+    obj_opq <- osmdata (bbox = q$bbox, overpass_call = q)
+    obj <- osmdata (bbox = q$bbox)
 
-    metaL<- list (meta_overpass_call = get_metadata(obj_overpass_call, doc)$meta,
-                  meta_opq = get_metadata(obj_opq, doc)$meta,
-                  meta_no_call = get_metadata(obj, doc)$meta)
+    metaL<- list (meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
+                  meta_opq = get_metadata (obj_opq, doc)$meta,
+                  meta_no_call = get_metadata (obj, doc)$meta)
 
-    k <- sapply (metaL, function (x) expect_equal(x$query_type, "adiff"))
+    k <- sapply (metaL, function (x) expect_equal (x$query_type, "adiff"))
     expect_identical (metaL$meta_overpass_call, metaL$meta_opq)
     expect_identical (metaL$meta_overpass_call$datetime_from, attr (q, "datetime"))
 })
@@ -150,15 +257,15 @@ test_that ("adiff2", {
     expect_named (x, cols)
     expect_s3_class (x, "data.frame")
 
-    obj_overpass_call <- osmdata(bbox = q$bbox, overpass_call = opq_string_intern(q))
-    obj_opq <- osmdata(bbox = q$bbox, overpass_call = q)
-    obj <- osmdata(bbox = q$bbox)
+    obj_overpass_call <- osmdata (bbox = q$bbox, overpass_call = opq_string_intern (q))
+    obj_opq <- osmdata (bbox = q$bbox, overpass_call = q)
+    obj <- osmdata (bbox = q$bbox)
 
-    metaL<- list (meta_overpass_call = get_metadata(obj_overpass_call, doc)$meta,
-                  meta_opq = get_metadata(obj_opq, doc)$meta,
-                  meta_no_call = get_metadata(obj, doc)$meta)
+    metaL<- list (meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
+                  meta_opq = get_metadata (obj_opq, doc)$meta,
+                  meta_no_call = get_metadata (obj, doc)$meta)
 
-    k <- sapply (metaL, function (x) expect_equal(x$query_type, "adiff"))
+    k <- sapply (metaL, function (x) expect_equal (x$query_type, "adiff"))
     expect_identical (metaL$meta_overpass_call, metaL$meta_opq)
     expect_identical (metaL$meta_overpass_call$datetime_from, attr (q, "datetime"))
 })
