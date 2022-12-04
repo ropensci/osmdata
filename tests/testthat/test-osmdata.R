@@ -211,6 +211,8 @@ test_that ("query-no-quiet", {
         #                "Issuing query to Overpass API")
         # expect_message (x <- osmdata_sc (qry, quiet = FALSE),
         #                "Issuing query to Overpass API")
+        # expect_message (x <- osmdata_data_frame (qry, quiet = FALSE),
+        #                "Issuing query to Overpass API")
     }
 })
 

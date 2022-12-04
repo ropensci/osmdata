@@ -222,6 +222,18 @@ get_metadata <- function (obj, doc) {
             meta$datetime_to <- x [2]
             meta$query_type <- "date"
 
+        } else if (grepl ("adiff", x [1])) {
+
+            if (length (x) < 2) {
+                stop ("unrecongised query format")
+            }
+            meta$datetime_from <- x [2]
+            meta$datetime_to <- x [4]
+            if (!is_datetime (meta$datetime_to)) {  # adiff opq without datetime2
+                meta$datetime_to <- xml2::xml_text (xml2::xml_find_all (doc, "//meta/@osm_base"))
+            }
+            meta$query_type <- "adiff"
+
         } else if (grepl ("diff", x [1])) {
 
             if (length (x) < 4) {
@@ -232,19 +244,38 @@ get_metadata <- function (obj, doc) {
             meta$query_type <- "diff"
         }
 
-    } else {
+    } else if (inherits (q, "overpass_query")) {
 
         if (!is.null (attr (q, "datetime2"))) {
 
-            meta$datetime_to <- attr (q, "datetime2")
             meta$datetime_from <- attr (q, "datetime")
-            meta$query_type <- "diff"
+            meta$datetime_to <- attr (q, "datetime2")
+
+            if ("action" %in% xml2::xml_name (xml2::xml_children(doc))) {
+                meta$query_type <- "adiff"
+            } else {
+                meta$query_type <- "diff"
+            }
 
         } else if (!is.null (attr (q, "datetime"))) {
 
-            meta$datetime_to <- attr (q, "datetime")
-            meta$query_type <- "date"
+            if ("action" %in% xml2::xml_name (xml2::xml_children(doc))) {
+                meta$datetime_from <- attr (q, "datetime")
+                meta$datetime_to <- xml2::xml_text (xml2::xml_find_all (doc, "//meta/@osm_base"))
+                meta$query_type <- "adiff"
+            } else {
+                meta$datetime_to <- attr (q, "datetime")
+                meta$query_type <- "date"
+            }
+
         }
+
+    } else {  # is.null (q)
+
+        if ("action" %in% xml2::xml_name (xml2::xml_children(doc))) {
+          meta$query_type <- "adiff"
+        }
+
     }
 
     obj$meta <- meta
@@ -253,6 +284,34 @@ get_metadata <- function (obj, doc) {
     obj$overpass_call <- q
 
     return (obj)
+}
+
+is_datetime <- function (x) {
+
+    if (nchar (x) != 20 &
+        substring (x, 5, 5) != "-" &
+        substring (x, 8, 8) != "-" &
+        substring (x, 11, 11) != "T" &
+        substring (x, 14, 14) != ":" &
+        substring (x, 17, 17) != ":" &
+        substring (x, 20, 20) != "Z") {
+      return (FALSE)
+    }
+    YY <- substring (x, 1, 4) # nolint
+    MM <- substring (x, 6, 7) # nolint
+    DD <- substring (x, 9, 10) # nolint
+    hh <- substring (x, 12, 13)
+    mm <- substring (x, 15, 16)
+    ss <- substring (x, 18, 19)
+    if (formatC (as.integer (YY), width = 4, flag = "0") != YY |
+        formatC (as.integer (MM), width = 2, flag = "0") != MM |
+        formatC (as.integer (DD), width = 2, flag = "0") != DD |
+        formatC (as.integer (hh), width = 2, flag = "0") != hh |
+        formatC (as.integer (mm), width = 2, flag = "0") != mm |
+        formatC (as.integer (ss), width = 2, flag = "0") != ss) {
+      return (FALSE)
+    }
+    return (TRUE)
 }
 
 #' Make an 'sf' object from an 'sfc' list and associated data matrix returned
@@ -551,7 +610,7 @@ getbb_sc <- function (x) {
 #' attr (hampi_df, "overpass_call")
 #' attr (hampi_df, "meta")
 #' }
-osmdata_data_frame<- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) {
+osmdata_data_frame <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) {
 
     obj <- osmdata () # uses class def
 
@@ -573,8 +632,15 @@ osmdata_data_frame<- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) {
     if (!quiet) {
         message ("converting OSM data to a data.frame")
     }
-    df <- xml_to_df (doc, stringsAsFactors = stringsAsFactors)
 
+    if ("action" %in% xml2::xml_name (xml2::xml_children(doc))) {
+        datetime_from <- obj$meta$datetime_from
+        datetime_to <- obj$meta$datetime_to
+        df <- xml_adiff_to_df (doc, datetime_from = datetime_from, datetime_to = datetime_to,
+                               stringsAsFactors = stringsAsFactors)
+    } else {
+        df <- xml_to_df (doc, stringsAsFactors = stringsAsFactors)
+    }
     attr (df, "bbox") <- obj$bbox
     attr (df, "overpass_call") <- obj$overpass_call
     attr (df, "meta") <- obj$meta
@@ -582,15 +648,20 @@ osmdata_data_frame<- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) {
     return (df)
 }
 
-xml_to_df<- function (doc, stringsAsFactors = FALSE){
+xml_to_df <- function (doc, stringsAsFactors = FALSE) {
 
     osm_obj <- xml2::xml_find_all (doc, ".//node|.//way|.//relation")
+
+    if (length (osm_obj) == 0) {
+        return (data.frame (osm_type = character (), osm_id = character (),
+                           stringsAsFactors = stringsAsFactors))
+    }
 
     osm_type <- xml2::xml_name (osm_obj)
     osm_id <- xml2::xml_attr (osm_obj, attr = "id")
 
     tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = FALSE)
-    tagsL <- lapply (tags, function(x){
+    tagsL <- lapply (tags, function(x) {
         tag <- xml2::xml_attrs (x)
         tag <- sapply (tag, function(y) structure (y["v"], names=y["k"]))
         data.frame (t (tag), stringsAsFactors = stringsAsFactors, check.names = FALSE)
@@ -598,29 +669,141 @@ xml_to_df<- function (doc, stringsAsFactors = FALSE){
 
     df <- do.call (rbind_addColumns, c(tagsL, list (stringsAsFactors = stringsAsFactors)))
     df <- df[, order (names (df))]
-    df <- data.frame (osm_type, osm_id, df,
-                      stringsAsFactors = stringsAsFactors, check.names = FALSE)
+
+    if (all (xml2::xml_has_attr (osm_obj,
+                                 c ("version", "timestamp", "changeset", "uid", "user")))) {
+
+        osm_version <- xml2::xml_attr (osm_obj, attr = "version")
+        osm_timestamp <- xml2::xml_attr (osm_obj, attr = "timestamp")
+        osm_changeset <- xml2::xml_attr (osm_obj, attr = "changeset")
+        osm_uid <- xml2::xml_attr (osm_obj, attr = "uid")
+        osm_user <- xml2::xml_attr (osm_obj, attr = "user")
+
+        df <- data.frame (osm_type, osm_id, osm_version, osm_timestamp,
+                          osm_changeset, osm_uid, osm_user, df,
+                          stringsAsFactors = stringsAsFactors, check.names = FALSE)
+
+    } else {
+        df <- data.frame (osm_type, osm_id, df,
+                          stringsAsFactors = stringsAsFactors, check.names = FALSE)
+    }
 
     return (df)
 }
 
 
+xml_adiff_to_df <- function (doc, datetime_from, datetime_to, stringsAsFactors=FALSE) {
+
+    osm_actions <- xml2::xml_find_all (doc, ".//action")
+
+    if (length (osm_actions) == 0) {
+        return (data.frame (osm_type = character (), osm_id = character (),
+                           stringsAsFactors = stringsAsFactors))
+    }
+
+    action_type <- xml2::xml_attr (osm_actions, attr = "type")
+
+    dfL <- mapply (function (action, type) {
+        osm_obj <- xml2::xml_find_all (action, ".//node|.//way|.//relation")
+        osm_type <- xml2::xml_name (osm_obj)
+        osm_id <- xml2::xml_attr (osm_obj, attr = "id")
+
+        if (type == "modify") {
+
+            dates <- c(datetime_from, datetime_to)
+            tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = FALSE)
+            tagsL <- mapply (function(x, adiff_date) {
+                tag <- xml2::xml_attrs (x)
+                key <- sapply (tag, function(y) y["k"])
+                value <- sapply (tag, function(y) y["v"])
+                names (value) <- key
+                data.frame (adiff_action = "modify", adiff_date, t (value),
+                            stringsAsFactors = stringsAsFactors, check.names = FALSE)
+            }, x = tags, adiff_date = dates, SIMPLIFY = FALSE)
+            df <- do.call (rbind_addColumns, c(tagsL, list (stringsAsFactors = stringsAsFactors)))
+
+        } else if (type == "delete") {
+
+            dates <- c(datetime_from, datetime_to)
+            osm_visible <- xml2::xml_attr (osm_obj, attr = "visible")
+            tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = FALSE)
+            tagsL <- mapply (function(x, adiff_date, adiff_visible) {
+              tag <- xml2::xml_attrs (x)
+              key <- sapply (tag, function(y) y["k"])
+              value <- sapply (tag, function(y) y["v"])
+              names (value) <- key
+              data.frame (adiff_action = "delete", adiff_date, adiff_visible, t (value),
+                          stringsAsFactors = stringsAsFactors, check.names = FALSE)
+            }, x = tags, adiff_date = dates, adiff_visible = osm_visible, SIMPLIFY = FALSE)
+            df <- do.call (rbind_addColumns, c(tagsL, list (stringsAsFactors = stringsAsFactors)))
+
+        } else if (type == "create") {
+
+            tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = TRUE)
+            tag <- xml2::xml_attrs (tags)
+            key <- sapply (tag, function(x) x["k"])
+            value <- sapply (tag, function(x) x["v"])
+            names (value) <- key
+            df <- data.frame (adiff_action = "create", adiff_date = datetime_to, t (value),
+                        stringsAsFactors = stringsAsFactors, check.names = FALSE)
+
+        }
+
+        meta <- all (xml2::xml_has_attr (xml2::xml_find_all (osm_actions, ".//node|.//way|.//relation"),
+                                                c ("version", "timestamp", "changeset", "uid", "user")))
+        if (meta) {
+            osm_version <- xml2::xml_attr (osm_obj, attr = "version")
+            osm_timestamp <- xml2::xml_attr (osm_obj, attr = "timestamp")
+            osm_changeset <- xml2::xml_attr (osm_obj, attr = "changeset")
+            osm_uid <- xml2::xml_attr (osm_obj, attr = "uid")
+            osm_user <- xml2::xml_attr (osm_obj, attr = "user")
+
+            df <- data.frame (osm_type, osm_id, osm_version, osm_timestamp,
+                              osm_changeset, osm_uid, osm_user, df,
+                              stringsAsFactors = stringsAsFactors, check.names = FALSE)
+        } else {
+            df <- data.frame (osm_id, osm_type, df,
+                              stringsAsFactors = stringsAsFactors, check.names = FALSE)
+        }
+
+        return (df)
+    }, action = osm_actions, type = action_type)
+
+    df <- do.call (rbind_addColumns, c(dfL, list (stringsAsFactors = stringsAsFactors)))
+    sel_FALSE <- which (df$adiff_visible == "false")
+    sel_TRUE <- which (df$adiff_visible == "true")
+    df$adiff_visible <- NA
+    df$adiff_visible[sel_FALSE]<- FALSE
+    df$adiff_visible[sel_TRUE]<- TRUE
+
+    ord_cols <- intersect (c ("adiff_action", "adiff_date", "adiff_visible",
+                              "osm_type", "osm_id", "osm_version", "osm_timestamp",
+                              "osm_changeset", "osm_uid", "osm_user"),
+                           names(df))
+
+    ord_cols <- c (ord_cols, setdiff (sort(names (df)), ord_cols))
+    df <- df[, ord_cols]
+
+    return (df)
+}
+
 rbind_addColumns <- function (..., deparse.level = 0, make.row.names = FALSE,
-                              stringsAsFactors=FALSE){
+                              stringsAsFactors=FALSE) {
 
     input <- list(...)
-    colNameRes <-  unique (unlist (lapply (input, names)))
+    col_names <-  unique (unlist (lapply (input, names)))
 
-    res <- lapply (input, function (x){
-        misCols<- setdiff (colNameRes, names (x))
-        misCols<- structure (as.list (rep (NA, length (misCols))), names = misCols)
-        out <- list2DF (c (x, misCols))
-        out <- out[, colNameRes]
+    res <- lapply (input, function (x) {
+        mis_cols <- setdiff (col_names, names (x))
+        mis_cols <- structure (as.list ( rep (list (rep (NA, nrow (x))),
+                                              length (mis_cols))), names = mis_cols)
+        out <- list2DF (c (x, mis_cols))
+        out <- out[, col_names]
     })
 
-    res <- c (res, list(deparse.level = deparse.level,
-                        make.row.names = make.row.names,
-                        stringsAsFactors = stringsAsFactors))
+    res <- c (res, list (deparse.level = deparse.level,
+                         make.row.names = make.row.names,
+                         stringsAsFactors = stringsAsFactors))
     res <- do.call (rbind, res)
 
     return (res)

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API 0.7.59 e21c39fe">
+  <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+  <meta osm_base="2022-12-04T00:03:05Z"/>
+  <action type="create">
+    <node id="579950717" lat="42.4374960" lon="2.2610942" version="8" timestamp="2021-12-06T11:36:02Z" changeset="114614991" uid="11725140" user="jmaspons">
+      <tag k="ele" v="2702"/>
+      <tag k="name" v="Pic de la Dona"/>
+      <tag k="name:ca" v="Pic de la Dona"/>
+      <tag k="natural" v="peak"/>
+      <tag k="prominence" v="98"/>
+      <tag k="wikidata" v="Q384203"/>
+      <tag k="wikipedia" v="ca:Pic de la Dona"/>
+    </node>
+  </action>
+  <action type="modify">
+    <old>
+      <node id="6197624321" version="1" timestamp="2019-01-10T07:51:07Z" changeset="66185998" uid="2491053" user="ManelG"/>
+    </old>
+    <new>
+      <node id="6197624321" lat="42.4921111" lon="2.4686112" version="2" timestamp="2021-12-06T12:47:21Z" changeset="114617494" uid="11725140" user="jmaspons">
+        <tag k="ele" v="2731"/>
+        <tag k="name" v="Puig dels Tres Vents"/>
+        <tag k="name:ca" v="Puig dels Tres Vents"/>
+        <tag k="natural" v="peak"/>
+        <tag k="prominence" v="222"/>
+        <tag k="source:prominence" v="IGN map. Key col: 2509m"/>
+        <tag k="wikidata" v="Q7838888"/>
+        <tag k="wikipedia" v="ca:Puig de Tres Vents"/>
+      </node>
+    </new>
+  </action>
+</osm>
