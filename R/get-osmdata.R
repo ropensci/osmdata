@@ -669,7 +669,7 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
         data.frame (t (tag), stringsAsFactors = stringsAsFactors, check.names = FALSE)
     })
 
-    df <- do.call (rbind_addColumns, c(tagsL, list (stringsAsFactors = stringsAsFactors)))
+    df <- do.call (rbind_add_columns, c (tagsL, list (stringsAsFactors = stringsAsFactors)))
     df <- df[, order (names (df))]
 
     if (all (xml2::xml_has_attr (osm_obj,
@@ -712,7 +712,7 @@ xml_adiff_to_df <- function (doc, datetime_from, datetime_to, stringsAsFactors=F
 
         if (type == "modify") {
 
-            dates <- c(datetime_from, datetime_to)
+            dates <- c (datetime_from, datetime_to)
             tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = FALSE)
             tagsL <- mapply (function(x, adiff_date) {
                 tag <- xml2::xml_attrs (x)
@@ -722,11 +722,11 @@ xml_adiff_to_df <- function (doc, datetime_from, datetime_to, stringsAsFactors=F
                 data.frame (adiff_action = "modify", adiff_date, t (value),
                             stringsAsFactors = stringsAsFactors, check.names = FALSE)
             }, x = tags, adiff_date = dates, SIMPLIFY = FALSE)
-            df <- do.call (rbind_addColumns, c(tagsL, list (stringsAsFactors = stringsAsFactors)))
+            df <- do.call (rbind_add_columns, c (tagsL, list (stringsAsFactors = stringsAsFactors)))
 
         } else if (type == "delete") {
 
-            dates <- c(datetime_from, datetime_to)
+            dates <- c (datetime_from, datetime_to)
             osm_visible <- xml2::xml_attr (osm_obj, attr = "visible")
             tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = FALSE)
             tagsL <- mapply (function(x, adiff_date, adiff_visible) {
@@ -737,7 +737,7 @@ xml_adiff_to_df <- function (doc, datetime_from, datetime_to, stringsAsFactors=F
               data.frame (adiff_action = "delete", adiff_date, adiff_visible, t (value),
                           stringsAsFactors = stringsAsFactors, check.names = FALSE)
             }, x = tags, adiff_date = dates, adiff_visible = osm_visible, SIMPLIFY = FALSE)
-            df <- do.call (rbind_addColumns, c(tagsL, list (stringsAsFactors = stringsAsFactors)))
+            df <- do.call (rbind_add_columns, c (tagsL, list (stringsAsFactors = stringsAsFactors)))
 
         } else if (type == "create") {
 
@@ -771,7 +771,7 @@ xml_adiff_to_df <- function (doc, datetime_from, datetime_to, stringsAsFactors=F
         return (df)
     }, action = osm_actions, type = action_type)
 
-    df <- do.call (rbind_addColumns, c(dfL, list (stringsAsFactors = stringsAsFactors)))
+    df <- do.call (rbind_add_columns, c (dfL, list (stringsAsFactors = stringsAsFactors)))
     sel_FALSE <- which (df$adiff_visible == "false")
     sel_TRUE <- which (df$adiff_visible == "true")
     df$adiff_visible <- NA
@@ -789,8 +789,8 @@ xml_adiff_to_df <- function (doc, datetime_from, datetime_to, stringsAsFactors=F
     return (df)
 }
 
-rbind_addColumns <- function (..., deparse.level = 0, make.row.names = FALSE,
-                              stringsAsFactors=FALSE) {
+rbind_add_columns <- function (..., deparse.level = 0, make.row.names = FALSE,
+                               stringsAsFactors=FALSE) {
 
     input <- list(...)
     col_names <-  unique (unlist (lapply (input, names)))
