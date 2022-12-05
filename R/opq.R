@@ -864,19 +864,33 @@ opq_string_intern <- function (opq, quiet = TRUE) {
             )
         }
 
-        if (!is.null (opq$bbox)){
-            area <- paste0 (sprintf (" node (%s);\n", opq$bbox),
-                            sprintf (" way (%s);\n", opq$bbox),
-                            sprintf (" relation (%s);\n", opq$bbox)
-            )
-        } else if (!is.null (opq$area)){
-            opq$prefix<- gsub ("\n$", "", opq$prefix)
-            searchArea<- paste0(opq$area, "; map_to_area->.searchArea; );\n(\n")
-            area <- paste0 (searchArea,
-                "  node (area.searchArea);\n",
-                "  way (area.searchArea);\n",
-                "  relation (area.searchArea);\n"
-            )
+        if (attr (opq, "nodes_only")) {
+
+            if (!is.null (opq$bbox)) {
+                area <- sprintf (" node (%s);\n", opq$bbox)
+            } else if (!is.null (opq$area)){
+                opq$prefix<- gsub ("\n$", "", opq$prefix)
+                searchArea<- paste0(opq$area, "; map_to_area->.searchArea; );\n(\n")
+                area <- paste0 (searchArea, "  node (area.searchArea);\n")
+            }
+
+        } else {
+
+          if (!is.null (opq$bbox)) {
+              area <- paste0 (sprintf (" node (%s);\n", opq$bbox),
+                              sprintf (" way (%s);\n", opq$bbox),
+                              sprintf (" relation (%s);\n", opq$bbox)
+              )
+          } else if (!is.null (opq$area)) {
+              opq$prefix<- gsub ("\n$", "", opq$prefix)
+              searchArea<- paste0(opq$area, "; map_to_area->.searchArea; );\n(\n")
+              area <- paste0 (searchArea,
+                  "  node (area.searchArea);\n",
+                  "  way (area.searchArea);\n",
+                  "  relation (area.searchArea);\n"
+              )
+          }
+
         }
 
         res <- paste0 (opq$prefix, area, opq$suffix)
