@@ -71,6 +71,17 @@ test_that ("getbb-place_name", {
     expect_error (getbb ("Salzzburg"), "`place_name` 'Salzzburg' can't be found")
 })
 
+test_that ("getarea-place_name", {
+
+    expect_silent (
+        res <- with_mock_dir ("mock_bb_df", {
+            getarea (place_name = "Salzburg")
+        })
+    )
+    expect_is (res, "character")
+    expect_length (res,  1L)
+})
+
 # Note that the polygon calls produce large mock files which are reduced with
 # post-processing routines. See `test-features.R` for explanations.
 post_process_polygons <- function (dir_name, min_polys = 2) {
