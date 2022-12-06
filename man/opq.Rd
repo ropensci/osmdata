@@ -7,6 +7,7 @@
 opq(
   bbox = NULL,
   nodes_only = FALSE,
+  out = c("body", "tags", "meta", "skel", "tags center", "ids"),
   datetime = NULL,
   datetime2 = NULL,
   timeout = 25,
@@ -34,6 +35,13 @@ relation, but this can be very inefficient for node-only queries.
 Setting this value to \code{TRUE} for such cases makes queries more
 efficient, with data returned in the \code{osm_points} list item.}
 
+\item{out}{The level of verbosity of the overpass result: \code{body} (geometries
+and tags, the default), \code{tags} (tags without geometry), \code{meta} (like
+body + Timestamp, Version, Changeset, User, User ID of the last edition),
+\code{skel} (geometries only), \verb{tags center} (tags without geometry + the
+coordinates of the center of the bounding box) and \code{ids} (type and id of
+the objects only).}
+
 \item{datetime}{If specified, a date and time to extract data from the OSM
 database as it was up to the specified date and time, as described at
 \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#date}.
@@ -57,9 +65,16 @@ An \code{overpass_query} object
 \description{
 Build an Overpass query
 }
+\details{
+The \code{out} statement for \code{tags}, \verb{tags center}and \code{id}, do not return
+geometries and \code{out = "meta"}is not yet implemented for all \verb{osmdata_*}
+functions. Use \link{osmdata_xml} or \link{osmdata_data_frame} to get the result of
+these queries. For details, see the documentation of the
+\href{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#out}{out statement}.
+}
 \note{
 See
-/url{https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29}
+\url{https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29}
 for explanation of \code{timeout} and \code{memsize} (or \code{maxsize} in overpass terms).
 Note in particular the comment that queries with arbitrarily large \code{memsize}
 are likely to be rejected.
