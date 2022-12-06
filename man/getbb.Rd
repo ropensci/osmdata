@@ -24,10 +24,11 @@ returned by \url{https://wiki.openstreetmap.org/wiki/Nominatim}}
 
 \item{viewbox}{The bounds in which you're searching}
 
-\item{format_out}{Character string indicating output format: matrix
-(default), string (see \code{\link[=bbox_to_string]{bbox_to_string()}}), data.frame (all 'hits' returned
-by Nominatim), sf_polygon (for polygons that work with the sf package) or
-polygon (full polygonal bounding boxes for each match).}
+\item{format_out}{Character string indicating output format: \code{matrix}
+(default), \code{string} (see \code{\link[=bbox_to_string]{bbox_to_string()}}), \code{data.frame} (all 'hits' returned
+by Nominatim), \code{sf_polygon} (for polygons that work with the sf package),
+\code{polygon} (full polygonal bounding boxes for each match) or \code{osm_type_id} (
+string for quering inside deffined OSM areas \code{\link[=bbox_to_string]{bbox_to_string()}}).}
 
 \item{base_url}{Base website from where data is queried}
 
@@ -50,11 +51,21 @@ y ...   ...
 If \code{format_out = "polygon"}, one or more two-columns matrices of polygonal
 longitude-latitude points. Where multiple \code{place_name} occurrences are found
 within \code{nominatim}, each item of the list of coordinates may itself contain
-multiple coordinate matrices where multiple exact matches exist. If one one
+multiple coordinate matrices where multiple exact matches exist. If one
 exact match exists with potentially multiple polygonal boundaries (for
 example, "london uk" is an exact match, but can mean either greater London or
 the City of London), only the first is returned. See examples below for
 illustration.
+
+For \code{format_out = "osm_type_id"}, a character string representing an OSM object in overpass query
+language. For example: \code{"relation(id:11747082)"} represents the area of
+the Catalan Countries. If one exact match exists with potentially multiple
+polygonal boundaries, only the first relation or way is returned. A set of
+objects can also be represented for multiple results (e.g.
+\verb{relation(id:11747082,307833); way(id:22422490)}). See examples below for
+illustration. The OSM objects that can be used as
+\href{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Map_way/relation_to_area_(map_to_area)}{areas in overpass queries}
+\emph{must be closed rings} (ways or relations).
 }
 \description{
 This function uses the free Nominatim API provided by OpenStreetMap to find
@@ -81,9 +92,10 @@ a city is desired, better results will usually be obtained with
 \dontrun{
 getbb ("Salzburg")
 # select based on display_name, print query url
-getbb ("Hereford", display_name_contains = "USA", silent = FALSE)
+getbb ("Hereford", display_name_contains = "United States", silent = FALSE)
 # top 3 matches as data frame
 getbb ("Hereford", format_out = "data.frame", limit = 3)
+
 # Examples of polygonal boundaries
 bb <- getbb ("london uk", format_out = "polygon") # single match
 dim (bb [[1]] [[1]]) # matrix of longitude/latitude pairs
@@ -91,6 +103,12 @@ bb_sf <- getbb ("kathmandu", format_out = "sf_polygon")
 # sf:::plot.sf(bb_sf) # can be plotted if sf is installed
 getbb ("london", format_out = "sf_polygon")
 getbb ("accra", format_out = "sf_polygon") # rectangular bb
+
+area <- getbb("València", format_out = "osm_type_id")
+# select multiple areas with format_out = "osm_type_id"
+areas <- getbb("València", format_out = "data.frame")
+bbox_to_string(areas[areas$osm_type != "node", ])
+
 # Using an alternative service (locationiq requires an API key)
 # add LOCATIONIQ=type_your_api_key_here to .Renviron:
 key <- Sys.getenv ("LOCATIONIQ")

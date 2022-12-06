@@ -2,12 +2,13 @@
 % Please edit documentation in R/getbb.R
 \name{bbox_to_string}
 \alias{bbox_to_string}
-\title{Convert a named matrix or a named or unnamed vector to a string}
+\title{Convert a named matrix or a named or unnamed vector or data.frame to a string}
 \usage{
 bbox_to_string(bbox)
 }
 \arguments{
-\item{bbox}{bounding box as character, matrix or vector.
+\item{bbox}{bounding box as character, matrix, vector or a data.frame with
+\code{osm_type} and \code{osm_id} columns.
 If character, the bbox will be found (geocoded) and extracted with
 \link{getbb}. Unnamed vectors will be sorted appropriately and must merely be
 in the order (x, y, x, y).}
@@ -15,14 +16,19 @@ in the order (x, y, x, y).}
 \value{
 A character string representing min x, min y, max x, and max y
 bounds. For example: \code{"15.3152361,76.4406446,15.3552361,76.4806446"} is
-the bounding box for Hampi, India.
+the bounding box for Hampi, India. For data.frames with OSM objects, a
+character string representing a set of OSM objects in overpass query
+language. For example: \code{"relation(id:11747082)"} represents the area of
+the Catalan Countries. A set of objects can also be represented for multirow
+data.frames (e.g. \code{"relation(id:11747082,307833); way(id:22422490)"}).
 }
 \description{
 This function converts a bounding box into a string for use in web apis
 }
 \examples{
 \dontrun{
-bbox_to_string (getbb ("hampi india"))
+bbox_to_string (getbb ("València"))
+bbox_to_string (getbb ("València", format_out="data.frame"))
 }
 }
 \seealso{

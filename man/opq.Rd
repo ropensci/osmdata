@@ -19,7 +19,13 @@ longitudes and latitudes, in the form \code{c(xmin, ymin, xmax, ymax)}
 or (ii) a character string in the form \code{xmin,ymin,xmax,ymax}. These
 will be passed to \link{getbb} to be converted to a numerical bounding
 box. Can also be (iii) a matrix representing a bounding polygon as
-returned from \code{getbb(..., format_out = "polygon")}.}
+returned from \code{getbb(..., format_out = "polygon")}. To search in an area,
+(iv) a character string with a relation or a (closed) way id in the
+format \code{"way(id:1)"}, \code{"relation(id:1, 2)"} or
+\code{"relation(id:1, 2, 3); way(id:2)"} as returned by
+\code{getbb(..., format_out = "osm_type_id")} or \link{bbox_to_string} with
+a \code{data.frame} from \code{getbb(..., format_out = "data.frame")} to select all
+areas combined (relations and ways).}
 
 \item{nodes_only}{If \code{TRUE}, query OSM nodes only. Some OSM structures such
 as \code{place = "city"} or \code{highway = "traffic_signals"} are represented by
@@ -78,6 +84,18 @@ c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 opq <- opq (bbox, nodes_only = TRUE) \%>\%
     add_osm_feature (key = "place", value = "city") \%>\%
     osmdata_sf (quiet = FALSE)
+
+# Filter by a search area
+qa1 <- getbb ("Catalan Countries", format_out = "osm_type_id") \%>\%
+    opq (nodes_only = TRUE) \%>\%
+    add_osm_feature (key = "capital", value = "4")
+opqa1 <- osmdata_sf (qa1)
+# Filter by a multiple search areas
+bb <- getbb ("Vilafranca", format_out = "data.frame")
+qa2 <- bbox_to_string (bb[bb$osm_type != "node", ]) \%>\%
+    opq (nodes_only = TRUE) \%>\%
+    add_osm_feature (key = "place")
+opqa2 <- osmdata_sf (qa2)
 }
 }
 \seealso{

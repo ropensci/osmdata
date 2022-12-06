@@ -1,29 +1,55 @@
-#' Convert a named matrix or a named or unnamed vector to a string
+#' Convert a named matrix or a named or unnamed vector or data.frame to a string
 #'
 #' This function converts a bounding box into a string for use in web apis
 #'
-#' @param bbox bounding box as character, matrix or vector.
+#' @param bbox bounding box as character, matrix, vector or a data.frame with
+#' `osm_type` and `osm_id` columns.
 #' If character, the bbox will be found (geocoded) and extracted with
 #' \link{getbb}. Unnamed vectors will be sorted appropriately and must merely be
 #' in the order (x, y, x, y).
 #'
 #' @return A character string representing min x, min y, max x, and max y
 #' bounds. For example: \code{"15.3152361,76.4406446,15.3552361,76.4806446"} is
-#' the bounding box for Hampi, India.
+#' the bounding box for Hampi, India. For data.frames with OSM objects, a
+#' character string representing a set of OSM objects in overpass query
+#' language. For example: `"relation(id:11747082)"` represents the area of
+#' the Catalan Countries. A set of objects can also be represented for multirow
+#' data.frames (e.g. `"relation(id:11747082,307833); way(id:22422490)"`).
 #'
 #' @family queries
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' bbox_to_string (getbb ("hampi india"))
+#' bbox_to_string (getbb ("València"))
+#' bbox_to_string (getbb ("València", format_out="data.frame"))
 #' }
 bbox_to_string <- function (bbox) {
 
     if (missing (bbox)) stop ("bbox must be provided")
 
     if (is.character (bbox)) {
-        bbox <- getbb (bbox)
+        if (grepl ("(node|way|relation|rel)\\(id:[0-9, ]+\\)", bbox)) {
+            return (bbox)
+        } else {
+            bbox <- getbb (bbox)
+        }
+    }
+
+    if (inherits (bbox, "data.frame")){
+
+        if (!all (c ("osm_type", "osm_id") %in% names (bbox))) {
+            stop ("bbox must be a data.frame with osm_type and osm_id columns as ",
+                  "in:\n\t getbb(..., format_out = \"data.frame\").")
+        }
+
+        type_id <- split (bbox$osm_id, bbox$osm_type)
+        id <- mapply (function (type, ids){
+            paste0 (type, "(id:", paste (ids, collapse=","), ")")
+        }, type = names (type_id), ids = type_id)
+
+        return ( paste (id, collapse="; "))
+
     }
 
     if (is.list (bbox)) {
@@ -72,11 +98,11 @@ bbox_to_string <- function (bbox) {
             bbox <- c (y [1], x [1], y [2], x [2])
         }
     }
-  
+
     if (any (is.na (bbox))) {
       stop ("bbox contains 'NA' values")
     }
-    
+
     return (paste0 (bbox, collapse = ","))
 }
 
@@ -97,10 +123,11 @@ bbox_to_string <- function (bbox) {
 #' @param display_name_contains Text string to match with display_name field
 #' returned by <https://wiki.openstreetmap.org/wiki/Nominatim>
 #' @param viewbox The bounds in which you're searching
-#' @param format_out Character string indicating output format: matrix
-#' (default), string (see [bbox_to_string()]), data.frame (all 'hits' returned
-#' by Nominatim), sf_polygon (for polygons that work with the sf package) or
-#' polygon (full polygonal bounding boxes for each match).
+#' @param format_out Character string indicating output format: `matrix`
+#' (default), `string` (see [bbox_to_string()]), `data.frame` (all 'hits' returned
+#' by Nominatim), `sf_polygon` (for polygons that work with the sf package),
+#' `polygon` (full polygonal bounding boxes for each match) or `osm_type_id` (
+#' string for quering inside deffined OSM areas [bbox_to_string()]).
 #' @param base_url Base website from where data is queried
 #' @param featuretype The type of OSM feature (settlement is default; see Note)
 #' @param limit How many results should the API return?
@@ -117,11 +144,21 @@ bbox_to_string <- function (bbox) {
 #' If `format_out = "polygon"`, one or more two-columns matrices of polygonal
 #' longitude-latitude points. Where multiple `place_name` occurrences are found
 #' within `nominatim`, each item of the list of coordinates may itself contain
-#' multiple coordinate matrices where multiple exact matches exist. If one one
+#' multiple coordinate matrices where multiple exact matches exist. If one
 #' exact match exists with potentially multiple polygonal boundaries (for
 #' example, "london uk" is an exact match, but can mean either greater London or
 #' the City of London), only the first is returned. See examples below for
 #' illustration.
+#'
+#' For `format_out = "osm_type_id"`, a character string representing an OSM object in overpass query
+#' language. For example: \code{"relation(id:11747082)"} represents the area of
+#' the Catalan Countries. If one exact match exists with potentially multiple
+#' polygonal boundaries, only the first relation or way is returned. A set of
+#' objects can also be represented for multiple results (e.g.
+#'`relation(id:11747082,307833); way(id:22422490)`). See examples below for
+#' illustration. The OSM objects that can be used as
+#' [areas in overpass queries](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Map_way/relation_to_area_(map_to_area))
+#' \emph{must be closed rings} (ways or relations).
 #'
 #' @note Specific values of `featuretype` include "street", "city",
 # " "county", "state", and "country" (see
@@ -141,6 +178,7 @@ bbox_to_string <- function (bbox) {
 #' getbb ("Hereford", display_name_contains = "United States", silent = FALSE)
 #' # top 3 matches as data frame
 #' getbb ("Hereford", format_out = "data.frame", limit = 3)
+#'
 #' # Examples of polygonal boundaries
 #' bb <- getbb ("london uk", format_out = "polygon") # single match
 #' dim (bb [[1]] [[1]]) # matrix of longitude/latitude pairs
@@ -148,6 +186,12 @@ bbox_to_string <- function (bbox) {
 #' # sf:::plot.sf(bb_sf) # can be plotted if sf is installed
 #' getbb ("london", format_out = "sf_polygon")
 #' getbb ("accra", format_out = "sf_polygon") # rectangular bb
+#'
+#' area <- getbb("València", format_out = "osm_type_id")
+#' # select multiple areas with format_out = "osm_type_id"
+#' areas <- getbb("València", format_out = "data.frame")
+#' bbox_to_string(areas[areas$osm_type != "node", ])
+#'
 #' # Using an alternative service (locationiq requires an API key)
 #' # add LOCATIONIQ=type_your_api_key_here to .Renviron:
 #' key <- Sys.getenv ("LOCATIONIQ")
@@ -170,7 +214,7 @@ getbb <- function (place_name,
 
     is_polygon <- grepl ("polygon", format_out)
 
-    obj <- get_bb_query (
+    obj <- get_nominatim_query (
         place_name,
         featuretype,
         is_polygon,
@@ -181,19 +225,29 @@ getbb <- function (place_name,
         base_url,
         silent
     )
-    
+
     if (format_out == "data.frame") {
         return (obj)
+    }
+
+    if (format_out == "osm_type_id") {
+
+        bbox <- obj[which (obj$osm_type %in% c ("relation", "way"))[1], ]
+        if (nrow (bbox) == 0) {
+            stop ("No area found for `place_name` ", place_name, ".")
+        }
+
+        return (bbox_to_string (bbox))
     }
 
     bn <- as.numeric (obj$boundingbox [[1]])
     bb_mat <- matrix (c (bn [3:4], bn [1:2]), nrow = 2, byrow = TRUE)
     dimnames (bb_mat) <- list (c ("x", "y"), c ("min", "max"))
-    
+
     if (any (is.na (bb_mat))) {
       stop (paste0 ("`place_name` '", place_name ,"' can't be found"))
     }
-    
+
     if (format_out == "matrix") {
         ret <- bb_mat
     } else if (format_out == "string") {
@@ -228,7 +282,7 @@ getbb <- function (place_name,
     return (ret)
 }
 
-get_bb_query <- function (place_name,
+get_nominatim_query <- function (place_name,
                           featuretype,
                           is_polygon,
                           display_name_contains,

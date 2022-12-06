@@ -70,14 +70,65 @@ test_that ("opq_string", {
     expect_false (grepl ("value", s0))
     expect_true (grepl ("out body", s0)) # full data body; (nodes,ways,rels)
 
+    # area only:
+    expect_silent (
+        q0 <- opq (bbox = "relation(id:11747082)")
+    )
+    expect_silent (
+        s0 <- opq_string (q0)
+    )
+    expect_message (
+        s0 <- opq_string_intern (q0, quiet = FALSE),
+        paste0 (
+            "The overpass server is intended to ",
+            "be used to extract specific features"
+        )
+    )
+    expect_type (s0, "character")
+    expect_length (s0, 1L)
+    expect_false (grepl ("key", s0))
+    expect_false (grepl ("value", s0))
+    expect_true (grepl ("out body", s0)) # full data body; (nodes,ways,rels)
+
     # nodes_only parameter:
     q1 <- opq (
         bbox = c (-0.118, 51.514, -0.115, 51.517),
         nodes_only = TRUE
     )
     s1 <- opq_string (q1)
-    # nodes only, so "out" instead of "out body"
+    # nodes only, so "out" instead of "out body" and no way nor relation
     expect_false (grepl ("out body", s1))
+    expect_false (grepl ("way|relation", s1))
+
+    q1 <- opq (
+      bbox = "relation(id:11747082)",
+      nodes_only = TRUE
+    )
+    s1 <- opq_string (q1)
+    # nodes only, so "out" instead of "out body" and no way nor relation on clauses
+    expect_false (grepl ("out body", s1))
+    expect_false (all (grepl ("way|relation", strsplit(s1, "\\n")[[1]][-2])))
+
+    # nodes_only parameter with features:
+    q1 <- opq (
+        bbox = c (-0.118, 51.514, -0.115, 51.517),
+        nodes_only = TRUE
+    )
+    q1 <- add_osm_feature(q1, key = "amenity", value = "restaurant")
+    s1 <- opq_string (q1)
+    # nodes only, so "out" instead of "out body" and no way nor relation
+    expect_false (grepl ("out body", s1))
+    expect_false (grepl ("way|relation", s1))
+
+    q1 <- opq (
+        bbox = "relation(id:11747082)",
+        nodes_only = TRUE
+    )
+    q1 <- add_osm_feature(q1, key = "amenity", value = "restaurant")
+    s1 <- opq_string (q1)
+    # nodes only, so "out" instead of "out body" and no way nor relation on clauses
+    expect_false (grepl ("out body", s1))
+    expect_false (all (grepl ("way|relation", strsplit(s1, "\\n")[[1]][-2])))
 
     # key-value pair:
     q2 <- add_osm_feature (q0, key = "highway", value = "!primary")
