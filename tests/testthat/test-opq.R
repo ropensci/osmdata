@@ -56,7 +56,7 @@ test_that ("out", {
             bbox = c (-0.118, 51.514, -0.115, 51.517),
             out = "blah"
         ),
-        "'arg' should be one of "
+        'out parameter must be "body", "tags", "meta", "skel", "tags center" or "ids".'
     )
 
     q_geo <- lapply (c ("meta", "skel"), function (x) {
@@ -87,7 +87,7 @@ test_that ("out", {
             bbox = c (-0.118, 51.514, -0.115, 51.517),
             out = "blah"
         ),
-        "'arg' should be one of "
+        'out parameter must be "body", "tags", "meta", "skel", "tags center" or "ids".'
     )
 
     q_geo <- lapply (c ("meta", "skel"), function (x) {

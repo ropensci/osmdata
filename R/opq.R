@@ -101,9 +101,9 @@ opq <- function (bbox = NULL,  nodes_only = FALSE,
         "); out;",
         ");\n(._;>;);\nout body;"
     ) # recurse down
-    out <- match.arg (out)
-    if (is.na (out)) {
-        stop ('out must be "body", "tags", "meta", "skel", "tags center" or "id".')
+    out <- try (match.arg (out))
+    if (inherits (out, "try-error")) {
+        stop ('out parameter must be "body", "tags", "meta", "skel", "tags center" or "ids".')
     }
     has_geometry <- out %in% c ("body", "meta", "skel")
     if (has_geometry && out != "body") {
