@@ -275,7 +275,22 @@ get_metadata <- function (obj, doc) {
     } else {  # is.null (q)
 
         if ("action" %in% xml2::xml_name (xml2::xml_children(doc))) {
-          meta$query_type <- "adiff"
+            osm_actions <- xml2::xml_find_all (doc, ".//action")
+            action_type <- xml2::xml_attr (osm_actions, attr = "type")
+            # Adiff have <new> for deleted objects, but diff have not.
+            if (length(sel_del <- which (action_type %in% "delete")) > 0) {
+                if ("new" %in% xml2::xml_name(xml2::xml_children(actions[sel_del[1]]))) {
+                    meta$query_type <- "adiff"
+                } else {
+                    meta$query_type <- "diff"
+                }
+            } else {
+                meta$query_type <- "diff"
+                warning("OSM data is ambiguous and can correspond either to a diff ",
+                        "or an adiff query. As \"q\" parameter is missing, it's ",
+                        "not possible to distinguish.\n\tAssuming diff.")
+            }
+
         }
 
     }
@@ -641,7 +656,7 @@ osmdata_data_frame <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) 
         message ("converting OSM data to a data.frame")
     }
 
-    if ("action" %in% xml2::xml_name (xml2::xml_children(doc))) {
+    if (obj$meta$query_type == "adiff") {
         datetime_from <- obj$meta$datetime_from
         if (is.null(datetime_from)) datetime_from <- "old"
         datetime_to <- obj$meta$datetime_to
@@ -650,6 +665,9 @@ osmdata_data_frame <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) 
                                stringsAsFactors = stringsAsFactors)
     } else {
         df <- xml_to_df (doc, stringsAsFactors = stringsAsFactors)
+        if (obj$meta$query_type == "diff") {
+            df <- unique (df)
+        }
     }
     attr (df, "bbox") <- obj$bbox
     attr (df, "overpass_call") <- obj$overpass_call
