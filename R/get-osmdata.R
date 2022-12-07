@@ -637,7 +637,9 @@ osmdata_data_frame <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) 
 
     if ("action" %in% xml2::xml_name (xml2::xml_children(doc))) {
         datetime_from <- obj$meta$datetime_from
+        if (is.null(datetime_from)) datetime_from <- "old"
         datetime_to <- obj$meta$datetime_to
+        if (is.null(datetime_to)) datetime_to <- "new"
         df <- xml_adiff_to_df (doc, datetime_from = datetime_from, datetime_to = datetime_to,
                                stringsAsFactors = stringsAsFactors)
     } else {
@@ -665,8 +667,11 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
     tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = FALSE)
     tagsL <- lapply (tags, function(x) {
         tag <- xml2::xml_attrs (x)
-        tag <- sapply (tag, function(y) structure (y["v"], names=y["k"]))
-        data.frame (t (tag), stringsAsFactors = stringsAsFactors, check.names = FALSE)
+        ## Improvement for geometries (many nodes without tags) but worst for `out tags;`
+        # if (length (tag) == 0) return (list2DF (nrow = 1))
+        tag <- structure (lapply (tag, function (y) y["v"]),
+                          names = lapply (tag, function (y) y["k"]))
+        list2DF (tag, nrow = 1)
     })
 
     df <- do.call (rbind_add_columns, c (tagsL, list (stringsAsFactors = stringsAsFactors)))
@@ -716,11 +721,10 @@ xml_adiff_to_df <- function (doc, datetime_from, datetime_to, stringsAsFactors=F
             tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = FALSE)
             tagsL <- mapply (function(x, adiff_date) {
                 tag <- xml2::xml_attrs (x)
-                key <- sapply (tag, function(y) y["k"])
-                value <- sapply (tag, function(y) y["v"])
-                names (value) <- key
-                data.frame (adiff_action = "modify", adiff_date, t (value),
-                            stringsAsFactors = stringsAsFactors, check.names = FALSE)
+                tag <- structure (lapply (tag, function (y) y["v"]),
+                                  names = lapply (tag, function (y) y["k"]))
+                list2DF (c (list (adiff_action = "modify",
+                                  adiff_date = adiff_date), tag), nrow = 1)
             }, x = tags, adiff_date = dates, SIMPLIFY = FALSE)
             df <- do.call (rbind_add_columns, c (tagsL, list (stringsAsFactors = stringsAsFactors)))
 
@@ -730,12 +734,12 @@ xml_adiff_to_df <- function (doc, datetime_from, datetime_to, stringsAsFactors=F
             osm_visible <- xml2::xml_attr (osm_obj, attr = "visible")
             tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = FALSE)
             tagsL <- mapply (function(x, adiff_date, adiff_visible) {
-              tag <- xml2::xml_attrs (x)
-              key <- sapply (tag, function(y) y["k"])
-              value <- sapply (tag, function(y) y["v"])
-              names (value) <- key
-              data.frame (adiff_action = "delete", adiff_date, adiff_visible, t (value),
-                          stringsAsFactors = stringsAsFactors, check.names = FALSE)
+                tag <- xml2::xml_attrs (x)
+                if (length (tag) == 0) return (list2DF (nrow = 1))
+                tag <- structure (lapply (tag, function (y) y["v"]),
+                                  names = lapply (tag, function (y) y["k"]))
+                list2DF (c (list (adiff_action = "delete", adiff_date = adiff_date,
+                                  adiff_visible = adiff_visible), tag), nrow = 1)
             }, x = tags, adiff_date = dates, adiff_visible = osm_visible, SIMPLIFY = FALSE)
             df <- do.call (rbind_add_columns, c (tagsL, list (stringsAsFactors = stringsAsFactors)))
 
@@ -743,11 +747,10 @@ xml_adiff_to_df <- function (doc, datetime_from, datetime_to, stringsAsFactors=F
 
             tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = TRUE)
             tag <- xml2::xml_attrs (tags)
-            key <- sapply (tag, function(x) x["k"])
-            value <- sapply (tag, function(x) x["v"])
-            names (value) <- key
-            df <- data.frame (adiff_action = "create", adiff_date = datetime_to, t (value),
-                        stringsAsFactors = stringsAsFactors, check.names = FALSE)
+            tag <- structure (lapply (tag, function (y) y["v"]),
+                              names = lapply (tag, function (y) y["k"]))
+            df <- list2DF (c (list (adiff_action = "create",
+                              adiff_date = datetime_to), tag), nrow = 1)
 
         }
 
