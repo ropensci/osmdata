@@ -119,7 +119,14 @@ test_that ("osmdata without query", {
     osm_multi <- test_path ("fixtures", "osm-multi.osm")
     doc <- xml2::read_xml (osm_multi)
 
-    expect_s3_class ( osmdata_data_frame (doc = doc), "data.frame")
+    expect_silent ( x_df <- osmdata_data_frame (doc = doc))
+    expect_s3_class ( x_df, "data.frame")
+
+    expect_message (
+         x_df <- osmdata_data_frame (doc = doc, quiet = FALSE),
+        "q missing: osmdata object will not include query"
+    )
+    expect_s3_class ( x_df, "data.frame")
 })
 
 test_that ("make_query", {
