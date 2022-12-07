@@ -119,23 +119,37 @@ test_that ("osmdata without query", {
     osm_multi <- test_path ("fixtures", "osm-multi.osm")
     doc <- xml2::read_xml (osm_multi)
 
+    expect_silent ( x_sp <- osmdata_sp (doc = doc))
+    expect_silent ( x_sf <- osmdata_sf (doc = doc))
+    # expect_silent ( x_sc <- osmdata_sc (doc = doc)) # fails without bbox
     expect_silent ( x_df <- osmdata_data_frame (doc = doc))
+
+    expect_s3_class ( x_sp, "osmdata")
+    expect_s3_class ( x_sf, "osmdata")
+    # expect_s3_class ( x_sc, "osmdata") # fails without bbox
     expect_s3_class ( x_df, "data.frame")
 
+    expect_message (
+        x_sp <- osmdata_sp (doc = doc, quiet = FALSE),
+        "q missing: osmdata object will not include query"
+    )
+    expect_message (
+        x_sf <- osmdata_sf (doc = doc, quiet = FALSE),
+        "q missing: osmdata object will not include query"
+    )
+    # expect_message (
+    #      x_sc <- osmdata_sc (doc = doc, quiet = FALSE), # fails without bbox
+    #     "q missing: osmdata object will not include query"
+    # )
     expect_message (
          x_df <- osmdata_data_frame (doc = doc, quiet = FALSE),
         "q missing: osmdata object will not include query"
     )
+
+    expect_s3_class ( x_sp, "osmdata")
+    expect_s3_class ( x_sf, "osmdata")
+    # expect_s3_class ( x_sc, "osmdata") # fails without bbox
     expect_s3_class ( x_df, "data.frame")
-})
-
-test_that ("osmdata without query", {
-    osm_multi <- test_path ("fixtures", "osm-multi.osm")
-    doc <- xml2::read_xml (osm_multi)
-
-    expect_s3_class ( osmdata_sp (doc = doc), "osmdata")
-    expect_s3_class ( osmdata_sf (doc = doc), "osmdata")
-    # expect_s3_class ( osmdata_sc (doc = doc), "osmdata")
 })
 
 test_that ("make_query", {
