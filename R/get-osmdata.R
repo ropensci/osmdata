@@ -616,8 +616,14 @@ osmdata_data_frame <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) 
 
     obj <- osmdata () # uses class def
 
-    if (missing (q) & !quiet) {
-        message ("q missing: osmdata object will not include query")
+    if (missing (q)) {
+        if (missing (doc)) {
+            stop ('arguments "q" and "doc" are missing, with no default. ',
+                  "At least one must be provided.")
+        }
+        if (!quiet) {
+            message ("q missing: osmdata object will not include query")
+        }
     } else if (is (q, "overpass_query")) {
         obj$bbox <- q$bbox
         obj$overpass_call <- opq_string_intern (q, quiet = quiet)

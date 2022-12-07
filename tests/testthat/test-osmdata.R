@@ -90,7 +90,7 @@ test_that ("query_errors", {
     )
     expect_error (
         osmdata_data_frame (),
-        "argument \"q\" is missing, with no default"
+        'arguments "q" and "doc" are missing, with no default. '
     )
 
     expect_error (
@@ -113,6 +113,13 @@ test_that ("query_errors", {
         osmdata_data_frame (q = NULL),
         "q must be an overpass query or a character string"
     )
+})
+
+test_that ("osmdata without query", {
+    osm_multi <- test_path ("fixtures", "osm-multi.osm")
+    doc <- xml2::read_xml (osm_multi)
+
+    expect_s3_class ( osmdata_data_frame (doc = doc), "data.frame")
 })
 
 test_that ("make_query", {
@@ -231,7 +238,7 @@ test_that ("add_osm_features", {
     )
 
     qry <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
-    
+
     expect_error (
        qry <- add_osm_features (qry, features = "a"),
         "features must be a named list or vector or a character vector enclosed in escape delimited quotations \\(see examples\\)"
@@ -249,12 +256,12 @@ test_that ("add_osm_features", {
 
     qry3 <- add_osm_features (qry0, features = c("amenity" = "restaurant"))
     expect_identical (qry1, qry3)
-    
+
     qry4 <- add_osm_features (qry0,
       features = c("amenity" = "restaurant", "amentity" = "pub")
       )
     expect_s3_class (qry4, "overpass_query")
-    
+
     qry5 <- add_osm_features (qry0,
       features = list("amenity" = "restaurant", "amentity" = "pub")
     )

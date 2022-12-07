@@ -128,6 +128,7 @@ test_that ("attributes", {
 
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_data_frame (q0, osm_multi)
+    x_no_call <- osmdata_data_frame (doc = osm_multi)
     x_sf <- osmdata_sf (q0, osm_multi)
 
     expect_s3_class (x, "data.frame")
@@ -136,6 +137,11 @@ test_that ("attributes", {
     expect_identical (attr (x, "bbox"), q0$bbox)
     expect_identical (attr (x, "overpass_call"), x_sf$overpass_call)
     expect_identical (attr (x, "meta"), x_sf$meta)
+    # no call
+    expect_s3_class (x_no_call, "data.frame")
+    expect_identical (names (attributes (x_no_call)),
+                      c ("names", "class", "row.names", "meta"))
+    expect_identical (attr (x_no_call, "meta"), x_sf$meta)
 })
 
 test_that ("date", {
@@ -149,11 +155,14 @@ test_that ("date", {
     doc <- xml2::read_xml (osm_meta_date)
 
     x <- osmdata_data_frame (q, doc)
+    x_no_call <- osmdata_data_frame (doc = doc, quiet = FALSE)
 
     cols <- c ("osm_type", "osm_id", "ele", "name",
                "name:ca", "natural", "prominence")
     expect_named (x, cols)
+    expect_named (x_no_call, cols)
     expect_s3_class (x, "data.frame")
+    expect_s3_class (x_no_call, "data.frame")
 
     obj_overpass_call <- osmdata (bbox = q$bbox, overpass_call = opq_string_intern (q))
     obj_opq <- osmdata (bbox = q$bbox, overpass_call = q)
@@ -182,13 +191,16 @@ test_that ("out meta & diff", {
     osm_meta_diff <- test_path ("fixtures", "osm-meta_diff.osm")
     doc <- xml2::read_xml (osm_meta_diff)
 
-    x <- osmdata_data_frame (doc = doc, quiet = FALSE)
+    x <- osmdata_data_frame (q, doc, quiet = FALSE)
+    x_no_call <- osmdata_data_frame (doc = doc)
 
     cols <- c ("osm_type", "osm_id", "osm_version", "osm_timestamp",
                "osm_changeset", "osm_uid", "osm_user", "ele", "name",
                "name:ca", "natural", "prominence")
     expect_named (x, cols)
+    expect_named (x_no_call, cols)
     expect_s3_class (x, "data.frame")
+    expect_s3_class (x_no_call, "data.frame")
 
     obj_overpass_call <- osmdata (bbox = q$bbox, overpass_call = opq_string_intern (q))
     obj_opq <- osmdata (bbox = q$bbox, overpass_call = q)
@@ -218,13 +230,16 @@ test_that ("out meta & adiff", {
     doc <- xml2::read_xml (osm_meta_adiff)
 
     x <- osmdata_data_frame (opq_string_intern (q), doc)
+    x_no_call <- osmdata_data_frame (doc = doc)
 
     cols <- c ("adiff_action", "adiff_date", "adiff_visible", "osm_type", "osm_id",
                "osm_version", "osm_timestamp", "osm_changeset", "osm_uid", "osm_user",
                "ele", "name", "name:ca", "natural", "prominence", "source:prominence",
                "wikidata", "wikipedia")
     expect_named (x, cols)
+    expect_named (x_no_call, cols)
     expect_s3_class (x, "data.frame")
+    expect_s3_class (x_no_call, "data.frame")
 
     obj_overpass_call <- osmdata (bbox = q$bbox, overpass_call = opq_string_intern (q))
     obj_opq <- osmdata (bbox = q$bbox, overpass_call = q)
@@ -249,13 +264,16 @@ test_that ("adiff2", {
     osm_adiff2 <- test_path ("fixtures", "osm-adiff2.osm")
     doc <- xml2::read_xml (osm_adiff2)
 
-    x <- osmdata_data_frame (q, doc)
+    x <- osmdata_data_frame (q, doc, quiet = FALSE)
+    x_no_call <- osmdata_data_frame (doc = doc)
 
     cols <- c ("adiff_action", "adiff_date", "adiff_visible", "osm_type", "osm_id",
                "addr:housenumber", "addr:street", "amenity", "created_by",
                "cuisine", "name", "phone")
     expect_named (x, cols)
+    expect_named (x_no_call, cols)
     expect_s3_class (x, "data.frame")
+    expect_s3_class (x_no_call, "data.frame")
 
     obj_overpass_call <- osmdata (bbox = q$bbox, overpass_call = opq_string_intern (q))
     obj_opq <- osmdata (bbox = q$bbox, overpass_call = q)
