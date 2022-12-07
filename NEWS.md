@@ -4,7 +4,8 @@
 ## Major changes:
 
 - Improved `add_osm_features` so that key-values pairs can be submitted as a list, rather than escape-delimited character strings; thanks to @elipousson (#277, #278).
-- @elipousson is also new package contributor, thanks to the above work.
+- `opq()` can now utilise overpass ability to filter results by area; thanks to @jmaspons (#286)
+- Both @elipousson and @jmaspons are new package contributors, thanks to the above work.
 
 ## Minor changes:
 
