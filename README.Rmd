@@ -268,6 +268,7 @@ project, you agree to abide by its terms.
 
 
 
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -298,6 +299,12 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=hrbrmstr">hrbrmstr</a>
 </td>
 <td align="center">
+<a href="https://github.com/jmaspons">
+<img src="https://avatars.githubusercontent.com/u/102644?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=jmaspons">jmaspons</a>
+</td>
+<td align="center">
 <a href="https://github.com/virgesmith">
 <img src="https://avatars.githubusercontent.com/u/19323577?v=4" width="100px;" alt=""/>
 </a><br>
@@ -314,12 +321,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <img src="https://avatars.githubusercontent.com/u/931136?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=elipousson">elipousson</a>
-</td>
-<td align="center">
-<a href="https://github.com/jmaspons">
-<img src="https://avatars.githubusercontent.com/u/102644?v=4" width="100px;" alt=""/>
-</a><br>
-<a href="https://github.com/ropensci/osmdata/commits?author=jmaspons">jmaspons</a>
 </td>
 </tr>
 
@@ -734,10 +735,10 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3AnfruehADA">nfruehADA</a>
 </td>
 <td align="center">
-<a href="https://github.com/orlandoandradeb">
+<a href="https://github.com/orlandombaa">
 <img src="https://avatars.githubusercontent.com/u/48104481?u=66d48bb0e7efb664a94eace3472aa6a06960a7f4&v=4" width="100px;" alt=""/>
 </a><br>
-<a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aorlandoandradeb">orlandoandradeb</a>
+<a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aorlandombaa">orlandombaa</a>
 </td>
 <td align="center">
 <a href="https://github.com/changwoo-lee">
@@ -900,6 +901,7 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
 
 
 
