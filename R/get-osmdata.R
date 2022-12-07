@@ -274,7 +274,7 @@ get_metadata <- function (obj, doc) {
 
     } else {  # is.null (q)
 
-        if ("action" %in% xml2::xml_name (xml2::xml_children(doc))) {
+        if ("action" %in% xml2::xml_name (xml2::xml_children (doc))) {
             osm_actions <- xml2::xml_find_all (doc, ".//action")
             action_type <- xml2::xml_attr (osm_actions, attr = "type")
             # Adiff have <new> for deleted objects, but diff have not.
@@ -286,9 +286,9 @@ get_metadata <- function (obj, doc) {
                 }
             } else {
                 meta$query_type <- "diff"
-                warning("OSM data is ambiguous and can correspond either to a diff ",
-                        "or an adiff query. As \"q\" parameter is missing, it's ",
-                        "not possible to distinguish.\n\tAssuming diff.")
+                warning ("OSM data is ambiguous and can correspond either to a diff ",
+                         "or an adiff query. As \"q\" parameter is missing, it's ",
+                         "not possible to distinguish.\n\tAssuming diff.")
             }
 
         }
