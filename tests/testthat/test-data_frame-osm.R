@@ -229,15 +229,18 @@ test_that ("out meta & adiff", {
     osm_meta_adiff <- test_path ("fixtures", "osm-meta_adiff.osm")
     doc <- xml2::read_xml (osm_meta_adiff)
 
-    x <- osmdata_data_frame (opq_string_intern (q), doc)
-    x_no_call <- osmdata_data_frame (doc = doc)
+    expect_silent( x <- osmdata_data_frame (opq_string_intern (q), doc) )
+    expect_warning(
+        x_no_call <- osmdata_data_frame (doc = doc),
+        "OSM data is ambiguous and can correspond either to a diff or an adiff query."
+    ) # query_type assigned to diff
 
     cols <- c ("adiff_action", "adiff_date", "adiff_visible", "osm_type", "osm_id",
                "osm_version", "osm_timestamp", "osm_changeset", "osm_uid", "osm_user",
                "ele", "name", "name:ca", "natural", "prominence", "source:prominence",
                "wikidata", "wikipedia")
     expect_named (x, cols)
-    expect_named (x_no_call, cols)
+    # expect_named (x_no_call, cols) # query_type assigned to diff
     expect_s3_class (x, "data.frame")
     expect_s3_class (x_no_call, "data.frame")
 
@@ -247,9 +250,15 @@ test_that ("out meta & adiff", {
 
     metaL<- list (meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
                   meta_opq = get_metadata (obj_opq, doc)$meta,
-                  meta_no_call = get_metadata (obj, doc)$meta)
+                  meta_no_call = expect_warning (
+                                     get_metadata (obj, doc)$meta,
+                                     "OSM data is ambiguous and can correspond either to a diff or an adiff query"
+                                 )
+                  )
 
-    k <- sapply (metaL, function (x) expect_equal (x$query_type, "adiff"))
+    expect_equal (metaL$meta_overpass_call$query_type, "adiff")
+    expect_equal (metaL$meta_opq$query_type, "adiff")
+    expect_equal (metaL$meta_no_call$query_type, "diff")
     expect_identical (metaL$meta_overpass_call, metaL$meta_opq)
     expect_identical (metaL$meta_overpass_call$datetime_from, attr (q, "datetime"))
 })
