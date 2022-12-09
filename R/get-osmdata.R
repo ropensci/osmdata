@@ -305,30 +305,8 @@ get_metadata <- function (obj, doc) {
 
 is_datetime <- function (x) {
 
-    if (nchar (x) != 20 &
-        substring (x, 5, 5) != "-" &
-        substring (x, 8, 8) != "-" &
-        substring (x, 11, 11) != "T" &
-        substring (x, 14, 14) != ":" &
-        substring (x, 17, 17) != ":" &
-        substring (x, 20, 20) != "Z") {
-        return (FALSE)
-    }
-    YY <- substring (x, 1, 4) # nolint
-    MM <- substring (x, 6, 7) # nolint
-    DD <- substring (x, 9, 10) # nolint
-    hh <- substring (x, 12, 13)
-    mm <- substring (x, 15, 16)
-    ss <- substring (x, 18, 19)
-    if (formatC (as.integer (YY), width = 4, flag = "0") != YY |
-        formatC (as.integer (MM), width = 2, flag = "0") != MM |
-        formatC (as.integer (DD), width = 2, flag = "0") != DD |
-        formatC (as.integer (hh), width = 2, flag = "0") != hh |
-        formatC (as.integer (mm), width = 2, flag = "0") != mm |
-        formatC (as.integer (ss), width = 2, flag = "0") != ss) {
-        return (FALSE)
-    }
-    return (TRUE)
+    ptn <- "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}[A-Z]"
+    grepl (ptn, x)
 }
 
 #' Make an 'sf' object from an 'sfc' list and associated data matrix returned
