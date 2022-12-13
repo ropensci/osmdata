@@ -3,9 +3,11 @@
 
 ## Major changes:
 
+- New `osmdata_data_frame()` function to return non-spatial `data.frame` structures directly from overpass; thanks to @jmaspons (#285).
 - Improved `add_osm_features` so that key-values pairs can be submitted as a list, rather than escape-delimited character strings; thanks to @elipousson (#277, #278).
-- `opq()` can now utilise overpass ability to filter results by area; thanks to @jmaspons (#286)
-- Both @elipousson and @jmaspons are new package contributors, thanks to the above work.
+- `opq()` can now utilise overpass ability to filter results by area; thanks to @jmaspons (#286).
+- @elipousson is new package contributor, thanks to the above work.
+- @jmaspons is new package author, thanks to #285.
 
 ## Minor changes:
 
