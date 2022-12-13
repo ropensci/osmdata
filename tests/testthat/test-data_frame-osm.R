@@ -180,13 +180,11 @@ test_that ("date", {
 
 test_that ("out meta & diff", {
     q <- getbb ("Conflent", featuretype = "relation") %>%
-        opq (nodes_only = TRUE, datetime = "2020-11-07T00:00:00Z",
+        opq (nodes_only = TRUE, out = "meta", datetime = "2020-11-07T00:00:00Z",
              datetime2 = "2022-12-04T00:00:00Z") %>%
         add_osm_feature ("natural", "peak") %>%
         add_osm_feature ("prominence")  %>%
         add_osm_feature ("name:ca")
-
-    q$suffix <- ");\n(._;>;);\nout meta;"
 
     osm_meta_diff <- test_path ("fixtures", "osm-meta_diff.osm")
     doc <- xml2::read_xml (osm_meta_diff)
@@ -218,13 +216,12 @@ test_that ("out meta & diff", {
 
 test_that ("out meta & adiff", {
     q <- getbb ("Conflent", featuretype = "relation") %>%
-        opq (nodes_only = TRUE, datetime = "2020-11-07T00:00:00Z") %>%
+        opq (nodes_only = TRUE, out = "meta", datetime = "2020-11-07T00:00:00Z") %>%
         add_osm_feature ("natural", "peak") %>%
         add_osm_feature ("prominence")  %>%
         add_osm_feature ("name:ca")
 
     q$prefix <- gsub ("date:", "adiff:", q$prefix)
-    q$suffix <- ");\n(._;>;);\nout meta;"
 
     osm_meta_adiff <- test_path ("fixtures", "osm-meta_adiff.osm")
     doc <- xml2::read_xml (osm_meta_adiff)
