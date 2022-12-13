@@ -88,6 +88,10 @@ test_that ("query_errors", {
         osmdata_sc (),
         "argument \"q\" is missing, with no default"
     )
+    expect_error (
+        osmdata_data_frame (),
+        'arguments "q" and "doc" are missing, with no default. '
+    )
 
     expect_error (
         osmdata_xml (q = NULL),
@@ -105,6 +109,24 @@ test_that ("query_errors", {
         osmdata_sc (q = NULL),
         "q must be an overpass query or a character string"
     )
+    expect_error (
+        osmdata_data_frame (q = NULL),
+        "q must be an overpass query or a character string"
+    )
+})
+
+test_that ("osmdata without query", {
+    osm_multi <- test_path ("fixtures", "osm-multi.osm")
+    doc <- xml2::read_xml (osm_multi)
+
+    expect_silent ( x_df <- osmdata_data_frame (doc = doc))
+    expect_s3_class ( x_df, "data.frame")
+
+    expect_message (
+         x_df <- osmdata_data_frame (doc = doc, quiet = FALSE),
+        "q missing: osmdata object will not include query"
+    )
+    expect_s3_class ( x_df, "data.frame")
 })
 
 test_that ("make_query", {
@@ -127,6 +149,10 @@ test_that ("make_query", {
         )
         expect_error (
             osmdata_sc (qry),
+            "Overpass query unavailable without internet"
+        )
+        expect_error (
+            osmdata_data_frame (qry),
             "Overpass query unavailable without internet"
         )
     } else {
@@ -199,6 +225,8 @@ test_that ("query-no-quiet", {
         #                "Issuing query to Overpass API")
         # expect_message (x <- osmdata_sc (qry, quiet = FALSE),
         #                "Issuing query to Overpass API")
+        # expect_message (x <- osmdata_data_frame (qry, quiet = FALSE),
+        #                "Issuing query to Overpass API")
     }
 })
 
@@ -217,7 +245,7 @@ test_that ("add_osm_features", {
     )
 
     qry <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
-    
+
     expect_error (
        qry <- add_osm_features (qry, features = "a"),
         "features must be a named list or vector or a character vector enclosed in escape delimited quotations \\(see examples\\)"
@@ -235,12 +263,12 @@ test_that ("add_osm_features", {
 
     qry3 <- add_osm_features (qry0, features = c("amenity" = "restaurant"))
     expect_identical (qry1, qry3)
-    
+
     qry4 <- add_osm_features (qry0,
       features = c("amenity" = "restaurant", "amentity" = "pub")
       )
     expect_s3_class (qry4, "overpass_query")
-    
+
     qry5 <- add_osm_features (qry0,
       features = list("amenity" = "restaurant", "amentity" = "pub")
     )

@@ -42,6 +42,7 @@ osmdata_xml (q, filename = "hampi.osm")
 }
 \seealso{
 Other extract: 
+\code{\link{osmdata_data_frame}()},
 \code{\link{osmdata_sc}()},
 \code{\link{osmdata_sf}()},
 \code{\link{osmdata_sp}()}

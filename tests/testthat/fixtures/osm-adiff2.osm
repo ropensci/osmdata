@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API 0.7.59 e21c39fe">
+  <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+  <meta osm_base="2022-12-04T01:01:07Z"/>
+  <action type="modify">
+    <old>
+      <node id="367830258" lat="42.7022772" lon="2.8945481">
+        <tag k="created_by" v="Potlatch 0.10f"/>
+        <tag k="name" v="La Passarelle"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="phone" v="+33468513065"/>
+      </node>
+    </old>
+    <new>
+      <node id="367830258" lat="42.7022772" lon="2.8945481">
+        <tag k="amenity" v="restaurant"/>
+        <tag k="name" v="La Passerelle"/>
+        <tag k="phone" v="+33468513065"/>
+      </node>
+    </new>
+  </action>
+  <action type="delete">
+    <old>
+      <node id="951372842" lat="42.6816597" lon="2.9011008">
+        <tag k="amenity" v="restaurant"/>
+        <tag k="name" v="Restaurant Universitaire"/>
+      </node>
+    </old>
+    <new>
+      <node id="951372842" visible="false"/>
+    </new>
+  </action>
+  <action type="delete">
+    <old>
+      <node id="1791127939" lat="42.6964046" lon="2.8783877">
+        <tag k="amenity" v="restaurant"/>
+        <tag k="name" v="Subway"/>
+      </node>
+    </old>
+    <new>
+      <node id="1791127939" visible="true"/>
+    </new>
+  </action>
+  <action type="create">
+    <node id="4341060735" lat="42.6992615" lon="2.8920530">
+      <tag k="name" v="Le Vauban"/>
+      <tag k="cuisine" v="regional"/>
+      <tag k="addr:street" v="Quai Sebastien Vauban"/>
+      <tag k="addr:housenumber" v="29"/>
+      <tag k="amenity" v="restaurant"/>
+    </node>
+  </action>
+</osm>
