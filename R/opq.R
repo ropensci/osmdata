@@ -32,7 +32,10 @@
 #' @param datetime2 If specified, return the \emph{difference} in the OSM
 #'      database between \code{datetime} and \code{datetime2}, where
 #'      \code{datetime2 > datetime}. See
-#'      \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Delta_between_two_dates_.28.22diff.22.29}.
+#'      \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Difference_between_two_dates_(diff)}.
+#' @param adiff If `TRUE`, query for [augmented difference](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Augmented-difference_between_two_dates_(adiff)).
+#'      The result indicates what happened to the modified and deleted OSM
+#'      objects. Requires `datetime(2)*`.
 #' @param timeout It may be necessary to increase this value for large queries,
 #'      because the server may time out before all data are delivered.
 #' @param memsize The default memory size for the 'overpass' server in *bytes*;
@@ -90,7 +93,7 @@
 #' }
 opq <- function (bbox = NULL,  nodes_only = FALSE,
                  out = c ("body", "tags", "meta", "skel", "tags center", "ids"),
-                 datetime = NULL, datetime2 = NULL,
+                 datetime = NULL, datetime2 = NULL, adiff = FALSE,
                  timeout = 25, memsize) {
 
     timeout <- format (timeout, scientific = FALSE)
@@ -103,7 +106,7 @@ opq <- function (bbox = NULL,  nodes_only = FALSE,
 
     has_geometry <- !nodes_only && out %in% c ("body", "meta", "skel")
     if (has_geometry) {
-        suffix <- paste0 (");\n(._;>;);\nout ", out, ";")
+        suffix <- paste0 (");\n(._;>;);\nout ", out, ";")  # recurse down
     } else {
         suffix <- paste0 ("); out", out, ";")
     }
@@ -128,6 +131,10 @@ opq <- function (bbox = NULL,  nodes_only = FALSE,
         } else {
 
             prefix <- paste0 ('[date:\"', datetime, '\"]', prefix)
+        }
+
+        if (adiff) {
+            prefix <- gsub ("^\\[(diff|date):", "[adiff:", prefix)
         }
     }
 

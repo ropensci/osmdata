@@ -10,6 +10,7 @@ opq(
   out = c("body", "tags", "meta", "skel", "tags center", "ids"),
   datetime = NULL,
   datetime2 = NULL,
+  adiff = FALSE,
   timeout = 25,
   memsize
 )
@@ -51,7 +52,11 @@ both the "T" and "Z" characters must be present.}
 \item{datetime2}{If specified, return the \emph{difference} in the OSM
 database between \code{datetime} and \code{datetime2}, where
 \code{datetime2 > datetime}. See
-\url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Delta_between_two_dates_.28.22diff.22.29}.}
+\url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Difference_between_two_dates_(diff)}.}
+
+\item{adiff}{If \code{TRUE}, query for \href{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Augmented-difference_between_two_dates_(adiff)}{augmented difference}.
+The result indicates what happened to the modified and deleted OSM
+objects. Requires \verb{datetime(2)*}.}
 
 \item{timeout}{It may be necessary to increase this value for large queries,
 because the server may time out before all data are delivered.}
