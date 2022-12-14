@@ -78,15 +78,15 @@ test_that ("query_errors", {
     )
     expect_error (
         osmdata_sp (),
-        "argument \"q\" is missing, with no default"
+        'arguments "q" and "doc" are missing, with no default. '
     )
     expect_error (
         osmdata_sf (),
-        "query must be a single character string"
+        'arguments "q" and "doc" are missing, with no default. '
     )
     expect_error (
         osmdata_sc (),
-        "argument \"q\" is missing, with no default"
+        'arguments "q" and "doc" are missing, with no default. '
     )
     expect_error (
         osmdata_data_frame (),
@@ -127,6 +127,15 @@ test_that ("osmdata without query", {
         "q missing: osmdata object will not include query"
     )
     expect_s3_class ( x_df, "data.frame")
+})
+
+test_that ("osmdata without query", {
+    osm_multi <- test_path ("fixtures", "osm-multi.osm")
+    doc <- xml2::read_xml (osm_multi)
+
+    expect_s3_class ( osmdata_sp (doc = doc), "osmdata")
+    expect_s3_class ( osmdata_sf (doc = doc), "osmdata")
+    # expect_s3_class ( osmdata_sc (doc = doc), "osmdata")
 })
 
 test_that ("make_query", {
