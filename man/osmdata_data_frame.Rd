@@ -28,6 +28,12 @@ A \code{data.frame} with id, type and tags of the the objects from the query.
 \description{
 Return an OSM Overpass query as a \link{data.frame} object.
 }
+\details{
+If you are not interested in the geometries of the results, it's a
+good option to query for objects that match the features only and forget
+about members of the ways and relations. You can achieve this by passing
+the parameter \code{body = "tags"} to \code{\link{opq}}.
+}
 \examples{
 \dontrun{
 hampi_df <- opq ("hampi india") \%>\%

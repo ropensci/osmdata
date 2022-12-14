@@ -18,6 +18,12 @@
 #'      relation, but this can be very inefficient for node-only queries.
 #'      Setting this value to `TRUE` for such cases makes queries more
 #'      efficient, with data returned in the `osm_points` list item.
+#' @param out The level of verbosity of the overpass result: `body` (geometries
+#'       and tags, the default), `tags` (tags without geometry), `meta` (like
+#'       body + Timestamp, Version, Changeset, User, User ID of the last edition),
+#'       `skel` (geometries only), `tags center` (tags without geometry + the
+#'       coordinates of the center of the bounding box) and `ids` (type and id of
+#'       the objects only).
 #' @param datetime If specified, a date and time to extract data from the OSM
 #'      database as it was up to the specified date and time, as described at
 #'      \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#date}.
@@ -34,8 +40,14 @@
 #'
 #' @return An `overpass_query` object
 #'
+#' @details The `out` statement for `tags`, `tags center`and `id`, do not return
+#' geometries and `out = "meta"`is not yet implemented for all `osmdata_*`
+#' functions. Use [osmdata_xml] or [osmdata_data_frame] to get the result of
+#' these queries. For details, see the documentation of the
+#' [out statement](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#out).
+#'
 #' @note See
-#' /url{https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29}
+#' \url{https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29}
 #' for explanation of `timeout` and `memsize` (or `maxsize` in overpass terms).
 #' Note in particular the comment that queries with arbitrarily large `memsize`
 #' are likely to be rejected.
@@ -76,17 +88,26 @@
 #'     add_osm_feature (key = "place")
 #' opqa2 <- osmdata_sf (qa2)
 #' }
-opq <- function (bbox = NULL, nodes_only = FALSE,
+opq <- function (bbox = NULL,  nodes_only = FALSE,
+                 out = c ("body", "tags", "meta", "skel", "tags center", "ids"),
                  datetime = NULL, datetime2 = NULL,
                  timeout = 25, memsize) {
 
     timeout <- format (timeout, scientific = FALSE)
     prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
-    suffix <- ifelse (
-        nodes_only,
-        "); out;",
-        ");\n(._;>;);\nout body;"
-    ) # recurse down
+
+    out <- try (match.arg (out))
+    if (inherits (out, "try-error")) {
+        stop ('out parameter must be "body", "tags", "meta", "skel", "tags center" or "ids".')
+    }
+
+    has_geometry <- !nodes_only && out %in% c ("body", "meta", "skel")
+    if (has_geometry) {
+        suffix <- paste0 (");\n(._;>;);\nout ", out, ";")
+    } else {
+        suffix <- paste0 ("); out", out, ";")
+    }
+
     if (!missing (memsize)) {
         prefix <- paste0 (
             prefix, "[maxsize:", # nocov

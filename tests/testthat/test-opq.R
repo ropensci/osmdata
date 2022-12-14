@@ -48,6 +48,72 @@ test_that ("datetime", {
     expect_true (grepl ("diff\\:", q2$prefix))
 })
 
+test_that ("out", {
+
+    q0 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
+    expect_error (
+        opq (
+            bbox = c (-0.118, 51.514, -0.115, 51.517),
+            out = "blah"
+        ),
+        'out parameter must be "body", "tags", "meta", "skel", "tags center" or "ids".'
+    )
+
+    q_geo <- lapply (c ("meta", "skel"), function (x) {
+        q<- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), out = x)
+        expect_true (!identical (q0, q))
+        expect_identical (names (q0), names (q))
+        expect_identical (
+            q0 [names (q0) != "suffix"],
+            q [names (q) != "suffix"]
+        )
+        expect_true (grepl ("^\\);\\n\\(\\._;>;\\);\\nout[a-z ]+;$", q$suffix))
+    })
+    q_no_geo <- lapply (c ("tags", "tags center", "ids"), function (x) {
+        q <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), out = x)
+        expect_true (!identical (q0, q))
+        expect_identical (names (q0), names (q))
+        expect_identical (
+            q0 [names (q0) != "suffix"],
+            q0 [names (q) != "suffix"]
+        )
+        expect_true (grepl ("^\\); out[a-z ]+;$", q$suffix))
+    })
+
+    # nodes_only
+    q1 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), nodes_only = TRUE)
+    expect_error (
+        opq (
+            bbox = c (-0.118, 51.514, -0.115, 51.517),
+            out = "blah"
+        ),
+        'out parameter must be "body", "tags", "meta", "skel", "tags center" or "ids".'
+    )
+
+    q_geo <- lapply (c ("meta", "skel"), function (x) {
+        q<- opq (bbox = c (-0.118, 51.514, -0.115, 51.517),
+                 nodes_only = TRUE, out = x)
+        expect_true (!identical (q1, q))
+        expect_identical (names (q1), names (q))
+        expect_identical (
+            q1 [names (q1) != "suffix"],
+            q1 [names (q) != "suffix"]
+        )
+        expect_true (grepl ("^\\); out[a-z ]+;$", q$suffix))
+    })
+    q_no_geo <- lapply (c ("tags", "tags center", "ids"), function (x) {
+        q <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517),
+                  nodes_only = TRUE, out = x)
+        expect_true (!identical (q1, q))
+        expect_identical (names (q1), names (q))
+        expect_identical (
+            q1 [names (q1) != "suffix"],
+            q1 [names (q) != "suffix"]
+        )
+        expect_true (grepl ("^\\); out[a-z ]+;$", q$suffix))
+    })
+})
+
 test_that ("opq_string", {
 
     # bbox only:
@@ -97,7 +163,7 @@ test_that ("opq_string", {
     )
     s1 <- opq_string (q1)
     # nodes only, so "out" instead of "out body" and no way nor relation
-    expect_false (grepl ("out body", s1))
+    expect_false (grepl ("\\(\\._;>;\\)", s1))
     expect_false (grepl ("way|relation", s1))
 
     q1 <- opq (
@@ -106,7 +172,7 @@ test_that ("opq_string", {
     )
     s1 <- opq_string (q1)
     # nodes only, so "out" instead of "out body" and no way nor relation on clauses
-    expect_false (grepl ("out body", s1))
+    expect_false (grepl ("\\(\\._;>;\\)", s1))
     expect_false (all (grepl ("way|relation", strsplit(s1, "\\n")[[1]][-2])))
 
     # nodes_only parameter with features:
@@ -117,7 +183,7 @@ test_that ("opq_string", {
     q1 <- add_osm_feature(q1, key = "amenity", value = "restaurant")
     s1 <- opq_string (q1)
     # nodes only, so "out" instead of "out body" and no way nor relation
-    expect_false (grepl ("out body", s1))
+    expect_false (grepl ("\\(\\._;>;\\)", s1))
     expect_false (grepl ("way|relation", s1))
 
     q1 <- opq (
@@ -127,7 +193,7 @@ test_that ("opq_string", {
     q1 <- add_osm_feature(q1, key = "amenity", value = "restaurant")
     s1 <- opq_string (q1)
     # nodes only, so "out" instead of "out body" and no way nor relation on clauses
-    expect_false (grepl ("out body", s1))
+    expect_false (grepl ("\\(\\._;>;\\)", s1))
     expect_false (all (grepl ("way|relation", strsplit(s1, "\\n")[[1]][-2])))
 
     # key-value pair:
@@ -266,3 +332,4 @@ test_that ("opq_around", {
     expect_true (grepl ("key", x_key_val))
     expect_true (grepl ("val", x_key_val))
 })
+

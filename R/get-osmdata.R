@@ -582,7 +582,6 @@ getbb_sc <- function (x) {
 
 #' Return an OSM Overpass query as a \link{data.frame} object.
 #'
-# TODO: recommend queries with `out tags;` when implemented.
 #'
 #' @inheritParams osmdata_sp
 #' @param q An object of class `overpass_query` constructed with
@@ -592,6 +591,11 @@ getbb_sc <- function (x) {
 #' @param stringsAsFactors Should character strings in the 'data.frame' be
 #'      coerced to factors?
 #' @return A `data.frame` with id, type and tags of the the objects from the query.
+#'
+#' @details If you are not interested in the geometries of the results, it's a
+#'      good option to query for objects that match the features only and forget
+#'      about members of the ways and relations. You can achieve this by passing
+#'      the parameter `body = "tags"` to \code{\link{opq}}.
 #'
 #' @family extract
 #' @export
