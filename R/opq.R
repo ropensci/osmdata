@@ -44,10 +44,13 @@
 #' @return An `overpass_query` object
 #'
 #' @details The `out` statement for `tags`, `tags center`and `id`, do not return
-#' geometries and `out = "meta"`is not yet implemented for all `osmdata_*`
-#' functions. Use [osmdata_xml] or [osmdata_data_frame] to get the result of
-#' these queries. For details, see the documentation of the
-#' [out statement](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#out).
+#' geometries. Neither `out = "meta"` nor `adiff = TRUE` options are implemented
+#' for all `osmdata_*` functions yet. Use [osmdata_xml] or [osmdata_data_frame]
+#' to get the result of these queries. See the documentation of the
+#' [out statement](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#out)
+#' and
+#' [augmented difference](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Augmented-difference_between_two_dates_(adiff))
+#' for more details about these options.
 #'
 #' @note See
 #' \url{https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29}

@@ -72,10 +72,13 @@ Build an Overpass query
 }
 \details{
 The \code{out} statement for \code{tags}, \verb{tags center}and \code{id}, do not return
-geometries and \code{out = "meta"}is not yet implemented for all \verb{osmdata_*}
-functions. Use \link{osmdata_xml} or \link{osmdata_data_frame} to get the result of
-these queries. For details, see the documentation of the
-\href{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#out}{out statement}.
+geometries. Neither \code{out = "meta"} nor \code{adiff = TRUE} options are implemented
+for all \verb{osmdata_*} functions yet. Use \link{osmdata_xml} or \link{osmdata_data_frame}
+to get the result of these queries. See the documentation of the
+\href{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#out}{out statement}
+and
+\href{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Augmented-difference_between_two_dates_(adiff)}{augmented difference}
+for more details about these options.
 }
 \note{
 See
