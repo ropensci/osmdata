@@ -163,7 +163,7 @@ test_that ("opq_string", {
     )
     s1 <- opq_string (q1)
     # nodes only, so "out" instead of "out body" and no way nor relation
-    expect_false (grepl ("out body", s1))
+    expect_false (grepl ("\\(\\._;>;\\)", s1))
     expect_false (grepl ("way|relation", s1))
 
     q1 <- opq (
@@ -172,7 +172,7 @@ test_that ("opq_string", {
     )
     s1 <- opq_string (q1)
     # nodes only, so "out" instead of "out body" and no way nor relation on clauses
-    expect_false (grepl ("out body", s1))
+    expect_false (grepl ("\\(\\._;>;\\)", s1))
     expect_false (all (grepl ("way|relation", strsplit(s1, "\\n")[[1]][-2])))
 
     # nodes_only parameter with features:
@@ -183,7 +183,7 @@ test_that ("opq_string", {
     q1 <- add_osm_feature(q1, key = "amenity", value = "restaurant")
     s1 <- opq_string (q1)
     # nodes only, so "out" instead of "out body" and no way nor relation
-    expect_false (grepl ("out body", s1))
+    expect_false (grepl ("\\(\\._;>;\\)", s1))
     expect_false (grepl ("way|relation", s1))
 
     q1 <- opq (
@@ -193,7 +193,7 @@ test_that ("opq_string", {
     q1 <- add_osm_feature(q1, key = "amenity", value = "restaurant")
     s1 <- opq_string (q1)
     # nodes only, so "out" instead of "out body" and no way nor relation on clauses
-    expect_false (grepl ("out body", s1))
+    expect_false (grepl ("\\(\\._;>;\\)", s1))
     expect_false (all (grepl ("way|relation", strsplit(s1, "\\n")[[1]][-2])))
 
     # key-value pair:
@@ -332,3 +332,4 @@ test_that ("opq_around", {
     expect_true (grepl ("key", x_key_val))
     expect_true (grepl ("val", x_key_val))
 })
+
