@@ -803,9 +803,9 @@ xml_adiff_to_df <- function (doc, datetime_from, datetime_to, stringsAsFactors=F
     df$adiff_visible[sel_FALSE]<- FALSE
     df$adiff_visible[sel_TRUE]<- TRUE
 
-    ord_cols <- intersect (c ("adiff_action", "adiff_date", "adiff_visible",
-                              "osm_type", "osm_id", "osm_version", "osm_timestamp",
-                              "osm_changeset", "osm_uid", "osm_user"),
+    ord_cols <- intersect (c ("osm_type", "osm_id", "osm_version", "osm_timestamp",
+                              "osm_changeset", "osm_uid", "osm_user",
+                              "adiff_action", "adiff_date", "adiff_visible"),
                            names(df))
 
     ord_cols <- c (ord_cols, setdiff (sort(names (df)), ord_cols))

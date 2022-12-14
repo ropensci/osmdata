@@ -233,10 +233,11 @@ test_that ("out meta & adiff", {
         "OSM data is ambiguous and can correspond either to a diff or an adiff query."
     ) # query_type assigned to diff
 
-    cols <- c ("adiff_action", "adiff_date", "adiff_visible", "osm_type", "osm_id",
+    cols <- c ("osm_type", "osm_id",
                "osm_version", "osm_timestamp", "osm_changeset", "osm_uid", "osm_user",
-               "ele", "name", "name:ca", "natural", "prominence", "source:prominence",
-               "wikidata", "wikipedia")
+               "adiff_action", "adiff_date", "adiff_visible",
+               "ele", "name", "name:ca", "natural", "prominence",
+               "source:prominence", "wikidata", "wikipedia")
     expect_named (x, cols)
     # expect_named (x_no_call, cols) # query_type assigned to diff
     expect_s3_class (x, "data.frame")
@@ -275,7 +276,8 @@ test_that ("adiff2", {
     x <- osmdata_data_frame (q, doc, quiet = FALSE)
     x_no_call <- osmdata_data_frame (doc = doc)
 
-    cols <- c ("adiff_action", "adiff_date", "adiff_visible", "osm_type", "osm_id",
+    cols <- c ("osm_type", "osm_id",
+               "adiff_action", "adiff_date", "adiff_visible",
                "addr:housenumber", "addr:street", "amenity", "created_by",
                "cuisine", "name", "phone")
     expect_named (x, cols)
