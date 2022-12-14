@@ -86,8 +86,8 @@ osmdata_xml <- function (q, filename, quiet = TRUE, encoding) {
         encoding <- "UTF-8"
     }
 
-    if (missing (q) & !quiet) {
-        message ("q missing: osmdata object will not include query")
+    if (missing (q)) {
+        stop ('argument "q" is missing, with no default.')
     } else if (is (q, "overpass_query")) {
         q <- opq_string_intern (q, quiet = quiet)
     } else if (!is.character (q)) {
@@ -130,8 +130,14 @@ osmdata_xml <- function (q, filename, quiet = TRUE, encoding) {
 osmdata_sp <- function (q, doc, quiet = TRUE) {
 
     obj <- osmdata () # uses class def
-    if (missing (q) & !quiet) {
-        message ("q missing: osmdata object will not include query")
+    if (missing (q)) {
+        if (missing (doc)) {
+            stop ('arguments "q" and "doc" are missing, with no default. ',
+                  "At least one must be provided.")
+        }
+        if (!quiet) {
+            message ("q missing: osmdata object will not include query")
+        }
     } else if (is (q, "overpass_query")) {
         obj$bbox <- q$bbox
         obj$overpass_call <- opq_string_intern (q, quiet = quiet)
@@ -387,6 +393,10 @@ osmdata_sf <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) { # noli
     obj <- osmdata () # uses class def
 
     if (missing (q)) {
+        if (missing (doc)) {
+            stop ('arguments "q" and "doc" are missing, with no default. ',
+                  "At least one must be provided.")
+        }
         if (!quiet) {
             message ("q missing: osmdata object will not include query")
         }
@@ -512,8 +522,14 @@ osmdata_sc <- function (q, doc, quiet = TRUE) {
 
     obj <- osmdata () # class def used here to for fill_overpass_data fn
 
-    if (missing (q) & !quiet) {
-        message ("q missing: osmdata object will not include query")
+    if (missing (q)) {
+        if (missing (doc)) {
+            stop ('arguments "q" and "doc" are missing, with no default. ',
+                  "At least one must be provided.")
+        }
+        if (!quiet) {
+            message ("q missing: osmdata object will not include query")
+        }
     } else if (is (q, "overpass_query")) {
         obj$bbox <- q$bbox
         obj$overpass_call <- opq_string_intern (q, quiet = quiet)
@@ -819,3 +835,4 @@ rbind_add_columns <- function (..., deparse.level = 0, make.row.names = FALSE,
 
     return (res)
 }
+
