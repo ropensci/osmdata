@@ -109,7 +109,7 @@ opq <- function (bbox = NULL,  nodes_only = FALSE,
     if (has_geometry && out != "body") {
         suffix <- gsub ("out( body)*;", paste0 ("out ", out, ";"), suffix)
     } else if (!has_geometry) {
-        suffix <- gsub ("\\);(\\n\\(\\._;>;\\);\\n| )out( body)*;", paste0 ("); out ", out, ";"), suffix)
+        suffix <- paste0 ("); out ", out, ";")
     }
 
     if (!missing (memsize)) {
