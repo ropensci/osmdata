@@ -48,11 +48,64 @@ test_that ("datetime", {
     expect_true (grepl ("diff\\:", q2$prefix))
 })
 
+test_that ("adiff", {
+
+    q0 <- opq (
+        bbox = c (-0.118, 51.514, -0.115, 51.517),
+        datetime = "2015-01-01T00:00:00Z"
+    )
+    q1 <- opq (
+        bbox = c (-0.118, 51.514, -0.115, 51.517),
+        datetime =  "2015-01-01T00:00:00Z",
+        adiff = TRUE
+    )
+
+
+    expect_true (!identical (q0, q1))
+    expect_identical (names (q0), names (q1))
+    expect_identical (
+        q0 [!names (q0) == "prefix"],
+        q1 [!names (q1) == "prefix"]
+    )
+    expect_true (!grepl ("date\\:", q1$prefix))
+    expect_true (grepl ("adiff\\:", q1$prefix))
+
+    expect_error (
+        opq (
+            bbox = c (-0.118, 51.514, -0.115, 51.517),
+            datetime = "2015-01-01T00:00:00Z",
+            datetime2 = "blah",
+            adiff = TRUE
+        ),
+        "datetime must be in ISO8601 format"
+    )
+
+    q2 <- opq (
+        bbox = c (-0.118, 51.514, -0.115, 51.517),
+        datetime = "2015-01-01T00:00:00Z",
+        datetime2 = "2015-01-02T00:00:00Z"
+    )
+    q3 <- opq (
+        bbox = c (-0.118, 51.514, -0.115, 51.517),
+        datetime = "2015-01-01T00:00:00Z",
+        datetime2 = "2015-01-02T00:00:00Z",
+        adiff = TRUE
+    )
+    expect_true (!identical (q2, q3))
+    expect_identical (names (q2), names (q3))
+    expect_identical (
+        q0 [!names (q2) == "prefix"],
+        q2 [!names (q3) == "prefix"]
+    )
+    expect_true (!grepl ("date\\:", q2$prefix))
+    expect_true (grepl ("adiff\\:", q3$prefix))
+})
+
 test_that ("out", {
 
     q0 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
     expect_error (
-        opq (
+        q<- opq (
             bbox = c (-0.118, 51.514, -0.115, 51.517),
             out = "blah"
         ),
@@ -83,7 +136,7 @@ test_that ("out", {
     # nodes_only
     q1 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), nodes_only = TRUE)
     expect_error (
-        opq (
+        q <- opq (
             bbox = c (-0.118, 51.514, -0.115, 51.517),
             out = "blah"
         ),
