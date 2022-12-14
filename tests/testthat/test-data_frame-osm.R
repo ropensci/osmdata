@@ -1,4 +1,4 @@
-context ("data.frame-osm")
+context ("data_frame-osm")
 
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
     identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
@@ -95,7 +95,9 @@ test_that ("empty result", {
     expect_null (metaL$meta_no_call$query_type)
 
     # adiff
-    q0$prefix <- gsub ("date:", "adiff:", q0$prefix)
+    q0 <- getbb ("Països Catalans", featuretype = "relation") %>%
+        opq (nodes_only = TRUE, datetime = "1714-09-11T00:00:00Z", adiff = TRUE) %>%
+        add_osm_feature ("does not exist", "&%$")
 
     # osm_empty <- test_path ("fixtures", "osm-empty.osm") # same result
     # doc <- xml2::read_xml (osm_empty)
@@ -216,12 +218,11 @@ test_that ("out meta & diff", {
 
 test_that ("out meta & adiff", {
     q <- getbb ("Conflent", featuretype = "relation") %>%
-        opq (nodes_only = TRUE, out = "meta", datetime = "2020-11-07T00:00:00Z") %>%
+        opq (nodes_only = TRUE, out = "meta",
+             datetime = "2020-11-07T00:00:00Z", adiff = TRUE) %>%
         add_osm_feature ("natural", "peak") %>%
         add_osm_feature ("prominence")  %>%
         add_osm_feature ("name:ca")
-
-    q$prefix <- gsub ("date:", "adiff:", q$prefix)
 
     osm_meta_adiff <- test_path ("fixtures", "osm-meta_adiff.osm")
     doc <- xml2::read_xml (osm_meta_adiff)
@@ -262,10 +263,11 @@ test_that ("out meta & adiff", {
 
 test_that ("adiff2", {
     q <- getbb ("Perpinyà", featuretype = "relation") %>%
-        opq (nodes_only = TRUE, datetime = "2012-11-07T00:00:00Z", datetime2 = "2016-11-07T00:00:00Z") %>%
+        opq (nodes_only = TRUE,
+             datetime = "2012-11-07T00:00:00Z",
+             datetime2 = "2016-11-07T00:00:00Z",
+             adiff = TRUE) %>%
         add_osm_feature ("amenity", "restaurant")
-
-    q$prefix <- gsub ("diff:", "adiff:", q$prefix)
 
     osm_adiff2 <- test_path ("fixtures", "osm-adiff2.osm")
     doc <- xml2::read_xml (osm_adiff2)
