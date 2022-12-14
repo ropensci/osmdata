@@ -691,8 +691,8 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
         tag <- xml2::xml_attrs (x)
         ## Improvement for geometries (many nodes without tags) but worst for `out tags;`
         # if (length (tag) == 0) return (list2DF (nrow = 1))
-        tag <- structure (lapply (tag, function (y) y["v"]),
-                          names = lapply (tag, function (y) y["k"]))
+        tag <- structure (lapply (tag, function (y) y[["v"]]),
+                          names = vapply(tag, function (y) y["k"], character (1)))
         list2DF (tag, nrow = 1)
     })
 
@@ -743,8 +743,8 @@ xml_adiff_to_df <- function (doc, datetime_from, datetime_to, stringsAsFactors=F
             tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = FALSE)
             tagsL <- mapply (function(x, adiff_date) {
                 tag <- xml2::xml_attrs (x)
-                tag <- structure (lapply (tag, function (y) y["v"]),
-                                  names = lapply (tag, function (y) y["k"]))
+                tag <- structure (lapply (tag, function (y) y[["v"]]),
+                                  names = vapply (tag, function (y) y["k"], character (1)))
                 list2DF (c (list (adiff_action = "modify",
                                   adiff_date = adiff_date), tag), nrow = 1)
             }, x = tags, adiff_date = dates, SIMPLIFY = FALSE)
@@ -757,9 +757,14 @@ xml_adiff_to_df <- function (doc, datetime_from, datetime_to, stringsAsFactors=F
             tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = FALSE)
             tagsL <- mapply (function(x, adiff_date, adiff_visible) {
                 tag <- xml2::xml_attrs (x)
-                if (length (tag) == 0) return (list2DF (nrow = 1))
-                tag <- structure (lapply (tag, function (y) y["v"]),
-                                  names = lapply (tag, function (y) y["k"]))
+                if (length (tag) == 0) {
+                    return (list2DF (list (adiff_action = "delete",
+                                           adiff_date = adiff_date,
+                                           adiff_visible = adiff_visible),
+                                     nrow = 1))
+                }
+                tag <- structure (lapply (tag, function (y) y[["v"]]),
+                                  names = vapply(tag, function (y) y["k"], character (1)))
                 list2DF (c (list (adiff_action = "delete", adiff_date = adiff_date,
                                   adiff_visible = adiff_visible), tag), nrow = 1)
             }, x = tags, adiff_date = dates, adiff_visible = osm_visible, SIMPLIFY = FALSE)
@@ -769,8 +774,8 @@ xml_adiff_to_df <- function (doc, datetime_from, datetime_to, stringsAsFactors=F
 
             tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = TRUE)
             tag <- xml2::xml_attrs (tags)
-            tag <- structure (lapply (tag, function (y) y["v"]),
-                              names = lapply (tag, function (y) y["k"]))
+            tag <- structure (lapply (tag, function (y) y[["v"]]),
+                              names = vapply(tag, function (y) y["k"], character (1)))
             df <- list2DF (c (list (adiff_action = "create",
                               adiff_date = datetime_to), tag), nrow = 1)
 
