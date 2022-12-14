@@ -96,19 +96,15 @@ opq <- function (bbox = NULL,  nodes_only = FALSE,
     timeout <- format (timeout, scientific = FALSE)
     prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
 
-    suffix <- ifelse (
-        nodes_only,
-        "); out;",
-        ");\n(._;>;);\nout body;"
-    ) # recurse down
     out <- try (match.arg (out))
     if (inherits (out, "try-error")) {
         stop ('out parameter must be "body", "tags", "meta", "skel", "tags center" or "ids".')
     }
-    has_geometry <- out %in% c ("body", "meta", "skel")
-    if (has_geometry && out != "body") {
-        suffix <- gsub ("out( body)*;", paste0 ("out ", out, ";"), suffix)
-    } else if (!has_geometry) {
+
+    has_geometry <- !nodes_only && out %in% c ("body", "meta", "skel")
+    if (has_geometry) {
+        suffix <- paste0 (");\n(._;>;);\nout ", out, ";")
+    } else {
         suffix <- paste0 ("); out ", out, ";")
     }
 
