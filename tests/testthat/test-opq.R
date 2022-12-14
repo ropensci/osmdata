@@ -94,10 +94,10 @@ test_that ("adiff", {
     expect_true (!identical (q2, q3))
     expect_identical (names (q2), names (q3))
     expect_identical (
-        q0 [!names (q2) == "prefix"],
-        q2 [!names (q3) == "prefix"]
+        q2 [!names (q2) == "prefix"],
+        q3 [!names (q3) == "prefix"]
     )
-    expect_true (!grepl ("date\\:", q2$prefix))
+    expect_true (!grepl ("date\\:", q3$prefix))
     expect_true (grepl ("adiff\\:", q3$prefix))
 })
 
