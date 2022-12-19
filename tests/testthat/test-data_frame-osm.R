@@ -1,4 +1,4 @@
-context ("data.frame-osm")
+context ("data_frame-osm")
 
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
     identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
@@ -95,7 +95,9 @@ test_that ("empty result", {
     expect_null (metaL$meta_no_call$query_type)
 
     # adiff
-    q0$prefix <- gsub ("date:", "adiff:", q0$prefix)
+    q0 <- getbb ("Països Catalans", featuretype = "relation") %>%
+        opq (nodes_only = TRUE, datetime = "1714-09-11T00:00:00Z", adiff = TRUE) %>%
+        add_osm_feature ("does not exist", "&%$")
 
     # osm_empty <- test_path ("fixtures", "osm-empty.osm") # same result
     # doc <- xml2::read_xml (osm_empty)
@@ -216,12 +218,11 @@ test_that ("out meta & diff", {
 
 test_that ("out meta & adiff", {
     q <- getbb ("Conflent", featuretype = "relation") %>%
-        opq (nodes_only = TRUE, out = "meta", datetime = "2020-11-07T00:00:00Z") %>%
+        opq (nodes_only = TRUE, out = "meta",
+             datetime = "2020-11-07T00:00:00Z", adiff = TRUE) %>%
         add_osm_feature ("natural", "peak") %>%
         add_osm_feature ("prominence")  %>%
         add_osm_feature ("name:ca")
-
-    q$prefix <- gsub ("date:", "adiff:", q$prefix)
 
     osm_meta_adiff <- test_path ("fixtures", "osm-meta_adiff.osm")
     doc <- xml2::read_xml (osm_meta_adiff)
@@ -232,10 +233,11 @@ test_that ("out meta & adiff", {
         "OSM data is ambiguous and can correspond either to a diff or an adiff query."
     ) # query_type assigned to diff
 
-    cols <- c ("adiff_action", "adiff_date", "adiff_visible", "osm_type", "osm_id",
+    cols <- c ("osm_type", "osm_id",
                "osm_version", "osm_timestamp", "osm_changeset", "osm_uid", "osm_user",
-               "ele", "name", "name:ca", "natural", "prominence", "source:prominence",
-               "wikidata", "wikipedia")
+               "adiff_action", "adiff_date", "adiff_visible",
+               "ele", "name", "name:ca", "natural", "prominence",
+               "source:prominence", "wikidata", "wikipedia")
     expect_named (x, cols)
     # expect_named (x_no_call, cols) # query_type assigned to diff
     expect_s3_class (x, "data.frame")
@@ -262,10 +264,11 @@ test_that ("out meta & adiff", {
 
 test_that ("adiff2", {
     q <- getbb ("Perpinyà", featuretype = "relation") %>%
-        opq (nodes_only = TRUE, datetime = "2012-11-07T00:00:00Z", datetime2 = "2016-11-07T00:00:00Z") %>%
+        opq (nodes_only = TRUE,
+             datetime = "2012-11-07T00:00:00Z",
+             datetime2 = "2016-11-07T00:00:00Z",
+             adiff = TRUE) %>%
         add_osm_feature ("amenity", "restaurant")
-
-    q$prefix <- gsub ("diff:", "adiff:", q$prefix)
 
     osm_adiff2 <- test_path ("fixtures", "osm-adiff2.osm")
     doc <- xml2::read_xml (osm_adiff2)
@@ -273,7 +276,8 @@ test_that ("adiff2", {
     x <- osmdata_data_frame (q, doc, quiet = FALSE)
     x_no_call <- osmdata_data_frame (doc = doc)
 
-    cols <- c ("adiff_action", "adiff_date", "adiff_visible", "osm_type", "osm_id",
+    cols <- c ("osm_type", "osm_id",
+               "adiff_action", "adiff_date", "adiff_visible",
                "addr:housenumber", "addr:street", "amenity", "created_by",
                "cuisine", "name", "phone")
     expect_named (x, cols)
