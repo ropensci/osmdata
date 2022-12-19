@@ -23,7 +23,8 @@ or an object of class \pkg{XML} returned from
 coerced to factors?}
 }
 \value{
-A \code{data.frame} with id, type and tags of the the objects from the query.
+A \code{data.frame} with id, type and tags of the the objects from the
+query.
 }
 \description{
 Return an OSM Overpass query as a \link{data.frame} object.

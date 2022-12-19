@@ -110,7 +110,7 @@ qa1 <- getbb ("Catalan Countries", format_out = "osm_type_id") \%>\%
 opqa1 <- osmdata_sf (qa1)
 # Filter by a multiple search areas
 bb <- getbb ("Vilafranca", format_out = "data.frame")
-qa2 <- bbox_to_string (bb[bb$osm_type != "node", ]) \%>\%
+qa2 <- bbox_to_string (bb [bb$osm_type != "node", ]) \%>\%
     opq (nodes_only = TRUE) \%>\%
     add_osm_feature (key = "place")
 opqa2 <- osmdata_sf (qa2)

@@ -45,9 +45,9 @@ dat2 <- opq_osm_id (type = "way", id = id) \%>\%
 dat2$osm_lines # the desired ways
 dat <- c (dat1, dat2) # The node and way data combined
 # All in one (same result as dat)
-id <- c(1489221200, 1489221321, 1489221491, 136190595, 136190596)
-type <- c("node", "node", "node", "way", "way")
-datAiO<- opq_osm_id (id = id, type = type) \%>\%
+id <- c (1489221200, 1489221321, 1489221491, 136190595, 136190596)
+type <- c ("node", "node", "node", "way", "way")
+datAiO <- opq_osm_id (id = id, type = type) \%>\%
     opq_string () \%>\%
     osmdata_sf ()
 }
