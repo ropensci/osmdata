@@ -30,7 +30,7 @@ test_that ("datetime", {
             datetime = "2015-01-01T00:00:00Z",
             datetime2 = "blah"
         ),
-        "datetime must be in ISO8601 format"
+        "datetime2 must be in ISO8601 format"
     )
 
     q2 <- opq (
@@ -77,7 +77,7 @@ test_that ("adiff", {
             datetime2 = "blah",
             adiff = TRUE
         ),
-        "datetime must be in ISO8601 format"
+        "datetime2 must be in ISO8601 format"
     )
 
     q2 <- opq (
