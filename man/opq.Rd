@@ -7,6 +7,7 @@
 opq(
   bbox = NULL,
   nodes_only = FALSE,
+  osm_types = c("node", "way", "relation"),
   out = c("body", "tags", "meta", "skel", "tags center", "ids"),
   datetime = NULL,
   datetime2 = NULL,
@@ -32,6 +33,11 @@ nodes only. Queries are built by default to return all nodes, ways, and
 relation, but this can be very inefficient for node-only queries.
 Setting this value to \code{TRUE} for such cases makes queries more
 efficient, with data returned in the \code{osm_points} list item.}
+
+\item{osm_types}{A character vector with several OSM types to query: \code{node},
+\code{way} and \code{relation} is the default. \code{nwr} and \code{rel} are also valid
+types. Ignored if \code{nodes_only = TRUE}. \code{osm_types = "node"} is
+equivalent to \code{nodes_only = TRUE}.}
 
 \item{out}{The level of verbosity of the overpass result: \code{body} (geometries
 and tags, the default), \code{tags} (tags without geometry), \code{meta} (like

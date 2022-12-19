@@ -17,6 +17,10 @@
 #'      relation, but this can be very inefficient for node-only queries.
 #'      Setting this value to `TRUE` for such cases makes queries more
 #'      efficient, with data returned in the `osm_points` list item.
+#' @param osm_types A character vector with several OSM types to query: `node`,
+#'      `way` and `relation` is the default. `nwr` and `rel` are also valid
+#'      types. Ignored if `nodes_only = TRUE`. `osm_types = "node"` is
+#'      equivalent to `nodes_only = TRUE`.
 #' @param out The level of verbosity of the overpass result: `body` (geometries
 #'      and tags, the default), `tags` (tags without geometry), `meta` (like
 #'      body + Timestamp, Version, Changeset, User, User ID of the last
@@ -95,12 +99,29 @@
 #' opqa2 <- osmdata_sf (qa2)
 #' }
 opq <- function (bbox = NULL, nodes_only = FALSE,
+                 osm_types = c ("node", "way", "relation"),
                  out = c ("body", "tags", "meta", "skel", "tags center", "ids"),
                  datetime = NULL, datetime2 = NULL, adiff = FALSE,
                  timeout = 25, memsize) {
 
     timeout <- format (timeout, scientific = FALSE)
     prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
+
+    if (nodes_only) {
+        osm_types <- "node"
+    } else {
+        osm_types <- try (
+            match.arg (osm_types,
+                choices = c ("nwr", "node", "way", "rel", "relation"),
+                several.ok = TRUE
+        ), silent = TRUE)
+        if (inherits (osm_types, "try-error")) {
+            stop ('osm_types parameter must be a vector with values from ',
+                '"nwr", "node", "way", "rel" and "relation".',
+                call. = FALSE
+            )
+        }
+    }
 
     out <- try (match.arg (out), silent = TRUE)
     if (inherits (out, "try-error")) {
@@ -158,7 +179,9 @@ opq <- function (bbox = NULL, nodes_only = FALSE,
     res <- list (
         bbox = bbox_to_string (bbox),
         prefix = paste0 (prefix, ";\n(\n"),
-        suffix = suffix, features = NULL
+        suffix = suffix,
+        features = NULL,
+        osm_types = osm_types
     )
 
     class (res) <- c (class (res), "overpass_query")
@@ -611,6 +634,7 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
     opq <- opq (1:4)
     opq$bbox <- NULL
     opq$features <- NULL
+    opq$osm_types <- NULL
     opq$id <- list (type = type, id = id)
 
     if (open_url) {
@@ -775,6 +799,10 @@ opq_string_intern <- function (opq, quiet = TRUE) {
 
     lat <- lon <- NULL # suppress no visible binding messages
 
+    if (attr (opq, "nodes_only")) {
+        opq$osm_types <- "node"
+    }
+
     map_to_area <- grepl ("(node|way|relation|rel)\\(id:[0-9, ]+\\)", opq$bbox)
 
     res <- NULL
@@ -792,28 +820,7 @@ opq_string_intern <- function (opq, quiet = TRUE) {
             )
         }
 
-
-        if (attr (opq, "nodes_only")) {
-
-            if (!map_to_area) {
-                features <- sprintf (
-                    " node %s (%s);\n",
-                    features,
-                    opq$bbox
-                )
-            } else {
-                opq$prefix <- gsub ("\n$", "", opq$prefix)
-                search_area <- paste0 (
-                    opq$bbox,
-                    "; map_to_area->.searchArea;);\n(\n"
-                )
-                features <- c (search_area, sprintf (
-                    " node %s (area.searchArea);\n",
-                    features
-                ))
-            }
-
-        } else if (!is.null (attr (opq, "enclosing"))) {
+        if (!is.null (attr (opq, "enclosing"))) {
 
             if (length (features) > 1) {
                 stop ("enclosing queries can only accept one feature")
@@ -833,22 +840,9 @@ opq_string_intern <- function (opq, quiet = TRUE) {
         } else {
 
             if (!map_to_area) {
-                features <- paste0 (
-                    sprintf (
-                        " node %s (%s);\n",
-                        features,
-                        opq$bbox
-                    ),
-                    sprintf (
-                        " way %s (%s);\n",
-                        features,
-                        opq$bbox
-                    ),
-                    sprintf (
-                        " relation %s (%s);\n\n",
-                        features,
-                        opq$bbox
-                    )
+                features <-  c (sprintf (" %s %s (%s);\n",
+                                         opq$osm_types, features, opq$bbox),
+                                "\n" # should be removed but mock calls must be refreshed
                 )
             } else {
                 opq$prefix <- gsub ("\n$", "", opq$prefix)
@@ -858,16 +852,14 @@ opq_string_intern <- function (opq, quiet = TRUE) {
                 )
                 features <- c (
                     search_area,
-                    sprintf ("  node %s (area.searchArea);\n", features),
-                    sprintf ("  way %s (area.searchArea);\n", features),
-                    sprintf ("  relation %s (area.searchArea);\n", features)
+                    sprintf (" %s %s (area.searchArea);\n", opq$osm_types, features)
                 )
             }
         }
 
         res <- paste0 (
             opq$prefix,
-            paste0 (features, collapse = ""),
+            paste (features, collapse = ""),
             opq$suffix
         )
 
@@ -893,40 +885,19 @@ opq_string_intern <- function (opq, quiet = TRUE) {
             )
         }
 
-        if (attr (opq, "nodes_only")) {
-
-            if (!map_to_area) {
-                bbox <- sprintf (" node (%s);\n", opq$bbox)
-            } else {
-                opq$prefix <- gsub ("\n$", "", opq$prefix)
-                search_area <-
-                    paste0 (opq$bbox, "; map_to_area->.searchArea; );\n(\n")
-                bbox <- paste0 (search_area, "  node (area.searchArea);\n")
-            }
-
+        if (!map_to_area) {
+            bbox <- sprintf (" %s (%s);\n", opq$osm_types, opq$bbox)
         } else {
-
-            if (!map_to_area) {
-                bbox <- paste0 (
-                    sprintf (" node (%s);\n", opq$bbox),
-                    sprintf (" way (%s);\n", opq$bbox),
-                    sprintf (" relation (%s);\n", opq$bbox)
-                )
-            } else {
                 opq$prefix <- gsub ("\n$", "", opq$prefix)
-                search_area <-
-                    paste0 (opq$bbox, "; map_to_area->.searchArea; );\n(\n")
-                bbox <- paste0 (
-                    search_area,
-                    "  node (area.searchArea);\n",
-                    "  way (area.searchArea);\n",
-                    "  relation (area.searchArea);\n"
-                )
-            }
-
+            search_area <-
+                paste0 (opq$bbox, "; map_to_area->.searchArea; );\n(\n")
+            bbox <- c (
+                search_area,
+                sprintf (" %s (area.searchArea);\n", opq$osm_types)
+            )
         }
 
-        res <- paste0 (opq$prefix, bbox, opq$suffix)
+        res <- paste0 (opq$prefix, paste (bbox, collapse = ""), opq$suffix)
     }
 
     return (res)
