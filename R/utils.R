@@ -1,3 +1,10 @@
+
+is_datetime <- function (x) {
+
+    ptn <- "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}[A-Z]$"
+    grepl (ptn, x)
+}
+
 #' unname_osmdata_sf
 #'
 #' Remove names from `osmdata` geometry objects, for cases in which these cause

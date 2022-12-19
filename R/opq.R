@@ -125,11 +125,22 @@ opq <- function (bbox = NULL, nodes_only = FALSE,
     } # nocov
     if (!is.null (datetime)) {
 
-        datetime <- check_datetime (datetime)
+        if (!is_datetime (datetime)) {
+            stop (
+                "datetime must be in ISO8601 format ('YYYY-MM-DDThh:mm:ssZ')",
+                call. = FALSE
+            )
+        }
+
 
         if (!is.null (datetime2)) {
 
-            datetime2 <- check_datetime (datetime2)
+            if (!is_datetime (datetime2)) {
+                stop (
+                    "datetime2 must be in ISO8601 format ('YYYY-MM-DDThh:mm:ssZ')",
+                    call. = FALSE
+                )
+            }
             prefix <- paste0 (
                 '[diff:\"', datetime, '\",\"', datetime2, '\"]',
                 prefix
@@ -156,34 +167,6 @@ opq <- function (bbox = NULL, nodes_only = FALSE,
     attr (res, "nodes_only") <- nodes_only
 
     return (res)
-}
-
-check_datetime <- function (x) {
-
-    if (nchar (x) != 20 &&
-        substring (x, 5, 5) != "-" &&
-        substring (x, 8, 8) != "-" &&
-        substring (x, 11, 11) != "T" &&
-        substring (x, 14, 14) != ":" &&
-        substring (x, 17, 17) != ":" &&
-        substring (x, 20, 20) != "Z") {
-        stop ("datetime must be in ISO8601 format ('YYYY-MM-DDThh:mm:ssZ')")
-    }
-    YY <- substring (x, 1, 4) # nolint
-    MM <- substring (x, 6, 7) # nolint
-    DD <- substring (x, 9, 10) # nolint
-    hh <- substring (x, 12, 13)
-    mm <- substring (x, 15, 16)
-    ss <- substring (x, 18, 19)
-    if (formatC (as.integer (YY), width = 4, flag = "0") != YY ||
-        formatC (as.integer (MM), width = 2, flag = "0") != MM ||
-        formatC (as.integer (DD), width = 2, flag = "0") != DD ||
-        formatC (as.integer (hh), width = 2, flag = "0") != hh ||
-        formatC (as.integer (mm), width = 2, flag = "0") != mm ||
-        formatC (as.integer (ss), width = 2, flag = "0") != ss) {
-        stop ("x is not is ISO8601 format ('YYYY-MM-DDThh:mm:ssZ')")
-    }
-    invisible (x)
 }
 
 # used in the following add_osm_feature fn
