@@ -102,7 +102,7 @@ opq <- function (bbox = NULL, nodes_only = FALSE,
     timeout <- format (timeout, scientific = FALSE)
     prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
 
-    out <- try (match.arg (out))
+    out <- try (match.arg (out), silent = TRUE)
     if (inherits (out, "try-error")) {
         stop ("out parameter must be ",
             '"body", "tags", "meta", "skel", "tags center" or "ids".',
