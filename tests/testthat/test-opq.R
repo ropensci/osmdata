@@ -56,7 +56,7 @@ test_that ("adiff", {
     )
     q1 <- opq (
         bbox = c (-0.118, 51.514, -0.115, 51.517),
-        datetime =  "2015-01-01T00:00:00Z",
+        datetime = "2015-01-01T00:00:00Z",
         adiff = TRUE
     )
 
@@ -105,7 +105,7 @@ test_that ("out", {
 
     q0 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
     expect_error (
-        q<- opq (
+        q <- opq (
             bbox = c (-0.118, 51.514, -0.115, 51.517),
             out = "blah"
         ),
@@ -113,7 +113,7 @@ test_that ("out", {
     )
 
     q_geo <- lapply (c ("meta", "skel"), function (x) {
-        q<- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), out = x)
+        q <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), out = x)
         expect_true (!identical (q0, q))
         expect_identical (names (q0), names (q))
         expect_identical (
@@ -144,8 +144,10 @@ test_that ("out", {
     )
 
     q_geo <- lapply (c ("meta", "skel"), function (x) {
-        q<- opq (bbox = c (-0.118, 51.514, -0.115, 51.517),
-                 nodes_only = TRUE, out = x)
+        q <- opq (
+            bbox = c (-0.118, 51.514, -0.115, 51.517),
+            nodes_only = TRUE, out = x
+        )
         expect_true (!identical (q1, q))
         expect_identical (names (q1), names (q))
         expect_identical (
@@ -155,8 +157,10 @@ test_that ("out", {
         expect_true (grepl ("^\\); out[a-z ]+;$", q$suffix))
     })
     q_no_geo <- lapply (c ("tags", "tags center", "ids"), function (x) {
-        q <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517),
-                  nodes_only = TRUE, out = x)
+        q <- opq (
+            bbox = c (-0.118, 51.514, -0.115, 51.517),
+            nodes_only = TRUE, out = x
+        )
         expect_true (!identical (q1, q))
         expect_identical (names (q1), names (q))
         expect_identical (
@@ -220,20 +224,20 @@ test_that ("opq_string", {
     expect_false (grepl ("way|relation", s1))
 
     q1 <- opq (
-      bbox = "relation(id:11747082)",
-      nodes_only = TRUE
+        bbox = "relation(id:11747082)",
+        nodes_only = TRUE
     )
     s1 <- opq_string (q1)
     # nodes only, so "out" instead of "out body" and no way nor relation on clauses
     expect_false (grepl ("\\(\\._;>;\\)", s1))
-    expect_false (all (grepl ("way|relation", strsplit(s1, "\\n")[[1]][-2])))
+    expect_false (all (grepl ("way|relation", strsplit (s1, "\\n") [[1]] [-2])))
 
     # nodes_only parameter with features:
     q1 <- opq (
         bbox = c (-0.118, 51.514, -0.115, 51.517),
         nodes_only = TRUE
     )
-    q1 <- add_osm_feature(q1, key = "amenity", value = "restaurant")
+    q1 <- add_osm_feature (q1, key = "amenity", value = "restaurant")
     s1 <- opq_string (q1)
     # nodes only, so "out" instead of "out body" and no way nor relation
     expect_false (grepl ("\\(\\._;>;\\)", s1))
@@ -243,11 +247,11 @@ test_that ("opq_string", {
         bbox = "relation(id:11747082)",
         nodes_only = TRUE
     )
-    q1 <- add_osm_feature(q1, key = "amenity", value = "restaurant")
+    q1 <- add_osm_feature (q1, key = "amenity", value = "restaurant")
     s1 <- opq_string (q1)
     # nodes only, so "out" instead of "out body" and no way nor relation on clauses
     expect_false (grepl ("\\(\\._;>;\\)", s1))
-    expect_false (all (grepl ("way|relation", strsplit(s1, "\\n")[[1]][-2])))
+    expect_false (all (grepl ("way|relation", strsplit (s1, "\\n") [[1]] [-2])))
 
     # key-value pair:
     q2 <- add_osm_feature (q0, key = "highway", value = "!primary")
@@ -304,20 +308,20 @@ test_that ("opq_osm_id", {
         "overpass_query"
     )
     expect_s3_class (
-      opq_osm_id (id = c(paste0("node/", 1:2), "way/1")),
-      "overpass_query"
+        opq_osm_id (id = c (paste0 ("node/", 1:2), "way/1")),
+        "overpass_query"
     )
     expect_s3_class (
-      x <- opq_osm_id (type = c("node", "way"), id = 1:4 + 0.1),
-      "overpass_query"
+        x <- opq_osm_id (type = c ("node", "way"), id = 1:4 + 0.1),
+        "overpass_query"
     )
     expect_error (
-      x <- opq_osm_id (type = c("node", "way"), id = 1:3 + 0.1),
-      "id length must be a multiple of type length."
+        x <- opq_osm_id (type = c ("node", "way"), id = 1:3 + 0.1),
+        "id length must be a multiple of type length."
     )
-    expect_identical(
-      opq_osm_id (type = "node", id = 123456),
-      opq_osm_id (id = "node/123456")
+    expect_identical (
+        opq_osm_id (type = "node", id = 123456),
+        opq_osm_id (id = "node/123456")
     )
     expect_s3_class (
         x <- opq_osm_id (type = "node", id = 123456),
@@ -385,4 +389,3 @@ test_that ("opq_around", {
     expect_true (grepl ("key", x_key_val))
     expect_true (grepl ("val", x_key_val))
 })
-
