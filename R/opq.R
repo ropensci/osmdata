@@ -5,13 +5,12 @@
 #'      or (ii) a character string in the form \code{xmin,ymin,xmax,ymax}. These
 #'      will be passed to \link{getbb} to be converted to a numerical bounding
 #'      box. Can also be (iii) a matrix representing a bounding polygon as
-#'      returned from `getbb(..., format_out = "polygon")`. To search in an area,
-#'      (iv) a character string with a relation or a (closed) way id in the
-#'      format `"way(id:1)"`, `"relation(id:1, 2)"` or
-#'      `"relation(id:1, 2, 3); way(id:2)"` as returned by
-#'      `getbb(..., format_out = "osm_type_id")` or \link{bbox_to_string} with
-#'      a `data.frame` from `getbb(..., format_out = "data.frame")` to select all
-#'      areas combined (relations and ways).
+#'      returned from `getbb(..., format_out = "polygon")`. To search in an
+#'      area, (iv) a character string with a relation or a (closed) way id in
+#'      the format `"way(id:1)"`, `"relation(id:1, 2)"` or `"relation(id:1, 2,
+#'      3); way(id:2)"` as returned by `getbb(..., format_out = "osm_type_id")`
+#'      or \link{bbox_to_string} with a `data.frame` from `getbb(..., format_out
+#'      = "data.frame")` to select all areas combined (relations and ways).
 #' @param nodes_only If `TRUE`, query OSM nodes only. Some OSM structures such
 #'      as `place = "city"` or `highway = "traffic_signals"` are represented by
 #'      nodes only. Queries are built by default to return all nodes, ways, and
@@ -19,11 +18,11 @@
 #'      Setting this value to `TRUE` for such cases makes queries more
 #'      efficient, with data returned in the `osm_points` list item.
 #' @param out The level of verbosity of the overpass result: `body` (geometries
-#'       and tags, the default), `tags` (tags without geometry), `meta` (like
-#'       body + Timestamp, Version, Changeset, User, User ID of the last edition),
-#'       `skel` (geometries only), `tags center` (tags without geometry + the
-#'       coordinates of the center of the bounding box) and `ids` (type and id of
-#'       the objects only).
+#'      and tags, the default), `tags` (tags without geometry), `meta` (like
+#'      body + Timestamp, Version, Changeset, User, User ID of the last
+#'      edition), `skel` (geometries only), `tags center` (tags without geometry
+#'      + the coordinates of the center of the bounding box) and `ids` (type and
+#'      id of the objects only).
 #' @param datetime If specified, a date and time to extract data from the OSM
 #'      database as it was up to the specified date and time, as described at
 #'      \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#date}.
@@ -33,7 +32,8 @@
 #'      database between \code{datetime} and \code{datetime2}, where
 #'      \code{datetime2 > datetime}. See
 #'      \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Difference_between_two_dates_(diff)}.
-#' @param adiff If `TRUE`, query for [augmented difference](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Augmented-difference_between_two_dates_(adiff)).
+#' @param adiff If `TRUE`, query for [augmented
+#'      difference](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Augmented-difference_between_two_dates_(adiff)).
 #'      The result indicates what happened to the modified and deleted OSM
 #'      objects. Requires `datetime(2)*`.
 #' @param timeout It may be necessary to increase this value for large queries,
@@ -46,10 +46,10 @@
 #' @details The `out` statement for `tags`, `tags center`and `id`, do not return
 #' geometries. Neither `out = "meta"` nor `adiff = TRUE` options are implemented
 #' for all `osmdata_*` functions yet. Use [osmdata_xml] or [osmdata_data_frame]
-#' to get the result of these queries. See the documentation of the
-#' [out statement](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#out)
-#' and
-#' [augmented difference](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Augmented-difference_between_two_dates_(adiff))
+#' to get the result of these queries. See the documentation of the [out
+#' statement](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#out)
+#' and [augmented
+#' difference](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Augmented-difference_between_two_dates_(adiff))
 #' for more details about these options.
 #'
 #' @note See
@@ -89,12 +89,12 @@
 #' opqa1 <- osmdata_sf (qa1)
 #' # Filter by a multiple search areas
 #' bb <- getbb ("Vilafranca", format_out = "data.frame")
-#' qa2 <- bbox_to_string (bb[bb$osm_type != "node", ]) %>%
+#' qa2 <- bbox_to_string (bb [bb$osm_type != "node", ]) %>%
 #'     opq (nodes_only = TRUE) %>%
 #'     add_osm_feature (key = "place")
 #' opqa2 <- osmdata_sf (qa2)
 #' }
-opq <- function (bbox = NULL,  nodes_only = FALSE,
+opq <- function (bbox = NULL, nodes_only = FALSE,
                  out = c ("body", "tags", "meta", "skel", "tags center", "ids"),
                  datetime = NULL, datetime2 = NULL, adiff = FALSE,
                  timeout = 25, memsize) {
@@ -104,12 +104,15 @@ opq <- function (bbox = NULL,  nodes_only = FALSE,
 
     out <- try (match.arg (out))
     if (inherits (out, "try-error")) {
-        stop ('out parameter must be "body", "tags", "meta", "skel", "tags center" or "ids".')
+        stop ("out parameter must be ",
+            '"body", "tags", "meta", "skel", "tags center" or "ids".',
+            call. = FALSE
+        )
     }
 
     has_geometry <- !nodes_only && out %in% c ("body", "meta", "skel")
     if (has_geometry) {
-        suffix <- paste0 (");\n(._;>;);\nout ", out, ";")  # recurse down
+        suffix <- paste0 (");\n(._;>;);\nout ", out, ";") # recurse down
     } else {
         suffix <- paste0 ("); out", out, ";")
     }
@@ -157,12 +160,12 @@ opq <- function (bbox = NULL,  nodes_only = FALSE,
 
 check_datetime <- function (x) {
 
-    if (nchar (x) != 20 &
-        substring (x, 5, 5) != "-" &
-        substring (x, 8, 8) != "-" &
-        substring (x, 11, 11) != "T" &
-        substring (x, 14, 14) != ":" &
-        substring (x, 17, 17) != ":" &
+    if (nchar (x) != 20 &&
+        substring (x, 5, 5) != "-" &&
+        substring (x, 8, 8) != "-" &&
+        substring (x, 11, 11) != "T" &&
+        substring (x, 14, 14) != ":" &&
+        substring (x, 17, 17) != ":" &&
         substring (x, 20, 20) != "Z") {
         stop ("datetime must be in ISO8601 format ('YYYY-MM-DDThh:mm:ssZ')")
     }
@@ -172,11 +175,11 @@ check_datetime <- function (x) {
     hh <- substring (x, 12, 13)
     mm <- substring (x, 15, 16)
     ss <- substring (x, 18, 19)
-    if (formatC (as.integer (YY), width = 4, flag = "0") != YY |
-        formatC (as.integer (MM), width = 2, flag = "0") != MM |
-        formatC (as.integer (DD), width = 2, flag = "0") != DD |
-        formatC (as.integer (hh), width = 2, flag = "0") != hh |
-        formatC (as.integer (mm), width = 2, flag = "0") != mm |
+    if (formatC (as.integer (YY), width = 4, flag = "0") != YY ||
+        formatC (as.integer (MM), width = 2, flag = "0") != MM ||
+        formatC (as.integer (DD), width = 2, flag = "0") != DD ||
+        formatC (as.integer (hh), width = 2, flag = "0") != hh ||
+        formatC (as.integer (mm), width = 2, flag = "0") != mm ||
         formatC (as.integer (ss), width = 2, flag = "0") != ss) {
         stop ("x is not is ISO8601 format ('YYYY-MM-DDThh:mm:ssZ')")
     }
@@ -421,18 +424,18 @@ check_bind_key_pre <- function (bind = "=", key_pre = "") {
 #' Add multiple features to an Overpass query
 #'
 #' Alternative version of \link{add_osm_feature} for creating single queries
-#' with multiple features. Key-value matching may be controlled by using
-#' the filter symbols described in
+#' with multiple features. Key-value matching may be controlled by using the
+#' filter symbols described in
 #' \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_tag_.28has-kv.29}.
 #'
 #' @inheritParams add_osm_feature
 #' @inheritSection add_osm_feature `add_osm_feature` vs `add_osm_features`
 #' @param features A named list or vector with the format `list("<key>" =
-#'   "<value>")` or `c("<key>" = "<value>")` or a character vector of key-value
-#'   pairs with keys and values enclosed in escape-formatted quotations. See
-#'   examples for details.
+#'      "<value>")` or `c("<key>" = "<value>")` or a character vector of
+#'      key-value pairs with keys and values enclosed in escape-formatted
+#'      quotations. See examples for details.
 #' @param bbox optional bounding box for the feature query; must be set if no
-#'        opq query bbox has been set.
+#'      opq query bbox has been set.
 #' @return \link{opq} object
 #'
 #' @references \url{https://wiki.openstreetmap.org/wiki/Map_Features}
@@ -528,16 +531,19 @@ is_escape_delimited <- function (x) {
 #' @noRd
 check_features <- function (features) {
     if (missing (features)) {
-        stop ("features must be provided")
+        stop ("features must be provided", call. = FALSE)
     }
 
     stopifnot (
-        "features must be a list or character vector." = is.character (features) | is.list (features)
+        "features must be a list or character vector." =
+            is.character (features) | is.list (features)
     )
 
     if (!is_named (features) && is_escape_delimited (features)) {
         stop (
-            "features must be a named list or vector or a character vector enclosed in escape delimited quotations (see examples)"
+            "features must be a named list or vector or a character vector ",
+            "enclosed in escape delimited quotations (see examples)",
+            call. = FALSE
         )
     }
 }
@@ -545,13 +551,14 @@ check_features <- function (features) {
 #' Add a feature specified by OSM ID to an Overpass query
 #'
 #' @param id One or more official OSM identifiers (long-form integers), which
-#' must be entered as either a character or *numeric* value (because R does not
-#' support long-form integers). id can also be a character string prefixed with
-#' the id type, e.g. "relation/11158003"
-#' @param type Type of objects (recycled); must be either `node`, `way`, or `relation`.
-#'   Optional if id is prefixed with the type.
+#'      must be entered as either a character or *numeric* value (because R does
+#'      not support long-form integers). id can also be a character string
+#'      prefixed with the id type, e.g. "relation/11158003"
+#' @param type Type of objects (recycled); must be either `node`, `way`, or
+#'      `relation`. Optional if id is prefixed with the type.
 #' @param open_url If `TRUE`, open the OSM page of the specified object in web
-#' browser. Multiple objects (`id` values) will be opened in multiple pages.
+#'      browser. Multiple objects (`id` values) will be opened in multiple
+#'      pages.
 #' @return \link{opq} object
 #'
 #' @references
@@ -579,9 +586,9 @@ check_features <- function (features) {
 #' dat2$osm_lines # the desired ways
 #' dat <- c (dat1, dat2) # The node and way data combined
 #' # All in one (same result as dat)
-#' id <- c(1489221200, 1489221321, 1489221491, 136190595, 136190596)
-#' type <- c("node", "node", "node", "way", "way")
-#' datAiO<- opq_osm_id (id = id, type = type) %>%
+#' id <- c (1489221200, 1489221321, 1489221491, 136190595, 136190596)
+#' type <- c ("node", "node", "node", "way", "way")
+#' datAiO <- opq_osm_id (id = id, type = type) %>%
 #'     opq_string () %>%
 #'     osmdata_sf ()
 #' }
@@ -589,7 +596,9 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
     if (is.null (type)) {
         if (is.null (id)) {
             stop (
-                "type must be specified: one of node, way, or relation if id is 'NULL'"
+                "type must be specified: one of ",
+                "node, way, or relation if id is 'NULL'",
+                call. = FALSE
             )
         } else if (all (grepl ("^node/|^way/|^relation/", id))) {
             type <- dirname (id)
@@ -598,17 +607,17 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
     }
 
     type <- tolower (type)
-    if (!all(type %in% c ("node", "way", "relation"))){
+    if (!all (type %in% c ("node", "way", "relation"))) {
         stop ('type items must be "node", "way" or "relation".')
     }
 
     if (is.null (id)) {
         stop ("id must be specified.")
     }
-    if (!(is.character (id) | storage.mode (id) == "double")) {
+    if (!(is.character (id) || storage.mode (id) == "double")) {
         stop ("id must be character or numeric.")
     }
-    if (length (id) %% length (type) != 0 | length (type) > length (id)){
+    if (length (id) %% length (type) != 0 || length (type) > length (id)) {
         stop ("id length must be a multiple of type length.")
     }
 
@@ -669,11 +678,11 @@ opq_enclosing <- function (lon = NULL, lat = NULL,
 
     enclosing <- match.arg (tolower (enclosing), c ("relation", "way"))
 
-    if (is.null (lon) | is.null (lat)) {
+    if (is.null (lon) || is.null (lat)) {
         stop ("'lon' and 'lat' must be provided.")
     }
-    if (!(is.numeric (lon) & is.numeric (lat) &
-        length (lon) == 1L & length (lat) == 1L)) {
+    if (!(is.numeric (lon) && is.numeric (lat) &&
+        length (lon) == 1L && length (lat) == 1L)) {
         stop ("'lon' and 'lat' must both be single numeric values.")
     }
 
@@ -793,10 +802,10 @@ opq_string_intern <- function (opq, quiet = TRUE) {
         if (length (features) > 1L) { # from add_osm_features fn
 
             features <- vapply (features, function (i) {
-                    paste (i, collapse = "")
-                },
-                character (1),
-                USE.NAMES = FALSE
+                paste (i, collapse = "")
+            },
+            character (1),
+            USE.NAMES = FALSE
             )
         }
 
@@ -810,9 +819,12 @@ opq_string_intern <- function (opq, quiet = TRUE) {
                     opq$bbox
                 )
             } else {
-                opq$prefix<- gsub ("\n$", "", opq$prefix)
-                searchArea<- paste0 (opq$bbox, "; map_to_area->.searchArea;);\n(\n")
-                features <- c (searchArea, sprintf (
+                opq$prefix <- gsub ("\n$", "", opq$prefix)
+                search_area <- paste0 (
+                    opq$bbox,
+                    "; map_to_area->.searchArea;);\n(\n"
+                )
+                features <- c (search_area, sprintf (
                     " node %s (area.searchArea);\n",
                     features
                 ))
@@ -857,11 +869,15 @@ opq_string_intern <- function (opq, quiet = TRUE) {
                 )
             } else {
                 opq$prefix <- gsub ("\n$", "", opq$prefix)
-                searchArea <- paste0 (opq$bbox,"; map_to_area->.searchArea; );\n(\n")
-                features <- c (searchArea,
-                               sprintf ("  node %s (area.searchArea);\n", features),
-                               sprintf ("  way %s (area.searchArea);\n", features),
-                               sprintf ("  relation %s (area.searchArea);\n", features)
+                search_area <- paste0 (
+                    opq$bbox,
+                    "; map_to_area->.searchArea; );\n(\n"
+                )
+                features <- c (
+                    search_area,
+                    sprintf ("  node %s (area.searchArea);\n", features),
+                    sprintf ("  way %s (area.searchArea);\n", features),
+                    sprintf ("  relation %s (area.searchArea);\n", features)
                 )
             }
         }
@@ -874,13 +890,13 @@ opq_string_intern <- function (opq, quiet = TRUE) {
 
     } else if (!is.null (opq$id)) { # opq with opq_osm_id
 
-        type_id <- data.frame (type=opq$id$type, id=opq$id$id)
+        type_id <- data.frame (type = opq$id$type, id = opq$id$id)
         type_id <- split (type_id, type_id$type)
-        id <- mapply (function (type, ids){
-          paste0 (" ", type, "(id:", paste (ids, collapse=","), ");\n")
-        }, type=names (type_id), ids=type_id)
+        id <- mapply (function (type, ids) {
+            paste0 (" ", type, "(id:", paste (ids, collapse = ","), ");\n")
+        }, type = names (type_id), ids = type_id)
 
-        id <- paste (id, collapse="")
+        id <- paste (id, collapse = "")
         res <- paste0 (opq$prefix, id, opq$suffix)
 
     } else { # straight opq with neither features nor ID specified
@@ -899,27 +915,31 @@ opq_string_intern <- function (opq, quiet = TRUE) {
             if (!map_to_area) {
                 bbox <- sprintf (" node (%s);\n", opq$bbox)
             } else {
-                opq$prefix<- gsub ("\n$", "", opq$prefix)
-                searchArea<- paste0(opq$bbox, "; map_to_area->.searchArea; );\n(\n")
-                bbox <- paste0 (searchArea, "  node (area.searchArea);\n")
+                opq$prefix <- gsub ("\n$", "", opq$prefix)
+                search_area <-
+                    paste0 (opq$bbox, "; map_to_area->.searchArea; );\n(\n")
+                bbox <- paste0 (search_area, "  node (area.searchArea);\n")
             }
 
         } else {
 
-          if (!map_to_area) {
-              bbox <- paste0 (sprintf (" node (%s);\n", opq$bbox),
-                              sprintf (" way (%s);\n", opq$bbox),
-                              sprintf (" relation (%s);\n", opq$bbox)
-              )
-          } else {
-              opq$prefix<- gsub ("\n$", "", opq$prefix)
-              searchArea<- paste0(opq$bbox, "; map_to_area->.searchArea; );\n(\n")
-              bbox <- paste0 (searchArea,
-                  "  node (area.searchArea);\n",
-                  "  way (area.searchArea);\n",
-                  "  relation (area.searchArea);\n"
-              )
-          }
+            if (!map_to_area) {
+                bbox <- paste0 (
+                    sprintf (" node (%s);\n", opq$bbox),
+                    sprintf (" way (%s);\n", opq$bbox),
+                    sprintf (" relation (%s);\n", opq$bbox)
+                )
+            } else {
+                opq$prefix <- gsub ("\n$", "", opq$prefix)
+                search_area <-
+                    paste0 (opq$bbox, "; map_to_area->.searchArea; );\n(\n")
+                bbox <- paste0 (
+                    search_area,
+                    "  node (area.searchArea);\n",
+                    "  way (area.searchArea);\n",
+                    "  relation (area.searchArea);\n"
+                )
+            }
 
         }
 

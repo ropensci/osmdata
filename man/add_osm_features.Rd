@@ -15,9 +15,9 @@ add_osm_features(
 \arguments{
 \item{opq}{An \code{overpass_query} object}
 
-\item{features}{A named list or vector with the format \code{list("<key>" = "<value>")} or \code{c("<key>" = "<value>")} or a character vector of key-value
-pairs with keys and values enclosed in escape-formatted quotations. See
-examples for details.}
+\item{features}{A named list or vector with the format \code{list("<key>" = "<value>")} or \code{c("<key>" = "<value>")} or a character vector of
+key-value pairs with keys and values enclosed in escape-formatted
+quotations. See examples for details.}
 
 \item{bbox}{optional bounding box for the feature query; must be set if no
 opq query bbox has been set.}
@@ -32,8 +32,8 @@ opq query bbox has been set.}
 }
 \description{
 Alternative version of \link{add_osm_feature} for creating single queries
-with multiple features. Key-value matching may be controlled by using
-the filter symbols described in
+with multiple features. Key-value matching may be controlled by using the
+filter symbols described in
 \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_tag_.28has-kv.29}.
 }
 \section{\code{add_osm_feature} vs \code{add_osm_features}}{

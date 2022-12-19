@@ -8,15 +8,16 @@ opq_osm_id(id = NULL, type = NULL, open_url = FALSE)
 }
 \arguments{
 \item{id}{One or more official OSM identifiers (long-form integers), which
-must be entered as either a character or \emph{numeric} value (because R does not
-support long-form integers). id can also be a character string prefixed with
-the id type, e.g. "relation/11158003"}
+must be entered as either a character or \emph{numeric} value (because R does
+not support long-form integers). id can also be a character string
+prefixed with the id type, e.g. "relation/11158003"}
 
-\item{type}{Type of objects (recycled); must be either \code{node}, \code{way}, or \code{relation}.
-Optional if id is prefixed with the type.}
+\item{type}{Type of objects (recycled); must be either \code{node}, \code{way}, or
+\code{relation}. Optional if id is prefixed with the type.}
 
 \item{open_url}{If \code{TRUE}, open the OSM page of the specified object in web
-browser. Multiple objects (\code{id} values) will be opened in multiple pages.}
+browser. Multiple objects (\code{id} values) will be opened in multiple
+pages.}
 }
 \value{
 \link{opq} object

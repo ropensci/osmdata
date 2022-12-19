@@ -21,13 +21,10 @@ longitudes and latitudes, in the form \code{c(xmin, ymin, xmax, ymax)}
 or (ii) a character string in the form \code{xmin,ymin,xmax,ymax}. These
 will be passed to \link{getbb} to be converted to a numerical bounding
 box. Can also be (iii) a matrix representing a bounding polygon as
-returned from \code{getbb(..., format_out = "polygon")}. To search in an area,
-(iv) a character string with a relation or a (closed) way id in the
-format \code{"way(id:1)"}, \code{"relation(id:1, 2)"} or
-\code{"relation(id:1, 2, 3); way(id:2)"} as returned by
-\code{getbb(..., format_out = "osm_type_id")} or \link{bbox_to_string} with
-a \code{data.frame} from \code{getbb(..., format_out = "data.frame")} to select all
-areas combined (relations and ways).}
+returned from \code{getbb(..., format_out = "polygon")}. To search in an
+area, (iv) a character string with a relation or a (closed) way id in
+the format \code{"way(id:1)"}, \code{"relation(id:1, 2)"} or \code{"relation(id:1, 2, 3); way(id:2)"} as returned by \code{getbb(..., format_out = "osm_type_id")}
+or \link{bbox_to_string} with a \code{data.frame} from \code{getbb(..., format_out = "data.frame")} to select all areas combined (relations and ways).}
 
 \item{nodes_only}{If \code{TRUE}, query OSM nodes only. Some OSM structures such
 as \code{place = "city"} or \code{highway = "traffic_signals"} are represented by
@@ -38,10 +35,10 @@ efficient, with data returned in the \code{osm_points} list item.}
 
 \item{out}{The level of verbosity of the overpass result: \code{body} (geometries
 and tags, the default), \code{tags} (tags without geometry), \code{meta} (like
-body + Timestamp, Version, Changeset, User, User ID of the last edition),
-\code{skel} (geometries only), \verb{tags center} (tags without geometry + the
-coordinates of the center of the bounding box) and \code{ids} (type and id of
-the objects only).}
+body + Timestamp, Version, Changeset, User, User ID of the last
+edition), \code{skel} (geometries only), \verb{tags center} (tags without geometry
++ the coordinates of the center of the bounding box) and \code{ids} (type and
+id of the objects only).}
 
 \item{datetime}{If specified, a date and time to extract data from the OSM
 database as it was up to the specified date and time, as described at
@@ -74,10 +71,8 @@ Build an Overpass query
 The \code{out} statement for \code{tags}, \verb{tags center}and \code{id}, do not return
 geometries. Neither \code{out = "meta"} nor \code{adiff = TRUE} options are implemented
 for all \verb{osmdata_*} functions yet. Use \link{osmdata_xml} or \link{osmdata_data_frame}
-to get the result of these queries. See the documentation of the
-\href{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#out}{out statement}
-and
-\href{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Augmented-difference_between_two_dates_(adiff)}{augmented difference}
+to get the result of these queries. See the documentation of the \href{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#out}{out statement}
+and \href{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Augmented-difference_between_two_dates_(adiff)}{augmented difference}
 for more details about these options.
 }
 \note{
