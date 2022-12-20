@@ -227,6 +227,20 @@ test_that ("make_query", {
                 "osm_multipolygons"
             )
             expect_named (res, expected = nms, ignore.order = FALSE)
+
+            res <- with_mock_dir ("mock_osm_df", {
+                osmdata_data_frame (qry)
+            })
+            expect_s3_class (res, "data.frame")
+            expect_silent (res <- osmdata_data_frame (qry, doc))
+            expect_s3_class (res, "data.frame")
+            expect_silent (res <- osmdata_data_frame (qry, "junk.osm"))
+            expect_message (res <- osmdata_data_frame (qry, "junk.osm", quiet = FALSE))
+
+            nms <- c (
+                "names", "class", "row.names", "bbox", "overpass_call", "meta"
+            )
+            expect_named (attributes(res), expected = nms, ignore.order = FALSE)
         }
 
         if (file.exists ("junk.osm")) invisible (file.remove ("junk.osm"))
