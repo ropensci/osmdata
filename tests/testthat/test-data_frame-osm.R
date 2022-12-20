@@ -104,7 +104,7 @@ test_that ("empty result", {
 
     x <- osmdata_data_frame (q0, doc)
 
-    cols <- c ("osm_type", "osm_id")
+    cols <- c ("osm_type", "osm_id", "adiff_action", "adiff_date", "adiff_visible")
     expect_named (x, cols)
     expect_s3_class (x, "data.frame")
     expect_identical (nrow (x), 0L)
