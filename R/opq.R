@@ -840,9 +840,8 @@ opq_string_intern <- function (opq, quiet = TRUE) {
         } else {
 
             if (!map_to_area) {
-                features <-  c (sprintf (" %s %s (%s);\n",
-                                         opq$osm_types, features, opq$bbox),
-                                "\n" # should be removed but mock calls must be refreshed
+                features <-  c (sprintf ("  %s%s (%s);\n",
+                                         opq$osm_types, features, opq$bbox)
                 )
             } else {
                 opq$prefix <- gsub ("\n$", "", opq$prefix)
@@ -852,7 +851,7 @@ opq_string_intern <- function (opq, quiet = TRUE) {
                 )
                 features <- c (
                     search_area,
-                    sprintf (" %s %s (area.searchArea);\n", opq$osm_types, features)
+                    sprintf ("  %s%s (area.searchArea);\n", opq$osm_types, features)
                 )
             }
         }
@@ -886,14 +885,14 @@ opq_string_intern <- function (opq, quiet = TRUE) {
         }
 
         if (!map_to_area) {
-            bbox <- sprintf (" %s (%s);\n", opq$osm_types, opq$bbox)
+            bbox <- sprintf ("  %s (%s);\n", opq$osm_types, opq$bbox)
         } else {
                 opq$prefix <- gsub ("\n$", "", opq$prefix)
             search_area <-
                 paste0 (opq$bbox, "; map_to_area->.searchArea; );\n(\n")
             bbox <- c (
                 search_area,
-                sprintf (" %s (area.searchArea);\n", opq$osm_types)
+                sprintf ("  %s (area.searchArea);\n", opq$osm_types)
             )
         }
 
