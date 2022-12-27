@@ -867,7 +867,7 @@ opq_string_intern <- function (opq, quiet = TRUE) {
         type_id <- data.frame (type = opq$id$type, id = opq$id$id)
         type_id <- split (type_id, type_id$type)
         id <- mapply (function (type, ids) {
-            paste0 (" ", type, "(id:", paste (ids, collapse = ","), ");\n")
+            paste0 (" ", type, "(id:", paste (ids$id, collapse = ","), ");\n")
         }, type = names (type_id), ids = type_id)
 
         id <- paste (id, collapse = "")
