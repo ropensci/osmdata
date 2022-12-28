@@ -197,7 +197,7 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
                             match_case = FALSE, value_exact = FALSE) {
     if (is.null (value)) {
 
-        feature <- paste0 (sprintf (' ["%s"]', key))
+        feature <- paste0 (sprintf ('["%s"]', key))
     } else {
 
         if (length (value) > 1) {
@@ -219,7 +219,7 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
             }
         }
         feature <- paste0 (sprintf (
-            ' [%s"%s"%s"%s"',
+            '[%s"%s"%s"%s"',
             key_pre, key, bind, value
         ))
         if (!match_case) {
@@ -840,7 +840,7 @@ opq_string_intern <- function (opq, quiet = TRUE) {
         } else {
 
             if (!map_to_area) {
-                features <-  c (sprintf ("  %s%s (%s);\n",
+                features <-  c (sprintf ("  %s %s (%s);\n",
                                          opq$osm_types, features, opq$bbox)
                 )
             } else {
@@ -851,7 +851,7 @@ opq_string_intern <- function (opq, quiet = TRUE) {
                 )
                 features <- c (
                     search_area,
-                    sprintf ("  %s%s (area.searchArea);\n", opq$osm_types, features)
+                    sprintf ("  %s %s (area.searchArea);\n", opq$osm_types, features)
                 )
             }
         }
