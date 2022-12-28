@@ -174,13 +174,17 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
                             match_case = FALSE, value_exact = FALSE) {
     if (is.null (value)) {
 
-        feature <- paste0 (sprintf (' ["%s"]', key))
+        feature <- ifelse (substring (key, 1, 1) == "!",
+                sprintf ('[!"%s"]', substring (key, 2, nchar (key))),
+                sprintf ('["%s"]', key)
+        )
+
     } else {
 
         if (length (value) > 1) {
 
             # convert to OR'ed regex:
-            value <- paste0 (value, collapse = "|")
+            value <- paste (value, collapse = "|")
             if (value_exact) {
                 value <- paste0 ("^(", value, ")$")
             }
@@ -196,7 +200,7 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
             }
         }
         feature <- paste0 (sprintf (
-            ' [%s"%s"%s"%s"',
+            '[%s"%s"%s"%s"',
             key_pre, key, bind, value
         ))
         if (!match_case) {
@@ -211,7 +215,8 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #' Add a feature to an Overpass query
 #'
 #' @param opq An `overpass_query` object
-#' @param key feature key
+#' @param key feature key; can be negated with an initial exclamation mark,
+#' `key = "!this"`, and can also be a vector if `value` is missing.
 #' @param value value for feature key; can be negated with an initial
 #' exclamation mark, `value = "!this"`, and can also be a vector,
 #' `value = c ("this", "that")`.

@@ -17,7 +17,8 @@ add_osm_feature(
 \arguments{
 \item{opq}{An \code{overpass_query} object}
 
-\item{key}{feature key}
+\item{key}{feature key; can be negated with an initial exclamation mark,
+\code{key = "!this"}, and can also be a vector if \code{value} is missing.}
 
 \item{value}{value for feature key; can be negated with an initial
 exclamation mark, \code{value = "!this"}, and can also be a vector,
