@@ -196,7 +196,7 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
             }
         }
         feature <- paste0 (sprintf (
-            ' [%s"%s"%s"%s"',
+            '[%s"%s"%s"%s"',
             key_pre, key, bind, value
         ))
         if (!match_case) {
@@ -301,7 +301,7 @@ add_osm_feature <- function (opq,
         match_case, value_exact
     )
 
-    opq$features <- paste0 (c (opq$features, feature), collapse = "")
+    opq$features <- paste (opq$features, paste (feature, collapse = " "))
 
     if (is.null (opq$suffix)) {
         opq$suffix <- ");\n(._;>;);\nout body;"
@@ -478,11 +478,16 @@ add_osm_features <- function (opq,
                 key_exact = key_exact
             )
 
-        features <-
-            paste0 (
-                bind_key_pre$key_pre, '\"', names (features), '\"',
-                bind_key_pre$bind, '\"', features, '\"'
-            )
+        features <- mapply (function (key, value, key_pre, bind) {
+                paste_features (key, value, key_pre = key_pre, bind = bind,
+                    match_case = TRUE, value_exact = value_exact)
+            },
+            key = names (features), value = features,
+            key_pre = bind_key_pre$key_pre, bind = bind_key_pre$bind,
+            SIMPLIFY = FALSE
+        )
+        features <- as.character (features)
+
     }
 
     index <- which (!grepl ("^\\[", features))
@@ -490,7 +495,7 @@ add_osm_features <- function (opq,
     index <- which (!grepl ("\\]$", features))
     features [index] <- paste0 (features [index], "]")
 
-    opq$features <- features
+    opq$features <- c (opq$features, features)
 
     opq
 }
