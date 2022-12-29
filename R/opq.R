@@ -495,7 +495,7 @@ add_osm_features <- function (opq,
     index <- which (!grepl ("\\]$", features))
     features [index] <- paste0 (features [index], "]")
 
-    opq$features <- c (opq$features, features)
+    opq$features <- unique (c (opq$features, features))
 
     opq
 }
