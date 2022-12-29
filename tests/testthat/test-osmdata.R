@@ -49,14 +49,14 @@ test_that ("add feature", {
         key = "highway", value = "!primary",
         match_case = FALSE
     )
-    expect_identical (qry1$features, " [\"highway\"]")
-    expect_identical (qry2$features, " [\"highway\"=\"primary\"]")
+    expect_identical (qry1$features, "[\"highway\"]")
+    expect_identical (qry2$features, "[\"highway\"=\"primary\"]")
     expect_identical (
         qry3$features,
-        " [\"highway\"~\"^(primary|tertiary)$\"]"
+        "[\"highway\"~\"^(primary|tertiary)$\"]"
     )
-    expect_identical (qry4$features, " [\"highway\"!=\"primary\"]")
-    expect_identical (qry5$features, " [\"highway\"!=\"primary\",i]")
+    expect_identical (qry4$features, "[\"highway\"!=\"primary\"]")
+    expect_identical (qry5$features, "[\"highway\"!=\"primary\",i]")
 
     bbox <- c (-0.118, 51.514, -0.115, 51.517)
     qry <- opq (bbox = bbox)
