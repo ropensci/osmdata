@@ -706,8 +706,9 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
     tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = FALSE)
     tags_u <- xml2::xml_find_all (osm_obj, xpath = ".//tag")
     col_names <- sort (unique (xml2::xml_attr (tags_u, attr = "k")))
-    m <- matrix (nrow = length (tags), ncol = length (col_names),
-                 dimnames = list (NULL, col_names)
+    m <- matrix (
+        nrow = length (tags), ncol = length (col_names),
+        dimnames = list (NULL, col_names)
     )
     has_tags <- which (vapply (tags, length, FUN.VALUE = integer (1)) > 0)
     for (i in has_tags) {
@@ -745,6 +746,46 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
 }
 
 
+xml_to_df_cpp <- function (doc, stringsAsFactors = FALSE) {
+
+    res <- rcpp_osmdata_df (paste0 (doc))
+    if (nrow (res$points_kv) > 0L) {
+        res$points_kv$osm_type <- "node"
+    }
+    if (nrow (res$ways_kv) > 0L) {
+        res$ways_kv$osm_type <- "way"
+    }
+    if (nrow (res$rels_kv) > 0L) {
+        res$rels_kv$osm_type <- "relation"
+    }
+
+    nms <- sort (unique (unlist (lapply (res, names))))
+    nms1 <- c ("osm_type", "osm_id", "name")
+    nms <- c (nms1, nms [-which (nms %in% nms1)])
+
+    df <- lapply (res, function (i) {
+        out <- data.frame (
+            matrix (nrow = nrow (i), ncol = length (nms)),
+            stringsAsFactors = stringsAsFactors
+        )
+        names (out) <- nms
+        out [, match (names (i), nms)] <- i
+        return (out)
+    })
+    df <- do.call (rbind, df)
+
+    if (nrow (df) == 0) {
+        df <- data.frame (
+            osm_type = character (),
+            osm_id = character (),
+            stringsAsFactors = stringsAsFactors
+        )
+    }
+
+    return (df)
+}
+
+
 xml_adiff_to_df <- function (doc,
                              datetime_from,
                              datetime_to,
@@ -765,8 +806,9 @@ xml_adiff_to_df <- function (doc,
 
     tags_u <- xml2::xml_find_all (osm_actions, xpath = ".//tag")
     col_names <- sort (unique (xml2::xml_attr (tags_u, attr = "k")))
-    m <- matrix (nrow = length (osm_obj), ncol = length (col_names),
-                 dimnames = list (NULL, col_names)
+    m <- matrix (
+        nrow = length (osm_obj), ncol = length (col_names),
+        dimnames = list (NULL, col_names)
     )
 
     tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = FALSE)
@@ -804,9 +846,9 @@ xml_adiff_to_df <- function (doc,
     adiff_visible [which (adiff_visible == "true")] <- TRUE
 
     if (all (xml2::xml_has_attr (
-            osm_obj,
-            c ("version", "timestamp", "changeset", "uid", "user"))
-        )
+        osm_obj,
+        c ("version", "timestamp", "changeset", "uid", "user")
+    ))
     ) {
 
         osm_version <- xml2::xml_attr (osm_obj, attr = "version")
@@ -822,7 +864,7 @@ xml_adiff_to_df <- function (doc,
         )
 
     } else {
-        df <- data.frame(osm_type, osm_id,
+        df <- data.frame (osm_type, osm_id,
             adiff_action, adiff_date, adiff_visible, m,
             stringsAsFactors = stringsAsFactors, check.names = FALSE
         )
