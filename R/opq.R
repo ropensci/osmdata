@@ -114,7 +114,7 @@ opq <- function (bbox = NULL, nodes_only = FALSE,
     if (has_geometry) {
         suffix <- paste0 (");\n(._;>;);\nout ", out, ";") # recurse down
     } else {
-        suffix <- paste0 ("); out", out, ";")
+        suffix <- paste0 ("); out ", out, ";")
     }
 
     if (!missing (memsize)) {
