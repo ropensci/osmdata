@@ -10,6 +10,17 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// rcpp_osmdata_df
+Rcpp::List rcpp_osmdata_df(const std::string& st);
+RcppExport SEXP _osmdata_rcpp_osmdata_df(SEXP stSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string& >::type st(stSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_osmdata_df(st));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_osmdata_sc
 Rcpp::List rcpp_osmdata_sc(const std::string& st);
 RcppExport SEXP _osmdata_rcpp_osmdata_sc(SEXP stSEXP) {
