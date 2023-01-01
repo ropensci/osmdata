@@ -112,8 +112,6 @@ void osm_df::get_osm_ways (Rcpp::DataFrame &kv_df,
 {
 
     size_t nrow = way_ids.size (), ncol = unique_vals.k_way.size ();
-    std::vector <std::string> waynames;
-    waynames.reserve (way_ids.size ());
 
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
