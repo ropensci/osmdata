@@ -52,9 +52,7 @@
 
 //' get_osm_relations
 //'
-//' Return a dual Rcpp::List containing all OSM relations, the firmt element of
-//' which holds `multipolygon` relations, while the second holds all others,
-//' which are stored as `multilinestring` objects.
+//' Return a dual Rcpp::DataFrame containing all OSM relations.
 //'
 //' @param rels Pointer to the vector of Relation objects
 //' @param nodes Pointer to the vector of node objects
