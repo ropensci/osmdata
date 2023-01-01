@@ -69,7 +69,6 @@ Rcpp::DataFrame osm_df::get_osm_relations (const Relations &rels,
     const unsigned int nmp = rels.size ();
 
     size_t ncol = unique_vals.k_rel.size ();
-    rel_id_mp.reserve (nmp);
 
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nmp, ncol));
     unsigned int count = 0;
