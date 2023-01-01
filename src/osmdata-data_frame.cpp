@@ -35,6 +35,8 @@
 #include "osmdata.h"
 
 #include <Rcpp.h>
+#include <list>
+#include <string>
 
 // Note: This code uses explicit index counters within most loops which use Rcpp
 // objects, because these otherwise require a 
@@ -64,11 +66,12 @@
 Rcpp::DataFrame osm_df::get_osm_relations (const Relations &rels, 
         const UniqueVals &unique_vals)
 {
-    std::vector <std::string> ids_mp; 
 
     const unsigned int nmp = rels.size ();
 
     size_t ncol = unique_vals.k_rel.size ();
+    std::vector <std::string> rel_ids; 
+    rel_ids.reserve (nmp);
 
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nmp, ncol));
     unsigned int count = 0;
@@ -78,6 +81,7 @@ Rcpp::DataFrame osm_df::get_osm_relations (const Relations &rels,
         if (count % 1000 == 0)
             Rcpp::checkUserInterrupt ();
 
+        rel_ids.push_back (std::to_string (itr->id));
 
         osm_convert::get_value_mat_rel (itr, unique_vals, kv_mat, count++);
     }
@@ -86,9 +90,12 @@ Rcpp::DataFrame osm_df::get_osm_relations (const Relations &rels,
     if (nmp > 0)
     {
         kv_mat.attr ("names") = unique_vals.k_rel;
+        kv_mat.attr ("dimnames") = Rcpp::List::create (rel_ids, unique_vals.k_rel);
         kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
     } else
         kv_df = R_NilValue;
+
+    rel_ids.clear ();
 
     return kv_df;
 }
@@ -109,6 +116,8 @@ void osm_df::get_osm_ways (Rcpp::DataFrame &kv_df,
 {
 
     size_t nrow = way_ids.size (), ncol = unique_vals.k_way.size ();
+    std::vector <std::string> waynames;
+    waynames.reserve (nrow);
 
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
@@ -117,6 +126,9 @@ void osm_df::get_osm_ways (Rcpp::DataFrame &kv_df,
     {
         if (count % 1000 == 0)
             Rcpp::checkUserInterrupt ();
+
+        waynames.push_back (std::to_string (*wi));
+
         auto wj = ways.find (*wi);
         osm_convert::get_value_mat_way (wj, unique_vals, kv_mat, count);
         count++;
@@ -130,6 +142,8 @@ void osm_df::get_osm_ways (Rcpp::DataFrame &kv_df,
         if (kv_mat.nrow () > 0 && kv_mat.ncol () > 0)
             kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
     }
+
+    waynames.clear ();
 }
 
 //' get_osm_nodes
@@ -149,11 +163,16 @@ void osm_df::get_osm_nodes (Rcpp::DataFrame &kv_df,
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
 
+    std::vector <std::string> ptnames;
+    ptnames.reserve (nodes.size ());
+
     unsigned int count = 0;
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
         if (count % 1000 == 0)
             Rcpp::checkUserInterrupt ();
+
+        ptnames.push_back (std::to_string (ni->first));
 
         for (auto kv_iter = ni->second.key_val.begin ();
                 kv_iter != ni->second.key_val.end (); ++kv_iter)
@@ -166,11 +185,13 @@ void osm_df::get_osm_nodes (Rcpp::DataFrame &kv_df,
     }
     if (unique_vals.k_point.size () > 0)
     {
+        kv_mat.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
         kv_mat.attr ("names") = unique_vals.k_point;
         kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
     } else
         kv_df = R_NilValue;
 
+    ptnames.clear ();
 }
 
 
