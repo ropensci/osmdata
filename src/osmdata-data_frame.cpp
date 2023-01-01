@@ -122,7 +122,6 @@ void osm_df::get_osm_ways (Rcpp::DataFrame &kv_df,
     {
         if (count % 1000 == 0)
             Rcpp::checkUserInterrupt ();
-        waynames.push_back (std::to_string (*wi));
         auto wj = ways.find (*wi);
         osm_convert::get_value_mat_way (wj, unique_vals, kv_mat, count);
         count++;
