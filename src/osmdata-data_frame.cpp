@@ -78,7 +78,6 @@ Rcpp::DataFrame osm_df::get_osm_relations (const Relations &rels,
         if (count % 1000 == 0)
             Rcpp::checkUserInterrupt ();
 
-        rel_id_mp.push_back (std::to_string (itr->id));
 
         osm_convert::get_value_mat_rel (itr, unique_vals, kv_mat, count++);
     }
