@@ -110,7 +110,7 @@ Rcpp::DataFrame osm_df::get_osm_relations (const Relations &rels,
 //' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
 //' 
 //' @noRd 
-void osm_df::get_osm_ways (Rcpp::DataFrame &kv_df,
+Rcpp::DataFrame osm_df::get_osm_ways (
         const std::set <osmid_t> &way_ids, const Ways &ways,
         const UniqueVals &unique_vals)
 {
@@ -134,7 +134,7 @@ void osm_df::get_osm_ways (Rcpp::DataFrame &kv_df,
         count++;
     }
 
-    kv_df = R_NilValue;
+    Rcpp::DataFrame kv_df = R_NilValue;
     if (way_ids.size () > 0)
     {
         kv_mat.attr ("names") = unique_vals.k_way;
@@ -144,6 +144,8 @@ void osm_df::get_osm_ways (Rcpp::DataFrame &kv_df,
     }
 
     waynames.clear ();
+
+    return kv_df;
 }
 
 //' get_osm_nodes
@@ -155,8 +157,8 @@ void osm_df::get_osm_ways (Rcpp::DataFrame &kv_df,
 //' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
 //' 
 //' @noRd 
-void osm_df::get_osm_nodes (Rcpp::DataFrame &kv_df,
-        const Nodes &nodes, const UniqueVals &unique_vals)
+Rcpp::DataFrame osm_df::get_osm_nodes (const Nodes &nodes,
+        const UniqueVals &unique_vals)
 {
     size_t nrow = nodes.size (), ncol = unique_vals.k_point.size ();
 
@@ -183,15 +185,18 @@ void osm_df::get_osm_nodes (Rcpp::DataFrame &kv_df,
         }
         count++;
     }
+
+    Rcpp::DataFrame kv_df = R_NilValue;
     if (unique_vals.k_point.size () > 0)
     {
         kv_mat.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
         kv_mat.attr ("names") = unique_vals.k_point;
         kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
-    } else
-        kv_df = R_NilValue;
+    }
 
     ptnames.clear ();
+
+    return kv_df;
 }
 
 
@@ -238,15 +243,13 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
         way_ids.insert ((*itw).first);
     }
 
-    Rcpp::DataFrame kv_df_ways;
-    osm_df::get_osm_ways (kv_df_ways, way_ids, ways, unique_vals);
+    Rcpp::DataFrame kv_df_ways = osm_df::get_osm_ways (way_ids, ways, unique_vals);
 
     /* --------------------------------------------------------------
      * 3. Extract OSM nodes
      * --------------------------------------------------------------*/
 
-    Rcpp::DataFrame kv_df_points;
-    osm_df::get_osm_nodes (kv_df_points, nodes, unique_vals);
+    Rcpp::DataFrame kv_df_points = osm_df::get_osm_nodes (nodes, unique_vals);
 
     /* --------------------------------------------------------------
      * 4. Collate all data

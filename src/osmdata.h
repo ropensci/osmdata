@@ -492,10 +492,10 @@ namespace osm_df {
 
 Rcpp::DataFrame get_osm_relations (const Relations &rels, 
         const UniqueVals &unique_vals);
-void get_osm_ways (Rcpp::DataFrame &kv_df, const std::set <osmid_t> &way_ids,
+Rcpp::DataFrame get_osm_ways (const std::set <osmid_t> &way_ids,
         const Ways &ways, const UniqueVals &unique_vals);
-void get_osm_nodes (Rcpp::DataFrame &kv_df,
-        const Nodes &nodes, const UniqueVals &unique_vals);
+Rcpp::DataFrame get_osm_nodes ( const Nodes &nodes,
+        const UniqueVals &unique_vals);
 
 } // end namespace osm_df
 
