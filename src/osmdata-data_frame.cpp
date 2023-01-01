@@ -149,8 +149,6 @@ void osm_df::get_osm_nodes (Rcpp::DataFrame &kv_df,
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
 
-    std::vector <std::string> ptnames;
-    ptnames.reserve (nodes.size ());
     unsigned int count = 0;
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
