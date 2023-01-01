@@ -77,7 +77,8 @@ Rcpp::DataFrame osm_df::get_osm_relations (const Relations &rels,
 
     for (auto itr = rels.begin (); itr != rels.end (); ++itr)
     {
-        Rcpp::checkUserInterrupt ();
+        if (count % 1000 == 0)
+            Rcpp::checkUserInterrupt ();
 
         rel_id_mp.push_back (std::to_string (itr->id));
 
@@ -120,7 +121,8 @@ void osm_df::get_osm_ways (Rcpp::DataFrame &kv_df,
     unsigned int count = 0;
     for (auto wi = way_ids.begin (); wi != way_ids.end (); ++wi)
     {
-        Rcpp::checkUserInterrupt ();
+        if (count % 1000 == 0)
+            Rcpp::checkUserInterrupt ();
         waynames.push_back (std::to_string (*wi));
         auto wj = ways.find (*wi);
         osm_convert::get_value_mat_way (wj, unique_vals, kv_mat, count);
