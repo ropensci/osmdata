@@ -83,7 +83,7 @@ Rcpp::DataFrame osm_df::get_osm_relations (const Relations &rels,
     }
 
     Rcpp::DataFrame kv_df;
-    if (rel_id_mp.size () > 0)
+    if (nmp > 0)
     {
         kv_mat.attr ("names") = unique_vals.k_rel;
         kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
