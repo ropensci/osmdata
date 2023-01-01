@@ -171,7 +171,6 @@ void osm_df::get_osm_nodes (Rcpp::DataFrame &kv_df,
     } else
         kv_df = R_NilValue;
 
-    ptnames.clear ();
 }
 
 
