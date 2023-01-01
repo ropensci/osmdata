@@ -761,7 +761,7 @@ xml_to_df_cpp <- function (doc, stringsAsFactors = FALSE) {
 
     nms <- sort (unique (unlist (lapply (res, names))))
     nms1 <- c ("osm_type", "osm_id", "name")
-    nms <- c (nms1, nms [-which (nms %in% nms1)])
+    nms <- c (nms1, setdiff (nms, nms1))
 
     df <- lapply (res, function (i) {
         out <- data.frame (
