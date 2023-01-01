@@ -769,7 +769,7 @@ xml_to_df_cpp <- function (doc, stringsAsFactors = FALSE) {
             stringsAsFactors = stringsAsFactors
         )
         names (out) <- nms
-        out [, match (names (i), nms)] <- i
+        out [, names (i)] <- i
         return (out)
     })
     df <- do.call (rbind, df)
