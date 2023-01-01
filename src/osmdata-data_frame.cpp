@@ -65,7 +65,6 @@ Rcpp::DataFrame osm_df::get_osm_relations (const Relations &rels,
         const UniqueVals &unique_vals)
 {
     std::vector <std::string> ids_mp, rel_id_mp; 
-    std::vector <std::string> roles;
 
     const unsigned int nmp = rels.size ();
 
