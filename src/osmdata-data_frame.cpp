@@ -155,7 +155,6 @@ void osm_df::get_osm_nodes (Rcpp::DataFrame &kv_df,
         if (count % 1000 == 0)
             Rcpp::checkUserInterrupt ();
 
-        ptnames.push_back (std::to_string (ni->first));
         for (auto kv_iter = ni->second.key_val.begin ();
                 kv_iter != ni->second.key_val.end (); ++kv_iter)
         {
