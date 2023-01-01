@@ -217,7 +217,6 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
         way_ids.insert ((*itw).first);
     }
 
-    Rcpp::List polyList (way_ids.size ());
     Rcpp::DataFrame kv_df_ways;
     osm_df::get_osm_ways (kv_df_ways, way_ids, ways, unique_vals);
 
