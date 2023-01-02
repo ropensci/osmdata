@@ -188,7 +188,6 @@ Rcpp::DataFrame osm_df::get_osm_nodes (const Nodes &nodes,
     if (unique_vals.k_point.size () > 0)
     {
         kv_mat.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
-        kv_mat.attr ("names") = unique_vals.k_point;
         kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
     }
 
