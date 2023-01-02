@@ -136,7 +136,6 @@ Rcpp::DataFrame osm_df::get_osm_ways (
     Rcpp::DataFrame kv_df = R_NilValue;
     if (way_ids.size () > 0)
     {
-        kv_mat.attr ("names") = unique_vals.k_way;
         kv_mat.attr ("dimnames") = Rcpp::List::create (waynames, unique_vals.k_way);
         if (kv_mat.nrow () > 0 && kv_mat.ncol () > 0)
             kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
