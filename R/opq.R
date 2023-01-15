@@ -18,9 +18,9 @@
 #'      Setting this value to `TRUE` for such cases makes queries more
 #'      efficient, with data returned in the `osm_points` list item.
 #' @param osm_types A character vector with several OSM types to query: `node`,
-#'      `way` and `relation` is the default. `nwr` and `rel` are also valid
-#'      types. Ignored if `nodes_only = TRUE`. `osm_types = "node"` is
-#'      equivalent to `nodes_only = TRUE`.
+#'      `way` and `relation` is the default. `nwr`, `nw`, `wr`, `nr`, `area` and
+#'       `rel` are also valid types. Ignored if `nodes_only = TRUE`.
+#'       `osm_types = "node"` is equivalent to `nodes_only = TRUE`.
 #' @param out The level of verbosity of the overpass result: `body` (geometries
 #'      and tags, the default), `tags` (tags without geometry), `meta` (like
 #'      body + Timestamp, Version, Changeset, User, User ID of the last
@@ -112,12 +112,16 @@ opq <- function (bbox = NULL, nodes_only = FALSE,
     } else {
         osm_types <- try (
             match.arg (osm_types,
-                choices = c ("nwr", "node", "way", "rel", "relation"),
+                choices = c (
+                    "node", "way", "rel", "relation",
+                    "nwr", "nw", "wr", "nr", "area"
+                ),
                 several.ok = TRUE
         ), silent = TRUE)
         if (inherits (osm_types, "try-error")) {
             stop ('osm_types parameter must be a vector with values from ',
-                '"nwr", "node", "way", "rel" and "relation".',
+                '"node", "way", "rel", "relation", ',
+                '"nwr", "nw", "wr", "nr" and "area".',
                 call. = FALSE
             )
         }
