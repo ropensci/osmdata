@@ -154,7 +154,7 @@ osmdata_sp <- function (q, doc, quiet = TRUE) {
     {
         stop (
             "Queries returning no geometries (out tags/ids) not accepted. ",
-            'Use queries with «out="body"» or «out=skel» instead.'
+            'Use queries with `out="body"` or `out="skel"` instead.'
         )
     }
 
@@ -443,7 +443,7 @@ osmdata_sf <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) { # noli
     {
         stop (
             "Queries returning no geometries (out tags/ids) not accepted. ",
-            'Use queries with «out="body"» or «out=skel» instead.'
+            'Use queries with `out="body"` or `out="skel"` instead.'
         )
     }
 
@@ -595,7 +595,7 @@ osmdata_sc <- function (q, doc, quiet = TRUE) {
     {
         stop (
             "Queries returning no geometries (out tags/ids) not accepted. ",
-            'Use queries with «out="body"» or «out=skel» instead.'
+            'Use queries with `out="body"` or `out="skel"` instead.'
         )
     }
 
