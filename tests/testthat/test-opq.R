@@ -154,7 +154,7 @@ test_that ("out", {
             q0 [names (q0) != "suffix"],
             q [names (q) != "suffix"]
         )
-        expect_true (grepl ("^\\);\\n\\(\\._;>;\\);\\nout[a-z ]+;$", q$suffix))
+        expect_true (grepl ("^\\);\\n\\(\\._;>;\\);\\nout [a-z ]+;$", q$suffix))
     })
     q_no_geo <- lapply (c ("tags", "tags center", "ids"), function (x) {
         q <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), out = x)
@@ -164,7 +164,7 @@ test_that ("out", {
             q0 [names (q0) != "suffix"],
             q0 [names (q) != "suffix"]
         )
-        expect_true (grepl ("^\\); out[a-z ]+;$", q$suffix))
+        expect_true (grepl ("^\\); out [a-z ]+;$", q$suffix))
     })
 
     # nodes_only
