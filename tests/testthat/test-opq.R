@@ -109,7 +109,7 @@ test_that ("osm_types", {
             bbox = c (-0.118, 51.514, -0.115, 51.517),
             osm_types = "blah"
         ),
-        'osm_types parameter must be a vector with values from "nwr", "node", '
+        'osm_types parameter must be a vector with values from "node", "way", '
     )
 
     q1 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), osm_types = "nwr")
