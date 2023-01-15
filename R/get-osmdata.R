@@ -149,9 +149,30 @@ osmdata_sp <- function (q, doc, quiet = TRUE) {
         stop ("q must be an overpass query or a character string")
     }
 
+    if (!missing (q) &&
+        grepl ("; out (tags|ids)( center)*;$", obj$overpass_call))
+    {
+        stop (
+            "Queries returning no geometries (out tags/ids) not accepted. ",
+            'Use queries with «out="body"» or «out=skel» instead.'
+        )
+    }
+
+    if (!missing (q) && grepl ("out meta;$", obj$overpass_call)) {
+        warning (
+            "out meta queries not yet implemented. ",
+            "Metadata fields will be missing."
+        )
+    }
+
     temp <- fill_overpass_data (obj, doc, quiet = quiet)
     obj <- temp$obj
     doc <- temp$doc
+
+    if (isTRUE (obj$meta$query_type == "adiff")) {
+        # return incorrect result
+        stop ("adiff queries not yet implemented.")
+    }
 
     if (!quiet) {
         message ("converting OSM data to sp format")
@@ -417,9 +438,29 @@ osmdata_sf <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) { # noli
         stop ("q must be an overpass query or a character string")
     }
 
+    if (!missing (q) &&
+        grepl ("; out (tags|ids)( center)*;$", obj$overpass_call))
+    {
+        stop (
+            "Queries returning no geometries (out tags/ids) not accepted. ",
+            'Use queries with «out="body"» or «out=skel» instead.'
+        )
+    }
+
+    if (!missing (q) && grepl ("out meta;$", obj$overpass_call)) {
+        warning (
+            "out meta queries not yet implemented. ",
+            "Metadata fields will be missing."
+        )
+    }
+
     temp <- fill_overpass_data (obj, doc, quiet = quiet)
     obj <- temp$obj
     doc <- temp$doc
+
+    if (isTRUE (obj$meta$query_type == "adiff")) {
+        stop ("adiff queries not yet implemented.")
+    }
 
     if (!quiet) {
         message ("converting OSM data to sf format")
@@ -549,9 +590,29 @@ osmdata_sc <- function (q, doc, quiet = TRUE) {
         stop ("q must be an overpass query or a character string")
     }
 
+    if (!missing (q) &&
+        grepl ("out (tags|ids)( center)*;$", obj$overpass_call))
+    {
+        stop (
+            "Queries returning no geometries (out tags/ids) not accepted. ",
+            'Use queries with «out="body"» or «out=skel» instead.'
+        )
+    }
+
+    if (!missing (q) && grepl ("out meta;$", obj$overpass_call)) {
+        warning (
+            "out meta queries not yet implemented. ",
+            "Metadata fields will be missing."
+        )
+    }
+
     temp <- fill_overpass_data (obj, doc, quiet = quiet)
     obj <- temp$obj
     doc <- temp$doc
+
+    if (isTRUE (obj$meta$query_type == "adiff")) {
+        stop ("adiff queries not yet implemented.")
+    }
 
     if (!quiet) {
         message ("converting OSM data to sc format")

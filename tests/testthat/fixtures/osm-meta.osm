@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API 0.7.59 e21c39fe">
+<note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+<meta osm_base="2023-01-14T10:22:31Z"/>
+
+  <node id="1802450104" lat="42.5279495" lon="2.4005123" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450106" lat="42.5279513" lon="2.4008403" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450108" lat="42.5279797" lon="2.4004130" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450110" lat="42.5279775" lon="2.4004766" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450112" lat="42.5279904" lon="2.4009562" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450114" lat="42.5280411" lon="2.4004600" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450116" lat="42.5280497" lon="2.4003997" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450118" lat="42.5280457" lon="2.4006918" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450120" lat="42.5280620" lon="2.4004527" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450122" lat="42.5280820" lon="2.4005635" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450123" lat="42.5281117" lon="2.4006030" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450126" lat="42.5281184" lon="2.4011751" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450131" lat="42.5281612" lon="2.4012214" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450133" lat="42.5281614" lon="2.4007132" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450134" lat="42.5281748" lon="2.4012360" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450146" lat="42.5281767" lon="2.4006704" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450155" lat="42.5282216" lon="2.4011595" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450160" lat="42.5282828" lon="2.4007470" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450163" lat="42.5282981" lon="2.4010194" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450166" lat="42.5283057" lon="2.4006834" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450168" lat="42.5283306" lon="2.4010388" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450170" lat="42.5283373" lon="2.4007703" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450172" lat="42.5283507" lon="2.4007119" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1802450174" lat="42.5284013" lon="2.4008014" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1967352632" lat="42.5280517" lon="2.4009557" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1967352633" lat="42.5280862" lon="2.4008885" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1967352634" lat="42.5281288" lon="2.4010728" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="1967352635" lat="42.5281921" lon="2.4009697" version="2" timestamp="2018-01-11T15:11:04Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="5333402420" lat="42.5279997" lon="2.4009378" version="1" timestamp="2018-01-11T15:11:01Z" changeset="55354798" uid="90394" user="petrovsk"/>
+  <node id="7630464760" lat="42.5283731" lon="2.4008961" version="1" timestamp="2020-06-17T21:39:09Z" changeset="86792341" uid="2573778" user="sargasso"/>
+  <way id="169072893" version="4" timestamp="2020-06-17T21:39:09Z" changeset="86792341" uid="2573778" user="sargasso">
+    <nd ref="1802450116"/>
+    <nd ref="1802450108"/>
+    <nd ref="1802450110"/>
+    <nd ref="1802450104"/>
+    <nd ref="1802450118"/>
+    <nd ref="1802450106"/>
+    <nd ref="5333402420"/>
+    <nd ref="1802450112"/>
+    <nd ref="1802450126"/>
+    <nd ref="1802450131"/>
+    <nd ref="1802450134"/>
+    <nd ref="1802450155"/>
+    <nd ref="1802450163"/>
+    <nd ref="1802450168"/>
+    <nd ref="7630464760"/>
+    <nd ref="1802450174"/>
+    <nd ref="1802450170"/>
+    <nd ref="1802450172"/>
+    <nd ref="1802450166"/>
+    <nd ref="1802450160"/>
+    <nd ref="1802450133"/>
+    <nd ref="1802450146"/>
+    <nd ref="1802450123"/>
+    <nd ref="1802450122"/>
+    <nd ref="1802450114"/>
+    <nd ref="1802450120"/>
+    <nd ref="1802450116"/>
+    <tag k="source" v="data.gouv.fr:Ministère de la Culture - 08/2011"/>
+  </way>
+  <way id="186037979" version="1" timestamp="2012-10-15T19:48:47Z" changeset="13510738" uid="90394" user="petrovsk">
+    <nd ref="1967352635"/>
+    <nd ref="1967352634"/>
+    <nd ref="1967352632"/>
+    <nd ref="1967352633"/>
+    <nd ref="1967352635"/>
+  </way>
+  <relation id="2501713" version="3" timestamp="2022-02-21T13:52:50Z" changeset="117682848" uid="1290300" user="Laurent Jerry">
+    <member type="way" ref="169072893" role="outer"/>
+    <member type="way" ref="186037979" role="inner"/>
+    <tag k="amenity" v="place_of_worship"/>
+    <tag k="building" v="yes"/>
+    <tag k="fee" v="yes"/>
+    <tag k="heritage:operator" v="mhs"/>
+    <tag k="historic" v="monastery"/>
+    <tag k="mhs:inscription_date" v="1889"/>
+    <tag k="name" v="Abbaye de Saint-Martin du Canigou"/>
+    <tag k="name:ca" v="Sant Marti de Canigò"/>
+    <tag k="ref:mhs" v="PA00103981"/>
+    <tag k="religion" v="christian"/>
+    <tag k="ruins" v="no"/>
+    <tag k="tourism" v="attraction"/>
+    <tag k="type" v="multipolygon"/>
+    <tag k="wikidata" v="Q287751"/>
+    <tag k="wikipedia" v="fr:Abbaye Saint-Martin du Canigou"/>
+  </relation>
+
+</osm>
