@@ -86,9 +86,11 @@ test_that ("empty result", {
     obj_opq <- osmdata (bbox = q0$bbox, overpass_call = q0)
     obj <- osmdata (bbox = q0$bbox)
 
-    metaL<- list (meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
-                  meta_opq = get_metadata (obj_opq, doc)$meta,
-                  meta_no_call = get_metadata (obj, doc)$meta)
+    metaL <- list (
+        meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
+        meta_opq = get_metadata (obj_opq, doc)$meta,
+        meta_no_call = get_metadata (obj, doc)$meta
+    )
 
     expect_equal (metaL$meta_overpass_call$query_type, "date")
     expect_equal (metaL$meta_opq$query_type, "date")
@@ -113,9 +115,11 @@ test_that ("empty result", {
     obj_opq <- osmdata (bbox = q0$bbox, overpass_call = q0)
     obj <- osmdata (bbox = q0$bbox)
 
-    metaL<- list (meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
-                  meta_opq = get_metadata (obj_opq, doc)$meta,
-                  meta_no_call = get_metadata (obj, doc)$meta)
+    metaL <- list (
+        meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
+        meta_opq = get_metadata (obj_opq, doc)$meta,
+        meta_no_call = get_metadata (obj, doc)$meta
+    )
 
     expect_equal (metaL$meta_overpass_call$query_type, "adiff")
     expect_equal (metaL$meta_opq$query_type, "adiff")
@@ -134,15 +138,19 @@ test_that ("attributes", {
     x_sf <- osmdata_sf (q0, osm_multi)
 
     expect_s3_class (x, "data.frame")
-    expect_identical (names (attributes (x)),
-                      c ("names", "class", "row.names", "bbox", "overpass_call", "meta"))
+    expect_true (setequal (
+        names (attributes (x)),
+        c ("bbox", "class", "meta", "names", "overpass_call", "row.names")
+    ))
     expect_identical (attr (x, "bbox"), q0$bbox)
     expect_identical (attr (x, "overpass_call"), x_sf$overpass_call)
     expect_identical (attr (x, "meta"), x_sf$meta)
     # no call
     expect_s3_class (x_no_call, "data.frame")
-    expect_identical (names (attributes (x_no_call)),
-                      c ("names", "class", "row.names", "meta"))
+    expect_true (setequal (
+        names (attributes (x_no_call)),
+        c ("names", "class", "row.names", "meta")
+    ))
     expect_identical (attr (x_no_call, "meta"), x_sf$meta)
 })
 
@@ -150,7 +158,7 @@ test_that ("date", {
     q <- getbb ("Conflent", featuretype = "relation") %>%
         opq (nodes_only = TRUE, datetime = "2020-11-07T00:00:00Z") %>%
         add_osm_feature ("natural", "peak") %>%
-        add_osm_feature ("prominence")  %>%
+        add_osm_feature ("prominence") %>%
         add_osm_feature ("name:ca")
 
     osm_meta_date <- test_path ("fixtures", "osm-date.osm")
@@ -159,8 +167,10 @@ test_that ("date", {
     x <- osmdata_data_frame (q, doc)
     x_no_call <- osmdata_data_frame (doc = doc, quiet = FALSE)
 
-    cols <- c ("osm_type", "osm_id", "ele", "name",
-               "name:ca", "natural", "prominence")
+    cols <- c (
+        "osm_type", "osm_id", "ele", "name",
+        "name:ca", "natural", "prominence"
+    )
     expect_named (x, cols)
     expect_named (x_no_call, cols)
     expect_s3_class (x, "data.frame")
@@ -170,9 +180,11 @@ test_that ("date", {
     obj_opq <- osmdata (bbox = q$bbox, overpass_call = q)
     obj <- osmdata (bbox = q$bbox)
 
-    metaL<- list (meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
-                  meta_opq = get_metadata (obj_opq, doc)$meta,
-                  meta_no_call = get_metadata (obj, doc)$meta)
+    metaL <- list (
+        meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
+        meta_opq = get_metadata (obj_opq, doc)$meta,
+        meta_no_call = get_metadata (obj, doc)$meta
+    )
 
     expect_identical (metaL$meta_overpass_call, metaL$meta_opq)
     expect_identical (metaL$meta_overpass_call$datetime_to, attr (q, "datetime"))
@@ -182,10 +194,12 @@ test_that ("date", {
 
 test_that ("out meta & diff", {
     q <- getbb ("Conflent", featuretype = "relation") %>%
-        opq (nodes_only = TRUE, out = "meta", datetime = "2020-11-07T00:00:00Z",
-             datetime2 = "2022-12-04T00:00:00Z") %>%
+        opq (
+            nodes_only = TRUE, out = "meta", datetime = "2020-11-07T00:00:00Z",
+            datetime2 = "2022-12-04T00:00:00Z"
+        ) %>%
         add_osm_feature ("natural", "peak") %>%
-        add_osm_feature ("prominence")  %>%
+        add_osm_feature ("prominence") %>%
         add_osm_feature ("name:ca")
 
     osm_meta_diff <- test_path ("fixtures", "osm-meta_diff.osm")
@@ -194,9 +208,11 @@ test_that ("out meta & diff", {
     x <- osmdata_data_frame (q, doc, quiet = FALSE)
     x_no_call <- osmdata_data_frame (doc = doc)
 
-    cols <- c ("osm_type", "osm_id", "osm_version", "osm_timestamp",
-               "osm_changeset", "osm_uid", "osm_user", "ele", "name",
-               "name:ca", "natural", "prominence")
+    cols <- c (
+        "osm_type", "osm_id", "osm_version", "osm_timestamp",
+        "osm_changeset", "osm_uid", "osm_user", "ele", "name",
+        "name:ca", "natural", "prominence"
+    )
     expect_named (x, cols)
     expect_named (x_no_call, cols)
     expect_s3_class (x, "data.frame")
@@ -206,9 +222,11 @@ test_that ("out meta & diff", {
     obj_opq <- osmdata (bbox = q$bbox, overpass_call = q)
     obj <- osmdata (bbox = q$bbox)
 
-    metaL<- list (meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
-                  meta_opq = get_metadata (obj_opq, doc)$meta,
-                  meta_no_call = get_metadata (obj, doc)$meta)
+    metaL <- list (
+        meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
+        meta_opq = get_metadata (obj_opq, doc)$meta,
+        meta_no_call = get_metadata (obj, doc)$meta
+    )
 
     expect_identical (metaL$meta_overpass_call, metaL$meta_opq)
     expect_identical (metaL$meta_overpass_call$datetime_from, attr (q, "datetime"))
@@ -218,26 +236,30 @@ test_that ("out meta & diff", {
 
 test_that ("out meta & adiff", {
     q <- getbb ("Conflent", featuretype = "relation") %>%
-        opq (nodes_only = TRUE, out = "meta",
-             datetime = "2020-11-07T00:00:00Z", adiff = TRUE) %>%
+        opq (
+            nodes_only = TRUE, out = "meta",
+            datetime = "2020-11-07T00:00:00Z", adiff = TRUE
+        ) %>%
         add_osm_feature ("natural", "peak") %>%
-        add_osm_feature ("prominence")  %>%
+        add_osm_feature ("prominence") %>%
         add_osm_feature ("name:ca")
 
     osm_meta_adiff <- test_path ("fixtures", "osm-meta_adiff.osm")
     doc <- xml2::read_xml (osm_meta_adiff)
 
-    expect_silent( x <- osmdata_data_frame (opq_string_intern (q), doc) )
-    expect_warning(
+    expect_silent (x <- osmdata_data_frame (opq_string_intern (q), doc))
+    expect_warning (
         x_no_call <- osmdata_data_frame (doc = doc),
         "OSM data is ambiguous and can correspond either to a diff or an adiff query."
     ) # query_type assigned to diff
 
-    cols <- c ("osm_type", "osm_id",
-               "osm_version", "osm_timestamp", "osm_changeset", "osm_uid", "osm_user",
-               "adiff_action", "adiff_date", "adiff_visible",
-               "ele", "name", "name:ca", "natural", "prominence",
-               "source:prominence", "wikidata", "wikipedia")
+    cols <- c (
+        "osm_type", "osm_id",
+        "osm_version", "osm_timestamp", "osm_changeset", "osm_uid", "osm_user",
+        "adiff_action", "adiff_date", "adiff_visible",
+        "ele", "name", "name:ca", "natural", "prominence",
+        "source:prominence", "wikidata", "wikipedia"
+    )
     expect_named (x, cols)
     # expect_named (x_no_call, cols) # query_type assigned to diff
     expect_s3_class (x, "data.frame")
@@ -247,13 +269,14 @@ test_that ("out meta & adiff", {
     obj_opq <- osmdata (bbox = q$bbox, overpass_call = q)
     obj <- osmdata (bbox = q$bbox)
 
-    metaL<- list (meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
-                  meta_opq = get_metadata (obj_opq, doc)$meta,
-                  meta_no_call = expect_warning (
-                                     get_metadata (obj, doc)$meta,
-                                     "OSM data is ambiguous and can correspond either to a diff or an adiff query"
-                                 )
-                  )
+    metaL <- list (
+        meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
+        meta_opq = get_metadata (obj_opq, doc)$meta,
+        meta_no_call = expect_warning (
+            get_metadata (obj, doc)$meta,
+            "OSM data is ambiguous and can correspond either to a diff or an adiff query"
+        )
+    )
 
     expect_equal (metaL$meta_overpass_call$query_type, "adiff")
     expect_equal (metaL$meta_opq$query_type, "adiff")
@@ -264,10 +287,12 @@ test_that ("out meta & adiff", {
 
 test_that ("adiff2", {
     q <- getbb ("Perpinyà", featuretype = "relation") %>%
-        opq (nodes_only = TRUE,
-             datetime = "2012-11-07T00:00:00Z",
-             datetime2 = "2016-11-07T00:00:00Z",
-             adiff = TRUE) %>%
+        opq (
+            nodes_only = TRUE,
+            datetime = "2012-11-07T00:00:00Z",
+            datetime2 = "2016-11-07T00:00:00Z",
+            adiff = TRUE
+        ) %>%
         add_osm_feature ("amenity", "restaurant")
 
     osm_adiff2 <- test_path ("fixtures", "osm-adiff2.osm")
@@ -276,10 +301,12 @@ test_that ("adiff2", {
     x <- osmdata_data_frame (q, doc, quiet = FALSE)
     x_no_call <- osmdata_data_frame (doc = doc)
 
-    cols <- c ("osm_type", "osm_id",
-               "adiff_action", "adiff_date", "adiff_visible",
-               "addr:housenumber", "addr:street", "amenity", "created_by",
-               "cuisine", "name", "phone")
+    cols <- c (
+        "osm_type", "osm_id",
+        "adiff_action", "adiff_date", "adiff_visible",
+        "addr:housenumber", "addr:street", "amenity", "created_by",
+        "cuisine", "name", "phone"
+    )
     expect_named (x, cols)
     expect_named (x_no_call, cols)
     expect_s3_class (x, "data.frame")
@@ -289,9 +316,11 @@ test_that ("adiff2", {
     obj_opq <- osmdata (bbox = q$bbox, overpass_call = q)
     obj <- osmdata (bbox = q$bbox)
 
-    metaL<- list (meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
-                  meta_opq = get_metadata (obj_opq, doc)$meta,
-                  meta_no_call = get_metadata (obj, doc)$meta)
+    metaL <- list (
+        meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
+        meta_opq = get_metadata (obj_opq, doc)$meta,
+        meta_no_call = get_metadata (obj, doc)$meta
+    )
 
     k <- sapply (metaL, function (x) expect_equal (x$query_type, "adiff"))
     expect_identical (metaL$meta_overpass_call, metaL$meta_opq)
