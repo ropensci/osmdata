@@ -367,7 +367,16 @@ inline void XmlData::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
             // have are "inner" and "outer" roles.
             if (!strcmp (it->value(), "inner") || !strcmp (it->value(), "outer"))
                 rrel.ispoly = true;
-        }
+        } else if (!strcmp (it->name(), "version"))
+            rrel._version = it->value();
+        else if (!strcmp (it->name(), "timestamp"))
+            rrel._timestamp = it->value();
+        else if (!strcmp (it->name(), "changeset"))
+            rrel._changeset = it->value();
+        else if (!strcmp (it->name(), "uid"))
+            rrel._uid = it->value();
+        else if (!strcmp (it->name(), "user"))
+            rrel._user = it->value();
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
@@ -526,7 +535,7 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st);
 
 namespace osm_df {
 
-Rcpp::DataFrame get_osm_relations (const Relations &rels, 
+Rcpp::List get_osm_relations (const Relations &rels, 
         const UniqueVals &unique_vals);
 Rcpp::List get_osm_ways (const std::set <osmid_t> &way_ids,
         const Ways &ways, const UniqueVals &unique_vals);

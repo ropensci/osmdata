@@ -765,6 +765,10 @@ xml_to_df_cpp <- function (doc, stringsAsFactors = FALSE) {
     }
     if (nrow (res$rels_kv) > 0L) {
         res$rels_kv$osm_type <- "relation"
+        res$rels_kv <- cbind (
+            get_meta_from_cpp_output (res, "rels"),
+            res$rels_kv
+        )
     }
 
     nms <- sort (unique (unlist (lapply (res [1:3], names))))

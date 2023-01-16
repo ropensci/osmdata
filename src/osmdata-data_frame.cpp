@@ -63,7 +63,7 @@
 //' @return A dual Rcpp::DataFrame with the tags and metadata of the relations.
 //' 
 //' @noRd 
-Rcpp::DataFrame osm_df::get_osm_relations (const Relations &rels, 
+Rcpp::List osm_df::get_osm_relations (const Relations &rels, 
         const UniqueVals &unique_vals)
 {
 
@@ -74,6 +74,10 @@ Rcpp::DataFrame osm_df::get_osm_relations (const Relations &rels,
     rel_ids.reserve (nmp);
 
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nmp, ncol));
+    std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
+    Rcpp::CharacterMatrix meta (Rcpp::Dimension (nmp, 5L));
+    std::fill (meta.begin (), meta.end (), NA_STRING);
+
     unsigned int count = 0;
 
     for (auto itr = rels.begin (); itr != rels.end (); ++itr)
@@ -83,6 +87,12 @@ Rcpp::DataFrame osm_df::get_osm_relations (const Relations &rels,
 
         rel_ids.push_back (std::to_string (itr->id));
 
+        meta (count, 0L) = itr->_version;
+        meta (count, 1L) = itr->_timestamp;
+        meta (count, 2L) = itr->_changeset;
+        meta (count, 3L) = itr->_uid;
+        meta (count, 4L) = itr->_user;
+
         osm_convert::get_value_mat_rel (itr, unique_vals, kv_mat, count++);
     }
 
@@ -91,12 +101,19 @@ Rcpp::DataFrame osm_df::get_osm_relations (const Relations &rels,
     {
         kv_mat.attr ("dimnames") = Rcpp::List::create (rel_ids, unique_vals.k_rel);
         kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
+
+        meta.attr ("dimnames") = Rcpp::List::create (rel_ids, metanames);
     } else
+    {
         kv_df = R_NilValue;
+        meta = R_NilValue;
+    }
 
     rel_ids.clear ();
 
-    return kv_df;
+    Rcpp::List res = Rcpp::List::create (kv_df, meta);
+
+    return res;
 }
 
 //' get_osm_ways
@@ -254,7 +271,9 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
      * 1. Extract OSM Relations
      * --------------------------------------------------------------*/
 
-    Rcpp::DataFrame kv_rels = osm_df::get_osm_relations (rels, unique_vals);
+    Rcpp::List data_rels = osm_df::get_osm_relations (rels, unique_vals);
+    Rcpp::DataFrame kv_rels = Rcpp::as <Rcpp::DataFrame> (data_rels (0));
+    Rcpp::CharacterMatrix meta_rels = Rcpp::as <Rcpp::CharacterMatrix> (data_rels (1));
 
     /* --------------------------------------------------------------
      * 2. Extract OSM ways
@@ -282,15 +301,16 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
      * 4. Collate all data
      * --------------------------------------------------------------*/
 
-    Rcpp::List ret (5);
+    Rcpp::List ret (6);
     ret [0] = kv_df_points;
     ret [1] = kv_df_ways;
     ret [2] = kv_rels;
     ret [3] = meta_nodes;
     ret [4] = meta_ways;
+    ret [5] = meta_rels;
 
     std::vector <std::string> retnames {"points_kv", "ways_kv", "rels_kv",
-        "points_meta", "ways_meta"};
+        "points_meta", "ways_meta", "rels_meta"};
     ret.attr ("names") = retnames;
     
     return ret;
