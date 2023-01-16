@@ -758,16 +758,22 @@ xml_to_df_cpp <- function (doc, stringsAsFactors = FALSE) {
     }
     if (nrow (res$ways_kv) > 0L) {
         res$ways_kv$osm_type <- "way"
+        res$ways_kv <- cbind (
+            get_meta_from_cpp_output (res, "ways"),
+            res$ways_kv
+        )
     }
     if (nrow (res$rels_kv) > 0L) {
         res$rels_kv$osm_type <- "relation"
     }
 
-    nms <- sort (unique (unlist (lapply (res, names))))
+    nms <- sort (unique (unlist (lapply (res [1:3], names))))
     nms1 <- c ("osm_type", "osm_id", "name")
+    # Then add metadata names:
+    nms1 <- c (nms1, setdiff (grep ("^osm\\_", nms, value = TRUE), nms1))
     nms <- c (nms1, setdiff (nms, nms1))
 
-    df <- lapply (res, function (i) {
+    df <- lapply (res [1:3], function (i) {
         out <- data.frame (
             matrix (nrow = nrow (i), ncol = length (nms)),
             stringsAsFactors = stringsAsFactors
@@ -789,12 +795,20 @@ xml_to_df_cpp <- function (doc, stringsAsFactors = FALSE) {
     return (df)
 }
 
+#' Extract the metadata character matrices from `rcpp_osmdata_df` output,
+#' convert to df, and return only columns with data.
+#'
+#' The "meta" components returns from `rcpp_osmdata_df()` are all named with
+#' underscore prefixes. These are prepended here with "osm" to provide
+#' standardised names.
+#' @noRd
 get_meta_from_cpp_output <- function (res, what = "points") {
 
     this <- res [[paste0 (what, "_meta")]]
     has_data <- apply (this, 2, function (i) any (nzchar (i)))
     has_data [3] <- T
     this <- this [, which (has_data), drop = FALSE]
+    colnames (this) <- paste0 ("osm", colnames (this))
 
     return (as.data.frame (this))
 }

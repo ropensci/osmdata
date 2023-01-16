@@ -256,6 +256,13 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                             (rway.key [i], rway.value [i]));
                     m_unique.k_way.insert (rway.key [i]);
                 }
+                // metadata:
+                way._version = rway._version;
+                way._changeset = rway._changeset;
+                way._timestamp = rway._timestamp;
+                way._uid = rway._uid;
+                way._user = rway._user;
+
                 // Then copy nodes from rway to way.
                 way.nodes.swap (rway.nodes);
                 m_ways.insert (std::make_pair (way.id, way));
@@ -511,7 +518,7 @@ namespace osm_df {
 
 Rcpp::DataFrame get_osm_relations (const Relations &rels, 
         const UniqueVals &unique_vals);
-Rcpp::DataFrame get_osm_ways (const std::set <osmid_t> &way_ids,
+Rcpp::List get_osm_ways (const std::set <osmid_t> &way_ids,
         const Ways &ways, const UniqueVals &unique_vals);
 Rcpp::List get_osm_nodes (const Nodes &nodes,
         const UniqueVals &unique_vals);

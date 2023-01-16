@@ -120,6 +120,7 @@ struct Node
 struct RawWay
 {
     osmid_t id;
+    std::string _version, _timestamp, _changeset, _uid, _user; // metadata
     std::vector <std::string> key, value;
     std::vector <osmid_t> nodes;
 };
@@ -127,6 +128,7 @@ struct RawWay
 struct OneWay
 {
     osmid_t id;
+    std::string _version, _timestamp, _changeset, _uid, _user; // metadata
     std::map <std::string, std::string> key_val;
     std::vector <osmid_t> nodes;
 };

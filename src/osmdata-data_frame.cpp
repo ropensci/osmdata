@@ -109,7 +109,7 @@ Rcpp::DataFrame osm_df::get_osm_relations (const Relations &rels,
 //' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
 //' 
 //' @noRd 
-Rcpp::DataFrame osm_df::get_osm_ways (
+Rcpp::List osm_df::get_osm_ways (
         const std::set <osmid_t> &way_ids, const Ways &ways,
         const UniqueVals &unique_vals)
 {
@@ -120,6 +120,9 @@ Rcpp::DataFrame osm_df::get_osm_ways (
 
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
+    Rcpp::CharacterMatrix meta (Rcpp::Dimension (nrow, 5L));
+    std::fill (meta.begin (), meta.end (), NA_STRING);
+
     unsigned int count = 0;
     for (auto wi = way_ids.begin (); wi != way_ids.end (); ++wi)
     {
@@ -129,6 +132,12 @@ Rcpp::DataFrame osm_df::get_osm_ways (
         waynames.push_back (std::to_string (*wi));
 
         auto wj = ways.find (*wi);
+        meta (count, 0L) = wj->second._version;
+        meta (count, 1L) = wj->second._timestamp;
+        meta (count, 2L) = wj->second._changeset;
+        meta (count, 3L) = wj->second._uid;
+        meta (count, 4L) = wj->second._user;
+
         osm_convert::get_value_mat_way (wj, unique_vals, kv_mat, count);
         count++;
     }
@@ -139,11 +148,15 @@ Rcpp::DataFrame osm_df::get_osm_ways (
         kv_mat.attr ("dimnames") = Rcpp::List::create (waynames, unique_vals.k_way);
         if (kv_mat.nrow () > 0 && kv_mat.ncol () > 0)
             kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
+
+        meta.attr ("dimnames") = Rcpp::List::create (waynames, metanames);
     }
 
     waynames.clear ();
 
-    return kv_df;
+    Rcpp::List res = Rcpp::List::create (kv_mat, meta);
+
+    return res;
 }
 
 //' get_osm_nodes
@@ -204,9 +217,7 @@ Rcpp::List osm_df::get_osm_nodes (const Nodes &nodes,
 
     ptnames.clear ();
 
-    Rcpp::List res = Rcpp::List (2);
-    res (0) = kv_df;
-    res (1) = meta;
+    Rcpp::List res = Rcpp::List::create (kv_df, meta);
 
     return res;
 }
@@ -255,7 +266,9 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
         way_ids.insert ((*itw).first);
     }
 
-    Rcpp::DataFrame kv_df_ways = osm_df::get_osm_ways (way_ids, ways, unique_vals);
+    Rcpp::List data_ways = osm_df::get_osm_ways (way_ids, ways, unique_vals);
+    Rcpp::DataFrame kv_df_ways = Rcpp::as <Rcpp::DataFrame> (data_ways (0));
+    Rcpp::CharacterMatrix meta_ways = Rcpp::as <Rcpp::CharacterMatrix> (data_ways (1));
 
     /* --------------------------------------------------------------
      * 3. Extract OSM nodes
@@ -269,13 +282,15 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
      * 4. Collate all data
      * --------------------------------------------------------------*/
 
-    Rcpp::List ret (4);
+    Rcpp::List ret (5);
     ret [0] = kv_df_points;
     ret [1] = kv_df_ways;
     ret [2] = kv_rels;
     ret [3] = meta_nodes;
+    ret [4] = meta_ways;
 
-    std::vector <std::string> retnames {"points_kv", "ways_kv", "rels_kv", "points_meta"};
+    std::vector <std::string> retnames {"points_kv", "ways_kv", "rels_kv",
+        "points_meta", "ways_meta"};
     ret.attr ("names") = retnames;
     
     return ret;
