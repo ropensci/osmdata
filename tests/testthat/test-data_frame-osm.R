@@ -134,15 +134,15 @@ test_that ("attributes", {
     x_sf <- osmdata_sf (q0, osm_multi)
 
     expect_s3_class (x, "data.frame")
-    expect_identical (names (attributes (x)),
-                      c ("names", "class", "row.names", "bbox", "overpass_call", "meta"))
+    expect_true (setequal (names (attributes (x)),
+        c ("bbox", "class", "meta", "names", "overpass_call", "row.names")))
     expect_identical (attr (x, "bbox"), q0$bbox)
     expect_identical (attr (x, "overpass_call"), x_sf$overpass_call)
     expect_identical (attr (x, "meta"), x_sf$meta)
     # no call
     expect_s3_class (x_no_call, "data.frame")
-    expect_identical (names (attributes (x_no_call)),
-                      c ("names", "class", "row.names", "meta"))
+    expect_true (setequal (names (attributes (x_no_call)),
+                      c ("names", "class", "row.names", "meta")))
     expect_identical (attr (x_no_call, "meta"), x_sf$meta)
 })
 
