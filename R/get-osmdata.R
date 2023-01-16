@@ -819,9 +819,10 @@ get_meta_from_cpp_output <- function (res, what = "points") {
 
     this <- res [[paste0 (what, "_meta")]]
     has_data <- apply (this, 2, function (i) any (nzchar (i)))
-    has_data [3] <- T
     this <- this [, which (has_data), drop = FALSE]
-    colnames (this) <- paste0 ("osm", colnames (this))
+    if (ncol (this) > 0L) {
+        colnames (this) <- paste0 ("osm", colnames (this))
+    }
 
     return (as.data.frame (this))
 }
