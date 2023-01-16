@@ -308,6 +308,13 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                 for (size_t i=0; i<rrel.nodes.size (); i++)
                     relation.nodes.push_back (std::make_pair (rrel.nodes [i],
                                 rrel.role_node [i]));
+                // metadata:
+                relation._version = rrel._version;
+                relation._changeset = rrel._changeset;
+                relation._timestamp = rrel._timestamp;
+                relation._uid = rrel._uid;
+                relation._user = rrel._user;
+
                 m_relations.push_back (relation);
             }
         }
