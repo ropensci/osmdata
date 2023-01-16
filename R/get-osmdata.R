@@ -772,7 +772,7 @@ xml_to_df_cpp <- function (doc, stringsAsFactors = FALSE) {
     }
 
     nms <- sort (unique (unlist (lapply (res [1:3], names))))
-    nms1 <- c ("osm_type", "osm_id", "name")
+    nms1 <- c ("osm_type", "osm_id")
     # Then add metadata names:
     nms1 <- c (nms1, setdiff (grep ("^osm\\_", nms, value = TRUE), nms1))
     nms <- c (nms1, setdiff (nms, nms1))
@@ -784,9 +784,11 @@ xml_to_df_cpp <- function (doc, stringsAsFactors = FALSE) {
         )
         names (out) <- nms
         out [, names (i)] <- i
+        rownames (out) <- rownames (i)
         return (out)
     })
     df <- do.call (rbind, df)
+    rownames (df) <- NULL
 
     if (nrow (df) == 0) {
         df <- data.frame (
