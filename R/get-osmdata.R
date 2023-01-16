@@ -751,6 +751,10 @@ xml_to_df_cpp <- function (doc, stringsAsFactors = FALSE) {
     res <- rcpp_osmdata_df (paste0 (doc))
     if (nrow (res$points_kv) > 0L) {
         res$points_kv$osm_type <- "node"
+        res$points_kv <- cbind (
+            get_meta_from_cpp_output (res, "points"),
+            res$points_kv
+        )
     }
     if (nrow (res$ways_kv) > 0L) {
         res$ways_kv$osm_type <- "way"
@@ -783,6 +787,16 @@ xml_to_df_cpp <- function (doc, stringsAsFactors = FALSE) {
     }
 
     return (df)
+}
+
+get_meta_from_cpp_output <- function (res, what = "points") {
+
+    this <- res [[paste0 (what, "_meta")]]
+    has_data <- apply (this, 2, function (i) any (nzchar (i)))
+    has_data [3] <- T
+    this <- this [, which (has_data), drop = FALSE]
+
+    return (as.data.frame (this))
 }
 
 

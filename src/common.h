@@ -100,6 +100,7 @@ struct UniqueVals
 struct RawNode
 {
     osmid_t id;
+    std::string _version, _timestamp, _changeset, _uid, _user; // metadata
     std::vector <std::string> key, value;
     double lat, lon;
 };
@@ -107,6 +108,7 @@ struct RawNode
 struct Node
 {
     osmid_t id;
+    std::string _version, _timestamp, _changeset, _uid, _user; // metadata
     std::map <std::string, std::string> key_val;
     double lat, lon;
 };

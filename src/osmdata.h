@@ -65,6 +65,8 @@ const std::string wkt =
         BBOX[-90,-180,90,180]],\n\
     ID[\"EPSG\",4326]]";
 
+const Rcpp::CharacterVector metanames = {"_version", "_timestamp", "_changeset", "_uid", "_user"};
+
 /************************************************************************
  ************************************************************************
  **                                                                    **
@@ -222,6 +224,13 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                             (rnode.key [i], rnode.value [i]));
                     m_unique.k_point.insert (rnode.key [i]); // only inserts unique keys
                 }
+                // metadata:
+                node._version = rnode._version;
+                node._changeset = rnode._changeset;
+                node._timestamp = rnode._timestamp;
+                node._uid = rnode._uid;
+                node._user = rnode._user;
+
                 m_nodes.insert (std::make_pair (node.id, node));
             }
         }
@@ -414,6 +423,16 @@ inline void XmlData::traverseNode (XmlNodePtr pt, RawNode& rnode)
             rnode.key.push_back (it->value ());
         else if (!strcmp (it->name(), "v"))
             rnode.value.push_back (it->value ());
+        else if (!strcmp (it->name(), "version")) // metadata
+            rnode._version = it->value ();
+        else if (!strcmp (it->name(), "timestamp")) // metadata
+            rnode._timestamp = it->value ();
+        else if (!strcmp (it->name(), "changeset")) // metadata
+            rnode._changeset = it->value ();
+        else if (!strcmp (it->name(), "uid")) // metadata
+            rnode._uid = it->value ();
+        else if (!strcmp (it->name(), "user")) // metadata
+            rnode._user = it->value ();
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
@@ -494,7 +513,7 @@ Rcpp::DataFrame get_osm_relations (const Relations &rels,
         const UniqueVals &unique_vals);
 Rcpp::DataFrame get_osm_ways (const std::set <osmid_t> &way_ids,
         const Ways &ways, const UniqueVals &unique_vals);
-Rcpp::DataFrame get_osm_nodes ( const Nodes &nodes,
+Rcpp::List get_osm_nodes (const Nodes &nodes,
         const UniqueVals &unique_vals);
 
 } // end namespace osm_df

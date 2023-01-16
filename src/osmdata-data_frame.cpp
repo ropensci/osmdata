@@ -155,16 +155,19 @@ Rcpp::DataFrame osm_df::get_osm_ways (
 //' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
 //' 
 //' @noRd 
-Rcpp::DataFrame osm_df::get_osm_nodes (const Nodes &nodes,
+Rcpp::List osm_df::get_osm_nodes (const Nodes &nodes,
         const UniqueVals &unique_vals)
 {
     size_t nrow = nodes.size (), ncol = unique_vals.k_point.size ();
 
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
+    Rcpp::CharacterMatrix meta (Rcpp::Dimension (nrow, 5L));
+    std::fill (meta.begin (), meta.end (), NA_STRING);
 
+    const size_t n = nodes.size ();
     std::vector <std::string> ptnames;
-    ptnames.reserve (nodes.size ());
+    ptnames.reserve (n);
 
     unsigned int count = 0;
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
@@ -173,6 +176,12 @@ Rcpp::DataFrame osm_df::get_osm_nodes (const Nodes &nodes,
             Rcpp::checkUserInterrupt ();
 
         ptnames.push_back (std::to_string (ni->first));
+
+        meta (count, 0L) = ni->second._version;
+        meta (count, 1L) = ni->second._timestamp;
+        meta (count, 2L) = ni->second._changeset;
+        meta (count, 3L) = ni->second._uid;
+        meta (count, 4L) = ni->second._user;
 
         for (auto kv_iter = ni->second.key_val.begin ();
                 kv_iter != ni->second.key_val.end (); ++kv_iter)
@@ -189,11 +198,17 @@ Rcpp::DataFrame osm_df::get_osm_nodes (const Nodes &nodes,
     {
         kv_mat.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
         kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
+
+        meta.attr ("dimnames") = Rcpp::List::create (ptnames, metanames);
     }
 
     ptnames.clear ();
 
-    return kv_df;
+    Rcpp::List res = Rcpp::List (2);
+    res (0) = kv_df;
+    res (1) = meta;
+
+    return res;
 }
 
 
@@ -246,18 +261,21 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
      * 3. Extract OSM nodes
      * --------------------------------------------------------------*/
 
-    Rcpp::DataFrame kv_df_points = osm_df::get_osm_nodes (nodes, unique_vals);
+    Rcpp::List data_nodes = osm_df::get_osm_nodes (nodes, unique_vals);
+    Rcpp::DataFrame kv_df_points = Rcpp::as <Rcpp::DataFrame> (data_nodes (0));
+    Rcpp::CharacterMatrix meta_nodes = Rcpp::as <Rcpp::CharacterMatrix> (data_nodes (1));
 
     /* --------------------------------------------------------------
      * 4. Collate all data
      * --------------------------------------------------------------*/
 
-    Rcpp::List ret (3);
+    Rcpp::List ret (4);
     ret [0] = kv_df_points;
     ret [1] = kv_df_ways;
     ret [2] = kv_rels;
+    ret [3] = meta_nodes;
 
-    std::vector <std::string> retnames {"points_kv", "ways_kv", "rels_kv"};
+    std::vector <std::string> retnames {"points_kv", "ways_kv", "rels_kv", "points_meta"};
     ret.attr ("names") = retnames;
     
     return ret;
