@@ -694,61 +694,8 @@ osmdata_data_frame <- function (q,
 
 xml_to_df <- function (doc, stringsAsFactors = FALSE) {
 
-    osm_obj <- xml2::xml_find_all (doc, ".//node|.//way|.//relation")
-
-    if (length (osm_obj) == 0) {
-        return (data.frame (
-            osm_type = character (), osm_id = character (),
-            stringsAsFactors = stringsAsFactors
-        ))
-    }
-
-    tags <- xml2::xml_find_all (osm_obj, xpath = ".//tag", flatten = FALSE)
-    tags_u <- xml2::xml_find_all (osm_obj, xpath = ".//tag")
-    col_names <- sort (unique (xml2::xml_attr (tags_u, attr = "k")))
-    m <- matrix (
-        nrow = length (tags), ncol = length (col_names),
-        dimnames = list (NULL, col_names)
-    )
-    has_tags <- which (vapply (tags, length, FUN.VALUE = integer (1)) > 0)
-    for (i in has_tags) {
-        tag <- xml2::xml_attrs (tags [[i]])
-        tagV <- vapply (tag, function (x) x, FUN.VALUE = character (2))
-        m [i, tagV [1, ]] <- tagV [2, ]
-    }
-
-    osm_type <- xml2::xml_name (osm_obj)
-    osm_id <- xml2::xml_attr (osm_obj, attr = "id")
-
-    if (all (xml2::xml_has_attr (
-        osm_obj,
-        c ("version", "timestamp", "changeset", "uid", "user")
-    ))) {
-
-        osm_version <- xml2::xml_attr (osm_obj, attr = "version")
-        osm_timestamp <- xml2::xml_attr (osm_obj, attr = "timestamp")
-        osm_changeset <- xml2::xml_attr (osm_obj, attr = "changeset")
-        osm_uid <- xml2::xml_attr (osm_obj, attr = "uid")
-        osm_user <- xml2::xml_attr (osm_obj, attr = "user")
-
-        df <- data.frame (osm_type, osm_id, osm_version, osm_timestamp,
-            osm_changeset, osm_uid, osm_user, m,
-            stringsAsFactors = stringsAsFactors, check.names = FALSE
-        )
-
-    } else {
-        df <- data.frame (osm_type, osm_id, m,
-            stringsAsFactors = stringsAsFactors, check.names = FALSE
-        )
-    }
-
-    return (df)
-}
-
-
-xml_to_df_cpp <- function (doc, stringsAsFactors = FALSE) {
-
     res <- rcpp_osmdata_df (paste0 (doc))
+
     if (nrow (res$points_kv) > 0L) {
         res$points_kv$osm_type <- "node"
         res$points_kv <- cbind (
