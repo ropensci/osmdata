@@ -774,9 +774,14 @@ xml_to_df_cpp <- function (doc, stringsAsFactors = FALSE) {
     }
 
     nms <- sort (unique (unlist (lapply (res [1:3], names))))
-    nms1 <- c ("osm_type", "osm_id")
-    # Then add metadata names:
-    nms1 <- c (nms1, setdiff (grep ("^osm\\_", nms, value = TRUE), nms1))
+    nms1 <- c (
+        "osm_type", "osm_id",
+        paste0 (
+            "osm_",
+            c ("version", "timestamp", "changeset", "uid", "user")
+        )
+    )
+    nms1 <- intersect (nms1, nms)
     nms <- c (nms1, setdiff (nms, nms1))
 
     df <- lapply (res [1:3], function (i) {
