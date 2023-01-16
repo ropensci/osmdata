@@ -149,6 +149,7 @@ Rcpp::List osm_df::get_osm_ways (
         waynames.push_back (std::to_string (*wi));
 
         auto wj = ways.find (*wi);
+
         meta (count, 0L) = wj->second._version;
         meta (count, 1L) = wj->second._timestamp;
         meta (count, 2L) = wj->second._changeset;

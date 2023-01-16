@@ -758,6 +758,7 @@ xml_to_df_cpp <- function (doc, stringsAsFactors = FALSE) {
     }
     if (nrow (res$ways_kv) > 0L) {
         res$ways_kv$osm_type <- "way"
+        res$ways_kv$osm_id <- rownames (res$ways_kv)
         res$ways_kv <- cbind (
             get_meta_from_cpp_output (res, "ways"),
             res$ways_kv
@@ -765,6 +766,7 @@ xml_to_df_cpp <- function (doc, stringsAsFactors = FALSE) {
     }
     if (nrow (res$rels_kv) > 0L) {
         res$rels_kv$osm_type <- "relation"
+        res$rels_kv$osm_id <- rownames (res$rels_kv)
         res$rels_kv <- cbind (
             get_meta_from_cpp_output (res, "rels"),
             res$rels_kv
