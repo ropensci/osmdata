@@ -97,21 +97,20 @@ Rcpp::List osm_df::get_osm_relations (const Relations &rels,
     }
 
     Rcpp::DataFrame kv_df;
+    Rcpp::List res = Rcpp::List::create (R_NilValue, R_NilValue);
+
     if (nmp > 0)
     {
         kv_mat.attr ("dimnames") = Rcpp::List::create (rel_ids, unique_vals.k_rel);
         kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
 
         meta.attr ("dimnames") = Rcpp::List::create (rel_ids, metanames);
-    } else
-    {
-        kv_df = R_NilValue;
-        meta = R_NilValue;
+
+        res (0) = kv_df;
+        res (1) = meta;
     }
 
     rel_ids.clear ();
-
-    Rcpp::List res = Rcpp::List::create (kv_df, meta);
 
     return res;
 }
@@ -161,6 +160,8 @@ Rcpp::List osm_df::get_osm_ways (
     }
 
     Rcpp::DataFrame kv_df = R_NilValue;
+    Rcpp::List res = Rcpp::List::create (R_NilValue, R_NilValue);
+
     if (way_ids.size () > 0)
     {
         kv_mat.attr ("dimnames") = Rcpp::List::create (waynames, unique_vals.k_way);
@@ -168,11 +169,12 @@ Rcpp::List osm_df::get_osm_ways (
             kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
 
         meta.attr ("dimnames") = Rcpp::List::create (waynames, metanames);
+
+        res (0) = kv_df;
+        res (1) = meta;
     }
 
     waynames.clear ();
-
-    Rcpp::List res = Rcpp::List::create (kv_mat, meta);
 
     return res;
 }
@@ -225,17 +227,20 @@ Rcpp::List osm_df::get_osm_nodes (const Nodes &nodes,
     }
 
     Rcpp::DataFrame kv_df = R_NilValue;
+    Rcpp::List res = Rcpp::List::create (R_NilValue, R_NilValue);
+
     if (unique_vals.k_point.size () > 0)
     {
         kv_mat.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
         kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
 
         meta.attr ("dimnames") = Rcpp::List::create (ptnames, metanames);
+
+        res (0) = kv_df;
+        res (1) = meta;
     }
 
     ptnames.clear ();
-
-    Rcpp::List res = Rcpp::List::create (kv_df, meta);
 
     return res;
 }
@@ -268,13 +273,19 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
     const std::vector <Relation>& rels = xml.relations ();
     const UniqueVals& unique_vals = xml.unique_vals ();
 
+    Rcpp::DataFrame kv_rels, kv_df_ways, kv_df_points;
+    Rcpp::CharacterMatrix meta_rels, meta_ways, meta_nodes;
+
     /* --------------------------------------------------------------
      * 1. Extract OSM Relations
      * --------------------------------------------------------------*/
 
     Rcpp::List data_rels = osm_df::get_osm_relations (rels, unique_vals);
-    Rcpp::DataFrame kv_rels = Rcpp::as <Rcpp::DataFrame> (data_rels (0));
-    Rcpp::CharacterMatrix meta_rels = Rcpp::as <Rcpp::CharacterMatrix> (data_rels (1));
+    if (data_rels (0) != R_NilValue)
+    {
+        kv_rels = Rcpp::as <Rcpp::DataFrame> (data_rels (0));
+        meta_rels = Rcpp::as <Rcpp::CharacterMatrix> (data_rels (1));
+    }
 
     /* --------------------------------------------------------------
      * 2. Extract OSM ways
@@ -287,16 +298,22 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
     }
 
     Rcpp::List data_ways = osm_df::get_osm_ways (way_ids, ways, unique_vals);
-    Rcpp::DataFrame kv_df_ways = Rcpp::as <Rcpp::DataFrame> (data_ways (0));
-    Rcpp::CharacterMatrix meta_ways = Rcpp::as <Rcpp::CharacterMatrix> (data_ways (1));
+    if (data_ways (0) != R_NilValue)
+    {
+        kv_df_ways = Rcpp::as <Rcpp::DataFrame> (data_ways (0));
+        meta_ways = Rcpp::as <Rcpp::CharacterMatrix> (data_ways (1));
+    }
 
     /* --------------------------------------------------------------
      * 3. Extract OSM nodes
      * --------------------------------------------------------------*/
 
     Rcpp::List data_nodes = osm_df::get_osm_nodes (nodes, unique_vals);
-    Rcpp::DataFrame kv_df_points = Rcpp::as <Rcpp::DataFrame> (data_nodes (0));
-    Rcpp::CharacterMatrix meta_nodes = Rcpp::as <Rcpp::CharacterMatrix> (data_nodes (1));
+    if (data_nodes (0) != R_NilValue)
+    {
+        kv_df_points = Rcpp::as <Rcpp::DataFrame> (data_nodes (0));
+        meta_nodes = Rcpp::as <Rcpp::CharacterMatrix> (data_nodes (1));
+    }
 
     /* --------------------------------------------------------------
      * 4. Collate all data
