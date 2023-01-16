@@ -398,6 +398,16 @@ inline void XmlData::traverseWay (XmlNodePtr pt, RawWay& rway)
             rway.id = std::stoll(it->value());
         else if (!strcmp (it->name(), "ref"))
             rway.nodes.push_back (std::stoll(it->value()));
+        else if (!strcmp (it->name(), "version"))
+            rway._version = it->value();
+        else if (!strcmp (it->name(), "timestamp"))
+            rway._timestamp = it->value();
+        else if (!strcmp (it->name(), "changeset"))
+            rway._changeset = it->value();
+        else if (!strcmp (it->name(), "uid"))
+            rway._uid = it->value();
+        else if (!strcmp (it->name(), "user"))
+            rway._user = it->value();
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
