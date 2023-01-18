@@ -238,7 +238,7 @@ test_that ("make_query", {
             expect_message (res <- osmdata_data_frame (qry, "junk.osm", quiet = FALSE))
 
             nms <- c (
-                "names", "class", "row.names", "bbox", "overpass_call", "meta"
+                "names", "row.names", "class", "bbox", "overpass_call", "meta"
             )
             expect_named (attributes(res), expected = nms, ignore.order = FALSE)
         }
