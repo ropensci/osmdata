@@ -328,7 +328,7 @@ add_osm_feature <- function (opq,
         match_case, value_exact
     )
 
-    opq$features <- paste (opq$features, paste (feature, collapse = " "))
+    opq$features <- paste0 (opq$features, paste (feature, collapse = " "))
 
     if (is.null (opq$suffix)) {
         opq$suffix <- ");\n(._;>;);\nout body;"
@@ -518,7 +518,7 @@ add_osm_features <- function (opq,
     }
 
     index <- which (!grepl ("^\\[", features))
-    features [index] <- paste0 (" [", features [index])
+    features [index] <- paste0 ("[", features [index])
     index <- which (!grepl ("\\]$", features))
     features [index] <- paste0 (features [index], "]")
 
