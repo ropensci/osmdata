@@ -65,6 +65,8 @@ const std::string wkt =
         BBOX[-90,-180,90,180]],\n\
     ID[\"EPSG\",4326]]";
 
+const Rcpp::CharacterVector metanames = {"_version", "_timestamp", "_changeset", "_uid", "_user"};
+
 /************************************************************************
  ************************************************************************
  **                                                                    **
@@ -222,6 +224,13 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                             (rnode.key [i], rnode.value [i]));
                     m_unique.k_point.insert (rnode.key [i]); // only inserts unique keys
                 }
+                // metadata:
+                node._version = rnode._version;
+                node._changeset = rnode._changeset;
+                node._timestamp = rnode._timestamp;
+                node._uid = rnode._uid;
+                node._user = rnode._user;
+
                 m_nodes.insert (std::make_pair (node.id, node));
             }
         }
@@ -247,6 +256,13 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                             (rway.key [i], rway.value [i]));
                     m_unique.k_way.insert (rway.key [i]);
                 }
+                // metadata:
+                way._version = rway._version;
+                way._changeset = rway._changeset;
+                way._timestamp = rway._timestamp;
+                way._uid = rway._uid;
+                way._user = rway._user;
+
                 // Then copy nodes from rway to way.
                 way.nodes.swap (rway.nodes);
                 m_ways.insert (std::make_pair (way.id, way));
@@ -292,6 +308,13 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                 for (size_t i=0; i<rrel.nodes.size (); i++)
                     relation.nodes.push_back (std::make_pair (rrel.nodes [i],
                                 rrel.role_node [i]));
+                // metadata:
+                relation._version = rrel._version;
+                relation._changeset = rrel._changeset;
+                relation._timestamp = rrel._timestamp;
+                relation._uid = rrel._uid;
+                relation._user = rrel._user;
+
                 m_relations.push_back (relation);
             }
         }
@@ -351,7 +374,16 @@ inline void XmlData::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
             // have are "inner" and "outer" roles.
             if (!strcmp (it->value(), "inner") || !strcmp (it->value(), "outer"))
                 rrel.ispoly = true;
-        }
+        } else if (!strcmp (it->name(), "version"))
+            rrel._version = it->value();
+        else if (!strcmp (it->name(), "timestamp"))
+            rrel._timestamp = it->value();
+        else if (!strcmp (it->name(), "changeset"))
+            rrel._changeset = it->value();
+        else if (!strcmp (it->name(), "uid"))
+            rrel._uid = it->value();
+        else if (!strcmp (it->name(), "user"))
+            rrel._user = it->value();
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
@@ -382,6 +414,16 @@ inline void XmlData::traverseWay (XmlNodePtr pt, RawWay& rway)
             rway.id = std::stoll(it->value());
         else if (!strcmp (it->name(), "ref"))
             rway.nodes.push_back (std::stoll(it->value()));
+        else if (!strcmp (it->name(), "version"))
+            rway._version = it->value();
+        else if (!strcmp (it->name(), "timestamp"))
+            rway._timestamp = it->value();
+        else if (!strcmp (it->name(), "changeset"))
+            rway._changeset = it->value();
+        else if (!strcmp (it->name(), "uid"))
+            rway._uid = it->value();
+        else if (!strcmp (it->name(), "user"))
+            rway._user = it->value();
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
@@ -414,6 +456,16 @@ inline void XmlData::traverseNode (XmlNodePtr pt, RawNode& rnode)
             rnode.key.push_back (it->value ());
         else if (!strcmp (it->name(), "v"))
             rnode.value.push_back (it->value ());
+        else if (!strcmp (it->name(), "version")) // metadata
+            rnode._version = it->value ();
+        else if (!strcmp (it->name(), "timestamp")) // metadata
+            rnode._timestamp = it->value ();
+        else if (!strcmp (it->name(), "changeset")) // metadata
+            rnode._changeset = it->value ();
+        else if (!strcmp (it->name(), "uid")) // metadata
+            rnode._uid = it->value ();
+        else if (!strcmp (it->name(), "user")) // metadata
+            rnode._user = it->value ();
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
@@ -487,3 +539,16 @@ void get_osm_nodes (Rcpp::DataFrame &node_df, Rcpp::DataFrame &kv_df,
 } // end namespace osm_sc
 
 Rcpp::List rcpp_osmdata_sc (const std::string& st);
+
+namespace osm_df {
+
+Rcpp::List get_osm_relations (const Relations &rels, 
+        const UniqueVals &unique_vals);
+Rcpp::List get_osm_ways (const std::set <osmid_t> &way_ids,
+        const Ways &ways, const UniqueVals &unique_vals);
+Rcpp::List get_osm_nodes (const Nodes &nodes,
+        const UniqueVals &unique_vals);
+
+} // end namespace osm_df
+
+Rcpp::List rcpp_osmdata_df (const std::string& st);
