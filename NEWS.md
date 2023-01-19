@@ -7,6 +7,7 @@
 - Improved `add_osm_features` so that key-values pairs can be submitted as a list, rather than escape-delimited character strings; thanks to @elipousson (#277, #278).
 - `opq()` can now utilise overpass ability to filter results by area; thanks to @jmaspons (#286).
 - `opq()` now has additional "out" parameter to control the kinds of data returned by overpass; thanks to @jmaspons (#288).
+- `opq()` now has additional "osm_types" parameter to provide finer control of which kinds of data are returned by overpass; thanks to @jmaspons (#295).
 - @elipousson is new package contributor, thanks to the above work.
 - @jmaspons is new package author, thanks to #285.
 

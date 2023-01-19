@@ -101,6 +101,40 @@ test_that ("adiff", {
     expect_true (grepl ("adiff\\:", q3$prefix))
 })
 
+test_that ("osm_types", {
+
+    q0 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
+    expect_error (
+        q <- opq (
+            bbox = c (-0.118, 51.514, -0.115, 51.517),
+            osm_types = "blah"
+        ),
+        'osm_types parameter must be a vector with values from "node", "way", '
+    )
+
+    q1 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), osm_types = "nwr")
+    expect_true (!identical (q0, q1))
+    expect_identical (names (q0), names (q1))
+    expect_identical (
+        q0 [names (q0) != "osm_types"],
+        q1 [names (q1) != "osm_types"]
+    )
+    expect_true ("nwr" == q1$osm_types)
+
+    # nodes_only
+    q2 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), nodes_only = TRUE)
+    expect_silent (
+        q3 <- opq (
+            bbox = c (-0.118, 51.514, -0.115, 51.517),
+            nodes_only = TRUE,
+            osm_types = "blah" # ignored if nodes_only == TRUE
+        )
+    )
+
+    expect_identical (q2, q3)
+    expect_true (q3$osm_types == "node")
+})
+
 test_that ("out", {
 
     q0 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
@@ -120,7 +154,7 @@ test_that ("out", {
             q0 [names (q0) != "suffix"],
             q [names (q) != "suffix"]
         )
-        expect_true (grepl ("^\\);\\n\\(\\._;>;\\);\\nout[a-z ]+;$", q$suffix))
+        expect_true (grepl ("^\\);\\n\\(\\._;>;\\);\\nout [a-z ]+;$", q$suffix))
     })
     q_no_geo <- lapply (c ("tags", "tags center", "ids"), function (x) {
         q <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), out = x)
@@ -130,7 +164,7 @@ test_that ("out", {
             q0 [names (q0) != "suffix"],
             q0 [names (q) != "suffix"]
         )
-        expect_true (grepl ("^\\); out[a-z ]+;$", q$suffix))
+        expect_true (grepl ("^\\); out [a-z ]+;$", q$suffix))
     })
 
     # nodes_only
