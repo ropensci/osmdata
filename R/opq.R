@@ -301,6 +301,13 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #' # Use of negation to extract all non-primary highways
 #' q <- opq ("portsmouth uk") %>%
 #'     add_osm_feature (key = "highway", value = "!primary")
+#'
+#' # key negation without warnings
+#' q3 <- opq ("Vinçà", osm_type="node") %>%
+#'     add_osm_feature (key = c("name", "!name:ca"))
+#' q4 <- opq ("el Carxe", osm_type="node") %>%
+#'     add_osm_feature (key = "natural", value = "peak") %>%
+#'     add_osm_feature (key = "!ele")
 #' }
 add_osm_feature <- function (opq,
                              key,
@@ -334,6 +341,16 @@ add_osm_feature <- function (opq,
     )
 
     opq$features <- paste0 (c (opq$features, feature), collapse = "")
+
+    if (any (w <- !grepl("\\[(\\\"|~)", opq$features))) {
+        warning(
+            "The query will request objects whith only a negated key (",
+            paste (opq$features[w], collapse = ", "), ") , which can be quite ",
+            "expensive for overpass servers. Add other features or be shure ",
+            "that that is what you want. To avoid this warning, reorder your ",
+            "calls to add_osm_feature/s and leave key negations at the end."
+        )
+    }
 
     if (is.null (opq$suffix)) {
         opq$suffix <- ");\n(._;>;);\nout body;"

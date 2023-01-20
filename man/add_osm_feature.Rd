@@ -83,6 +83,13 @@ c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 # Use of negation to extract all non-primary highways
 q <- opq ("portsmouth uk") \%>\%
     add_osm_feature (key = "highway", value = "!primary")
+
+# key negation without warnings
+q3 <- opq ("Vinçà", osm_type="node") \%>\%
+    add_osm_feature (key = c("name", "!name:ca"))
+q4 <- opq ("el Carxe", osm_type="node") \%>\%
+    add_osm_feature (key = "natural", value = "peak") \%>\%
+    add_osm_feature (key = "!ele")
 }
 }
 \references{
