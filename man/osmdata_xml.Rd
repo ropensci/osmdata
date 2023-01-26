@@ -21,7 +21,7 @@ encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
 an explicit encoding directive, this allows you to supply a default.}
 }
 \value{
-An object of class \code{XML::xml_document} containing the result of the
+An object of class \code{xml2::xml_document} containing the result of the
 overpass API query.
 }
 \description{

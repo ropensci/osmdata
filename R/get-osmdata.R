@@ -65,7 +65,7 @@ get_overpass_version <- function (doc) {
 #' @param encoding Unless otherwise specified XML documents are assumed to be
 #'        encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
 #'        an explicit encoding directive, this allows you to supply a default.
-#' @return An object of class `XML::xml_document` containing the result of the
+#' @return An object of class `xml2::xml_document` containing the result of the
 #'         overpass API query.
 #'
 #' @note Objects of class `xml_document` can be saved as `.xml` or
@@ -111,7 +111,7 @@ osmdata_xml <- function (q, filename, quiet = TRUE, encoding) {
 #'      query.
 #' @param doc If missing, `doc` is obtained by issuing the overpass query,
 #'        `q`, otherwise either the name of a file from which to read data,
-#'        or an object of class \pkg{XML} returned from
+#'        or an object of class \pkg{xml2} returned from
 #'        \link{osmdata_xml}.
 #' @param quiet suppress status messages.
 #'
