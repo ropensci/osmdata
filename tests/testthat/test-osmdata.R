@@ -49,14 +49,14 @@ test_that ("add feature", {
         key = "highway", value = "!primary",
         match_case = FALSE
     )
-    expect_identical (qry1$features, " [\"highway\"]")
-    expect_identical (qry2$features, " [\"highway\"=\"primary\"]")
+    expect_identical (qry1$features, "[\"highway\"]")
+    expect_identical (qry2$features, "[\"highway\"=\"primary\"]")
     expect_identical (
         qry3$features,
-        " [\"highway\"~\"^(primary|tertiary)$\"]"
+        "[\"highway\"~\"^(primary|tertiary)$\"]"
     )
-    expect_identical (qry4$features, " [\"highway\"!=\"primary\"]")
-    expect_identical (qry5$features, " [\"highway\"!=\"primary\",i]")
+    expect_identical (qry4$features, "[\"highway\"!=\"primary\"]")
+    expect_identical (qry5$features, "[\"highway\"!=\"primary\",i]")
 
     bbox <- c (-0.118, 51.514, -0.115, 51.517)
     qry <- opq (bbox = bbox)
@@ -68,6 +68,21 @@ test_that ("add feature", {
         value = "!primary"
     )
     expect_true (!identical (qry$bbox, qry6$bbox))
+
+    qry7 <- opq ("Vinçà") %>%
+        add_osm_feature (key = c("name", "!name:ca"))
+    qry8 <- opq ("el Carxe") %>%
+        add_osm_feature (key = "natural", value = "peak") %>%
+        add_osm_feature (key = "!ele")
+    expect_warning(
+        qry9 <- opq ("el Carxe") %>%
+            add_osm_feature (key = "!ele")%>%
+            add_osm_feature (key = "natural", value = "peak"),
+        "The query will request objects whith only a negated key "
+    )
+    expect_identical(qry7$features, "[\"name\"][!\"name:ca\"]")
+    expect_identical(qry8$features, "[\"natural\"=\"peak\"][!\"ele\"]")
+    expect_identical(qry9$features, "[!\"ele\"][\"natural\"=\"peak\"]")
 })
 
 test_that ("query_errors", {
@@ -203,7 +218,7 @@ test_that ("osmdata without query", {
     #     "q missing: osmdata object will not include query"
     # )
     expect_message (
-         x_df <- osmdata_data_frame (doc = doc, quiet = FALSE),
+        x_df <- osmdata_data_frame (doc = doc, quiet = FALSE),
         "q missing: osmdata object will not include query"
     )
 
@@ -288,6 +303,20 @@ test_that ("make_query", {
                 "osm_multipolygons"
             )
             expect_named (res, expected = nms, ignore.order = FALSE)
+
+            res <- with_mock_dir ("mock_osm_df", {
+                osmdata_data_frame (qry)
+            })
+            expect_s3_class (res, "data.frame")
+            expect_silent (res <- osmdata_data_frame (qry, doc))
+            expect_s3_class (res, "data.frame")
+            expect_silent (res <- osmdata_data_frame (qry, "junk.osm"))
+            expect_message (res <- osmdata_data_frame (qry, "junk.osm", quiet = FALSE))
+
+            nms <- c (
+                "names", "row.names", "class", "bbox", "overpass_call", "meta"
+            )
+            expect_named (attributes(res), expected = nms, ignore.order = FALSE)
         }
 
         if (file.exists ("junk.osm")) invisible (file.remove ("junk.osm"))

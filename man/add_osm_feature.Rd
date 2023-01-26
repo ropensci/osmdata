@@ -17,7 +17,8 @@ add_osm_feature(
 \arguments{
 \item{opq}{An \code{overpass_query} object}
 
-\item{key}{feature key}
+\item{key}{feature key; can be negated with an initial exclamation mark,
+\code{key = "!this"}, and can also be a vector if \code{value} is missing.}
 
 \item{value}{value for feature key; can be negated with an initial
 exclamation mark, \code{value = "!this"}, and can also be a vector,
@@ -82,6 +83,13 @@ c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 # Use of negation to extract all non-primary highways
 q <- opq ("portsmouth uk") \%>\%
     add_osm_feature (key = "highway", value = "!primary")
+
+# key negation without warnings
+q3 <- opq ("Vinçà", osm_type="node") \%>\%
+    add_osm_feature (key = c("name", "!name:ca"))
+q4 <- opq ("el Carxe", osm_type="node") \%>\%
+    add_osm_feature (key = "natural", value = "peak") \%>\%
+    add_osm_feature (key = "!ele")
 }
 }
 \references{
