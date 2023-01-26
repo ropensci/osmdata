@@ -201,13 +201,17 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
                             match_case = FALSE, value_exact = FALSE) {
     if (is.null (value)) {
 
-        feature <- paste0 (sprintf ('["%s"]', key))
+        feature <- ifelse (substring (key, 1, 1) == "!",
+                sprintf ('[!"%s"]', substring (key, 2, nchar (key))),
+                sprintf ('["%s"]', key)
+        )
+
     } else {
 
         if (length (value) > 1) {
 
             # convert to OR'ed regex:
-            value <- paste0 (value, collapse = "|")
+            value <- paste (value, collapse = "|")
             if (value_exact) {
                 value <- paste0 ("^(", value, ")$")
             }
@@ -238,7 +242,8 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #' Add a feature to an Overpass query
 #'
 #' @param opq An `overpass_query` object
-#' @param key feature key
+#' @param key feature key; can be negated with an initial exclamation mark,
+#' `key = "!this"`, and can also be a vector if `value` is missing.
 #' @param value value for feature key; can be negated with an initial
 #' exclamation mark, `value = "!this"`, and can also be a vector,
 #' `value = c ("this", "that")`.
@@ -296,6 +301,13 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #' # Use of negation to extract all non-primary highways
 #' q <- opq ("portsmouth uk") %>%
 #'     add_osm_feature (key = "highway", value = "!primary")
+#'
+#' # key negation without warnings
+#' q3 <- opq ("Vinçà", osm_type="node") %>%
+#'     add_osm_feature (key = c("name", "!name:ca"))
+#' q4 <- opq ("el Carxe", osm_type="node") %>%
+#'     add_osm_feature (key = "natural", value = "peak") %>%
+#'     add_osm_feature (key = "!ele")
 #' }
 add_osm_feature <- function (opq,
                              key,
@@ -329,6 +341,16 @@ add_osm_feature <- function (opq,
     )
 
     opq$features <- paste0 (c (opq$features, feature), collapse = "")
+
+    if (any (w <- !grepl("\\[(\\\"|~)", opq$features))) {
+        warning(
+            "The query will request objects whith only a negated key (",
+            paste (opq$features[w], collapse = ", "), ") , which can be quite ",
+            "expensive for overpass servers. Add other features or be shure ",
+            "that that is what you want. To avoid this warning, reorder your ",
+            "calls to add_osm_feature/s and leave key negations at the end."
+        )
+    }
 
     if (is.null (opq$suffix)) {
         opq$suffix <- ");\n(._;>;);\nout body;"

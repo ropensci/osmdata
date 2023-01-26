@@ -68,6 +68,21 @@ test_that ("add feature", {
         value = "!primary"
     )
     expect_true (!identical (qry$bbox, qry6$bbox))
+
+    qry7 <- opq ("Vinçà") %>%
+        add_osm_feature (key = c("name", "!name:ca"))
+    qry8 <- opq ("el Carxe") %>%
+        add_osm_feature (key = "natural", value = "peak") %>%
+        add_osm_feature (key = "!ele")
+    expect_warning(
+        qry9 <- opq ("el Carxe") %>%
+            add_osm_feature (key = "!ele")%>%
+            add_osm_feature (key = "natural", value = "peak"),
+        "The query will request objects whith only a negated key "
+    )
+    expect_identical(qry7$features, "[\"name\"][!\"name:ca\"]")
+    expect_identical(qry8$features, "[\"natural\"=\"peak\"][!\"ele\"]")
+    expect_identical(qry9$features, "[!\"ele\"][\"natural\"=\"peak\"]")
 })
 
 test_that ("query_errors", {
