@@ -50,7 +50,6 @@ Suggests:
     raster,
     rmarkdown,
     sf,
-    silicate,
     sp,
     testthat
 LinkingTo:
