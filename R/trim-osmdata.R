@@ -155,6 +155,10 @@ trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE) {
 
     if (is (dat$osm_points, "sf")) {
 
+        if (!requireNamespace ("sp", quietly = TRUE)) {
+            stop ('trim_osmdata requires sp package:\n\tinstall.packages("sp")')
+        }
+
         # "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0":
         srcproj <- .lonlat ()
         # "+proj=merc +a=6378137 +b=6378137":

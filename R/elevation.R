@@ -15,13 +15,16 @@
 #' @export
 osm_elevation <- function (dat, elev_file) {
 
-    if (!"raster" %in% loadedNamespaces ()) {
-        requireNamespace ("raster")
-        message (
-            "Elevation data from Consortium for Spatial Information; ",
-            "see http://srtm.csi.cgiar.org/srtmdata/"
+    if (!requireNamespace ("raster", quietly = TRUE)) {
+        stop (
+            'osm_elevation requires raster package:\n\t',
+            'install.packages("raster")'
         )
     }
+    message (
+        "Elevation data from Consortium for Spatial Information; ",
+        "see http://srtm.csi.cgiar.org/srtmdata/"
+    )
 
     elev_file <- check_elev_file (elev_file)
     if (length (elev_file) > 1) {
@@ -84,6 +87,10 @@ check_elev_file <- function (elev_file) {
 }
 
 check_bbox <- function (dat, r) {
+
+    if (!requireNamespace ("sp", quietly = TRUE)) {
+        stop ('osm_elevation requires sp package:\n\tinstall.packages("sp")')
+    }
 
     bb <- as.numeric (strsplit (dat$meta$bbox, ",") [[1]])
     bb <- matrix (bb [c (2, 1, 4, 3)], ncol = 2)
