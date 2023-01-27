@@ -137,3 +137,19 @@ test_that ("non-valid key names", {
         expect_true ("name:ca" %in% names (f))
     })
 })
+
+test_that ("clashes in key names", {
+    osm_multi_key_clashes <- test_path ("fixtures", "osm-key_clashes.osm")
+    q0 <- opq (bbox = c (1, 1, 5, 5))
+    expect_warning(
+        x <- osmdata_sf (q0, osm_multi_key_clashes),
+        "Feature keys clash with id or metadata columns and will be renamed by "
+    )
+
+    expect_false (any (duplicated (names (x$osm_points))))
+    # x$osm_points don't have osm_id column in tags TODO?
+    k <- lapply (x[grep ("osm_", names (x))[-1]], function (f) {
+        expect_false (any (duplicated (names (f))))
+        expect_true (all (c ("osm_id", "osm_id.1") %in% names (f)))
+    })
+})

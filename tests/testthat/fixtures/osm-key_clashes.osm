@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API">
+  <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+  <meta osm_base="2017-01-25T10:52:05Z"/>
+  <node id="1" lat="1" lon="1"/>
+  <node id="2" lat="1" lon="2"/>
+  <node id="3" lat="1" lon="3"/>
+  <node id="4" lat="1" lon="4"/>
+  <node id="5" lat="1" lon="5"/>
+  <node id="6" lat="2" lon="1"/>
+  <node id="7" lat="2" lon="2"/>
+  <node id="8" lat="2" lon="3"/>
+  <node id="9" lat="2" lon="4"/>
+  <node id="10" lat="2" lon="5"/>
+  <node id="11" lat="3" lon="1">
+    <tag k="stuff" v="yes"/>
+    <tag k="junk" v="some"/>
+    <tag k="name:ca" v="Ni idea"/>
+    <tag k="osm_id" v="Why to use this tag?"/>
+    <!-- test comment for rapidxml.h tests -->
+  </node>
+  <node id="12" lat="3" lon="2"/>
+  <node id="13" lat="3" lon="3"/>
+  <node id="14" lat="3" lon="4"/>
+  <node id="15" lat="3" lon="5"/>
+  <node id="16" lat="4" lon="1"/>
+  <node id="17" lat="4" lon="2"/>
+  <node id="18" lat="4" lon="3">
+    <tag k="stuff" v="nope"/>
+    <tag k="like" v="lots"/>
+    <tag k="name:ca" v="Ves a saber"/>
+  </node>
+  <node id="19" lat="4" lon="4"/>
+  <node id="20" lat="4" lon="5"/>
+  <node id="21" lat="5" lon="1"/>
+  <node id="22" lat="5" lon="2"/>
+  <node id="23" lat="5" lon="3"/>
+  <node id="24" lat="5" lon="4"/>
+  <node id="25" lat="5" lon="5"/>
+  <way id="100">
+    <nd ref="1"/>
+    <nd ref="2"/>
+    <nd ref="3"/>
+    <nd ref="4"/>
+    <tag k="highway" v="footway"/>
+    <tag k="layer" v="0"/>
+    <tag k="name:ca" v="Qui sap"/>
+  </way>
+  <way id="101">
+    <nd ref="4"/>
+    <nd ref="10"/>
+    <nd ref="15"/>
+    <nd ref="19"/>
+    <tag k="highway" v="maybe"/>
+    <tag k="name" v="blue&lt;this&gt;"/>
+    <tag k="name:ca" v="No ho se pas"/>
+    <tag k="osm_id" v="Why to use this tag?"/>
+  </way>
+  <way id="102">
+    <nd ref="19"/>
+    <nd ref="18"/>
+    <nd ref="22"/>
+    <nd ref="16"/>
+    <tag k="boat" v="yes"/>
+    <tag k="name" v="River Thames"/>
+    <tag k="name:ca" v="Riu Tàmesi"/>
+    <tag k="osm_id" v="Why to use this tag?"/>
+  </way>
+  <way id="103">
+    <nd ref="16"/>
+    <nd ref="11"/>
+    <nd ref="7"/>
+    <nd ref="1"/>
+    <tag k="foot" v="yes"/>
+    <tag k="highway" v="cycleway"/>
+  </way>
+  <way id="104">
+    <nd ref="8"/>
+    <nd ref="9"/>
+    <nd ref="14"/>
+    <nd ref="13"/>
+    <nd ref="8"/>
+  </way>
+  <relation id="1000">
+    <member type="way" ref="100" role="outer"/>
+    <member type="way" ref="101" role="outer"/>
+    <member type="way" ref="102" role="outer"/>
+    <member type="way" ref="103" role="outer"/>
+    <member type="way" ref="104" role="inner"/>
+    <tag k="name" v="big loop"/>
+    <tag k="name:ca" v="bucle gran"/>
+    <tag k="osm_id" v="Why to use this tag?"/>
+    <tag k="type" v="multipolygon"/>
+    <tag k="something" v="stuff&amp;junk&apos;andthenwhat"/>
+  </relation>
+  <relation id="2000">
+    <member type="way" ref="100" role=""/>
+    <member type="way" ref="101" role=""/>
+    <member type="way" ref="102" role=""/>
+    <tag k="name" v="big loop"/>
+    <tag k="name:ca" v="bucle gran"/>
+    <tag k="osm_id" v="Why to use this tag?"/>
+    <tag k="type" v="route"/>
+    <tag k="something" v="stuff&apos;&quot;aa&quot;"/>
+  </relation>
+</osm>

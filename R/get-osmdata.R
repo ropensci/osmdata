@@ -102,6 +102,39 @@ osmdata_xml <- function (q, filename, quiet = TRUE, encoding) {
     invisible (doc)
 }
 
+fix_duplicated_columns <- function (x) {
+    dup <- duplicated (x)
+    i <- 1
+    while (any (dup)) {
+        x[dup] <- paste0 (x[dup], ".", i)
+        i <- i + 1
+        dup <- duplicated (x)
+    }
+
+    return (x)
+}
+
+fix_columns_list <- function (l) {
+    cols <- lapply (l, names)
+    cols_no_dup <- lapply (cols, fix_duplicated_columns)
+    if (!identical (cols, cols_no_dup)) {
+        warning (
+            "Feature keys clash with id or metadata columns and will be ",
+            "renamed by appending `.n`:\n\t",
+            paste (
+                unique (setdiff (unlist (cols_no_dup), unlist(cols))),
+                collapse = ", "
+            )
+        )
+        l <- mapply (function (x, col) {
+            suppressWarnings (names (x) <- col)
+            x
+        }, x = l, col = cols_no_dup, SIMPLIFY = FALSE)
+    }
+
+    return (l)
+}
+
 #' Return an OSM Overpass query as an \link{osmdata} object in \pkg{sp}
 #' format.
 #'
@@ -167,6 +200,8 @@ osmdata_sp <- function (q, doc, quiet = TRUE) {
     obj$osm_multilines <- res$multilines
     obj$osm_multipolygons <- res$multipolygons
 
+    osm_items <- grep ("^osm_", names (obj))
+    obj[osm_items] <- fix_columns_list (obj[osm_items])
     class (obj) <- c (class (obj), "osmdata_sp")
 
     return (obj)
@@ -428,13 +463,15 @@ osmdata_sf <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) { # noli
     res <- rcpp_osmdata_sf (paste0 (doc))
     # some objects don't have names. As explained in
     # src/osm_convert::restructure_kv_mat, these instances do not get an osm_id
-    # column, so this is appended here:
-    if (!"osm_id" %in% names (res$points_kv)) {
+    # column (the first one), so this is appended here:
+    if (!"osm_id" %in% names (res$points_kv)[1]) {
         res <- fill_kv (res, "points_kv", "points", stringsAsFactors)
     }
-    if (!"osm_id" %in% names (res$polygons_kv)) {
+    if (!"osm_id" %in% names (res$polygons_kv)[1]) {
         res <- fill_kv (res, "polygons_kv", "polygons", stringsAsFactors)
     }
+    kv_df <- grep ("_kv$", names (res))
+    res[kv_df] <- fix_columns_list (res[kv_df])
 
     if (missing (q)) {
         obj$bbox <- paste (res$bbox, collapse = " ")
@@ -699,53 +736,62 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
 
     res <- rcpp_osmdata_df (paste0 (doc))
 
-    if (nrow (res$points_kv) > 0L) {
-        res$points_kv$osm_type <- "node"
-        res$points_kv <- cbind (
-            get_meta_from_cpp_output (res, "points"),
-            res$points_kv
-        )
-    }
-    if (nrow (res$ways_kv) > 0L) {
-        res$ways_kv$osm_type <- "way"
-        res$ways_kv$osm_id <- rownames (res$ways_kv)
-        res$ways_kv <- cbind (
-            get_meta_from_cpp_output (res, "ways"),
-            res$ways_kv
-        )
-    }
-    if (nrow (res$rels_kv) > 0L) {
-        res$rels_kv$osm_type <- "relation"
-        res$rels_kv$osm_id <- rownames (res$rels_kv)
-        res$rels_kv <- cbind (
-            get_meta_from_cpp_output (res, "rels"),
-            res$rels_kv
-        )
-    }
-
-    nms <- sort (unique (unlist (lapply (res [1:3], names))))
-    nms1 <- c (
-        "osm_type", "osm_id",
-        paste0 (
-            "osm_",
-            c ("version", "timestamp", "changeset", "uid", "user")
-        )
-    )
-    nms1 <- intersect (nms1, nms)
-    nms <- c (nms1, setdiff (nms, nms1))
-
-    df <- lapply (res [1:3], function (i) {
-        out <- data.frame (
-            matrix (nrow = nrow (i), ncol = length (nms)),
-            stringsAsFactors = stringsAsFactors
-        )
-        names (out) <- nms
-        out [, names (i)] <- i
-        rownames (out) <- rownames (i)
-        return (out)
+    keysL <- lapply ( c ("points_kv", "ways_kv", "rels_kv"), function (x) {
+        out <- names (res[[x]])
+        if (isTRUE (out[1] == "osm_id")) {
+            out <- out[-1] # remove osm_id. Not always present
+        }
+        out
     })
-    df <- do.call (rbind, df)
+    keys<- sort (unique (unlist(keysL)))
+
+    tags <- mapply (function (i, k) {
+        i <- i[, k] # remove osm_id column if exists
+        out <- data.frame (
+            matrix (
+                nrow = nrow (i), ncol = length (keys),
+                dimnames = list (NULL, keys)
+            ),
+            stringsAsFactors = stringsAsFactors,
+            check.names = FALSE
+        )
+        out [, names (i)] <- i
+        return (out)
+    }, i = res[1:3], k = keysL, SIMPLIFY = FALSE)
+
+    meta <- lapply (c ("points", "ways", "rels"), function (type) {
+        get_meta_from_cpp_output (res, type)
+    })
+    metaCols<- unique (unlist (lapply (meta, names)))
+
+    df <- lapply(1:3, function (i) {
+        osm_type <- if (nrow (res[[i]]) > 0) {
+            c ("node", "way", "relation")[i]
+        } else {
+            character ()
+        }
+        data.frame(
+            osm_type,
+            osm_id = rownames (res[[i]]),
+            meta[[i]],
+            tags[[i]],
+            stringsAsFactors = stringsAsFactors,
+            check.names = FALSE
+        )
+    })
+
+    df <- do.call (rbind, c (df, list(deparse.level = 0)))
     rownames (df) <- NULL
+
+    cols_no_dup <- fix_duplicated_columns (names (df))
+    if (!identical (names (df), cols_no_dup)) {
+        warning (
+            "Feature keys clash with id or metadata columns and will be ",
+            "renamed by appending `.n`:\n\t",
+            paste (setdiff (cols_no_dup, names (df)), collapse = ", ")
+        )
+        names (df) <- fix_duplicated_columns (names (df))
+    }
 
     if (nrow (df) == 0) {
         df <- data.frame (
