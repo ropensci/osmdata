@@ -130,6 +130,67 @@ test_that ("query_errors", {
     )
 })
 
+test_that ("not implemented queries", {
+
+    qadiff <- opq (bbox = c (1.8374527, 41.5931579, 1.8384799, 41.5936434),
+                   datetime = "2014-09-11T00:00:00Z",
+                   datetime2 = "2017-09-11T00:00:00Z",
+                   adiff = TRUE)
+    osm_adiff2 <- test_path ("fixtures", "osm-adiff2.osm")
+    doc <- xml2::read_xml (osm_adiff2)
+
+    expect_error (
+        osmdata_sp (q = qadiff, doc = doc),
+        "adiff queries not yet implemented."
+    )
+    expect_error (
+        osmdata_sf (q = qadiff, doc = doc),
+        "adiff queries not yet implemented."
+    )
+    expect_error (
+        osmdata_sc (q = qadiff, doc = doc),
+        "adiff queries not yet implemented."
+    )
+
+
+    qtags <- opq (bbox = c (1.8374527, 41.5931579, 1.8384799, 41.5936434),
+                  out="tags")
+    osm_tags <- test_path ("fixtures", "osm-tags.osm")
+    doc <- xml2::read_xml (osm_tags)
+
+    expect_error (
+        osmdata_sp (q = qtags, doc = doc),
+        "Queries returning no geometries \\(out tags/ids\\) not accepted."
+    )
+    expect_error (
+        osmdata_sf (q = qtags, doc = doc),
+        "Queries returning no geometries \\(out tags/ids\\) not accepted."
+    )
+    expect_error (
+        osmdata_sc (q = qtags, doc = doc),
+        "Queries returning no geometries \\(out tags/ids\\) not accepted."
+    )
+
+    qmeta <- opq (bbox = c (1.8374527, 41.5931579, 1.8384799, 41.5936434),
+                  out="meta")
+    osm_meta <- test_path ("fixtures", "osm-meta.osm")
+    doc <- xml2::read_xml (osm_meta)
+
+    expect_warning (
+        osmdata_sp (q = qmeta, doc = doc),
+        "`out meta` queries not yet implemented."
+    )
+    expect_warning (
+        osmdata_sf (q = qmeta, doc = doc),
+        "`out meta` queries not yet implemented."
+    )
+    expect_warning (
+        osmdata_sc (q = qmeta, doc = doc),
+        "`out meta` queries not yet implemented."
+    )
+
+})
+
 test_that ("osmdata without query", {
     osm_multi <- test_path ("fixtures", "osm-multi.osm")
     doc <- xml2::read_xml (osm_multi)
