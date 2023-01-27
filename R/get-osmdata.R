@@ -353,7 +353,8 @@ make_sf <- function (..., stringsAsFactors = FALSE) { # nolint
     } else { # create a data.frame from list:
         data.frame (x [-sf_column],
             row.names = row_names,
-            stringsAsFactors = stringsAsFactors
+            stringsAsFactors = stringsAsFactors,
+            check.names = FALSE
         )
     }
 
@@ -460,13 +461,15 @@ fill_kv <- function (res, kv_name, g_name, stringsAsFactors) { # nolint
         if (nrow (res [[kv_name]]) == 0) {
             res [[kv_name]] <- data.frame (
                 osm_id = names (res [[g_name]]),
-                stringsAsFactors = stringsAsFactors
+                stringsAsFactors = stringsAsFactors,
+                check.names = FALSE
             )
         } else {
             res [[kv_name]] <- data.frame (
                 osm_id = rownames (res [[kv_name]]),
                 res [[kv_name]],
-                stringsAsFactors = stringsAsFactors
+                stringsAsFactors = stringsAsFactors,
+                check.names = FALSE
             )
         }
     }

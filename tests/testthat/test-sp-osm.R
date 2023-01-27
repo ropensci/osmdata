@@ -124,3 +124,13 @@ test_that ("ways", {
         expect_identical (attributes (xyi), attributes (xyi_sp))
     }
 })
+
+test_that ("non-valid key names", {
+    osm_multi <- test_path ("fixtures", "osm-multi.osm")
+    q0 <- opq (bbox = c (1, 1, 5, 5))
+    x <- osmdata_sp (q0, osm_multi)
+
+    k <- lapply (x[grep ("osm_", names (x))], function (f) {
+        expect_true("name:ca" %in% names(f))
+    })
+})

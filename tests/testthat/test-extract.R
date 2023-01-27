@@ -152,28 +152,28 @@ test_that ("points-from-multipolygons", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
     pts <- osm_points (x, rownames (x$osm_multipolygons))
-    expect_equal (dim (pts), c (16, 5))
+    expect_equal (dim (pts), c (16, 6))
 })
 
 test_that ("points-from-multilines", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
     pts <- osm_points (x, rownames (x$osm_multilines))
-    expect_equal (dim (pts), c (10, 5))
+    expect_equal (dim (pts), c (10, 6))
 })
 
 test_that ("points-from-polygons", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
     pts <- osm_points (x, rownames (x$osm_polygons))
-    expect_equal (dim (pts), c (4, 5))
+    expect_equal (dim (pts), c (4, 6))
 })
 
 test_that ("points-from-lines", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
     pts <- osm_points (x, rownames (x$osm_lines))
-    expect_equal (dim (pts), c (12, 5))
+    expect_equal (dim (pts), c (12, 6))
 
     # Only lines have multiples features
     ids <- lapply (seq (x$osm_lines$geometry), function (i) {
@@ -193,28 +193,28 @@ test_that ("lines-from-multipolygons", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
     lns <- osm_lines (x, rownames (x$osm_multipolygons))
-    expect_equal (dim (lns), c (4, 7))
+    expect_equal (dim (lns), c (4, 8))
 })
 
 test_that ("lines-from-multilines", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
     lns <- osm_lines (x, rownames (x$osm_multilines))
-    expect_equal (dim (lns), c (3, 7))
+    expect_equal (dim (lns), c (3, 8))
 })
 
 test_that ("lines-from-lines", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
     lns <- osm_lines (x, rownames (x$osm_lines) [1])
-    expect_equal (dim (lns), c (3, 7))
+    expect_equal (dim (lns), c (3, 8))
 })
 
 test_that ("lines-from-points", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
     lns <- osm_lines (x, rownames (x$osm_points) [1])
-    expect_equal (dim (lns), c (2, 7))
+    expect_equal (dim (lns), c (2, 8))
 })
 
 # ------------------- polygons
@@ -223,7 +223,7 @@ test_that ("polygons-from-multipolygons", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
     pls <- osm_polygons (x, rownames (x$osm_multipolygons))
-    expect_equal (dim (pls), c (1, 7))
+    expect_equal (dim (pls), c (1, 8))
 })
 
 test_that ("polygons-from-multilines", {
@@ -239,14 +239,14 @@ test_that ("polygons-from-lines", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
     pls <- osm_polygons (x, rownames (x$osm_lines) [1])
-    expect_equal (dim (pls), c (0, 7)) # no polygons contain lines
+    expect_equal (dim (pls), c (0, 8)) # no polygons contain lines
 })
 
 test_that ("polygons-from-points", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
     pls <- osm_polygons (x, rownames (x$osm_points) [8])
-    expect_equal (dim (pls), c (1, 7))
+    expect_equal (dim (pls), c (1, 8))
 })
 
 # ------------------- multilines
@@ -255,14 +255,14 @@ test_that ("multilines-from-lines", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
     mls <- osm_multilines (x, rownames (x$osm_lines) [1])
-    expect_equal (dim (mls), c (1, 6))
+    expect_equal (dim (mls), c (1, 7))
 })
 
 test_that ("multilines-from-points", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
     mls <- osm_multilines (x, rownames (x$osm_points) [1])
-    expect_equal (dim (mls), c (1, 6))
+    expect_equal (dim (mls), c (1, 7))
 })
 
 # ------------------- multipolygons
@@ -271,19 +271,19 @@ test_that ("multipolygons-from-polygons", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
     mps <- osm_multipolygons (x, rownames (x$osm_polygons) [1])
-    expect_equal (dim (mps), c (1, 5))
+    expect_equal (dim (mps), c (1, 6))
 })
 
 test_that ("multipolygons-from-lines", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
     mps <- osm_multipolygons (x, rownames (x$osm_lines) [2])
-    expect_equal (dim (mps), c (1, 5))
+    expect_equal (dim (mps), c (1, 6))
 })
 
 test_that ("multipolygons-from-points", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
     x <- osmdata_sf (q0, test_path ("fixtures", "osm-multi.osm"))
     mps <- osm_multipolygons (x, rownames (x$osm_points) [1])
-    expect_equal (dim (mps), c (1, 5))
+    expect_equal (dim (mps), c (1, 6))
 })

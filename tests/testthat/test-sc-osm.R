@@ -24,3 +24,14 @@ test_that ("ways", {
     expect_is (x, "SC")
     expect_equal (names (x), sc_names)
 })
+
+
+test_that ("non-valid key names", {
+    osm_multi <- test_path ("fixtures", "osm-multi.osm")
+    q0 <- opq (bbox = c (1, 1, 5, 5))
+    x <- osmdata_sc (q0, osm_multi)
+
+    k<- lapply (x[c ("nodes", "relation_properties", "object")], function (f) {
+        expect_true ("name:ca" %in% f$key)
+    })
+})

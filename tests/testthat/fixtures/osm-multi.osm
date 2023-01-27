@@ -15,6 +15,7 @@
   <node id="11" lat="3" lon="1">
     <tag k="stuff" v="yes"/>
     <tag k="junk" v="some"/>
+    <tag k="name:ca" v="Ni idea"/>
     <!-- test comment for rapidxml.h tests -->
   </node>
   <node id="12" lat="3" lon="2"/>
@@ -26,6 +27,7 @@
   <node id="18" lat="4" lon="3">
     <tag k="stuff" v="nope"/>
     <tag k="like" v="lots"/>
+    <tag k="name:ca" v="Ves a saber"/>
   </node>
   <node id="19" lat="4" lon="4"/>
   <node id="20" lat="4" lon="5"/>
@@ -41,6 +43,7 @@
     <nd ref="4"/>
     <tag k="highway" v="footway"/>
     <tag k="layer" v="0"/>
+    <tag k="name:ca" v="Qui sap"/>
   </way>
   <way id="101">
     <nd ref="4"/>
@@ -49,6 +52,7 @@
     <nd ref="19"/>
     <tag k="highway" v="maybe"/>
     <tag k="name" v="blue&lt;this&gt;"/>
+    <tag k="name:ca" v="No ho se pas"/>
   </way>
   <way id="102">
     <nd ref="19"/>
@@ -57,6 +61,7 @@
     <nd ref="16"/>
     <tag k="boat" v="yes"/>
     <tag k="name" v="River Thames"/>
+    <tag k="name:ca" v="Riu Tàmesi"/>
   </way>
   <way id="103">
     <nd ref="16"/>
@@ -80,6 +85,7 @@
     <member type="way" ref="103" role="outer"/>
     <member type="way" ref="104" role="inner"/>
     <tag k="name" v="big loop"/>
+    <tag k="name:ca" v="bucle gran"/>
     <tag k="type" v="multipolygon"/>
     <tag k="something" v="stuff&amp;junk&apos;andthenwhat"/>
   </relation>
@@ -88,6 +94,7 @@
     <member type="way" ref="101" role=""/>
     <member type="way" ref="102" role=""/>
     <tag k="name" v="big loop"/>
+    <tag k="name:ca" v="bucle gran"/>
     <tag k="type" v="route"/>
     <tag k="something" v="stuff&apos;&quot;aa&quot;"/>
   </relation>
