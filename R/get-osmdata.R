@@ -846,7 +846,7 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
             "renamed by appending `.n`:\n\t",
             paste (setdiff (cols_no_dup, names (df)), collapse = ", ")
         )
-        names (df) <- fix_duplicated_columns (names (df))
+        names (df) <- cols_no_dup
     }
 
     if (nrow (df) == 0) {
