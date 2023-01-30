@@ -799,7 +799,7 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
         }
         out
     })
-    keys<- sort (unique (unlist(keysL)))
+    keys <- sort (unique (unlist(keysL)))
 
     tags <- mapply (function (i, k) {
         i <- i[, k] # remove osm_id column if exists
