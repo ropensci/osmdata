@@ -427,8 +427,6 @@ void osm_sp::get_osm_relations (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
 }
 
 
-// [[Rcpp::depends(sp)]]
-
 //' rcpp_osmdata_sp
 //'
 //' Extracts all polygons from an overpass API query
