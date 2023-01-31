@@ -802,7 +802,7 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
     keys <- sort (unique (unlist(keysL)))
 
     tags <- mapply (function (i, k) {
-        i <- i[, k] # remove osm_id column if exists
+        i <- i[, k, drop = FALSE] # remove osm_id column if exists
         out <- data.frame (
             matrix (
                 nrow = nrow (i), ncol = length (keys),
