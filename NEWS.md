@@ -8,6 +8,8 @@
 - `opq()` can now utilise overpass ability to filter results by area; thanks to @jmaspons (#286).
 - `opq()` now has additional "out" parameter to control the kinds of data returned by overpass; thanks to @jmaspons (#288).
 - `opq()` now has additional "osm_types" parameter to provide finer control of which kinds of data are returned by overpass; thanks to @jmaspons (#295).
+- `sp` dependency moved to suggested and added missing osmdata_* functions to docs; by @jmaspons & @mpadge (#302)
+- Fix key modifications for non-valid column names and handle duplicated column names in `osmdata_*` functions; by @jmaspons (#303)
 - @elipousson is new package contributor, thanks to the above work.
 - @jmaspons is new package author, thanks to #285.
 
