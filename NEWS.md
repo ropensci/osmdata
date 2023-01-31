@@ -9,10 +9,11 @@
 - `opq()` now has additional "out" parameter to control the kinds of data returned by overpass; thanks to @jmaspons (#288).
 - `opq()` now has additional "osm_types" parameter to provide finer control of which kinds of data are returned by overpass; thanks to @jmaspons (#295).
 - @elipousson is new package contributor, thanks to the above work.
-- @jmaspons is new package author, thanks to #285.
+- @jmaspons is new package author, thanks to #285 (plus most of the above, and a whole lot more!)
 
 ## Minor changes:
 
+- Downgraded `sp` from "Imports" to "Suggests"; thanks to @jmaspons (#302)
 - Improved `osm_osm_id()` to accept vectors of ids and types; thanks to @jmaspons (#268, #282, #283)
 
 0.1.10
