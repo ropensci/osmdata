@@ -1,7 +1,8 @@
 Connected as: 123456789
 Current time: 2022-01-01T00:00:00Z
-Announced endpoint: lz4.overpass-api.de/api/
-Rate limit: 2
-1 slots available now.
-Slot available after: 2022-01-01T00:00:00Z, in 10 seconds.
+Announced endpoint: z.overpass-api.de/api/
+Rate limit: 3
+Slot available after: 2022-01-01T00:00:00Z, in 4 seconds.
+Slot available after: 2022-01-01T00:00:00Z, in 5 seconds.
+Slot available after: 2022-01-01T00:00:00Z, in 13 seconds.
 Currently running queries (pid, space limit, time limit, start time):
