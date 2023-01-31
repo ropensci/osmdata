@@ -1,13 +1,13 @@
-#' Import OpenStreetMap data in 'sf' and 'sp' formats
+#' Import OpenStreetMap data in 'sf', 'SC', 'sp', 'data.frame' and 'xml' formats
 #'
-#' Imports OpenStreetMap (OSM) data into R as either 'sf' or 'sp' objects.  OSM
-#' data are extracted from the overpass API and processed with very fast C++
-#' routines for return to R.  The package enables simple overpass queries to be
-#' constructed without the user necessarily understanding the syntax of the
-#' overpass query language, while retaining the ability to handle arbitrarily
-#' complex queries. Functions are also provided to enable recursive searching
-#' between different kinds of OSM data (for example, to find all lines which
-#' intersect a given point).
+#' Imports OpenStreetMap (OSM) data into R as 'sf', 'SC', 'sp', 'data.frame' or
+#' 'xml_document' objects. OSM data are extracted from the overpass API and
+#' processed with very fast C++ routines for return to R. The package enables
+#' simple overpass queries to be constructed without the user necessarily
+#' understanding the syntax of the overpass query language, while retaining the
+#' ability to handle arbitrarily complex queries. Functions are also provided to
+#' enable recursive searching between different kinds of OSM data (for example,
+#' to find all lines which intersect a given point).
 #'
 #' @section Functions to Prepare Queries:
 #' \itemize{
@@ -29,9 +29,12 @@
 #'
 #' @section Functions to Extract OSM Data:
 #' \itemize{
+#' \item \link{osmdata_data_frame}: Return OSM data in \code{\link{data.frame}}
+#'     format
+#' \item \link{osmdata_sc}: Return OSM data in \pkg{silicate} format
 #' \item \link{osmdata_sf}: Return OSM data in \pkg{sf} format
 #' \item \link{osmdata_sp}: Return OSM data in \pkg{sp} format
-#' \item \link{osmdata_xml}: Return OSM data in \pkg{XML} format
+#' \item \link{osmdata_xml}: Return OSM data in \pkg{xml2} format
 #' }
 #'
 #' @section Functions to Search Data:
@@ -46,8 +49,7 @@
 #' @name osmdata
 #' @docType package
 #' @family package
-#' @author Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon
-#' @import sp
+#' @author Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon, Joan Maspons
 #' @importFrom magrittr %>%
 #' @importFrom methods is slot
 #' @importFrom Rcpp evalCpp

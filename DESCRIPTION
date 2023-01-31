@@ -39,7 +39,6 @@ Imports:
     Rcpp (>= 0.12.4),
     reproj,
     rvest,
-    sp,
     tibble,
     utils,
     xml2
@@ -51,6 +50,7 @@ Suggests:
     raster,
     rmarkdown,
     sf,
+    sp,
     testthat
 LinkingTo:
     Rcpp
