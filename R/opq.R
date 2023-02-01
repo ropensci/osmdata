@@ -339,8 +339,13 @@ add_osm_feature <- function (opq,
         key, value, bind_key_pre$key_pre, bind_key_pre$bind,
         match_case, value_exact
     )
+    feature<- paste (feature, collapse = " ")
 
-    opq$features <- paste0 (opq$features, paste (feature, collapse = " "))
+    if (is.null (opq$features)) {
+        opq$features <- feature
+    } else {
+        opq$features <- paste (opq$features, feature)
+    }
 
     if (any (w <- !grepl("\\[(\\\"|~)", opq$features))) {
         warning(

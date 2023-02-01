@@ -80,9 +80,9 @@ test_that ("add feature", {
             add_osm_feature (key = "natural", value = "peak"),
         "The query will request objects whith only a negated key "
     )
-    expect_identical(qry7$features, "[\"name\"][!\"name:ca\"]")
-    expect_identical(qry8$features, "[\"natural\"=\"peak\"][!\"ele\"]")
-    expect_identical(qry9$features, "[!\"ele\"][\"natural\"=\"peak\"]")
+    expect_identical(qry7$features, "[\"name\"] [!\"name:ca\"]")
+    expect_identical(qry8$features, "[\"natural\"=\"peak\"] [!\"ele\"]")
+    expect_identical(qry9$features, "[!\"ele\"] [\"natural\"=\"peak\"]")
 })
 
 test_that ("query_errors", {
