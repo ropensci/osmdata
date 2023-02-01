@@ -16,8 +16,8 @@
  *  You should have received a copy of the GNU General Public License along with
  *  osm-router.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Author:     Mark Padgham 
- *  E-Mail:     mark.padgham@email.com 
+ *  Author:     Mark Padgham
+ *  E-Mail:     mark.padgham@email.com
  *
  *  Description:    Extract OSM data from an object of class XmlData and return
  *                  it in R 'sp' format.
@@ -36,7 +36,7 @@
 #include <algorithm> // for min_element/max_element
 
 // Note: This code uses explicit index counters within most loops which use Rcpp
-// objects, because these otherwise require a 
+// objects, because these otherwise require a
 // static_cast <size_t> (std::distance (...)). This operation copies each
 // instance and can slow the loops down by several orders of magnitude!
 
@@ -50,12 +50,12 @@
 //' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
 //' @param bbox Pointer to the bbox needed for `sf` construction
 //' @param crs Pointer to the crs needed for `sf` construction
-//' 
-//' @noRd 
-void osm_sp::get_osm_nodes (Rcpp::S4 &sp_points, const Nodes &nodes, 
+//'
+//' @noRd
+void osm_sp::get_osm_nodes (Rcpp::S4 &sp_points, const Nodes &nodes,
         const UniqueVals &unique_vals)
 {
-    Rcpp::NumericMatrix ptxy; 
+    Rcpp::NumericMatrix ptxy;
     Rcpp::CharacterMatrix kv_mat;
     size_t nrow = nodes.size (), ncol = unique_vals.k_point.size ();
 
@@ -119,9 +119,9 @@ void osm_sp::get_osm_nodes (Rcpp::S4 &sp_points, const Nodes &nodes,
 //' @param geom_type Character string specifying "POLYGON" or "LINESTRING"
 //' @param bbox Pointer to the bbox needed for `sf` construction
 //' @param crs Pointer to the crs needed for `sf` construction
-//' 
-//' @noRd 
-void osm_sp::get_osm_ways (Rcpp::S4 &sp_ways, 
+//'
+//' @noRd
+void osm_sp::get_osm_ways (Rcpp::S4 &sp_ways,
         const std::set <osmid_t> &way_ids, const Ways &ways, const Nodes &nodes,
         const UniqueVals &unique_vals, const std::string &geom_type)
 {
@@ -174,7 +174,7 @@ void osm_sp::get_osm_ways (Rcpp::S4 &sp_ways,
             lines.slot ("Lines") = dummy_list;
             lines.slot ("ID") = (*wi);
             wayList [count] = lines;
-        } else 
+        } else
         {
             const double dtol = 1.0e-6;
             if (nmat.nrow () == 3 && fabs (nmat (0, 0) - nmat (2, 0)) < dtol &&
@@ -281,9 +281,9 @@ void osm_sp::get_osm_ways (Rcpp::S4 &sp_ways,
 //'
 //' @return A dual Rcpp::List, the first of which contains the multipolygon
 //'         relations; the second the multilinestring relations.
-//' 
-//' @noRd 
-void osm_sp::get_osm_relations (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons, 
+//'
+//' @noRd
+void osm_sp::get_osm_relations (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
         const Relations &rels, const std::map <osmid_t, Node> &nodes,
         const std::map <osmid_t, OneWay> &ways, const UniqueVals &unique_vals)
 {
@@ -299,17 +299,17 @@ void osm_sp::get_osm_relations (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
 
     double_arr2 lat_vec, lon_vec;
     double_arr3 lat_arr_mp, lon_arr_mp, lon_arr_ls, lat_arr_ls;
-    string_arr2 rowname_vec, id_vec_mp, roles_ls; 
+    string_arr2 rowname_vec, id_vec_mp, roles_ls;
     string_arr3 rowname_arr_mp, rowname_arr_ls;
-    std::vector <osmid_t> ids_ls; 
-    std::vector <std::string> ids_mp, rel_id_mp, rel_id_ls; 
+    std::vector <osmid_t> ids_ls;
+    std::vector <std::string> ids_mp, rel_id_mp, rel_id_ls;
     osmt_arr2 id_vec_ls;
     std::vector <std::string> roles;
 
     unsigned int nmp = 0, nls = 0; // number of multipolygon and multilinestringrelations
     for (auto itr = rels.begin (); itr != rels.end (); ++itr)
     {
-        if (itr->ispoly) 
+        if (itr->ispoly)
             nmp++;
         else
         {
@@ -368,7 +368,7 @@ void osm_sp::get_osm_relations (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
             roles_set.clear ();
             for (std::string role: roles)
             {
-                trace_multilinestring (itr, role, ways, nodes, 
+                trace_multilinestring (itr, role, ways, nodes,
                         lon_vec, lat_vec, rowname_vec, ids_ls);
                 std::stringstream ss;
                 ss.str ("");
@@ -427,16 +427,14 @@ void osm_sp::get_osm_relations (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
 }
 
 
-// [[Rcpp::depends(sp)]]
-
 //' rcpp_osmdata_sp
 //'
 //' Extracts all polygons from an overpass API query
 //'
 //' @param st Text contents of an overpass API query
 //' @return A \code{SpatialLinesDataFrame} contains all polygons and associated data
-//' 
-//' @noRd 
+//'
+//' @noRd
 // [[Rcpp::export]]
 Rcpp::List rcpp_osmdata_sp (const std::string& st)
 {
@@ -491,11 +489,11 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
     osm_sp::get_osm_ways (sp_polygons, poly_ways, ways, nodes, unique_vals, "polygon");
     osm_sp::get_osm_ways (sp_lines, non_poly_ways, ways, nodes, unique_vals, "line");
     osm_sp::get_osm_nodes (sp_points, nodes, unique_vals);
-    osm_sp::get_osm_relations (sp_multilines, sp_multipolygons, 
+    osm_sp::get_osm_relations (sp_multilines, sp_multipolygons,
             rels, nodes, ways, unique_vals);
 
     // Add bbox and crs to each sp object
-    Rcpp::NumericMatrix bbox = rcpp_get_bbox (xml.x_min (), xml.x_max (), 
+    Rcpp::NumericMatrix bbox = rcpp_get_bbox (xml.x_min (), xml.x_max (),
                                               xml.y_min (), xml.y_max ());
     sp_points.slot ("bbox") = bbox;
     sp_lines.slot ("bbox") = bbox;
@@ -507,7 +505,7 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
     Rcpp::S4 crs = crs_call.eval ();
     crs.slot ("projargs") = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0";
     sp_points.slot ("proj4string") = crs;
-    sp_lines.slot ("proj4string") = crs; 
+    sp_lines.slot ("proj4string") = crs;
     sp_polygons.slot ("proj4string") = crs;
     sp_multilines.slot ("proj4string") = crs;
     sp_multipolygons.slot ("proj4string") = crs;
@@ -523,6 +521,6 @@ Rcpp::List rcpp_osmdata_sp (const std::string& st)
     std::vector <std::string> retnames {"bbox", "points", "lines", "polygons",
         "multilines", "multipolygons"};
     ret.attr ("names") = retnames;
-    
+
     return ret;
 }

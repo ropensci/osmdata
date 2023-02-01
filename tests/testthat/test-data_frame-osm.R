@@ -326,3 +326,23 @@ test_that ("adiff2", {
     expect_identical (metaL$meta_overpass_call, metaL$meta_opq)
     expect_identical (metaL$meta_overpass_call$datetime_from, attr (q, "datetime"))
 })
+
+test_that ("non-valid key names", {
+    osm_multi <- test_path ("fixtures", "osm-multi.osm")
+    q0 <- opq (bbox = c (1, 1, 5, 5))
+    x <- osmdata_data_frame (q0, osm_multi)
+
+    expect_true ("name:ca" %in% names(x))
+})
+
+test_that ("clashes in key names", {
+    osm_multi_key_clashes <- test_path ("fixtures", "osm-key_clashes.osm")
+    q0 <- opq (bbox = c (1, 1, 5, 5))
+    expect_warning (
+        x <- osmdata_data_frame (q0, osm_multi_key_clashes),
+        "Feature keys clash with id or metadata columns and will be renamed by "
+    )
+
+    expect_true (all (c ("osm_id", "osm_id.1") %in% names(x)))
+    expect_false (any (duplicated (names (x))))
+})

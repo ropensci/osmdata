@@ -65,7 +65,7 @@ get_overpass_version <- function (doc) {
 #' @param encoding Unless otherwise specified XML documents are assumed to be
 #'        encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
 #'        an explicit encoding directive, this allows you to supply a default.
-#' @return An object of class `XML::xml_document` containing the result of the
+#' @return An object of class `xml2::xml_document` containing the result of the
 #'         overpass API query.
 #'
 #' @note Objects of class `xml_document` can be saved as `.xml` or
@@ -102,6 +102,76 @@ osmdata_xml <- function (q, filename, quiet = TRUE, encoding) {
     invisible (doc)
 }
 
+
+#' Check for not implemented queries in overpass call
+#'
+#' Detects adiff queries and out meta/ids/tags which are not implemented for
+#' osmdata_* functions except for osmdata_xml and osmdata_data_frame.
+#'
+#' @param obj Initial \link{osmdata} object
+#'
+#' @return Nothing. Throw errors or warnings for not implemented queries.
+#'
+#' @noRd
+check_not_implemented_queries <- function (obj) {
+    if (!is.null (obj$overpass_call)){
+
+        if (grepl ("; out (tags|ids)( center)*;$", obj$overpass_call)) {
+            stop (
+                "Queries returning no geometries (out tags/ids) not accepted. ",
+                'Use queries with `out="body"` or `out="skel"` instead.'
+            )
+        }
+
+        if (grepl ("\\[adiff:", obj$overpass_call)) {
+            stop ("adiff queries not yet implemented.")
+        }
+
+        if (grepl ("out meta;$", obj$overpass_call)) {
+            warning (
+                "`out meta` queries not yet implemented. ",
+                "Metadata fields will be missing."
+            )
+        }
+
+    }
+}
+
+
+fix_duplicated_columns <- function (x) {
+    dup <- duplicated (x)
+    i <- 1
+    while (any (dup)) {
+        x[dup] <- paste0 (x[dup], ".", i)
+        i <- i + 1
+        dup <- duplicated (x)
+    }
+
+    return (x)
+}
+
+fix_columns_list <- function (l) {
+    cols <- lapply (l, names)
+    cols_no_dup <- lapply (cols, fix_duplicated_columns)
+    if (!identical (cols, cols_no_dup)) {
+        warning (
+            "Feature keys clash with id or metadata columns and will be ",
+            "renamed by appending `.n`:\n\t",
+            paste (
+                unique (setdiff (unlist (cols_no_dup), unlist(cols))),
+                collapse = ", "
+            )
+        )
+        l <- mapply (function (x, col) {
+            suppressWarnings (names (x) <- col)
+            x
+        }, x = l, col = cols_no_dup, SIMPLIFY = FALSE)
+    }
+
+    return (l)
+}
+
+
 #' Return an OSM Overpass query as an \link{osmdata} object in \pkg{sp}
 #' format.
 #'
@@ -111,7 +181,7 @@ osmdata_xml <- function (q, filename, quiet = TRUE, encoding) {
 #'      query.
 #' @param doc If missing, `doc` is obtained by issuing the overpass query,
 #'        `q`, otherwise either the name of a file from which to read data,
-#'        or an object of class \pkg{XML} returned from
+#'        or an object of class \pkg{xml2} returned from
 #'        \link{osmdata_xml}.
 #' @param quiet suppress status messages.
 #'
@@ -149,9 +219,16 @@ osmdata_sp <- function (q, doc, quiet = TRUE) {
         stop ("q must be an overpass query or a character string")
     }
 
+    check_not_implemented_queries (obj)
+
     temp <- fill_overpass_data (obj, doc, quiet = quiet)
     obj <- temp$obj
     doc <- temp$doc
+
+    if (isTRUE (obj$meta$query_type == "adiff")) {
+        # return incorrect result
+        stop ("adiff queries not yet implemented.")
+    }
 
     if (!quiet) {
         message ("converting OSM data to sp format")
@@ -167,6 +244,8 @@ osmdata_sp <- function (q, doc, quiet = TRUE) {
     obj$osm_multilines <- res$multilines
     obj$osm_multipolygons <- res$multipolygons
 
+    osm_items <- grep ("^osm_", names (obj))
+    obj[osm_items] <- fix_columns_list (obj[osm_items])
     class (obj) <- c (class (obj), "osmdata_sp")
 
     return (obj)
@@ -353,7 +432,8 @@ make_sf <- function (..., stringsAsFactors = FALSE) { # nolint
     } else { # create a data.frame from list:
         data.frame (x [-sf_column],
             row.names = row_names,
-            stringsAsFactors = stringsAsFactors
+            stringsAsFactors = stringsAsFactors,
+            check.names = FALSE
         )
     }
 
@@ -417,9 +497,15 @@ osmdata_sf <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) { # noli
         stop ("q must be an overpass query or a character string")
     }
 
+    check_not_implemented_queries (obj)
+
     temp <- fill_overpass_data (obj, doc, quiet = quiet)
     obj <- temp$obj
     doc <- temp$doc
+
+    if (isTRUE (obj$meta$query_type == "adiff")) {
+        stop ("adiff queries not yet implemented.")
+    }
 
     if (!quiet) {
         message ("converting OSM data to sf format")
@@ -427,13 +513,15 @@ osmdata_sf <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) { # noli
     res <- rcpp_osmdata_sf (paste0 (doc))
     # some objects don't have names. As explained in
     # src/osm_convert::restructure_kv_mat, these instances do not get an osm_id
-    # column, so this is appended here:
-    if (!"osm_id" %in% names (res$points_kv)) {
+    # column (the first one), so this is appended here:
+    if (!"osm_id" %in% names (res$points_kv)[1]) {
         res <- fill_kv (res, "points_kv", "points", stringsAsFactors)
     }
-    if (!"osm_id" %in% names (res$polygons_kv)) {
+    if (!"osm_id" %in% names (res$polygons_kv)[1]) {
         res <- fill_kv (res, "polygons_kv", "polygons", stringsAsFactors)
     }
+    kv_df <- grep ("_kv$", names (res))
+    res[kv_df] <- fix_columns_list (res[kv_df])
 
     if (missing (q)) {
         obj$bbox <- paste (res$bbox, collapse = " ")
@@ -460,13 +548,15 @@ fill_kv <- function (res, kv_name, g_name, stringsAsFactors) { # nolint
         if (nrow (res [[kv_name]]) == 0) {
             res [[kv_name]] <- data.frame (
                 osm_id = names (res [[g_name]]),
-                stringsAsFactors = stringsAsFactors
+                stringsAsFactors = stringsAsFactors,
+                check.names = FALSE
             )
         } else {
             res [[kv_name]] <- data.frame (
                 osm_id = rownames (res [[kv_name]]),
                 res [[kv_name]],
-                stringsAsFactors = stringsAsFactors
+                stringsAsFactors = stringsAsFactors,
+                check.names = FALSE
             )
         }
     }
@@ -549,9 +639,15 @@ osmdata_sc <- function (q, doc, quiet = TRUE) {
         stop ("q must be an overpass query or a character string")
     }
 
+    check_not_implemented_queries (obj)
+
     temp <- fill_overpass_data (obj, doc, quiet = quiet)
     obj <- temp$obj
     doc <- temp$doc
+
+    if (isTRUE (obj$meta$query_type == "adiff")) {
+        stop ("adiff queries not yet implemented.")
+    }
 
     if (!quiet) {
         message ("converting OSM data to sc format")
@@ -696,53 +792,62 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
 
     res <- rcpp_osmdata_df (paste0 (doc))
 
-    if (nrow (res$points_kv) > 0L) {
-        res$points_kv$osm_type <- "node"
-        res$points_kv <- cbind (
-            get_meta_from_cpp_output (res, "points"),
-            res$points_kv
-        )
-    }
-    if (nrow (res$ways_kv) > 0L) {
-        res$ways_kv$osm_type <- "way"
-        res$ways_kv$osm_id <- rownames (res$ways_kv)
-        res$ways_kv <- cbind (
-            get_meta_from_cpp_output (res, "ways"),
-            res$ways_kv
-        )
-    }
-    if (nrow (res$rels_kv) > 0L) {
-        res$rels_kv$osm_type <- "relation"
-        res$rels_kv$osm_id <- rownames (res$rels_kv)
-        res$rels_kv <- cbind (
-            get_meta_from_cpp_output (res, "rels"),
-            res$rels_kv
-        )
-    }
-
-    nms <- sort (unique (unlist (lapply (res [1:3], names))))
-    nms1 <- c (
-        "osm_type", "osm_id",
-        paste0 (
-            "osm_",
-            c ("version", "timestamp", "changeset", "uid", "user")
-        )
-    )
-    nms1 <- intersect (nms1, nms)
-    nms <- c (nms1, setdiff (nms, nms1))
-
-    df <- lapply (res [1:3], function (i) {
-        out <- data.frame (
-            matrix (nrow = nrow (i), ncol = length (nms)),
-            stringsAsFactors = stringsAsFactors
-        )
-        names (out) <- nms
-        out [, names (i)] <- i
-        rownames (out) <- rownames (i)
-        return (out)
+    keysL <- lapply ( c ("points_kv", "ways_kv", "rels_kv"), function (x) {
+        out <- names (res[[x]])
+        if (isTRUE (out[1] == "osm_id")) {
+            out <- out[-1] # remove osm_id. Not always present
+        }
+        out
     })
-    df <- do.call (rbind, df)
+    keys <- sort (unique (unlist(keysL)))
+
+    tags <- mapply (function (i, k) {
+        i <- i[, k, drop = FALSE] # remove osm_id column if exists
+        out <- data.frame (
+            matrix (
+                nrow = nrow (i), ncol = length (keys),
+                dimnames = list (NULL, keys)
+            ),
+            stringsAsFactors = stringsAsFactors,
+            check.names = FALSE
+        )
+        out [, names (i)] <- i
+        return (out)
+    }, i = res[1:3], k = keysL, SIMPLIFY = FALSE)
+
+    meta <- lapply (c ("points", "ways", "rels"), function (type) {
+        get_meta_from_cpp_output (res, type)
+    })
+    metaCols<- unique (unlist (lapply (meta, names)))
+
+    df <- lapply(1:3, function (i) {
+        osm_type <- if (nrow (res[[i]]) > 0) {
+            c ("node", "way", "relation")[i]
+        } else {
+            character ()
+        }
+        data.frame(
+            osm_type,
+            osm_id = rownames (res[[i]]),
+            meta[[i]],
+            tags[[i]],
+            stringsAsFactors = stringsAsFactors,
+            check.names = FALSE
+        )
+    })
+
+    df <- do.call (rbind, c (df, list(deparse.level = 0)))
     rownames (df) <- NULL
+
+    cols_no_dup <- fix_duplicated_columns (names (df))
+    if (!identical (names (df), cols_no_dup)) {
+        warning (
+            "Feature keys clash with id or metadata columns and will be ",
+            "renamed by appending `.n`:\n\t",
+            paste (setdiff (cols_no_dup, names (df)), collapse = ", ")
+        )
+        names (df) <- cols_no_dup
+    }
 
     if (nrow (df) == 0) {
         df <- data.frame (

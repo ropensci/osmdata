@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API 0.7.59 e21c39fe">
+<note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+<meta osm_base="2023-01-14T02:43:50Z"/>
+
+  <node id="1927271876">
+    <tag k="natural" v="tree"/>
+  </node>
+  <way id="182384937">
+    <tag k="amenity" v="monastery"/>
+    <tag k="community" v="OSB"/>
+    <tag k="community:gender" v="male"/>
+    <tag k="denomination" v="catholic"/>
+    <tag k="heritage" v="4"/>
+    <tag k="historic" v="yes"/>
+    <tag k="landuse" v="residential"/>
+    <tag k="name" v="Monestir de Montserrat"/>
+    <tag k="name:ca" v="Monestir de Montserrat"/>
+    <tag k="name:cs" v="Klášter Montserrat"/>
+    <tag k="ref:ipac" v="16806"/>
+    <tag k="religion" v="christian"/>
+    <tag k="tourism" v="attraction"/>
+    <tag k="wikidata" v="Q771935"/>
+    <tag k="wikipedia" v="ca:Monestir de Montserrat"/>
+  </way>
+  <relation id="7642208">
+    <tag k="distance" v="24.6"/>
+    <tag k="name" v="Camí Ignasià Català 7: Montserrat - Manresa"/>
+    <tag k="name:ca" v="Camí Ignasià Català 7: Montserrat - Manresa"/>
+    <tag k="network" v="nwn"/>
+    <tag k="osmc:symbol" v="orange:orange:hiker"/>
+    <tag k="roundtrip" v="no"/>
+    <tag k="route" v="hiking"/>
+    <tag k="type" v="route"/>
+    <tag k="website" v="http://caminoignaciano.org/ca"/>
+    <tag k="wiki:symbol" v="CamiIgnasia.png"/>
+  </relation>
+
+</osm>

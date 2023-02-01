@@ -216,9 +216,11 @@ including:
    [`osmdata_sf()`](https://docs.ropensci.org/osmdata/reference/osmdata_sf.html);
 3. [R Spatial (sp)](https://cran.r-project.org/package=sp) format via
    [`osmdata_sp()`](https://docs.ropensci.org/osmdata/reference/osmdata_sp.html);
-   and
 4. [Silicate (SC)](https://github.com/hypertidy/silicate) format via
-   [`osmdata_sc()`](https://docs.ropensci.org/osmdata/reference/osmdata_sc.html).
+   [`osmdata_sc()`](https://docs.ropensci.org/osmdata/reference/osmdata_sc.html);
+   and
+5. `data.frame` format via
+   [`osmdata_data_frame()`](https://docs.ropensci.org/osmdata/reference/osmdata_data_frame.html).
 
 
 ### Additional Functionality {#additional}

@@ -16,6 +16,7 @@
     <tag k="stuff" v="yes"/>
     <tag k="junk" v="some"/>
     <tag k="name:ca" v="Ni idea"/>
+    <tag k="osm_id" v="Why to use this tag?"/>
     <!-- test comment for rapidxml.h tests -->
   </node>
   <node id="12" lat="3" lon="2"/>
@@ -53,6 +54,7 @@
     <tag k="highway" v="maybe"/>
     <tag k="name" v="blue&lt;this&gt;"/>
     <tag k="name:ca" v="No ho se pas"/>
+    <tag k="osm_id" v="Why to use this tag?"/>
   </way>
   <way id="102">
     <nd ref="19"/>
@@ -62,6 +64,7 @@
     <tag k="boat" v="yes"/>
     <tag k="name" v="River Thames"/>
     <tag k="name:ca" v="Riu Tàmesi"/>
+    <tag k="osm_id" v="Why to use this tag?"/>
   </way>
   <way id="103">
     <nd ref="16"/>
@@ -86,6 +89,7 @@
     <member type="way" ref="104" role="inner"/>
     <tag k="name" v="big loop"/>
     <tag k="name:ca" v="bucle gran"/>
+    <tag k="osm_id" v="Why to use this tag?"/>
     <tag k="type" v="multipolygon"/>
     <tag k="something" v="stuff&amp;junk&apos;andthenwhat"/>
   </relation>
@@ -95,6 +99,7 @@
     <member type="way" ref="102" role=""/>
     <tag k="name" v="big loop"/>
     <tag k="name:ca" v="bucle gran"/>
+    <tag k="osm_id" v="Why to use this tag?"/>
     <tag k="type" v="route"/>
     <tag k="something" v="stuff&apos;&quot;aa&quot;"/>
   </relation>

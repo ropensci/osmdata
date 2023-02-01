@@ -15,7 +15,7 @@ query.}
 
 \item{doc}{If missing, \code{doc} is obtained by issuing the overpass query,
 \code{q}, otherwise either the name of a file from which to read data,
-or an object of class \pkg{XML} returned from
+or an object of class \pkg{xml2} returned from
 \link{osmdata_xml}.}
 
 \item{quiet}{suppress status messages.}
