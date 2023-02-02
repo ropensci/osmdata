@@ -339,8 +339,13 @@ add_osm_feature <- function (opq,
         key, value, bind_key_pre$key_pre, bind_key_pre$bind,
         match_case, value_exact
     )
+    feature<- paste (feature, collapse = " ")
 
-    opq$features <- paste0 (c (opq$features, feature), collapse = "")
+    if (is.null (opq$features)) {
+        opq$features <- feature
+    } else {
+        opq$features <- paste (opq$features, feature)
+    }
 
     if (any (w <- !grepl("\\[(\\\"|~)", opq$features))) {
         warning(
@@ -527,19 +532,24 @@ add_osm_features <- function (opq,
                 key_exact = key_exact
             )
 
-        features <-
-            paste0 (
-                bind_key_pre$key_pre, '\"', names (features), '\"',
-                bind_key_pre$bind, '\"', features, '\"'
-            )
+        features <- mapply (function (key, value, key_pre, bind) {
+                paste_features (key, value, key_pre = key_pre, bind = bind,
+                    match_case = TRUE, value_exact = value_exact)
+            },
+            key = names (features), value = features,
+            key_pre = bind_key_pre$key_pre, bind = bind_key_pre$bind,
+            SIMPLIFY = FALSE
+        )
+        features <- as.character (features)
+
     }
 
     index <- which (!grepl ("^\\[", features))
-    features [index] <- paste0 (" [", features [index])
+    features [index] <- paste0 ("[", features [index])
     index <- which (!grepl ("\\]$", features))
     features [index] <- paste0 (features [index], "]")
 
-    opq$features <- features
+    opq$features <- unique (c (opq$features, features))
 
     opq
 }
