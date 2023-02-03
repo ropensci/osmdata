@@ -17,6 +17,7 @@
 
 - Downgraded `sp` from "Imports" to "Suggests"; thanks to @jmaspons (#302)
 - Improved `osm_osm_id()` to accept vectors of ids and types; thanks to @jmaspons (#268, #282, #283)
+- "get-osmdata.R" file now split into several smaller and more manageable files (#306, thanks to @jmaspons)
 
 0.1.10
 ===================
