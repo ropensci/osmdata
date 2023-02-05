@@ -214,7 +214,7 @@ test_that ("osmdata without query", {
         "q missing: osmdata object will not include query"
     )
     expect_message (
-         x_sc <- osmdata_sc (doc = doc, quiet = FALSE),
+        x_sc <- osmdata_sc (doc = doc, quiet = FALSE),
         "q missing: osmdata object will not include query"
     )
     expect_message (
