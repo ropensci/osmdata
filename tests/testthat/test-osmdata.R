@@ -197,12 +197,12 @@ test_that ("osmdata without query", {
 
     expect_silent ( x_sp <- osmdata_sp (doc = doc))
     expect_silent ( x_sf <- osmdata_sf (doc = doc))
-    # expect_silent ( x_sc <- osmdata_sc (doc = doc)) # fails without bbox
+    expect_silent ( x_sc <- osmdata_sc (doc = doc))
     expect_silent ( x_df <- osmdata_data_frame (doc = doc))
 
     expect_s3_class ( x_sp, "osmdata")
     expect_s3_class ( x_sf, "osmdata")
-    # expect_s3_class ( x_sc, "osmdata") # fails without bbox
+    expect_s3_class ( x_sc, c ("SC", "osmdata_sc"))
     expect_s3_class ( x_df, "data.frame")
 
     expect_message (
@@ -213,10 +213,10 @@ test_that ("osmdata without query", {
         x_sf <- osmdata_sf (doc = doc, quiet = FALSE),
         "q missing: osmdata object will not include query"
     )
-    # expect_message (
-    #      x_sc <- osmdata_sc (doc = doc, quiet = FALSE), # fails without bbox
-    #     "q missing: osmdata object will not include query"
-    # )
+    expect_message (
+         x_sc <- osmdata_sc (doc = doc, quiet = FALSE),
+        "q missing: osmdata object will not include query"
+    )
     expect_message (
         x_df <- osmdata_data_frame (doc = doc, quiet = FALSE),
         "q missing: osmdata object will not include query"
@@ -224,7 +224,7 @@ test_that ("osmdata without query", {
 
     expect_s3_class ( x_sp, "osmdata")
     expect_s3_class ( x_sf, "osmdata")
-    # expect_s3_class ( x_sc, "osmdata") # fails without bbox
+    expect_s3_class ( x_sc, c ("SC", "osmdata_sc"))
     expect_s3_class ( x_df, "data.frame")
 })
 

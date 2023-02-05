@@ -2,7 +2,7 @@
 #' `silicate` (`SC`) format.
 #'
 #' @inheritParams osmdata_sp
-#' @return An object of class `osmdata` representing the original OSM hierarchy
+#' @return An object of class `osmdata_sc` representing the original OSM hierarchy
 #'      of nodes, ways, and relations.
 #'
 #' @note The `silicate` format is currently highly experimental, and
@@ -80,7 +80,7 @@ osmdata_sc <- function (q, doc, quiet = TRUE) {
             obj$meta$bbox <- q$bbox
         }
     } else {
-        obj$meta$bbox <- bbox_to_string (obj)
+        obj$meta$bbox <- getbb_sc (obj)
     }
 
     attr (obj, "join_ramp") <- c (
@@ -96,6 +96,7 @@ osmdata_sc <- function (q, doc, quiet = TRUE) {
 
     return (obj)
 }
+
 
 getbb_sc <- function (x) {
 

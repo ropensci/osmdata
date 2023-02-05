@@ -21,7 +21,7 @@ or an object of class \pkg{xml2} returned from
 \item{quiet}{suppress status messages.}
 }
 \value{
-An object of class \code{osmdata} representing the original OSM hierarchy
+An object of class \code{osmdata_sc} representing the original OSM hierarchy
 of nodes, ways, and relations.
 }
 \description{
