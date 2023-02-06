@@ -4,11 +4,6 @@
 # small sample only. Post-process of features is done in the test call; tags are
 # done via separate fn defined below.
 
-test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
-    identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
-
-set_overpass_url ("https://overpass-api.de/api/interpreter")
-
 test_that ("available_features", {
 
     expect_error (available_features (1), "unused argument")

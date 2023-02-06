@@ -1,10 +1,5 @@
 has_internet <- curl::has_internet ()
 
-test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
-    identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
-
-set_overpass_url ("https://overpass-api.de/api/interpreter")
-
 test_that ("bbox", {
 
     expect_error (bbox_to_string (), "bbox must be provided")
