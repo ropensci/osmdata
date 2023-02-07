@@ -1,10 +1,5 @@
 has_internet <- curl::has_internet ()
 
-test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
-    identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
-
-set_overpass_url ("https://overpass-api.de/api/interpreter")
-
 test_that ("query-construction", {
 
     q0 <- opq (bbox = c (-0.12, 51.51, -0.11, 51.52))
@@ -325,21 +320,30 @@ test_that ("make_query", {
 
 test_that ("query-no-quiet", {
 
-    qry <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
+    qry <- opq (bbox = c (-0.116, 51.516, -0.115, 51.517))
     qry <- add_osm_feature (qry, key = "highway")
-    # switched off until mock results for httr2 reinstanted for #272
-    # expect_message (x <- osmdata_xml (qry, quiet = FALSE),
-    #                "Issuing query to Overpass API")
 
     if (test_all) {
-        # expect_message (x <- osmdata_sp (qry, quiet = FALSE),
-        #                "Issuing query to Overpass API")
-        # expect_message (x <- osmdata_sf (qry, quiet = FALSE),
-        #                "Issuing query to Overpass API")
-        # expect_message (x <- osmdata_sc (qry, quiet = FALSE),
-        #                "Issuing query to Overpass API")
-        # expect_message (x <- osmdata_data_frame (qry, quiet = FALSE),
-        #                "Issuing query to Overpass API")
+        with_mock_dir ("mock_osm_xml", {
+            expect_message (x <- osmdata_xml (qry, quiet = FALSE),
+                           "Issuing query to Overpass API")
+        })
+        with_mock_dir ("mock_osm_sp", {
+            expect_message (x <- osmdata_sp (qry, quiet = FALSE),
+                           "Issuing query to Overpass API")
+        })
+        with_mock_dir ("mock_osm_sf", {
+            expect_message (x <- osmdata_sf (qry, quiet = FALSE),
+                           "Issuing query to Overpass API")
+        })
+        with_mock_dir ("mock_osm_sc", {
+            expect_message (x <- osmdata_sc (qry, quiet = FALSE),
+                           "Issuing query to Overpass API")
+        })
+        with_mock_dir ("mock_osm_df", {
+            expect_message (x <- osmdata_data_frame (qry, quiet = FALSE),
+                           "Issuing query to Overpass API")
+        })
     }
 })
 

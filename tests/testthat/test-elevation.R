@@ -1,10 +1,5 @@
 has_internet <- curl::has_internet ()
 
-test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
-    identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
-
-set_overpass_url ("https://overpass-api.de/api/interpreter")
-
 test_that ("elevation", {
 
     # elevation can't actually be tested, because it only works with a full SRTM
