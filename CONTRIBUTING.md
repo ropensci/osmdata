@@ -17,7 +17,9 @@ as best practices for submitting pull requests
 
 The `osmdata` coding style diverges somewhat from [this commonly used R style
 guide](http://adv-r.had.co.nz/Style.html), primarily in the following two ways,
-both of which improve code readability: (1) All curly braces are vertically aligned:
+both of which improve code readability: (1) All curly braces are vertically
+aligned:
+
 ```r
 this <- function ()
 {
@@ -46,6 +48,23 @@ this <- function ()
 ```
 with a space between `function` and `()`. That's it.
 
+You can use `precommit::use_precommit()` to enforce this style with git commit 
+hooks as defined in `.pre-commit-config.yaml`. The first commit can be slow
+because the hooks have to be compiled and installed. To commit ignoring hooks,
+`git commit --no-verify`, or shortened version, `git commit -n`.
+
+## Maintenance
+
+To refresh the `README.md` file after modifying `README.Rmd`, use:
+```r
+devtools::build_readme(output_format="md_document")
+```
+
+When updating the package dependencies in `DESCRIPTION` or other metadata,
+refresh `codemeta.json`:
+```r
+codemetar::write_codemeta()
+```
 
 ## Code of Conduct
 
