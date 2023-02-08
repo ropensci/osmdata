@@ -51,7 +51,7 @@ with a space between `function` and `()`. That's it.
 You can use `precommit::use_precommit()` to enforce this style with git commit 
 hooks as defined in `.pre-commit-config.yaml`. The first commit can be slow
 because the hooks have to be compiled and installed. To commit ignoring hooks,
-`git commit --no-verify`.
+`git commit --no-verify`, or shortened version, `git commit -n`.
 
 ## Maintenance
 
