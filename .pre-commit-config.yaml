@@ -56,7 +56,7 @@ repos:
         language: fail
         files: '\.Rhistory|\.RData|\.Rds|\.rds$'
     -   id: description version
-        name: Version has been incremeneted in DESCRIPTION
+        name: Version has been incremented in DESCRIPTION
         entry: .hooks/description
         language: script
         # `exclude: <regex>` to allow committing specific files.
