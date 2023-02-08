@@ -27,12 +27,14 @@ area, (iv) a character string with a relation or a (closed) way id in
 the format \code{"way(id:1)"}, \code{"relation(id:1, 2)"} or \code{"relation(id:1, 2, 3); way(id:2)"} as returned by \code{getbb(..., format_out = "osm_type_id")}
 or \link{bbox_to_string} with a \code{data.frame} from \code{getbb(..., format_out = "data.frame")} to select all areas combined (relations and ways).}
 
-\item{nodes_only}{If \code{TRUE}, query OSM nodes only. Some OSM structures such
-as \code{place = "city"} or \code{highway = "traffic_signals"} are represented by
-nodes only. Queries are built by default to return all nodes, ways, and
-relation, but this can be very inefficient for node-only queries.
-Setting this value to \code{TRUE} for such cases makes queries more
-efficient, with data returned in the \code{osm_points} list item.}
+\item{nodes_only}{WARNING: this parameter is equivalent to
+\code{osm_types = "node"} and will be DEPRECATED. If \code{TRUE}, query OSM nodes
+only. Some OSM structures such as \code{place = "city"} or
+\code{highway = "traffic_signals"} are represented by nodes only. Queries are
+built by default to return all nodes, ways, and relation, but this can
+be very inefficient for node-only queries. Setting this value to \code{TRUE}
+for such cases makes queries more efficient, with data returned in the
+\code{osm_points} list item.}
 
 \item{osm_types}{A character vector with several OSM types to query: \code{node},
 \code{way} and \code{relation} is the default. \code{nwr}, \code{nw}, \code{wr}, \code{nr} and \code{rel}

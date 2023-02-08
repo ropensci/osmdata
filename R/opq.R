@@ -11,12 +11,14 @@
 #'      3); way(id:2)"` as returned by `getbb(..., format_out = "osm_type_id")`
 #'      or \link{bbox_to_string} with a `data.frame` from `getbb(..., format_out
 #'      = "data.frame")` to select all areas combined (relations and ways).
-#' @param nodes_only If `TRUE`, query OSM nodes only. Some OSM structures such
-#'      as `place = "city"` or `highway = "traffic_signals"` are represented by
-#'      nodes only. Queries are built by default to return all nodes, ways, and
-#'      relation, but this can be very inefficient for node-only queries.
-#'      Setting this value to `TRUE` for such cases makes queries more
-#'      efficient, with data returned in the `osm_points` list item.
+#' @param nodes_only WARNING: this parameter is equivalent to
+#'      `osm_types = "node"` and will be DEPRECATED. If `TRUE`, query OSM nodes
+#'      only. Some OSM structures such as `place = "city"` or
+#'      `highway = "traffic_signals"` are represented by nodes only. Queries are
+#'      built by default to return all nodes, ways, and relation, but this can
+#'      be very inefficient for node-only queries. Setting this value to `TRUE`
+#'      for such cases makes queries more efficient, with data returned in the
+#'      `osm_points` list item.
 #' @param osm_types A character vector with several OSM types to query: `node`,
 #'      `way` and `relation` is the default. `nwr`, `nw`, `wr`, `nr` and `rel`
 #'      are also valid types. Ignored if `nodes_only = TRUE`.
