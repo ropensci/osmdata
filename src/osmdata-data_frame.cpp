@@ -67,7 +67,7 @@ Rcpp::List osm_df::get_osm_relations (const Relations &rels,
         const UniqueVals &unique_vals)
 {
 
-    const unsigned int nmp = rels.size ();
+    const unsigned int nmp = static_cast <unsigned int> (rels.size ());
 
     size_t ncol = unique_vals.k_rel.size ();
     std::vector <std::string> rel_ids; 
