@@ -1,5 +1,10 @@
+0.2.0.00x (dev version)
+===================
+
 0.2.0
 ===================
+
+This release welcomes a new package author @jmaspons. The lists of changes here gives an overview of the amazing work he has contributed to this new major version.
 
 ## Major changes:
 
