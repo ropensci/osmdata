@@ -68,6 +68,10 @@ Rcpp::List osm_df::get_osm_relations (const Relations &rels,
 {
 
     const unsigned int nmp = static_cast <unsigned int> (rels.size ());
+    Rcpp::List res = Rcpp::List::create (R_NilValue, R_NilValue);
+    if (nmp == 0L) {
+        return res;
+    }
 
     size_t ncol = unique_vals.k_rel.size ();
     std::vector <std::string> rel_ids; 
@@ -97,18 +101,14 @@ Rcpp::List osm_df::get_osm_relations (const Relations &rels,
     }
 
     Rcpp::DataFrame kv_df;
-    Rcpp::List res = Rcpp::List::create (R_NilValue, R_NilValue);
 
-    if (nmp > 0)
-    {
-        kv_mat.attr ("dimnames") = Rcpp::List::create (rel_ids, unique_vals.k_rel);
-        kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
+    kv_mat.attr ("dimnames") = Rcpp::List::create (rel_ids, unique_vals.k_rel);
+    kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
 
-        meta.attr ("dimnames") = Rcpp::List::create (rel_ids, metanames);
+    meta.attr ("dimnames") = Rcpp::List::create (rel_ids, metanames);
 
-        res (0) = kv_df;
-        res (1) = meta;
-    }
+    res (0) = kv_df;
+    res (1) = meta;
 
     rel_ids.clear ();
 
@@ -131,6 +131,12 @@ Rcpp::List osm_df::get_osm_ways (
 {
 
     size_t nrow = way_ids.size (), ncol = unique_vals.k_way.size ();
+    Rcpp::List res = Rcpp::List::create (R_NilValue, R_NilValue);
+    if (nrow == 0L)
+    {
+        return res;
+    }
+
     std::vector <std::string> waynames;
     waynames.reserve (nrow);
 
@@ -160,19 +166,15 @@ Rcpp::List osm_df::get_osm_ways (
     }
 
     Rcpp::DataFrame kv_df = R_NilValue;
-    Rcpp::List res = Rcpp::List::create (R_NilValue, R_NilValue);
 
-    if (way_ids.size () > 0)
-    {
-        kv_mat.attr ("dimnames") = Rcpp::List::create (waynames, unique_vals.k_way);
-        if (kv_mat.nrow () > 0 && kv_mat.ncol () > 0)
-            kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
+    kv_mat.attr ("dimnames") = Rcpp::List::create (waynames, unique_vals.k_way);
+    if (kv_mat.nrow () > 0 && kv_mat.ncol () > 0)
+        kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
 
-        meta.attr ("dimnames") = Rcpp::List::create (waynames, metanames);
+    meta.attr ("dimnames") = Rcpp::List::create (waynames, metanames);
 
-        res (0) = kv_df;
-        res (1) = meta;
-    }
+    res (0) = kv_df;
+    res (1) = meta;
 
     waynames.clear ();
 
