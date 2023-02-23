@@ -1,4 +1,6 @@
-# CRAN notes for osmdata_0.2.0 submission
+# CRAN notes for osmdata_0.2.1 submission
+
+This submission fixes the two valgrind memleak errors from the previous submission. Both the uninitialised variable and possible memory leak errors were able to be precisely reproduced and fixed in this submission.
 
 ## Test environments
 
