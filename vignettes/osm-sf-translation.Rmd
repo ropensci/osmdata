@@ -19,7 +19,7 @@ vignette: >
 [OpenStreetMap (OSM)](https://www.openstreetmap.org/) data has a unique structure that
 is not directly reconcilable with other modes of representing spatial data,
 notably including the widely-adopted 
-[Simple Features (SF)](https://www.ogc.org/standards/sfa) 
+[Simple Features (SF)](https://www.ogc.org/standards/sfa/)
 scheme of the 
 [Open Geospatial Consortium (OGC)](https://www.ogc.org). 
 The three primary spatial objects of OSM are:
@@ -50,7 +50,7 @@ The three primary spatial objects of OSM are:
 ## 2. Simple Features Data Structure
 
 The representation of spatial objects as Simple Features is 
-[described at length by the OGC](https://www.ogc.org/standards/sfo),
+[described at length by the OGC](https://www.ogc.org/standards/sfo/),
 with this document merely reviewing relevant aspects. The SF system assumes that
 spatial features can be represented in one of seven distinct primary classes,
 which by convention are referred to in all capital letters.  Relevant classes

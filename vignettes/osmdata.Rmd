@@ -547,7 +547,7 @@ dat_sf <- osmdata_sf(q, 'buildings.osm')
 ### 3.2. The `osmdata_sf()` function
 
 `osmdata_sf()` returns OSM data in 
-[Simple Features (SF)](https://www.ogc.org/standards/sfo) 
+[Simple Features (SF)](https://www.ogc.org/standards/sfo/) 
 format, defined by the
 [Open Geospatial Consortium](https://www.ogc.org), and implemented in
 the `R` package [`sf`](https://cran.r-project.org/package=sf). This package
