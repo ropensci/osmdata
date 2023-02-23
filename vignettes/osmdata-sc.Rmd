@@ -43,7 +43,7 @@ consists of the following tables:
 
 The translation of the underlying OSM data structure -- consisting of nodes,
 way, and relations -- into 
-[Simple Features (SF)](https://www.ogc.org/standards/sfa/) via the
+[Simple Features (SF)](https://www.ogc.org/standard/sfa/) via the
 [`osmdata_sf()`](https://docs.ropensci.org/osmdata/reference/osmdata_sf.html)
 function is less than 100% faithful, and results in some representational loss
 compared with the original OSM structure (for details, see the [vignette on
