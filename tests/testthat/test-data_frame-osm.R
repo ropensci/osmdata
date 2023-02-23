@@ -68,8 +68,12 @@ test_that ("ways", {
 })
 
 test_that ("empty result", {
-    q0 <- getbb ("Països Catalans", featuretype = "relation") %>%
-        opq (nodes_only = TRUE, datetime = "1714-09-11T00:00:00Z") %>%
+    # bb <- getbb ("Països Catalans", featuretype = "relation")
+    bb <- rbind (c (-1.24, 8.42), c (28.03, 42.92))
+    rownames (bb) <- c ("x", "y")
+    colnames (bb) <- c ("min", "max")
+
+    q0 <- opq (bb, nodes_only = TRUE, datetime = "1714-09-11T00:00:00Z") %>%
         add_osm_feature ("does not exist", "&%$")
 
     osm_empty <- test_path ("fixtures", "osm-empty.osm")
@@ -97,8 +101,8 @@ test_that ("empty result", {
     expect_null (metaL$meta_no_call$query_type)
 
     # adiff
-    q0 <- getbb ("Països Catalans", featuretype = "relation") %>%
-        opq (nodes_only = TRUE, datetime = "1714-09-11T00:00:00Z", adiff = TRUE) %>%
+    # q0 <- getbb ("Països Catalans", featuretype = "relation") %>%
+    q0 <- opq (bb, nodes_only = TRUE, datetime = "1714-09-11T00:00:00Z", adiff = TRUE) %>%
         add_osm_feature ("does not exist", "&%$")
 
     # osm_empty <- test_path ("fixtures", "osm-empty.osm") # same result
@@ -155,8 +159,11 @@ test_that ("attributes", {
 })
 
 test_that ("date", {
-    q <- getbb ("Conflent", featuretype = "relation") %>%
-        opq (nodes_only = TRUE, datetime = "2020-11-07T00:00:00Z") %>%
+    # q <- getbb ("Conflent", featuretype = "relation")
+    bb <- rbind (c (2.01, 2.66), c (42.42, 42.71))
+    rownames (bb) <- c ("x", "y")
+    colnames (bb) <- c ("min", "max")
+    q <- opq (bb, nodes_only = TRUE, datetime = "2020-11-07T00:00:00Z") %>%
         add_osm_feature ("natural", "peak") %>%
         add_osm_feature ("prominence") %>%
         add_osm_feature ("name:ca")
@@ -193,11 +200,14 @@ test_that ("date", {
 })
 
 test_that ("out meta & diff", {
-    q <- getbb ("Conflent", featuretype = "relation") %>%
-        opq (
-            nodes_only = TRUE, out = "meta", datetime = "2020-11-07T00:00:00Z",
-            datetime2 = "2022-12-04T00:00:00Z"
-        ) %>%
+    # q <- getbb ("Conflent", featuretype = "relation") %>%
+    bb <- rbind (c (2.01, 2.66), c (42.42, 42.71))
+    rownames (bb) <- c ("x", "y")
+    colnames (bb) <- c ("min", "max")
+    q <- opq (bb, nodes_only = TRUE, out = "meta",
+        datetime = "2020-11-07T00:00:00Z",
+        datetime2 = "2022-12-04T00:00:00Z"
+    ) %>%
         add_osm_feature ("natural", "peak") %>%
         add_osm_feature ("prominence") %>%
         add_osm_feature ("name:ca")
@@ -235,11 +245,13 @@ test_that ("out meta & diff", {
 })
 
 test_that ("out meta & adiff", {
-    q <- getbb ("Conflent", featuretype = "relation") %>%
-        opq (
-            nodes_only = TRUE, out = "meta",
-            datetime = "2020-11-07T00:00:00Z", adiff = TRUE
-        ) %>%
+    # q <- getbb ("Conflent", featuretype = "relation") %>%
+    bb <- rbind (c (2.01, 2.66), c (42.42, 42.71))
+    rownames (bb) <- c ("x", "y")
+    colnames (bb) <- c ("min", "max")
+    q <- opq (bb, nodes_only = TRUE, out = "meta",
+        datetime = "2020-11-07T00:00:00Z", adiff = TRUE
+    ) %>%
         add_osm_feature ("natural", "peak") %>%
         add_osm_feature ("prominence") %>%
         add_osm_feature ("name:ca")
@@ -286,13 +298,15 @@ test_that ("out meta & adiff", {
 })
 
 test_that ("adiff2", {
-    q <- getbb ("Perpinyà", featuretype = "relation") %>%
-        opq (
-            nodes_only = TRUE,
-            datetime = "2012-11-07T00:00:00Z",
-            datetime2 = "2016-11-07T00:00:00Z",
-            adiff = TRUE
-        ) %>%
+    # q <- getbb ("Perpinyà", featuretype = "relation")
+    bb <- rbind (c (2.82, 2.98), c (42.65, 42.75))
+    rownames (bb) <- c ("x", "y")
+    colnames (bb) <- c ("min", "max")
+    q <- opq (bb, nodes_only = TRUE,
+        datetime = "2012-11-07T00:00:00Z",
+        datetime2 = "2016-11-07T00:00:00Z",
+        adiff = TRUE
+    ) %>%
         add_osm_feature ("amenity", "restaurant")
 
     osm_adiff2 <- test_path ("fixtures", "osm-adiff2.osm")
