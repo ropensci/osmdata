@@ -1,5 +1,13 @@
-0.2.0.00x (dev version)
+0.2.1
 ===================
+
+## Major changes:
+
+- Very soft deprecation of `nodes_only` parameter in `opq` (#308, #312).
+
+## Minor changes
+
+- Couple of minor memory leak bug fixes in `osmdata_data_frame` C++ code.
 
 0.2.0
 ===================
@@ -16,7 +24,6 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - Fix key modifications for non-valid column names and handle duplicated column names in `osmdata_*` functions; by @jmaspons (#303)
 - @elipousson is new package contributor, thanks to the above work.
 - @jmaspons is new package author, thanks to #285 (plus most of the above, and a whole lot more!)
-- Very soft deprecation of `nodes_only` parameter in `opq` (#308, #312).
 
 ## Minor changes:
 
