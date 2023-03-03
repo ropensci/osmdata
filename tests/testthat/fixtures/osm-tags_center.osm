@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API 0.7.59.2 0994154d">
+  <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+  <meta osm_base="2023-03-02T17:46:46Z"/>
+  <node id="4282036572" lat="41.1169240" lon="1.2572857">
+    <tag k="addr:city" v="Tarragona"/>
+    <tag k="addr:housenumber" v="11"/>
+    <tag k="addr:street" v="Carrer de la Nau"/>
+    <tag k="amenity" v="community_centre"/>
+    <tag k="name" v="Casal Popular Sageta de Foc"/>
+    <tag k="website" v="http://sagetadefoc.cat/"/>
+  </node>
+  <node id="4602971125" lat="41.6227940" lon="0.6184314">
+    <tag k="addr:postcode" v="25008"/>
+    <tag k="addr:street" v="Carrer de Tamarit de Llitera"/>
+    <tag k="amenity" v="community_centre"/>
+    <tag k="name" v="Llar Municipal El Pilar"/>
+    <tag k="name:ca" v="Llar Municipal El Pilar"/>
+  </node>
+  <node id="4629862816" lat="41.6249866" lon="0.6225930">
+    <tag k="amenity" v="community_centre"/>
+    <tag k="name" v="Col·legi Oficial d'Enginyers Tècnics Agrícoles"/>
+    <tag k="name:ca" v="Col·legi Oficial d'Enginyers Tècnics Agrícoles"/>
+  </node>
+  <way id="274271923">
+    <center lat="41.1171598" lon="1.2586268"/>
+    <tag k="amenity" v="community_centre"/>
+    <tag k="building" v="civic"/>
+    <tag k="name" v="Xiquets de Tarragona"/>
+    <tag k="name:ca" v="Xiquets de Tarragona"/>
+    <tag k="sport" v="castells"/>
+    <tag k="website" v="http://www.xiquetsdetarragona.cat/"/>
+    <tag k="wikidata" v="Q11955410"/>
+    <tag k="wikipedia" v="ca:Xiquets de Tarragona"/>
+  </way>
+  <way id="274282040">
+    <center lat="41.1162778" lon="1.2567148"/>
+    <tag k="amenity" v="community_centre"/>
+    <tag k="building" v="civic"/>
+    <tag k="name" v="Colla Jove Xiquets de Tarragona"/>
+    <tag k="sport" v="castells"/>
+    <tag k="website" v="http://www.collajove.cat"/>
+    <tag k="wikidata" v="Q11914600"/>
+    <tag k="wikipedia" v="ca:Colla Jove Xiquets de Tarragona"/>
+  </way>
+  <way id="311179562">
+    <center lat="41.1562828" lon="1.1097734"/>
+    <tag k="amenity" v="community_centre"/>
+    <tag k="building" v="civic"/>
+    <tag k="name" v="Casal Despertaferro"/>
+  </way>
+  <way id="756481236">
+    <center lat="41.6178669" lon="0.6225143"/>
+    <tag k="amenity" v="community_centre"/>
+    <tag k="building" v="civic"/>
+    <tag k="community_centre" v="cultural_centre"/>
+    <tag k="name" v="Orfeó lleidatà"/>
+    <tag k="name:ca" v="Orfeó lleidatà"/>
+  </way>
+  <way id="1076573636">
+    <center lat="41.1104278" lon="1.2434245"/>
+    <tag k="addr:city" v="Tarragona"/>
+    <tag k="amenity" v="community_centre"/>
+    <tag k="building" v="civic"/>
+    <tag k="name" v="Local assaig Colla Xiquets del Serrallo"/>
+    <tag k="sport" v="castells"/>
+    <tag k="wikidata" v="Q11955412"/>
+    <tag k="wikipedia" v="ca:Xiquets del Serrallo"/>
+  </way>
+  <relation id="5416254">
+    <center lat="42.1347037" lon="-0.4061089"/>
+    <tag k="addr:housenumber" v="51"/>
+    <tag k="addr:postcode" v="22002"/>
+    <tag k="addr:street" v="Calle del Padre Huesca"/>
+    <tag k="amenity" v="community_centre"/>
+    <tag k="building" v="yes"/>
+    <tag k="building:colour" v="#d4bf95"/>
+    <tag k="building:levels" v="2"/>
+    <tag k="building:material" v="plaster"/>
+    <tag k="community_centre:for" v="juvenile"/>
+    <tag k="name" v="Espacio ZETA"/>
+    <tag k="old_name" v="Antiguo Cuartel de la Merced"/>
+    <tag k="operator" v="Ayuntamiento de Huesca"/>
+    <tag k="roof:material" v="roof_tiles"/>
+    <tag k="roof:shape" v="gabled"/>
+    <tag k="type" v="multipolygon"/>
+  </relation>
+</osm>

@@ -221,6 +221,36 @@ test_that ("date", {
     expect_null (meta_l$meta_no_call$query_type)
 })
 
+test_that ("out tags center", {
+    # q <- getbb ("Franja de Ponent", featuretype = "relation") %>%
+    bb <- rbind (c (-0.73, 1.27), c (40.63, 42.63))
+    rownames (bb) <- c ("x", "y")
+    colnames (bb) <- c ("min", "max")
+    q <- opq (bb, out = "tags center") %>%
+        add_osm_feature ("amenity", "community_center") #%>%
+        # add_osm_feature ("prominence") %>%
+        # add_osm_feature ("name:ca")
+
+    osm_tags_center <- test_path ("fixtures", "osm-tags_center.osm")
+    doc <- xml2::read_xml (osm_tags_center)
+
+    expect_silent (x <- osmdata_data_frame (opq_string_intern (q), doc))
+    expect_silent ( x_no_call <- osmdata_data_frame (doc = doc))
+
+    cols <- c (
+        "osm_type", "osm_id", "osm_center_lat", "osm_center_lon", "addr:city",
+        "addr:housenumber", "addr:postcode", "addr:street", "amenity",
+        "building", "building:colour", "building:levels", "building:material",
+        "community_centre", "community_centre:for", "name", "name:ca",
+        "old_name", "operator", "roof:material", "roof:shape", "sport", "type",
+        "website", "wikidata", "wikipedia"
+    )
+    expect_named (x, cols)
+    expect_named (x_no_call, cols)
+    expect_s3_class (x, "data.frame")
+    expect_s3_class (x_no_call, "data.frame")
+})
+
 test_that ("out meta & diff", {
     # q <- getbb ("Conflent", featuretype = "relation") %>%
     bb <- rbind (c (2.01, 2.66), c (42.42, 42.71))

@@ -66,6 +66,7 @@ const std::string wkt =
     ID[\"EPSG\",4326]]";
 
 const Rcpp::CharacterVector metanames = {"_version", "_timestamp", "_changeset", "_uid", "_user"};
+const Rcpp::CharacterVector centernames = {"_lat", "_lon"};
 
 /************************************************************************
  ************************************************************************
@@ -262,6 +263,9 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                 way._timestamp = rway._timestamp;
                 way._uid = rway._uid;
                 way._user = rway._user;
+                // center:
+                way._lat = rway._lat;
+                way._lon = rway._lon;
 
                 // Then copy nodes from rway to way.
                 way.nodes.swap (rway.nodes);
@@ -314,6 +318,9 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                 relation._timestamp = rrel._timestamp;
                 relation._uid = rrel._uid;
                 relation._user = rrel._user;
+                // center:
+                relation._lat = rrel._lat;
+                relation._lon = rrel._lon;
 
                 m_relations.push_back (relation);
             }
@@ -384,6 +391,10 @@ inline void XmlData::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
             rrel._uid = it->value();
         else if (!strcmp (it->name(), "user"))
             rrel._user = it->value();
+        else if (!strcmp (it->name(), "lat"))
+            rrel._lat = it->value();
+        else if (!strcmp (it->name(), "lon"))
+            rrel._lon = it->value();
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
@@ -424,6 +435,10 @@ inline void XmlData::traverseWay (XmlNodePtr pt, RawWay& rway)
             rway._uid = it->value();
         else if (!strcmp (it->name(), "user"))
             rway._user = it->value();
+        else if (!strcmp (it->name(), "lat"))
+            rway._lat = it->value();
+        else if (!strcmp (it->name(), "lon"))
+            rway._lon = it->value();
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())

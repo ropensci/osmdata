@@ -121,6 +121,7 @@ struct RawWay
 {
     osmid_t id;
     std::string _version, _timestamp, _changeset, _uid, _user; // metadata
+    std::string _lat, _lon; // center
     std::vector <std::string> key, value;
     std::vector <osmid_t> nodes;
 };
@@ -129,6 +130,7 @@ struct OneWay
 {
     osmid_t id;
     std::string _version, _timestamp, _changeset, _uid, _user; // metadata
+    std::string _lat, _lon; // center
     std::map <std::string, std::string> key_val;
     std::vector <osmid_t> nodes;
 };
@@ -139,6 +141,7 @@ struct RawRelation
     osmid_t id;
     std::string member_type;
     std::string _version, _timestamp, _changeset, _uid, _user; // metadata
+    std::string _lat, _lon; // center
     // APS would (key,value) be better in a std::map?
     std::vector <std::string> key, value, role_node, role_way, role_relation;
     std::vector <osmid_t> nodes;
@@ -152,6 +155,7 @@ struct Relation
     osmid_t id;
     std::string rel_type;
     std::string _version, _timestamp, _changeset, _uid, _user; // metadata
+    std::string _lat, _lon; // center
     std::map <std::string, std::string> key_val;
     // Relations may have nodes as members, but these are not used here.
     std::vector <std::pair <osmid_t, std::string> > nodes; // str = role

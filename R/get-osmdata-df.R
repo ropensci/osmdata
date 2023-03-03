@@ -77,9 +77,18 @@ osmdata_data_frame <- function (q,
             df <- unique (df)
         }
     }
+
+    if (!is.null (obj$overpass_call) &&
+        !grepl (" center;$", obj$overpass_call)
+    ) {
+        df[, c ("osm_center_lat", "osm_center_lon")] <- NULL
+    }
+
     attr (df, "bbox") <- obj$bbox
     attr (df, "overpass_call") <- obj$overpass_call
     attr (df, "meta") <- obj$meta
+
+
 
     return (df)
 }
@@ -112,10 +121,22 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
         return (out)
     }, i = res[1:3], k = keysL, SIMPLIFY = FALSE)
 
+    center <- lapply (c ("points", "ways", "rels"), function (type) {
+        get_center_from_cpp_output (res, type)
+    })
+    missing_center <- vapply (center, function (x) {
+        ncol (x) == 0 & nrow (x) > 0
+    }, FUN.VALUE = logical (1))
+    if (any (missing_center)) { # not a "out * center;" query
+        center <- lapply (center, function (x) {
+            x[, c ("osm_center_lat", "osm_center_lon")] <- NULL
+            x
+        })
+    }
+
     meta <- lapply (c ("points", "ways", "rels"), function (type) {
         get_meta_from_cpp_output (res, type)
     })
-    metaCols<- unique (unlist (lapply (meta, names)))
 
     df <- lapply(1:3, function (i) {
         osm_type <- if (nrow (res[[i]]) > 0) {
@@ -126,6 +147,7 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
         data.frame(
             osm_type,
             osm_id = rownames (res[[i]]),
+            center[[i]],
             meta[[i]],
             tags[[i]],
             stringsAsFactors = stringsAsFactors,
