@@ -1,6 +1,9 @@
 0.2.1.00x (dev version)
 ===================
 
+## Major changes:
+
+- `osmdata_data_frame` adds columns `osm_center_lat` and `osm_center_lon` for `out * center;` queries (#316).
 
 0.2.1
 ===================
