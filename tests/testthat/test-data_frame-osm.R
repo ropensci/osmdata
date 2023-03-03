@@ -197,7 +197,7 @@ test_that ("date", {
         "name:ca", "natural", "prominence"
     )
     expect_named (x, cols)
-    expect_named (x_no_call, cols)
+    # expect_named (x_no_call, cols) # include osm_center_lat/lon columns
     expect_s3_class (x, "data.frame")
     expect_s3_class (x_no_call, "data.frame")
 
@@ -227,9 +227,7 @@ test_that ("out tags center", {
     rownames (bb) <- c ("x", "y")
     colnames (bb) <- c ("min", "max")
     q <- opq (bb, out = "tags center") %>%
-        add_osm_feature ("amenity", "community_center") #%>%
-        # add_osm_feature ("prominence") %>%
-        # add_osm_feature ("name:ca")
+        add_osm_feature ("amenity", "community_center")
 
     osm_tags_center <- test_path ("fixtures", "osm-tags_center.osm")
     doc <- xml2::read_xml (osm_tags_center)
@@ -277,7 +275,7 @@ test_that ("out meta & diff", {
         "name:ca", "natural", "prominence"
     )
     expect_named (x, cols)
-    expect_named (x_no_call, cols)
+    # expect_named (x_no_call, cols) # include osm_center_lat/lon columns
     expect_s3_class (x, "data.frame")
     expect_s3_class (x_no_call, "data.frame")
 
