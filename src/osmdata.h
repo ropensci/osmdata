@@ -392,9 +392,9 @@ inline void XmlData::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
         else if (!strcmp (it->name(), "user"))
             rrel._user = it->value();
         else if (!strcmp (it->name(), "lat"))
-            rrel._lat = it->value();
+            rrel._lat = std::stod(it->value());
         else if (!strcmp (it->name(), "lon"))
-            rrel._lon = it->value();
+            rrel._lon = std::stod(it->value());
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
@@ -436,9 +436,9 @@ inline void XmlData::traverseWay (XmlNodePtr pt, RawWay& rway)
         else if (!strcmp (it->name(), "user"))
             rway._user = it->value();
         else if (!strcmp (it->name(), "lat"))
-            rway._lat = it->value();
+            rway._lat = std::stod(it->value());
         else if (!strcmp (it->name(), "lon"))
-            rway._lon = it->value();
+            rway._lon = std::stod(it->value());
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())

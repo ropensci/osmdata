@@ -81,8 +81,8 @@ Rcpp::List osm_df::get_osm_relations (const Relations &rels,
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
     Rcpp::CharacterMatrix meta (Rcpp::Dimension (nmp, 5L));
     std::fill (meta.begin (), meta.end (), NA_STRING);
-    Rcpp::CharacterMatrix center (Rcpp::Dimension (nmp, 2L));
-    std::fill (center.begin (), center.end (), NA_STRING);
+    Rcpp::NumericMatrix center (Rcpp::Dimension (nmp, 2L));
+    std::fill (center.begin (), center.end (), NA_REAL);
 
     unsigned int count = 0;
 
@@ -151,8 +151,8 @@ Rcpp::List osm_df::get_osm_ways (
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
     Rcpp::CharacterMatrix meta (Rcpp::Dimension (nrow, 5L));
     std::fill (meta.begin (), meta.end (), NA_STRING);
-    Rcpp::CharacterMatrix center (Rcpp::Dimension (nrow, 2L));
-    std::fill (center.begin (), center.end (), NA_STRING);
+    Rcpp::NumericMatrix center (Rcpp::Dimension (nrow, 2L));
+    std::fill (center.begin (), center.end (), NA_REAL);
 
     unsigned int count = 0;
     for (auto wi = way_ids.begin (); wi != way_ids.end (); ++wi)
@@ -213,8 +213,8 @@ Rcpp::List osm_df::get_osm_nodes (const Nodes &nodes,
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
     Rcpp::CharacterMatrix meta (Rcpp::Dimension (nrow, 5L));
     std::fill (meta.begin (), meta.end (), NA_STRING);
-    Rcpp::CharacterMatrix center (Rcpp::Dimension (nrow, 2L));
-    std::fill (center.begin (), center.end (), NA_STRING);
+    Rcpp::NumericMatrix center (Rcpp::Dimension (nrow, 2L));
+    std::fill (center.begin (), center.end (), NA_REAL);
 
     const size_t n = nodes.size ();
     std::vector <std::string> ptnames;
@@ -298,7 +298,7 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
 
     Rcpp::DataFrame kv_rels, kv_df_ways, kv_df_points;
     Rcpp::CharacterMatrix meta_rels, meta_ways, meta_nodes;
-    Rcpp::CharacterMatrix center_rels, center_ways, center_nodes;
+    Rcpp::NumericMatrix center_rels, center_ways, center_nodes;
 
     /* --------------------------------------------------------------
      * 1. Extract OSM Relations
@@ -309,7 +309,7 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
     {
         kv_rels = Rcpp::as <Rcpp::DataFrame> (data_rels (0));
         meta_rels = Rcpp::as <Rcpp::CharacterMatrix> (data_rels (1));
-        center_rels = Rcpp::as <Rcpp::CharacterMatrix> (data_rels (2));
+        center_rels = Rcpp::as <Rcpp::NumericMatrix> (data_rels (2));
     }
 
     /* --------------------------------------------------------------
@@ -327,7 +327,7 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
     {
         kv_df_ways = Rcpp::as <Rcpp::DataFrame> (data_ways (0));
         meta_ways = Rcpp::as <Rcpp::CharacterMatrix> (data_ways (1));
-        center_ways = Rcpp::as <Rcpp::CharacterMatrix> (data_ways (2));
+        center_ways = Rcpp::as <Rcpp::NumericMatrix> (data_ways (2));
     }
 
     /* --------------------------------------------------------------
@@ -339,7 +339,7 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
     {
         kv_df_points = Rcpp::as <Rcpp::DataFrame> (data_nodes (0));
         meta_nodes = Rcpp::as <Rcpp::CharacterMatrix> (data_nodes (1));
-        center_nodes = Rcpp::as <Rcpp::CharacterMatrix> (data_nodes (2));
+        center_nodes = Rcpp::as <Rcpp::NumericMatrix> (data_nodes (2));
     }
 
     /* --------------------------------------------------------------
