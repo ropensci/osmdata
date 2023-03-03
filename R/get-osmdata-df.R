@@ -88,8 +88,6 @@ osmdata_data_frame <- function (q,
     attr (df, "overpass_call") <- obj$overpass_call
     attr (df, "meta") <- obj$meta
 
-
-
     return (df)
 }
 
