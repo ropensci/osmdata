@@ -16,8 +16,8 @@
  *  You should have received a copy of the GNU General Public License along with
  *  osmdata.  If not, see <https://www.gnu.org/licenses/>.
  *
- *  Author:     Mark Padgham 
- *  E-Mail:     mark.padgham@email.com 
+ *  Author:     Mark Padgham
+ *  E-Mail:     mark.padgham@email.com
  *
  *  Description:    Modified version of 'osmdata-sf' to extract OSM data from an
  *                  object of class XmlData and return it in Rcpp::List format,
@@ -39,7 +39,7 @@
 #include <string>
 
 // Note: This code uses explicit index counters within most loops which use Rcpp
-// objects, because these otherwise require a 
+// objects, because these otherwise require a
 // static_cast <size_t> (std::distance (...)). This operation copies each
 // instance and can slow the loops down by several orders of magnitude!
 
@@ -61,9 +61,9 @@
 //'       unique IDs and keys for each kind of OSM object (nodes, ways, rels).
 //'
 //' @return A dual Rcpp::DataFrame with the tags and metadata of the relations.
-//' 
-//' @noRd 
-Rcpp::List osm_df::get_osm_relations (const Relations &rels, 
+//'
+//' @noRd
+Rcpp::List osm_df::get_osm_relations (const Relations &rels,
         const UniqueVals &unique_vals)
 {
 
@@ -74,7 +74,7 @@ Rcpp::List osm_df::get_osm_relations (const Relations &rels,
     }
 
     size_t ncol = unique_vals.k_rel.size ();
-    std::vector <std::string> rel_ids; 
+    std::vector <std::string> rel_ids;
     rel_ids.reserve (nmp);
 
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nmp, ncol));
@@ -130,8 +130,8 @@ Rcpp::List osm_df::get_osm_relations (const Relations &rels,
 //' @param way_ids Vector of <osmid_t> IDs of ways to trace
 //' @param ways Pointer to all ways in data set
 //' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
-//' 
-//' @noRd 
+//'
+//' @noRd
 Rcpp::List osm_df::get_osm_ways (
         const std::set <osmid_t> &way_ids, const Ways &ways,
         const UniqueVals &unique_vals)
@@ -202,8 +202,8 @@ Rcpp::List osm_df::get_osm_ways (
 //' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
 //' @param nodes Pointer to all nodes in data set
 //' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
-//' 
-//' @noRd 
+//'
+//' @noRd
 Rcpp::List osm_df::get_osm_nodes (const Nodes &nodes,
         const UniqueVals &unique_vals)
 {
@@ -284,8 +284,8 @@ Rcpp::List osm_df::get_osm_nodes (const Nodes &nodes,
 //'
 //' @param st Text contents of an overpass API query
 //' @return Rcpp::List objects of OSM data
-//' 
-//' @noRd 
+//'
+//' @noRd
 // [[Rcpp::export]]
 Rcpp::List rcpp_osmdata_df (const std::string& st)
 {
