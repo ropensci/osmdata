@@ -877,10 +877,20 @@ opq_string_intern <- function (opq, quiet = TRUE) {
 
         } else {
 
+            types_features <- expand.grid (
+                osm_types=opq$osm_types,
+                features=features,
+                stringsAsFactors = FALSE
+            )
+
             if (!map_to_area) {
                 features <-  c (sprintf ("  %s %s (%s);\n",
-                                         opq$osm_types, features, opq$bbox)
+                                         types_features$osm_types,
+                                         types_features$features,
+                                         opq$bbox
+                                )
                 )
+
             } else {
                 opq$prefix <- gsub ("\n$", "", opq$prefix)
                 search_area <- paste0 (
@@ -889,7 +899,10 @@ opq_string_intern <- function (opq, quiet = TRUE) {
                 )
                 features <- c (
                     search_area,
-                    sprintf ("  %s %s (area.searchArea);\n", opq$osm_types, features)
+                    sprintf ("  %s %s (area.searchArea);\n",
+                             types_features$osm_types,
+                             types_features$features
+                    )
                 )
             }
         }
