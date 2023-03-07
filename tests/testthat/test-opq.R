@@ -121,18 +121,35 @@ test_that ("osm_types", {
     )
     expect_true ("nwr" == q1$osm_types)
 
+    features <- c (
+        "\"amenity\"=\"school\"",
+        "\"amenity\"=\"kindergarten\"",
+        "\"amenity\"=\"music_school\"",
+        "\"amenity\"=\"language_school\"",
+        "\"amenity\"=\"dancing_school\""
+    )
+    q2 <- opq ("Catalunya") %>%
+        add_osm_features(features = features)
+    s <- opq_string (q2)
+
+    n_fts <- length (features)
+    n_fts_in_query <- length (gregexpr ("amenity", s) [[1]])
+    # Query should have that number repeated for each osm_types (default to
+    # node, way, relation):
+    expect_equal (n_fts_in_query, n_fts * length(q2$osm_types))
+
     # nodes_only
-    q2 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), nodes_only = TRUE)
+    q3 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), nodes_only = TRUE)
     expect_silent (
-        q3 <- opq (
+        q4 <- opq (
             bbox = c (-0.118, 51.514, -0.115, 51.517),
             nodes_only = TRUE,
             osm_types = "blah" # ignored if nodes_only == TRUE
         )
     )
 
-    expect_identical (q2, q3)
-    expect_true (q3$osm_types == "node")
+    expect_identical (q3, q4)
+    expect_true (q4$osm_types == "node")
 })
 
 test_that ("out", {
