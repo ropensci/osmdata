@@ -1,6 +1,9 @@
 0.2.1.00x (dev version)
 ===================
 
+## Minor changes
+
+- Fix queries with !match_case and only one value (#317)
 
 0.2.1
 ===================
