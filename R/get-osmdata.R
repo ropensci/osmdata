@@ -308,7 +308,7 @@ get_meta_from_cpp_output <- function (res, what = "points") {
 get_center_from_cpp_output <- function (res, what = "points") {
 
     this <- res [[paste0 (what, "_center")]]
-    has_data <- apply (this, 2, function (i) any (nzchar (i)))
+    has_data <- apply (this, 2, function (i) any (!is.na (i)))
     this <- this [, which (has_data), drop = FALSE]
     if (ncol (this) > 0L) {
         colnames (this) <- paste0 ("osm_center", colnames (this))
