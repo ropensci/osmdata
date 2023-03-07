@@ -3,6 +3,7 @@
 
 ## Minor changes
 
+- Fix queries with !match_case and only one value (#317)
 - Fix queries with multiple features & multiple osm_types (#318)
 
 0.2.1
