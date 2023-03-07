@@ -210,7 +210,7 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 
     } else {
 
-        if (length (value) > 1) {
+        if (length (value) > 1 || !match_case) {
 
             # convert to OR'ed regex:
             value <- paste (value, collapse = "|")
