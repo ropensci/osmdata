@@ -227,7 +227,7 @@ test_that ("out tags center", {
     rownames (bb) <- c ("x", "y")
     colnames (bb) <- c ("min", "max")
     q <- opq (bb, out = "tags center") %>%
-        add_osm_feature ("amenity", "community_center")
+        add_osm_feature ("amenity", "community_centre")
 
     osm_tags_center <- test_path ("fixtures", "osm-tags_center.osm")
     doc <- xml2::read_xml (osm_tags_center)
