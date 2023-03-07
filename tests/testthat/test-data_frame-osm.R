@@ -247,6 +247,10 @@ test_that ("out tags center", {
     expect_named (x_no_call, cols)
     expect_s3_class (x, "data.frame")
     expect_s3_class (x_no_call, "data.frame")
+    expect_type (x$osm_center_lat, "double")
+    expect_type (x$osm_center_lon, "double")
+    expect_true (!any (is.na (x$osm_center_lat)))
+    expect_true (!any (is.na (x$osm_center_lon)))
 })
 
 test_that ("out meta & diff", {
