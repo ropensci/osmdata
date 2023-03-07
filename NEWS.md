@@ -1,6 +1,9 @@
 0.2.1.00x (dev version)
 ===================
 
+## Minor changes
+
+- Fix queries with multiple features & multiple osm_types (#318)
 
 0.2.1
 ===================
