@@ -296,3 +296,23 @@ get_meta_from_cpp_output <- function (res, what = "points") {
 
     return (as.data.frame (this))
 }
+
+
+#' Extract the center matrices from `rcpp_osmdata_df` output,
+#' convert to df, and return only columns with data.
+#'
+#' The "center" components returns from `rcpp_osmdata_df()` are all named with
+#' underscore prefixes. These are prepended here with "osm_center" to provide
+#' standardised names.
+#' @noRd
+get_center_from_cpp_output <- function (res, what = "points") {
+
+    this <- res [[paste0 (what, "_center")]]
+    has_data <- apply (this, 2, function (i) any (!is.na (i)))
+    this <- this [, which (has_data), drop = FALSE]
+    if (ncol (this) > 0L) {
+        colnames (this) <- paste0 ("osm_center", colnames (this))
+    }
+
+    return (as.data.frame (this))
+}

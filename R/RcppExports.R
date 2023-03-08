@@ -10,8 +10,8 @@
 #'       unique IDs and keys for each kind of OSM object (nodes, ways, rels).
 #'
 #' @return A dual Rcpp::DataFrame with the tags and metadata of the relations.
-#' 
-#' @noRd 
+#'
+#' @noRd
 NULL
 
 #' get_osm_ways
@@ -22,8 +22,8 @@ NULL
 #' @param way_ids Vector of <osmid_t> IDs of ways to trace
 #' @param ways Pointer to all ways in data set
 #' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
-#' 
-#' @noRd 
+#'
+#' @noRd
 NULL
 
 #' get_osm_nodes
@@ -33,8 +33,8 @@ NULL
 #' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
 #' @param nodes Pointer to all nodes in data set
 #' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
-#' 
-#' @noRd 
+#'
+#' @noRd
 NULL
 
 #' rcpp_osmdata_df
@@ -44,8 +44,8 @@ NULL
 #'
 #' @param st Text contents of an overpass API query
 #' @return Rcpp::List objects of OSM data
-#' 
-#' @noRd 
+#'
+#' @noRd
 rcpp_osmdata_df <- function(st) {
     .Call(`_osmdata_rcpp_osmdata_df`, st)
 }
@@ -133,8 +133,8 @@ rcpp_osmdata_sf <- function(st) {
 #' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
 #' @param bbox Pointer to the bbox needed for `sf` construction
 #' @param crs Pointer to the crs needed for `sf` construction
-#' 
-#' @noRd 
+#'
+#' @noRd
 NULL
 
 #' get_osm_ways
@@ -150,8 +150,8 @@ NULL
 #' @param geom_type Character string specifying "POLYGON" or "LINESTRING"
 #' @param bbox Pointer to the bbox needed for `sf` construction
 #' @param crs Pointer to the crs needed for `sf` construction
-#' 
-#' @noRd 
+#'
+#' @noRd
 NULL
 
 #' get_osm_relations
@@ -168,8 +168,8 @@ NULL
 #'
 #' @return A dual Rcpp::List, the first of which contains the multipolygon
 #'         relations; the second the multilinestring relations.
-#' 
-#' @noRd 
+#'
+#' @noRd
 NULL
 
 #' rcpp_osmdata_sp
@@ -178,8 +178,8 @@ NULL
 #'
 #' @param st Text contents of an overpass API query
 #' @return A \code{SpatialLinesDataFrame} contains all polygons and associated data
-#' 
-#' @noRd 
+#'
+#' @noRd
 rcpp_osmdata_sp <- function(st) {
     .Call(`_osmdata_rcpp_osmdata_sp`, st)
 }

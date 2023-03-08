@@ -31,6 +31,7 @@
 #pragma once
 
 #include "rapidxml.h"
+#include <Rcpp.h> // Only for 'NA_REAL'
 
 // APS not good pratice to have all the headers included here, adds to compile time
 // better to #include as and where needed, ideally in source rather than headers,
@@ -102,7 +103,7 @@ struct RawNode
     osmid_t id;
     std::string _version = "", _timestamp = "", _changeset = "", _uid = "", _user = ""; // metadata
     std::vector <std::string> key, value;
-    double lat = DOUBLE_MAX, lon = DOUBLE_MAX;
+    double lat = NA_REAL, lon = NA_REAL;
 };
 
 struct Node
@@ -110,7 +111,7 @@ struct Node
     osmid_t id;
     std::string _version = "", _timestamp = "", _changeset = "", _uid = "", _user = ""; // metadata
     std::map <std::string, std::string> key_val;
-    double lat = DOUBLE_MAX, lon = DOUBLE_MAX;
+    double lat = NA_REAL, lon = NA_REAL;
 };
 
 /* Traversing the XML tree means keys and values are read sequentially and
@@ -121,6 +122,7 @@ struct RawWay
 {
     osmid_t id;
     std::string _version, _timestamp, _changeset, _uid, _user; // metadata
+    double _lat = NA_REAL, _lon = NA_REAL; // center
     std::vector <std::string> key, value;
     std::vector <osmid_t> nodes;
 };
@@ -129,6 +131,7 @@ struct OneWay
 {
     osmid_t id;
     std::string _version, _timestamp, _changeset, _uid, _user; // metadata
+    double _lat = NA_REAL, _lon = NA_REAL; // center
     std::map <std::string, std::string> key_val;
     std::vector <osmid_t> nodes;
 };
@@ -139,6 +142,7 @@ struct RawRelation
     osmid_t id;
     std::string member_type;
     std::string _version, _timestamp, _changeset, _uid, _user; // metadata
+    double _lat = NA_REAL, _lon = NA_REAL; // center
     // APS would (key,value) be better in a std::map?
     std::vector <std::string> key, value, role_node, role_way, role_relation;
     std::vector <osmid_t> nodes;
@@ -152,6 +156,7 @@ struct Relation
     osmid_t id;
     std::string rel_type;
     std::string _version, _timestamp, _changeset, _uid, _user; // metadata
+    double _lat = NA_REAL, _lon = NA_REAL; // center
     std::map <std::string, std::string> key_val;
     // Relations may have nodes as members, but these are not used here.
     std::vector <std::pair <osmid_t, std::string> > nodes; // str = role

@@ -66,6 +66,7 @@ const std::string wkt =
     ID[\"EPSG\",4326]]";
 
 const Rcpp::CharacterVector metanames = {"_version", "_timestamp", "_changeset", "_uid", "_user"};
+const Rcpp::CharacterVector centernames = {"_lat", "_lon"};
 
 /************************************************************************
  ************************************************************************
@@ -262,6 +263,9 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                 way._timestamp = rway._timestamp;
                 way._uid = rway._uid;
                 way._user = rway._user;
+                // center:
+                way._lat = rway._lat;
+                way._lon = rway._lon;
 
                 // Then copy nodes from rway to way.
                 way.nodes.swap (rway.nodes);
@@ -314,6 +318,9 @@ inline void XmlData::traverseWays (XmlNodePtr pt)
                 relation._timestamp = rrel._timestamp;
                 relation._uid = rrel._uid;
                 relation._user = rrel._user;
+                // center:
+                relation._lat = rrel._lat;
+                relation._lon = rrel._lon;
 
                 m_relations.push_back (relation);
             }
@@ -384,6 +391,10 @@ inline void XmlData::traverseRelation (XmlNodePtr pt, RawRelation& rrel)
             rrel._uid = it->value();
         else if (!strcmp (it->name(), "user"))
             rrel._user = it->value();
+        else if (!strcmp (it->name(), "lat"))
+            rrel._lat = std::stod(it->value());
+        else if (!strcmp (it->name(), "lon"))
+            rrel._lon = std::stod(it->value());
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
@@ -424,6 +435,10 @@ inline void XmlData::traverseWay (XmlNodePtr pt, RawWay& rway)
             rway._uid = it->value();
         else if (!strcmp (it->name(), "user"))
             rway._user = it->value();
+        else if (!strcmp (it->name(), "lat"))
+            rway._lat = std::stod(it->value());
+        else if (!strcmp (it->name(), "lon"))
+            rway._lon = std::stod(it->value());
     }
     // allows for >1 child nodes
     for (XmlNodePtr it = pt->first_node(); it != nullptr; it = it->next_sibling())
@@ -495,7 +510,7 @@ inline void XmlData::make_key_val_indices ()
 
 namespace osm_sf {
 
-Rcpp::List get_osm_relations (const Relations &rels, 
+Rcpp::List get_osm_relations (const Relations &rels,
         const std::map <osmid_t, Node> &nodes,
         const std::map <osmid_t, OneWay> &ways, const UniqueVals &unique_vals,
         const Rcpp::NumericVector &bbox, const Rcpp::List &crs);
@@ -504,7 +519,7 @@ void get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
         const UniqueVals &unique_vals, const std::string &geom_type,
         const Rcpp::NumericVector &bbox, const Rcpp::List &crs);
 void get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
-        const Nodes &nodes, const UniqueVals &unique_vals, 
+        const Nodes &nodes, const UniqueVals &unique_vals,
         const Rcpp::NumericVector &bbox, const Rcpp::List &crs);
 
 } // end namespace osm_sf
@@ -513,12 +528,12 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st);
 
 namespace osm_sp {
 
-void get_osm_nodes (Rcpp::S4 &sp_points, const Nodes &nodes, 
+void get_osm_nodes (Rcpp::S4 &sp_points, const Nodes &nodes,
         const UniqueVals &unique_vals);
-void get_osm_ways (Rcpp::S4 &sp_ways, 
+void get_osm_ways (Rcpp::S4 &sp_ways,
         const std::set <osmid_t> &way_ids, const Ways &ways, const Nodes &nodes,
         const UniqueVals &unique_vals, const std::string &geom_type);
-void get_osm_relations (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons, 
+void get_osm_relations (Rcpp::S4 &multilines, Rcpp::S4 &multipolygons,
         const Relations &rels, const std::map <osmid_t, Node> &nodes,
         const std::map <osmid_t, OneWay> &ways, const UniqueVals &unique_vals);
 
@@ -542,7 +557,7 @@ Rcpp::List rcpp_osmdata_sc (const std::string& st);
 
 namespace osm_df {
 
-Rcpp::List get_osm_relations (const Relations &rels, 
+Rcpp::List get_osm_relations (const Relations &rels,
         const UniqueVals &unique_vals);
 Rcpp::List get_osm_ways (const std::set <osmid_t> &way_ids,
         const Ways &ways, const UniqueVals &unique_vals);

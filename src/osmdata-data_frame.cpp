@@ -16,8 +16,8 @@
  *  You should have received a copy of the GNU General Public License along with
  *  osmdata.  If not, see <https://www.gnu.org/licenses/>.
  *
- *  Author:     Mark Padgham 
- *  E-Mail:     mark.padgham@email.com 
+ *  Author:     Mark Padgham
+ *  E-Mail:     mark.padgham@email.com
  *
  *  Description:    Modified version of 'osmdata-sf' to extract OSM data from an
  *                  object of class XmlData and return it in Rcpp::List format,
@@ -39,7 +39,7 @@
 #include <string>
 
 // Note: This code uses explicit index counters within most loops which use Rcpp
-// objects, because these otherwise require a 
+// objects, because these otherwise require a
 // static_cast <size_t> (std::distance (...)). This operation copies each
 // instance and can slow the loops down by several orders of magnitude!
 
@@ -61,26 +61,28 @@
 //'       unique IDs and keys for each kind of OSM object (nodes, ways, rels).
 //'
 //' @return A dual Rcpp::DataFrame with the tags and metadata of the relations.
-//' 
-//' @noRd 
-Rcpp::List osm_df::get_osm_relations (const Relations &rels, 
+//'
+//' @noRd
+Rcpp::List osm_df::get_osm_relations (const Relations &rels,
         const UniqueVals &unique_vals)
 {
 
     const unsigned int nmp = static_cast <unsigned int> (rels.size ());
-    Rcpp::List res = Rcpp::List::create (R_NilValue, R_NilValue);
+    Rcpp::List res = Rcpp::List::create (R_NilValue, R_NilValue, R_NilValue);
     if (nmp == 0L) {
         return res;
     }
 
     size_t ncol = unique_vals.k_rel.size ();
-    std::vector <std::string> rel_ids; 
+    std::vector <std::string> rel_ids;
     rel_ids.reserve (nmp);
 
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nmp, ncol));
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
     Rcpp::CharacterMatrix meta (Rcpp::Dimension (nmp, 5L));
     std::fill (meta.begin (), meta.end (), NA_STRING);
+    Rcpp::NumericMatrix center (Rcpp::Dimension (nmp, 2L));
+    std::fill (center.begin (), center.end (), NA_REAL);
 
     unsigned int count = 0;
 
@@ -97,6 +99,9 @@ Rcpp::List osm_df::get_osm_relations (const Relations &rels,
         meta (count, 3L) = itr->_uid;
         meta (count, 4L) = itr->_user;
 
+        center (count, 0L) = itr->_lat;
+        center (count, 1L) = itr->_lon;
+
         osm_convert::get_value_mat_rel (itr, unique_vals, kv_mat, count++);
     }
 
@@ -106,9 +111,11 @@ Rcpp::List osm_df::get_osm_relations (const Relations &rels,
     kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
 
     meta.attr ("dimnames") = Rcpp::List::create (rel_ids, metanames);
+    center.attr ("dimnames") = Rcpp::List::create (rel_ids, centernames);
 
     res (0) = kv_df;
     res (1) = meta;
+    res (2) = center;
 
     rel_ids.clear ();
 
@@ -123,15 +130,15 @@ Rcpp::List osm_df::get_osm_relations (const Relations &rels,
 //' @param way_ids Vector of <osmid_t> IDs of ways to trace
 //' @param ways Pointer to all ways in data set
 //' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
-//' 
-//' @noRd 
+//'
+//' @noRd
 Rcpp::List osm_df::get_osm_ways (
         const std::set <osmid_t> &way_ids, const Ways &ways,
         const UniqueVals &unique_vals)
 {
 
     size_t nrow = way_ids.size (), ncol = unique_vals.k_way.size ();
-    Rcpp::List res = Rcpp::List::create (R_NilValue, R_NilValue);
+    Rcpp::List res = Rcpp::List::create (R_NilValue, R_NilValue, R_NilValue);
     if (nrow == 0L)
     {
         return res;
@@ -144,6 +151,8 @@ Rcpp::List osm_df::get_osm_ways (
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
     Rcpp::CharacterMatrix meta (Rcpp::Dimension (nrow, 5L));
     std::fill (meta.begin (), meta.end (), NA_STRING);
+    Rcpp::NumericMatrix center (Rcpp::Dimension (nrow, 2L));
+    std::fill (center.begin (), center.end (), NA_REAL);
 
     unsigned int count = 0;
     for (auto wi = way_ids.begin (); wi != way_ids.end (); ++wi)
@@ -161,6 +170,9 @@ Rcpp::List osm_df::get_osm_ways (
         meta (count, 3L) = wj->second._uid;
         meta (count, 4L) = wj->second._user;
 
+        center (count, 0L) = wj->second._lat;
+        center (count, 1L) = wj->second._lon;
+
         osm_convert::get_value_mat_way (wj, unique_vals, kv_mat, count);
         count++;
     }
@@ -172,9 +184,11 @@ Rcpp::List osm_df::get_osm_ways (
         kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
 
     meta.attr ("dimnames") = Rcpp::List::create (waynames, metanames);
+    center.attr ("dimnames") = Rcpp::List::create (waynames, centernames);
 
     res (0) = kv_df;
     res (1) = meta;
+    res (2) = center;
 
     waynames.clear ();
 
@@ -188,8 +202,8 @@ Rcpp::List osm_df::get_osm_ways (
 //' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
 //' @param nodes Pointer to all nodes in data set
 //' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
-//' 
-//' @noRd 
+//'
+//' @noRd
 Rcpp::List osm_df::get_osm_nodes (const Nodes &nodes,
         const UniqueVals &unique_vals)
 {
@@ -199,6 +213,8 @@ Rcpp::List osm_df::get_osm_nodes (const Nodes &nodes,
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
     Rcpp::CharacterMatrix meta (Rcpp::Dimension (nrow, 5L));
     std::fill (meta.begin (), meta.end (), NA_STRING);
+    Rcpp::NumericMatrix center (Rcpp::Dimension (nrow, 2L));
+    std::fill (center.begin (), center.end (), NA_REAL);
 
     const size_t n = nodes.size ();
     std::vector <std::string> ptnames;
@@ -218,6 +234,9 @@ Rcpp::List osm_df::get_osm_nodes (const Nodes &nodes,
         meta (count, 3L) = ni->second._uid;
         meta (count, 4L) = ni->second._user;
 
+        center(count, 0L) = ni->second.lat;
+        center(count, 1L) = ni->second.lon;
+
         for (auto kv_iter = ni->second.key_val.begin ();
                 kv_iter != ni->second.key_val.end (); ++kv_iter)
         {
@@ -229,7 +248,7 @@ Rcpp::List osm_df::get_osm_nodes (const Nodes &nodes,
     }
 
     Rcpp::DataFrame kv_df = R_NilValue;
-    Rcpp::List res = Rcpp::List::create (R_NilValue, R_NilValue);
+    Rcpp::List res = Rcpp::List::create (R_NilValue, R_NilValue, R_NilValue);
 
     if (unique_vals.k_point.size () > 0)
     {
@@ -237,9 +256,11 @@ Rcpp::List osm_df::get_osm_nodes (const Nodes &nodes,
         kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
 
         meta.attr ("dimnames") = Rcpp::List::create (ptnames, metanames);
+        center.attr ("dimnames") = Rcpp::List::create (ptnames, centernames);
 
         res (0) = kv_df;
         res (1) = meta;
+        res (2) = center;
     }
 
     ptnames.clear ();
@@ -263,8 +284,8 @@ Rcpp::List osm_df::get_osm_nodes (const Nodes &nodes,
 //'
 //' @param st Text contents of an overpass API query
 //' @return Rcpp::List objects of OSM data
-//' 
-//' @noRd 
+//'
+//' @noRd
 // [[Rcpp::export]]
 Rcpp::List rcpp_osmdata_df (const std::string& st)
 {
@@ -277,6 +298,7 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
 
     Rcpp::DataFrame kv_rels, kv_df_ways, kv_df_points;
     Rcpp::CharacterMatrix meta_rels, meta_ways, meta_nodes;
+    Rcpp::NumericMatrix center_rels, center_ways, center_nodes;
 
     /* --------------------------------------------------------------
      * 1. Extract OSM Relations
@@ -287,6 +309,7 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
     {
         kv_rels = Rcpp::as <Rcpp::DataFrame> (data_rels (0));
         meta_rels = Rcpp::as <Rcpp::CharacterMatrix> (data_rels (1));
+        center_rels = Rcpp::as <Rcpp::NumericMatrix> (data_rels (2));
     }
 
     /* --------------------------------------------------------------
@@ -304,6 +327,7 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
     {
         kv_df_ways = Rcpp::as <Rcpp::DataFrame> (data_ways (0));
         meta_ways = Rcpp::as <Rcpp::CharacterMatrix> (data_ways (1));
+        center_ways = Rcpp::as <Rcpp::NumericMatrix> (data_ways (2));
     }
 
     /* --------------------------------------------------------------
@@ -315,23 +339,28 @@ Rcpp::List rcpp_osmdata_df (const std::string& st)
     {
         kv_df_points = Rcpp::as <Rcpp::DataFrame> (data_nodes (0));
         meta_nodes = Rcpp::as <Rcpp::CharacterMatrix> (data_nodes (1));
+        center_nodes = Rcpp::as <Rcpp::NumericMatrix> (data_nodes (2));
     }
 
     /* --------------------------------------------------------------
      * 4. Collate all data
      * --------------------------------------------------------------*/
 
-    Rcpp::List ret (6);
+    Rcpp::List ret (9);
     ret [0] = kv_df_points;
     ret [1] = kv_df_ways;
     ret [2] = kv_rels;
     ret [3] = meta_nodes;
     ret [4] = meta_ways;
     ret [5] = meta_rels;
+    ret [6] = center_nodes;
+    ret [7] = center_ways;
+    ret [8] = center_rels;
 
     std::vector <std::string> retnames {"points_kv", "ways_kv", "rels_kv",
-        "points_meta", "ways_meta", "rels_meta"};
+        "points_meta", "ways_meta", "rels_meta",
+        "points_center", "ways_center", "rels_center"};
     ret.attr ("names") = retnames;
-    
+
     return ret;
 }
