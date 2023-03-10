@@ -237,30 +237,35 @@ xml_adiff_to_df <- function (doc,
     adiff_visible [which (adiff_visible == "false")] <- FALSE
     adiff_visible [which (adiff_visible == "true")] <- TRUE
 
+    meta <- get_meta_from_xml (osm_obj)
+
+    df <- data.frame (
+        osm_type, osm_id, meta,
+        adiff_action, adiff_date, adiff_visible, m,
+        stringsAsFactors = stringsAsFactors, check.names = FALSE
+    )
+
+    return (df)
+}
+
+get_meta_from_xml <- function (osm_obj) {
     if (all (xml2::xml_has_attr (
         osm_obj,
         c ("version", "timestamp", "changeset", "uid", "user")
     ))
     ) {
 
-        osm_version <- xml2::xml_attr (osm_obj, attr = "version")
-        osm_timestamp <- xml2::xml_attr (osm_obj, attr = "timestamp")
-        osm_changeset <- xml2::xml_attr (osm_obj, attr = "changeset")
-        osm_uid <- xml2::xml_attr (osm_obj, attr = "uid")
-        osm_user <- xml2::xml_attr (osm_obj, attr = "user")
-
-        df <- data.frame (osm_type, osm_id, osm_version, osm_timestamp,
-            osm_changeset, osm_uid, osm_user,
-            adiff_action, adiff_date, adiff_visible, m,
-            stringsAsFactors = stringsAsFactors, check.names = FALSE
+        out <- data.frame (
+            osm_version = xml2::xml_attr (osm_obj, attr = "version"),
+            osm_timestamp = xml2::xml_attr (osm_obj, attr = "timestamp"),
+            osm_changeset = xml2::xml_attr (osm_obj, attr = "changeset"),
+            osm_uid = xml2::xml_attr (osm_obj, attr = "uid"),
+            osm_user = xml2::xml_attr (osm_obj, attr = "user")
         )
 
     } else {
-        df <- data.frame (osm_type, osm_id,
-            adiff_action, adiff_date, adiff_visible, m,
-            stringsAsFactors = stringsAsFactors, check.names = FALSE
-        )
+        out <- matrix (nrow = length (osm_obj), ncol = 0)
     }
 
-    return (df)
+    return (out)
 }
