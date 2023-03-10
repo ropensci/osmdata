@@ -237,16 +237,64 @@ xml_adiff_to_df <- function (doc,
     adiff_visible [which (adiff_visible == "false")] <- FALSE
     adiff_visible [which (adiff_visible == "true")] <- TRUE
 
+    center <- get_center_from_xml (osm_obj)
     meta <- get_meta_from_xml (osm_obj)
 
     df <- data.frame (
-        osm_type, osm_id, meta,
+        osm_type, osm_id, center, meta,
         adiff_action, adiff_date, adiff_visible, m,
         stringsAsFactors = stringsAsFactors, check.names = FALSE
     )
 
     return (df)
 }
+
+
+get_center_from_xml <- function (osm_obj) {
+    centers <- xml2::xml_find_all (
+        osm_obj,
+        xpath = ".//center",
+        flatten = FALSE
+    )
+    has_center <- vapply (centers, length, FUN.VALUE = integer(1)) > 0
+    if (any (has_center) ||
+        all (xml2::xml_has_attr (osm_obj, c ("lat", "lon")))
+    ) {
+
+        osm_center_lat_nodes <- xml2::xml_attr (osm_obj, attr = "lat")
+        osm_center_lon_nodes <- xml2::xml_attr (osm_obj, attr = "lon")
+
+        osm_center_lat <- vapply(centers, function (x) {
+            lat <- xml2::xml_attr (x, attr = "lat")
+            ifelse (length(lat) == 0, NA_character_, lat)
+        }, FUN.VALUE= character (1))
+        osm_center_lon <- vapply(centers, function (x) {
+            lon <- xml2::xml_attr (x, attr = "lon")
+            ifelse (length(lon) == 0, NA_character_, lon)
+        }, FUN.VALUE = character (1))
+
+        osm_center_lat <- ifelse (
+            is.na (osm_center_lat),
+            osm_center_lat_nodes,
+            osm_center_lat
+        )
+        osm_center_lon <- ifelse (
+            is.na (osm_center_lon),
+            osm_center_lat_nodes,
+            osm_center_lon
+        )
+
+        out <- data.frame (
+            osm_center_lat = as.numeric (osm_center_lat),
+            osm_center_lon = as.numeric (osm_center_lon)
+        )
+    } else {
+        out <- matrix (nrow = length (osm_obj), ncol = 0)
+    }
+
+    return (out)
+}
+
 
 get_meta_from_xml <- function (osm_obj) {
     if (all (xml2::xml_has_attr (
