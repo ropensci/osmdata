@@ -233,7 +233,7 @@ test_that ("out tags center", {
     doc <- xml2::read_xml (osm_tags_center)
 
     expect_silent (x <- osmdata_data_frame (opq_string_intern (q), doc))
-    expect_silent ( x_no_call <- osmdata_data_frame (doc = doc))
+    expect_silent (x_no_call <- osmdata_data_frame (doc = doc))
 
     cols <- c (
         "osm_type", "osm_id", "osm_center_lat", "osm_center_lon", "addr:city",
@@ -370,7 +370,8 @@ test_that ("out tags center & adiff", {
     rownames (bb) <- c ("x", "y")
     colnames (bb) <- c ("min", "max")
     q <- opq (
-        bb, out = "tags center",
+        bb,
+        out = "tags center",
         datetime = "2017-11-07T00:00:00Z",
         datetime2 = "2020-11-07T00:00:00Z",
         adiff = TRUE,
@@ -381,8 +382,8 @@ test_that ("out tags center & adiff", {
     osm_tags_center <- test_path ("fixtures", "osm-tags_center-adiff.osm")
     doc <- xml2::read_xml (osm_tags_center)
 
-    expect_silent ( x <- osmdata_data_frame (opq_string_intern (q), doc))
-    expect_silent ( x_no_call <- osmdata_data_frame (doc = doc))
+    expect_silent (x <- osmdata_data_frame (opq_string_intern (q), doc))
+    expect_silent (x_no_call <- osmdata_data_frame (doc = doc))
 
     cols <- c (
         "osm_type", "osm_id", "osm_center_lat", "osm_center_lon",
