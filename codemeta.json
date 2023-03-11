@@ -350,7 +350,7 @@
   "applicationCategory": "DataAccess",
   "isPartOf": "https://ropensci.org",
   "keywords": ["open0street0map", "openstreetmap", "overpass0API", "OSM"],
-  "fileSize": "45067.501KB",
+  "fileSize": "14961.933KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
