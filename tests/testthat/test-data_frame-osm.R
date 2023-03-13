@@ -233,7 +233,7 @@ test_that ("out tags center", {
     doc <- xml2::read_xml (osm_tags_center)
 
     expect_silent (x <- osmdata_data_frame (opq_string_intern (q), doc))
-    expect_silent ( x_no_call <- osmdata_data_frame (doc = doc))
+    expect_silent (x_no_call <- osmdata_data_frame (doc = doc))
 
     cols <- c (
         "osm_type", "osm_id", "osm_center_lat", "osm_center_lon", "addr:city",
@@ -362,6 +362,57 @@ test_that ("out meta & adiff", {
         meta_l$meta_overpass_call$datetime_from,
         attr (q, "datetime")
     )
+})
+
+test_that ("out tags center & adiff", {
+    # q <- getbb ("Franja de Ponent", featuretype = "relation") %>%
+    bb <- rbind (c (-0.73, 1.27), c (40.63, 42.63))
+    rownames (bb) <- c ("x", "y")
+    colnames (bb) <- c ("min", "max")
+    q <- opq (
+        bb,
+        out = "tags center",
+        datetime = "2017-11-07T00:00:00Z",
+        datetime2 = "2020-11-07T00:00:00Z",
+        adiff = TRUE,
+        timeout = 50
+    ) %>%
+        add_osm_feature ("amenity", "community_centre")
+
+    osm_tags_center <- test_path ("fixtures", "osm-tags_center-adiff.osm")
+    doc <- xml2::read_xml (osm_tags_center)
+
+    expect_silent (x <- osmdata_data_frame (opq_string_intern (q), doc))
+    expect_silent (x_no_call <- osmdata_data_frame (doc = doc))
+
+    cols <- c (
+        "osm_type", "osm_id", "osm_center_lat", "osm_center_lon",
+        "adiff_action", "adiff_date", "adiff_visible", "alt_name", "amenity",
+        "building", "building:levels", "community_centre:for", "designation",
+        "heritage", "heritage:operator", "name", "name:ca", "name:en",
+        "name:es", "social_facility:for"
+    )
+    expect_named (x, cols)
+    expect_named (x_no_call, cols)
+    expect_s3_class (x, "data.frame")
+    expect_s3_class (x_no_call, "data.frame")
+    expect_type (x$osm_center_lat, "double")
+    expect_type (x$osm_center_lon, "double")
+    ## BUG in overpass?? modified objects without tags have no center
+    # expect_true (!any (
+    #     is.na (x$osm_center_lat) &
+    #     is.na (x$osm_center_lon) &
+    #     x$adiff_action != "delete" &
+    #     x$adiff_date == min (x$adiff_date)
+    # ))
+    # x[is.na (x$osm_center_lat) & x$adiff_action != "delete" & x$adiff_date != max (x$adiff_date), 1:10]
+    # x[x$osm_id == "383342026", ]
+    # expect_true (!any (
+    #     is.na (x_no_call$osm_center_lat) &
+    #     is.na (x_no_call$osm_center_lon) &
+    #     x_no_call$adiff_action != "delete" &
+    #     x_no_call$adiff_date == "old"
+    # ))
 })
 
 test_that ("adiff2", {

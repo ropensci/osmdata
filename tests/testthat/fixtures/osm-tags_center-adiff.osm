@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API 0.7.59.4 36d058c8">
+  <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+  <meta osm_base="2023-03-10T09:46:14Z"/>
+  <action type="create">
+    <node id="2454496906" lat="40.8344255" lon="-0.2410303">
+      <tag k="amenity" v="community_centre"/>
+      <tag k="community_centre:for" v="senior"/>
+      <tag k="name" v="Centre de Dia"/>
+    </node>
+  </action>
+  <action type="modify">
+    <old>
+      <node id="3003821088" lat="41.4222844" lon="-0.4953377">
+        <tag k="amenity" v="community_centre"/>
+      </node>
+    </old>
+    <new>
+      <node id="3003821088" lat="41.4222894" lon="-0.4953126">
+        <tag k="amenity" v="community_centre"/>
+        <tag k="name" v="Casa de la Cultura"/>
+      </node>
+    </new>
+  </action>
+  <action type="delete">
+    <old>
+      <node id="4248811598" lat="41.6230150" lon="0.6079723">
+        <tag k="amenity" v="community_centre"/>
+        <tag k="name" v="Centre penitenciari Ponent"/>
+      </node>
+    </old>
+    <new>
+      <node id="4248811598" visible="false"/>
+    </new>
+  </action>
+  <action type="modify">
+    <old>
+      <node id="4629862816" lat="41.6251044" lon="0.6226145">
+        <tag k="name" v="Col.legi Oficial d'Enginters Tècnics Agricoles"/>
+        <tag k="name:ca" v="Col.legi Oficial d'Enginters Tècnics Agricoles"/>
+        <tag k="amenity" v="community_centre"/>
+      </node>
+    </old>
+    <new>
+      <node id="4629862816" lat="41.6251044" lon="0.6226145">
+        <tag k="amenity" v="community_centre"/>
+        <tag k="name" v="Col·legi Oficial d'Enginyers Tècnics Agrícoles"/>
+        <tag k="name:ca" v="Col·legi Oficial d'Enginyers Tècnics Agrícoles"/>
+      </node>
+    </new>
+  </action>
+  <action type="delete">
+    <old>
+      <node id="4741597738" lat="42.1060790" lon="0.4981802">
+        <tag k="amenity" v="community_centre"/>
+        <tag k="name:es" v="Tanatorio"/>
+        <tag k="name:en" v="Tanatory"/>
+        <tag k="name" v="Tanatorio"/>
+      </node>
+    </old>
+    <new>
+      <node id="4741597738" visible="true"/>
+    </new>
+  </action>
+  <action type="create">
+    <way id="86846358">
+      <center lat="41.1196583" lon="1.2469704"/>
+      <tag k="amenity" v="community_centre"/>
+      <tag k="community_centre:for" v="juvenile"/>
+      <tag k="designation" v="Youth Activities"/>
+      <tag k="name" v="Espai Jove Kesse"/>
+    </way>
+  </action>
+  <action type="create">
+    <way id="194997582">
+      <center lat="41.2132826" lon="1.1397973"/>
+      <tag k="name" v="Associació de Jubilats"/>
+      <tag k="amenity" v="community_centre"/>
+      <tag k="building" v="yes"/>
+    </way>
+  </action>
+  <action type="modify">
+    <old>
+      <way id="288454889">
+        <center lat="41.6116630" lon="0.6328729"/>
+        <tag k="name" v="Centre Cívic Cappont"/>
+        <tag k="building:levels" v="5"/>
+        <tag k="building" v="public"/>
+        <tag k="amenity" v="community_centre"/>
+      </way>
+    </old>
+    <new>
+      <way id="288454889">
+        <center lat="41.6116630" lon="0.6328729"/>
+        <tag k="amenity" v="community_centre"/>
+        <tag k="building" v="public"/>
+        <tag k="building:levels" v="5"/>
+      </way>
+    </new>
+  </action>
+  <action type="modify">
+    <old>
+      <way id="327325640">
+        <center lat="41.1545844" lon="1.1048025"/>
+        <tag k="amenity" v="community_centre"/>
+        <tag k="building" v="yes"/>
+        <tag k="name" v="Centre Cívic del Carme"/>
+      </way>
+    </old>
+    <new>
+      <way id="327325640">
+        <center lat="41.1545894" lon="1.1047589"/>
+        <tag k="amenity" v="community_centre"/>
+        <tag k="building" v="yes"/>
+        <tag k="name" v="Centre Cívic del Carme"/>
+      </way>
+    </new>
+  </action>
+  <action type="modify">
+    <old>
+      <way id="367793304">
+        <center lat="40.8320682" lon="0.1838792"/>
+        <tag k="amenity" v="community_centre"/>
+      </way>
+    </old>
+    <new>
+      <way id="367793304">
+        <center lat="40.8320682" lon="0.1838792"/>
+        <tag k="name" v="Casa de Cultura"/>
+        <tag k="amenity" v="community_centre"/>
+      </way>
+    </new>
+  </action>
+  <action type="modify">
+    <old>
+      <way id="383342026"/>
+    </old>
+    <new>
+      <way id="383342026">
+        <center lat="42.1473831" lon="-0.3600594"/>
+        <tag k="amenity" v="community_centre"/>
+        <tag k="building" v="house"/>
+        <tag k="building:levels" v="3"/>
+        <tag k="name" v="Centro Cultural Doña Petronila"/>
+      </way>
+    </new>
+  </action>
+  <action type="create">
+    <way id="634118647">
+      <center lat="41.6142777" lon="0.6336980"/>
+      <tag k="amenity" v="community_centre"/>
+      <tag k="building" v="yes"/>
+      <tag k="name" v="Club Bonsai Lleida"/>
+    </way>
+  </action>
+  <action type="create">
+    <way id="636257625">
+      <center lat="41.6015451" lon="0.6461521"/>
+      <tag k="amenity" v="community_centre"/>
+    </way>
+  </action>
+  <action type="create">
+    <way id="710494257">
+      <center lat="41.6137076" lon="0.6222691"/>
+      <tag k="social_facility:for" v="senior"/>
+      <tag k="name" v="Espai Municipal Cultural / Centre de dia"/>
+      <tag k="alt_name" v="Antic Convent de Santa Clara"/>
+      <tag k="amenity" v="community_centre"/>
+      <tag k="building" v="public"/>
+      <tag k="heritage" v="4"/>
+      <tag k="heritage:operator" v="Ajuntament de Lleida"/>
+    </way>
+  </action>
+</osm>

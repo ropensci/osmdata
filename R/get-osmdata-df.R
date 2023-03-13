@@ -81,7 +81,7 @@ osmdata_data_frame <- function (q,
     if (!is.null (obj$overpass_call) &&
         !grepl (" center;$", obj$overpass_call)
     ) {
-        df[, c ("osm_center_lat", "osm_center_lon")] <- NULL
+        df [, c ("osm_center_lat", "osm_center_lon")] <- NULL
     }
 
     attr (df, "bbox") <- obj$bbox
@@ -96,17 +96,17 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
 
     res <- rcpp_osmdata_df (paste0 (doc))
 
-    keysL <- lapply ( c ("points_kv", "ways_kv", "rels_kv"), function (x) {
-        out <- names (res[[x]])
-        if (isTRUE (out[1] == "osm_id")) {
-            out <- out[-1] # remove osm_id. Not always present
+    keysL <- lapply (c ("points_kv", "ways_kv", "rels_kv"), function (x) {
+        out <- names (res [[x]])
+        if (isTRUE (out [1] == "osm_id")) {
+            out <- out [-1] # remove osm_id. Not always present
         }
         out
     })
-    keys <- sort (unique (unlist(keysL)))
+    keys <- sort (unique (unlist (keysL)))
 
     tags <- mapply (function (i, k) {
-        i <- i[, k, drop = FALSE] # remove osm_id column if exists
+        i <- i [, k, drop = FALSE] # remove osm_id column if exists
         out <- data.frame (
             matrix (
                 nrow = nrow (i), ncol = length (keys),
@@ -117,7 +117,7 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
         )
         out [, names (i)] <- i
         return (out)
-    }, i = res[1:3], k = keysL, SIMPLIFY = FALSE)
+    }, i = res [1:3], k = keysL, SIMPLIFY = FALSE)
 
     center <- lapply (c ("points", "ways", "rels"), function (type) {
         get_center_from_cpp_output (res, type)
@@ -127,7 +127,7 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
     }, FUN.VALUE = logical (1))
     if (any (missing_center)) { # not a "out * center;" query
         center <- lapply (center, function (x) {
-            x[, c ("osm_center_lat", "osm_center_lon")] <- NULL
+            x [, c ("osm_center_lat", "osm_center_lon")] <- NULL
             x
         })
     }
@@ -136,24 +136,24 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
         get_meta_from_cpp_output (res, type)
     })
 
-    df <- lapply(1:3, function (i) {
-        osm_type <- if (nrow (res[[i]]) > 0) {
-            c ("node", "way", "relation")[i]
+    df <- lapply (1:3, function (i) {
+        osm_type <- if (nrow (res [[i]]) > 0) {
+            c ("node", "way", "relation") [i]
         } else {
             character ()
         }
-        data.frame(
+        data.frame (
             osm_type,
-            osm_id = rownames (res[[i]]),
-            center[[i]],
-            meta[[i]],
-            tags[[i]],
+            osm_id = rownames (res [[i]]),
+            center [[i]],
+            meta [[i]],
+            tags [[i]],
             stringsAsFactors = stringsAsFactors,
             check.names = FALSE
         )
     })
 
-    df <- do.call (rbind, c (df, list(deparse.level = 0)))
+    df <- do.call (rbind, c (df, list (deparse.level = 0)))
     rownames (df) <- NULL
 
     cols_no_dup <- fix_duplicated_columns (names (df))
@@ -237,30 +237,83 @@ xml_adiff_to_df <- function (doc,
     adiff_visible [which (adiff_visible == "false")] <- FALSE
     adiff_visible [which (adiff_visible == "true")] <- TRUE
 
+    center <- get_center_from_xml (osm_obj)
+    meta <- get_meta_from_xml (osm_obj)
+
+    df <- data.frame (
+        osm_type, osm_id, center, meta,
+        adiff_action, adiff_date, adiff_visible, m,
+        stringsAsFactors = stringsAsFactors, check.names = FALSE
+    )
+
+    return (df)
+}
+
+
+get_center_from_xml <- function (osm_obj) {
+    centers <- xml2::xml_find_all (
+        osm_obj,
+        xpath = ".//center",
+        flatten = FALSE
+    )
+    has_center <- vapply (centers, length, FUN.VALUE = integer (1)) > 0
+    if (any (has_center) ||
+        all (xml2::xml_has_attr (osm_obj, c ("lat", "lon")))
+    ) {
+
+        osm_center_lat_nodes <- xml2::xml_attr (osm_obj, attr = "lat")
+        osm_center_lon_nodes <- xml2::xml_attr (osm_obj, attr = "lon")
+
+        osm_center_lat <- vapply (centers, function (x) {
+            lat <- xml2::xml_attr (x, attr = "lat")
+            ifelse (length (lat) == 0, NA_character_, lat)
+        }, FUN.VALUE = character (1))
+        osm_center_lon <- vapply (centers, function (x) {
+            lon <- xml2::xml_attr (x, attr = "lon")
+            ifelse (length (lon) == 0, NA_character_, lon)
+        }, FUN.VALUE = character (1))
+
+        osm_center_lat <- ifelse (
+            is.na (osm_center_lat),
+            osm_center_lat_nodes,
+            osm_center_lat
+        )
+        osm_center_lon <- ifelse (
+            is.na (osm_center_lon),
+            osm_center_lat_nodes,
+            osm_center_lon
+        )
+
+        out <- data.frame (
+            osm_center_lat = as.numeric (osm_center_lat),
+            osm_center_lon = as.numeric (osm_center_lon)
+        )
+    } else {
+        out <- matrix (nrow = length (osm_obj), ncol = 0)
+    }
+
+    return (out)
+}
+
+
+get_meta_from_xml <- function (osm_obj) {
     if (all (xml2::xml_has_attr (
         osm_obj,
         c ("version", "timestamp", "changeset", "uid", "user")
     ))
     ) {
 
-        osm_version <- xml2::xml_attr (osm_obj, attr = "version")
-        osm_timestamp <- xml2::xml_attr (osm_obj, attr = "timestamp")
-        osm_changeset <- xml2::xml_attr (osm_obj, attr = "changeset")
-        osm_uid <- xml2::xml_attr (osm_obj, attr = "uid")
-        osm_user <- xml2::xml_attr (osm_obj, attr = "user")
-
-        df <- data.frame (osm_type, osm_id, osm_version, osm_timestamp,
-            osm_changeset, osm_uid, osm_user,
-            adiff_action, adiff_date, adiff_visible, m,
-            stringsAsFactors = stringsAsFactors, check.names = FALSE
+        out <- data.frame (
+            osm_version = xml2::xml_attr (osm_obj, attr = "version"),
+            osm_timestamp = xml2::xml_attr (osm_obj, attr = "timestamp"),
+            osm_changeset = xml2::xml_attr (osm_obj, attr = "changeset"),
+            osm_uid = xml2::xml_attr (osm_obj, attr = "uid"),
+            osm_user = xml2::xml_attr (osm_obj, attr = "user")
         )
 
     } else {
-        df <- data.frame (osm_type, osm_id,
-            adiff_action, adiff_date, adiff_visible, m,
-            stringsAsFactors = stringsAsFactors, check.names = FALSE
-        )
+        out <- matrix (nrow = length (osm_obj), ncol = 0)
     }
 
-    return (df)
+    return (out)
 }
