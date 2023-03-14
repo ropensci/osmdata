@@ -440,3 +440,92 @@ test_that ("opq_around", {
     expect_true (grepl ("key", x_key_val))
     expect_true (grepl ("val", x_key_val))
 })
+
+test_that ("opq_csv", {
+
+    q <- opq (bbox = c (8.42, -1.24, 42.92, 28.03))
+    expect_error (
+        opq_csv (q),
+        'argument "fields" is missing, with no default'
+    )
+    expect_error (
+        opq_csv (42),
+        "q must be an overpass query or a character string."
+    )
+    expect_error (
+        opq_csv (q, fields = 1:3),
+        "fields must be a character vector"
+    )
+
+    q0 <- opq_csv (q, fields = "name")
+    expect_identical (
+        q [!names (q) == "prefix"],
+        q0 [!names (q0) == "prefix"]
+    )
+    expect_s3_class (q0, "overpass_query")
+    expect_true (grepl ("\\[out:csv", q0$prefix))
+    expect_true (!grepl ("\\[out:xml", q0$prefix))
+    expect_true (!identical (q, q0))
+    expect_identical (attributes (q), attributes (q0))
+
+    qdate <- opq (
+        bbox = c (8.42, -1.24, 42.92, 28.03),
+        datetime = "2014-09-11T00:00:00Z",
+    )
+    qdate <- opq_string (qdate)
+    q1 <- opq_csv (qdate, fields = "name")
+    expect_is (q1, "character")
+    expect_identical (
+        gsub ("\\[out:csv\\(.+\\)]", "[out:xml]", q1),
+        qdate
+    )
+
+    qadiff <- opq (
+        bbox = c (8.42, -1.24, 42.92, 28.03),
+        datetime = "2017-10-01T00:00:00Z",
+        datetime2 = "2017-11-09T00:00:00Z",
+        adiff = TRUE
+    )
+    q2 <- opq_csv (qadiff, fields = "name")
+    expect_identical (
+        qadiff [!names (qadiff) == "prefix"],
+        q2 [!names (q2) == "prefix"]
+    )
+    expect_s3_class (q2, "overpass_query")
+    expect_true (grepl ("\\[out:csv", q2$prefix))
+    expect_true (!grepl ("\\[out:xml", q2$prefix))
+    expect_true (!identical (qadiff, q2))
+    expect_identical (attributes (qadiff), attributes (q2))
+
+    qid <- opq_osm_id (id = c (paste0 ("node/", 1:2), "way/1"))
+    q3 <- opq_csv (qid, fields = "name")
+    expect_identical (
+        qid [!names (qid) == "prefix"],
+        q3 [!names (q3) == "prefix"]
+    )
+    expect_s3_class (q3, "overpass_query")
+    expect_true (grepl ("\\[out:csv", q3$prefix))
+    expect_true (!grepl ("\\[out:xml", q3$prefix))
+    expect_true (!identical (qid, q3))
+    expect_identical (attributes (qid), attributes (q3))
+
+    qenc <- opq_enclosing (lon = 2.4565596, lat = 42.5189047)
+    q4 <- opq_csv (qenc, fields = "name")
+    expect_identical (
+        qenc [!names (qenc) == "prefix"],
+        q4 [!names (q4) == "prefix"]
+    )
+    expect_s3_class (q4, "overpass_query")
+    expect_true (grepl ("\\[out:csv", q4$prefix))
+    expect_true (!grepl ("\\[out:xml", q4$prefix))
+    expect_true (!identical (qenc, q4))
+    expect_identical (attributes (qenc), attributes (q4))
+
+    qaround <- opq_around (lon = 2.4565596, lat = 42.5189047)
+    q5 <- opq_csv (qaround, fields = "name")
+    expect_is (q5, "character")
+    expect_identical (
+        gsub ("\\[out:csv\\(.+\\)]", "[out:xml]", q5),
+        qaround
+    )
+})

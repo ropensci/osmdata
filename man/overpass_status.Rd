@@ -24,6 +24,7 @@ Other queries:
 \code{\link{bbox_to_string}()},
 \code{\link{getbb}()},
 \code{\link{opq_around}()},
+\code{\link{opq_csv}()},
 \code{\link{opq_enclosing}()},
 \code{\link{opq_osm_id}()},
 \code{\link{opq_string}()},
