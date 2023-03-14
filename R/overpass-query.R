@@ -226,11 +226,14 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
 
     httr2::resp_check_status (resp)
 
-    doc <- httr2::resp_body_xml (resp)
-
     # TODO: Just return the direct httr::POST result here and convert in the
     # subsequent functions (`osmdata_xml/csv/sp/sf`)?
-    check_for_error (paste0 (doc))
+    if (resp$headers$`Content-Type` == "application/osm3s+xml") {
+        doc <- httr2::resp_body_xml (resp)
+        check_for_error (paste0 (doc))
+    } else if (resp$headers$`Content-Type` == "text/csv") {
+        doc <- httr2::resp_body_string (resp)
+    }
 
     return (doc)
 }

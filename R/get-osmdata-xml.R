@@ -38,6 +38,10 @@ osmdata_xml <- function (q, filename, quiet = TRUE, encoding) {
         stop ("q must be an overpass query or a character string")
     }
 
+    if (grepl ("\\[out:csv", q)) {
+        stop ("out:csv queries only work with osmdata_data_frame().")
+    }
+
     doc <- overpass_query (query = q, quiet = quiet, encoding = encoding)
     if (!missing (filename)) {
         xml2::write_xml (doc, file = filename)

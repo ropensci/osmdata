@@ -62,7 +62,18 @@ osmdata_data_frame <- function (q,
         message ("converting OSM data to a data.frame")
     }
 
-    if (isTRUE (obj$meta$query_type == "adiff")) {
+    if (is.character (doc)) {
+        header <- is.null (obj$overpass_call) ||
+            !grepl ("\\[out:csv\\(.+; false\\)\\]", obj$overpass_call)
+        df <- utils::read.table (
+            text = doc,
+            header = header,
+            sep = "\t",
+            quote = "",
+            check.names = FALSE,
+            stringsAsFactors = stringsAsFactors
+        )
+    } else if (isTRUE (obj$meta$query_type == "adiff")) {
         datetime_from <- obj$meta$datetime_from
         if (is.null (datetime_from)) datetime_from <- "old"
         datetime_to <- obj$meta$datetime_to

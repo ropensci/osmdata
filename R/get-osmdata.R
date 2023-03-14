@@ -59,8 +59,9 @@ get_overpass_version <- function (doc) {
 
 #' Check for not implemented queries in overpass call
 #'
-#' Detects adiff queries and out meta/ids/tags which are not implemented for
-#' osmdata_* functions except for osmdata_xml and osmdata_data_frame.
+#' Detects adiff, out meta/ids/tags and out:csv queries which are not
+#' implemented for osmdata_* functions except for osmdata_xml (no out:csv) and
+#' osmdata_data_frame.
 #'
 #' @param obj Initial \link{osmdata} object
 #'
@@ -79,6 +80,10 @@ check_not_implemented_queries <- function (obj) {
 
         if (grepl ("\\[adiff:", obj$overpass_call)) {
             stop ("adiff queries not yet implemented.")
+        }
+
+        if (grepl ("\\[out:csv", obj$overpass_call)) {
+            stop ("out:csv queries only work with osmdata_data_frame.")
         }
 
         if (grepl ("out meta;$", obj$overpass_call)) {
@@ -164,11 +169,15 @@ fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8") {
 
 get_metadata <- function (obj, doc) {
 
-    meta <- list (
-        timestamp = get_timestamp (doc),
-        OSM_version = get_osm_version (doc),
-        overpass_version = get_overpass_version (doc)
-    )
+    if (inherits (doc, "xml_document")) {
+        meta <- list (
+            timestamp = get_timestamp (doc),
+            OSM_version = get_osm_version (doc),
+            overpass_version = get_overpass_version (doc)
+        )
+    } else {
+        meta <- list ()
+    }
 
     q <- obj$overpass_call
 
@@ -193,7 +202,8 @@ get_metadata <- function (obj, doc) {
             }
             meta$datetime_from <- x [2]
             meta$datetime_to <- x [4]
-            if (!is_datetime (meta$datetime_to)) { # adiff opq without datetime2
+            if (!is_datetime (meta$datetime_to) &
+                inherits(doc, "xml_document")) { # adiff opq without datetime2
                 meta$datetime_to <- xml2::xml_text (xml2::xml_find_all (
                     doc,
                     "//meta/@osm_base"
@@ -219,7 +229,11 @@ get_metadata <- function (obj, doc) {
             meta$datetime_to <- attr (q, "datetime2")
 
             if (grepl ("adiff", q$prefix) ||
-                "action" %in% xml2::xml_name (xml2::xml_children (doc))) {
+                (
+                    inherits(doc, "xml_document") &&
+                    "action" %in% xml2::xml_name (xml2::xml_children (doc))
+                )
+            ) {
                 meta$query_type <- "adiff"
             } else {
                 meta$query_type <- "diff"
@@ -228,7 +242,11 @@ get_metadata <- function (obj, doc) {
         } else if (!is.null (attr (q, "datetime"))) {
 
             if (grepl ("adiff", q$prefix) ||
-                "action" %in% xml2::xml_name (xml2::xml_children (doc))) {
+                (
+                    inherits(doc, "xml_document") &&
+                    "action" %in% xml2::xml_name (xml2::xml_children (doc))
+                )
+            ) {
                 meta$datetime_from <- attr (q, "datetime")
                 meta$datetime_to <- xml2::xml_text (xml2::xml_find_all (
                     doc,
@@ -242,7 +260,7 @@ get_metadata <- function (obj, doc) {
 
         }
 
-    } else { # is.null (q)
+    } else if (inherits(doc, "xml_document")) { # is.null (q)
 
         if ("action" %in% xml2::xml_name (xml2::xml_children (doc))) {
             osm_actions <- xml2::xml_find_all (doc, ".//action")

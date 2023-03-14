@@ -42,7 +42,8 @@ comarques <- osmdata_data_frame (q) # without timeout parameter, 0 rows
 
 qid<- opq_osm_id (
     type = "relation",
-    id = c ("341530", "1809102", "1664395", "343124")
+    id = c ("341530", "1809102", "1664395", "343124"),
+    out = "tags"
 ) \%>\%
     opq_csv (fields = c ("name", "name:ca"))
 cities <- osmdata_data_frame (qid)

@@ -464,6 +464,19 @@ test_that ("adiff2", {
     )
 })
 
+test_that ("out:csv", {
+    q <- getbb ("Catalan Countries", format_out = "osm_type_id") %>%
+        opq (out = "tags center", osm_type = "relation", timeout = 50) %>%
+        add_osm_feature ("admin_level", "7") %>%
+        add_osm_feature ("boundary", "administrative") %>%
+        opq_csv (fields = c ("name", "::type", "::id", "::lat", "::lon"))
+
+    with_mock_dir ("mock_csv", {
+        x <- osmdata_data_frame (q)
+    })
+    expect_is (x, "data.frame")
+})
+
 test_that ("non-valid key names", {
     osm_multi <- test_path ("fixtures", "osm-multi.osm")
     q0 <- opq (bbox = c (1, 1, 5, 5))

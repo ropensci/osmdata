@@ -184,6 +184,25 @@ test_that ("not implemented queries", {
         "`out meta` queries not yet implemented."
     )
 
+    qcsv <- opq (bbox = c (1.8374527, 41.5931579, 1.8384799, 41.5936434)) %>%
+        opq_csv(fields = c("name"))
+    expect_error (
+        osmdata_xml (q = qcsv),
+        "out:csv queries only work with osmdata_data_frame()."
+    )
+    expect_error (
+        osmdata_sp (q = qcsv),
+        "out:csv queries only work with osmdata_data_frame()."
+    )
+    expect_error (
+        osmdata_sf (q = qcsv),
+        "out:csv queries only work with osmdata_data_frame()."
+    )
+    expect_error (
+        osmdata_sc (q = qcsv),
+        "out:csv queries only work with osmdata_data_frame()."
+    )
+
 })
 
 test_that ("osmdata without query", {
