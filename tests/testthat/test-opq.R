@@ -179,7 +179,7 @@ test_that ("out", {
         expect_identical (names (q0), names (q))
         expect_identical (
             q0 [names (q0) != "suffix"],
-            q0 [names (q) != "suffix"]
+            q [names (q) != "suffix"]
         )
         expect_true (grepl ("^\\); out [a-z ]+;$", q$suffix))
     })
@@ -203,7 +203,7 @@ test_that ("out", {
         expect_identical (names (q1), names (q))
         expect_identical (
             q1 [names (q1) != "suffix"],
-            q1 [names (q) != "suffix"]
+            q [names (q) != "suffix"]
         )
         expect_true (grepl ("^\\); out[a-z ]+;$", q$suffix))
     })
@@ -216,7 +216,7 @@ test_that ("out", {
         expect_identical (names (q1), names (q))
         expect_identical (
             q1 [names (q1) != "suffix"],
-            q1 [names (q) != "suffix"]
+            q [names (q) != "suffix"]
         )
         expect_true (grepl ("^\\); out[a-z ]+;$", q$suffix))
     })
