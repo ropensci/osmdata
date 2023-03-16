@@ -594,6 +594,7 @@ check_features <- function (features) {
 
 #' Add a feature specified by OSM ID to an Overpass query
 #'
+#' @inheritParams opq
 #' @param id One or more official OSM identifiers (long-form integers), which
 #'      must be entered as either a character or *numeric* value (because R does
 #'      not support long-form integers). id can also be a character string
@@ -636,7 +637,9 @@ check_features <- function (features) {
 #'     opq_string () %>%
 #'     osmdata_sf ()
 #' }
-opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
+opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE,
+                        out = "body", datetime = NULL, datetime2 = NULL,
+                        adiff = FALSE, timeout = 25, memsize) {
     if (is.null (type)) {
         if (is.null (id)) {
             stop (
@@ -669,7 +672,11 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE) {
         id <- as.character (id)
     }
 
-    opq <- opq (1:4)
+    opq <- opq (
+        bbox = 1:4, out = out, datetime = datetime, datetime2 = datetime2,
+        adiff = adiff, timeout = timeout, memsize = memsize
+    )
+
     opq$bbox <- NULL
     opq$features <- NULL
     opq$osm_types <- NULL

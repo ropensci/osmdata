@@ -69,17 +69,25 @@ get_overpass_version <- function (doc) {
 #'
 #' @noRd
 check_not_implemented_queries <- function (obj) {
-    if (!is.null (obj$overpass_call)){
+    if (!is.null (obj$overpass_call)) {
 
         if (grepl ("; out (tags|ids)( center)*;$", obj$overpass_call)) {
             stop (
                 "Queries returning no geometries (out tags/ids) not accepted. ",
-                'Use queries with `out="body"` or `out="skel"` instead.'
+                'Use queries with `out="body"` or `out="skel"` instead. ',
+                "Alternatively, you can retrieve the results with osmdata_xml ",
+                "or osmdata_data_frame.",
+                call. = FALSE
             )
         }
 
         if (grepl ("\\[adiff:", obj$overpass_call)) {
-            stop ("adiff queries not yet implemented.")
+            stop (
+                "adiff queries not yet implemented. Alternatively, you can ",
+                "retrieve the results with osmdata_xml or ",
+                "osmdata_data_frame.",
+                call. = FALSE
+            )
         }
 
         if (grepl ("\\[out:csv", obj$overpass_call)) {
@@ -88,8 +96,10 @@ check_not_implemented_queries <- function (obj) {
 
         if (grepl ("out meta;$", obj$overpass_call)) {
             warning (
-                "`out meta` queries not yet implemented. ",
-                "Metadata fields will be missing."
+                "`out meta` queries not yet implemented. Metadata fields will ",
+                "be missing. Alternatively, you can retrieve the results with ",
+                "osmdata_xml or osmdata_data_frame.",
+                call. = FALSE
             )
         }
 

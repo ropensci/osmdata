@@ -4,7 +4,10 @@
 ## Major changes:
 
 - `osmdata_data_frame` adds columns `osm_center_lat` and `osm_center_lon` for `out * center;` queries (#316, #319).
+- Add parameters from `opq` to `opq_osm_id`: out, datetime, datetime2, adiff, timeout and memsize (#320)
 - Implement `out:csv` queries (#321).
+
+
 
 ## Minor changes
 
