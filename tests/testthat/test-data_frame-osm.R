@@ -478,10 +478,10 @@ test_that ("out:csv", {
     r <- lapply (x, expect_is, "character")
 
     # Test quotes and NAs
-    qqoutes <- getbb("Barcelona", format_out = "osm_type_id") %>%
-        opq(osm_types = "nwr", out = "tags") %>%
-        opq_csv(fields = c("name", "::id", "no_exists", "amenity")) %>%
-        add_osm_feature(
+    qqoutes <- getbb ("Barcelona", format_out = "osm_type_id") %>%
+        opq (osm_types = "nwr", out = "tags") %>%
+        opq_csv (fields = c ("name", "::id", "no_exists", "amenity")) %>%
+        add_osm_feature (
             key = "name", value = "\\\"|,|Pont",
             value_exact = FALSE
         )
@@ -494,8 +494,8 @@ test_that ("out:csv", {
     r <- lapply (xquotes, function (v) expect_false (any (v %in% ""))) # NAs
 
     # OP values containing `,` | `"` get quoted with `"`. `"` in values -> `""`
-    expect_false (any (grepl("^\".+,", xquotes$name))) # case specific
-    expect_false (any (grepl("\"\".+,", xquotes$name)))
+    expect_false (any (grepl ("^\".+,", xquotes$name))) # case specific
+    expect_false (any (grepl ("\"\".+,", xquotes$name)))
 })
 
 test_that ("non-valid key names", {
