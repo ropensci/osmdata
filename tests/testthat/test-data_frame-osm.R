@@ -475,6 +475,27 @@ test_that ("out:csv", {
         x <- osmdata_data_frame (q)
     })
     expect_is (x, "data.frame")
+    r <- lapply (x, expect_is, "character")
+
+    # Test quotes and NAs
+    qqoutes <- getbb("Barcelona", format_out = "osm_type_id") %>%
+        opq(osm_types = "nwr", out = "tags") %>%
+        opq_csv(fields = c("name", "::id", "no_exists", "amenity")) %>%
+        add_osm_feature(
+            key = "name", value = "\\\"|,|Pont",
+            value_exact = FALSE
+        )
+
+    with_mock_dir ("mock_csv_quotes", {
+        xquotes <- osmdata_data_frame (qqoutes)
+    })
+    expect_is (xquotes, "data.frame")
+    r <- lapply (xquotes, expect_is, "character")
+    r <- lapply (xquotes, function (v) expect_false (any (v %in% ""))) # NAs
+
+    # OP values containing `,` | `"` get quoted with `"`. `"` in values -> `""`
+    expect_false (any (grepl("^\".+,", xquotes$name))) # case specific
+    expect_false (any (grepl("\"\".+,", xquotes$name)))
 })
 
 test_that ("non-valid key names", {

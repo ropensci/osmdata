@@ -1,0 +1,6 @@
+Connected as: 123456789
+Current time: 2022-01-01T00:00:00Z
+Announced endpoint: lambert.openstreetmap.de/
+Rate limit: 6
+6 slots available now.
+Currently running queries (pid, space limit, time limit, start time):

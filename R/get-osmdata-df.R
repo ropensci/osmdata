@@ -65,11 +65,14 @@ osmdata_data_frame <- function (q,
     if (is.character (doc)) {
         header <- is.null (obj$overpass_call) ||
             !grepl ("\\[out:csv\\(.+; false\\)\\]", obj$overpass_call)
+        # Values containing `,` | `"` get quoted with `"`. `"` in values -> `""`
         df <- utils::read.table (
             text = doc,
             header = header,
             sep = "\t",
-            quote = "",
+            quote = "\"",
+            na.strings = "",
+            colClasses = "character", # osm_id doesn't fit in integer
             check.names = FALSE,
             stringsAsFactors = stringsAsFactors
         )
