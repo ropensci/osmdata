@@ -74,6 +74,7 @@ osmdata_data_frame <- function (q,
             na.strings = "",
             colClasses = "character", # osm_id doesn't fit in integer
             check.names = FALSE,
+            comment.char = "",
             stringsAsFactors = stringsAsFactors
         )
     } else if (isTRUE (obj$meta$query_type == "adiff")) {
