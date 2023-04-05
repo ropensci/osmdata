@@ -66,51 +66,108 @@ available_tags <- function (feature) {
         resp <- httr2::req_perform (req)
         pg <- httr2::resp_body_html (resp)
 
-        taglists <- rvest::html_nodes (pg, "div[class='taglist']") %>%
-            rvest::html_attr ("data-taginfo-taglist-tags")
+        tags <- get_all_tags (pg)
 
-        taglists <- lapply (taglists, function (i) {
-
-            temp <- strsplit (i, "=") [[1]]
-            res <- NULL
-
-            if (length (temp) == 2) {
-                res <- strsplit (temp [2], ",")
-                names (res) <- temp [1]
-            }
-
-            return (res)
-        })
-
-        taglists [vapply (taglists, is.null, logical (1))] <- NULL
-        keys <- unique (unlist (lapply (taglists, names)))
-
-        if (!(feature %in% keys)) {
-
-            # try old style tables
-            tags <- rvest::html_nodes (
-                pg,
-                sprintf ("a[title^='Tag:%s']", feature)
+        if (!feature %in% tags$Key) {
+            stop ("feature [", feature, "] not listed as Key in ",
+                url_ftrs,
+                call. = FALSE
             )
-            tags <- vapply (
-                strsplit (xml2::xml_attr (tags, "href"), "%3D"),
-                function (i) i [2], character (1)
-            )
-            ret <- unique (sort (tags))
-
-        } else {
-
-            taglists <- stats::setNames (do.call (
-                mapply,
-                c (FUN = c, lapply (taglists, `[`, keys))
-            ), keys)
-
-            taglists <- mapply (unique, taglists)
-            ret <- taglists [[feature]] %>% sort ()
-            ret <- gsub ("&.*$", "", ret)
         }
+
+        ret <- tags [which (tags$Key == feature), ]
+
     } else {
         message ("No internet connection")
     }
     return (ret)
+}
+
+#' Get all Key-Value pairs from wiki webpage
+#'
+#' @noRd
+get_all_tags <- function (pg) {
+
+    tags <- rbind (tags_from_tables (pg), tags_from_taglists (pg))
+
+    tags <- tags [which (!duplicated (tags)), ]
+    tags <- tags [which (!tags$Key == "Key"), ]
+    # There are a couple of just entries with "Key" values beginning with "[[ <comment>":
+    tags <- tags [which (!grepl ("^\\[\\[", tags$Key)), ]
+
+    # Then a non-dplyr group_by and arrange:
+    tags <- tags [order (tags$Key), ]
+    tags <- lapply (
+        split (tags, f = as.factor (tags$Key)),
+        function (i) i [order (i$Value), ]
+    )
+    tags <- do.call (rbind, tags)
+
+    return (tags)
+}
+
+#' Get tags from HTML taglist structures (not tables)
+#'
+#' The wiki page at \url{https://wiki.openstreetmap.org/wiki/Map_Features} now
+#' has most data in tables (HTML "td"), but some is still present as older-style
+#' "taglist" classes. This function extracts the latter information, to be added
+#' to the majority of data extracted from tables.
+#' @noRd
+tags_from_taglists <- function (pg) {
+
+    taglists <- rvest::html_nodes (pg, "div[class='taglist']") %>%
+        rvest::html_attr ("data-taginfo-taglist-tags")
+
+    taglists <- lapply (taglists, function (i) {
+
+        temp <- strsplit (i, "=") [[1]]
+        res <- NULL
+
+        if (length (temp) == 2) {
+            res <- strsplit (temp [2], ",")
+            names (res) <- temp [1]
+        }
+
+        return (res)
+    })
+
+    taglists [vapply (taglists, is.null, logical (1))] <- NULL
+
+    taglists <- lapply (seq_along (taglists), function (i) {
+        data.frame (
+            Key = rep (names (taglists [[i]]), length (taglists [[i]])),
+            Value = unlist (taglists [[i]])
+        )
+    })
+
+    tags_df <- do.call (rbind, taglists)
+    rownames (tags_df) <- NULL
+
+    return (tags_df)
+}
+
+#' Get tags from HTML table structures (not taglists)
+#'
+#' The wiki page at \url{https://wiki.openstreetmap.org/wiki/Map_Features} now
+#' has most data in tables (HTML "td"), but some is still present as older-style
+#' "taglist" classes. This function extracts the former information, to be added
+#' to the small remaining amount of data extracted from taglists.
+#' @noRd
+tags_from_tables <- function (pg) {
+
+    tables <- rvest::html_table (pg, header = TRUE)
+    tables <- lapply (tables, function (i) {
+        if (identical (names (i) [1:2], c ("Key", "Value"))) {
+            res <- i [, 1:2]
+        } else {
+            res <- do.call (rbind, strsplit (i [[1]], split = "="))
+            res <- data.frame (res)
+            names (res) <- c ("Key", "Value")
+        }
+        return (res)
+    })
+
+    tables <- do.call (rbind, tables)
+
+    return (tables)
 }
