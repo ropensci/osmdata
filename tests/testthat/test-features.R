@@ -56,9 +56,24 @@ post_process_tags <- function (dir_name, keys = "building") {
     }, logical (1L)))
     tables_sample <- tables_sample [index]
 
-    xsample <- c (as.character (nodes_sample), as.character (tables_sample))
+    # table_rows <- xml2::xml_find_all (tables_sample, "//tr")
+    # table_rows <- table_rows [grep (keys, table_rows) [1:10]]
+    # TODO: Figure out how to re-insert these table rows back into document
 
-    writeLines (xsample, fname)
+    # A hacky way to reduce number of table nodes, by replacing lines in the
+    # text file:
+    ftmp <- tempfile (fileext = ".html")
+    writeLines (as.character (tables_sample), ftmp)
+    tmp <- readLines (ftmp)
+    index0 <- grep ("<tr", tmp)
+    index1 <- grep ("<\\/tr", tmp)
+    tables_sample <- c (
+        tmp [seq (index0 [1] - 1)],
+        tmp [seq (index0 [1], index1 [10])],
+        tmp [seq (max (index1) + 1, length (tmp))]
+    )
+
+    writeLines (c (as.character (nodes_sample), tables_sample), fname)
 }
 
 test_that ("available_tags", {
