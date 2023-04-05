@@ -284,19 +284,17 @@ project, you agree to abide by its terms.
 
 ## Contributors
 
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-All contributions to this project are gratefully acknowledged using the
-[`allcontributors`
-package](https://github.com/ropenscilabs/allcontributors) following the
-[all-contributors](https://allcontributors.org) specification.
-Contributions of any kind are welcome!
+All contributions to this project are gratefully acknowledged using the [`allcontributors` package](https://github.com/ropenscilabs/allcontributors) following the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
 
 ### Code
 
 <table>
+
 <tr>
 <td align="center">
 <a href="https://github.com/mpadge">
@@ -311,16 +309,16 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/commits?author=Robinlovelace">Robinlovelace</a>
 </td>
 <td align="center">
-<a href="https://github.com/hrbrmstr">
-<img src="https://avatars.githubusercontent.com/u/509878?v=4" width="100px;" alt=""/>
-</a><br>
-<a href="https://github.com/ropensci/osmdata/commits?author=hrbrmstr">hrbrmstr</a>
-</td>
-<td align="center">
 <a href="https://github.com/jmaspons">
 <img src="https://avatars.githubusercontent.com/u/102644?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=jmaspons">jmaspons</a>
+</td>
+<td align="center">
+<a href="https://github.com/hrbrmstr">
+<img src="https://avatars.githubusercontent.com/u/509878?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=hrbrmstr">hrbrmstr</a>
 </td>
 <td align="center">
 <a href="https://github.com/virgesmith">
@@ -341,6 +339,8 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/commits?author=elipousson">elipousson</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/agila5">
@@ -385,6 +385,8 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/commits?author=angela-li">angela-li</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/Mashin6">
@@ -429,6 +431,8 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/commits?author=brry">brry</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/ccamara">
@@ -473,6 +477,8 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/commits?author=MHenderson">MHenderson</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/patperu">
@@ -499,11 +505,14 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/commits?author=rgzn">rgzn</a>
 </td>
 </tr>
+
 </table>
+
 
 ### Issue Authors
 
 <table>
+
 <tr>
 <td align="center">
 <a href="https://github.com/sytpp">
@@ -548,6 +557,8 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Ayaakovfeldman">yaakovfeldman</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/gregor-d">
@@ -592,10 +603,12 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Awaholulu">waholulu</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/ibarraespinosa">
-<img src="https://avatars.githubusercontent.com/u/27447280?u=d851d229e4bc1808e94ced94014fe14df03bb0b8&v=4" width="100px;" alt=""/>
+<img src="https://avatars.githubusercontent.com/u/27447280?u=bc9f48a0d0634f4a56d1f891c21ba6de3870ff5f&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aibarraespinosa">ibarraespinosa</a>
 </td>
@@ -636,6 +649,8 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aslow-data">slow-data</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/mroorda">
@@ -680,6 +695,8 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amarcusyoung">marcusyoung</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/barryrowlingson">
@@ -724,6 +741,8 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Arobitalec">robitalec</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/nfruehADA">
@@ -768,6 +787,8 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Admag-ir">dmag-ir</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/FlxPo">
@@ -781,12 +802,21 @@ Contributions of any kind are welcome!
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Avanhry">vanhry</a>
 </td>
+<td align="center">
+<a href="https://github.com/boiled-data">
+<img src="https://avatars.githubusercontent.com/u/73987518?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aboiled-data">boiled-data</a>
+</td>
 </tr>
+
 </table>
+
 
 ### Issue Contributors
 
 <table>
+
 <tr>
 <td align="center">
 <a href="https://github.com/sckott">
@@ -831,6 +861,8 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Acboettig">cboettig</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/prise6">
@@ -875,6 +907,8 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3ARobsteranium">Robsteranium</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/assignUser">
@@ -883,9 +917,12 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3AassignUser">assignUser</a>
 </td>
 </tr>
+
 </table>
+
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
 
 [![ropensci_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)

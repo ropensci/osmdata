@@ -271,6 +271,7 @@ project, you agree to abide by its terms.
 
 
 
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -295,16 +296,16 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=Robinlovelace">Robinlovelace</a>
 </td>
 <td align="center">
-<a href="https://github.com/hrbrmstr">
-<img src="https://avatars.githubusercontent.com/u/509878?v=4" width="100px;" alt=""/>
-</a><br>
-<a href="https://github.com/ropensci/osmdata/commits?author=hrbrmstr">hrbrmstr</a>
-</td>
-<td align="center">
 <a href="https://github.com/jmaspons">
 <img src="https://avatars.githubusercontent.com/u/102644?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=jmaspons">jmaspons</a>
+</td>
+<td align="center">
+<a href="https://github.com/hrbrmstr">
+<img src="https://avatars.githubusercontent.com/u/509878?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=hrbrmstr">hrbrmstr</a>
 </td>
 <td align="center">
 <a href="https://github.com/virgesmith">
@@ -594,7 +595,7 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <tr>
 <td align="center">
 <a href="https://github.com/ibarraespinosa">
-<img src="https://avatars.githubusercontent.com/u/27447280?u=d851d229e4bc1808e94ced94014fe14df03bb0b8&v=4" width="100px;" alt=""/>
+<img src="https://avatars.githubusercontent.com/u/27447280?u=bc9f48a0d0634f4a56d1f891c21ba6de3870ff5f&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aibarraespinosa">ibarraespinosa</a>
 </td>
@@ -788,6 +789,12 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Avanhry">vanhry</a>
 </td>
+<td align="center">
+<a href="https://github.com/boiled-data">
+<img src="https://avatars.githubusercontent.com/u/73987518?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aboiled-data">boiled-data</a>
+</td>
 </tr>
 
 </table>
@@ -903,6 +910,7 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
 
 
 
