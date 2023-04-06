@@ -18,7 +18,7 @@ test_that ("available_features", {
             recursive = TRUE
         ) [1]
         x <- xml2::read_html (fname)
-        nodes_all <- rvest::html_nodes (x, "td")
+        nodes_all <- rvest::html_elements (x, "td")
         nodes_sample <- nodes_all [1:20]
         writeLines (as.character (nodes_sample), fname)
     }
@@ -43,9 +43,9 @@ post_process_tags <- function (dir_name, keys = "building") {
 
     x <- xml2::read_html (fname)
 
-    nodes_sample <- rvest::html_nodes (x, "div[class='taglist']") [1:10]
+    nodes_sample <- rvest::html_elements (x, "div[class='taglist']") [1:10]
 
-    tables <- rvest::html_nodes (x, "table")
+    tables <- rvest::html_elements (x, "table")
     tables_r <- rvest::html_table (tables)
     index <- which (vapply (tables_r, function (i) {
         ret <- FALSE
