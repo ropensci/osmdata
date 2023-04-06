@@ -465,8 +465,8 @@ test_that ("adiff2", {
 })
 
 test_that ("out:csv", {
-    q <- getbb ("Catalan Countries", format_out = "osm_type_id") %>%
-        opq (out = "tags center", osm_type = "relation", timeout = 50) %>%
+    # q <- getbb ("Catalan Countries", format_out = "osm_type_id") %>%
+    q <- opq (bbox = "relation(id:11747082)", out = "tags center", osm_type = "relation", timeout = 50) %>%
         add_osm_feature ("admin_level", "7") %>%
         add_osm_feature ("boundary", "administrative") %>%
         opq_csv (fields = c ("name", "::type", "::id", "::lat", "::lon"))
@@ -478,8 +478,8 @@ test_that ("out:csv", {
     r <- lapply (x, expect_is, "character")
 
     # Test quotes and NAs
-    qqoutes <- getbb ("Barcelona", format_out = "osm_type_id") %>%
-        opq (osm_types = "nwr", out = "tags") %>%
+    # qqoutes <- getbb ("Barcelona", format_out = "osm_type_id") %>%
+    qqoutes <- opq (bbox = "relation(id:347950)", osm_types = "nwr", out = "tags") %>%
         opq_csv (fields = c ("name", "::id", "no_exists", "amenity")) %>%
         add_osm_feature (
             key = "name", value = "\\\"|,|Pont",
