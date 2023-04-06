@@ -45,8 +45,8 @@ post_process_tags <- function (dir_name, keys = "building") {
 
     nodes_sample <- rvest::html_nodes (x, "div[class='taglist']") [1:10]
 
-    tables_sample <- rvest::html_nodes (x, "table")
-    tables_r <- rvest::html_table (tables_sample)
+    tables <- rvest::html_nodes (x, "table")
+    tables_r <- rvest::html_table (tables)
     index <- which (vapply (tables_r, function (i) {
         ret <- FALSE
         if ("Key" %in% names (i)) {
@@ -54,26 +54,13 @@ post_process_tags <- function (dir_name, keys = "building") {
         }
         return (ret)
     }, logical (1L)))
-    tables_sample <- tables_sample [index]
 
-    # table_rows <- xml2::xml_find_all (tables_sample, "//tr")
-    # table_rows <- table_rows [grep (keys, table_rows) [1:10]]
-    # TODO: Figure out how to re-insert these table rows back into document
+    tables_sample <- xml2::xml_child (tables, index)
+    table_body <- xml2::xml_children (tables_sample)
+    rm_rows <- table_body [10:length (table_body)]
+    xml2::xml_remove (rm_rows)
 
-    # A hacky way to reduce number of table nodes, by replacing lines in the
-    # text file:
-    ftmp <- tempfile (fileext = ".html")
-    writeLines (as.character (tables_sample), ftmp)
-    tmp <- readLines (ftmp)
-    index0 <- grep ("<tr", tmp)
-    index1 <- grep ("<\\/tr", tmp)
-    tables_sample <- c (
-        tmp [seq (index0 [1] - 1)],
-        tmp [seq (index0 [1], index1 [10])],
-        tmp [seq (max (index1) + 1, length (tmp))]
-    )
-
-    writeLines (c (as.character (nodes_sample), tables_sample), fname)
+    writeLines (c (as.character (nodes_sample), as.character (tables_sample)), fname)
 }
 
 test_that ("available_tags", {
