@@ -64,13 +64,13 @@ test_that ("add feature", {
     )
     expect_true (!identical (qry$bbox, qry6$bbox))
 
-    qry7 <- opq ("Vinçà") %>%
+    qry7 <- opq ("relation(id:74310)") %>% # "Vinçà"
         add_osm_feature (key = c("name", "!name:ca"))
-    qry8 <- opq ("el Carxe") %>%
+    qry8 <- opq ("relation(id:11755232)") %>% # "el Carxe"
         add_osm_feature (key = "natural", value = "peak") %>%
         add_osm_feature (key = "!ele")
     expect_warning(
-        qry9 <- opq ("el Carxe") %>%
+        qry9 <- opq ("relation(id:11755232)") %>% # "el Carxe"
             add_osm_feature (key = "!ele")%>%
             add_osm_feature (key = "natural", value = "peak"),
         "The query will request objects whith only a negated key "

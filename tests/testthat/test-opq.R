@@ -128,7 +128,7 @@ test_that ("osm_types", {
         "\"amenity\"=\"language_school\"",
         "\"amenity\"=\"dancing_school\""
     )
-    q2 <- opq ("Catalunya") %>%
+    q2 <- opq ("relation(id:349053)") %>% # "Catalunya"
         add_osm_features(features = features)
     s <- opq_string (q2)
 
