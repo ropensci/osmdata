@@ -23,7 +23,7 @@ available_features <- function () {
         pg <- httr2::resp_body_html (resp)
 
         keys <- xml2::xml_attr (
-            rvest::html_nodes (pg, "a[href^='/wiki/Key']"), # nolint
+            rvest::html_elements (pg, "a[href^='/wiki/Key']"), # nolint
             "href"
         ) %>%
             strsplit ("/wiki/Key:") %>%
@@ -115,7 +115,7 @@ get_all_tags <- function (pg) {
 #' @noRd
 tags_from_taglists <- function (pg) {
 
-    taglists <- rvest::html_nodes (pg, "div[class='taglist']") %>%
+    taglists <- rvest::html_elements (pg, "div[class='taglist']") %>%
         rvest::html_attr ("data-taginfo-taglist-tags")
 
     taglists <- lapply (taglists, function (i) {

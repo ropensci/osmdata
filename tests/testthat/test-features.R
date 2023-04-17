@@ -18,7 +18,7 @@ test_that ("available_features", {
             recursive = TRUE
         ) [1]
         x <- xml2::read_html (fname)
-        nodes_all <- rvest::html_nodes (x, "td")
+        nodes_all <- rvest::html_elements (x, "td")
         nodes_sample <- nodes_all [1:20]
         writeLines (as.character (nodes_sample), fname)
     }
@@ -43,10 +43,10 @@ post_process_tags <- function (dir_name, keys = "building") {
 
     x <- xml2::read_html (fname)
 
-    nodes_sample <- rvest::html_nodes (x, "div[class='taglist']") [1:10]
+    nodes_sample <- rvest::html_elements (x, "div[class='taglist']") [1:10]
 
-    tables_sample <- rvest::html_nodes (x, "table")
-    tables_r <- rvest::html_table (tables_sample)
+    tables <- rvest::html_elements (x, "table")
+    tables_r <- rvest::html_table (tables)
     index <- which (vapply (tables_r, function (i) {
         ret <- FALSE
         if ("Key" %in% names (i)) {
@@ -54,11 +54,13 @@ post_process_tags <- function (dir_name, keys = "building") {
         }
         return (ret)
     }, logical (1L)))
-    tables_sample <- tables_sample [index]
 
-    xsample <- c (as.character (nodes_sample), as.character (tables_sample))
+    tables_sample <- xml2::xml_child (tables, index)
+    table_body <- xml2::xml_children (tables_sample)
+    rm_rows <- table_body [10:length (table_body)]
+    xml2::xml_remove (rm_rows)
 
-    writeLines (xsample, fname)
+    writeLines (c (as.character (nodes_sample), as.character (tables_sample)), fname)
 }
 
 test_that ("available_tags", {
