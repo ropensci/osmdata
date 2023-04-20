@@ -61,7 +61,7 @@ To load the package and check the version:
 library (osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
 packageVersion ("osmdata")
-#> [1] '0.1.10.29'
+#> [1] '0.2.1.6'
 ```
 
 ## Usage
@@ -236,21 +236,23 @@ citation ("osmdata")
 #> To cite osmdata in publications use:
 #> 
 #>   Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon (2017).
-#>   osmdata Journal of Open Source Software, 2(14). URL
-#>   https://doi.org/10.21105/joss.00305
+#>   "osmdata." _Journal of Open Source Software_, *2*(14), 305.
+#>   doi:10.21105/joss.00305 <https://doi.org/10.21105/joss.00305>,
+#>   <https://joss.theoj.org/papers/10.21105/joss.00305>.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Article{,
 #>     title = {osmdata},
-#>     author = {Mark Padgham and Bob Rudis and Robin Lovelace and Maëlle Salmon},
-#>     journal = {The Journal of Open Source Software},
+#>     author = {{Mark Padgham} and {Bob Rudis} and {Robin Lovelace} and {Maëlle Salmon}},
+#>     journal = {Journal of Open Source Software},
 #>     year = {2017},
 #>     volume = {2},
 #>     number = {14},
+#>     pages = {305},
 #>     month = {jun},
 #>     publisher = {The Open Journal},
-#>     url = {https://doi.org/10.21105/joss.00305},
+#>     url = {https://joss.theoj.org/papers/10.21105/joss.00305},
 #>     doi = {10.21105/joss.00305},
 #>   }
 ```
@@ -284,17 +286,19 @@ project, you agree to abide by its terms.
 
 ## Contributors
 
-
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-All contributions to this project are gratefully acknowledged using the [`allcontributors` package](https://github.com/ropenscilabs/allcontributors) following the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
+All contributions to this project are gratefully acknowledged using the
+[`allcontributors`
+package](https://github.com/ropenscilabs/allcontributors) following the
+[all-contributors](https://allcontributors.org) specification.
+Contributions of any kind are welcome!
 
 ### Code
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/mpadge">
@@ -339,8 +343,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=elipousson">elipousson</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/agila5">
@@ -385,8 +387,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=angela-li">angela-li</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/Mashin6">
@@ -431,8 +431,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=brry">brry</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/ccamara">
@@ -477,8 +475,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=MHenderson">MHenderson</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/patperu">
@@ -505,14 +501,11 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=rgzn">rgzn</a>
 </td>
 </tr>
-
 </table>
-
 
 ### Issue Authors
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/sytpp">
@@ -557,8 +550,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Ayaakovfeldman">yaakovfeldman</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/gregor-d">
@@ -603,8 +594,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Awaholulu">waholulu</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/ibarraespinosa">
@@ -649,8 +638,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aslow-data">slow-data</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/mroorda">
@@ -695,8 +682,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amarcusyoung">marcusyoung</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/barryrowlingson">
@@ -741,8 +726,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Arobitalec">robitalec</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/nfruehADA">
@@ -787,8 +770,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Admag-ir">dmag-ir</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/FlxPo">
@@ -809,14 +790,11 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aboiled-data">boiled-data</a>
 </td>
 </tr>
-
 </table>
-
 
 ### Issue Contributors
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/sckott">
@@ -861,8 +839,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Acboettig">cboettig</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/prise6">
@@ -907,8 +883,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3ARobsteranium">Robsteranium</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/assignUser">
@@ -917,12 +891,9 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3AassignUser">assignUser</a>
 </td>
 </tr>
-
 </table>
-
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-
 
 [![ropensci_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)

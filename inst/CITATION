@@ -1,16 +1,17 @@
 citHeader("To cite osmdata in publications use:")
 
-bibentry(bibtype = "Manual",
+bibentry(bibtype = "Article",
          title = "osmdata",
          author = c(person(given = "Mark Padgham"),
                     person(given = "Bob Rudis"),
                     person(given = "Robin Lovelace"),
                     person(given = "Maëlle Salmon")),
-         journal = "The Journal of Open Source Software",
+         journal = "Journal of Open Source Software",
          year = "2017",
          volume = "2",
          number = "14",
+         pages = "305",
          month = "jun",
          publisher = "The Open Journal",
-         url = "https://doi.org/10.21105/joss.00305",
+         url = "https://joss.theoj.org/papers/10.21105/joss.00305",
          doi = "10.21105/joss.00305")
