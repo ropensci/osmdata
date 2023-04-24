@@ -25,3 +25,4 @@ makefile$
 ^\.github$
 ^\.pre-commit-config\.yaml$
 ^revdep$
+^CRAN-SUBMISSION$

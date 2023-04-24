@@ -61,7 +61,7 @@ To load the package and check the version:
 library (osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
 packageVersion ("osmdata")
-#> [1] '0.2.1.6'
+#> [1] '0.2.2'
 ```
 
 ## Usage
