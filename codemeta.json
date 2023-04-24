@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/ropensci/osmdata/",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.2.2",
+  "version": "0.2.001",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
