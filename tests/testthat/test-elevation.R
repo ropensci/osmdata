@@ -34,9 +34,11 @@ test_that ("misc elevation fns", {
 
     qry <- opq (bbox = bbox)
     dat <- list (meta = list (bbox = qry$bbox))
-    expect_silent (
-        check_bbox (dat, bbox_mat)
-    )
+    # 'sp' will soon issue a message here about depending on legacy packages.
+    # Expectation may be restored once sp-dependency has been removed (#273).
+    # expect_silent (
+    check_bbox (dat, bbox_mat)
+    # )
 
     ti <- get_tile_index (qry$bbox)
     expect_s3_class (ti, "data.frame")
