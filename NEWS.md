@@ -1,5 +1,9 @@
-0.2.2.00x (development version)
+0.2.3
 ===================
+
+## Minor changes
+
+- Fix failing test due to changes to 'sp' moving towards deprecation.
 
 
 0.2.2

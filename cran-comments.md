@@ -1,4 +1,6 @@
-# CRAN notes for osmdata_0.2.2 submission
+# CRAN notes for osmdata_0.2.3 submission
+
+This submission fixes errors in previous version, due to changes in the 'sp' package.
 
 ## Test environments
 
