@@ -22,7 +22,7 @@
 #' @examples
 #' \dontrun{
 #' bbox_to_string (getbb ("València"))
-#' bbox_to_string (getbb ("València", format_out="data.frame"))
+#' bbox_to_string (getbb ("València", format_out = "data.frame"))
 #' }
 bbox_to_string <- function (bbox) {
 
@@ -36,19 +36,21 @@ bbox_to_string <- function (bbox) {
         }
     }
 
-    if (inherits (bbox, "data.frame")){
+    if (inherits (bbox, "data.frame")) {
 
         if (!all (c ("osm_type", "osm_id") %in% names (bbox))) {
-            stop ("bbox must be a data.frame with osm_type and osm_id columns as ",
-                  "in:\n\t getbb(..., format_out = \"data.frame\").")
+            stop (
+                "bbox must be a data.frame with osm_type and osm_id columns as ",
+                "in:\n\t getbb(..., format_out = \"data.frame\")."
+            )
         }
 
         type_id <- split (bbox$osm_id, bbox$osm_type)
-        id <- mapply (function (type, ids){
-            paste0 (type, "(id:", paste (ids, collapse=","), ")")
+        id <- mapply (function (type, ids) {
+            paste0 (type, "(id:", paste (ids, collapse = ","), ")")
         }, type = names (type_id), ids = type_id)
 
-        return ( paste (id, collapse="; "))
+        return (paste (id, collapse = "; "))
 
     }
 
@@ -100,7 +102,7 @@ bbox_to_string <- function (bbox) {
     }
 
     if (any (is.na (bbox))) {
-      stop ("bbox contains 'NA' values")
+        stop ("bbox contains 'NA' values")
     }
 
     return (paste0 (bbox, collapse = ","))
@@ -155,7 +157,7 @@ bbox_to_string <- function (bbox) {
 #' the Catalan Countries. If one exact match exists with potentially multiple
 #' polygonal boundaries, only the first relation or way is returned. A set of
 #' objects can also be represented for multiple results (e.g.
-#'`relation(id:11747082,307833); way(id:22422490)`). See examples below for
+#' `relation(id:11747082,307833); way(id:22422490)`). See examples below for
 #' illustration. The OSM objects that can be used as
 #' [areas in overpass queries](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Map_way/relation_to_area_(map_to_area))
 #' \emph{must be closed rings} (ways or relations).
@@ -187,10 +189,10 @@ bbox_to_string <- function (bbox) {
 #' getbb ("london", format_out = "sf_polygon")
 #' getbb ("accra", format_out = "sf_polygon") # rectangular bb
 #'
-#' area <- getbb("València", format_out = "osm_type_id")
+#' area <- getbb ("València", format_out = "osm_type_id")
 #' # select multiple areas with format_out = "osm_type_id"
-#' areas <- getbb("València", format_out = "data.frame")
-#' bbox_to_string(areas[areas$osm_type != "node", ])
+#' areas <- getbb ("València", format_out = "data.frame")
+#' bbox_to_string (areas [areas$osm_type != "node", ])
 #'
 #' # Using an alternative service (locationiq requires an API key)
 #' # add LOCATIONIQ=type_your_api_key_here to .Renviron:
@@ -232,7 +234,7 @@ getbb <- function (place_name,
 
     if (format_out == "osm_type_id") {
 
-        bbox <- obj[which (obj$osm_type %in% c ("relation", "way"))[1], ]
+        bbox <- obj [which (obj$osm_type %in% c ("relation", "way")) [1], ]
         if (nrow (bbox) == 0) {
             stop ("No area found for `place_name` ", place_name, ".")
         }
@@ -245,7 +247,7 @@ getbb <- function (place_name,
     dimnames (bb_mat) <- list (c ("x", "y"), c ("min", "max"))
 
     if (any (is.na (bb_mat))) {
-      stop (paste0 ("`place_name` '", place_name ,"' can't be found"))
+        stop (paste0 ("`place_name` '", place_name, "' can't be found"))
     }
 
     if (format_out == "matrix") {
@@ -283,14 +285,14 @@ getbb <- function (place_name,
 }
 
 get_nominatim_query <- function (place_name,
-                          featuretype,
-                          is_polygon,
-                          display_name_contains,
-                          viewbox,
-                          key,
-                          limit,
-                          base_url,
-                          silent) {
+                                 featuretype,
+                                 is_polygon,
+                                 display_name_contains,
+                                 viewbox,
+                                 key,
+                                 limit,
+                                 base_url,
+                                 silent) {
 
     featuretype <- tolower (featuretype)
 
