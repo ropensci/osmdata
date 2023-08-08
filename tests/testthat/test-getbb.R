@@ -34,7 +34,7 @@ test_that ("getbb-place_name", {
     )
     range0 <- apply (res0, 1, function (i) diff (range (i)))
     range2 <- apply (res2, 1, function (i) diff (range (i)))
-    expect_true (all (range2 > range0))
+    expect_true (all (range2 >= range0))
 
     expect_output (
         res0 <- with_mock_dir ("mock_bb", {

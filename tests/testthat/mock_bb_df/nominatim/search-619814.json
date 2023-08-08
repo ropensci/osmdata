@@ -1,0 +1,65 @@
+[
+    {
+        "place_id": 307835155,
+        "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "osm_type": "relation",
+        "osm_id": 86538,
+        "lat": "47.7981346",
+        "lon": "13.0464806",
+        "class": "boundary",
+        "type": "administrative",
+        "place_rank": 12,
+        "importance": 0.5754709096560191,
+        "addresstype": "city",
+        "name": "Salzburg",
+        "display_name": "Salzburg, 5020, Österreich",
+        "boundingbox": [
+            "47.7512115",
+            "47.8543925",
+            "12.9856478",
+            "13.1275256"
+        ]
+    },
+    {
+        "place_id": 307852111,
+        "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "osm_type": "relation",
+        "osm_id": 86539,
+        "lat": "47.4166667",
+        "lon": "13.25",
+        "class": "boundary",
+        "type": "administrative",
+        "place_rank": 8,
+        "importance": 0.5614282515201715,
+        "addresstype": "state",
+        "name": "Salzburg",
+        "display_name": "Salzburg, Österreich",
+        "boundingbox": [
+            "46.9438580",
+            "48.0414691",
+            "12.0760956",
+            "13.9961250"
+        ]
+    },
+    {
+        "place_id": 307733752,
+        "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "osm_type": "relation",
+        "osm_id": 114907,
+        "lat": "48.8230783",
+        "lon": "6.5113122",
+        "class": "boundary",
+        "type": "administrative",
+        "place_rank": 16,
+        "importance": 0.551945755236079,
+        "addresstype": "village",
+        "name": "Château-Salins",
+        "display_name": "Château-Salins, Sarrebourg-Château-Salins, Moselle, Grand Est, France métropolitaine, 57170, France",
+        "boundingbox": [
+            "48.8037039",
+            "48.8364496",
+            "6.4566055",
+            "6.5287811"
+        ]
+    }
+]
