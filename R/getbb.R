@@ -299,7 +299,7 @@ get_nominatim_query <- function (place_name,
     }
 
     req <- httr2::request (base_url)
-    req <- httr2::req_method (req, "POST")
+    req <- httr2::req_method (req, "GET")
     req <- httr2::req_url_query (req, format = "json")
     req <- httr2::req_url_query (req, q = place_name)
     req <- httr2::req_url_query (req, featuretype = featuretype)

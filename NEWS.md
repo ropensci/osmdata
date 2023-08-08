@@ -1,3 +1,12 @@
+
+0.2.3.00X (dev version)
+===================
+
+## Minor changes
+
+- Bug fix to stop getbb call to Nominatim returning 405 error (#328)
+
+
 0.2.3
 ===================
 
