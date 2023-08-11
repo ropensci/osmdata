@@ -1,6 +1,6 @@
-# CRAN notes for osmdata_0.2.3 submission
+# CRAN notes for osmdata_0.2.4 submission
 
-This submission fixes errors in previous version, due to changes in the 'sp' package.
+This submission fixes one error in previous version, due to one test making an external https request which failed. That test failure has now been mocked, and no longer makes the external call.
 
 ## Test environments
 
