@@ -66,7 +66,12 @@ test_that ("getbb-place_name", {
     expect_is (res6, "character")
     expect_length (res6, 1L)
 
-    expect_error (getbb ("Salzzburg"), "`place_name` 'Salzzburg' can't be found")
+    expect_error (
+        with_mock_dir ("mock_bb_typo", {
+            getbb ("Salzzburg")
+        }),
+        "`place_name` 'Salzzburg' can't be found"
+    )
 })
 
 # Note that the polygon calls produce large mock files which are reduced with
