@@ -58,7 +58,7 @@ format offered by the `osmdata` package is enabling elevation data to be
 combined with OSM data. The result is
 a [`silicate`](https://github.com/hypertidy/silicate)-format object which is
 able to be submitted directly to the [`dodgr`
-package](https://github.com/ATFutures/dodgr) to enable routing on street
+package](https://github.com/UrbanAnalyst/dodgr) to enable routing on street
 networks that accounts for elevation changes.
 
 
