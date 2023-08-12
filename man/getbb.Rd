@@ -104,10 +104,10 @@ bb_sf <- getbb ("kathmandu", format_out = "sf_polygon")
 getbb ("london", format_out = "sf_polygon")
 getbb ("accra", format_out = "sf_polygon") # rectangular bb
 
-area <- getbb("València", format_out = "osm_type_id")
+area <- getbb ("València", format_out = "osm_type_id")
 # select multiple areas with format_out = "osm_type_id"
-areas <- getbb("València", format_out = "data.frame")
-bbox_to_string(areas[areas$osm_type != "node", ])
+areas <- getbb ("València", format_out = "data.frame")
+bbox_to_string (areas [areas$osm_type != "node", ])
 
 # Using an alternative service (locationiq requires an API key)
 # add LOCATIONIQ=type_your_api_key_here to .Renviron:
