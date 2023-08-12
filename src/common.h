@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include "rapidxml.h"
+#include "rapidxml.hpp"
 #include <Rcpp.h> // Only for 'NA_REAL'
 
 // APS not good pratice to have all the headers included here, adds to compile time

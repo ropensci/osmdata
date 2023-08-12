@@ -1,5 +1,3 @@
-#pragma clang system_header // exclude from clang warnings
-
 #ifndef RAPIDXML_HPP_INCLUDED
 #define RAPIDXML_HPP_INCLUDED
 
@@ -12,7 +10,6 @@
 #if !defined(RAPIDXML_NO_STDLIB)
     #include <cstdlib>      // For std::size_t
     #include <cassert>      // For assert
-    #include <stdexcept>    // MP replace assert with throw
     #include <new>          // For placement new
 #endif
 
@@ -307,6 +304,37 @@ namespace rapidxml
             static const unsigned char lookup_digits[256];                  // Digits
             static const unsigned char lookup_upcase[256];                  // To uppercase conversion table for ASCII characters
         };
+
+        // Find length of the string
+        template<class Ch>
+        inline std::size_t measure(const Ch *p)
+        {
+            const Ch *tmp = p;
+            while (*tmp) 
+                ++tmp;
+            return tmp - p;
+        }
+
+        // Compare strings for equality
+        template<class Ch>
+        inline bool compare(const Ch *p1, std::size_t size1, const Ch *p2, std::size_t size2, bool case_sensitive)
+        {
+            if (size1 != size2)
+                return false;
+            if (case_sensitive)
+            {
+                for (const Ch *end = p1 + size1; p1 < end; ++p1, ++p2)
+                    if (*p1 != *p2)
+                        return false;
+            }
+            else
+            {
+                for (const Ch *end = p1 + size1; p1 < end; ++p1, ++p2)
+                    if (lookup_tables<0>::lookup_upcase[static_cast<unsigned char>(*p1)] != lookup_tables<0>::lookup_upcase[static_cast<unsigned char>(*p2)])
+                        return false;
+            }
+            return true;
+        }
     }
     //! \endcond
 
@@ -390,6 +418,20 @@ namespace rapidxml
         {
             void *memory = allocate_aligned(sizeof(xml_node<Ch>));
             xml_node<Ch> *node = new(memory) xml_node<Ch>(type);
+            if (name)
+            {
+                if (name_size > 0)
+                    node->name(name, name_size);
+                else
+                    node->name(name);
+            }
+            if (value)
+            {
+                if (value_size > 0)
+                    node->value(value, value_size);
+                else
+                    node->value(value);
+            }
             return node;
         }
 
@@ -407,6 +449,20 @@ namespace rapidxml
         {
             void *memory = allocate_aligned(sizeof(xml_attribute<Ch>));
             xml_attribute<Ch> *attribute = new(memory) xml_attribute<Ch>;
+            if (name)
+            {
+                if (name_size > 0)
+                    attribute->name(name, name_size);
+                else
+                    attribute->name(name);
+            }
+            if (value)
+            {
+                if (value_size > 0)
+                    attribute->value(value, value_size);
+                else
+                    attribute->value(value);
+            }
             return attribute;
         }
 
@@ -419,9 +475,9 @@ namespace rapidxml
         //! \return Pointer to allocated char array. This pointer will never be NULL.
         Ch *allocate_string(const Ch *source = 0, std::size_t size = 0)
         {
-            //assert(source || size);     // Either source or size (or both) must be specified
-            if (!(source || size)) // NP assert -> runtime_error
-                throw std::runtime_error ("either source or size must be specified");
+            assert(source || size);     // Either source or size (or both) must be specified
+            if (size == 0)
+                size = internal::measure(source) + 1;
             Ch *result = static_cast<Ch *>(allocate_aligned(size * sizeof(Ch)));
             if (source)
                 for (std::size_t i = 0; i < size; ++i)
@@ -495,10 +551,7 @@ namespace rapidxml
         //! \param ff Free function, or 0 to restore default function
         void set_allocator(alloc_func *af, free_func *ff)
         {
-            //assert(m_begin == m_static_memory && m_ptr == align(m_begin));    // Verify that no memory is allocated yet
-            // MP: Replace assert with runtime_error
-            if (!(m_begin == m_static_memory && m_ptr == align(m_begin)))    
-                throw std::runtime_error ("memory already allocated");
+            assert(m_begin == m_static_memory && m_ptr == align(m_begin));    // Verify that no memory is allocated yet
             m_alloc_func = af;
             m_free_func = ff;
         }
@@ -530,9 +583,7 @@ namespace rapidxml
             if (m_alloc_func)   // Allocate memory using either user-specified allocation function or global operator new[]
             {
                 memory = m_alloc_func(size);
-                //assert(memory); // Allocator is not allowed to return 0, on failure it must either throw, stop the program or use longjmp
-                if (!memory) // NP assert -> runtime_error
-                    throw std::runtime_error ("memory can not be allocated");
+                assert(memory); // Allocator is not allowed to return 0, on failure it must either throw, stop the program or use longjmp
             }
             else
             {
@@ -673,6 +724,14 @@ namespace rapidxml
             m_name_size = size;
         }
 
+        //! Sets name of node to a zero-terminated string.
+        //! See also \ref ownership_of_strings and xml_node::name(const Ch *, std::size_t).
+        //! \param name Name of node to set. Must be zero terminated.
+        void name(const Ch *name)
+        {
+            this->name(name, internal::measure(name));
+        }
+
         //! Sets value of node to a non zero-terminated string.
         //! See \ref ownership_of_strings.
         //! <br><br>
@@ -695,6 +754,13 @@ namespace rapidxml
             m_value_size = size;
         }
 
+        //! Sets value of node to a zero-terminated string.
+        //! See also \ref ownership_of_strings and xml_node::value(const Ch *, std::size_t).
+        //! \param value Vame of node to set. Must be zero terminated.
+        void value(const Ch *value)
+        {
+            this->value(value, internal::measure(value));
+        }
 
         ///////////////////////////////////////////////////////////////////////////
         // Related nodes access
@@ -769,7 +835,17 @@ namespace rapidxml
         //! \return Pointer to found attribute, or 0 if not found.
         xml_attribute<Ch> *previous_attribute(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
         {
-            return this->m_parent ? m_prev_attribute : 0;
+            if (name)
+            {
+                if (name_size == 0)
+                    name_size = internal::measure(name);
+                for (xml_attribute<Ch> *attribute = m_prev_attribute; attribute; attribute = attribute->m_prev_attribute)
+                    if (internal::compare(attribute->name(), attribute->name_size(), name, name_size, case_sensitive))
+                        return attribute;
+                return 0;
+            }
+            else
+                return this->m_parent ? m_prev_attribute : 0;
         }
 
         //! Gets next attribute, optionally matching attribute name. 
@@ -779,7 +855,17 @@ namespace rapidxml
         //! \return Pointer to found attribute, or 0 if not found.
         xml_attribute<Ch> *next_attribute(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
         {
-            return this->m_parent ? m_next_attribute : 0;
+            if (name)
+            {
+                if (name_size == 0)
+                    name_size = internal::measure(name);
+                for (xml_attribute<Ch> *attribute = m_next_attribute; attribute; attribute = attribute->m_next_attribute)
+                    if (internal::compare(attribute->name(), attribute->name_size(), name, name_size, case_sensitive))
+                        return attribute;
+                return 0;
+            }
+            else
+                return this->m_parent ? m_next_attribute : 0;
         }
 
     private:
@@ -849,7 +935,17 @@ namespace rapidxml
         //! \return Pointer to found child, or 0 if not found.
         xml_node<Ch> *first_node(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
         {
-            return m_first_node;
+            if (name)
+            {
+                if (name_size == 0)
+                    name_size = internal::measure(name);
+                for (xml_node<Ch> *child = m_first_node; child; child = child->next_sibling())
+                    if (internal::compare(child->name(), child->name_size(), name, name_size, case_sensitive))
+                        return child;
+                return 0;
+            }
+            else
+                return m_first_node;
         }
 
         //! Gets last child node, optionally matching node name. 
@@ -861,10 +957,18 @@ namespace rapidxml
         //! \return Pointer to found child, or 0 if not found.
         xml_node<Ch> *last_node(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
         {
-            //assert(m_first_node);  // Cannot query for last child if node has no children
-            if (!m_first_node) // NP assert -> runtime_error
-                throw std::runtime_error ("Node has no children");
-            return m_last_node;
+            assert(m_first_node);  // Cannot query for last child if node has no children
+            if (name)
+            {
+                if (name_size == 0)
+                    name_size = internal::measure(name);
+                for (xml_node<Ch> *child = m_last_node; child; child = child->previous_sibling())
+                    if (internal::compare(child->name(), child->name_size(), name, name_size, case_sensitive))
+                        return child;
+                return 0;
+            }
+            else
+                return m_last_node;
         }
 
         //! Gets previous sibling node, optionally matching node name. 
@@ -876,10 +980,18 @@ namespace rapidxml
         //! \return Pointer to found sibling, or 0 if not found.
         xml_node<Ch> *previous_sibling(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
         {
-            //assert(this->m_parent);     // Cannot query for siblings if node has no parent
-            if (!this->m_parent) // NP assert -> runtime_error
-                throw std::runtime_error ("Node has no parent");
-            return m_prev_sibling;
+            assert(this->m_parent);     // Cannot query for siblings if node has no parent
+            if (name)
+            {
+                if (name_size == 0)
+                    name_size = internal::measure(name);
+                for (xml_node<Ch> *sibling = m_prev_sibling; sibling; sibling = sibling->m_prev_sibling)
+                    if (internal::compare(sibling->name(), sibling->name_size(), name, name_size, case_sensitive))
+                        return sibling;
+                return 0;
+            }
+            else
+                return m_prev_sibling;
         }
 
         //! Gets next sibling node, optionally matching node name. 
@@ -891,10 +1003,18 @@ namespace rapidxml
         //! \return Pointer to found sibling, or 0 if not found.
         xml_node<Ch> *next_sibling(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
         {
-            //assert(this->m_parent);     // Cannot query for siblings if node has no parent
-            if (!(this->m_parent)) // NP assert -> runtime_error
-                throw std::runtime_error ("Node has no parent");
-            return m_next_sibling;
+            assert(this->m_parent);     // Cannot query for siblings if node has no parent
+            if (name)
+            {
+                if (name_size == 0)
+                    name_size = internal::measure(name);
+                for (xml_node<Ch> *sibling = m_next_sibling; sibling; sibling = sibling->m_next_sibling)
+                    if (internal::compare(sibling->name(), sibling->name_size(), name, name_size, case_sensitive))
+                        return sibling;
+                return 0;
+            }
+            else
+                return m_next_sibling;
         }
 
         //! Gets first attribute of node, optionally matching attribute name.
@@ -904,7 +1024,17 @@ namespace rapidxml
         //! \return Pointer to found attribute, or 0 if not found.
         xml_attribute<Ch> *first_attribute(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
         {
-            return m_first_attribute;
+            if (name)
+            {
+                if (name_size == 0)
+                    name_size = internal::measure(name);
+                for (xml_attribute<Ch> *attribute = m_first_attribute; attribute; attribute = attribute->m_next_attribute)
+                    if (internal::compare(attribute->name(), attribute->name_size(), name, name_size, case_sensitive))
+                        return attribute;
+                return 0;
+            }
+            else
+                return m_first_attribute;
         }
 
         //! Gets last attribute of node, optionally matching attribute name.
@@ -914,7 +1044,17 @@ namespace rapidxml
         //! \return Pointer to found attribute, or 0 if not found.
         xml_attribute<Ch> *last_attribute(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
         {
-            return m_first_attribute ? m_last_attribute : 0;
+            if (name)
+            {
+                if (name_size == 0)
+                    name_size = internal::measure(name);
+                for (xml_attribute<Ch> *attribute = m_last_attribute; attribute; attribute = attribute->m_prev_attribute)
+                    if (internal::compare(attribute->name(), attribute->name_size(), name, name_size, case_sensitive))
+                        return attribute;
+                return 0;
+            }
+            else
+                return m_first_attribute ? m_last_attribute : 0;
         }
 
         ///////////////////////////////////////////////////////////////////////////
@@ -935,10 +1075,7 @@ namespace rapidxml
         //! \param child Node to prepend.
         void prepend_node(xml_node<Ch> *child)
         {
-            //assert(child && !child->parent() && child->type() != node_document);
-            // MP: Replace assert with runtime_error
-            if (!(child && !child->parent() && child->type() != node_document))
-                throw std::runtime_error ("No children, parents, or nodes");
+            assert(child && !child->parent() && child->type() != node_document);
             if (first_node())
             {
                 child->m_next_sibling = m_first_node;
@@ -959,10 +1096,7 @@ namespace rapidxml
         //! \param child Node to append.
         void append_node(xml_node<Ch> *child)
         {
-            //assert(child && !child->parent() && child->type() != node_document);
-            // MP: Replace assert with runtime_error
-            if(!child && !child->parent() && child->type() != node_document)
-                throw std::runtime_error ("No children, parents, or nodes");
+            assert(child && !child->parent() && child->type() != node_document);
             if (first_node())
             {
                 child->m_prev_sibling = m_last_node;
@@ -984,13 +1118,8 @@ namespace rapidxml
         //! \param child Node to insert.
         void insert_node(xml_node<Ch> *where, xml_node<Ch> *child)
         {
-            //assert(!where || where->parent() == this);
-            if (!(!where || where->parent() == this)) // NP assert -> runtime_error
-                throw std::runtime_error ("child can not be parent");
-            //assert(child && !child->parent() && child->type() != node_document);
-            // MP: Replace assert with runtime_error
-            if(!(child && !child->parent() && child->type() != node_document))
-                throw std::runtime_error ("No children, parents, or nodes");
+            assert(!where || where->parent() == this);
+            assert(child && !child->parent() && child->type() != node_document);
             if (where == m_first_node)
                 prepend_node(child);
             else if (where == 0)
@@ -1010,9 +1139,7 @@ namespace rapidxml
         //! Use first_node() to test if node has children.
         void remove_first_node()
         {
-            //assert(first_node());
-            if (!first_node()) // NP assert -> runtime_error
-                throw std::runtime_error ("First node does not exist");
+            assert(first_node());
             xml_node<Ch> *child = m_first_node;
             m_first_node = child->m_next_sibling;
             if (child->m_next_sibling)
@@ -1027,9 +1154,7 @@ namespace rapidxml
         //! Use first_node() to test if node has children.
         void remove_last_node()
         {
-            //assert(first_node());
-            if (!first_node()) // NP assert -> runtime_error
-                throw std::runtime_error ("First node does not exist");
+            assert(first_node());
             xml_node<Ch> *child = m_last_node;
             if (child->m_prev_sibling)
             {
@@ -1045,12 +1170,8 @@ namespace rapidxml
         // \param where Pointer to child to be removed.
         void remove_node(xml_node<Ch> *where)
         {
-            //assert(where && where->parent() == this);
-            if (!(!where || where->parent() == this)) // MP assert -> runtime_err
-                throw std::runtime_error ("child can not be parent");
-            //assert(first_node());
-            if (!first_node()) // MP assert -> runtime_error
-                throw std::runtime_error ("First node does not exist");
+            assert(where && where->parent() == this);
+            assert(first_node());
             if (where == m_first_node)
                 remove_first_node();
             else if (where == m_last_node)
@@ -1075,9 +1196,7 @@ namespace rapidxml
         //! \param attribute Attribute to prepend.
         void prepend_attribute(xml_attribute<Ch> *attribute)
         {
-            //assert(attribute && !attribute->parent());
-            if(!(attribute && !attribute->parent())) // MP assert -> runtime_error
-                throw std::runtime_error ("no attribute; no parent");
+            assert(attribute && !attribute->parent());
             if (first_attribute())
             {
                 attribute->m_next_attribute = m_first_attribute;
@@ -1097,9 +1216,7 @@ namespace rapidxml
         //! \param attribute Attribute to append.
         void append_attribute(xml_attribute<Ch> *attribute)
         {
-            //assert(attribute && !attribute->parent());
-            if(!(attribute && !attribute->parent())) // MP assert -> runtime_error
-                throw std::runtime_error ("no attribute; no parent");
+            assert(attribute && !attribute->parent());
             if (first_attribute())
             {
                 attribute->m_prev_attribute = m_last_attribute;
@@ -1121,12 +1238,8 @@ namespace rapidxml
         //! \param attribute Attribute to insert.
         void insert_attribute(xml_attribute<Ch> *where, xml_attribute<Ch> *attribute)
         {
-            //assert(!where || where->parent() == this);
-            if(!(!where || where->parent() == this)) // MP assert -> runtime_error
-                throw std::runtime_error ("Parent can not be child");
-            //assert(attribute && !attribute->parent());
-            if(!(attribute && !attribute->parent())) // MP assert -> runtime_error
-                throw std::runtime_error ("no attribute; no parent");
+            assert(!where || where->parent() == this);
+            assert(attribute && !attribute->parent());
             if (where == m_first_attribute)
                 prepend_attribute(attribute);
             else if (where == 0)
@@ -1146,9 +1259,7 @@ namespace rapidxml
         //! Use first_attribute() to test if node has attributes.
         void remove_first_attribute()
         {
-            //assert(first_attribute());
-            if(!first_attribute()) // MP assert -> runtime_error
-                throw std::runtime_error ("no first attribute");
+            assert(first_attribute());
             xml_attribute<Ch> *attribute = m_first_attribute;
             if (attribute->m_next_attribute)
             {
@@ -1165,9 +1276,7 @@ namespace rapidxml
         //! Use first_attribute() to test if node has attributes.
         void remove_last_attribute()
         {
-            //assert(first_attribute());
-            if(!first_attribute()) // MP assert -> runtime_error
-                throw std::runtime_error ("no first attribute");
+            assert(first_attribute());
             xml_attribute<Ch> *attribute = m_last_attribute;
             if (attribute->m_prev_attribute)
             {
@@ -1183,10 +1292,7 @@ namespace rapidxml
         //! \param where Pointer to attribute to be removed.
         void remove_attribute(xml_attribute<Ch> *where)
         {
-            //assert(first_attribute() && where->parent() == this);
-            // MP assert -> runtime_error
-            if(!(first_attribute() && where->parent() == this)) 
-                throw std::runtime_error ("no first attribute; parent=child");
+            assert(first_attribute() && where->parent() == this);
             if (where == m_first_attribute)
                 remove_first_attribute();
             else if (where == m_last_attribute)
@@ -1274,9 +1380,7 @@ namespace rapidxml
         template<int Flags>
         void parse(Ch *text)
         {
-            //assert(text);
-            if(!text) // MP assert -> runtime_error
-                throw std::runtime_error ("no text");
+            assert(text);
             
             // Remove current contents
             this->remove_all_nodes();
@@ -2020,6 +2124,28 @@ namespace rapidxml
                     }
                     break;
 
+                // <![
+                case Ch('['):
+                    if (text[2] == Ch('C') && text[3] == Ch('D') && text[4] == Ch('A') && 
+                        text[5] == Ch('T') && text[6] == Ch('A') && text[7] == Ch('['))
+                    {
+                        // '<![CDATA[' - cdata
+                        text += 8;     // Skip '![CDATA['
+                        return parse_cdata<Flags>(text);
+                    }
+                    break;
+
+                // <!D
+                case Ch('D'):
+                    if (text[2] == Ch('O') && text[3] == Ch('C') && text[4] == Ch('T') && 
+                        text[5] == Ch('Y') && text[6] == Ch('P') && text[7] == Ch('E') && 
+                        whitespace_pred::test(text[8]))
+                    {
+                        // '<!DOCTYPE ' - doctype
+                        text += 9;      // skip '!DOCTYPE '
+                        return parse_doctype<Flags>(text);
+                    }
+
                 }   // switch
 
                 // Attempt to skip other, unrecognized node types starting with <!
@@ -2067,8 +2193,10 @@ namespace rapidxml
                         if (Flags & parse_validate_closing_tags)
                         {
                             // Skip and validate closing tag name
-                            //Ch *closing_name = text;
+                            Ch *closing_name = text;
                             skip<node_name_pred, Flags>(text);
+                            if (!internal::compare(node->name(), node->name_size(), closing_name, text - closing_name, true))
+                                RAPIDXML_PARSE_ERROR("invalid closing tag name", text);
                         }
                         else
                         {
