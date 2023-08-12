@@ -6,7 +6,7 @@
 // Revision $DateTime: 2009/05/13 01:46:17 $
 //! \file rapidxml_print.hpp This file contains rapidxml printer implementation
 
-#include "rapidxml.hpp"
+#include "rapidxml.h"
 
 // Only include streams if not disabled
 #ifndef RAPIDXML_NO_STREAMS
