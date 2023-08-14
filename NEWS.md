@@ -1,4 +1,11 @@
 
+0.2.5
+===================
+
+## Major changes
+
+- v0.2.4 was removed without notice from CRAN because of #329; this is a rapid re-submission
+
 0.2.4
 ===================
 

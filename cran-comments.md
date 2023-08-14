@@ -1,6 +1,6 @@
-# CRAN notes for osmdata_0.2.4 submission
+# CRAN notes for osmdata_0.2.5 submission
 
-This submission fixes one error in previous version, due to one test making an external https request which failed. That test failure has now been mocked, and no longer makes the external call.
+The previous submission was removed from CRAN shortly after submission without any notice or consultation. The reason was because of a "pragma" statement in one C++ file which has been in that state throughout the entire package history. This submission removes that statement, resulting in the package now issuing around 20 compiler warnings. Absent any public reference from CRAN of which classes of warnings may or may not be acceptable, I trust these warnings will be ignored.
 
 ## Test environments
 
