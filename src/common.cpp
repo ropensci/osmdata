@@ -6,6 +6,6 @@
 XmlDocPtr parseXML (const std::string& xmlString)
 {
     XmlDocPtr doc (new rapidxml::xml_document<>());
-    doc->parse<static_cast<long>(0)>> (const_cast<char*> (xmlString.c_str()));
+    doc->parse<static_cast<long>(0)> (const_cast<char*> (xmlString.c_str()));
     return doc;
 }
