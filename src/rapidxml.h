@@ -374,7 +374,7 @@ namespace rapidxml
     //! If required, you can tweak <code>RAPIDXML_STATIC_POOL_SIZE</code>, <code>RAPIDXML_DYNAMIC_POOL_SIZE</code> and <code>RAPIDXML_ALIGNMENT</code> 
     //! to obtain best wasted memory to performance compromise.
     //! To do it, define their values before rapidxml.hpp file is included.
-    //! \param Ch Character type of created nodes. 
+    //! param Ch Character type of created nodes. 
     template<class Ch = char>
     class memory_pool
     {
@@ -643,7 +643,7 @@ namespace rapidxml
 
     //! Base class for xml_node and xml_attribute implementing common functions: 
     //! name(), name_size(), value(), value_size() and parent().
-    //! \param Ch Character type to use
+    //! param Ch Character type to use
     template<class Ch = char>
     class xml_base
     {
@@ -793,7 +793,7 @@ namespace rapidxml
     //! Each attribute has name and value strings, which are available through name() and value() functions (inherited from xml_base).
     //! Note that after parse, both name and value of attribute will point to interior of source text used for parsing. 
     //! Thus, this text must persist in memory for the lifetime of attribute.
-    //! \param Ch Character type to use.
+    //! param Ch Character type to use.
     template<class Ch = char>
     class xml_attribute: public xml_base<Ch>
     {
@@ -885,7 +885,7 @@ namespace rapidxml
     //! <br><br>
     //! Note that after parse, both name and value of node, if any, will point interior of source text used for parsing. 
     //! Thus, this text must persist in the memory for the lifetime of node.
-    //! \param Ch Character type to use.
+    //! param Ch Character type to use.
     template<class Ch = char>
     class xml_node: public xml_base<Ch>
     {
@@ -1353,7 +1353,7 @@ namespace rapidxml
     //! parse() function allocates memory for nodes and attributes by using functions of xml_document, 
     //! which are inherited from memory_pool.
     //! To access root node of the document, use the document itself, as if it was an xml_node.
-    //! \param Ch Character type to use.
+    //! param Ch Character type to use.
     template<class Ch = char>
     class xml_document: public xml_node<Ch>, public memory_pool<Ch>
     {
