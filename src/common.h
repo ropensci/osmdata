@@ -30,7 +30,16 @@
 
 #pragma once
 
+// These lines suppress two classes of warnings from rapidxml, but note that
+// this is forbidden on CRAN:
+// https://cran.r-project.org/web/packages/policies.html
+
+// #pragma GCC diagnostic push
+// #pragma GCC diagnostic ignored "-Wdeprecated-dynamic-exception-spec"
+// #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 #include "rapidxml.h"
+// #pragma GCC diagnostic pop
+
 #include <Rcpp.h> // Only for 'NA_REAL'
 
 // APS not good pratice to have all the headers included here, adds to compile time
