@@ -55,7 +55,7 @@
 #' @importFrom Rcpp evalCpp
 #' @importFrom utils browseURL read.table
 #' @useDynLib osmdata, .registration = TRUE
-NULL
+"_PACKAGE"
 
 #' Pipe operator
 #'

@@ -3,6 +3,7 @@
 \docType{package}
 \name{osmdata}
 \alias{osmdata}
+\alias{osmdata-package}
 \title{osmdata class def}
 \usage{
 osmdata(
@@ -99,6 +100,14 @@ format
 }
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://docs.ropensci.org/osmdata/ (website) https://github.com/ropensci/osmdata/ (devel)}
+  \item Report bugs at \url{https://github.com/ropensci/osmdata/issues}
+}
+
+}
 \author{
 Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon, Joan Maspons
 }
