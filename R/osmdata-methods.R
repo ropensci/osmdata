@@ -139,6 +139,22 @@ c.osmdata <- function (...) {
     return (res)
 }
 
+#' @export
+c.osmdata_sc <- function (...) {
+
+    x <- list (...)
+    nms <- unique (unlist (lapply (x, names)))
+
+    res <- lapply (nms, function (n) {
+        unique (do.call (rbind, lapply (x, function (i) i [[n]])))
+    })
+    names (res) <- nms
+
+    class (res) <- c ("SC", "sc", "osmdata_sc")
+
+    return (res)
+}
+
 c_sf <- function (res, x) {
 
     osm_names <- names (x [[1]]) [which (grepl ("osm_", names (x [[1]])))]

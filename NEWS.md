@@ -2,6 +2,10 @@
 0.2.5.00x (dev version)
 ===================
 
+## Major changes
+
+- Implemented `c.osmdata_sc` method to join `osmdata_sc` objects (#333)
+
 
 0.2.5
 ===================
