@@ -2,8 +2,8 @@
 % Please edit documentation in R/osmdata-class.R, R/osmdata-package.R
 \docType{package}
 \name{osmdata}
-\alias{osmdata}
 \alias{osmdata-package}
+\alias{osmdata}
 \title{osmdata class def}
 \usage{
 osmdata(

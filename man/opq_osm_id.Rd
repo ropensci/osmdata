@@ -95,15 +95,15 @@ datAiO <- opq_osm_id (id = id, type = type) \%>\%
 }
 \seealso{
 Other queries: 
-\code{\link{add_osm_features}()},
 \code{\link{add_osm_feature}()},
+\code{\link{add_osm_features}()},
 \code{\link{bbox_to_string}()},
 \code{\link{getbb}()},
+\code{\link{opq}()},
 \code{\link{opq_around}()},
 \code{\link{opq_csv}()},
 \code{\link{opq_enclosing}()},
 \code{\link{opq_string}()},
-\code{\link{opq}()},
 \code{\link{overpass_status}()}
 }
 \concept{queries}

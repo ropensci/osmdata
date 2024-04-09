@@ -126,8 +126,8 @@ opqa2 <- osmdata_sf (qa2)
 }
 \seealso{
 Other queries: 
-\code{\link{add_osm_features}()},
 \code{\link{add_osm_feature}()},
+\code{\link{add_osm_features}()},
 \code{\link{bbox_to_string}()},
 \code{\link{getbb}()},
 \code{\link{opq_around}()},
