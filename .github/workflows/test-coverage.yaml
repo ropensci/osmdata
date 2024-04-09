@@ -19,7 +19,6 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-
       - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-r@v2
@@ -32,5 +31,25 @@ jobs:
           needs: coverage
 
       - name: Test coverage
-        run: covr::codecov(line_exclusions = list('R/overpass-query.R', 'src/rapidxml.h','src/rapidxml_print.h'),function_exclusions=c('osm_elevation','check_elev_file'))
+        run: |
+          covr::codecov(
+            quiet = FALSE,
+            clean = FALSE,
+            install_path = file.path(Sys.getenv("RUNNER_TEMP"), "package"),
+            line_exclusions = list('R/overpass-query.R', 'src/rapidxml.h','src/rapidxml_print.h'),function_exclusions=c('osm_elevation','check_elev_file')
+          )
         shell: Rscript {0}
+
+      - name: Show testthat output
+        if: always()
+        run: |
+          ## --------------------------------------------------------------------
+          find ${{ runner.temp }}/package -name 'testthat.Rout*' -exec cat '{}' \; || true
+        shell: bash
+
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-test-failures
+          path: ${{ runner.temp }}/package
