@@ -2,15 +2,15 @@
 # R specific hooks: https://github.com/lorenzwalthert/precommit
 repos:
 -   repo: https://github.com/lorenzwalthert/precommit
-    rev: v0.3.2.9021
-    hooks: 
+    rev: v0.4.1
+    hooks:
     -   id: style-files
         args: [--style_pkg=spaceout, --style_fun=spaceout_style]    
         additional_dependencies:
         - ropensci-review-tools/spaceout
-          # -   id: roxygenize
+        # -   id: roxygenize
     # codemeta must be above use-tidy-description when both are used
-    -   id: codemeta-description-updated
+    # -   id: codemeta-description-updated
     -   id: use-tidy-description
     -   id: spell-check
         exclude: >
@@ -46,10 +46,12 @@ repos:
     -   id: readme-rmd-rendered
     -   id: parsable-R
     -   id: no-browser-statement
+    -   id: no-print-statement
     -   id: no-debug-statement
     -   id: deps-in-desc
+    # -   id: pkgdown
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.6.0
     hooks: 
     -   id: check-added-large-files
         args: ['--maxkb=200']
@@ -60,7 +62,7 @@ repos:
 -   repo: https://github.com/pre-commit-ci/pre-commit-ci-config
     rev: v1.6.1
     hooks:
-    # Only reuiqred when https://pre-commit.ci is used for config validation
+    # Only required when https://pre-commit.ci is used for config validation
     -   id: check-pre-commit-ci-config
 -   repo: local
     hooks:
@@ -77,3 +79,4 @@ repos:
 
 ci:
     autoupdate_schedule: monthly
+    # skip: [pkgdown]
