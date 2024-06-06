@@ -321,7 +321,7 @@ get_nominatim_query <- function (place_name,
     }
 
     if (!silent) {
-        print (req$url)
+        message (req$url)
     }
 
     req <- httr2::req_retry (req, max_tries = 10L)
