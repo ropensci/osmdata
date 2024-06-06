@@ -278,7 +278,10 @@ getbb <- function (place_name,
     }
 
     if (format_out == "sf_polygon") {
-        ret <- bb_as_sf_poly (gt_p, gt_mp, place_name)
+        ret_poly <- bb_as_sf_poly (gt_p, gt_mp, place_name)
+        obj_index <- as.integer (c (names (gt_p), names (gt_mp)))
+        ret_data <- obj [obj_index, which (!names (obj) %in% c ("boundingbox", "geotext"))]
+        ret <- cbind (ret_data, ret_poly)
     }
 
     return (ret)
@@ -360,9 +363,12 @@ get_geotext_poly <- function (obj) {
 
     . <- NULL # suppress R CMD check note
 
+    index_final <- seq_len (nrow (obj))
+
     indx_multi <- grep ("MULTIPOLYGON", obj$geotext)
     gt_p <- NULL
     indx <- which (!(seq (nrow (obj)) %in% indx_multi))
+    index_final <- index_final [indx]
     gt_p <- obj$geotext [indx] %>%
         gsub ("POLYGON\\(\\(", "", .) %>%
         gsub ("\\)\\)", "", .) %>%
@@ -370,6 +376,9 @@ get_geotext_poly <- function (obj) {
     indx_na <- rev (which (is.na (gt_p)))
     for (i in indx_na) {
         gt_p [[i]] <- NULL
+    }
+    if (length (indx_na) > 0L) {
+        index_final <- index_final [-indx_na]
     }
 
     # points and linestrings may be present in result, and will be prepended
@@ -384,11 +393,15 @@ get_geotext_poly <- function (obj) {
     ))
     if (length (indx) > 0) {
         gt_p <- gt_p [-indx]
+        index_final <- index_final [-indx]
     }
 
     if (length (gt_p) > 0) {
         gt_p <- lapply (gt_p, function (i) get1bdypoly (i))
+        lens <- vapply (gt_p, length, integer (1))
+        index_final <- rep (index_final, times = lens)
         gt_p <- do.call (c, gt_p)
+        names (gt_p) <- as.character (index_final)
     }
 
     return (gt_p)
@@ -407,6 +420,7 @@ get_geotext_multipoly <- function (obj) {
 
     indx_multi <- grep ("MULTIPOLYGON", obj$geotext)
     gt_mp <- NULL
+    index_final <- seq_len (nrow (obj)) [indx_multi]
 
     # nocov start
     # TODO: Test this
@@ -419,11 +433,17 @@ get_geotext_multipoly <- function (obj) {
         for (i in indx_na) {
             gt_mp [[i]] <- NULL
         }
+        if (length (indx_na) > 0L) {
+            index_final <- index_final [-indx_na]
+        }
     }
     # nocov end
 
     if (length (gt_mp) > 0) {
         gt_mp <- lapply (gt_mp, function (i) get1bdypoly (i))
+        lens <- vapply (gt_mp, length, integer (1))
+        index_final <- rep (index_final, times = lens)
+        names (gt_mp) <- as.character (index_final)
     }
 
     return (gt_mp)
