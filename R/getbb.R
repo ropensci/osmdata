@@ -282,6 +282,10 @@ getbb <- function (place_name,
         obj_index <- as.integer (c (names (gt_p), names (gt_mp)))
         ret_data <- obj [obj_index, which (!names (obj) %in% c ("boundingbox", "geotext"))]
         ret <- cbind (ret_data, ret_poly)
+        # Then restore sf attributes:
+        nms <- names (ret)
+        attributes (ret) <- attributes (ret_poly)
+        names (ret) <- nms
     }
 
     return (ret)
