@@ -47,21 +47,14 @@ make_sfc <- function (x, type) {
     class (x) <- c (paste0 ("sfc_", class (x [[1L]]) [2L]), "sfc")
     attr (x, "bbox") <- bb
 
-    if (packageVersion ("sf") < 0.9) {
-        NA_crs_ <- structure (list ( # nolint
-            epsg = NA_integer_, # nolint
-            proj4string = NA_character_
-        ), # nolint
-        class = "crs"
-        )
-    } else {
-        NA_crs_ <- structure (list ( # nolint
+    NA_crs_ <- structure (
+        list ( # nolint
             input = NA_character_, # nolint
             wkt = NA_character_
         ), # nolint
         class = "crs"
-        )
-    }
+    )
+
     attr (x, "crs") <- NA_crs_
 
     return (x)

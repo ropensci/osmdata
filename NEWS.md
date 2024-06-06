@@ -6,6 +6,11 @@
 
 - Implemented `c.osmdata_sc` method to join `osmdata_sc` objects (#333)
 
+## Minor changes
+
+- Improved `get_bb(..., format_out = "sf_polygon")` to return full metadata
+  along with geometries (#338 thanks to @RegularnaMatrica)
+
 
 0.2.5
 ===================

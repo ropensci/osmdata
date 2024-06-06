@@ -38,7 +38,7 @@ test_that ("getbb-place_name", {
     range2 <- apply (res2, 1, function (i) diff (range (i)))
     expect_true (all (range2 >= range0))
 
-    expect_output (
+    expect_message (
         res0 <- with_mock_dir ("mock_bb", {
             getbb (place_name = "Salzburg", silent = FALSE)
         })
@@ -132,6 +132,7 @@ test_that ("getbb-polygon", {
     expect_is (res, "sf")
     expect_is (res$geometry, "sfc_POLYGON")
     expect_true (length (res$geometry) > 1)
+    expect_true (ncol (res) > 1)
 })
 
 test_that ("bbox-to-string", {
