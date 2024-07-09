@@ -6,7 +6,7 @@ output:
     self_contained: no
 
   md_document:
-    variant: markdown_github
+    variant: gfm
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
