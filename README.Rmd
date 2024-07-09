@@ -252,6 +252,10 @@ sure you understand that licence before publishing any derived datasets.
 The package represents data in [`sf`](https://github.com/r-spatial/sf) format only, and only allows a single "layer" (such as points, lines, or polygons) to be read at one time.
 It is nevertheless recommended over osmdata for large queries of single layers, or where relationships between layers are not important.
 
+- [osmapiR](https://docs.ropensci.org/osmapiR/) is an R interface to the [OpenStreetMap API v0.6](https://wiki.openstreetmap.org/wiki/API_v0.6) for fetching and saving raw geodata from/to the OpenStreetMap database.
+This package allows access to OSM maps data as well as map notes, GPS traces, changelogs, and users data.
+To access OSM map data for purposes other than editing or exploring the history of the objects, better use osmdata or osmextract packages.
+
 
 ## Code of Conduct
 
