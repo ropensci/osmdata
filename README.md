@@ -60,8 +60,11 @@ To load the package and check the version:
 ``` r
 library (osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
+```
+
+``` r
 packageVersion ("osmdata")
-#> [1] '0.2.2'
+#> [1] '0.2.5.17'
 ```
 
 ## Usage
@@ -130,8 +133,11 @@ boxes:
 b <- getbb ("bangalore", format_out = "polygon")
 class (b)
 #> [1] "matrix" "array"
+```
+
+``` r
 head (b [[1]])
-#> [1] 77.4601
+#> [1] 77.46005
 ```
 
 ### Features
@@ -232,7 +238,6 @@ function. Full package functionality is described on the
 
 ``` r
 citation ("osmdata")
-#> 
 #> To cite osmdata in publications use:
 #> 
 #>   Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon (2017).
@@ -269,14 +274,22 @@ understand that licence before publishing any derived datasets.
 
 <!-- todo: add links to other packages -->
 
--   [osmextract](https://docs.ropensci.org/osmextract/) is an R package
-    for downloading and importing compressed ‘extracts’ of OSM data
-    covering large areas (e.g. all roads in a country). The package
-    represents data in [`sf`](https://github.com/r-spatial/sf) format
-    only, and only allows a single “layer” (such as points, lines, or
-    polygons) to be read at one time. It is nevertheless recommended
-    over osmdata for large queries of single layers, or where
-    relationships between layers are not important.
+- [osmextract](https://docs.ropensci.org/osmextract/) is an R package
+  for downloading and importing compressed ‘extracts’ of OSM data
+  covering large areas (e.g. all roads in a country). The package
+  represents data in [`sf`](https://github.com/r-spatial/sf) format
+  only, and only allows a single “layer” (such as points, lines, or
+  polygons) to be read at one time. It is nevertheless recommended over
+  osmdata for large queries of single layers, or where relationships
+  between layers are not important.
+
+- [osmapiR](https://docs.ropensci.org/osmapiR/) is an R interface to the
+  [OpenStreetMap API v0.6](https://wiki.openstreetmap.org/wiki/API_v0.6)
+  for fetching and saving raw geodata from/to the OpenStreetMap
+  database. This package allows access to OSM maps data as well as map
+  notes, GPS traces, changelogs, and users data. To access OSM map data
+  for purposes other than editing or exploring the history of the
+  objects, better use osmdata or osmextract packages.
 
 ## Code of Conduct
 
@@ -286,18 +299,19 @@ project, you agree to abide by its terms.
 
 ## Contributors
 
-
-
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-All contributions to this project are gratefully acknowledged using the [`allcontributors` package](https://github.com/ropenscilabs/allcontributors) following the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
+All contributions to this project are gratefully acknowledged using the
+[`allcontributors`
+package](https://github.com/ropenscilabs/allcontributors) following the
+[all-contributors](https://allcontributors.org) specification.
+Contributions of any kind are welcome!
 
 ### Code
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/mpadge">
@@ -342,8 +356,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=elipousson">elipousson</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/espinielli">
@@ -388,8 +400,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=ec-nebi">ec-nebi</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/Tazinho">
@@ -434,8 +444,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=stragu">stragu</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/patperu">
@@ -480,8 +488,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=danstowell">danstowell</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/ccamara">
@@ -496,14 +502,11 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=brry">brry</a>
 </td>
 </tr>
-
 </table>
-
 
 ### Issue Authors
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/karpfen">
@@ -548,8 +551,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Abeingalink">beingalink</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/yaakovfeldman">
@@ -594,8 +595,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aprokulski">prokulski</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/waholulu">
@@ -640,8 +639,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aloreabad6">loreabad6</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/slow-data">
@@ -686,8 +683,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Apolettif">polettif</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/marcusyoung">
@@ -732,8 +727,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Adipenpatel235">dipenpatel235</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/robitalec">
@@ -778,8 +771,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3AAlbertRapp">AlbertRapp</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/dmag-ir">
@@ -824,8 +815,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amooibroekd">mooibroekd</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/xiaofanliang">
@@ -858,14 +847,11 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3ARegularnaMatrica">RegularnaMatrica</a>
 </td>
 </tr>
-
 </table>
-
 
 ### Issue Contributors
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/sckott">
@@ -910,8 +896,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Acboettig">cboettig</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/prise6">
@@ -956,8 +940,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3ARobsteranium">Robsteranium</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/assignUser">
@@ -972,13 +954,9 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Arsbivand">rsbivand</a>
 </td>
 </tr>
-
 </table>
-
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-
-
 
 [![ropensci_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
