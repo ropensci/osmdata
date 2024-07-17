@@ -35,16 +35,3 @@ articles:
     - osm-sf-translation
     - query-split
 
-navbar:
-  title: osmdata
-  type: default
-  left:
-  - text: Home
-    href: index.html
-  - text: Articles
-    href: articles/index.html
-  - text: Functions
-    href: reference/index.html
-  right:
-  - icon: fa-github fa-lg
-    href: https://github.com/ropensci/osmdata
