@@ -157,10 +157,21 @@ q <- opq ("portsmouth usa") %>%
     add_osm_feature (key = "amenity", value = "restaurant") %>%
     add_osm_feature (key = "amenity", value = "pub") # There are none of these
 ```
+
+Features can also be requested by key only, in which case features with any
+values for the specified key will be returned:
+```{r key-val2}
+q <- opq ("portsmouth usa") %>%
+    add_osm_feature (key = "amenity")
+```
+Such key-only queries can, however, translate into requesting very large data
+sets, and should generally be avoided in favour of more precise key-value
+specifications.
+
 Negation can also be specified by pre-pending an exclamation mark so that the
 following requests all amenities that are NOT labelled as restaurants and that
 are not labelled as pubs:
-```{r key-val2}
+```{r key-val3}
 q <- opq ("portsmouth usa") %>%
     add_osm_feature (key = "amenity", value = "!restaurant") %>%
     add_osm_feature (key = "amenity", value = "!pub") # There are a lot of these
@@ -168,7 +179,7 @@ q <- opq ("portsmouth usa") %>%
 
 Additional arguments allow for more refined matching, such as the following
 request for all pubs with "irish" in the name:
-```{r key-val3}
+```{r key-val4}
 q <- opq ("washington dc") %>%
     add_osm_feature (key = "amenity", value = "pub") %>%
     add_osm_feature (

@@ -60,11 +60,8 @@ To load the package and check the version:
 ``` r
 library (osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
-```
-
-``` r
 packageVersion ("osmdata")
-#> [1] '0.2.5.17'
+#> [1] '0.2.5.16'
 ```
 
 ## Usage
@@ -133,9 +130,6 @@ boxes:
 b <- getbb ("bangalore", format_out = "polygon")
 class (b)
 #> [1] "matrix" "array"
-```
-
-``` r
 head (b [[1]])
 #> [1] 77.46005
 ```
@@ -157,6 +151,18 @@ q <- opq ("portsmouth usa") %>%
     add_osm_feature (key = "amenity", value = "restaurant") %>%
     add_osm_feature (key = "amenity", value = "pub") # There are none of these
 ```
+
+Features can also be requested by key only, in which case features with
+any values for the specified key will be returned:
+
+``` r
+q <- opq ("portsmouth usa") %>%
+    add_osm_feature (key = "amenity")
+```
+
+Such key-only queries can, however, translate into requesting very large
+data sets, and should generally be avoided in favour of more precise
+key-value specifications.
 
 Negation can also be specified by pre-pending an exclamation mark so
 that the following requests all amenities that are NOT labelled as
