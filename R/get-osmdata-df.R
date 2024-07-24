@@ -75,7 +75,8 @@ osmdata_data_frame <- function (q,
             colClasses = "character", # osm_id doesn't fit in integer
             check.names = FALSE,
             comment.char = "",
-            stringsAsFactors = stringsAsFactors
+            stringsAsFactors = stringsAsFactors,
+            encoding = "UTF-8"
         )
     } else if (isTRUE (obj$meta$query_type == "adiff")) {
         datetime_from <- obj$meta$datetime_from
@@ -162,7 +163,7 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
             osm_id = rownames (res [[i]]),
             center [[i]],
             meta [[i]],
-            tags [[i]],
+            setenc_utf8(tags [[i]]),
             stringsAsFactors = stringsAsFactors,
             check.names = FALSE
         )
@@ -225,6 +226,7 @@ xml_adiff_to_df <- function (doc,
         tagV <- vapply (tag, function (x) x, FUN.VALUE = character (2))
         m [i, tagV [1, ]] <- tagV [2, ]
     }
+    Encoding(m) <- "UTF-8"
 
     osm_type <- xml2::xml_name (osm_obj)
     osm_id <- xml2::xml_attr (osm_obj, "id")
@@ -325,6 +327,7 @@ get_meta_from_xml <- function (osm_obj) {
             osm_uid = xml2::xml_attr (osm_obj, attr = "uid"),
             osm_user = xml2::xml_attr (osm_obj, attr = "user")
         )
+        Encoding(out$osm_user) <- "UTF-8"
 
     } else {
         out <- matrix (nrow = length (osm_obj), ncol = 0)

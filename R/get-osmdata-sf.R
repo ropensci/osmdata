@@ -62,8 +62,9 @@ osmdata_sf <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) { # noli
     if (!"osm_id" %in% names (res$polygons_kv)[1]) {
         res <- fill_kv (res, "polygons_kv", "polygons", stringsAsFactors)
     }
-    kv_df <- grep ("_kv$", names (res))
-    res[kv_df] <- fix_columns_list (res[kv_df])
+    kv_df <- grep ("_kv$", names (res)) # objects with tags
+    res [kv_df] <- fix_columns_list (res[kv_df])
+    res [kv_df] <- lapply (res [kv_df], setenc_utf8)
 
     if (missing (q)) {
         obj$bbox <- paste (res$bbox, collapse = " ")
