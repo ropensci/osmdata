@@ -353,7 +353,7 @@ get_center_from_cpp_output <- function (res, what = "points") {
 #' @return `x` with all the columns or items of type character with UTF-8 encoding set.
 #' @noRd
 setenc_utf8 <- function(x) {
-    char_cols <- vapply (x, is.character, FUN.VALUE = logical (1))
+    char_cols <- which (vapply (x, is.character, FUN.VALUE = logical (1)))
     x [char_cols] <- lapply (x [char_cols], function (y) {
         Encoding (y) <- "UTF-8"
         y
