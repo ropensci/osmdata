@@ -229,6 +229,8 @@ getbb <- function (place_name,
     )
 
     if (format_out == "data.frame") {
+        utf8cols <- c ("licence", "name", "display_name")
+        obj [, utf8cols] <- setenc_utf8 (obj [, utf8cols])
         return (obj)
     }
 
