@@ -153,3 +153,31 @@ test_that ("clashes in key names", {
         expect_true (all (c ("osm_id", "osm_id.1") %in% names (f)))
     })
 })
+
+test_that ("duplicated column names", {
+    # https://github.com/ropensci/osmdata/issues/348
+    osm_ways <- test_path ("fixtures", "osm-ways.osm")
+
+    q0 <- opq (bbox = c (1, 1, 5, 5))
+    x0 <- osmdata_sf (q0, osm_ways)$osm_lines
+    expect_true ("boat" %in% names (x0))
+    x0_boat <- x0$boat [which (!is.na (x0$boat))]
+    expect_equal (x0_boat, "yes")
+
+    # Read those data and insert new node with duplicated name.
+    # This requires much less code read as text rather than xml:
+    x <- readLines (osm_ways)
+    i <- grep ("\"boat\"", x)
+    x_i <- gsub ("yes", "no", gsub ("boat", "Boat", x [i]))
+    x <- c (x [seq_len (i)], x_i, x [seq (i + 1L, length (x))])
+    ftmp <- tempfile (fileext = ".osm")
+    writeLines (x, ftmp)
+
+    # Note that XML parses capitals before lowercase, so "boat" is merged into
+    # "Boat"
+    x1 <- osmdata_sf (q0, ftmp)$osm_lines
+    expect_false ("boat" %in% names (x1))
+    expect_true ("Boat" %in% names (x1))
+    x1_boat <- x1$Boat [which (!is.na (x1$Boat))]
+    expect_equal (x1_boat, "no")
+})
