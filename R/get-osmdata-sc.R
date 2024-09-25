@@ -75,6 +75,12 @@ osmdata_sc <- function (q, doc, quiet = TRUE) {
         overpass_version = temp$obj$meta$overpass_version
     )
 
+    has_tags <- c ("nodes", "relation_properties", "object")
+    obj [has_tags] <- lapply(obj [has_tags], function (x) {
+        x [, c ("key", "value")] <- setenc_utf8 (x [, c ("key", "value")])
+        x
+    })
+
     if (!missing (q)) {
         if (!is.character (q)) {
             obj$meta$bbox <- q$bbox

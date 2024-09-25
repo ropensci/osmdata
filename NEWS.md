@@ -12,6 +12,7 @@
   along with geometries (#338 thanks to @RegularnaMatrica)
 - Mention key-only feature requests in README (#342 thanks to @joostschouppe)
 - Merge any columns in `osmdata_sf()` with mixed-case duplicated names (#348)
+- Set encoding to UTF-8 for tags and user names (#347)
 
 
 0.2.5

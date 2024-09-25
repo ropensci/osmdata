@@ -75,7 +75,8 @@ osmdata_data_frame <- function (q,
             colClasses = "character", # osm_id doesn't fit in integer
             check.names = FALSE,
             comment.char = "",
-            stringsAsFactors = stringsAsFactors
+            stringsAsFactors = stringsAsFactors,
+            encoding = "UTF-8"
         )
     } else if (isTRUE (obj$meta$query_type == "adiff")) {
         datetime_from <- obj$meta$datetime_from
@@ -122,13 +123,15 @@ xml_to_df <- function (doc, stringsAsFactors = FALSE) {
 
     tags <- mapply (function (i, k) {
         i <- i [, k, drop = FALSE] # remove osm_id column if exists
+        out <- matrix (
+            NA_character_,
+            nrow = nrow (i), ncol = length (keys),
+            dimnames = list (NULL, keys)
+        )
+        out <- enc2utf8 (out)
         out <- data.frame (
-            matrix (
-                nrow = nrow (i), ncol = length (keys),
-                dimnames = list (NULL, keys)
-            ),
-            stringsAsFactors = stringsAsFactors,
-            check.names = FALSE
+            out,
+            stringsAsFactors = stringsAsFactors, check.names = FALSE
         )
         out [, names (i)] <- i
         return (out)
@@ -214,6 +217,7 @@ xml_adiff_to_df <- function (doc,
     tags_u <- xml2::xml_find_all (osm_actions, xpath = ".//tag")
     col_names <- sort (unique (xml2::xml_attr (tags_u, attr = "k")))
     m <- matrix (
+        NA_character_,
         nrow = length (osm_obj), ncol = length (col_names),
         dimnames = list (NULL, col_names)
     )
@@ -225,6 +229,7 @@ xml_adiff_to_df <- function (doc,
         tagV <- vapply (tag, function (x) x, FUN.VALUE = character (2))
         m [i, tagV [1, ]] <- tagV [2, ]
     }
+    m <- enc2utf8 (m)
 
     osm_type <- xml2::xml_name (osm_obj)
     osm_id <- xml2::xml_attr (osm_obj, "id")
@@ -325,6 +330,7 @@ get_meta_from_xml <- function (osm_obj) {
             osm_uid = xml2::xml_attr (osm_obj, attr = "uid"),
             osm_user = xml2::xml_attr (osm_obj, attr = "user")
         )
+        out$osm_user <- enc2utf8 (out$osm_user)
 
     } else {
         out <- matrix (nrow = length (osm_obj), ncol = 0)

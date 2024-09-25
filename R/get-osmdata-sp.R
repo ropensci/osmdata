@@ -71,7 +71,11 @@ osmdata_sp <- function (q, doc, quiet = TRUE) {
     obj$osm_multipolygons <- res$multipolygons
 
     osm_items <- grep ("^osm_", names (obj))
-    obj[osm_items] <- fix_columns_list (obj[osm_items])
+    obj [osm_items] <- fix_columns_list (obj [osm_items])
+    obj [osm_items] <- lapply (obj [osm_items], function (x) {
+        x@data <- setenc_utf8 (x@data)
+        x
+    })
     class (obj) <- c (class (obj), "osmdata_sp")
 
     return (obj)
