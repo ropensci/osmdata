@@ -56,14 +56,14 @@ osmdata_sf <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) { # noli
     # some objects don't have names. As explained in
     # src/osm_convert::restructure_kv_mat, these instances do not get an osm_id
     # column (the first one), so this is appended here:
-    if (!"osm_id" %in% names (res$points_kv)[1]) {
+    if (!"osm_id" %in% names (res$points_kv) [1]) {
         res <- fill_kv (res, "points_kv", "points", stringsAsFactors)
     }
-    if (!"osm_id" %in% names (res$polygons_kv)[1]) {
+    if (!"osm_id" %in% names (res$polygons_kv) [1]) {
         res <- fill_kv (res, "polygons_kv", "polygons", stringsAsFactors)
     }
     kv_df <- grep ("_kv$", names (res))
-    res[kv_df] <- fix_columns_list (res[kv_df])
+    res [kv_df] <- fix_columns_list (res [kv_df])
 
     if (missing (q)) {
         obj$bbox <- paste (res$bbox, collapse = " ")
@@ -191,7 +191,7 @@ fill_kv <- function (res, kv_name, g_name, stringsAsFactors) { # nolint
 
 
 fill_sf_objects <- function (res, obj, type = "points",
-                          stringsAsFactors = FALSE) { # nolint
+                             stringsAsFactors = FALSE) { # nolint
 
     if (!type %in% sf_types) {
         stop ("type must be one of ", paste (sf_types, collapse = " "))
