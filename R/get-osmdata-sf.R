@@ -121,6 +121,8 @@ make_sf <- function (..., stringsAsFactors = FALSE) { # nolint
         )
     }
 
+    df <- merge_duplicated_col_names (df)
+
     object <- as.list (substitute (list (...))) [-1L]
     arg_nm <- sapply (object, function (x) deparse (x)) # nolint
     sfc_name <- make.names (arg_nm [sf_column])
@@ -134,6 +136,28 @@ make_sf <- function (..., stringsAsFactors = FALSE) { # nolint
     names (f) <- names (df) [-ncol (df)]
     attr (df, "agr") <- f
     class (df) <- c ("sf", class (df))
+
+    return (df)
+}
+
+#' Merge any `sf` `data.frame` columns which have mixed-case duplicated names
+#' (like "This" and "this"; #348).
+merge_duplicated_col_names <- function (df) {
+
+    nms_lower <- tolower (names (df))
+    dups <- which (duplicated (nms_lower))
+    if (length (dups) > 0L) {
+        dup_nms <- nms_lower [dups]
+        cols_to_rm <- NULL
+        for (nm in dup_nms) {
+            index <- which (nms_lower == nm)
+            df [, index [1]] <- apply (df [, index], 1, function (i) {
+                ifelse (all (is.na (i)), i [1], i [which (!is.na (i)) [1]])
+            })
+            cols_to_rm <- c (cols_to_rm, index [2])
+        }
+        df <- df [, -(cols_to_rm)]
+    }
 
     return (df)
 }
