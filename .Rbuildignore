@@ -13,7 +13,6 @@ makefile$
 ^cran-comments.md$
 ^CODE_OF_CONDUCT\.md$
 ^README\.Rmd$
-^README\.md$
 ^README\.html$
 ^inst/WORDLIST$
 ^src/Makevars$
