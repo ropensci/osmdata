@@ -2,13 +2,12 @@
 #' format.
 #'
 #' @param q An object of class `overpass_query` constructed with
-#'      \link{opq} and \link{add_osm_feature}. May be be omitted,
-#'      in which case the \link{osmdata} object will not include the
-#'      query.
+#'      \link{opq} and \link{add_osm_feature} or a string with a valid query.
+#'      May be be omitted, in which case the \link{osmdata} object will not
+#'      include the query.
 #' @param doc If missing, `doc` is obtained by issuing the overpass query,
 #'        `q`, otherwise either the name of a file from which to read data,
-#'        or an object of class \pkg{xml2} returned from
-#'        \link{osmdata_xml}.
+#'        or an object of class \pkg{xml2} returned from \link{osmdata_xml}.
 #' @param quiet suppress status messages.
 #'
 #' @return An object of class `osmdata` with the OSM components (points, lines,

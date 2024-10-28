@@ -10,7 +10,7 @@ osmdata_xml(q, filename, quiet = TRUE, encoding)
 }
 \arguments{
 \item{q}{An object of class \code{overpass_query} constructed with
-\link{opq} and \link{add_osm_feature}.}
+\link{opq} and \link{add_osm_feature} or a string with a valid query.}
 
 \item{filename}{If given, OSM data are saved to the named file}
 

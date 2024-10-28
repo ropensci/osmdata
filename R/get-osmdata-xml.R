@@ -3,7 +3,7 @@
 #' or a raw vector.
 #'
 #' @param q An object of class `overpass_query` constructed with
-#' \link{opq} and \link{add_osm_feature}.
+#' \link{opq} and \link{add_osm_feature} or a string with a valid query.
 #' @param filename If given, OSM data are saved to the named file
 #' @param quiet suppress status messages.
 #' @param encoding Unless otherwise specified XML documents are assumed to be

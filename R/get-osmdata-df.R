@@ -3,9 +3,9 @@
 #'
 #' @inheritParams osmdata_sp
 #' @param q An object of class `overpass_query` constructed with
-#'      \link{opq} and \link{add_osm_feature}. May be be omitted,
-#'      in which case the attributes of the \link{data.frame} will not include
-#'      the query.
+#'      \link{opq} and \link{add_osm_feature} or a string with a valid query.
+#'      May be be omitted, in which case the attributes of the \link{data.frame}
+#'      will not include the query.
 #' @param stringsAsFactors Should character strings in the 'data.frame' be
 #'      coerced to factors?
 #' @return A `data.frame` with id, type and tags of the the objects from the
