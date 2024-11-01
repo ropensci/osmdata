@@ -8,9 +8,10 @@ osmdata_data_frame(q, doc, quiet = TRUE, stringsAsFactors = FALSE)
 }
 \arguments{
 \item{q}{An object of class \code{overpass_query} constructed with
-\link{opq} and \link{add_osm_feature} or a string with a valid query.
+\link{opq} and \link{add_osm_feature} or a string with a valid query, such
+as \code{"(node(39.4712701,-0.3841326,39.4713799,-0.3839475);); out;"}.
 May be be omitted, in which case the attributes of the \link{data.frame}
-will not include the query.}
+will not include the query. See examples below.}
 
 \item{doc}{If missing, \code{doc} is obtained by issuing the overpass query,
 \code{q}, otherwise either the name of a file from which to read data,
@@ -42,6 +43,24 @@ hampi_df <- opq ("hampi india") \%>\%
 attr (hampi_df, "bbox")
 attr (hampi_df, "overpass_call")
 attr (hampi_df, "meta")
+
+# Complex query as a string (not possible with regular osmdata functions)
+q <- '[out:csv(::type, ::id, "name:ca", "wikidata")][timeout:50];
+    area["name"="Països Catalans"][boundary=political]->.boundaryarea;
+
+    rel(area.boundaryarea)[admin_level=8][boundary=administrative];
+    map_to_area -> .all_level_8_areas;
+
+    ( nwr(area.boundaryarea)["amenity"="townhall"];>;);
+    is_in;
+    area._[admin_level=8][boundary=administrative] -> .level_8_areas_with_townhall;
+
+    (.all_level_8_areas; - .level_8_areas_with_townhall;);
+    rel(pivot);
+    out tags;'
+
+no_townhall <- osmdata_data_frame (q)
+no_townhall
 }
 }
 \seealso{
