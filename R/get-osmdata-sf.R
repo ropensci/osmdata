@@ -15,6 +15,25 @@
 #' hampi_sf <- opq ("hampi india") %>%
 #'     add_osm_feature (key = "historic", value = "ruins") %>%
 #'     osmdata_sf ()
+#'
+#' # Complex query as a string (not possible with regular osmdata functions)
+#' q <- '[out:xml][timeout:50];
+#'     area[name="Països Catalans"][boundary=political]->.boundaryarea;
+#'
+#'     rel(area.boundaryarea)[admin_level=8][boundary=administrative];
+#'     map_to_area -> .all_level_8_areas;
+#'
+#'     ( nwr(area.boundaryarea)[amenity=townhall]; >; );
+#'     is_in;
+#'     area._[admin_level=8][boundary=administrative] -> .level_8_areas_with_townhall;
+#'
+#'     (.all_level_8_areas; - .level_8_areas_with_townhall;);
+#'     rel(pivot);
+#'     (._; >;);
+#'     out;'
+#'
+#' no_townhall <- osmdata_sf (q)
+#' no_townhall
 #' }
 osmdata_sf <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) { # nolint
 
