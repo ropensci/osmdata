@@ -6,7 +6,9 @@ on:
     branches:
       - main
 
-name: test-coverage
+name: test-coverage.yaml
+
+permissions: read-all
 
 jobs:
 
@@ -15,7 +17,6 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
@@ -27,29 +28,39 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::covr
+          extra-packages: any::covr, any::xml2
           needs: coverage
 
       - name: Test coverage
         run: |
-          covr::codecov(
+          cov <- covr::package_coverage(
             quiet = FALSE,
             clean = FALSE,
-            install_path = file.path(Sys.getenv("RUNNER_TEMP"), "package"),
+            install_path = file.path(normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"), "package"),
             line_exclusions = list('R/overpass-query.R', 'src/rapidxml.h','src/rapidxml_print.h'),function_exclusions=c('osm_elevation','check_elev_file')
           )
+          covr::to_cobertura(cov)
         shell: Rscript {0}
+
+      - uses: codecov/codecov-action@v4
+        with:
+          # Fail if error if not on PR, or if on PR and token is given
+          fail_ci_if_error: ${{ github.event_name != 'pull_request' || secrets.CODECOV_TOKEN }}
+          file: ./cobertura.xml
+          plugin: noop
+          disable_search: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Show testthat output
         if: always()
         run: |
           ## --------------------------------------------------------------------
-          find ${{ runner.temp }}/package -name 'testthat.Rout*' -exec cat '{}' \; || true
+          find '${{ runner.temp }}/package' -name 'testthat.Rout*' -exec cat '{}' \; || true
         shell: bash
 
       - name: Upload test results
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-test-failures
           path: ${{ runner.temp }}/package
