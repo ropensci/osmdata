@@ -1,5 +1,7 @@
 context ("unname-osmdata-sf")
 
+test_all <- (identical (Sys.getenv ("MPADGE_LOCAL", "false"), "true") ||
+    identical (Sys.getenv ("GITHUB_WORKFLOW", "nope"), "test-coverage"))
 skip_if (!test_all)
 
 has_internet <- curl::has_internet ()

@@ -1,5 +1,3 @@
-context ("sp-osm")
-
 test_that ("multipolygon", {
     osm_multi <- test_path ("fixtures", "osm-multi.osm")
     x_sf <- sf::st_read (osm_multi, layer = "multipolygons", quiet = TRUE)

@@ -1,5 +1,3 @@
-has_internet <- curl::has_internet ()
-
 test_that ("bbox", {
 
     expect_error (bbox_to_string (), "bbox must be provided")

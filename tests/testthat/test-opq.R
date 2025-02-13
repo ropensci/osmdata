@@ -1,6 +1,3 @@
-
-context ("opq functions")
-
 test_that ("datetime", {
 
     q0 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
