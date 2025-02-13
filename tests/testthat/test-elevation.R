@@ -1,5 +1,3 @@
-has_internet <- curl::has_internet ()
-
 test_that ("elevation", {
 
     # elevation can't actually be tested, because it only works with a full SRTM
