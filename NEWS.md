@@ -14,6 +14,7 @@
 - Merge any columns in `osmdata_sf()` with mixed-case duplicated names (#348)
 - Set encoding to UTF-8 for tags and user names (#347)
 - Document the use of the input query as character strings for `osmdata_*()` (#349)
+- Consistent `NA` values throughout all multi-* matrices returned by `osmdata_sf()` (#355)
 
 
 0.2.5
