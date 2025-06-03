@@ -30,6 +30,9 @@ test: ## Run test suite
 pkgcheck: ## Run `pkgcheck` and print results to screen.
 	Rscript -e 'library(pkgcheck); checks <- pkgcheck(); print(checks); summary (checks)'
 
+allcontribs: ## Update 'allcontributors' list on README
+	Rscript -e 'allcontributors::add_contributors (check_urls = FALSE)'
+
 clean: ## Clean all temp and cached files
 	rm -rf *.html *.png README_cache 
 
