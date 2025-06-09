@@ -13,7 +13,7 @@ overpass_status <- function (quiet = FALSE) {
 
     overpass_url <- get_overpass_url ()
     st_type <- "status"
-    if (grepl ("vi-di", overpass_url) | grepl ("rambler", overpass_url)) {
+    if (grepl ("vi-di", overpass_url) || grepl ("rambler", overpass_url)) {
         st_type <- "timestamp"
     }
 
@@ -102,7 +102,7 @@ check_for_error <- function (doc) {
 
     # the nchar check uses an arbitrary value to avoid trying to `read_xml()`
     # read data, which would take forever.
-    if (grepl ("error: ", doc, ignore.case = TRUE) &
+    if (grepl ("error: ", doc, ignore.case = TRUE) &&
         nchar (doc) < 10000) {
 
         docx <- xml2::read_xml (doc)
@@ -148,7 +148,7 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
     if (missing (query)) {
         stop ("query must be supplied", call. = FALSE)
     }
-    if (!is.character (query) | length (query) > 1) {
+    if (!is.character (query) || length (query) > 1) {
         stop ("query must be a single character string")
     }
 

@@ -4,20 +4,17 @@
   "identifier": "osmdata",
   "description": "Download and import of 'OpenStreetMap' ('OSM') data as 'sf' or 'sp' objects. 'OSM' data are extracted from the 'Overpass' web server (<https://overpass-api.de/>) and processed with very fast 'C++' routines for return to 'R'.",
   "name": "osmdata: Import 'OpenStreetMap' Data as Simple Features or Spatial Objects",
-  "relatedLink": [
-    "https://docs.ropensci.org/osmdata/",
-    "https://CRAN.R-project.org/package=osmdata"
-  ],
+  "relatedLink": ["https://docs.ropensci.org/osmdata/", "https://CRAN.R-project.org/package=osmdata"],
   "codeRepository": "https://github.com/ropensci/osmdata/",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.2.5.033",
+  "version": "0.2.5.34",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.4.1 (2024-06-14)",
+  "runtimePlatform": "R version 4.5.0 (2025-04-11)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -255,18 +252,6 @@
     },
     "4": {
       "@type": "SoftwareApplication",
-      "identifier": "lubridate",
-      "name": "lubridate",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=lubridate"
-    },
-    "5": {
-      "@type": "SoftwareApplication",
       "identifier": "magrittr",
       "name": "magrittr",
       "provider": {
@@ -277,12 +262,12 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=magrittr"
     },
-    "6": {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "methods",
       "name": "methods"
     },
-    "7": {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "Rcpp",
       "name": "Rcpp",
@@ -295,7 +280,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=Rcpp"
     },
-    "8": {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "reproj",
       "name": "reproj",
@@ -307,7 +292,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=reproj"
     },
-    "9": {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "rvest",
       "name": "rvest",
@@ -319,7 +304,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rvest"
     },
-    "10": {
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
@@ -331,12 +316,12 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
-    "11": {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "utils",
       "name": "utils"
     },
-    "12": {
+    "11": {
       "@type": "SoftwareApplication",
       "identifier": "xml2",
       "name": "xml2",
@@ -348,25 +333,12 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=xml2"
     },
-    "SystemRequirements": {}
+    "SystemRequirements": null
   },
   "applicationCategory": "DataAccess",
   "isPartOf": "https://ropensci.org",
-  "keywords": [
-    "open0street0map",
-    "openstreetmap",
-    "overpass0API",
-    "OSM",
-    "overpass-api",
-    "r",
-    "cpp",
-    "rstats",
-    "osm",
-    "osm-data",
-    "r-package",
-    "peer-reviewed"
-  ],
-  "fileSize": "17525.157KB",
+  "keywords": ["open0street0map", "openstreetmap", "overpass0API", "OSM", "overpass-api", "r", "cpp", "rstats", "osm", "osm-data", "r-package", "peer-reviewed"],
+  "fileSize": "28399.402KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
@@ -400,10 +372,7 @@
         "issueNumber": "14",
         "datePublished": "2017",
         "isPartOf": {
-          "@type": [
-            "PublicationVolume",
-            "Periodical"
-          ],
+          "@type": ["PublicationVolume", "Periodical"],
           "volumeNumber": "2",
           "name": "Journal of Open Source Software"
         }
@@ -412,10 +381,7 @@
   ],
   "releaseNotes": "https://github.com/ropensci/osmdata/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/osmdata/blob/main/README.md",
-  "contIntegration": [
-    "https://github.com/ropensci/osmdata/actions?query=workflow%3AR-CMD-check",
-    "https://app.codecov.io/gh/ropensci/osmdata"
-  ],
+  "contIntegration": ["https://github.com/ropensci/osmdata/actions?query=workflow%3AR-CMD-check", "https://app.codecov.io/gh/ropensci/osmdata"],
   "developmentStatus": "https://www.repostatus.org/#active",
   "review": {
     "@type": "Review",
