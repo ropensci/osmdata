@@ -24,12 +24,12 @@ get_timestamp <- function (doc) {
     }
 
     wday_t <- lubridate::wday (tstmp, label = TRUE)
-    wday <- lubridate::wday (tstmp, label = FALSE)
+    mday <- lubridate::mday (tstmp)
     mon <- lubridate::month (tstmp, label = TRUE)
     year <- lubridate::year (tstmp)
 
     hms <- strsplit (as.character (tstmp), " ") [[1]] [2]
-    paste ("[", wday_t, wday, mon, year, hms, "]")
+    paste ("[", wday_t, mday, mon, year, hms, "]")
 }
 
 
