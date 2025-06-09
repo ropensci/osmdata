@@ -33,7 +33,6 @@ Depends:
 Imports:
     curl,
     httr2,
-    lubridate,
     magrittr,
     methods,
     Rcpp (>= 0.12.4),

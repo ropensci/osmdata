@@ -46,8 +46,7 @@ overpass_status <- function (quiet = FALSE) {
         } else {
 
             # status not even returned so pause the whole shebang for 10 seconds
-            slot_time <- lubridate::ymd_hms (lubridate::now () + 10)
-            slot_time <- lubridate::force_tz (slot_time, tz = Sys.timezone ())
+            slot_time <- Sys.time () + 10
         }
     }
 
@@ -66,13 +65,12 @@ get_slot_time <- function (status, quiet) {
 
     if (grepl ("after", status_now)) {
         available <- FALSE
-        slot_time <- lubridate::ymd_hms (gsub (
-            "Slot available after: ",
-            "", status_now
-        ))
-        slot_time <- lubridate::force_tz (slot_time,
-            tz = Sys.timezone ()
+        slot_time <- strptime (
+            gsub ("Slot available after: ", "", status_now),
+            format = "%FT%TZ",
+            tz = "GMT"
         )
+        slot_time <- as.POSIXct (slot_time, tz = Sys.timezone ())
     } else {
         available <- TRUE
         slot_time <- Sys.time ()
