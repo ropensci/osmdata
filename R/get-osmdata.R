@@ -23,13 +23,9 @@ get_timestamp <- function (doc) {
         tstmp <- Sys.time ()
     }
 
-    wday_t <- lubridate::wday (tstmp, label = TRUE)
-    wday <- lubridate::wday (tstmp, label = FALSE)
-    mon <- lubridate::month (tstmp, label = TRUE)
-    year <- lubridate::year (tstmp)
-
-    hms <- strsplit (as.character (tstmp), " ") [[1]] [2]
-    paste ("[", wday_t, wday, mon, year, hms, "]")
+    out <- paste ("[", format (tstmp, format = "%a %e %b %Y %T"), "]")
+    out <- gsub ("  ", " ", out) # remove extra space in %e for single digit days
+    out <- gsub ("\\.", "\\\\.", out) # Escape dots
 }
 
 

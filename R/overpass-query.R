@@ -13,7 +13,7 @@ overpass_status <- function (quiet = FALSE) {
 
     overpass_url <- get_overpass_url ()
     st_type <- "status"
-    if (grepl ("vi-di", overpass_url) | grepl ("rambler", overpass_url)) {
+    if (grepl ("vi-di", overpass_url) || grepl ("rambler", overpass_url)) {
         st_type <- "timestamp"
     }
 
@@ -46,8 +46,7 @@ overpass_status <- function (quiet = FALSE) {
         } else {
 
             # status not even returned so pause the whole shebang for 10 seconds
-            slot_time <- lubridate::ymd_hms (lubridate::now () + 10)
-            slot_time <- lubridate::force_tz (slot_time, tz = Sys.timezone ())
+            slot_time <- Sys.time () + 10
         }
     }
 
@@ -66,13 +65,12 @@ get_slot_time <- function (status, quiet) {
 
     if (grepl ("after", status_now)) {
         available <- FALSE
-        slot_time <- lubridate::ymd_hms (gsub (
-            "Slot available after: ",
-            "", status_now
-        ))
-        slot_time <- lubridate::force_tz (slot_time,
-            tz = Sys.timezone ()
+        slot_time <- strptime (
+            gsub ("Slot available after: ", "", status_now),
+            format = "%FT%TZ",
+            tz = "GMT"
         )
+        slot_time <- as.POSIXct (slot_time, tz = Sys.timezone ())
     } else {
         available <- TRUE
         slot_time <- Sys.time ()
@@ -104,7 +102,7 @@ check_for_error <- function (doc) {
 
     # the nchar check uses an arbitrary value to avoid trying to `read_xml()`
     # read data, which would take forever.
-    if (grepl ("error: ", doc, ignore.case = TRUE) &
+    if (grepl ("error: ", doc, ignore.case = TRUE) &&
         nchar (doc) < 10000) {
 
         docx <- xml2::read_xml (doc)
@@ -150,7 +148,7 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
     if (missing (query)) {
         stop ("query must be supplied", call. = FALSE)
     }
-    if (!is.character (query) | length (query) > 1) {
+    if (!is.character (query) || length (query) > 1) {
         stop ("query must be a single character string")
     }
 

@@ -15,6 +15,7 @@
 - Set encoding to UTF-8 for tags and user names (#347)
 - Document the use of the input query as character strings for `osmdata_*()` (#349)
 - Consistent `NA` values throughout all multi-* matrices returned by `osmdata_sf()` (#355)
+- Fix dates and remove `lubridate` from imports (#360)
 
 
 0.2.5
