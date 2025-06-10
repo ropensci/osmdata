@@ -72,11 +72,11 @@ paths, ways, and roads are designated in OSM with `key=highway`, so that a query
 all motorways in greater London (UK) can be constructed as follows:
 
 ```{r opq3, eval = FALSE}
-q <- opq(bbox = 'greater london uk') %>%
+q <- opq(bbox = 'greater london uk') |>
     add_osm_feature(key = 'highway', value = 'motorway')
 ```
 ```{r, echo = FALSE}
-q <- opq (bbox = c (51.2867602, -0.510375, 51.6918741, 0.3340155)) %>%
+q <- opq (bbox = c (51.2867602, -0.510375, 51.6918741, 0.3340155)) |>
     add_osm_feature(key = 'highway', value = 'motorway')
 ```
 
@@ -100,8 +100,8 @@ and [Spatial (`sp`)](https://cran.r-project.org/package=sp) formats,
 respectively. The typical workflow for extracting OSM data with `osmdata` thus
 consists of the three lines:
 ```{r workflow, eval = FALSE}
-x <- opq(bbox = 'greater london uk') %>%
-    add_osm_feature(key = 'highway', value = 'motorway') %>%
+x <- opq(bbox = 'greater london uk') |>
+    add_osm_feature(key = 'highway', value = 'motorway') |>
     osmdata_sf ()
 ```
 The return object (`x`) is described in the third section below.
@@ -142,9 +142,9 @@ All highways from within the polygonal boundary of Greater London can be
 extracted with,
 ```{r trim-osmdata, eval = FALSE}
 bb <- getbb ('london uk', format_out = 'polygon')
-x <- opq(bbox = bb) %>%
-    add_osm_feature(key = 'highway', value = 'motorway') %>%
-    osmdata_sf () %>%
+x <- opq(bbox = bb) |>
+    add_osm_feature(key = 'highway', value = 'motorway') |>
+    osmdata_sf () |>
     trim_osmdata (bb)
 ```
 See `?trim_osmdata()` for further ways to obtain polygonally bounded sets of OSM
@@ -232,7 +232,7 @@ with the function `opq()`, followed by specifying desired OSM features with
 `add_osm_feature()`.  
 
 ```{r kunming1, eval = FALSE}
-q <- opq(bbox = 'Kunming, China') %>%
+q <- opq(bbox = 'Kunming, China') |>
     add_osm_feature(key = 'natural', value = 'water')
 ```
 This query will request all natural water water bodies in Kunming, China. A
@@ -240,13 +240,13 @@ particular water body may be requested through appending a further call to
 `add_osm_feature()`:
 
 ```{r kunming2, eval = FALSE}
-q <- opq(bbox = 'Kunming, China') %>%
-    add_osm_feature(key = 'natural', value = 'water') %>%
+q <- opq(bbox = 'Kunming, China') |>
+    add_osm_feature(key = 'natural', value = 'water') |>
     add_osm_feature(key = 'name:en', value = 'Dian', value_exact = FALSE)
 ```
 ```{r, echo = FALSE}
-q <- opq(bbox = c(102.5417638, 24.8915153, 102.8617638, 25.2115153)) %>%
-    add_osm_feature(key = 'natural', value = 'water') %>%
+q <- opq(bbox = c(102.5417638, 24.8915153, 102.8617638, 25.2115153)) |>
+    add_osm_feature(key = 'natural', value = 'water') |>
     add_osm_feature(key = 'name:en', value = 'Dian', value_exact = FALSE)
 ```
 Each successive call to `add_osm_feature()` **adds** features to a query. This query
@@ -264,7 +264,7 @@ data on both all natural features with the value of `"water"` OR all features
 whose English name is `"Dian"`.
 
 ```{r add_osm_features-fakey, eval = FALSE}
-q <- opq(bbox = 'Kunming, China') %>%
+q <- opq(bbox = 'Kunming, China') |>
     add_osm_features(features = c ("\"natural\"=\"water\"",
                                    "\"name:en\"=\"Dian\""))
 ```
@@ -292,11 +292,11 @@ query through using the inbuilt `c` operator
 of `osmdata`.
 
 ```{r kunming3, eval = FALSE}
-dat1 <- opq(bbox = 'Kunming, China') %>%
-    add_osm_feature(key = 'natural', value = 'water') %>%
+dat1 <- opq(bbox = 'Kunming, China') |>
+    add_osm_feature(key = 'natural', value = 'water') |>
     osmdata_sf ()
-dat2 <- opq(bbox = 'Kunming, China') %>%
-    add_osm_feature(key = 'name:en', value = 'Dian', value_exact = FALSE) %>%
+dat2 <- opq(bbox = 'Kunming, China') |>
+    add_osm_feature(key = 'name:en', value = 'Dian', value_exact = FALSE) |>
     osmdata_sf ()
 dat <- c (dat1, dat2)
 ```
@@ -370,9 +370,9 @@ Queries are, however, usually more useful when refined through using
 specifying any value for that `key`: 
 
 ```{r opq-london, eval = FALSE}
-not_so_much_data <- opq(bbox = 'city of london uk') %>%
-    add_osm_feature(key = 'highway') %>%
-    add_osm_feature(key = 'name') %>%
+not_so_much_data <- opq(bbox = 'city of london uk') |>
+    add_osm_feature(key = 'highway') |>
+    add_osm_feature(key = 'name') |>
     osmdata_sf()
 ```
 
@@ -388,7 +388,7 @@ To appreciate query building in more concrete terms, let's imagine that we
 wanted to find all cycle paths in Seville, Spain:
 
 ```{r opq-seville-plot, eval = FALSE}
-q1 <- opq('Sevilla') %>%
+q1 <- opq('Sevilla') |>
     add_osm_feature(key = 'highway', value = 'cycleway')
 cway_sev <- osmdata_sp(q1)
 sp::plot(cway_sev$osm_lines)
@@ -414,7 +414,7 @@ can be obtained through simply combining multiple `osmdata` objects with the `c`
 operator:
 
 ```{r, des-bike2, eval=FALSE}
-q2 <- opq('Sevilla') %>%
+q2 <- opq('Sevilla') |>
     add_osm_feature(key = 'bridge', value = 'yes')
 bridge <- osmdata_sf(q2)
 des_bike_or_bridge <- c(des_bike, bridge)
@@ -482,8 +482,8 @@ to disk in XML format. The following code demonstrates this function, beginning
 with a new query.
 
 ```{r osmdata_xml-london-buildings, eval = FALSE}
-dat <- opq(bbox = c(-0.12, 51.51, -0.11, 51.52)) %>%
-    add_osm_feature(key = 'building') %>%
+dat <- opq(bbox = c(-0.12, 51.51, -0.11, 51.52)) |>
+    add_osm_feature(key = 'building') |>
     osmdata_xml(file = 'buildings.osm')
 class(dat)
 ## [1] "xml_document" "xml_node"
@@ -495,7 +495,7 @@ formats by simply passing the data to the respective `osmdata` functions, either
 as the name of a file or an XML object:
 
 ```{r osmdata_with_files, eval = FALSE}
-q <- opq(bbox = c(-0.12, 51.51, -0.11, 51.52)) %>%
+q <- opq(bbox = c(-0.12, 51.51, -0.11, 51.52)) |>
     add_osm_feature(key = 'building')
 doc <- osmdata_xml(q, 'buildings.osm')
 dat1 <- osmdata_sf(q, doc)
@@ -563,8 +563,8 @@ builder](https://overpass-turbo.eu).
 The following example is based on this query:
 
 ```{r trentham, eval = FALSE}
-opq(bbox = 'Trentham, Australia') %>%
-    add_osm_feature(key = 'name') %>%
+opq(bbox = 'Trentham, Australia') |>
+    add_osm_feature(key = 'name') |>
     osmdata_xml(filename = 'trentham.osm')
 ```
 
@@ -751,8 +751,8 @@ demonstrate these functions, we first re-create the example above of named
 objects from Trentham, Australia:
 
 ```{r, eval = FALSE}
-tr <- opq(bbox = 'Trentham, Australia') %>%
-    add_osm_feature(key = 'name') %>%
+tr <- opq(bbox = 'Trentham, Australia') |>
+    add_osm_feature(key = 'name') |>
     osmdata_sf()
 ```
 
@@ -831,9 +831,9 @@ The following example extracts the London Route Network Route 9,
 which is composed of many (over 100) separate lines:
 
 ```{r, eval = FALSE}
-lcnr9 <- opq ('greater london uk') %>%
+lcnr9 <- opq ('greater london uk') |>
     add_osm_feature (key = "name", value = "LCN 9",
-                 value_exact = FALSE) %>%
+                 value_exact = FALSE) |>
     osmdata_sp()
 sp::plot(lcnr9$osm_lines)
 ```
