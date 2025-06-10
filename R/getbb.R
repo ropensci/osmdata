@@ -375,8 +375,7 @@ get_geotext_poly <- function (obj) {
     gt_p <- NULL
     indx <- which (!(seq (nrow (obj)) %in% indx_multi))
     index_final <- index_final [indx]
-    gt_p <- gsub ("POLYGON\\(\\(", "", obj$geotext [indx])
-    gt_p <- gsub ("\\)\\)", "", gt_p)
+    gt_p <- gsub ("(POLYGON\\(\\()|(\\)\\))", "", obj$geotext [indx])
     gt_p <- strsplit (gt_p, split = ",")
     indx_na <- rev (which (is.na (gt_p)))
     for (i in indx_na) {
