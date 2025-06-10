@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/ropensci/osmdata/",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.2.5.34",
+  "version": "0.2.5.35",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -252,22 +252,10 @@
     },
     "4": {
       "@type": "SoftwareApplication",
-      "identifier": "magrittr",
-      "name": "magrittr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=magrittr"
-    },
-    "5": {
-      "@type": "SoftwareApplication",
       "identifier": "methods",
       "name": "methods"
     },
-    "6": {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "Rcpp",
       "name": "Rcpp",
@@ -280,7 +268,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=Rcpp"
     },
-    "7": {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "reproj",
       "name": "reproj",
@@ -292,7 +280,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=reproj"
     },
-    "8": {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "rvest",
       "name": "rvest",
@@ -304,7 +292,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rvest"
     },
-    "9": {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
@@ -316,12 +304,12 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
-    "10": {
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "utils",
       "name": "utils"
     },
-    "11": {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "xml2",
       "name": "xml2",
@@ -338,7 +326,7 @@
   "applicationCategory": "DataAccess",
   "isPartOf": "https://ropensci.org",
   "keywords": ["open0street0map", "openstreetmap", "overpass0API", "OSM", "overpass-api", "r", "cpp", "rstats", "osm", "osm-data", "r-package", "peer-reviewed"],
-  "fileSize": "28399.402KB",
+  "fileSize": "2064.433KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
