@@ -64,14 +64,14 @@ test_that ("add feature", {
     )
     expect_true (!identical (qry$bbox, qry6$bbox))
 
-    qry7 <- opq ("relation(id:74310)") %>% # "Vinçà"
+    qry7 <- opq ("relation(id:74310)") |> # "Vinçà"
         add_osm_feature (key = c("name", "!name:ca"))
-    qry8 <- opq ("relation(id:11755232)") %>% # "el Carxe"
-        add_osm_feature (key = "natural", value = "peak") %>%
+    qry8 <- opq ("relation(id:11755232)") |> # "el Carxe"
+        add_osm_feature (key = "natural", value = "peak") |>
         add_osm_feature (key = "!ele")
     expect_warning(
-        qry9 <- opq ("relation(id:11755232)") %>% # "el Carxe"
-            add_osm_feature (key = "!ele")%>%
+        qry9 <- opq ("relation(id:11755232)") |> # "el Carxe"
+            add_osm_feature (key = "!ele")|>
             add_osm_feature (key = "natural", value = "peak"),
         "The query will request objects whith only a negated key "
     )
@@ -184,7 +184,7 @@ test_that ("not implemented queries", {
         "`out meta` queries not yet implemented."
     )
 
-    qcsv <- opq (bbox = c (1.8374527, 41.5931579, 1.8384799, 41.5936434)) %>%
+    qcsv <- opq (bbox = c (1.8374527, 41.5931579, 1.8384799, 41.5936434)) |>
         opq_csv(fields = c("name"))
     expect_error (
         osmdata_xml (q = qcsv),

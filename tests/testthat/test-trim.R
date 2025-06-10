@@ -79,8 +79,8 @@ test_that ("bb_poly as sf/sc", {
     )
     x1 <- trim_osmdata (x0, bb, exclude = FALSE)
 
-    bb_sf <- sf::st_polygon (list (bb)) %>%
-        st_sfc () %>%
+    bb_sf <- sf::st_polygon (list (bb)) |>
+        st_sfc () |>
         st_sf ()
     expect_silent (x2 <- trim_osmdata (x0,
         bb_poly = bb_sf,

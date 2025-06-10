@@ -25,8 +25,8 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' dat <- opq ("colchester uk") %>%
-#'     add_osm_feature (key = "highway") %>%
+#' dat <- opq ("colchester uk") |>
+#'     add_osm_feature (key = "highway") |>
 #'     osmdata_sf (quiet = FALSE)
 #' bb <- getbb ("colchester uk", format_out = "polygon")
 #' library (sf) # required for this function to work

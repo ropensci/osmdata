@@ -69,34 +69,34 @@
 #'
 #' @examples
 #' \dontrun{
-#' q <- getbb ("portsmouth", display_name_contains = "United States") %>%
-#'     opq () %>%
-#'     add_osm_feature ("amenity", "restaurant") %>%
+#' q <- getbb ("portsmouth", display_name_contains = "United States") |>
+#'     opq () |>
+#'     add_osm_feature ("amenity", "restaurant") |>
 #'     add_osm_feature ("amenity", "pub")
 #' osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
-#' q1 <- getbb ("portsmouth", display_name_contains = "United States") %>%
-#'     opq () %>%
+#' q1 <- getbb ("portsmouth", display_name_contains = "United States") |>
+#'     opq () |>
 #'     add_osm_feature ("amenity", "restaurant")
-#' q2 <- getbb ("portsmouth", display_name_contains = "United States") %>%
-#'     opq () %>%
+#' q2 <- getbb ("portsmouth", display_name_contains = "United States") |>
+#'     opq () |>
 #'     add_osm_feature ("amenity", "pub")
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 #'
 #' # Use nodes_only to retrieve single point data only, such as for central
 #' # locations of cities.
-#' opq <- opq (bbox, nodes_only = TRUE) %>%
-#'     add_osm_feature (key = "place", value = "city") %>%
+#' opq <- opq (bbox, nodes_only = TRUE) |>
+#'     add_osm_feature (key = "place", value = "city") |>
 #'     osmdata_sf (quiet = FALSE)
 #'
 #' # Filter by a search area
-#' qa1 <- getbb ("Catalan Countries", format_out = "osm_type_id") %>%
-#'     opq (nodes_only = TRUE) %>%
+#' qa1 <- getbb ("Catalan Countries", format_out = "osm_type_id") |>
+#'     opq (nodes_only = TRUE) |>
 #'     add_osm_feature (key = "capital", value = "4")
 #' opqa1 <- osmdata_sf (qa1)
 #' # Filter by a multiple search areas
 #' bb <- getbb ("Vilafranca", format_out = "data.frame")
-#' qa2 <- bbox_to_string (bb [bb$osm_type != "node", ]) %>%
-#'     opq (nodes_only = TRUE) %>%
+#' qa2 <- bbox_to_string (bb [bb$osm_type != "node", ]) |>
+#'     opq (nodes_only = TRUE) |>
 #'     add_osm_feature (key = "place")
 #' opqa2 <- osmdata_sf (qa2)
 #' }
@@ -285,30 +285,30 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #'
 #' @examples
 #' \dontrun{
-#' q <- opq ("portsmouth usa") %>%
+#' q <- opq ("portsmouth usa") |>
 #'     add_osm_feature (
 #'         key = "amenity",
 #'         value = "restaurant"
-#'     ) %>%
+#'     ) |>
 #'     add_osm_feature (key = "amenity", value = "pub")
 #' osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
-#' q1 <- opq ("portsmouth usa") %>%
+#' q1 <- opq ("portsmouth usa") |>
 #'     add_osm_feature (
 #'         key = "amenity",
 #'         value = "restaurant"
 #'     )
-#' q2 <- opq ("portsmouth usa") %>%
+#' q2 <- opq ("portsmouth usa") |>
 #'     add_osm_feature (key = "amenity", value = "pub")
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 #' # Use of negation to extract all non-primary highways
-#' q <- opq ("portsmouth uk") %>%
+#' q <- opq ("portsmouth uk") |>
 #'     add_osm_feature (key = "highway", value = "!primary")
 #'
 #' # key negation without warnings
-#' q3 <- opq ("Vinçà", osm_type="node") %>%
+#' q3 <- opq ("Vinçà", osm_type="node") |>
 #'     add_osm_feature (key = c("name", "!name:ca"))
-#' q4 <- opq ("el Carxe", osm_type="node") %>%
-#'     add_osm_feature (key = "natural", value = "peak") %>%
+#' q4 <- opq ("el Carxe", osm_type="node") |>
+#'     add_osm_feature (key = "natural", value = "peak") |>
 #'     add_osm_feature (key = "!ele")
 #' }
 add_osm_feature <- function (opq,
@@ -485,24 +485,24 @@ check_bind_key_pre <- function (bind = "=", key_pre = "") {
 #'
 #' @examples
 #' \dontrun{
-#' q <- opq ("portsmouth usa") %>%
+#' q <- opq ("portsmouth usa") |>
 #'     add_osm_features (features = list (
 #'         "amenity" = "restaurant",
 #'         "amenity" = "pub"
 #'     ))
 #'
-#' q <- opq ("portsmouth usa") %>%
+#' q <- opq ("portsmouth usa") |>
 #'     add_osm_features (features = c (
 #'         "\"amenity\"=\"restaurant\"",
 #'         "\"amenity\"=\"pub\""
 #'     ))
 #' # This extracts in a single query the same result as the following:
-#' q1 <- opq ("portsmouth usa") %>%
+#' q1 <- opq ("portsmouth usa") |>
 #'     add_osm_feature (
 #'         key = "amenity",
 #'         value = "restaurant"
 #'     )
-#' q2 <- opq ("portsmouth usa") %>%
+#' q2 <- opq ("portsmouth usa") |>
 #'     add_osm_feature (key = "amenity", value = "pub")
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 #' }
@@ -620,21 +620,21 @@ check_features <- function (features) {
 #' @examples
 #' \dontrun{
 #' id <- c (1489221200, 1489221321, 1489221491)
-#' dat1 <- opq_osm_id (type = "node", id = id) %>%
-#'     opq_string () %>%
+#' dat1 <- opq_osm_id (type = "node", id = id) |>
+#'     opq_string () |>
 #'     osmdata_sf ()
 #' dat1$osm_points # the desired nodes
 #' id <- c (136190595, 136190596)
-#' dat2 <- opq_osm_id (type = "way", id = id) %>%
-#'     opq_string () %>%
+#' dat2 <- opq_osm_id (type = "way", id = id) |>
+#'     opq_string () |>
 #'     osmdata_sf ()
 #' dat2$osm_lines # the desired ways
 #' dat <- c (dat1, dat2) # The node and way data combined
 #' # All in one (same result as dat)
 #' id <- c (1489221200, 1489221321, 1489221491, 136190595, 136190596)
 #' type <- c ("node", "node", "node", "way", "way")
-#' datAiO <- opq_osm_id (id = id, type = type) %>%
-#'     opq_string () %>%
+#' datAiO <- opq_osm_id (id = id, type = type) |>
+#'     opq_string () |>
 #'     osmdata_sf ()
 #' }
 opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE,
@@ -718,8 +718,8 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE,
 #' lon <- -3.07677
 #' key <- "natural"
 #' value <- "water"
-#' x <- opq_enclosing (lon, lat, key, value) %>%
-#'     opq_string () %>%
+#' x <- opq_enclosing (lon, lat, key, value) |>
+#'     opq_string () |>
 #'     osmdata_sf ()
 #' }
 #' @family queries
@@ -782,7 +782,7 @@ opq_enclosing <- function (lon = NULL, lat = NULL,
 #' key <- "amenity"
 #' value <- "bench"
 #' radius <- 100
-#' x <- opq_around (lon, lat, radius, key, value) %>%
+#' x <- opq_around (lon, lat, radius, key, value) |>
 #'     osmdata_sf ()
 #' }
 #' @family queries
@@ -838,10 +838,10 @@ opq_around <- function (lon, lat, radius = 15,
 #'
 #' @examples
 #' \dontrun{
-#' q <- getbb ("Catalan Countries", format_out = "osm_type_id") %>%
-#'     opq (out = "tags center", osm_type = "relation", timeout = 100) %>%
-#'     add_osm_feature ("admin_level", "7") %>%
-#'     add_osm_feature ("boundary", "administrative") %>%
+#' q <- getbb ("Catalan Countries", format_out = "osm_type_id") |>
+#'     opq (out = "tags center", osm_type = "relation", timeout = 100) |>
+#'     add_osm_feature ("admin_level", "7") |>
+#'     add_osm_feature ("boundary", "administrative") |>
 #'     opq_csv (fields = c("name", "::type", "::id", "::lat", "::lon"))
 #' comarques <- osmdata_data_frame (q) # without timeout parameter, 0 rows
 #'
@@ -849,7 +849,7 @@ opq_around <- function (lon, lat, radius = 15,
 #'     type = "relation",
 #'     id = c ("341530", "1809102", "1664395", "343124"),
 #'     out = "tags"
-#' ) %>%
+#' ) |>
 #'     opq_csv (fields = c ("name", "name:ca"))
 #' cities <- osmdata_data_frame (qid)
 #' }
