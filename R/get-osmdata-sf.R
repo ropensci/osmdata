@@ -162,6 +162,12 @@ make_sf <- function (..., stringsAsFactors = FALSE) { # nolint
 
 #' Merge any `sf` `data.frame` columns which have mixed-case duplicated names
 #' (like "This" and "this"; #348).
+#'
+#' @param df a `data.frame`
+#' @return Returns the `df` without duplicated columnms. If both values in a
+#'   row of the duplicated columns are not NA, use the value of the first column.
+#'
+#' @noRd
 merge_duplicated_col_names <- function (df) {
 
     nms_lower <- tolower (names (df))
