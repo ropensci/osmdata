@@ -79,9 +79,9 @@ trim_osmdata_sfp <- function (dat, bb_poly, exclude = TRUE) {
             source = srcproj
         ) [, 1:2]
 
-        dat <- trim_to_poly_pts (dat, bb_poly, exclude = exclude) %>%
-            trim_to_poly (bb_poly = bb_poly, exclude = exclude) %>%
-            trim_to_poly_multi (bb_poly = bb_poly, exclude = exclude)
+        dat <- trim_to_poly_pts (dat, bb_poly, exclude = exclude)
+        dat <- trim_to_poly (dat, bb_poly = bb_poly, exclude = exclude)
+        dat <- trim_to_poly_multi (dat, bb_poly = bb_poly, exclude = exclude)
     } else {
         message (
             "bb_poly must be a matrix with > 1 row; ",
@@ -381,9 +381,12 @@ verts_in_bpoly <- function (dat, bb_poly) {
             bb_poly <- rbind (bb_poly, bb_poly [1, ])
         }
 
-        sf::st_polygon (list (bb_poly)) %>%
-            sf::st_sfc (crs = 4326) %>%
-            sf::st_sf ()
+        sf::st_sf (
+            sf::st_sfc (
+                sf::st_polygon (list (bb_poly)),
+                crs = 4326
+            )
+        )
     }
     bb_poly <- bb_poly_to_sf (bb_poly)
 

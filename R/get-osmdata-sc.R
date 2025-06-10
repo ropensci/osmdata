@@ -125,6 +125,5 @@ osmdata_sc <- function (q, doc, quiet = TRUE) {
 
 getbb_sc <- function (x) {
 
-    apply (x$vertex [, 1:2], 2, range) %>%
-        bbox_to_string ()
+    bbox_to_string (apply (x$vertex [, 1:2], 2, range))
 }
