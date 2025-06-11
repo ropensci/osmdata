@@ -429,7 +429,8 @@ get_geotext_multipoly <- function (obj) {
     # nocov start
     # TODO: Test this
     if (length (indx_multi) > 0) {
-        gt_mp <- gsub ("(MULTIPOLYGON\\(\\(\\()|(\\)\\)\\))", "", obj$geotext [indx_multi])
+        ptn <- "(MULTIPOLYGON\\(\\(\\()|(\\)\\)\\))"
+        gt_mp <- gsub (ptn, "", obj$geotext [indx_multi])
         gt_mp <- strsplit (gt_mp, split = ",")
         indx_na <- rev (which (is.na (gt_mp)))
         for (i in indx_na) {
