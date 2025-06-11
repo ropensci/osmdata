@@ -44,6 +44,8 @@
 #' @seealso [set_overpass_url()]
 #'
 #' @family overpass
+#' @examples
+#' get_overpass_url ()
 #' @export
 get_overpass_url <- function () {
 
