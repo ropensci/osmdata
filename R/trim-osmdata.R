@@ -96,6 +96,16 @@ bb_poly_to_mat <- function (x) {
     UseMethod ("bb_poly_to_mat")
 }
 
+#' Convert BB polygon to matrix
+#'
+#' These must be "exported", but that only registerss them for (in this case,
+#' with generic not exported) package-internal use. The NAMESPACE file then has
+#' these methods, but there is no equivalent exported function there. See
+#' \url{https://github.com/r-lib/roxygen2/issues/1592}.
+#'
+#' @param x A bounding-box input to \link{getbb} or \link{opq}.
+#'
+#' @export
 bb_poly_to_mat.default <- function (x) {
 
     stop ("bb_poly is of unknown class; please use matrix or a spatial class")
@@ -106,6 +116,7 @@ more_than_one <- function () {
     message ("bb_poly has more than one polygon; the first will be selected.")
 }
 
+#' @export
 bb_poly_to_mat.sf <- function (x) {
 
     if (nrow (x) > 1) {
@@ -117,6 +128,7 @@ bb_poly_to_mat.sf <- function (x) {
     bb_poly_to_mat.sfc (x)
 }
 
+#' @export
 bb_poly_to_mat.sfc <- function (x) {
 
     if (length (x) > 1) {
@@ -127,6 +139,7 @@ bb_poly_to_mat.sfc <- function (x) {
     as.matrix (x [[1]] [[1]])
 }
 
+#' @export
 bb_poly_to_mat.SpatialPolygonsDataFrame <- function (x) { # nolint
 
     x <- slot (x, "polygons")
@@ -140,6 +153,7 @@ bb_poly_to_mat.SpatialPolygonsDataFrame <- function (x) { # nolint
     slot (x [[1]], "coords")
 }
 
+#' @export
 bb_poly_to_mat.list <- function (x) {
 
     if (length (x) > 1) {
