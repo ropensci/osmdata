@@ -12,6 +12,27 @@
 #' @return A modified version of the input `dat` with an additional `z_` column
 #' appended to the vertices.
 #' @family transform
+#' @examples
+#' # Bounding box of "omaha nebraska":
+#' bb <- c (-96.2682, 41.190585, -95.871141, 41.3930618)
+#' query <- opq (bb)
+#' query <- add_osm_feature (query, key = "highway")
+#' # Equivalent to:
+#' \dontrun{
+#' query <- opq ("omaha nebraska") |>
+#'     add_osm_feature (key = "highway")
+#' }
+#' # Elevation can only be app;lied to \pkg{silicate} 'SC'-class data:
+#' \dontrun{
+#' dat <- osmdata_sc (query)
+#' dat$vertex
+#' }
+#' # The vertex table will have columns ("x_", "y_", "vertex_"). Then
+#' # download elevation data from \url{https://srtm.csi.cgiar.org/srtmdata/}
+#' # (or elsewhere), and add elevation column, "z_" with:
+#' \dontrun{
+#' dat <- osm_elevation (dat, elev_file = "/path/to/elevation/data.tiff")
+#' }
 #' @export
 osm_elevation <- function (dat, elev_file) {
 
