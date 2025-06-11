@@ -26,6 +26,11 @@ data.frames (e.g. \code{"relation(id:11747082,307833); way(id:22422490)"}).
 This function converts a bounding box into a string for use in web apis
 }
 \examples{
+# Note input is (lon, lat) = (x, y) but output as needed for 'Overpass' API
+# is (lat, lon) = (y, x).
+bb <- c (-0.4325512, 39.2784496, -0.2725205, 39.566609)
+bbox_to_string (bb)
+# This is equivalent to:
 \dontrun{
 bbox_to_string (getbb ("València"))
 bbox_to_string (getbb ("València", format_out = "data.frame"))
