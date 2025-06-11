@@ -34,10 +34,19 @@ The \code{silicate} format is currently highly experimental, and
 recommended for use only if you really know what you're doing.
 }
 \examples{
+# Bounding box of "hampi india":
+bb <- c (76.4410201, 15.3158, 76.4810201, 15.3558)
+query <- opq (bb)
+query <- add_osm_feature (query, key = "historic", value = "ruins")
+# Equivalent to:
 \dontrun{
-hampi_sf <- opq ("hampi india") |>
-    add_osm_feature (key = "historic", value = "ruins") |>
-    osmdata_sc ()
+query <- opq ("hampi india") |>
+    add_osm_feature (key = "historic", value = "ruins")
+}
+# Then extract data from 'Overpass' API
+\dontrun{
+hampi_sf <- osmdata_sc ()
+}
 
 # Complex query as a string (not possible with regular osmdata functions)
 q <- '[out:xml][timeout:50];
@@ -55,6 +64,7 @@ q <- '[out:xml][timeout:50];
     (._; >;);
     out;'
 
+\dontrun{
 no_townhall <- osmdata_sc (q)
 no_townhall
 }
