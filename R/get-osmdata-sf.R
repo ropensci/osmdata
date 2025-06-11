@@ -1,6 +1,10 @@
 #' Return an OSM Overpass query as an \link{osmdata} object in \pkg{sf}
 #' format.
 #'
+#' @note In 'dplyr'-type workflows in which the output of this function is
+#' piped to other functions, it will generally be necessary to explicitly load
+#' the \pkg{sf} package into the current workspace with 'library(sf)'.
+#'
 #' @inheritParams osmdata_sp
 #' @param stringsAsFactors Should character strings in 'sf' 'data.frame' be
 #' coerced to factors?
