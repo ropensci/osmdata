@@ -20,6 +20,11 @@
 #' @export
 #'
 #' @examples
+#' # Note input is (lon, lat) = (x, y) but output as needed for 'Overpass' API
+#' # is (lat, lon) = (y, x).
+#' bb <- c (-0.4325512, 39.2784496, -0.2725205, 39.566609)
+#' bbox_to_string (bb)
+#' # This is equivalent to:
 #' \dontrun{
 #' bbox_to_string (getbb ("València"))
 #' bbox_to_string (getbb ("València", format_out = "data.frame"))

@@ -17,6 +17,11 @@ next available slot
 \description{
 Retrieve status of the Overpass API
 }
+\examples{
+\dontrun{
+overpass_status ()
+}
+}
 \seealso{
 Other queries: 
 \code{\link{add_osm_feature}()},

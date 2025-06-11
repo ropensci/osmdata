@@ -22,10 +22,21 @@ names also removes any ability to inter-relate the different components of an
 issues such as those linked to above.
 }
 \examples{
+# Bounding box of "hampi india":
+bb <- c (76.4410201, 15.3158, 76.4810201, 15.3558)
+query <- opq (bb)
+query <- add_osm_feature (query, key = "historic", value = "ruins")
+# Equivalent to:
 \dontrun{
-hampi_sf <- opq ("hampi india") |>
-    add_osm_feature (key = "historic", value = "ruins") |>
-    osmdata_sf ()
+query <- opq ("hampi india") |>
+    add_osm_feature (key = "historic", value = "ruins")
+}
+# Then extract data from 'Overpass' API
+\dontrun{
+hampi_sf <- osmdata_sf ()
+}
+# Remove rownames from all geometry metrices:
+\dontrun{
 hampi_clean <- unname_osmdata_sf (hampi_sf)
 
 # All coordinate matrices include rownames with OSM ID values:

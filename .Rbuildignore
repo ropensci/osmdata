@@ -5,6 +5,7 @@
 ^README\.Rmd$
 ^README\.html$
 ^\.Rproj\.user$
+^\.ccls-cache$
 ^\.github$
 ^\.pre-commit-config\.yaml$
 ^\.travis\.yml$

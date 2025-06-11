@@ -20,10 +20,19 @@
 #' @export
 #'
 #' @examples
+#' # Bounding box of "hampi india":
+#' bb <- c (76.4410201, 15.3158, 76.4810201, 15.3558)
+#' query <- opq (bb)
+#' query <- add_osm_feature (query, key = "historic", value = "ruins")
+#' # Equivalent to:
 #' \dontrun{
-#' q <- opq ("hampi india")
-#' q <- add_osm_feature (q, key = "historic", value = "ruins")
+#' query <- opq ("hampi india") |>
+#'     add_osm_feature (key = "historic", value = "ruins")
+#' }
+#' # Then extract data from 'Overpass' API and save to local file:
+#' \dontrun{
 #' osmdata_xml (q, filename = "hampi.osm")
+#' }
 #'
 #' # Complex query as a string (not possible with regular osmdata functions)
 #' q <- '[out:xml][timeout:50];
@@ -40,6 +49,7 @@
 #'     rel(pivot);
 #'     out tags;'
 #'
+#' \dontrun{
 #' no_townhall <- osmdata_xml (q)
 #' no_townhall
 #' }

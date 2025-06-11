@@ -13,13 +13,37 @@ unique_osmdata(dat)
 Equivalent object reduced to only unique objects of each type
 }
 \description{
-Reduce the components of an \link{osmdata} object to only unique items of
-each type. That is, reduce \verb{$osm_points} to only those points not
+Reduce the components of an \link{osmdata} object in 'sf' or 'sp' form (that
+is, obtained from \link{osmdata_sf} or \link{osmdata_sp}) to only unique
+items of each type. That is, reduce \verb{$osm_points} to only those points not
 present in other objects (lines, polygons, etc.); reduce \verb{$osm_lines} to
 only those lines not present in multiline objects; and reduce
 \verb{$osm_polygons} to only those polygons not present in multipolygon
 objects. This renders an \link{osmdata} object more directly compatible with
 typical output of \pkg{sf}.
+}
+\examples{
+# Bounding box of "Colchester UK":
+bb <- c (0.6993788, 51.7657055, 1.026803, 51.977153)
+query <- opq (bb)
+query <- add_osm_feature (query, key = "highway")
+# Equivalent to:
+\dontrun{
+query <- opq ("colchester uk") |>
+    add_osm_feature (key = "highway")
+}
+# Then extract data from 'Overpass' API
+\dontrun{
+dat <- osmdata_sf (query)
+dat
+}
+# Then reduce to unique items of each type only:
+\dontrun{
+dat <- unique_osmdata (dat)
+dat
+}
+# And objects of each type (points, line, polygons, and so on) now have
+# fewer members.
 }
 \seealso{
 Other transform: 
