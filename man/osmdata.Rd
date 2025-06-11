@@ -100,6 +100,10 @@ format
 }
 }
 
+\examples{
+# This function should not need to be called directly!
+osmdata ()
+}
 \seealso{
 Useful links:
 \itemize{

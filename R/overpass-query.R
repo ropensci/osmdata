@@ -5,6 +5,10 @@
 #'         text of the message from Overpass and the timestamp of the
 #'         next available slot
 #' @family queries
+#' @examples
+#' \dontrun{
+#' overpass_status ()
+#' }
 #' @export
 overpass_status <- function (quiet = FALSE) {
 
