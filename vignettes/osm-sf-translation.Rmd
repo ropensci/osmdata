@@ -19,7 +19,7 @@ vignette: >
 [OpenStreetMap (OSM)](https://www.openstreetmap.org/) data has a unique structure that
 is not directly reconcilable with other modes of representing spatial data,
 notably including the widely-adopted 
-[Simple Features (SF)](https://www.ogc.org/standard/sfa/)
+[Simple Features (SF)](https://www.ogc.org/standards/sfa/)
 scheme of the 
 [Open Geospatial Consortium (OGC)](https://www.ogc.org). 
 The three primary spatial objects of OSM are:
@@ -50,7 +50,7 @@ The three primary spatial objects of OSM are:
 ## 2. Simple Features Data Structure
 
 The representation of spatial objects as Simple Features is 
-[described at length by the OGC](https://www.ogc.org/standard/sfo/),
+[described at length by the OGC](https://www.ogc.org/standards/sfo/),
 with this document merely reviewing relevant aspects. The SF system assumes that
 spatial features can be represented in one of seven distinct primary classes,
 which by convention are referred to in all capital letters.  Relevant classes
@@ -169,7 +169,8 @@ for each member of the multilinestring.
 The `R` package [`sf`](https://cran.r-project.org/package=sf) provide an `R`
 implementation of Spatial Features, and provides a wrapper around GDAL for
 reading geospatial data. `GDAL` provides a ['driver' to read OSM
-data](https://gdal.org/drv_osm.html), and thus `sf` can also be used to read
+data](https://gdal.org/en/stable/drivers/vector/osm.html),
+and thus `sf` can also be used to read
 `OSM` data in `R`, 
 [as detailed in the main `osmdata` vignette](https://docs.ropensci.org/osmdata/articles/osmdata.html).
 However, the `GDAL` translation of OSM data differs in several important ways
@@ -181,7 +182,7 @@ are not otherwise members of some 'higher' object (`line`, `polygon`, or
 `relation` objects).  Although a given set of OSM data may actually contain a
 great many points, attempting to load these with
 ```{r, eval=FALSE}
-sf::st_read (file, layer = 'points')
+sf::st_read (file, layer = "points")
 ```
 will generally return surprisingly few points.
 
@@ -204,38 +205,42 @@ with the same principles applying to all of the following classes of OSM data.
 The following three lines define a query and download the resultant data to an
 `XML` file.
 ```{r trentham, eval=FALSE}
-q <- opq (bbox = 'Trentham, Australia')
-q <- add_osm_feature (q, key = 'name') # any named objects
-osmdata_xml (q, 'trentham.osm')
+q <- opq (bbox = "Trentham, Australia")
+q <- add_osm_feature (q, key = "name") # any named objects
+osmdata_xml (q, "trentham.osm")
 ```
 These data may then be converted into SF representations using either `R::sf` or
 `osmdata`, with OSM `keys` being the column names of the resultant `data.frame`
 objects.
 ```{r, eval=FALSE}
-names (sf::st_read ('trentham.osm', layer = 'points', quiet = TRUE))
+names (sf::st_read ("trentham.osm", layer = "points", quiet = TRUE))
 ```
 ```{r, echo=FALSE}
-c ("osm_id",     "name",       "barrier",    "highway",    "ref",
-"address",    "is_in",      "place",      "man_made",   "other_tags",
-"geometry")
+c (
+    "osm_id",     "name",       "barrier",    "highway",    "ref",
+    "address",    "is_in",      "place",      "man_made",   "other_tags",
+    "geometry"
+)
 ```
 ```{r, eval=FALSE}
-names (osmdata_sf (q, 'trentham.osm')$osm_points)
+names (osmdata_sf (q, "trentham.osm")$osm_points)
 ```
 ```{r, echo=FALSE}
-c ("osm_id",           "name",             "X_description_",   "X_waypoint_",
-"addr.city",        "addr.housenumber", "addr.postcode",    "addr.street",
-"amenity",          "barrier",          "denomination",     "foot",
-"ford",             "highway",          "leisure",          "note_1",
-"phone",            "place",            "railway",  "railway.historic",
-"ref",              "religion",         "shop",             "source",
-"tourism",          "waterway",         "geometry")
+c (
+    "osm_id", "name", "X_description_", "X_waypoint_",
+    "addr.city", "addr.housenumber", "addr.postcode", "addr.street",
+    "amenity", "barrier", "denomination", "foot",
+    "ford", "highway", "leisure", "note_1",
+    "phone", "place", "railway", "railway.historic",
+    "ref", "religion", "shop", "source",
+    "tourism", "waterway", "geometry"
+)
 ```
 `osmdata` returns far more `key` fields than does `GDAL/sf`. More importantly,
 however, `GDAL/sf` returns pre-defined `key` fields regardless of whether they
 contain any data:
 ```{r, eval=FALSE}
-addr <- sf::st_read ('trentham.osm', layer = 'points', quiet = TRUE)$address
+addr <- sf::st_read ("trentham.osm", layer = "points", quiet = TRUE)$address
 all (is.na (addr))
 ```
 ```{r, echo=FALSE}
