@@ -43,8 +43,8 @@ lat <- 54.33601
 lon <- -3.07677
 key <- "natural"
 value <- "water"
-x <- opq_enclosing (lon, lat, key, value) \%>\%
-    opq_string () \%>\%
+x <- opq_enclosing (lon, lat, key, value) |>
+    opq_string () |>
     osmdata_sf ()
 }
 }

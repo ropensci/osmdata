@@ -36,7 +36,7 @@ lon <- -2.52017
 key <- "amenity"
 value <- "bench"
 radius <- 100
-x <- opq_around (lon, lat, radius, key, value) \%>\%
+x <- opq_around (lon, lat, radius, key, value) |>
     osmdata_sf ()
 }
 }

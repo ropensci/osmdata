@@ -16,8 +16,8 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' dat <- opq ("colchester uk") %>%
-#'     add_osm_feature (key = "highway") %>%
+#' dat <- opq ("colchester uk") |>
+#'     add_osm_feature (key = "highway") |>
 #'     osmdata_sf ()
 #' # colchester has lots of roundabouts, and these are stored in 'osm_polygons'
 #' # rather than 'osm_lines'. The former can be merged with the latter by:

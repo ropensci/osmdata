@@ -37,8 +37,8 @@ the parameter \code{body = "tags"} to \code{\link{opq}}.
 }
 \examples{
 \dontrun{
-hampi_df <- opq ("hampi india") \%>\%
-    add_osm_feature (key = "historic", value = "ruins") \%>\%
+hampi_df <- opq ("hampi india") |>
+    add_osm_feature (key = "historic", value = "ruins") |>
     osmdata_data_frame ()
 attr (hampi_df, "bbox")
 attr (hampi_df, "overpass_call")

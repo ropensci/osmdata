@@ -50,19 +50,8 @@
 #' @docType package
 #' @family package
 #' @author Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon, Joan Maspons
-#' @importFrom magrittr %>%
 #' @importFrom methods is slot
 #' @importFrom Rcpp evalCpp
 #' @importFrom utils browseURL read.table
 #' @useDynLib osmdata, .registration = TRUE
 "_PACKAGE"
-
-#' Pipe operator
-#'
-#' @name %>%
-#' @rdname pipe
-#' @keywords internal
-#' @export
-#' @importFrom magrittr %>%
-#' @usage lhs \%>\% rhs
-NULL

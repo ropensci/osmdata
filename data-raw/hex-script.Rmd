@@ -6,39 +6,38 @@
 ```{r}
 library (osmdata)
 library (osmplotr)
-library (magrittr)
 bb <- getbb ("kichijoji japan")
 bb [2, 1] <- bb [2, 1] - 0.2 * diff (bb [2, ])
 bb [2, 2] <- mean (bb [2, ])
-hw <- opq (bb) %>%
-    add_osm_feature (key = "highway") %>%
-    osmdata_sf (quiet = FALSE) %>%
-    osm_poly2line () %>%
+hw <- opq (bb) |>
+    add_osm_feature (key = "highway") |>
+    osmdata_sf (quiet = FALSE) |>
+    osm_poly2line () |>
     extract2 ("osm_lines")
-b <- opq (bb) %>%
-    add_osm_feature (key = "building") %>%
-    osmdata_sf (quiet = FALSE) %>%
+b <- opq (bb) |>
+    add_osm_feature (key = "building") |>
+    osmdata_sf (quiet = FALSE) |>
     extract2 ("osm_polygons")
-g1 <- opq (bb) %>%
-    add_osm_feature (key = "landuse", value = "grass") %>%
-    osmdata_sf (quiet = FALSE) %>%
+g1 <- opq (bb) |>
+    add_osm_feature (key = "landuse", value = "grass") |>
+    osmdata_sf (quiet = FALSE) |>
     extract2 ("osm_polygons")
-g2 <- opq (bb) %>%
-    add_osm_feature (key = "leisure", value = "park") %>%
-    osmdata_sf (quiet = FALSE) %>%
+g2 <- opq (bb) |>
+    add_osm_feature (key = "leisure", value = "park") |>
+    osmdata_sf (quiet = FALSE) |>
     extract2 ("osm_polygons")
 g <- sf::st_sf (osm_id = c (g1$osm_id, g2$osm_id),
                  geometry = c (g1$geometry, g2$geometry))
-w <- opq (bb) %>%
-    add_osm_feature (key = "natural", value = "water") %>%
-    osmdata_sf (quiet = FALSE) %>%
+w <- opq (bb) |>
+    add_osm_feature (key = "natural", value = "water") |>
+    osmdata_sf (quiet = FALSE) |>
     extract2 ("osm_polygons")
 
 #osm_structures (col_scheme = "light")
-map <- osm_basemap (bbox = bb, bg = "gray95") %>%
-    add_osm_objects (hw, col = "#969696FF") %>%
-    add_osm_objects (b, col = "#C8C8C8FF") %>%
-    add_osm_objects (g, col = "#C8FFC8FF") %>%
+map <- osm_basemap (bbox = bb, bg = "gray95") |>
+    add_osm_objects (hw, col = "#969696FF") |>
+    add_osm_objects (b, col = "#C8C8C8FF") |>
+    add_osm_objects (g, col = "#C8FFC8FF") |>
     add_osm_objects (w, col = "#C8C8DCFF")
 #print_osm_map (map, filename = "kichijoji.png")
 saveRDS (map, file = "map.Rds")
@@ -46,19 +45,18 @@ saveRDS (map, file = "map.Rds")
 
 Reduce image to square:
 ```{r}
-library (magrittr)
 map <- readRDS ("map.Rds")
 f <- "kichijoji.png"
 osmplotr::print_osm_map (map, filename = f)
-magick::image_read (f) %>%
-    magick::image_trim () %>%
+magick::image_read (f) |>
+    magick::image_trim () |>
     magick::image_write (f)
-i <- magick::image_read (f) %>%
+i <- magick::image_read (f) |>
     magick::image_info ()
 chop <- floor (i$width - i$height) / 2
 chop <- paste0 (i$height, "x", i$height, "+", chop, "+0")
-magick::image_read (f) %>%
-    magick::image_crop (chop) %>%
+magick::image_read (f) |>
+    magick::image_crop (chop) |>
     magick::image_write (f)
 ```
 
@@ -70,7 +68,6 @@ image is 1260 h X 2100 w
 
 ```{r}
 f <- "kichijoji.png"
-library (magrittr)
 img <- png::readPNG (f)
 # define hexagon and set all outer pixels to 1
 s3 <- sqrt (3) / 2

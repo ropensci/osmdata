@@ -73,8 +73,8 @@ TIFF format. Elevation data may then be incorporated with
 through the `osm_elevation()` function. The entire procedure is demonstrated
 with the following lines:
 ```{r omaha, eval = FALSE}
-dat <- opq ("omaha nebraska") %>%
-    add_osm_feature (key = "highway") %>%
+dat <- opq ("omaha nebraska") |>
+    add_osm_feature (key = "highway") |>
     osmdata_sc ()
 ```
 This object has a `vertex` table like this:
@@ -134,11 +134,11 @@ the elevation of each network edge. We first join the vertex elevation data on
 to the edges, and calculate the mean elevation of each edge.
 
 ```{r edges, eval = FALSE}
-edges <- dplyr::left_join (dat$edge, dat$vertex, by = c (".vx0" = "vertex_")) %>%
-    dplyr::rename (".vx0_x" = x_, ".vx0_y" = y_, ".vx0_z" = z_) %>%
-    dplyr::left_join (dat$vertex, by = c (".vx1" = "vertex_")) %>%
-    dplyr::rename (".vx1_x" = x_, ".vx1_y" = y_, ".vx1_z" = z_) %>%
-    dplyr::mutate ("zmn" = (.vx0_z + .vx1_z) / 2) %>%
+edges <- dplyr::left_join (dat$edge, dat$vertex, by = c (".vx0" = "vertex_")) |>
+    dplyr::rename (".vx0_x" = x_, ".vx0_y" = y_, ".vx0_z" = z_) |>
+    dplyr::left_join (dat$vertex, by = c (".vx1" = "vertex_")) |>
+    dplyr::rename (".vx1_x" = x_, ".vx1_y" = y_, ".vx1_z" = z_) |>
+    dplyr::mutate ("zmn" = (.vx0_z + .vx1_z) / 2) |>
     dplyr::select (-c (.vx0_z, .vx1_z))
 edges
 ```
@@ -180,7 +180,7 @@ plot with the following code:
 ```{r, eval = FALSE}
 library (mapdeck)
 set_token (Sys.getenv ("MAPBOX_TOKEN")) # load local token for MapBox
-mapdeck (style = mapdeck_style ("dark")) %>%
+mapdeck (style = mapdeck_style ("dark")) |>
     add_line (edges,
         origin = c (".vx0_x", ".vx0_y"),
         destination = c (".vx1_x", ".vx1_y"),

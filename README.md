@@ -77,8 +77,8 @@ objects with `osmdata_sp()` or [Silicate
 `osmdata_sc()`. For example,
 
 ``` r
-x <- opq (bbox = c (-0.27, 51.47, -0.20, 51.50)) %>% # Chiswick Eyot in London, U.K.
-    add_osm_feature (key = "name", value = "Thames", value_exact = FALSE) %>%
+x <- opq (bbox = c (-0.27, 51.47, -0.20, 51.50)) |> # Chiswick Eyot in London, U.K.
+    add_osm_feature (key = "name", value = "Thames", value_exact = FALSE) |>
     osmdata_sf ()
 x
 ```
@@ -147,8 +147,8 @@ result being a logical AND operation, thus returning all amenities that
 are labelled both as restaurants and also as pubs:
 
 ``` r
-q <- opq ("portsmouth usa") %>%
-    add_osm_feature (key = "amenity", value = "restaurant") %>%
+q <- opq ("portsmouth usa") |>
+    add_osm_feature (key = "amenity", value = "restaurant") |>
     add_osm_feature (key = "amenity", value = "pub") # There are none of these
 ```
 
@@ -156,7 +156,7 @@ Features can also be requested by key only, in which case features with
 any values for the specified key will be returned:
 
 ``` r
-q <- opq ("portsmouth usa") %>%
+q <- opq ("portsmouth usa") |>
     add_osm_feature (key = "amenity")
 ```
 
@@ -169,8 +169,8 @@ that the following requests all amenities that are NOT labelled as
 restaurants and that are not labelled as pubs:
 
 ``` r
-q <- opq ("portsmouth usa") %>%
-    add_osm_feature (key = "amenity", value = "!restaurant") %>%
+q <- opq ("portsmouth usa") |>
+    add_osm_feature (key = "amenity", value = "!restaurant") |>
     add_osm_feature (key = "amenity", value = "!pub") # There are a lot of these
 ```
 
@@ -178,8 +178,8 @@ Additional arguments allow for more refined matching, such as the
 following request for all pubs with “irish” in the name:
 
 ``` r
-q <- opq ("washington dc") %>%
-    add_osm_feature (key = "amenity", value = "pub") %>%
+q <- opq ("washington dc") |>
+    add_osm_feature (key = "amenity", value = "pub") |>
     add_osm_feature (
         key = "name", value = "irish",
         value_exact = FALSE, match_case = FALSE
@@ -194,7 +194,7 @@ restaurants AND pubs. The following query will request data on
 restaurants OR pubs:
 
 ``` r
-q <- opq ("portsmouth usa") %>%
+q <- opq ("portsmouth usa") |>
     add_osm_features (features = c (
         "\"amenity\"=\"restaurant\"",
         "\"amenity\"=\"pub\""

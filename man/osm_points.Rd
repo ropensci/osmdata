@@ -20,7 +20,7 @@ Extract all \code{osm_points} from an osmdata object
 }
 \examples{
 \dontrun{
-tr <- opq ("trentham australia") \%>\% osmdata_sf ()
+tr <- opq ("trentham australia") |> osmdata_sf ()
 coliban <- tr$osm_lines [which (tr$osm_lines$name == "Coliban River"), ]
 pts <- osm_points (tr, rownames (coliban)) # all points of river
 # the waterfall point:

@@ -2,7 +2,7 @@ test_that ("elevation", {
 
     # elevation can't actually be tested, because it only works with a full SRTM
     # elevation file, so this test doesn't actually do anything.
-    qry <- opq (bbox = c (-0.116, 51.516, -0.115, 51.517)) %>%
+    qry <- opq (bbox = c (-0.116, 51.516, -0.115, 51.517)) |>
         add_osm_feature (key = "highway")
 
     f <- file.path (tempdir (), "junk.osm")

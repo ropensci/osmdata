@@ -185,7 +185,7 @@ Rcpp::List osm_sf::get_osm_relations (const Relations &rels,
     }
 
     // Erase any multipolygon ways that are not okay. An example of these is
-    // opq("salzburg") %>% add_osm_feature (key = "highway"), for which
+    // opq("salzburg") |> add_osm_feature (key = "highway"), for which
     // $osm_multipolygons [[42]] with way#4108738 is not okay.
     std::vector <std::string> not_okay_id;
     for (size_t i = 0; i < mp_okay.size (); i++)

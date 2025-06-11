@@ -13,8 +13,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' hampi_sf <- opq ("hampi india") %>%
-#'     add_osm_feature (key = "historic", value = "ruins") %>%
+#' hampi_sf <- opq ("hampi india") |>
+#'     add_osm_feature (key = "historic", value = "ruins") |>
 #'     osmdata_sc ()
 #'
 #' # Complex query as a string (not possible with regular osmdata functions)
@@ -125,6 +125,5 @@ osmdata_sc <- function (q, doc, quiet = TRUE) {
 
 getbb_sc <- function (x) {
 
-    apply (x$vertex [, 1:2], 2, range) %>%
-        bbox_to_string ()
+    bbox_to_string (apply (x$vertex [, 1:2], 2, range))
 }
