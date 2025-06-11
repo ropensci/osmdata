@@ -23,6 +23,7 @@
 ^src/Makevars$
 ^src/Makevars.in$
 ^tests/timing-benchmark.R$
+^tests/valgrind-test.R$
 data-raw/
 hooks/
 makefile$
