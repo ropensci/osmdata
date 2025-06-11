@@ -272,8 +272,8 @@ citation ("osmdata")
 
 All data that you access using `osmdata` is licensed under
 [OpenStreetMap’s license, the Open Database
-Licence](https://wiki.osmfoundation.org/wiki/Licence). Any derived data
-and products must also carry the same licence. You should make sure you
+Licence](https://osmfoundation.org/wiki/Licence). Any derived data and
+products must also carry the same licence. You should make sure you
 understand that licence before publishing any derived datasets.
 
 ## Other approaches

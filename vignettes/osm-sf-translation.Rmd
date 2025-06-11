@@ -19,7 +19,7 @@ vignette: >
 [OpenStreetMap (OSM)](https://www.openstreetmap.org/) data has a unique structure that
 is not directly reconcilable with other modes of representing spatial data,
 notably including the widely-adopted 
-[Simple Features (SF)](https://www.ogc.org/standard/sfa/)
+[Simple Features (SF)](https://www.ogc.org/standards/sfa/)
 scheme of the 
 [Open Geospatial Consortium (OGC)](https://www.ogc.org). 
 The three primary spatial objects of OSM are:
@@ -50,7 +50,7 @@ The three primary spatial objects of OSM are:
 ## 2. Simple Features Data Structure
 
 The representation of spatial objects as Simple Features is 
-[described at length by the OGC](https://www.ogc.org/standard/sfo/),
+[described at length by the OGC](https://www.ogc.org/standards/sfo/),
 with this document merely reviewing relevant aspects. The SF system assumes that
 spatial features can be represented in one of seven distinct primary classes,
 which by convention are referred to in all capital letters.  Relevant classes
@@ -169,7 +169,8 @@ for each member of the multilinestring.
 The `R` package [`sf`](https://cran.r-project.org/package=sf) provide an `R`
 implementation of Spatial Features, and provides a wrapper around GDAL for
 reading geospatial data. `GDAL` provides a ['driver' to read OSM
-data](https://gdal.org/drv_osm.html), and thus `sf` can also be used to read
+data](https://gdal.org/en/stable/drivers/vector/osm.html),
+and thus `sf` can also be used to read
 `OSM` data in `R`, 
 [as detailed in the main `osmdata` vignette](https://docs.ropensci.org/osmdata/articles/osmdata.html).
 However, the `GDAL` translation of OSM data differs in several important ways
