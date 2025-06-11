@@ -32,6 +32,11 @@ and polygons) represented in \pkg{sf} format.
 Return an OSM Overpass query as an \link{osmdata} object in \pkg{sf}
 format.
 }
+\note{
+In 'dplyr'-type workflows in which the output of this function is
+piped to other functions, it will generally be necessary to explicitly load
+the \pkg{sf} package into the current workspace with 'library(sf)'.
+}
 \examples{
 # Bounding box of "hampi india":
 bb <- c (76.4410201, 15.3158, 76.4810201, 15.3558)
