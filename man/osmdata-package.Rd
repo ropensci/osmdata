@@ -72,3 +72,4 @@ Useful links:
 Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon, Joan Maspons
 }
 \concept{package}
+\keyword{internal}
