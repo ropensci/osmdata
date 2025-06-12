@@ -46,7 +46,6 @@
 #' \item `osm_multipolygons`: Extract all `osm_multipolygons` objects
 #' }
 #'
-#' @name osmdata
 #' @docType package
 #' @family package
 #' @author Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon, Joan Maspons
