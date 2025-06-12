@@ -19,7 +19,6 @@
 #' @note Class constructor should never be used directly, and is only exported
 #' to provide access to the print method
 #'
-#' @family package
 #' @examples
 #' # This function should not need to be called directly!
 #' osmdata ()
