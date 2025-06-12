@@ -1,13 +1,13 @@
 Package: osmdata
 Title: Import 'OpenStreetMap' Data as Simple Features or Spatial Objects
-Version: 0.2.5.054
+Version: 0.2.5.055
 Authors@R: c(
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre")),
     person("Bob", "Rudis", role = "aut"),
     person("Robin", "Lovelace", role = "aut"),
     person("Maëlle", "Salmon", role = "aut"),
     person("Joan", "Maspons", role = "aut",
-           comment = c(ORCID="0000-0003-2286-8727")),
+           comment = c(ORCID = "0000-0003-2286-8727")),
     person("Andrew", "Smith", role = "ctb"),
     person("James", "Smith", role = "ctb"),
     person("Andrea", "Gilardi", role = "ctb"),
@@ -16,7 +16,7 @@ Authors@R: c(
     person("Martin", "Machyna", role = "ctb"),
     person("Marcin", "Kalicinski", role = c("ctb", "cph"),
            comment = "Author of included RapidXML code"),
-    person("Eli", "Pousson", , "eli.pousson@gmail.com", role = c("ctb"),
+    person("Eli", "Pousson", , "eli.pousson@gmail.com", role = "ctb",
            comment = c(ORCID = "0000-0001-8280-1706"))
   )
 Maintainer: Mark Padgham <mark.padgham@email.com>
@@ -25,8 +25,7 @@ Description: Download and import of 'OpenStreetMap' ('OSM') data as 'sf'
     server (<https://overpass-api.de/>) and processed with very fast 'C++'
     routines for return to 'R'.
 License: GPL-3
-URL: https://docs.ropensci.org/osmdata/ (website)
-    https://github.com/ropensci/osmdata/ (devel),
+URL: https://docs.ropensci.org/osmdata/,
     https://github.com/ropensci/osmdata
 BugReports: https://github.com/ropensci/osmdata/issues
 Imports:

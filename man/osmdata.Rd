@@ -107,7 +107,8 @@ osmdata ()
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://docs.ropensci.org/osmdata/ (website) https://github.com/ropensci/osmdata/ (devel)}
+  \item \url{https://docs.ropensci.org/osmdata/}
+  \item \url{https://github.com/ropensci/osmdata}
   \item Report bugs at \url{https://github.com/ropensci/osmdata/issues}
 }
 
