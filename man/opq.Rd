@@ -6,7 +6,7 @@
 \usage{
 opq(
   bbox = NULL,
-  nodes_only = NULL,
+  nodes_only,
   osm_types = c("node", "way", "relation"),
   out = c("body", "tags", "meta", "skel", "tags center", "ids"),
   datetime = NULL,

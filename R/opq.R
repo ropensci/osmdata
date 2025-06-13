@@ -99,7 +99,7 @@
 #'     add_osm_feature (key = "place")
 #' opqa2 <- osmdata_sf (qa2)
 #' }
-opq <- function (bbox = NULL, nodes_only = NULL,
+opq <- function (bbox = NULL, nodes_only,
                  osm_types = c ("node", "way", "relation"),
                  out = c ("body", "tags", "meta", "skel", "tags center", "ids"),
                  datetime = NULL, datetime2 = NULL, adiff = FALSE,
@@ -108,7 +108,7 @@ opq <- function (bbox = NULL, nodes_only = NULL,
     timeout <- format (timeout, scientific = FALSE)
     prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
 
-    if (!is.null(nodes_only)) {
+    if (!missing(nodes_only)) {
         .Deprecated(msg = paste("The 'nodes_only' argument is deprecated",
                                 "and will be removed in a future version.",
                                 "Use 'osm_types = \"node\"' instead."))
