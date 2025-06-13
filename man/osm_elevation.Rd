@@ -25,14 +25,16 @@ pre-downloaded global elevation file from
 \examples{
 # Bounding box of "omaha nebraska":
 bb <- c (-96.2682, 41.190585, -95.871141, 41.3930618)
+
+\dontshow{if (getRversion() >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+query <- opq (bb) |>
+    add_osm_feature (key = "highway")
+\dontshow{\}) # examplesIf}
+\dontshow{if (getRversion() < "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 query <- opq (bb)
 query <- add_osm_feature (query, key = "highway")
-# Equivalent to:
-\dontrun{
-query <- opq ("omaha nebraska") |>
-    add_osm_feature (key = "highway")
-}
-# Elevation can only be app;lied to \pkg{silicate} 'SC'-class data:
+\dontshow{\}) # examplesIf}
+# Elevation can only be applied to \pkg{silicate} 'SC'-class data:
 \dontrun{
 dat <- osmdata_sc (query)
 dat$vertex

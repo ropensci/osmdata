@@ -29,7 +29,7 @@
 #' @examples
 #' # Then extract data from 'Overpass' API
 #' \dontrun{
-#' hampi_sf <- osmdata_sf ()
+#' hampi_sf <- osmdata_sf (query)
 #' }
 #'
 #' # Complex query as a string (not possible with regular osmdata functions)

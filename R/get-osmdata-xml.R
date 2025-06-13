@@ -34,7 +34,7 @@
 #' @examples
 #' # Then extract data from 'Overpass' API and save to local file:
 #' \dontrun{
-#' osmdata_xml (q, filename = "hampi.osm")
+#' osmdata_xml (query, filename = "hampi.osm")
 #' }
 #'
 #' # Complex query as a string (not possible with regular osmdata functions)

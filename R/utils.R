@@ -32,7 +32,7 @@ is_datetime <- function (x) {
 #' @examples
 #' # Then extract data from 'Overpass' API
 #' \dontrun{
-#' hampi_sf <- osmdata_sf ()
+#' hampi_sf <- osmdata_sf (query)
 #' }
 #' # Remove rownames from all geometry metrices:
 #' \dontrun{
