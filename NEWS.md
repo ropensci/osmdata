@@ -6,8 +6,8 @@
 
 - Implemented `c.osmdata_sc` method to join `osmdata_sc` objects (#333)
 - Remove `magrittr` from imports. User code relaying on reexported pipe `%>%` from `osmdata` must exlicitly load it
-  with `library(magrittr)`.  Code examples, tests and vignettes now use the pipe from base (`|>`) available since R 4.1
-  (#361)
+  with `library(magrittr)`.  Tests and vignettes now use the pipe from base (`|>`) available since R 4.1 (#361).
+  Code examples in the web are shown with base pipe, local docs show pipes or not according to the R version of the session (#369)
 
 ## Minor changes
 
