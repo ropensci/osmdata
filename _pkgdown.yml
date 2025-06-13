@@ -5,9 +5,9 @@ templates:
     bootswatch: cerulean
 
 reference:
-  - title: Package doc and class
+  - title: Package classes
     contents:
-    - has_concept("package")
+    - has_concept("class")
   - title: Overpass server
     contents:
     - has_concept("overpass")
