@@ -108,10 +108,12 @@ opq <- function (bbox = NULL, nodes_only,
     timeout <- format (timeout, scientific = FALSE)
     prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
 
-    if (!missing(nodes_only)) {
-        .Deprecated(msg = paste("The 'nodes_only' argument is deprecated",
-                                "and will be removed in a future version.",
-                                "Use 'osm_types = \"node\"' instead."))
+    if (!missing (nodes_only)) {
+        .Deprecated (
+            new = 'osm_types = "node"',
+            package = "osmdata",
+            old = "nodes_only = TRUE"
+        )
         if (nodes_only) {
             osm_types <- "node"
         }
