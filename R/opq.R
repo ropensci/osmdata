@@ -12,17 +12,16 @@
 #'      or \link{bbox_to_string} with a `data.frame` from `getbb(..., format_out
 #'      = "data.frame")` to select all areas combined (relations and ways).
 #' @param nodes_only WARNING: this parameter is equivalent to
-#'      `osm_types = "node"` and will be DEPRECATED. If `TRUE`, query OSM nodes
-#'      only. Some OSM structures such as `place = "city"` or
-#'      `highway = "traffic_signals"` are represented by nodes only. Queries are
-#'      built by default to return all nodes, ways, and relation, but this can
-#'      be very inefficient for node-only queries. Setting this value to `TRUE`
-#'      for such cases makes queries more efficient, with data returned in the
-#'      `osm_points` list item.
+#'      `osm_types = "node"` and is DEPRECATED. If `TRUE`, query OSM nodes
+#'      only.
 #' @param osm_types A character vector with several OSM types to query: `node`,
 #'      `way` and `relation` is the default. `nwr`, `nw`, `wr`, `nr` and `rel`
-#'      are also valid types. Ignored if `nodes_only = TRUE`.
-#'      `osm_types = "node"` is equivalent to `nodes_only = TRUE`.
+#'      are also valid types. Some OSM structures such as `place = "city"` or
+#'      `highway = "traffic_signals"` are represented by nodes only. Queries are
+#'      built by default to return all nodes, ways, and relation, but this can
+#'      be very inefficient for node-only queries. Setting this value to `"node"`
+#'      for such cases makes queries more efficient and, in [`osmdata_sf()`], the
+#'      data will be returned in the `osm_points` list item only.
 #' @param out The level of verbosity of the overpass result: `body` (geometries
 #'      and tags, the default), `tags` (tags without geometry), `meta` (like
 #'      body + Timestamp, Version, Changeset, User, User ID of the last
@@ -82,25 +81,25 @@
 #'     add_osm_feature ("amenity", "pub")
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 #'
-#' # Use nodes_only to retrieve single point data only, such as for central
+#' # Use `osm_types = "node"` to retrieve single point data only, such as for central
 #' # locations of cities.
-#' opq <- opq (bbox, nodes_only = TRUE) |>
+#' opq <- opq (bbox, osm_types = "node") |>
 #'     add_osm_feature (key = "place", value = "city") |>
 #'     osmdata_sf (quiet = FALSE)
 #'
 #' # Filter by a search area
 #' qa1 <- getbb ("Catalan Countries", format_out = "osm_type_id") |>
-#'     opq (nodes_only = TRUE) |>
+#'     opq (osm_types = "node") |>
 #'     add_osm_feature (key = "capital", value = "4")
 #' opqa1 <- osmdata_sf (qa1)
 #' # Filter by a multiple search areas
 #' bb <- getbb ("Vilafranca", format_out = "data.frame")
 #' qa2 <- bbox_to_string (bb [bb$osm_type != "node", ]) |>
-#'     opq (nodes_only = TRUE) |>
+#'     opq (osm_types = "node") |>
 #'     add_osm_feature (key = "place")
 #' opqa2 <- osmdata_sf (qa2)
 #' }
-opq <- function (bbox = NULL, nodes_only = FALSE,
+opq <- function (bbox = NULL, nodes_only = NULL,
                  osm_types = c ("node", "way", "relation"),
                  out = c ("body", "tags", "meta", "skel", "tags center", "ids"),
                  datetime = NULL, datetime2 = NULL, adiff = FALSE,
@@ -109,24 +108,29 @@ opq <- function (bbox = NULL, nodes_only = FALSE,
     timeout <- format (timeout, scientific = FALSE)
     prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
 
-    if (nodes_only) {
-        osm_types <- "node"
-    } else {
-        osm_types <- try (
-            match.arg (osm_types,
-                choices = c (
-                    "node", "way", "rel", "relation",
-                    "nwr", "nw", "wr", "nr"
-                ),
-                several.ok = TRUE
-        ), silent = TRUE)
-        if (inherits (osm_types, "try-error")) {
-            stop ('osm_types parameter must be a vector with values from ',
-                '"node", "way", "rel", "relation", ',
-                '"nwr", "nw", "wr" and "nr".',
-                call. = FALSE
-            )
+    if (!is.null(nodes_only)) {
+        .Deprecated(msg = paste("The 'nodes_only' argument is deprecated",
+                                "and will be removed in a future version.",
+                                "Use 'osm_types = \"node\"' instead."))
+        if (nodes_only) {
+            osm_types <- "node"
         }
+    }
+
+    osm_types <- try (
+        match.arg (osm_types,
+            choices = c (
+                "node", "way", "rel", "relation",
+                "nwr", "nw", "wr", "nr"
+            ),
+            several.ok = TRUE
+    ), silent = TRUE)
+    if (inherits (osm_types, "try-error")) {
+        stop ('osm_types parameter must be a vector with values from ',
+            '"node", "way", "rel", "relation", ',
+            '"nwr", "nw", "wr" and "nr".',
+            call. = FALSE
+        )
     }
 
     out <- try (match.arg (out), silent = TRUE)
@@ -137,7 +141,7 @@ opq <- function (bbox = NULL, nodes_only = FALSE,
         )
     }
 
-    has_geometry <- !nodes_only && out %in% c ("body", "meta", "skel")
+    has_geometry <- !all (osm_types == "node") && out %in% c ("body", "meta", "skel")
     if (has_geometry) {
         suffix <- paste0 (");\n(._;>;);\nout ", out, ";") # recurse down
     } else {
@@ -193,7 +197,6 @@ opq <- function (bbox = NULL, nodes_only = FALSE,
     class (res) <- c (class (res), "overpass_query")
     attr (res, "datetime") <- datetime
     attr (res, "datetime2") <- datetime2
-    attr (res, "nodes_only") <- nodes_only
 
     return (res)
 }
@@ -756,7 +759,6 @@ opq_enclosing <- function (lon = NULL, lat = NULL,
     )
     class (res) <- c (class (res), "overpass_query")
     attr (res, "datetime") <- attr (res, "datetime2") <- NULL
-    attr (res, "nodes_only") <- FALSE
     attr (res, "enclosing") <- enclosing
 
     return (res)
@@ -914,10 +916,6 @@ opq_string <- function (opq) {
 opq_string_intern <- function (opq, quiet = TRUE) {
 
     lat <- lon <- NULL # suppress no visible binding messages
-
-    if (attr (opq, "nodes_only")) {
-        opq$osm_types <- "node"
-    }
 
     map_to_area <- grepl ("(node|way|relation|rel)\\(id:[0-9, ]+\\)", opq$bbox)
 

@@ -68,7 +68,7 @@ test_that ("empty result", {
     rownames (bb) <- c ("x", "y")
     colnames (bb) <- c ("min", "max")
 
-    q0 <- opq (bb, nodes_only = TRUE, datetime = "1714-09-11T00:00:00Z") |>
+    q0 <- opq (bb, osm_types = "node", datetime = "1714-09-11T00:00:00Z") |>
         add_osm_feature ("does not exist", "&%$")
 
     osm_empty <- test_path ("fixtures", "osm-empty.osm")
@@ -100,7 +100,7 @@ test_that ("empty result", {
     # q0 <- getbb ("Països Catalans", featuretype = "relation") |>
     q0 <- opq (
         bb,
-        nodes_only = TRUE,
+        osm_types = "node",
         datetime = "1714-09-11T00:00:00Z",
         adiff = TRUE
     ) |>
@@ -176,7 +176,7 @@ test_that ("date", {
     bb <- rbind (c (2.01, 2.66), c (42.42, 42.71))
     rownames (bb) <- c ("x", "y")
     colnames (bb) <- c ("min", "max")
-    q <- opq (bb, nodes_only = TRUE, datetime = "2020-11-07T00:00:00Z") |>
+    q <- opq (bb, osm_types = "node", datetime = "2020-11-07T00:00:00Z") |>
         add_osm_feature ("natural", "peak") |>
         add_osm_feature ("prominence") |>
         add_osm_feature ("name:ca")
@@ -254,7 +254,7 @@ test_that ("out meta & diff", {
     rownames (bb) <- c ("x", "y")
     colnames (bb) <- c ("min", "max")
     q <- opq (bb,
-        nodes_only = TRUE, out = "meta",
+        osm_types = "node", out = "meta",
         datetime = "2020-11-07T00:00:00Z",
         datetime2 = "2022-12-04T00:00:00Z"
     ) |>
@@ -307,7 +307,7 @@ test_that ("out meta & adiff", {
     rownames (bb) <- c ("x", "y")
     colnames (bb) <- c ("min", "max")
     q <- opq (bb,
-        nodes_only = TRUE, out = "meta",
+        osm_types = "node", out = "meta",
         datetime = "2020-11-07T00:00:00Z", adiff = TRUE
     ) |>
         add_osm_feature ("natural", "peak") |>
@@ -416,7 +416,7 @@ test_that ("adiff2", {
     rownames (bb) <- c ("x", "y")
     colnames (bb) <- c ("min", "max")
     q <- opq (bb,
-        nodes_only = TRUE,
+        osm_types = "node",
         datetime = "2012-11-07T00:00:00Z",
         datetime2 = "2016-11-07T00:00:00Z",
         adiff = TRUE
