@@ -50,3 +50,4 @@ to provide access to the print method
 # This function should not need to be called directly!
 osmdata ()
 }
+\concept{class}
