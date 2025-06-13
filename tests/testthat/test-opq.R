@@ -135,16 +135,17 @@ test_that ("osm_types", {
     # node, way, relation):
     expect_equal (n_fts_in_query, n_fts * length(q2$osm_types))
 
-    # nodes_only
+    # nodes only
     q3 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), osm_types = "node")
-    expect_silent (
-        q4 <- opq (
-            bbox = c (-0.118, 51.514, -0.115, 51.517),
-            osm_types = "node"        )
+
+    # Deprecated nodes_only
+    expect_warning(
+        q_dep <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), nodes_only = TRUE),
+        "Deprecated"
     )
 
-    expect_identical (q3, q4)
-    expect_true (q4$osm_types == "node")
+    expect_identical (q3, q_dep)
+    expect_true (q3$osm_types == "node")
 })
 
 test_that ("out", {
