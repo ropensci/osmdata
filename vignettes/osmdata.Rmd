@@ -278,7 +278,6 @@ q <- list (
     features = c ("[\"natural\"=\"water\"]", "[\"name:en\"=\"Dian\"]")
 )
 attr (q, "class") <- c ("list", "overpass_query")
-attr (q, "nodes_only") <- FALSE
 ```
 
 Note that the `"="` symbols here requests features whose values exactly match

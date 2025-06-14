@@ -6,7 +6,7 @@
 \usage{
 opq(
   bbox = NULL,
-  nodes_only = FALSE,
+  nodes_only,
   osm_types = c("node", "way", "relation"),
   out = c("body", "tags", "meta", "skel", "tags center", "ids"),
   datetime = NULL,
@@ -28,18 +28,17 @@ the format \code{"way(id:1)"}, \code{"relation(id:1, 2)"} or \code{"relation(id:
 or \link{bbox_to_string} with a \code{data.frame} from \code{getbb(..., format_out = "data.frame")} to select all areas combined (relations and ways).}
 
 \item{nodes_only}{WARNING: this parameter is equivalent to
-\code{osm_types = "node"} and will be DEPRECATED. If \code{TRUE}, query OSM nodes
-only. Some OSM structures such as \code{place = "city"} or
-\code{highway = "traffic_signals"} are represented by nodes only. Queries are
-built by default to return all nodes, ways, and relation, but this can
-be very inefficient for node-only queries. Setting this value to \code{TRUE}
-for such cases makes queries more efficient, with data returned in the
-\code{osm_points} list item.}
+\code{osm_types = "node"} and is DEPRECATED. If \code{TRUE}, query OSM nodes
+only.}
 
 \item{osm_types}{A character vector with several OSM types to query: \code{node},
 \code{way} and \code{relation} is the default. \code{nwr}, \code{nw}, \code{wr}, \code{nr} and \code{rel}
-are also valid types. Ignored if \code{nodes_only = TRUE}.
-\code{osm_types = "node"} is equivalent to \code{nodes_only = TRUE}.}
+are also valid types. Some OSM structures such as \code{place = "city"} or
+\code{highway = "traffic_signals"} are represented by nodes only. Queries are
+built by default to return all nodes, ways, and relation, but this can
+be very inefficient for node-only queries. Setting this value to \code{"node"}
+for such cases makes queries more efficient and, in \code{\link[=osmdata_sf]{osmdata_sf()}}, the
+data will be returned in the \code{osm_points} list item only.}
 
 \item{out}{The level of verbosity of the overpass result: \code{body} (geometries
 and tags, the default), \code{tags} (tags without geometry), \code{meta} (like
@@ -105,21 +104,21 @@ q2 <- getbb ("portsmouth", display_name_contains = "United States") |>
     add_osm_feature ("amenity", "pub")
 c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 
-# Use nodes_only to retrieve single point data only, such as for central
+# Use `osm_types = "node"` to retrieve single point data only, such as for central
 # locations of cities.
-opq <- opq (bbox, nodes_only = TRUE) |>
+opq <- opq (bbox, osm_types = "node") |>
     add_osm_feature (key = "place", value = "city") |>
     osmdata_sf (quiet = FALSE)
 
 # Filter by a search area
 qa1 <- getbb ("Catalan Countries", format_out = "osm_type_id") |>
-    opq (nodes_only = TRUE) |>
+    opq (osm_types = "node") |>
     add_osm_feature (key = "capital", value = "4")
 opqa1 <- osmdata_sf (qa1)
 # Filter by a multiple search areas
 bb <- getbb ("Vilafranca", format_out = "data.frame")
 qa2 <- bbox_to_string (bb [bb$osm_type != "node", ]) |>
-    opq (nodes_only = TRUE) |>
+    opq (osm_types = "node") |>
     add_osm_feature (key = "place")
 opqa2 <- osmdata_sf (qa2)
 }
