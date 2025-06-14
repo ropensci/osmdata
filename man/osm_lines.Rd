@@ -22,6 +22,7 @@ containing that point. If \code{id} is of a line or polygon object,
 polygon.
 }
 \examples{
+\dontshow{if (getRversion() >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 dat <- opq ("hengelo nl") |>
     add_osm_feature (key = "highway") |>
@@ -34,6 +35,24 @@ osm_lines (dat, bus) # all highways containing bus stops
 dat <- opq ("Fitzrovia London") |>
     add_osm_feature (key = "highway") |>
     osmdata_sf ()
+}
+\dontshow{\}) # examplesIf}
+\dontshow{if (getRversion() < "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
+q <- opq ("hengelo nl")
+q <- add_osm_feature (q, key = "highway")
+dat <- osmdata_sf (q)
+bus <- dat$osm_points [which (dat$osm_points$highway == "bus_stop"), ]
+bus <- rownames (bus) # all OSM IDs of bus stops
+osm_lines (dat, bus) # all highways containing bus stops
+
+# All lines which intersect with Piccadilly Circus in London, UK
+q <- opq ("Fitzrovia London")
+q <- add_osm_feature (q, key = "highway")
+dat <- osmdata_sf (q)
+}
+\dontshow{\}) # examplesIf}
+\dontrun{
 i <- which (dat$osm_polygons$name == "Piccadilly Circus")
 id <- rownames (dat$osm_polygons [i, ])
 osm_lines (dat, id)

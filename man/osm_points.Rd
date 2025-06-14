@@ -19,8 +19,17 @@ An \pkg{sf} Simple Features Collection of points
 Extract all \code{osm_points} from an osmdata object
 }
 \examples{
+\dontshow{if (getRversion() >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 tr <- opq ("trentham australia") |> osmdata_sf ()
+}
+\dontshow{\}) # examplesIf}
+\dontshow{if (getRversion() < "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
+tr <- osmdata_sf (opq ("trentham australia"))
+}
+\dontshow{\}) # examplesIf}
+\dontrun{
 coliban <- tr$osm_lines [which (tr$osm_lines$name == "Coliban River"), ]
 pts <- osm_points (tr, rownames (coliban)) # all points of river
 # the waterfall point:

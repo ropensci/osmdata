@@ -22,26 +22,22 @@
 #' expected based on the current state of the OSM data.
 #'
 #' @family transform
+#'
 #' @examples
 #' # Bounding box of "Colchester UK":
 #' bb <- c (0.6993788, 51.7657055, 1.026803, 51.977153)
-#'
 #' @examplesIf getRversion() >= "4.1"
 #' query <- opq (bb) |>
 #'     add_osm_feature (key = "highway")
-#'
 #' @examplesIf getRversion() < "4.1"
 #' query <- opq (bb)
 #' query <- add_osm_feature (query, key = "highway")
-#'
 #' @examples
 #' # Then extract data from 'Overpass' API
 #' \dontrun{
 #' dat <- osmdata_sf (query, quiet = FALSE)
-#' }
 #' # Then get bounding *polygon* for Colchester, as opposed to rectangular
 #' # bounding box, and use that to trim data within that polygon:
-#' \dontrun{
 #' bb <- getbb ("colchester uk", format_out = "polygon")
 #' library (sf) # required for this function to work
 #' dat_tr <- trim_osmdata (dat, bb)

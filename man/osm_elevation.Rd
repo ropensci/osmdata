@@ -25,7 +25,6 @@ pre-downloaded global elevation file from
 \examples{
 # Bounding box of "omaha nebraska":
 bb <- c (-96.2682, 41.190585, -95.871141, 41.3930618)
-
 \dontshow{if (getRversion() >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 query <- opq (bb) |>
     add_osm_feature (key = "highway")

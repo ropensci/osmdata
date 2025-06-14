@@ -22,11 +22,22 @@ polygons containing that point. If \code{id} is of a line or polygon object,
 or polygon.
 }
 \examples{
-\dontrun{
 # Extract polygons which intersect Conway Street in London
+\dontshow{if (getRversion() >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 dat <- opq ("Marylebone London") |>
     add_osm_feature (key = "highway") |>
     osmdata_sf ()
+}
+\dontshow{\}) # examplesIf}
+\dontshow{if (getRversion() < "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
+q <- opq ("Marylebone London")
+q <- add_osm_feature (q, key = "highway")
+dat <- osmdata_sf (q)
+}
+\dontshow{\}) # examplesIf}
+\dontrun{
 conway <- which (dat$osm_lines$name == "Conway Street")
 id <- rownames (dat$osm_lines [conway, ])
 osm_polygons (dat, id)

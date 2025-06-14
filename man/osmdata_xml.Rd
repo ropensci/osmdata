@@ -37,7 +37,6 @@ Objects of class \code{xml_document} can be saved as \code{.xml} or
 \examples{
 # Bounding box of "hampi india":
 bb <- c (76.4410201, 15.3158, 76.4810201, 15.3558)
-
 \dontshow{if (getRversion() >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 query <- opq (bb) |>
     add_osm_feature (key = "historic", value = "ruins")

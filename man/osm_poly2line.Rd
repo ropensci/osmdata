@@ -26,7 +26,6 @@ repeated as \code{LINESTRING} objects in \code{osm_lines}.
 \examples{
 # Bounding box of "Colchester UK":
 bb <- c (0.6993788, 51.7657055, 1.026803, 51.977153)
-
 \dontshow{if (getRversion() >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 query <- opq (bb) |>
     add_osm_feature (key = "highway")
@@ -38,10 +37,8 @@ query <- add_osm_feature (query, key = "highway")
 # Then extract data from 'Overpass' API
 \dontrun{
 dat <- osmdata_sf (query)
-}
 # colchester has lots of roundabouts, and these are stored in 'osm_polygons'
 # rather than 'osm_lines'. The former can be merged with the latter by:
-\dontrun{
 dat2 <- osm_poly2line (dat)
 }
 # 'dat2' will have more lines than 'dat', but the same number of polygons

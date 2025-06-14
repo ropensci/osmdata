@@ -21,15 +21,12 @@
 #' @examples
 #' # Bounding box of "hampi india":
 #' bb <- c (76.4410201, 15.3158, 76.4810201, 15.3558)
-#'
 #' @examplesIf getRversion() >= "4.1"
 #' query <- opq (bb) |>
 #'     add_osm_feature (key = "historic", value = "ruins")
-#'
 #' @examplesIf getRversion() < "4.1"
 #' query <- opq (bb)
 #' query <- add_osm_feature (query, key = "historic", value = "ruins")
-#'
 #' @examples
 #' # Then extract data from 'Overpass' API
 #' \dontrun{

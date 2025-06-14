@@ -248,9 +248,16 @@ sanity_check <- function (dat, id) {
 #' @family search
 #' @export
 #'
-#' @examples
+#' @examplesIf getRversion() >= "4.1"
 #' \dontrun{
 #' tr <- opq ("trentham australia") |> osmdata_sf ()
+#' }
+#' @examplesIf getRversion() < "4.1"
+#' \dontrun{
+#' tr <- osmdata_sf (opq ("trentham australia"))
+#' }
+#' @examples
+#' \dontrun{
 #' coliban <- tr$osm_lines [which (tr$osm_lines$name == "Coliban River"), ]
 #' pts <- osm_points (tr, rownames (coliban)) # all points of river
 #' # the waterfall point:
@@ -293,7 +300,7 @@ osm_points <- function (dat, id) {
 #' @family search
 #' @export
 #'
-#' @examples
+#' @examplesIf getRversion() >= "4.1"
 #' \dontrun{
 #' dat <- opq ("hengelo nl") |>
 #'     add_osm_feature (key = "highway") |>
@@ -306,6 +313,23 @@ osm_points <- function (dat, id) {
 #' dat <- opq ("Fitzrovia London") |>
 #'     add_osm_feature (key = "highway") |>
 #'     osmdata_sf ()
+#' }
+#' @examplesIf getRversion() < "4.1"
+#' \dontrun{
+#' q <- opq ("hengelo nl")
+#' q <- add_osm_feature (q, key = "highway")
+#' dat <- osmdata_sf (q)
+#' bus <- dat$osm_points [which (dat$osm_points$highway == "bus_stop"), ]
+#' bus <- rownames (bus) # all OSM IDs of bus stops
+#' osm_lines (dat, bus) # all highways containing bus stops
+#'
+#' # All lines which intersect with Piccadilly Circus in London, UK
+#' q <- opq ("Fitzrovia London")
+#' q <- add_osm_feature (q, key = "highway")
+#' dat <- osmdata_sf (q)
+#' }
+#' @examples
+#' \dontrun{
 #' i <- which (dat$osm_polygons$name == "Piccadilly Circus")
 #' id <- rownames (dat$osm_polygons [i, ])
 #' osm_lines (dat, id)
@@ -350,11 +374,21 @@ osm_lines <- function (dat, id) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' # Extract polygons which intersect Conway Street in London
+#' @examplesIf getRversion() >= "4.1"
+#' \dontrun{
 #' dat <- opq ("Marylebone London") |>
 #'     add_osm_feature (key = "highway") |>
 #'     osmdata_sf ()
+#' }
+#' @examplesIf getRversion() < "4.1"
+#' \dontrun{
+#' q <- opq ("Marylebone London")
+#' q <- add_osm_feature (q, key = "highway")
+#' dat <- osmdata_sf (q)
+#' }
+#' @examples
+#' \dontrun{
 #' conway <- which (dat$osm_lines$name == "Conway Street")
 #' id <- rownames (dat$osm_lines [conway, ])
 #' osm_polygons (dat, id)
@@ -398,11 +432,20 @@ osm_polygons <- function (dat, id) {
 #' @family search
 #' @export
 #'
-#' @examples
+#' @examplesIf getRversion() >= "4.1"
 #' \dontrun{
 #' dat <- opq ("London UK") |>
 #'     add_osm_feature (key = "name", value = "Thames", exact = FALSE) |>
 #'     osmdata_sf ()
+#' }
+#' @examplesIf getRversion() < "4.1"
+#' \dontrun{
+#' q <- opq ("London UK")
+#' q <- add_osm_feature (q, key = "name", value = "Thames", exact = FALSE)
+#' dat <- osmdata_sf (q)
+#' }
+#' @examples
+#' \dontrun{
 #' # Get ids of lines called "The Thames":
 #' id <- rownames (dat$osm_lines [which (dat$osm_lines$name == "The Thames"), ])
 #' # and find all multilinestring objects which include those lines:
@@ -450,12 +493,22 @@ osm_multilines <- function (dat, id) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' # find all multipolygons which contain the single polygon called
 #' # "Chiswick Eyot" (which is an island).
+#' @examplesIf  getRversion() >= "4.1"
+#' \dontrun{
 #' dat <- opq ("London UK") |>
 #'     add_osm_feature (key = "name", value = "Thames", exact = FALSE) |>
 #'     osmdata_sf ()
+#' }
+#' @examplesIf  getRversion() < "4.1"
+#' \dontrun{
+#' q <- opq ("London UK")
+#' q <- add_osm_feature (q, key = "name", value = "Thames", exact = FALSE)
+#' dat <- osmdata_sf (q)
+#' }
+#' @examples
+#' \dontrun{
 #' index <- which (dat$osm_multipolygons$name == "Chiswick Eyot")
 #' id <- rownames (dat$osm_polygons [id, ])
 #' osm_multipolygons (dat, id)

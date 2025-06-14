@@ -24,7 +24,6 @@ issues such as those linked to above.
 \examples{
 # Bounding box of "hampi india":
 bb <- c (76.4410201, 15.3158, 76.4810201, 15.3558)
-
 \dontshow{if (getRversion() >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 query <- opq (bb) |>
     add_osm_feature (key = "historic", value = "ruins")
@@ -36,9 +35,7 @@ query <- add_osm_feature (query, key = "historic", value = "ruins")
 # Then extract data from 'Overpass' API
 \dontrun{
 hampi_sf <- osmdata_sf (query)
-}
 # Remove rownames from all geometry metrices:
-\dontrun{
 hampi_clean <- unname_osmdata_sf (hampi_sf)
 
 # All coordinate matrices include rownames with OSM ID values:
