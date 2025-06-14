@@ -67,7 +67,7 @@
 #' @family queries
 #' @export
 #'
-#' @examplesIf getRversion() >= "4.1"
+#' @examplesIf getRversion () >= "4.1"
 #' \dontrun{
 #' q <- getbb ("portsmouth", display_name_contains = "United States") |>
 #'     opq () |>
@@ -100,7 +100,7 @@
 #'     add_osm_feature (key = "place")
 #' opqa2 <- osmdata_sf (qa2)
 #' }
-#' @examplesIf getRversion() < "4.1"
+#' @examplesIf getRversion () < "4.1"
 #' \dontrun{
 #' q <- getbb ("portsmouth", display_name_contains = "United States")
 #' q <- opq (bbox)
@@ -340,9 +340,9 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #'     add_osm_feature (key = "highway", value = "!primary")
 #'
 #' # key negation without warnings
-#' q3 <- opq ("Vinçà", osm_type="node") |>
-#'     add_osm_feature (key = c("name", "!name:ca"))
-#' q4 <- opq ("el Carxe", osm_type="node") |>
+#' q3 <- opq ("Vinçà", osm_type = "node") |>
+#'     add_osm_feature (key = c ("name", "!name:ca"))
+#' q4 <- opq ("el Carxe", osm_type = "node") |>
 #'     add_osm_feature (key = "natural", value = "peak") |>
 #'     add_osm_feature (key = "!ele")
 #' }
@@ -877,10 +877,10 @@ opq_around <- function (lon, lat, radius = 15,
 #'     opq (out = "tags center", osm_type = "relation", timeout = 100) |>
 #'     add_osm_feature ("admin_level", "7") |>
 #'     add_osm_feature ("boundary", "administrative") |>
-#'     opq_csv (fields = c("name", "::type", "::id", "::lat", "::lon"))
+#'     opq_csv (fields = c ("name", "::type", "::id", "::lat", "::lon"))
 #' comarques <- osmdata_data_frame (q) # without timeout parameter, 0 rows
 #'
-#' qid<- opq_osm_id (
+#' qid <- opq_osm_id (
 #'     type = "relation",
 #'     id = c ("341530", "1809102", "1664395", "343124"),
 #'     out = "tags"

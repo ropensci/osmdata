@@ -23,14 +23,14 @@ object(s) which contain the object specified by \code{id}.
 \examples{
 # find all multipolygons which contain the single polygon called
 # "Chiswick Eyot" (which is an island).
-\dontshow{if ( getRversion() >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (getRversion () >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 dat <- opq ("London UK") |>
     add_osm_feature (key = "name", value = "Thames", exact = FALSE) |>
     osmdata_sf ()
 }
 \dontshow{\}) # examplesIf}
-\dontshow{if ( getRversion() < "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (getRversion () < "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 q <- opq ("London UK")
 q <- add_osm_feature (q, key = "name", value = "Thames", exact = FALSE)

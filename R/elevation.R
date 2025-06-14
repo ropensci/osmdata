@@ -15,10 +15,10 @@
 #' @examples
 #' # Bounding box of "omaha nebraska":
 #' bb <- c (-96.2682, 41.190585, -95.871141, 41.3930618)
-#' @examplesIf getRversion() >= "4.1"
+#' @examplesIf getRversion () >= "4.1"
 #' query <- opq (bb) |>
 #'     add_osm_feature (key = "highway")
-#' @examplesIf getRversion() < "4.1"
+#' @examplesIf getRversion () < "4.1"
 #' query <- opq (bb)
 #' query <- add_osm_feature (query, key = "highway")
 #' @examples

@@ -248,11 +248,11 @@ sanity_check <- function (dat, id) {
 #' @family search
 #' @export
 #'
-#' @examplesIf getRversion() >= "4.1"
+#' @examplesIf getRversion () >= "4.1"
 #' \dontrun{
 #' tr <- opq ("trentham australia") |> osmdata_sf ()
 #' }
-#' @examplesIf getRversion() < "4.1"
+#' @examplesIf getRversion () < "4.1"
 #' \dontrun{
 #' tr <- osmdata_sf (opq ("trentham australia"))
 #' }
@@ -300,7 +300,7 @@ osm_points <- function (dat, id) {
 #' @family search
 #' @export
 #'
-#' @examplesIf getRversion() >= "4.1"
+#' @examplesIf getRversion () >= "4.1"
 #' \dontrun{
 #' dat <- opq ("hengelo nl") |>
 #'     add_osm_feature (key = "highway") |>
@@ -314,7 +314,7 @@ osm_points <- function (dat, id) {
 #'     add_osm_feature (key = "highway") |>
 #'     osmdata_sf ()
 #' }
-#' @examplesIf getRversion() < "4.1"
+#' @examplesIf getRversion () < "4.1"
 #' \dontrun{
 #' q <- opq ("hengelo nl")
 #' q <- add_osm_feature (q, key = "highway")
@@ -375,13 +375,13 @@ osm_lines <- function (dat, id) {
 #'
 #' @examples
 #' # Extract polygons which intersect Conway Street in London
-#' @examplesIf getRversion() >= "4.1"
+#' @examplesIf getRversion () >= "4.1"
 #' \dontrun{
 #' dat <- opq ("Marylebone London") |>
 #'     add_osm_feature (key = "highway") |>
 #'     osmdata_sf ()
 #' }
-#' @examplesIf getRversion() < "4.1"
+#' @examplesIf getRversion () < "4.1"
 #' \dontrun{
 #' q <- opq ("Marylebone London")
 #' q <- add_osm_feature (q, key = "highway")
@@ -432,13 +432,13 @@ osm_polygons <- function (dat, id) {
 #' @family search
 #' @export
 #'
-#' @examplesIf getRversion() >= "4.1"
+#' @examplesIf getRversion () >= "4.1"
 #' \dontrun{
 #' dat <- opq ("London UK") |>
 #'     add_osm_feature (key = "name", value = "Thames", exact = FALSE) |>
 #'     osmdata_sf ()
 #' }
-#' @examplesIf getRversion() < "4.1"
+#' @examplesIf getRversion () < "4.1"
 #' \dontrun{
 #' q <- opq ("London UK")
 #' q <- add_osm_feature (q, key = "name", value = "Thames", exact = FALSE)
@@ -495,13 +495,13 @@ osm_multilines <- function (dat, id) {
 #' @examples
 #' # find all multipolygons which contain the single polygon called
 #' # "Chiswick Eyot" (which is an island).
-#' @examplesIf  getRversion() >= "4.1"
+#' @examplesIf getRversion () >= "4.1"
 #' \dontrun{
 #' dat <- opq ("London UK") |>
 #'     add_osm_feature (key = "name", value = "Thames", exact = FALSE) |>
 #'     osmdata_sf ()
 #' }
-#' @examplesIf  getRversion() < "4.1"
+#' @examplesIf getRversion () < "4.1"
 #' \dontrun{
 #' q <- opq ("London UK")
 #' q <- add_osm_feature (q, key = "name", value = "Thames", exact = FALSE)

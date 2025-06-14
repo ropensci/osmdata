@@ -91,7 +91,7 @@ Note in particular the comment that queries with arbitrarily large \code{memsize
 are likely to be rejected.
 }
 \examples{
-\dontshow{if (getRversion() >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (getRversion () >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 q <- getbb ("portsmouth", display_name_contains = "United States") |>
     opq () |>
@@ -125,7 +125,7 @@ qa2 <- bbox_to_string (bb [bb$osm_type != "node", ]) |>
 opqa2 <- osmdata_sf (qa2)
 }
 \dontshow{\}) # examplesIf}
-\dontshow{if (getRversion() < "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (getRversion () < "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 q <- getbb ("portsmouth", display_name_contains = "United States")
 q <- opq (bbox)

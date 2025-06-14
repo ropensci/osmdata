@@ -22,7 +22,7 @@ containing that point. If \code{id} is of a line or polygon object,
 polygon.
 }
 \examples{
-\dontshow{if (getRversion() >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (getRversion () >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 dat <- opq ("hengelo nl") |>
     add_osm_feature (key = "highway") |>
@@ -37,7 +37,7 @@ dat <- opq ("Fitzrovia London") |>
     osmdata_sf ()
 }
 \dontshow{\}) # examplesIf}
-\dontshow{if (getRversion() < "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (getRversion () < "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 q <- opq ("hengelo nl")
 q <- add_osm_feature (q, key = "highway")
