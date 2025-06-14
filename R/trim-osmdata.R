@@ -117,7 +117,10 @@ bb_poly_to_mat <- function (x) {
 #'
 #' @param x A bounding-box input to \link{getbb} or \link{opq}.
 #'
+#' @note About the need to export private methods
+#'   github.com/r-lib/roxygen2/issues/1592
 #' @export
+#' @noRd
 bb_poly_to_mat.default <- function (x) {
 
     stop ("bb_poly is of unknown class; please use matrix or a spatial class")
