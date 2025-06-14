@@ -85,9 +85,9 @@ q <- opq ("portsmouth uk") |>
     add_osm_feature (key = "highway", value = "!primary")
 
 # key negation without warnings
-q3 <- opq ("Vinçà", osm_type="node") |>
-    add_osm_feature (key = c("name", "!name:ca"))
-q4 <- opq ("el Carxe", osm_type="node") |>
+q3 <- opq ("Vinçà", osm_type = "node") |>
+    add_osm_feature (key = c ("name", "!name:ca"))
+q4 <- opq ("el Carxe", osm_type = "node") |>
     add_osm_feature (key = "natural", value = "peak") |>
     add_osm_feature (key = "!ele")
 }
