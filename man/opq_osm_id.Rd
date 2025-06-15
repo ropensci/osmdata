@@ -70,6 +70,7 @@ single query, but the results of multiple types can nevertheless be combined
 with the \link{c} operation of \link{osmdata}.
 }
 \examples{
+\dontshow{if (getRversion () >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 id <- c (1489221200, 1489221321, 1489221491)
 dat1 <- opq_osm_id (type = "node", id = id) |>
@@ -89,6 +90,28 @@ datAiO <- opq_osm_id (id = id, type = type) |>
     opq_string () |>
     osmdata_sf ()
 }
+\dontshow{\}) # examplesIf}
+\dontshow{if (getRversion () < "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
+id <- c (1489221200, 1489221321, 1489221491)
+q1 <- opq_osm_id (type = "node", id = id)
+q1 <- opq_string (q1)
+dat1 <- osmdata_sf (q1)
+dat1$osm_points # the desired nodes
+id <- c (136190595, 136190596)
+q2 <- opq_osm_id (type = "way", id = id)
+q2 <- opq_string (q2)
+dat2 <- osmdata_sf (q2)
+dat2$osm_lines # the desired ways
+dat <- c (dat1, dat2) # The node and way data combined
+# All in one (same result as dat)
+id <- c (1489221200, 1489221321, 1489221491, 136190595, 136190596)
+type <- c ("node", "node", "node", "way", "way")
+qAiO <- opq_osm_id (id = id, type = type)
+qAiO <- opq_string (qAiO)
+datAiO <- osmdata_sf ()
+}
+\dontshow{\}) # examplesIf}
 }
 \references{
 \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_element_id}
