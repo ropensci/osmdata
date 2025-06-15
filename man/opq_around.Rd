@@ -29,16 +29,24 @@ Find all features around a given point, and optionally match specific
 examples for how to use.
 }
 \examples{
-\dontrun{
 # Get all benches ("amenity=bench") within 100m of a particular point
 lat <- 53.94542
 lon <- -2.52017
 key <- "amenity"
 value <- "bench"
 radius <- 100
+\dontshow{if (getRversion () >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 x <- opq_around (lon, lat, radius, key, value) |>
     osmdata_sf ()
 }
+\dontshow{\}) # examplesIf}
+\dontshow{if (getRversion () < "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
+q <- opq_around (lon, lat, radius, key, value)
+x <- osmdata_sf (q)
+}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other queries: 

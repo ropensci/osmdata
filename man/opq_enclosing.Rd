@@ -37,16 +37,25 @@ Find all features which enclose a given point, and optionally match specific
 extraction function). See examples for how to use.
 }
 \examples{
-\dontrun{
 # Get water body surrounding a particular point:
 lat <- 54.33601
 lon <- -3.07677
 key <- "natural"
 value <- "water"
+\dontshow{if (getRversion () >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 x <- opq_enclosing (lon, lat, key, value) |>
     opq_string () |>
     osmdata_sf ()
 }
+\dontshow{\}) # examplesIf}
+\dontshow{if (getRversion () < "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
+q <- opq_enclosing (lon, lat, key, value)
+q <- opq_string (q)
+x <- osmdata_sf (q)
+}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other queries: 

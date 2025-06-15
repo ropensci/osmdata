@@ -32,6 +32,7 @@ without any warning. Increase \code{timeout} in \code{q} if you don't see the
 expected result.
 }
 \examples{
+\dontshow{if (getRversion () >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 q <- getbb ("Catalan Countries", format_out = "osm_type_id") |>
     opq (out = "tags center", osm_type = "relation", timeout = 100) |>
@@ -48,6 +49,25 @@ qid <- opq_osm_id (
     opq_csv (fields = c ("name", "name:ca"))
 cities <- osmdata_data_frame (qid)
 }
+\dontshow{\}) # examplesIf}
+\dontshow{if (getRversion () < "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
+q <- getbb ("Catalan Countries", format_out = "osm_type_id")
+q <- opq (q, out = "tags center", osm_type = "relation", timeout = 100)
+q <- add_osm_feature (q, "admin_level", "7")
+q <- add_osm_feature (q, "boundary", "administrative")
+q <- opq_csv (q, fields = c ("name", "::type", "::id", "::lat", "::lon"))
+comarques <- osmdata_data_frame (q) # without timeout parameter, 0 rows
+
+qid <- opq_osm_id (
+    type = "relation",
+    id = c ("341530", "1809102", "1664395", "343124"),
+    out = "tags"
+)
+qid <- opq_csv (qid, fields = c ("name", "name:ca"))
+cities <- osmdata_data_frame (qid)
+}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other queries: 

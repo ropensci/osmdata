@@ -64,6 +64,7 @@ features from these calls in a logical AND; this is analagous to chaining
 }
 
 \examples{
+\dontshow{if (getRversion () >= "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 q <- opq ("portsmouth usa") |>
     add_osm_feature (
@@ -91,6 +92,30 @@ q4 <- opq ("el Carxe", osm_type = "node") |>
     add_osm_feature (key = "natural", value = "peak") |>
     add_osm_feature (key = "!ele")
 }
+\dontshow{\}) # examplesIf}
+\dontshow{if (getRversion () < "4.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
+q <- opq ("portsmouth usa")
+q <- add_osm_feature (q, key = "amenity", value = "restaurant")
+q <- add_osm_feature (q, key = "amenity", value = "pub")
+osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
+q1 <- opq ("portsmouth usa")
+q1 <- add_osm_feature (q1, key = "amenity", value = "restaurant")
+q2 <- opq ("portsmouth usa")
+q2 <- add_osm_feature (q2, key = "amenity", value = "pub")
+c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
+# Use of negation to extract all non-primary highways
+q <- opq ("portsmouth uk")
+q <- add_osm_feature (q, key = "highway", value = "!primary")
+
+# key negation without warnings
+q3 <- opq ("Vinçà", osm_type = "node")
+q3 <- add_osm_feature (q3, key = c ("name", "!name:ca"))
+q4 <- opq ("el Carxe", osm_type = "node")
+q4 <- add_osm_feature (q4, key = "natural", value = "peak")
+q4 <- add_osm_feature (q4, key = "!ele")
+}
+\dontshow{\}) # examplesIf}
 }
 \references{
 \url{https://wiki.openstreetmap.org/wiki/Map_Features}
