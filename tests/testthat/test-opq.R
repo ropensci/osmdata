@@ -135,18 +135,17 @@ test_that ("osm_types", {
     # node, way, relation):
     expect_equal (n_fts_in_query, n_fts * length(q2$osm_types))
 
-    # nodes_only
-    q3 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), nodes_only = TRUE)
-    expect_silent (
-        q4 <- opq (
-            bbox = c (-0.118, 51.514, -0.115, 51.517),
-            nodes_only = TRUE,
-            osm_types = "blah" # ignored if nodes_only == TRUE
-        )
+    # nodes only
+    q3 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), osm_types = "node")
+
+    # Deprecated nodes_only
+    expect_warning(
+        q_dep <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), nodes_only = TRUE),
+        "Deprecated"
     )
 
-    expect_identical (q3, q4)
-    expect_true (q4$osm_types == "node")
+    expect_identical (q3, q_dep)
+    expect_true (q3$osm_types == "node")
 })
 
 test_that ("out", {
@@ -182,7 +181,7 @@ test_that ("out", {
     })
 
     # nodes_only
-    q1 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), nodes_only = TRUE)
+    q1 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), osm_types = "node")
     expect_error (
         q <- opq (
             bbox = c (-0.118, 51.514, -0.115, 51.517),
@@ -194,7 +193,7 @@ test_that ("out", {
     q_geo <- lapply (c ("meta", "skel"), function (x) {
         q <- opq (
             bbox = c (-0.118, 51.514, -0.115, 51.517),
-            nodes_only = TRUE, out = x
+            osm_types = "node", out = x
         )
         expect_true (!identical (q1, q))
         expect_identical (names (q1), names (q))
@@ -207,7 +206,7 @@ test_that ("out", {
     q_no_geo <- lapply (c ("tags", "tags center", "ids"), function (x) {
         q <- opq (
             bbox = c (-0.118, 51.514, -0.115, 51.517),
-            nodes_only = TRUE, out = x
+            osm_types = "node", out = x
         )
         expect_true (!identical (q1, q))
         expect_identical (names (q1), names (q))
@@ -264,7 +263,7 @@ test_that ("opq_string", {
     # nodes_only parameter:
     q1 <- opq (
         bbox = c (-0.118, 51.514, -0.115, 51.517),
-        nodes_only = TRUE
+        osm_types = "node"
     )
     s1 <- opq_string (q1)
     # nodes only, so "out" instead of "out body" and no way nor relation
@@ -273,7 +272,7 @@ test_that ("opq_string", {
 
     q1 <- opq (
         bbox = "relation(id:11747082)",
-        nodes_only = TRUE
+        osm_types = "node"
     )
     s1 <- opq_string (q1)
     # nodes only, so "out" instead of "out body" and no way nor relation on clauses
@@ -283,7 +282,7 @@ test_that ("opq_string", {
     # nodes_only parameter with features:
     q1 <- opq (
         bbox = c (-0.118, 51.514, -0.115, 51.517),
-        nodes_only = TRUE
+        osm_types = "node"
     )
     q1 <- add_osm_feature (q1, key = "amenity", value = "restaurant")
     s1 <- opq_string (q1)
@@ -293,7 +292,7 @@ test_that ("opq_string", {
 
     q1 <- opq (
         bbox = "relation(id:11747082)",
-        nodes_only = TRUE
+        osm_types = "node"
     )
     q1 <- add_osm_feature (q1, key = "amenity", value = "restaurant")
     s1 <- opq_string (q1)
