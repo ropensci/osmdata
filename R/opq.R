@@ -310,9 +310,9 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #'     add_osm_feature (key = "highway", value = "!primary")
 #'
 #' # key negation without warnings
-#' q3 <- opq ("Vinçà", osm_type="node") |>
-#'     add_osm_feature (key = c("name", "!name:ca"))
-#' q4 <- opq ("el Carxe", osm_type="node") |>
+#' q3 <- opq ("Vinçà", osm_type = "node") |>
+#'     add_osm_feature (key = c ("name", "!name:ca"))
+#' q4 <- opq ("el Carxe", osm_type = "node") |>
 #'     add_osm_feature (key = "natural", value = "peak") |>
 #'     add_osm_feature (key = "!ele")
 #' }
@@ -346,7 +346,7 @@ add_osm_feature <- function (opq,
         key, value, bind_key_pre$key_pre, bind_key_pre$bind,
         match_case, value_exact
     )
-    feature<- paste (feature, collapse = " ")
+    feature <- paste (feature, collapse = " ")
 
     if (is.null (opq$features)) {
         opq$features <- feature
@@ -846,10 +846,10 @@ opq_around <- function (lon, lat, radius = 15,
 #'     opq (out = "tags center", osm_type = "relation", timeout = 100) |>
 #'     add_osm_feature ("admin_level", "7") |>
 #'     add_osm_feature ("boundary", "administrative") |>
-#'     opq_csv (fields = c("name", "::type", "::id", "::lat", "::lon"))
+#'     opq_csv (fields = c ("name", "::type", "::id", "::lat", "::lon"))
 #' comarques <- osmdata_data_frame (q) # without timeout parameter, 0 rows
 #'
-#' qid<- opq_osm_id (
+#' qid <- opq_osm_id (
 #'     type = "relation",
 #'     id = c ("341530", "1809102", "1664395", "343124"),
 #'     out = "tags"
@@ -859,7 +859,7 @@ opq_around <- function (lon, lat, radius = 15,
 #' }
 opq_csv <- function (q, fields, header = TRUE) {
 
-    if (!inherits (q, c("overpass_query", "character"))) {
+    if (!inherits (q, c ("overpass_query", "character"))) {
         stop ("q must be an overpass query or a character string.")
     }
     if (!inherits (fields, "character")) {
@@ -1016,7 +1016,7 @@ opq_string_intern <- function (opq, quiet = TRUE) {
         if (!map_to_area) {
             bbox <- sprintf ("  %s (%s);\n", opq$osm_types, opq$bbox)
         } else {
-                opq$prefix <- gsub ("\n$", "", opq$prefix)
+            opq$prefix <- gsub ("\n$", "", opq$prefix)
             search_area <-
                 paste0 (opq$bbox, "; map_to_area->.searchArea; );\n(\n")
             bbox <- c (
