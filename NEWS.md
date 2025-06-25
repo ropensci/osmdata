@@ -8,6 +8,7 @@
 - Remove `magrittr` from imports. User code relaying on reexported pipe `%>%` from `osmdata` must exlicitly load it
   with `library(magrittr)`.  Code examples, tests and vignettes now use the pipe from base (`|>`) available since R 4.1
   (#361)
+- Depends on R >= 4.1 to use the base pipe (`|>`) in examples and vignettes (#371)
 - Deprecate `nodes_only` argument in `opq()`. Superseeded by argument `osm_types` (#370)
 
 ## Minor changes

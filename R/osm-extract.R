@@ -350,8 +350,8 @@ osm_lines <- function (dat, id) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' # Extract polygons which intersect Conway Street in London
+#' \dontrun{
 #' dat <- opq ("Marylebone London") |>
 #'     add_osm_feature (key = "highway") |>
 #'     osmdata_sf ()
@@ -450,9 +450,9 @@ osm_multilines <- function (dat, id) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' # find all multipolygons which contain the single polygon called
 #' # "Chiswick Eyot" (which is an island).
+#' \dontrun{
 #' dat <- opq ("London UK") |>
 #'     add_osm_feature (key = "name", value = "Thames", exact = FALSE) |>
 #'     osmdata_sf ()

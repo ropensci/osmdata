@@ -35,18 +35,11 @@ Objects of class \code{xml_document} can be saved as \code{.xml} or
 \code{.osm} files with \code{xml2::write_xml}.
 }
 \examples{
-# Bounding box of "hampi india":
-bb <- c (76.4410201, 15.3158, 76.4810201, 15.3558)
-query <- opq (bb)
-query <- add_osm_feature (query, key = "historic", value = "ruins")
-# Equivalent to:
 \dontrun{
 query <- opq ("hampi india") |>
     add_osm_feature (key = "historic", value = "ruins")
-}
 # Then extract data from 'Overpass' API and save to local file:
-\dontrun{
-osmdata_xml (q, filename = "hampi.osm")
+osmdata_xml (query, filename = "hampi.osm")
 }
 
 # Complex query as a string (not possible with regular osmdata functions)
