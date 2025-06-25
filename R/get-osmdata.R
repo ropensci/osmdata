@@ -143,7 +143,7 @@ fix_columns_list <- function (l) {
 #'
 #' @param obj Initial \link{osmdata} object
 #' @param doc Document contain XML-formatted version of OSM data
-#' @inheritParams osmdata_sp
+#' @inheritParams osmdata_sf
 #' @return List of an \link{osmdata} object (`obj`), and XML
 #'      document (`doc`)
 #' @noRd

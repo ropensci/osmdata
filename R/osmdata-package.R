@@ -33,7 +33,7 @@
 #'     format
 #' \item \link{osmdata_sc}: Return OSM data in \pkg{silicate} format
 #' \item \link{osmdata_sf}: Return OSM data in \pkg{sf} format
-#' \item \link{osmdata_sp}: Return OSM data in \pkg{sp} format
+#' \item \link{osmdata_sp}: Return OSM data in \pkg{sp} format (DEPRECATED)
 #' \item \link{osmdata_xml}: Return OSM data in \pkg{xml2} format
 #' }
 #'
