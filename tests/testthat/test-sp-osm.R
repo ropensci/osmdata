@@ -3,7 +3,10 @@ test_that ("multipolygon", {
     x_sf <- sf::st_read (osm_multi, layer = "multipolygons", quiet = TRUE)
     x_sp <- as (x_sf, "Spatial")
     q0 <- opq (bbox = c (1, 1, 5, 5))
-    x <- osmdata_sp (q0, osm_multi)$osm_multipolygons
+    expect_warning (
+        x <- osmdata_sp (q0, osm_multi)$osm_multipolygons,
+        "Deprecated"
+    )
     # GDAL spits out a whole lot of generic field names, so first the
     # two have to be reduced to common fields.
     x <- x [, which (names (x) %in% names (x_sp))]
@@ -60,7 +63,10 @@ test_that ("multilinestring", {
     x_sf <- sf::st_read (osm_multi, layer = "multilinestrings", quiet = TRUE)
     x_sp <- as (x_sf, "Spatial")
     q0 <- opq (bbox = c (1, 1, 5, 5))
-    x <- osmdata_sp (q0, osm_multi)$osm_multilines
+    expect_warning (
+        x <- osmdata_sp (q0, osm_multi)$osm_multilines,
+        "Deprecated"
+    )
     x <- x [, which (names (x) %in% names (x_sp))]
     x_sp <- x_sp [, which (names (x_sp) %in% names (x))]
     rownames (slot (x, "data")) <- rownames (slot (x_sp, "data"))
@@ -96,7 +102,10 @@ test_that ("ways", {
     x_sf <- sf::st_read (osm_ways, layer = "lines", quiet = TRUE)
     x_sp <- as (x_sf, "Spatial")
     q0 <- opq (bbox = c (1, 1, 5, 5))
-    x <- osmdata_sp (q0, osm_ways)$osm_lines
+    expect_warning (
+        x <- osmdata_sp (q0, osm_ways)$osm_lines,
+        "Deprecated"
+    )
     x <- x [, which (names (x) %in% names (x_sp))]
     x_sp <- x_sp [, which (names (x_sp) %in% names (x))]
     np <- length (slot (slot (x, "lines") [[1]], "Lines"))
@@ -126,7 +135,10 @@ test_that ("ways", {
 test_that ("non-valid key names", {
     osm_multi <- test_path ("fixtures", "osm-multi.osm")
     q0 <- opq (bbox = c (1, 1, 5, 5))
-    x <- osmdata_sp (q0, osm_multi)
+    expect_warning (
+        x <- osmdata_sp (q0, osm_multi),
+        "Deprecated"
+    )
 
     k <- lapply (x[grep ("osm_", names (x))], function (f) {
         expect_true("name:ca" %in% names(f))

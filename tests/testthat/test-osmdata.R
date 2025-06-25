@@ -87,7 +87,7 @@ test_that ("query_errors", {
         "argument \"q\" is missing, with no default"
     )
     expect_error (
-        osmdata_sp (),
+        expect_warning (osmdata_sp (), "Deprecated"),
         'arguments "q" and "doc" are missing, with no default. '
     )
     expect_error (
@@ -108,7 +108,7 @@ test_that ("query_errors", {
         "q must be an overpass query or a character string"
     )
     expect_error (
-        osmdata_sp (q = NULL),
+        expect_warning (osmdata_sp (q = NULL), "Deprecated"),
         "q must be an overpass query or a character string"
     )
     expect_error (
@@ -135,7 +135,7 @@ test_that ("not implemented queries", {
     doc <- xml2::read_xml (osm_adiff2)
 
     expect_error (
-        osmdata_sp (q = qadiff, doc = doc),
+        expect_warning (osmdata_sp (q = qadiff, doc = doc), "Deprecated"),
         "adiff queries not yet implemented."
     )
     expect_error (
@@ -154,7 +154,7 @@ test_that ("not implemented queries", {
     doc <- xml2::read_xml (osm_tags)
 
     expect_error (
-        osmdata_sp (q = qtags, doc = doc),
+        expect_warning (osmdata_sp (q = qtags, doc = doc), "Deprecated"),
         "Queries returning no geometries \\(out tags/ids\\) not accepted."
     )
     expect_error (
@@ -191,7 +191,7 @@ test_that ("not implemented queries", {
         "out:csv queries only work with osmdata_data_frame()."
     )
     expect_error (
-        osmdata_sp (q = qcsv),
+        expect_warning (osmdata_sp (q = qcsv), "Deprecated"),
         "out:csv queries only work with osmdata_data_frame()."
     )
     expect_error (
@@ -209,7 +209,9 @@ test_that ("osmdata without query", {
     osm_multi <- test_path ("fixtures", "osm-multi.osm")
     doc <- xml2::read_xml (osm_multi)
 
-    expect_silent ( x_sp <- osmdata_sp (doc = doc))
+    expect_silent (
+        expect_warning (x_sp <- osmdata_sp (doc = doc), "Deprecated")
+    )
     expect_silent ( x_sf <- osmdata_sf (doc = doc))
     expect_silent ( x_sc <- osmdata_sc (doc = doc))
     expect_silent ( x_df <- osmdata_data_frame (doc = doc))
@@ -220,7 +222,7 @@ test_that ("osmdata without query", {
     expect_s3_class ( x_df, "data.frame")
 
     expect_message (
-        x_sp <- osmdata_sp (doc = doc, quiet = FALSE),
+        expect_warning (x_sp <- osmdata_sp (doc = doc, quiet = FALSE), "Deprecated"),
         "q missing: osmdata object will not include query"
     )
     expect_message (
@@ -284,13 +286,17 @@ test_that ("make_query", {
         if (test_all) {
 
             res <- with_mock_dir ("mock_osm_sp", {
-                osmdata_sp (qry)
+                expect_warning (osmdata_sp (qry), "Deprecated")
             })
             expect_message (print (res), "Object of class 'osmdata' with")
-            expect_silent (res <- osmdata_sp (qry, doc))
+            expect_silent (
+                expect_warning (res <- osmdata_sp (qry, doc), "Deprecated")
+            )
             expect_message (print (res), "Object of class 'osmdata' with")
-            expect_silent (res <- osmdata_sp (qry, "junk.osm"))
-            expect_message (res <- osmdata_sp (qry, "junk.osm", quiet = FALSE))
+            expect_silent (expect_warning (res <- osmdata_sp (qry, "junk.osm"), "Deprecated"))
+            expect_message (
+                expect_warning (res <- osmdata_sp (qry, "junk.osm", quiet = FALSE), "Deprecated")
+            )
 
             expect_s3_class (res, "osmdata")
             nms <- c (
@@ -348,8 +354,10 @@ test_that ("query-no-quiet", {
                            "Issuing query to Overpass API")
         })
         with_mock_dir ("mock_osm_sp", {
-            expect_message (x <- osmdata_sp (qry, quiet = FALSE),
-                           "Issuing query to Overpass API")
+            expect_message (
+                expect_warning (x <- osmdata_sp (qry, quiet = FALSE), "Deprecated"),
+                "Issuing query to Overpass API"
+            )
         })
         with_mock_dir ("mock_osm_sf", {
             expect_message (x <- osmdata_sf (qry, quiet = FALSE),

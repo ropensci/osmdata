@@ -1,4 +1,4 @@
-#' Return an OSM Overpass query as an \link{osmdata} object in \pkg{sp}
+#' DEPRECATED: Return an OSM Overpass query as an \link{osmdata} object in \pkg{sp}
 #' format.
 #'
 #' @param q An object of class `overpass_query` constructed with
@@ -47,6 +47,12 @@
 #' no_townhall
 #' }
 osmdata_sp <- function (q, doc, quiet = TRUE) {
+
+    .Deprecated (
+        new = "osmdata_sf () or osmdata_sc ()",
+        package = "osmdata",
+        old = "osmdata_sp ()"
+    )
 
     obj <- osmdata () # uses class def
     if (missing (q)) {
