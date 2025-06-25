@@ -21,17 +21,10 @@
 #' @export
 #'
 #' @examples
-#' # Bounding box of "hampi india":
-#' bb <- c (76.4410201, 15.3158, 76.4810201, 15.3558)
-#' query <- opq (bb)
-#' query <- add_osm_feature (query, key = "historic", value = "ruins")
-#' # Equivalent to:
 #' \dontrun{
 #' query <- opq ("hampi india") |>
 #'     add_osm_feature (key = "historic", value = "ruins")
-#' }
 #' # Then extract data from 'Overpass' API
-#' \dontrun{
 #' hampi_df <- osmdata_data_frame (query)
 #' attr (hampi_df, "bbox")
 #' attr (hampi_df, "overpass_call")

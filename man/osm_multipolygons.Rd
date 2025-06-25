@@ -21,9 +21,9 @@ An \pkg{sf} Simple Features Collection of multipolygons
 object(s) which contain the object specified by \code{id}.
 }
 \examples{
-\dontrun{
 # find all multipolygons which contain the single polygon called
 # "Chiswick Eyot" (which is an island).
+\dontrun{
 dat <- opq ("London UK") |>
     add_osm_feature (key = "name", value = "Thames", exact = FALSE) |>
     osmdata_sf ()

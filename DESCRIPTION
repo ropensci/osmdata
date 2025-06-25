@@ -1,6 +1,6 @@
 Package: osmdata
 Title: Import 'OpenStreetMap' Data as Simple Features or Spatial Objects
-Version: 0.2.5.058
+Version: 0.2.5.059
 Authors@R: c(
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre")),
     person("Bob", "Rudis", role = "aut"),
@@ -28,6 +28,8 @@ License: GPL-3
 URL: https://docs.ropensci.org/osmdata/,
     https://github.com/ropensci/osmdata
 BugReports: https://github.com/ropensci/osmdata/issues
+Depends:
+    R (>= 4.1)
 Imports:
     curl,
     httr2,

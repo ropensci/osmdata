@@ -22,8 +22,8 @@ polygons containing that point. If \code{id} is of a line or polygon object,
 or polygon.
 }
 \examples{
-\dontrun{
 # Extract polygons which intersect Conway Street in London
+\dontrun{
 dat <- opq ("Marylebone London") |>
     add_osm_feature (key = "highway") |>
     osmdata_sf ()
