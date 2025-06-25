@@ -61,7 +61,7 @@ To load the package and check the version:
 library (osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
 packageVersion ("osmdata")
-#> [1] '0.2.5.16'
+#> [1] '0.2.5.60'
 ```
 
 ## Usage
@@ -72,7 +72,7 @@ can be built from a base query constructed with `opq` followed by
 converted to [Simple Feature
 (`sf`)](https://cran.r-project.org/package=sf) objects with
 `osmdata_sf()`, [Spatial (`sp`)](https://cran.r-project.org/package=sp)
-objects with `osmdata_sp()` or [Silicate
+objects with `osmdata_sp()` (DEPRECATED) or [Silicate
 (`sc`)](https://github.com/hypertidy/silicate) objects with
 `osmdata_sc()`. For example,
 
@@ -226,7 +226,8 @@ returned in a variety of formats, currently including:
     via
     [`osmdata_sf()`](https://docs.ropensci.org/osmdata/reference/osmdata_sf.html);
 3.  [R Spatial (sp)](https://cran.r-project.org/package=sp) format via
-    [`osmdata_sp()`](https://docs.ropensci.org/osmdata/reference/osmdata_sp.html);
+    [`osmdata_sp()`](https://docs.ropensci.org/osmdata/reference/osmdata_sp.html)
+    (DEPRECATED);
 4.  [Silicate (SC)](https://github.com/hypertidy/silicate) format via
     [`osmdata_sc()`](https://docs.ropensci.org/osmdata/reference/osmdata_sc.html);
     and

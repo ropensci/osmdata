@@ -1,7 +1,7 @@
 #' Return an OSM Overpass query as a \link{data.frame} object.
 #'
 #'
-#' @inheritParams osmdata_sp
+#' @inheritParams osmdata_sf
 #' @param q An object of class `overpass_query` constructed with
 #'      \link{opq} and \link{add_osm_feature} or a string with a valid query, such
 #'      as `"(node(39.4712701,-0.3841326,39.4713799,-0.3839475);); out;"`.

@@ -10,12 +10,13 @@
 #'   }
 #' }
 #'
-# @section Deprecated functions:
-# \describe{
-#   \item{`osmdata_sp()`}{
-#     Please use [`osmdata_sf()`] or [`osmdata_sc()`] instead.
-#   }
-# }
+#' @section Deprecated functions:
+#' \describe{
+#'   \item{`osmdata_sp()`}{
+#'     Please use [`osmdata_sf()`] or [`osmdata_sc()`] instead.
+#'     Since version 0.3, using [`osmdata_sp()`] will produce a deprecation warning.
+#'   }
+#' }
 #'
 #' @name osmdata-deprecated
 #' @keywords internal

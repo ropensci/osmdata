@@ -65,19 +65,19 @@ test_that ("add feature", {
     expect_true (!identical (qry$bbox, qry6$bbox))
 
     qry7 <- opq ("relation(id:74310)") |> # "Vinçà"
-        add_osm_feature (key = c("name", "!name:ca"))
+        add_osm_feature (key = c ("name", "!name:ca"))
     qry8 <- opq ("relation(id:11755232)") |> # "el Carxe"
         add_osm_feature (key = "natural", value = "peak") |>
         add_osm_feature (key = "!ele")
-    expect_warning(
+    expect_warning (
         qry9 <- opq ("relation(id:11755232)") |> # "el Carxe"
-            add_osm_feature (key = "!ele")|>
+            add_osm_feature (key = "!ele") |>
             add_osm_feature (key = "natural", value = "peak"),
         "The query will request objects whith only a negated key "
     )
-    expect_identical(qry7$features, "[\"name\"] [!\"name:ca\"]")
-    expect_identical(qry8$features, "[\"natural\"=\"peak\"] [!\"ele\"]")
-    expect_identical(qry9$features, "[!\"ele\"] [\"natural\"=\"peak\"]")
+    expect_identical (qry7$features, "[\"name\"] [!\"name:ca\"]")
+    expect_identical (qry8$features, "[\"natural\"=\"peak\"] [!\"ele\"]")
+    expect_identical (qry9$features, "[!\"ele\"] [\"natural\"=\"peak\"]")
 })
 
 test_that ("query_errors", {
@@ -87,7 +87,7 @@ test_that ("query_errors", {
         "argument \"q\" is missing, with no default"
     )
     expect_error (
-        osmdata_sp (),
+        expect_warning (osmdata_sp (), "Deprecated"),
         'arguments "q" and "doc" are missing, with no default. '
     )
     expect_error (
@@ -108,7 +108,7 @@ test_that ("query_errors", {
         "q must be an overpass query or a character string"
     )
     expect_error (
-        osmdata_sp (q = NULL),
+        expect_warning (osmdata_sp (q = NULL), "Deprecated"),
         "q must be an overpass query or a character string"
     )
     expect_error (
@@ -127,15 +127,17 @@ test_that ("query_errors", {
 
 test_that ("not implemented queries", {
 
-    qadiff <- opq (bbox = c (1.8374527, 41.5931579, 1.8384799, 41.5936434),
-                   datetime = "2014-09-11T00:00:00Z",
-                   datetime2 = "2017-09-11T00:00:00Z",
-                   adiff = TRUE)
+    qadiff <- opq (
+        bbox = c (1.8374527, 41.5931579, 1.8384799, 41.5936434),
+        datetime = "2014-09-11T00:00:00Z",
+        datetime2 = "2017-09-11T00:00:00Z",
+        adiff = TRUE
+    )
     osm_adiff2 <- test_path ("fixtures", "osm-adiff2.osm")
     doc <- xml2::read_xml (osm_adiff2)
 
     expect_error (
-        osmdata_sp (q = qadiff, doc = doc),
+        expect_warning (osmdata_sp (q = qadiff, doc = doc), "Deprecated"),
         "adiff queries not yet implemented."
     )
     expect_error (
@@ -148,13 +150,15 @@ test_that ("not implemented queries", {
     )
 
 
-    qtags <- opq (bbox = c (1.8374527, 41.5931579, 1.8384799, 41.5936434),
-                  out="tags")
+    qtags <- opq (
+        bbox = c (1.8374527, 41.5931579, 1.8384799, 41.5936434),
+        out = "tags"
+    )
     osm_tags <- test_path ("fixtures", "osm-tags.osm")
     doc <- xml2::read_xml (osm_tags)
 
     expect_error (
-        osmdata_sp (q = qtags, doc = doc),
+        expect_warning (osmdata_sp (q = qtags, doc = doc), "Deprecated"),
         "Queries returning no geometries \\(out tags/ids\\) not accepted."
     )
     expect_error (
@@ -166,8 +170,10 @@ test_that ("not implemented queries", {
         "Queries returning no geometries \\(out tags/ids\\) not accepted."
     )
 
-    qmeta <- opq (bbox = c (1.8374527, 41.5931579, 1.8384799, 41.5936434),
-                  out="meta")
+    qmeta <- opq (
+        bbox = c (1.8374527, 41.5931579, 1.8384799, 41.5936434),
+        out = "meta"
+    )
     osm_meta <- test_path ("fixtures", "osm-meta.osm")
     doc <- xml2::read_xml (osm_meta)
 
@@ -185,13 +191,13 @@ test_that ("not implemented queries", {
     )
 
     qcsv <- opq (bbox = c (1.8374527, 41.5931579, 1.8384799, 41.5936434)) |>
-        opq_csv(fields = c("name"))
+        opq_csv (fields = c ("name"))
     expect_error (
         osmdata_xml (q = qcsv),
         "out:csv queries only work with osmdata_data_frame()."
     )
     expect_error (
-        osmdata_sp (q = qcsv),
+        expect_warning (osmdata_sp (q = qcsv), "Deprecated"),
         "out:csv queries only work with osmdata_data_frame()."
     )
     expect_error (
@@ -209,18 +215,20 @@ test_that ("osmdata without query", {
     osm_multi <- test_path ("fixtures", "osm-multi.osm")
     doc <- xml2::read_xml (osm_multi)
 
-    expect_silent ( x_sp <- osmdata_sp (doc = doc))
-    expect_silent ( x_sf <- osmdata_sf (doc = doc))
-    expect_silent ( x_sc <- osmdata_sc (doc = doc))
-    expect_silent ( x_df <- osmdata_data_frame (doc = doc))
+    expect_silent (
+        expect_warning (x_sp <- osmdata_sp (doc = doc), "Deprecated")
+    )
+    expect_silent (x_sf <- osmdata_sf (doc = doc))
+    expect_silent (x_sc <- osmdata_sc (doc = doc))
+    expect_silent (x_df <- osmdata_data_frame (doc = doc))
 
-    expect_s3_class ( x_sp, "osmdata")
-    expect_s3_class ( x_sf, "osmdata")
-    expect_s3_class ( x_sc, c ("SC", "osmdata_sc"))
-    expect_s3_class ( x_df, "data.frame")
+    expect_s3_class (x_sp, "osmdata")
+    expect_s3_class (x_sf, "osmdata")
+    expect_s3_class (x_sc, c ("SC", "osmdata_sc"))
+    expect_s3_class (x_df, "data.frame")
 
     expect_message (
-        x_sp <- osmdata_sp (doc = doc, quiet = FALSE),
+        expect_warning (x_sp <- osmdata_sp (doc = doc, quiet = FALSE), "Deprecated"),
         "q missing: osmdata object will not include query"
     )
     expect_message (
@@ -236,10 +244,10 @@ test_that ("osmdata without query", {
         "q missing: osmdata object will not include query"
     )
 
-    expect_s3_class ( x_sp, "osmdata")
-    expect_s3_class ( x_sf, "osmdata")
-    expect_s3_class ( x_sc, c ("SC", "osmdata_sc"))
-    expect_s3_class ( x_df, "data.frame")
+    expect_s3_class (x_sp, "osmdata")
+    expect_s3_class (x_sf, "osmdata")
+    expect_s3_class (x_sc, c ("SC", "osmdata_sc"))
+    expect_s3_class (x_df, "data.frame")
 })
 
 test_that ("make_query", {
@@ -284,13 +292,17 @@ test_that ("make_query", {
         if (test_all) {
 
             res <- with_mock_dir ("mock_osm_sp", {
-                osmdata_sp (qry)
+                expect_warning (osmdata_sp (qry), "Deprecated")
             })
             expect_message (print (res), "Object of class 'osmdata' with")
-            expect_silent (res <- osmdata_sp (qry, doc))
+            expect_silent (
+                expect_warning (res <- osmdata_sp (qry, doc), "Deprecated")
+            )
             expect_message (print (res), "Object of class 'osmdata' with")
-            expect_silent (res <- osmdata_sp (qry, "junk.osm"))
-            expect_message (res <- osmdata_sp (qry, "junk.osm", quiet = FALSE))
+            expect_silent (expect_warning (res <- osmdata_sp (qry, "junk.osm"), "Deprecated"))
+            expect_message (
+                expect_warning (res <- osmdata_sp (qry, "junk.osm", quiet = FALSE), "Deprecated")
+            )
 
             expect_s3_class (res, "osmdata")
             nms <- c (
@@ -330,7 +342,7 @@ test_that ("make_query", {
             nms <- c (
                 "names", "row.names", "class", "bbox", "overpass_call", "meta"
             )
-            expect_named (attributes(res), expected = nms, ignore.order = FALSE)
+            expect_named (attributes (res), expected = nms, ignore.order = FALSE)
         }
 
         if (file.exists ("junk.osm")) invisible (file.remove ("junk.osm"))
@@ -344,24 +356,34 @@ test_that ("query-no-quiet", {
 
     if (test_all) {
         with_mock_dir ("mock_osm_xml", {
-            expect_message (x <- osmdata_xml (qry, quiet = FALSE),
-                           "Issuing query to Overpass API")
+            expect_message (
+                x <- osmdata_xml (qry, quiet = FALSE),
+                "Issuing query to Overpass API"
+            )
         })
         with_mock_dir ("mock_osm_sp", {
-            expect_message (x <- osmdata_sp (qry, quiet = FALSE),
-                           "Issuing query to Overpass API")
+            expect_message (
+                expect_warning (x <- osmdata_sp (qry, quiet = FALSE), "Deprecated"),
+                "Issuing query to Overpass API"
+            )
         })
         with_mock_dir ("mock_osm_sf", {
-            expect_message (x <- osmdata_sf (qry, quiet = FALSE),
-                           "Issuing query to Overpass API")
+            expect_message (
+                x <- osmdata_sf (qry, quiet = FALSE),
+                "Issuing query to Overpass API"
+            )
         })
         with_mock_dir ("mock_osm_sc", {
-            expect_message (x <- osmdata_sc (qry, quiet = FALSE),
-                           "Issuing query to Overpass API")
+            expect_message (
+                x <- osmdata_sc (qry, quiet = FALSE),
+                "Issuing query to Overpass API"
+            )
         })
         with_mock_dir ("mock_osm_df", {
-            expect_message (x <- osmdata_data_frame (qry, quiet = FALSE),
-                           "Issuing query to Overpass API")
+            expect_message (
+                x <- osmdata_data_frame (qry, quiet = FALSE),
+                "Issuing query to Overpass API"
+            )
         })
     }
 })
@@ -383,7 +405,7 @@ test_that ("add_osm_features", {
     qry <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
 
     expect_error (
-       qry <- add_osm_features (qry, features = "a"),
+        qry <- add_osm_features (qry, features = "a"),
         "features must be a named list or vector or a character vector enclosed in escape delimited quotations \\(see examples\\)"
     )
 
@@ -397,16 +419,16 @@ test_that ("add_osm_features", {
     )
     expect_false (identical (qry1$bbox, qry2$bbox))
 
-    qry3 <- add_osm_features (qry0, features = c("amenity" = "restaurant"))
+    qry3 <- add_osm_features (qry0, features = c ("amenity" = "restaurant"))
     expect_identical (qry1, qry3)
 
     qry4 <- add_osm_features (qry0,
-      features = c("amenity" = "restaurant", "amentity" = "pub")
-      )
+        features = c ("amenity" = "restaurant", "amentity" = "pub")
+    )
     expect_s3_class (qry4, "overpass_query")
 
     qry5 <- add_osm_features (qry0,
-      features = list("amenity" = "restaurant", "amentity" = "pub")
+        features = list ("amenity" = "restaurant", "amentity" = "pub")
     )
     expect_s3_class (qry5, "overpass_query")
 })

@@ -20,7 +20,10 @@ test_that ("unique sf", {
 
 test_that ("unique sp", {
     q0 <- opq (bbox = c (1, 1, 5, 5))
-    x0 <- osmdata_sp (q0, test_path ("fixtures", "osm-multi.osm"))
+    expect_warning (
+        x0 <- osmdata_sp (q0, test_path ("fixtures", "osm-multi.osm")),
+        "Deprecated"
+    )
     x1 <- unique_osmdata (x0)
     expect_true (!identical (x0, x1))
     expect_true (nrow (x0$osm_points) > nrow (x1$osm_points))
@@ -28,7 +31,10 @@ test_that ("unique sp", {
     # all objects extend through the trim bb_poly and out, so nothing
     # is trimmed.
 
-    x0 <- osmdata_sp (q0, test_path ("fixtures", "osm-ways.osm"))
+    expect_warning (
+        x0 <- osmdata_sp (q0, test_path ("fixtures", "osm-ways.osm")),
+        "Deprecated"
+    )
     # x1 <- unique_osmdata (x0)
     # expect_true (!identical (x0, x1))
     # expect_true (nrow (x0$osm_points) > nrow (x1$osm_points))
