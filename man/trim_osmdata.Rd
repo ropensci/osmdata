@@ -8,7 +8,7 @@ trim_osmdata(dat, bb_poly, exclude = TRUE)
 }
 \arguments{
 \item{dat}{An \link{osmdata} object returned from \link{osmdata_sf} or
-\link{osmdata_sp}.}
+\link{osmdata_sp} (DEPRECATED).}
 
 \item{bb_poly}{A matrix representing a bounding polygon obtained with
 \code{getbb (..., format_out = "polygon")} (and possibly selected from

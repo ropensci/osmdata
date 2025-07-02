@@ -3,7 +3,7 @@
 #' Trim an \link{osmdata} object to within a bounding polygon
 #'
 #' @param dat An \link{osmdata} object returned from \link{osmdata_sf} or
-#' \link{osmdata_sp}.
+#' \link{osmdata_sp} (DEPRECATED).
 #' @param bb_poly A matrix representing a bounding polygon obtained with
 #' `getbb (..., format_out = "polygon")` (and possibly selected from
 #' resultant list where multiple polygons are returned).

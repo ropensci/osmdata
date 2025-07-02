@@ -2,7 +2,7 @@
 % Please edit documentation in R/get-osmdata-sp.R
 \name{osmdata_sp}
 \alias{osmdata_sp}
-\title{Return an OSM Overpass query as an \link{osmdata} object in \pkg{sp}
+\title{DEPRECATED: Return an OSM Overpass query as an \link{osmdata} object in \pkg{sp}
 format.}
 \usage{
 osmdata_sp(q, doc, quiet = TRUE)
@@ -26,7 +26,7 @@ An object of class \code{osmdata} with the OSM components (points, lines,
 and polygons) represented in \pkg{sp} format.
 }
 \description{
-Return an OSM Overpass query as an \link{osmdata} object in \pkg{sp}
+DEPRECATED: Return an OSM Overpass query as an \link{osmdata} object in \pkg{sp}
 format.
 }
 \examples{

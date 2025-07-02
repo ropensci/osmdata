@@ -1,7 +1,7 @@
 #' Return an OSM Overpass query as an \link{osmdata} object in
 #' `silicate` (`SC`) format.
 #'
-#' @inheritParams osmdata_sp
+#' @inheritParams osmdata_sf
 #' @return An object of class `osmdata_sc` representing the original OSM hierarchy
 #'      of nodes, ways, and relations.
 #'

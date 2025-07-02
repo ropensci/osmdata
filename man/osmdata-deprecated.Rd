@@ -16,4 +16,14 @@ Since version 0.3, using \code{nodes_only} will produce a deprecation warning.
 }
 }
 
+\section{Deprecated functions}{
+
+\describe{
+\item{\code{osmdata_sp()}}{
+Please use \code{\link[=osmdata_sf]{osmdata_sf()}} or \code{\link[=osmdata_sc]{osmdata_sc()}} instead.
+Since version 0.3, using \code{\link[=osmdata_sp]{osmdata_sp()}} will produce a deprecation warning.
+}
+}
+}
+
 \keyword{internal}
