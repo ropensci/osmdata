@@ -17,7 +17,7 @@
 #' @param quiet suppress status messages.
 #' @param stringsAsFactors Should character strings in 'sf' 'data.frame' be
 #' coerced to factors?
-#' @return An object of class `osmdata` with the OSM components (points, lines,
+#' @return An object of class `osmdata_sf` with the OSM components (points, lines,
 #'         and polygons) represented in \pkg{sf} format.
 #'
 #' @family extract
