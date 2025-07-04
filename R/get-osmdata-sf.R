@@ -17,7 +17,7 @@
 #' @param quiet suppress status messages.
 #' @param stringsAsFactors Should character strings in 'sf' 'data.frame' be
 #' coerced to factors?
-#' @return An object of class `osmdata` with the OSM components (points, lines,
+#' @return An object of class `osmdata_sf` with the OSM components (points, lines,
 #'         and polygons) represented in \pkg{sf} format.
 #'
 #' @family extract
@@ -114,7 +114,7 @@ osmdata_sf <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) { # noli
         )
     }
 
-    class (obj) <- c (class (obj), "osmdata_sf")
+    class (obj) <- c ("osmdata_sf", class (obj))
 
     return (obj)
 }
