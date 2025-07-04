@@ -114,7 +114,7 @@ osmdata_sf <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) { # noli
         )
     }
 
-    class (obj) <- c (class (obj), "osmdata_sf")
+    class (obj) <- c ("osmdata_sf", class (obj))
 
     return (obj)
 }
