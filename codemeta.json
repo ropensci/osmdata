@@ -11,13 +11,13 @@
   "codeRepository": "https://github.com/ropensci/osmdata",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.2.5.061",
+  "version": "0.2.5.062",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.5.0 (2025-04-11)",
+  "runtimePlatform": "R version 4.5.1 (2025-06-13)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -342,7 +342,7 @@
     "r-package",
     "peer-reviewed"
   ],
-  "fileSize": "19655.382KB",
+  "fileSize": "19047.106KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
