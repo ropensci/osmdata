@@ -120,7 +120,7 @@ osmdata_sc <- function (q, doc, quiet = TRUE) {
         "edge",
         "vertex"
     )
-    attr (obj, "class") <- c ("SC", "sc", "osmdata_sc")
+    attr (obj, "class") <- c ("osmdata_sc", "osmdata", "SC", "sc")
 
     return (obj)
 }
