@@ -25,7 +25,7 @@ or an object of class \pkg{xml2} returned from \link{osmdata_xml}.}
 coerced to factors?}
 }
 \value{
-An object of class \code{osmdata} with the OSM components (points, lines,
+An object of class \code{osmdata_sf} with the OSM components (points, lines,
 and polygons) represented in \pkg{sf} format.
 }
 \description{
