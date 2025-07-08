@@ -23,6 +23,7 @@
 - Document the use of the input query as character strings for `osmdata_*()` (#349)
 - Consistent `NA` values throughout all multi-* matrices returned by `osmdata_sf()` (#355)
 - Fix dates and remove `lubridate` from imports (#360)
+- Restructure class definitions of `osmdata_sf()` and `osmdata_sc()` objects (#373, #374)
 
 
 0.2.5
