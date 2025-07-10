@@ -286,13 +286,11 @@ getbb <- function (place_name,
 
     if (format_out == "sf_polygon") {
         ret_poly <- bb_as_sf_poly (gt_p, gt_mp, place_name)
+        geom <- do.call (c, lapply (ret_poly, function (p) p$geometry))
+
         obj_index <- as.integer (c (names (gt_p), names (gt_mp)))
-        ret_data <- obj [obj_index, which (!names (obj) %in% c ("boundingbox", "geotext"))]
-        ret <- cbind (ret_data, ret_poly)
-        # Then restore sf attributes:
-        nms <- names (ret)
-        attributes (ret) <- attributes (ret_poly)
-        names (ret) <- nms
+        ret <- obj [obj_index, which (!names (obj) %in% c ("boundingbox", "geotext"))]
+        ret$geometry <- geom
     }
 
     return (ret)
@@ -450,8 +448,8 @@ get_geotext_multipoly <- function (obj) {
 
     if (length (gt_mp) > 0) {
         gt_mp <- lapply (gt_mp, function (i) get1bdypoly (i))
-        lens <- vapply (gt_mp, length, integer (1))
-        index_final <- rep (index_final, times = lens)
+        # lens <- vapply (gt_mp, length, integer (1))
+        # index_final <- rep (index_final, times = lens)
         names (gt_mp) <- as.character (index_final)
     }
 
