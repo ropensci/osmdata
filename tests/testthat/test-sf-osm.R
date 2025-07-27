@@ -126,6 +126,60 @@ test_that ("ways", {
 })
 
 
+test_that ("out meta & diff", {
+    # q <- getbb ("Conflent", featuretype = "relation") |>
+    bb <- rbind (c (2.01, 2.66), c (42.42, 42.71))
+    rownames (bb) <- c ("x", "y")
+    colnames (bb) <- c ("min", "max")
+    q <- opq (bb,
+        osm_types = "node", out = "meta",
+        datetime = "2020-11-07T00:00:00Z",
+        datetime2 = "2022-12-04T00:00:00Z"
+    ) |>
+        add_osm_feature ("natural", "peak") |>
+        add_osm_feature ("prominence") |>
+        add_osm_feature ("name:ca")
+
+    osm_meta_diff <- test_path ("fixtures", "osm-meta_diff.osm")
+    doc <- xml2::read_xml (osm_meta_diff)
+
+    x <- osmdata_sf (q, doc, quiet = FALSE)
+    x_no_call <- osmdata_sf (doc = doc)
+
+    cols <- c (
+        "osm_type", "osm_id", "osm_version", "osm_timestamp",
+        "osm_changeset", "osm_uid", "osm_user", "ele", "name",
+        "name:ca", "natural", "prominence"
+    )
+    expect_named (x, cols)
+    # expect_named (x_no_call, cols) # include osm_center_lat/lon columns
+    expect_s3_class (x, "osmdata_sf")
+    expect_s3_class (x_no_call, "osmdata_sf")
+
+    obj_overpass_call <-
+        osmdata (bbox = q$bbox, overpass_call = opq_string_intern (q))
+    obj_opq <- osmdata (bbox = q$bbox, overpass_call = q)
+    obj <- osmdata (bbox = q$bbox)
+
+    meta_l <- list (
+        meta_overpass_call = get_metadata (obj_overpass_call, doc)$meta,
+        meta_opq = get_metadata (obj_opq, doc)$meta,
+        meta_no_call = get_metadata (obj, doc)$meta
+    )
+
+    expect_identical (meta_l$meta_overpass_call, meta_l$meta_opq)
+    expect_identical (
+        meta_l$meta_overpass_call$datetime_from,
+        attr (q, "datetime")
+    )
+    expect_identical (
+        meta_l$meta_overpass_call$datetime_to,
+        attr (q, "datetime2")
+    )
+    expect_null (meta_l$meta_no_call$query_type)
+})
+
+
 test_that ("non-valid key names", {
     osm_multi <- test_path ("fixtures", "osm-multi.osm")
     q0 <- opq (bbox = c (1, 1, 5, 5))
@@ -135,6 +189,7 @@ test_that ("non-valid key names", {
         expect_true ("name:ca" %in% names (f))
     })
 })
+
 
 test_that ("clashes in key names", {
     osm_multi_key_clashes <- test_path ("fixtures", "osm-key_clashes.osm")
@@ -151,6 +206,7 @@ test_that ("clashes in key names", {
         expect_true (all (c ("osm_id", "osm_id.1") %in% names (f)))
     })
 })
+
 
 test_that ("duplicated column names", {
     # https://github.com/ropensci/osmdata/issues/348

@@ -74,7 +74,7 @@ osmdata_sf <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) { # noli
         stop ("q must be an overpass query or a character string")
     }
 
-    check_not_implemented_queries (obj)
+    check_not_implemented_queries (obj, meta = TRUE)
 
     temp <- fill_overpass_data (obj, doc, quiet = quiet)
     obj <- temp$obj
@@ -100,6 +100,8 @@ osmdata_sf <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) { # noli
     kv_df <- grep ("_kv$", names (res)) # objects with tags
     res [kv_df] <- fix_columns_list (res [kv_df])
     res [kv_df] <- lapply (res [kv_df], setenc_utf8)
+    meta_df <- grep ("_meta$", names (res))
+    res [meta_df] <- lapply (res [meta_df], setenc_utf8) ## TODO optimize fields
 
     if (missing (q)) {
         obj$bbox <- paste (res$bbox, collapse = " ")
@@ -242,6 +244,7 @@ fill_sf_objects <- function (res, obj, type = "points",
     geometry <- res [[type]]
     obj_name <- paste0 ("osm_", type)
     kv_name <- paste0 (type, "_kv")
+    meta_name <- paste0 (type, "_meta")
 
     if (length (res [[kv_name]]) > 0) {
 

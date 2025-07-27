@@ -16,7 +16,7 @@
 #' query <- opq ("hampi india") |>
 #'     add_osm_feature (key = "historic", value = "ruins")
 #' # Then extract data from 'Overpass' API
-#' hampi_sf <- osmdata_sc (query)
+#' hampi_sc <- osmdata_sc (query)
 #' }
 #'
 #' # Complex query as a string (not possible with regular osmdata functions)
