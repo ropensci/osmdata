@@ -12,6 +12,7 @@
 - Deprecate `nodes_only` argument in `opq()`. Superseded by argument `osm_types` (#370)
 - Deprecate `osmdata_sp` (#372)
 - Pre-prend class names `osmdata_sf` and `osmdata` rather than append; thanks to @agila5 (#373)
+- Add `osmadata_data.frame` class to `osmdata_data_frame()` results (#378)
 
 ## Minor changes
 
