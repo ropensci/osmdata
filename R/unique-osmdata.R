@@ -1,7 +1,7 @@
 #' unique_osmdata
 #'
 #' Reduce the components of an \link{osmdata} object in 'sf' or 'sp' form (that
-#' is, obtained from \link{osmdata_sf} or \link{osmdata_sp}) to only unique
+#' is, obtained from [osmdata_sf()] or [osmdata_sp()] to only unique
 #' items of each type. That is, reduce `$osm_points` to only those points not
 #' present in other objects (lines, polygons, etc.); reduce `$osm_lines` to
 #' only those lines not present in multiline objects; and reduce
@@ -9,7 +9,7 @@
 #' objects. This renders an \link{osmdata} object more directly compatible with
 #' typical output of \pkg{sf}.
 #'
-#' @param dat An \link{osmdata} object
+#' @param dat An object of class `osmdata_sf` or `osmdata_sp`
 #' @return Equivalent object reduced to only unique objects of each type
 #' @family transform
 #'

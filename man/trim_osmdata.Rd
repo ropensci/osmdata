@@ -7,7 +7,7 @@
 trim_osmdata(dat, bb_poly, exclude = TRUE)
 }
 \arguments{
-\item{dat}{An \link{osmdata} object returned from \code{\link[=osmdata_sf]{osmdata_sf()}} or
+\item{dat}{An \code{osmdata} object returned from \code{\link[=osmdata_sf]{osmdata_sf()}} or
 \code{\link[=osmdata_sc]{osmdata_sc()}}.}
 
 \item{bb_poly}{A matrix representing a bounding polygon obtained with
@@ -23,7 +23,7 @@ A trimmed version of \code{dat}, reduced only to those components
 lying within the bounding polygon.
 }
 \description{
-Trim an \link{osmdata} object to within a bounding polygon
+Trim an \code{osmdata} object to within a bounding polygon
 }
 \note{
 It will generally be necessary to pre-load the \pkg{sf} package for

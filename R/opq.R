@@ -615,9 +615,7 @@ check_features <- function (features) {
 #' \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_element_id}
 #'
 #' @note Extracting elements by ID requires explicitly specifying the type of
-#' element. Only elements of one of the three given types can be extracted in a
-#' single query, but the results of multiple types can nevertheless be combined
-#' with the \link{c} operation of \link{osmdata}.
+#' element.
 #'
 #' @family queries
 #' @export

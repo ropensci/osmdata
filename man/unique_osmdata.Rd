@@ -7,14 +7,14 @@
 unique_osmdata(dat)
 }
 \arguments{
-\item{dat}{An \link{osmdata} object}
+\item{dat}{An object of class \code{osmdata_sf} or \code{osmdata_sp}}
 }
 \value{
 Equivalent object reduced to only unique objects of each type
 }
 \description{
 Reduce the components of an \link{osmdata} object in 'sf' or 'sp' form (that
-is, obtained from \link{osmdata_sf} or \link{osmdata_sp}) to only unique
+is, obtained from \code{\link[=osmdata_sf]{osmdata_sf()}} or \code{\link[=osmdata_sp]{osmdata_sp()}} to only unique
 items of each type. That is, reduce \verb{$osm_points} to only those points not
 present in other objects (lines, polygons, etc.); reduce \verb{$osm_lines} to
 only those lines not present in multiline objects; and reduce

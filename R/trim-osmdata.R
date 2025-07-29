@@ -1,8 +1,8 @@
 #' trim_osmdata
 #'
-#' Trim an \link{osmdata} object to within a bounding polygon
+#' Trim an `osmdata` object to within a bounding polygon
 #'
-#' @param dat An \link{osmdata} object returned from [osmdata_sf()] or
+#' @param dat An `osmdata` object returned from [osmdata_sf()] or
 #' [osmdata_sc()].
 #' @param bb_poly A matrix representing a bounding polygon obtained with
 #' `getbb (..., format_out = "polygon")` (and possibly selected from
