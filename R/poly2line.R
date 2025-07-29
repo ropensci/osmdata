@@ -5,7 +5,7 @@
 #' those with the `osm_lines` component to yield a single \pkg{sf}
 #' `data.frame` of all highways, whether polygonal or not.
 #'
-#' @param osmdat An \link{osmdata} object.
+#' @param osmdat An `osmdata_sf` object.
 #' @return Modified version of same object with all `osm_polygons`
 #' objects merged into `osm_lines`.
 #'
@@ -28,7 +28,7 @@
 #' @export
 osm_poly2line <- function (osmdat) {
 
-    if (!is (osmdat, "osmdata_sf")) {
+    if (!inherits (osmdat, "osmdata_sf")) {
         stop ("osm_poly2line only works for objects of class osmdata_sf")
     }
 

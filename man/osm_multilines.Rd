@@ -2,12 +2,12 @@
 % Please edit documentation in R/osm-extract.R
 \name{osm_multilines}
 \alias{osm_multilines}
-\title{Extract all \code{osm_multilines} from an osmdata object}
+\title{Extract all \code{osm_multilines} from an \code{osmdata_sf} object}
 \usage{
 osm_multilines(dat, id)
 }
 \arguments{
-\item{dat}{An object of class \link{osmdata}}
+\item{dat}{An object of class \code{osmdata_sf}}
 
 \item{id}{OSM identification of one of more objects for which multilines are
 to be extracted}

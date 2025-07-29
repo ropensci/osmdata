@@ -2,8 +2,8 @@
 #'
 #' Trim an \link{osmdata} object to within a bounding polygon
 #'
-#' @param dat An \link{osmdata} object returned from \link{osmdata_sf} or
-#' \link{osmdata_sp} (DEPRECATED).
+#' @param dat An \link{osmdata} object returned from [osmdata_sf()] or
+#' [osmdata_sc()].
 #' @param bb_poly A matrix representing a bounding polygon obtained with
 #' `getbb (..., format_out = "polygon")` (and possibly selected from
 #' resultant list where multiple polygons are returned).
@@ -44,20 +44,16 @@
 #' }
 #' @export
 trim_osmdata <- function (dat, bb_poly, exclude = TRUE) {
+    UseMethod ("trim_osmdata")
+}
 
-    # safer than using method despatch, because these class defs are **NOT** the
-    # first items
-    if (methods::is (dat, "osmdata_sf") | methods::is (dat, "osmdata_sp")) {
+#' @export
+trim_osmdata.default <- function (dat, bb_poly, exclude = TRUE) {
 
-        trim_osmdata_sfp (dat = dat, bb_poly = bb_poly, exclude = exclude)
-
-    } else if (methods::is (dat, "osmdata_sc")) {
-
-        trim_osmdata_sc (dat = dat, bb_poly = bb_poly, exclude = exclude)
-
-    } else {
-        stop ("unrecognised format: ", paste0 (class (dat), collapse = " "))
-    }
+    stop (
+        "unrecognised dat class: ", paste0 (class (dat), collapse = " "),
+        ". trim_osmdata() implemented only for `osmdata_sf` or `osmdata_sc`."
+    )
 }
 
 
@@ -65,7 +61,8 @@ trim_osmdata <- function (dat, bb_poly, exclude = TRUE) {
 # **********************   sf/sp methods   **********************
 # ***************************************************************
 
-trim_osmdata_sfp <- function (dat, bb_poly, exclude = TRUE) {
+#' @export
+trim_osmdata.osmdata_sf <- function (dat, bb_poly, exclude = TRUE) {
 
     requireNamespace ("sf")
     if (!is (bb_poly, "matrix")) {
@@ -95,6 +92,14 @@ trim_osmdata_sfp <- function (dat, bb_poly, exclude = TRUE) {
     }
     return (dat)
 }
+
+
+#' @export
+trim_osmdata.osmdata_sp <- function (dat, bb_poly, exclude = TRUE) {
+
+    stop ("trim_osmdata() not implemented for `osmdata_sp` objects.")
+}
+
 
 bb_poly_to_mat <- function (x) {
 
@@ -175,9 +180,9 @@ bb_poly_to_mat.list <- function (x) {
 
 trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE) {
 
-    if (is (dat$osm_points, "sf")) {
+    if (inherits (dat$osm_points, "sf")) {
 
-        requireNamespace ("sp", quietly = TRUE)
+        requireNamespace ("sp", quietly = TRUE) ## TODO: remove sp
 
         # "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0":
         srcproj <- .lonlat ()
@@ -185,8 +190,10 @@ trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE) {
         crs <- .sph_merc ()
 
         g <- do.call (rbind, dat$osm_points$geometry)
+        ## TODO: don't reproject. s2 used by sf works fine with lon lat
+        # See also bb_poly_*
         g <- reproj::reproj (g, target = crs, source = srcproj)
-        indx <- sp::point.in.polygon (
+        indx <- sp::point.in.polygon ( # TODO: use sf::st_intersects()
             g [, 1], g [, 2],
             bb_poly [, 1], bb_poly [, 2]
         )
@@ -337,7 +344,8 @@ trim_to_poly_multi <- function (dat, bb_poly, exclude = TRUE) {
 # ************************   sc methods   ***********************
 # ***************************************************************
 
-trim_osmdata_sc <- function (dat, bb_poly, exclude = TRUE) {
+#' @export
+trim_osmdata.osmdata_sc <- function (dat, bb_poly, exclude = TRUE) {
 
     v <- verts_in_bpoly (dat, bb_poly)
 
