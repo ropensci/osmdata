@@ -25,6 +25,8 @@
 - Consistent `NA` values throughout all multi-* matrices returned by `osmdata_sf()` (#355)
 - Fix dates and remove `lubridate` from imports (#360)
 - Restructure class definitions of `osmdata_sf()` and `osmdata_sc()` objects (#373, #374)
+- Revert added `osmdata` class to `osmdata_data_frame()` and `osmdata_sc()` + 
+  Fix docs to better represent classes accepted by `trim_osmdata()`, `osm_poly2line()` and extract function (#380)
 
 
 0.2.5
