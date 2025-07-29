@@ -125,7 +125,7 @@ osmdata_data_frame <- function (q,
     attr (df, "bbox") <- obj$bbox
     attr (df, "overpass_call") <- obj$overpass_call
     attr (df, "meta") <- obj$meta
-    class (df) <- c ("osmdata_data.frame", "osmdata", class (df))
+    class (df) <- c ("osmdata_data.frame", class (df))
 
     return (df)
 }

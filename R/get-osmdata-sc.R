@@ -1,4 +1,4 @@
-#' Return an OSM Overpass query as an `osmdata` object in
+#' Return an OSM Overpass query as an `osmdata_sc` object in
 #' `silicate` (`SC`) format.
 #'
 #' @inheritParams osmdata_sf
@@ -120,7 +120,7 @@ osmdata_sc <- function (q, doc, quiet = TRUE) {
         "edge",
         "vertex"
     )
-    attr (obj, "class") <- c ("osmdata_sc", "osmdata", "SC", "sc")
+    attr (obj, "class") <- c ("osmdata_sc", "SC", "sc")
 
     return (obj)
 }

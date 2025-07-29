@@ -2,7 +2,7 @@
 % Please edit documentation in R/get-osmdata-sc.R
 \name{osmdata_sc}
 \alias{osmdata_sc}
-\title{Return an OSM Overpass query as an \code{osmdata} object in
+\title{Return an OSM Overpass query as an \code{osmdata_sc} object in
 \code{silicate} (\code{SC}) format.}
 \usage{
 osmdata_sc(q, doc, quiet = TRUE)
@@ -26,7 +26,7 @@ An object of class \code{osmdata_sc} representing the original OSM
 hierarchy of nodes, ways, and relations.
 }
 \description{
-Return an OSM Overpass query as an \code{osmdata} object in
+Return an OSM Overpass query as an \code{osmdata_sc} object in
 \code{silicate} (\code{SC}) format.
 }
 \note{
