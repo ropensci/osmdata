@@ -11,7 +11,7 @@ test_that ("trim_osm_data", {
     require (sf)
     expect_error (
         trim_osmdata (1, bb_poly = bb),
-        "unrecognised format: numeric"
+        "unrecognised dat class: numeric"
     )
     expect_silent (x1 <- trim_osmdata (x0, bb_poly = bb))
     expect_equal (nrow (x1$osm_points), 0)

@@ -7,7 +7,7 @@
 osm_poly2line(osmdat)
 }
 \arguments{
-\item{osmdat}{An \link{osmdata} object.}
+\item{osmdat}{An \code{osmdata_sf} object.}
 }
 \value{
 Modified version of same object with all \code{osm_polygons}

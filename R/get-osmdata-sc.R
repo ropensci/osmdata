@@ -1,9 +1,9 @@
-#' Return an OSM Overpass query as an \link{osmdata} object in
+#' Return an OSM Overpass query as an `osmdata_sc` object in
 #' `silicate` (`SC`) format.
 #'
 #' @inheritParams osmdata_sf
-#' @return An object of class `osmdata_sc` representing the original OSM hierarchy
-#'      of nodes, ways, and relations.
+#' @return An object of class `osmdata_sc` representing the original OSM
+#'      hierarchy of nodes, ways, and relations.
 #'
 #' @note The `silicate` format is currently highly experimental, and
 #'      recommended for use only if you really know what you're doing.
@@ -16,7 +16,7 @@
 #' query <- opq ("hampi india") |>
 #'     add_osm_feature (key = "historic", value = "ruins")
 #' # Then extract data from 'Overpass' API
-#' hampi_sf <- osmdata_sc (query)
+#' hampi_sc <- osmdata_sc (query)
 #' }
 #'
 #' # Complex query as a string (not possible with regular osmdata functions)
@@ -120,7 +120,7 @@ osmdata_sc <- function (q, doc, quiet = TRUE) {
         "edge",
         "vertex"
     )
-    attr (obj, "class") <- c ("osmdata_sc", "osmdata", "SC", "sc")
+    attr (obj, "class") <- c ("osmdata_sc", "SC", "sc")
 
     return (obj)
 }
