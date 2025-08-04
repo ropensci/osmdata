@@ -4,10 +4,11 @@
 #'
 #' @param dat An `osmdata` object returned from [osmdata_sf()] or
 #' [osmdata_sc()].
-#' @param bb_poly A matrix representing a bounding polygon obtained with
-#' `getbb (..., format_out = "polygon")` (and possibly selected from
-#' resultant list where multiple polygons are returned).
-#' @param exclude If TRUE, objects are trimmed exclusively, only retaining those
+#' @param bb_poly An `sf` or `sfc` object, or matrix representing a bounding
+#'    polygon. Can be obtained with `getbb (..., format_out = "polygon")` or
+#'    `getbb (..., format_out = "sf_polygon")` (and possibly
+#'    selected from resultant list where multiple polygons are returned).
+#' @param exclude If `TRUE`, objects are trimmed exclusively, only retaining those
 #' strictly within the bounding polygon; otherwise all objects which partly
 #' extend within the bounding polygon are retained.
 #'
@@ -20,6 +21,9 @@
 #' `getbb(..., format_out = "polygon"|"sf_polygon")`. These shapes can be
 #' outdated and thus could cause the trimming operation to not give results
 #' expected based on the current state of the OSM data.
+#' @note To reduce the downloaded data from Overpass, you can do the trimming in
+#' the server-side using `getbb(..., format_out = "osm_type_id")`
+#' (see examples).
 #'
 #' @family transform
 #'
@@ -41,6 +45,12 @@
 #' bb_sp <- as (bb_sf, "Spatial")
 #' class (bb_sp) # SpatialPolygonsDataFrame
 #' dat_tr <- trim_osmdata (dat, bb_sp)
+#'
+#' # Server-side trimming equivalent
+#' bb <- getbb ("colchester uk", format_out = "osm_type_id")
+#' query <- opq (bb) |>
+#'     add_osm_feature (key = "highway")
+#' dat <- osmdata_sf (query, quiet = FALSE)
 #' }
 #' @export
 trim_osmdata <- function (dat, bb_poly, exclude = TRUE) {
@@ -65,31 +75,14 @@ trim_osmdata.default <- function (dat, bb_poly, exclude = TRUE) {
 trim_osmdata.osmdata_sf <- function (dat, bb_poly, exclude = TRUE) {
 
     requireNamespace ("sf")
-    if (!is (bb_poly, "matrix")) {
-        bb_poly <- bb_poly_to_mat (bb_poly)
+    if (!inherits (bb_poly, c ("sf", "sfc"), which = FALSE)) {
+        bb_poly <- bb_poly_to_sf (bb_poly)
     }
 
-    if (nrow (bb_poly) > 1) {
+    dat <- trim_to_poly_pts (dat, bb_poly, exclude = exclude)
+    dat <- trim_to_poly (dat, bb_poly = bb_poly, exclude = exclude)
+    dat <- trim_to_poly_multi (dat, bb_poly = bb_poly, exclude = exclude)
 
-        # "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0":
-        srcproj <- .lonlat ()
-        # "+proj=merc +a=6378137 +b=6378137":
-        crs <- .sph_merc ()
-        bb_poly <- reproj::reproj (
-            bb_poly,
-            target = crs,
-            source = srcproj
-        ) [, 1:2]
-
-        dat <- trim_to_poly_pts (dat, bb_poly, exclude = exclude)
-        dat <- trim_to_poly (dat, bb_poly = bb_poly, exclude = exclude)
-        dat <- trim_to_poly_multi (dat, bb_poly = bb_poly, exclude = exclude)
-    } else {
-        message (
-            "bb_poly must be a matrix with > 1 row; ",
-            " data will not be trimmed."
-        )
-    }
     return (dat)
 }
 
@@ -124,9 +117,15 @@ bb_poly_to_mat.default <- function (x) {
     stop ("bb_poly is of unknown class; please use matrix or a spatial class")
 }
 
+
 more_than_one <- function () {
 
     message ("bb_poly has more than one polygon; the first will be selected.")
+}
+
+#' @export
+bb_poly_to_mat.matrix <- function (x) {
+    x
 }
 
 #' @export
@@ -178,35 +177,65 @@ bb_poly_to_mat.list <- function (x) {
     return (x)
 }
 
+
+bb_poly_to_sf <- function (bb_poly) {
+
+    bb_poly <- bb_poly_to_mat (bb_poly)
+
+    if (nrow (bb_poly) == 2) { # bbox corners
+
+        bb_poly <- rbind (
+            bb_poly [1, ],
+            c (bb_poly [1, 1], bb_poly [2, 2]),
+            bb_poly [2, ],
+            c (bb_poly [2, 1], bb_poly [1, 2])
+        )
+    }
+
+    if (!identical (
+        as.numeric (utils::head (bb_poly, 1)),
+        as.numeric (utils::tail (bb_poly, 1))
+    )) { # Non-closed polygon
+        bb_poly <- rbind (bb_poly, bb_poly [1, ])
+    }
+
+    bb_poly <- sf::st_sfc (sf::st_polygon (list (bb_poly)), crs = 4326)
+
+    return (bb_poly)
+}
+
+
+#' Remove points outside bb_poly
+#'
+#' @param dat an object of class `osmdata_sf`
+#' @param bb_poly an object of class `sf` or `sfc`
+#' @param exclude If TRUE, only retaini points strictly within the bounding
+#'   polygon and discard points in the vertex or boundaries; otherwise keep the
+#'   points in the boundaries of the bb_poly.
+#'
+#' @noRd
 trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE) {
 
     if (inherits (dat$osm_points, "sf")) {
 
-        requireNamespace ("sp", quietly = TRUE) ## TODO: remove sp
-
-        # "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0":
-        srcproj <- .lonlat ()
-        # "+proj=merc +a=6378137 +b=6378137":
-        crs <- .sph_merc ()
-
-        g <- do.call (rbind, dat$osm_points$geometry)
-        ## TODO: don't reproject. s2 used by sf works fine with lon lat
-        # See also bb_poly_*
-        g <- reproj::reproj (g, target = crs, source = srcproj)
-        indx <- sp::point.in.polygon ( # TODO: use sf::st_intersects()
-            g [, 1], g [, 2],
-            bb_poly [, 1], bb_poly [, 2]
-        )
         if (exclude) {
-            indx <- which (indx == 1)
+            # st_contains_properly assumes planar coordinates. No s2 method?
+            g <- sf::st_transform (dat$osm_points, crs = .sph_merc ())
+            bb_poly <- sf::st_transform (bb_poly, crs = .sph_merc ())
+            indx <- sf::st_contains_properly (bb_poly, g, sparse = FALSE) [1, ]
         } else {
-            indx <- which (indx > 0)
+            indx <- sf::st_within (
+                dat$osm_points, bb_poly,
+                sparse = FALSE
+            ) [, 1]
         }
+
         dat$osm_points <- dat$osm_points [indx, ]
     }
 
     return (dat)
 }
+
 
 #' get_trim_indx
 #'
@@ -223,62 +252,37 @@ trim_to_poly_pts <- function (dat, bb_poly, exclude = TRUE) {
 #' @noRd
 get_trim_indx <- function (g, bb, exclude) {
 
-    # "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0":
-    srcproj <- .lonlat ()
-    # "+proj=merc +a=6378137 +b=6378137":
-    crs <- .sph_merc ()
-
-    indx <- lapply (g, function (i) {
-
-        if (is.list (i)) { # polygons
-            i <- i [[1]]
-        }
-        i <- reproj::reproj (as.matrix (i), target = crs, source = srcproj)
-        inp <- sp::point.in.polygon (
-            i [, 1], i [, 2],
-            bb [, 1], bb [, 2]
-        )
-        if ((exclude & all (inp > 0)) |
-            (!exclude & any (inp > 0))) {
-            return (TRUE)
-        } else {
-            return (FALSE)
-        }
-    })
-    ret <- NULL # multi objects can be empty
-    if (length (indx) > 0) {
-        ret <- which (unlist (indx))
+    if (exclude) {
+        # st_contains_properly assumes planar coordinates. No s2 method?
+        g <- sf::st_transform (g, crs = .sph_merc ())
+        bb <- sf::st_transform (bb, crs = .sph_merc ())
+        indx <- sf::st_contains_properly (bb, g, sparse = FALSE) [1, ]
+    } else {
+        indx <- sf::st_intersects (bb, g, sparse = FALSE) [1, ]
     }
-    return (ret)
+
+    return (which (indx))
 }
 
 trim_to_poly <- function (dat, bb_poly, exclude = TRUE) {
 
-    if (is (dat$osm_lines, "sf") | is (dat$osm_polygons, "sf")) {
+    if (inherits (dat$osm_lines, "sf")) {
+        gnms <- "osm_lines"
+    } else {
+        gnms <- character ()
+    }
+    if (inherits (dat$osm_polygons, "sf")) {
+        gnms <- c (gnms, "osm_polygons")
+    }
 
-        gnms <- c ("osm_lines", "osm_polygons")
-        index <- vapply (
-            gnms, function (i) !is.null (dat [[i]]),
-            logical (1)
-        )
-        gnms <- gnms [index]
-        for (g in gnms) {
+    for (g in gnms) {
 
-            if (!is.null (dat [[g]]) & nrow (dat [[g]]) > 0) {
+        if (nrow (dat [[g]]) > 0) {
 
-                indx <- get_trim_indx (dat [[g]]$geometry, bb_poly,
-                    exclude = exclude
-                )
-                # cl <- class (dat [[g]]$geometry) # TODO: Delete
-                attrs <- attributes (dat [[g]])
-                attrs$row.names <- attrs$row.names [indx]
-                attrs_g <- attributes (dat [[g]]$geometry)
-                attrs_g$names <- attrs_g$names [indx]
-                dat [[g]] <- dat [[g]] [indx, ] # this strips sf class defs
-                # class (dat [[g]]$geometry) <- cl # TODO: Delete
-                attributes (dat [[g]]) <- attrs
-                attributes (dat [[g]]$geometry) <- attrs_g
-            }
+            indx <- get_trim_indx (
+                g = dat [[g]]$geometry, bb = bb_poly, exclude = exclude
+            )
+            dat [[g]] <- dat [[g]] [indx, ]
         }
     }
 
@@ -287,53 +291,48 @@ trim_to_poly <- function (dat, bb_poly, exclude = TRUE) {
 
 trim_to_poly_multi <- function (dat, bb_poly, exclude = TRUE) {
 
-    if (is (dat$osm_multilines, "sf") | is (dat$osm_multipolygons, "sf")) {
+    if (inherits (dat$osm_multilines, "sf")) {
+        gnms <- "osm_multilines"
+    } else {
+        gnms <- character ()
+    }
+    if (inherits (dat$osm_multipolygons, "sf")) {
+        gnms <- c (gnms, "osm_multipolygons")
+    }
 
-        gnms <- c ("osm_multilines", "osm_multipolygons")
-        index <- vapply (
-            gnms, function (i) !is.null (dat [[i]]),
-            logical (1)
-        )
-        gnms <- gnms [index]
-        for (g in gnms) {
+    for (g in gnms) {
 
-            if (nrow (dat [[g]]) > 0) {
+        if (nrow (dat [[g]]) > 0) {
 
-                if (g == "osm_multilines") {
-                    indx <- lapply (dat [[g]]$geometry, function (gi) {
-                        get_trim_indx (
-                            g = gi, bb = bb_poly,
-                            exclude = exclude
-                        )
-                    })
-                } else {
-                    indx <- lapply (dat [[g]]$geometry, function (gi) {
-                        get_trim_indx (
-                            g = gi [[1]], bb = bb_poly,
-                            exclude = exclude
-                        )
-                    })
-                }
-                ilens <- vapply (indx, length, 1L, USE.NAMES = FALSE)
-                glens <- vapply (dat [[g]]$geometry, function (i) {
-                    length (i [[1]])
-                }, 1L, USE.NAMES = FALSE)
-                if (exclude) {
-                    indx <- which (ilens == glens)
-                } else {
-                    indx <- which (ilens > 0)
-                }
+            # if (g == "osm_multilines") {
+            #     indx <- lapply (dat [[g]]$geometry, function (gi) {
+            #         get_trim_indx (
+            #             g = gi, bb = bb_poly,
+            #             exclude = exclude
+            #         )
+            #     })
+            # } else {
+            #     indx <- lapply (dat [[g]]$geometry, function (gi) {
+            #         get_trim_indx (
+            #             g = gi [[1]], bb = bb_poly,
+            #             exclude = exclude
+            #         )
+            #     })
+            # }
+            indx <- get_trim_indx (
+                g = dat [[g]]$geometry, bb = bb_poly, exclude = exclude
+            )
+            # ilens <- vapply (indx, length, 1L, USE.NAMES = FALSE)
+            # glens <- vapply (dat [[g]]$geometry, function (i) {
+            #     length (i [[1]])
+            # }, 1L, USE.NAMES = FALSE)
+            # if (exclude) {
+            #     indx <- which (ilens == glens)
+            # } else {
+            #     indx <- which (ilens > 0)
+            # }
 
-                # cl <- class (dat [[g]]$geometry) # TODO: Delete
-                attrs <- attributes (dat [[g]])
-                attrs$row.names <- attrs$row.names [indx]
-                attrs_g <- attributes (dat [[g]]$geometry)
-                attrs_g$names <- attrs_g$names [indx]
-                dat [[g]] <- dat [[g]] [indx, ]
-                # class (dat [[g]]$geometry) <- cl # TODO: Delete
-                attributes (dat [[g]]) <- attrs
-                attributes (dat [[g]]$geometry) <- attrs_g
-            }
+            dat [[g]] <- dat [[g]] [indx, ]
         }
     }
 
@@ -347,7 +346,8 @@ trim_to_poly_multi <- function (dat, bb_poly, exclude = TRUE) {
 #' @export
 trim_osmdata.osmdata_sc <- function (dat, bb_poly, exclude = TRUE) {
 
-    v <- verts_in_bpoly (dat, bb_poly)
+    v <- verts_in_bpoly (dat, bb_poly, exclude = exclude)
+    # TODO: no geometries checked, only vertex
 
     if (exclude) {
 
@@ -390,34 +390,9 @@ trim_osmdata.osmdata_sc <- function (dat, bb_poly, exclude = TRUE) {
     return (dat)
 }
 
-verts_in_bpoly <- function (dat, bb_poly) {
+verts_in_bpoly <- function (dat, bb_poly, exclude) {
 
-    bb_poly_to_sf <- function (bb_poly) {
-
-        if (nrow (bb_poly) == 2) {
-
-            bb_poly <- rbind (
-                bb_poly [1, ],
-                c (bb_poly [1, 1], bb_poly [2, 2]),
-                bb_poly [2, ],
-                c (bb_poly [2, 1], bb_poly [1, 2])
-            )
-        }
-
-        if (!identical (
-            as.numeric (utils::head (bb_poly, 1)),
-            as.numeric (utils::tail (bb_poly, 1))
-        )) {
-            bb_poly <- rbind (bb_poly, bb_poly [1, ])
-        }
-
-        sf::st_sf (
-            sf::st_sfc (
-                sf::st_polygon (list (bb_poly)),
-                crs = 4326
-            )
-        )
-    }
+    requireNamespace ("sf")
     bb_poly <- bb_poly_to_sf (bb_poly)
 
     vert_to_sf <- function (dat) {
@@ -426,9 +401,14 @@ verts_in_bpoly <- function (dat, bb_poly) {
         sf::st_as_sf (v, coords = c ("x_", "y_"), crs = 4326)
     }
 
-    # suppress message about st_intersection assuming planar coordinates,
-    # because the inaccuracy may be ignored here
-    suppressMessages (w <- sf::st_within (vert_to_sf (dat), bb_poly))
+    if (exclude) {
+        # st_contains_properly assumes planar coordinates. No s2 method?
+        g <- sf::st_transform (vert_to_sf (dat), crs = .sph_merc ())
+        bb_poly <- sf::st_transform (bb_poly, crs = .sph_merc ())
+        w <- sf::st_contains_properly (bb_poly, g, sparse = FALSE) [1, ]
+    } else {
+        w <- sf::st_within (vert_to_sf (dat), bb_poly, sparse = FALSE) [, 1]
+    }
 
-    dat$vertex$vertex_ [which (as.logical (w))]
+    return (dat$vertex$vertex_ [which (w)])
 }
