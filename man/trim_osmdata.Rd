@@ -10,11 +10,12 @@ trim_osmdata(dat, bb_poly, exclude = TRUE)
 \item{dat}{An \code{osmdata} object returned from \code{\link[=osmdata_sf]{osmdata_sf()}} or
 \code{\link[=osmdata_sc]{osmdata_sc()}}.}
 
-\item{bb_poly}{A matrix representing a bounding polygon obtained with
-\code{getbb (..., format_out = "polygon")} (and possibly selected from
-resultant list where multiple polygons are returned).}
+\item{bb_poly}{An \code{sf} or \code{sfc} object, or matrix representing a bounding
+polygon. Can be obtained with \code{getbb (..., format_out = "polygon")} or
+\code{getbb (..., format_out = "sf_polygon")} (and possibly
+selected from resultant list where multiple polygons are returned).}
 
-\item{exclude}{If TRUE, objects are trimmed exclusively, only retaining those
+\item{exclude}{If \code{TRUE}, objects are trimmed exclusively, only retaining those
 strictly within the bounding polygon; otherwise all objects which partly
 extend within the bounding polygon are retained.}
 }
@@ -33,6 +34,10 @@ Caution is advised when using polygons obtained from Nominatim via
 \code{getbb(..., format_out = "polygon"|"sf_polygon")}. These shapes can be
 outdated and thus could cause the trimming operation to not give results
 expected based on the current state of the OSM data.
+
+To reduce the downloaded data from Overpass, you can do the trimming in
+the server-side using \code{getbb(..., format_out = "osm_type_id")}
+(see examples).
 }
 \examples{
 \dontrun{
@@ -52,6 +57,12 @@ dat_tr <- trim_osmdata (dat, bb_sf)
 bb_sp <- as (bb_sf, "Spatial")
 class (bb_sp) # SpatialPolygonsDataFrame
 dat_tr <- trim_osmdata (dat, bb_sp)
+
+# Server-side trimming equivalent
+bb <- getbb ("colchester uk", format_out = "osm_type_id")
+query <- opq (bb) |>
+    add_osm_feature (key = "highway")
+dat <- osmdata_sf (query, quiet = FALSE)
 }
 }
 \seealso{

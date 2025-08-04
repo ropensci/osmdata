@@ -3,6 +3,7 @@
 S3method(bb_poly_to_mat,SpatialPolygonsDataFrame)
 S3method(bb_poly_to_mat,default)
 S3method(bb_poly_to_mat,list)
+S3method(bb_poly_to_mat,matrix)
 S3method(bb_poly_to_mat,sf)
 S3method(bb_poly_to_mat,sfc)
 S3method(c,osmdata)

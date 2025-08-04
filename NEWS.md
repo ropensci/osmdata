@@ -13,6 +13,8 @@
 - Deprecate `osmdata_sp` (#372)
 - Pre-prend class names `osmdata_sf` and `osmdata` rather than append; thanks to @agila5 (#373)
 - Add `osmadata_data.frame` class to `osmdata_data_frame()` results (#378)
+- Reimplement `trim_osmdata()` using `sf` instead of `sp`. Now, it checks the full geometry instead of just the points
+  to determine if an object is properly contained in the bbox (only for `osmdata_sf` objects, `osdmata_sc` still wrong) (#382).
 
 ## Minor changes
 
