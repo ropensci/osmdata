@@ -27,6 +27,7 @@
 - Restructure class definitions of `osmdata_sf()` and `osmdata_sc()` objects (#373, #374)
 - Revert added `osmdata` class to `osmdata_data_frame()` and `osmdata_sc()` + 
   Fix docs to better represent classes accepted by `trim_osmdata()`, `osm_poly2line()` and extract function (#380)
+- Use terra functions instead of raster (obsolete) in osm_elevation() (#383)
 
 
 0.2.5

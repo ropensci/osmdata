@@ -7,7 +7,8 @@
 #'
 #' @param dat An `SC` object produced by \link{osmdata_sc}.
 #' @param elev_file A vector of one or more character strings specifying paths
-#' to `.tif` files containing global elevation data.
+#' to `.tif` files (or anything that \pkg{terra} can read) containing global
+#' elevation data. `.zip` files will be uncompressed.
 #'
 #' @return A modified version of the input `dat` with an additional `z_` column
 #' appended to the vertices.
@@ -28,8 +29,7 @@
 #' @export
 osm_elevation <- function (dat, elev_file) {
 
-    requireNamespace ("raster", quietly = TRUE)
-    requireNamespace ("sp", quietly = TRUE)
+    requireNamespace ("terra", quietly = TRUE)
 
     message (
         "Elevation data from Consortium for Spatial Information; ",
@@ -40,10 +40,10 @@ osm_elevation <- function (dat, elev_file) {
     if (length (elev_file) > 1) {
         stop ("not yet")
     }
-    r <- raster::raster (elev_file)
+    r <- terra::rast (elev_file)
     check_bbox (dat, r)
 
-    z <- raster::extract (r, dat$vertex [, 1:2])
+    z <- terra::extract (r, dat$vertex [, 1:2])
     dat$vertex$z_ <- as.double (z)
     dat$vertex <- dat$vertex [, c ("x_", "y_", "z_", "vertex_")]
 
@@ -52,7 +52,7 @@ osm_elevation <- function (dat, elev_file) {
 
 check_elev_file <- function (elev_file) {
 
-    if (!methods::is (elev_file, "character")) {
+    if (!is.character (elev_file)) {
         stop ("elev_file must be one of more character strings")
     }
 
@@ -67,9 +67,6 @@ check_elev_file <- function (elev_file) {
         }
 
         fe <- tools::file_ext (f)
-        if (!fe %in% c ("tif", "zip")) {
-            stop ("Unrecognised file format [.", fe, "]; must be .zip or .tif")
-        }
 
         if (fe == "zip") {
 
@@ -100,7 +97,7 @@ check_bbox <- function (dat, r) {
 
     bb <- as.numeric (strsplit (dat$meta$bbox, ",") [[1]])
     bb <- matrix (bb [c (2, 1, 4, 3)], ncol = 2)
-    bbr <- sp::bbox (r)
+    bbr <- as.matrix (terra::ext (r))
 
     if (bb [1, 1] < bbr [1, 1] |
         bb [1, 2] > bbr [1, 2] |
