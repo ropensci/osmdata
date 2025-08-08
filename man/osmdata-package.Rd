@@ -69,7 +69,7 @@ Useful links:
 
 }
 \author{
-Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon, Joan Maspons
+Joan Maspons, Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon
 }
 \concept{package}
 \keyword{internal}
