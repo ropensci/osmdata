@@ -305,6 +305,7 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #' q2 <- opq ("portsmouth usa") |>
 #'     add_osm_feature (key = "amenity", value = "pub")
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
+#'
 #' # Use of negation to extract all non-primary highways
 #' q <- opq ("portsmouth uk") |>
 #'     add_osm_feature (key = "highway", value = "!primary")
@@ -312,9 +313,17 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #' # key negation without warnings
 #' q3 <- opq ("Vinçà", osm_type = "node") |>
 #'     add_osm_feature (key = c ("name", "!name:ca"))
+#' cat (opq_string (q3))
 #' q4 <- opq ("el Carxe", osm_type = "node") |>
 #'     add_osm_feature (key = "natural", value = "peak") |>
 #'     add_osm_feature (key = "!ele")
+#' cat (opq_string (q4))
+#'
+#' # Get objects with keys (`natural` OR `waterway`) AND `name`
+#' q_keys <- opq ("Badia del Vallès", osm_types = "nwr", out = "tags") |>
+#'     add_osm_features (features = list (natural = NULL, waterway = NULL)) |>
+#'     add_osm_feature (key = "name")
+#' cat (opq_string (q_keys))
 #' }
 add_osm_feature <- function (opq,
                              key,
@@ -501,6 +510,7 @@ check_bind_key_pre <- function (bind = "=", key_pre = "") {
 #'         "\"amenity\"=\"restaurant\"",
 #'         "\"amenity\"=\"pub\""
 #'     ))
+#' cat (opq_string (q))
 #' # This extracts in a single query the same result as the following:
 #' q1 <- opq ("portsmouth usa") |>
 #'     add_osm_feature (
@@ -510,6 +520,12 @@ check_bind_key_pre <- function (bind = "=", key_pre = "") {
 #' q2 <- opq ("portsmouth usa") |>
 #'     add_osm_feature (key = "amenity", value = "pub")
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
+#'
+#' # Get objects with keys (`natural` OR `waterway`) AND `name`
+#' q_keys <- opq ("Badia del Vallès", osm_types = "nwr", out = "tags") |>
+#'     add_osm_features (features = list (natural = NULL, waterway = NULL)) |>
+#'     add_osm_feature (key = "name")
+#' cat (opq_string (q_keys))
 #' }
 add_osm_features <- function (opq,
                               features,
