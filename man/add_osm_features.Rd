@@ -62,7 +62,7 @@ q <- opq ("portsmouth usa") |>
         "\"amenity\"=\"restaurant\"",
         "\"amenity\"=\"pub\""
     ))
-cat(opq_string(q))
+cat (opq_string (q))
 # This extracts in a single query the same result as the following:
 q1 <- opq ("portsmouth usa") |>
     add_osm_feature (
@@ -77,7 +77,7 @@ c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 q_keys <- opq ("Badia del Vallès", osm_types = "nwr", out = "tags") |>
     add_osm_features (features = list (natural = NULL, waterway = NULL)) |>
     add_osm_feature (key = "name")
-cat(opq_string(q_keys))
+cat (opq_string (q_keys))
 }
 }
 \references{

@@ -88,17 +88,17 @@ q <- opq ("portsmouth uk") |>
 # key negation without warnings
 q3 <- opq ("Vinçà", osm_type = "node") |>
     add_osm_feature (key = c ("name", "!name:ca"))
-cat(opq_string(q3))
+cat (opq_string (q3))
 q4 <- opq ("el Carxe", osm_type = "node") |>
     add_osm_feature (key = "natural", value = "peak") |>
     add_osm_feature (key = "!ele")
-cat(opq_string(q4))
+cat (opq_string (q4))
 
 # Get objects with keys (`natural` OR `waterway`) AND `name`
 q_keys <- opq ("Badia del Vallès", osm_types = "nwr", out = "tags") |>
     add_osm_features (features = list (natural = NULL, waterway = NULL)) |>
     add_osm_feature (key = "name")
-cat(opq_string(q_keys))
+cat (opq_string (q_keys))
 }
 }
 \references{

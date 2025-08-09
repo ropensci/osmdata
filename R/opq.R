@@ -126,9 +126,11 @@ opq <- function (bbox = NULL, nodes_only,
                 "nwr", "nw", "wr", "nr"
             ),
             several.ok = TRUE
-    ), silent = TRUE)
+        ),
+        silent = TRUE
+    )
     if (inherits (osm_types, "try-error")) {
-        stop ('osm_types parameter must be a vector with values from ',
+        stop ("osm_types parameter must be a vector with values from ",
             '"node", "way", "rel", "relation", ',
             '"nwr", "nw", "wr" and "nr".',
             call. = FALSE
@@ -209,8 +211,8 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
     if (is.null (value)) {
 
         feature <- ifelse (substring (key, 1, 1) == "!",
-                sprintf ('[!"%s"]', substring (key, 2, nchar (key))),
-                sprintf ('["%s"]', key)
+            sprintf ('[!"%s"]', substring (key, 2, nchar (key))),
+            sprintf ('["%s"]', key)
         )
 
     } else {
@@ -363,10 +365,10 @@ add_osm_feature <- function (opq,
         opq$features <- paste (opq$features, feature)
     }
 
-    if (any (w <- !grepl("\\[(\\\"|~)", opq$features))) {
-        warning(
+    if (any (w <- !grepl ("\\[(\\\"|~)", opq$features))) {
+        warning (
             "The query will request objects whith only a negated key (",
-            paste (opq$features[w], collapse = ", "), ") , which can be quite ",
+            paste (opq$features [w], collapse = ", "), ") , which can be quite ",
             "expensive for overpass servers. Add other features or be shure ",
             "that that is what you want. To avoid this warning, reorder your ",
             "calls to add_osm_feature/s and leave key negations at the end."
@@ -555,9 +557,12 @@ add_osm_features <- function (opq,
                 key_exact = key_exact
             )
 
-        features <- mapply (function (key, value, key_pre, bind) {
-                paste_features (key, value, key_pre = key_pre, bind = bind,
-                    match_case = TRUE, value_exact = value_exact)
+        features <- mapply (
+            function (key, value, key_pre, bind) {
+                paste_features (key, value,
+                    key_pre = key_pre, bind = bind,
+                    match_case = TRUE, value_exact = value_exact
+                )
             },
             key = names (features), value = features,
             key_pre = bind_key_pre$key_pre, bind = bind_key_pre$bind,
@@ -880,13 +885,13 @@ opq_csv <- function (q, fields, header = TRUE) {
         stop ("fields must be a character vector.")
     }
 
-    fields <- vapply(fields, function (x) {
-        if (substr(x, 1, 2) != "::") {
-            x <- paste0("\"", x, "\"")
+    fields <- vapply (fields, function (x) {
+        if (substr (x, 1, 2) != "::") {
+            x <- paste0 ("\"", x, "\"")
         }
         return (x)
-    }, FUN.VALUE = character(1), USE.NAMES = FALSE)
-    fields <- paste (fields, collapse=", ")
+    }, FUN.VALUE = character (1), USE.NAMES = FALSE)
+    fields <- paste (fields, collapse = ", ")
 
     csv_prefix <- paste0 (
         "[out:csv(", fields,
@@ -970,18 +975,18 @@ opq_string_intern <- function (opq, quiet = TRUE) {
         } else {
 
             types_features <- expand.grid (
-                osm_types=opq$osm_types,
-                features=features,
+                osm_types = opq$osm_types,
+                features = features,
                 stringsAsFactors = FALSE
             )
 
             if (!map_to_area) {
-                features <-  c (sprintf ("  %s %s (%s);\n",
-                                         types_features$osm_types,
-                                         types_features$features,
-                                         opq$bbox
-                                )
-                )
+                features <- c (sprintf (
+                    "  %s %s (%s);\n",
+                    types_features$osm_types,
+                    types_features$features,
+                    opq$bbox
+                ))
 
             } else {
                 opq$prefix <- gsub ("\n$", "", opq$prefix)
@@ -991,9 +996,10 @@ opq_string_intern <- function (opq, quiet = TRUE) {
                 )
                 features <- c (
                     search_area,
-                    sprintf ("  %s %s (area.searchArea);\n",
-                             types_features$osm_types,
-                             types_features$features
+                    sprintf (
+                        "  %s %s (area.searchArea);\n",
+                        types_features$osm_types,
+                        types_features$features
                     )
                 )
             }
