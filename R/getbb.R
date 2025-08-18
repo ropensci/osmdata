@@ -286,11 +286,11 @@ getbb <- function (place_name,
 
     if (format_out == "sf_polygon") {
         ret_poly <- bb_as_sf_poly (gt_p, gt_mp, place_name)
-        geom <- do.call (c, lapply (ret_poly, function (p) p$geometry))
 
         obj_index <- as.integer (c (names (gt_p), names (gt_mp)))
-        ret <- obj [obj_index, which (!names (obj) %in% c ("boundingbox", "geotext"))]
-        ret$geometry <- geom
+        ret <- obj [obj_index, setdiff (names (obj), c ("boundingbox", "geotext"))]
+        geometry <- ret_poly$geometry
+        ret <- make_sf (ret, geometry)
     }
 
     return (ret)
