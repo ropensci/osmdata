@@ -2,12 +2,12 @@
 % Please edit documentation in R/osm-extract.R
 \name{osm_multipolygons}
 \alias{osm_multipolygons}
-\title{Extract all \code{osm_multipolygons} from an osmdata object}
+\title{Extract all \code{osm_multipolygons} from an \code{osmdata_sf} object}
 \usage{
 osm_multipolygons(dat, id)
 }
 \arguments{
-\item{dat}{An object of class \link{osmdata}}
+\item{dat}{An object of class \code{osmdata_sf}}
 
 \item{id}{OSM identification of one or more objects for which multipolygons
 are to be extracted}

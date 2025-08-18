@@ -9,8 +9,8 @@
 #'      will not include the query. See examples below.
 #' @param stringsAsFactors Should character strings in the 'data.frame' be
 #'      coerced to factors?
-#' @return A `data.frame` with id, type and tags of the the objects from the
-#'      query.
+#' @return A `data.frame` inheriting from `osmdata_data.frame` class with id, type
+#'      and tags of the the objects from the query.
 #'
 #' @details If you are not interested in the geometries of the results, it's a
 #'      good option to query for objects that match the features only and forget
@@ -125,6 +125,7 @@ osmdata_data_frame <- function (q,
     attr (df, "bbox") <- obj$bbox
     attr (df, "overpass_call") <- obj$overpass_call
     attr (df, "meta") <- obj$meta
+    class (df) <- c ("osmdata_data.frame", class (df))
 
     return (df)
 }

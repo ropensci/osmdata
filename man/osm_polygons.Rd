@@ -2,12 +2,12 @@
 % Please edit documentation in R/osm-extract.R
 \name{osm_polygons}
 \alias{osm_polygons}
-\title{Extract all \code{osm_polygons} from an osmdata object}
+\title{Extract all \code{osm_polygons} from an \code{osmdata_sf} object}
 \usage{
 osm_polygons(dat, id)
 }
 \arguments{
-\item{dat}{An object of class \link{osmdata}}
+\item{dat}{An object of class \code{osmdata_sf}}
 
 \item{id}{OSM identification of one or more objects for which polygons are to
 be extracted}

@@ -221,8 +221,8 @@ get_multipolygon_ids <- function (x, dat, id) {
 
 sanity_check <- function (dat, id) {
 
-    if (!is (dat, "osmdata")) {
-        stop ("dat must be of class osmdata")
+    if (!inherits (dat, "osmdata_sf")) {
+        stop ("dat must be of class `osmdata_sf`")
     }
 
     if (!(is.character (id) | is.numeric (id))) {
@@ -237,9 +237,9 @@ sanity_check <- function (dat, id) {
 }
 
 
-#' Extract all `osm_points` from an osmdata object
+#' Extract all `osm_points` from an `osmdata_sf` object
 #'
-#' @param dat An object of class \link{osmdata}
+#' @param dat An object of class `osmdata_sf`
 #' @param id OSM identification of one or more objects for which points are to
 #' be extracted
 #'
@@ -278,14 +278,14 @@ osm_points <- function (dat, id) {
     dat$osm_points [which (rownames (dat$osm_points) %in% ids), ]
 }
 
-#' Extract all `osm_lines` from an osmdata object
+#' Extract all `osm_lines` from an `osmdata_sf` object
 #'
 #' If `id` is of a point object, `osm_lines` will return all lines
 #' containing that point. If `id` is of a line or polygon object,
 #' `osm_lines` will return all lines which intersect the given line or
 #' polygon.
 #'
-#' @param dat An object of class \link{osmdata}
+#' @param dat An object of class `osmdata_sf`
 #' @param id OSM identification of one or more objects for which lines are to be
 #' extracted
 #' @return An \pkg{sf} Simple Features Collection of linestrings
@@ -333,7 +333,7 @@ osm_lines <- function (dat, id) {
 }
 
 
-#' Extract all `osm_polygons` from an osmdata object
+#' Extract all `osm_polygons` from an `osmdata_sf` object
 #'
 #' If `id` is of a point object, `osm_polygons` will return all
 #' polygons containing that point. If `id` is of a line or polygon object,
@@ -341,7 +341,7 @@ osm_lines <- function (dat, id) {
 #' or polygon.
 #'
 #'
-#' @param dat An object of class \link{osmdata}
+#' @param dat An object of class `osmdata_sf`
 #' @param id OSM identification of one or more objects for which polygons are to
 #' be extracted
 #' @return An \pkg{sf} Simple Features Collection of polygons
@@ -382,7 +382,7 @@ osm_polygons <- function (dat, id) {
 }
 
 
-#' Extract all `osm_multilines` from an osmdata object
+#' Extract all `osm_multilines` from an `osmdata_sf` object
 #'
 #' `id` must be of an `osm_points` or `osm_lines` object (and can
 #' not be the `id` of an `osm_polygons` object because multilines by
@@ -390,7 +390,7 @@ osm_polygons <- function (dat, id) {
 #' object(s) which contain the object specified by `id`.
 #'
 #'
-#' @param dat An object of class \link{osmdata}
+#' @param dat An object of class `osmdata_sf`
 #' @param id OSM identification of one of more objects for which multilines are
 #' to be extracted
 #' @return An \pkg{sf} Simple Features Collection of multilines
@@ -434,14 +434,14 @@ osm_multilines <- function (dat, id) {
     dat$osm_multilines [which (rownames (dat$osm_multilines) %in% ids), ]
 }
 
-#' Extract all `osm_multipolygons` from an osmdata object
+#' Extract all `osm_multipolygons` from an `osmdata_sf` object
 #'
 #' `id` must be of an `osm_points`, `osm_lines`, or
 #' `osm_polygons` object. `osm_multipolygons` returns any multipolygon
 #' object(s) which contain the object specified by `id`.
 #'
 #'
-#' @param dat An object of class \link{osmdata}
+#' @param dat An object of class `osmdata_sf`
 #' @param id OSM identification of one or more objects for which multipolygons
 #' are to be extracted
 #' @return An \pkg{sf} Simple Features Collection of multipolygons

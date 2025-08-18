@@ -12,6 +12,9 @@
 - Deprecate `nodes_only` argument in `opq()`. Superseded by argument `osm_types` (#370)
 - Deprecate `osmdata_sp` (#372)
 - Pre-prend class names `osmdata_sf` and `osmdata` rather than append; thanks to @agila5 (#373)
+- Add `osmadata_data.frame` class to `osmdata_data_frame()` results (#378)
+- Reimplement `trim_osmdata()` using `sf` instead of `sp`. Now, it checks the full geometry instead of just the points
+  to determine if an object is properly contained in the bbox (only for `osmdata_sf` objects, `osdmata_sc` still wrong) (#382).
 
 ## Minor changes
 
@@ -24,6 +27,9 @@
 - Consistent `NA` values throughout all multi-* matrices returned by `osmdata_sf()` (#355)
 - Fix dates and remove `lubridate` from imports (#360)
 - Restructure class definitions of `osmdata_sf()` and `osmdata_sc()` objects (#373, #374)
+- Revert added `osmdata` class to `osmdata_data_frame()` and `osmdata_sc()` + 
+  Fix docs to better represent classes accepted by `trim_osmdata()`, `osm_poly2line()` and extract function (#380)
+- Use terra functions instead of raster (obsolete) in osm_elevation() (#383)
 
 
 0.2.5

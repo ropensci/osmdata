@@ -23,8 +23,8 @@ or an object of class \pkg{xml2} returned from \link{osmdata_xml}.}
 coerced to factors?}
 }
 \value{
-A \code{data.frame} with id, type and tags of the the objects from the
-query.
+A \code{data.frame} inheriting from \code{osmdata_data.frame} class with id, type
+and tags of the the objects from the query.
 }
 \description{
 Return an OSM Overpass query as a \link{data.frame} object.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get-osmdata-sc.R
 \name{osmdata_sc}
 \alias{osmdata_sc}
-\title{Return an OSM Overpass query as an \link{osmdata} object in
+\title{Return an OSM Overpass query as an \code{osmdata_sc} object in
 \code{silicate} (\code{SC}) format.}
 \usage{
 osmdata_sc(q, doc, quiet = TRUE)
@@ -22,11 +22,11 @@ or an object of class \pkg{xml2} returned from \link{osmdata_xml}.}
 \item{quiet}{suppress status messages.}
 }
 \value{
-An object of class \code{osmdata_sc} representing the original OSM hierarchy
-of nodes, ways, and relations.
+An object of class \code{osmdata_sc} representing the original OSM
+hierarchy of nodes, ways, and relations.
 }
 \description{
-Return an OSM Overpass query as an \link{osmdata} object in
+Return an OSM Overpass query as an \code{osmdata_sc} object in
 \code{silicate} (\code{SC}) format.
 }
 \note{
@@ -38,7 +38,7 @@ recommended for use only if you really know what you're doing.
 query <- opq ("hampi india") |>
     add_osm_feature (key = "historic", value = "ruins")
 # Then extract data from 'Overpass' API
-hampi_sf <- osmdata_sc (query)
+hampi_sc <- osmdata_sc (query)
 }
 
 # Complex query as a string (not possible with regular osmdata functions)

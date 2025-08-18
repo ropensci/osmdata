@@ -10,7 +10,8 @@ osm_elevation(dat, elev_file)
 \item{dat}{An \code{SC} object produced by \link{osmdata_sc}.}
 
 \item{elev_file}{A vector of one or more character strings specifying paths
-to \code{.tif} files containing global elevation data.}
+to \code{.tif} files (or anything that \pkg{terra} can read) containing global
+elevation data. \code{.zip} files will be uncompressed.}
 }
 \value{
 A modified version of the input \code{dat} with an additional \code{z_} column
