@@ -2,12 +2,12 @@ Package: osmdata
 Title: Import 'OpenStreetMap' Data as Simple Features or Spatial Objects
 Version: 0.2.5.067
 Authors@R: c(
-    person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre")),
+    person("Joan", "Maspons", , "joanmaspons@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-2286-8727")),
+    person("Mark", "Padgham", , "mark.padgham@email.com", role = "aut"),
     person("Bob", "Rudis", role = "aut"),
     person("Robin", "Lovelace", role = "aut"),
     person("Maëlle", "Salmon", role = "aut"),
-    person("Joan", "Maspons", role = "aut",
-           comment = c(ORCID = "0000-0003-2286-8727")),
     person("Andrew", "Smith", role = "ctb"),
     person("James", "Smith", role = "ctb"),
     person("Andrea", "Gilardi", role = "ctb"),
@@ -19,7 +19,6 @@ Authors@R: c(
     person("Eli", "Pousson", , "eli.pousson@gmail.com", role = "ctb",
            comment = c(ORCID = "0000-0001-8280-1706"))
   )
-Maintainer: Mark Padgham <mark.padgham@email.com>
 Description: Download and import of 'OpenStreetMap' ('OSM') data as 'sf'
     or 'sp' objects.  'OSM' data are extracted from the 'Overpass' web
     server (<https://overpass-api.de/>) and processed with very fast 'C++'
@@ -35,7 +34,6 @@ Imports:
     httr2,
     methods,
     Rcpp (>= 0.12.4),
-    reproj,
     rvest,
     tibble,
     utils,

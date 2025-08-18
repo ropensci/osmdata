@@ -48,7 +48,7 @@
 #'
 #' @docType package
 #' @family package
-#' @author Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon, Joan Maspons
+#' @author Joan Maspons, Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon
 #' @keywords internal
 #' @importFrom methods is slot
 #' @importFrom Rcpp evalCpp
