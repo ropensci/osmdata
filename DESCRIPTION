@@ -1,6 +1,6 @@
 Package: osmdata
 Title: Import 'OpenStreetMap' Data as Simple Features or Spatial Objects
-Version: 0.2.5.066
+Version: 0.2.5.067
 Authors@R: c(
     person("Joan", "Maspons", , "joanmaspons@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-2286-8727")),
@@ -43,10 +43,10 @@ Suggests:
     jsonlite,
     knitr,
     markdown,
-    raster,
     rmarkdown,
     sf,
     sp,
+    terra,
     testthat
 LinkingTo:
     Rcpp
