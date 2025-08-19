@@ -53,7 +53,7 @@ test_that ("getbb-place_name", {
         res5 <- with_mock_dir ("mock_bb_nope", {
             getbb (place_name = "Salzburg", format_out = "no format")
         }),
-        "format_out not recognised"
+        class = "simpleError"
     )
 
     expect_silent (

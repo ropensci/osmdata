@@ -216,13 +216,17 @@ bbox_to_string <- function (bbox) {
 getbb <- function (place_name,
                    display_name_contains = NULL,
                    viewbox = NULL,
-                   format_out = "matrix",
+                   format_out = c (
+                       "matrix", "data.frame", "string",
+                       "polygon", "sf_polygon", "osm_type_id"
+                   ),
                    base_url = "https://nominatim.openstreetmap.org",
                    featuretype = "settlement",
                    limit = 10,
                    key = NULL,
                    silent = TRUE) {
 
+    format_out <- match.arg (format_out)
     is_polygon <- grepl ("polygon", format_out)
 
     obj <- get_nominatim_query (
@@ -297,11 +301,6 @@ getbb <- function (place_name,
             geometry <- ret_poly$geometry
             ret <- make_sf (ret, geometry)
         }
-    } else {
-        stop (paste0 (
-            "format_out not recognised; please specify one of ",
-            "[data.frame, matrix, string, polygon]"
-        ))
     }
 
     return (ret)
