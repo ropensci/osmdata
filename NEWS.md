@@ -15,6 +15,9 @@
 - Add `osmadata_data.frame` class to `osmdata_data_frame()` results (#378)
 - Reimplement `trim_osmdata()` using `sf` instead of `sp`. Now, it checks the full geometry instead of just the points
   to determine if an object is properly contained in the bbox (only for `osmdata_sf` objects, `osdmata_sc` still wrong) (#382).
+- `getbb(..., format_out = "polygon")` return polygons following [https://www.ogc.org/standards/sfa/].
+  Polygons are defined by a list of matrices of coordinates. The first ring defines the exterior boundary, and the following rings define holes if present.
+  Also fix `getbb(..., format_out = "sf_polygon")` returning each relation as a row in an `sf` object. Before, every ring was a row even for holes or multipolygons (#378).
 
 ## Minor changes
 
