@@ -286,19 +286,30 @@ getbb <- function (place_name,
             } else if (length (gt) == 1) {
                 ret <- gt [[1]]
             } else {
-                ret <- gt
+                poly_id <- names (gt)
+                obj_id <- paste0 (obj$osm_type, "/", obj$osm_id)
+                obj_id <- intersect (obj_id, poly_id)
+                # sort geometries following Nominatim order
+                ord_poly <- match (obj_id, poly_id)
+                ret <- gt [ord_poly]
             }
         } else if (format_out == "sf_polygon") {
 
             ret_poly <- bb_as_sf_poly (gt_p, gt_mp)
 
-            obj_index <- as.integer (c (names (gt_p), names (gt_mp)))
+            poly_id <- c (names (gt_p), names (gt_mp))
+            obj_id <- paste0 (obj$osm_type, "/", obj$osm_id)
             cols <- setdiff (names (obj), c ("boundingbox", "geotext"))
-            ret <- obj [obj_index, cols]
+            ret <- obj [obj_id %in% poly_id, cols]
+            obj_id <- intersect (obj_id, poly_id)
+
             utf8cols <- c ("licence", "name", "display_name")
             ret [, utf8cols] <- setenc_utf8 (ret [, utf8cols])
 
-            geometry <- ret_poly$geometry
+            # sort geometries following Nominatim order
+            ord_poly <- match (obj_id, poly_id)
+            geometry <- ret_poly$geometry [ord_poly]
+
             ret <- make_sf (ret, geometry)
         }
     }
