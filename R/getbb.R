@@ -421,9 +421,20 @@ get_geotext_poly <- function (obj) {
         lens <- vapply (gt_p, length, integer (1))
         index_final <- rep (index_final, times = lens)
         gt_p <- do.call (c, gt_p)
-        names (gt_p) <- as.character (index_final)
 
-        gt_p <- split(gt_p, names(gt_p))
+        gt_p <- split (
+            gt_p,
+            paste0 (obj$osm_type [index_final], "/", obj$osm_id [index_final])
+        )
+        gt_p <- lapply (gt_p, function (x) {
+            if (length (x) > 1) {
+                inner <- paste0 ("inner_", seq_len (length (x) - 1))
+            } else {
+                inner <- character ()
+            }
+            names (x) <- c ("outer", inner)
+            x
+        })
     }
 
     return (gt_p)
@@ -464,11 +475,25 @@ get_geotext_multipoly <- function (obj) {
 
     if (length (gt_mp) > 0) {
         gt_mp <- lapply (gt_mp, function (i) get1bdypoly (i))
-        # lens <- vapply (gt_mp, length, integer (1))
-        # index_final <- rep (index_final, times = lens)
-        names (gt_mp) <- as.character (index_final)
 
-        gt_mp <- split(gt_mp, names(gt_mp))
+        gt_mp <- split (
+            gt_mp,
+            paste0 (obj$osm_type [index_final], "/", obj$osm_id [index_final])
+        )
+        gt_mp <- lapply (gt_mp, function (x) {
+            names (x) <- paste0 ("pol_", seq_len (length (x)))
+            x <- lapply (x, function (y) {
+                if (length (y) > 1) {
+                    inner <- paste0 ("inner_", seq_len (length (y) - 1))
+                } else {
+                    inner <- character ()
+                }
+                names (y) <- c ("outer", inner)
+                y
+            })
+
+            x
+        })
     }
 
     return (gt_mp)
