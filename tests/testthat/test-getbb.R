@@ -101,31 +101,34 @@ post_process_polygons <- function (dir_name, min_polys = 2) {
 test_that ("getbb-polygon", {
 
     post_process <- !dir.exists ("mock_bb_poly")
-    res <- with_mock_dir ("mock_bb_poly", {
-        getbb (place_name = "Salzburg", format_out = "polygon")
+    with_mock_dir ("mock_bb_poly", {
+        res_poly <- getbb (
+            place_name = "Milano, Italia", format_out = "polygon"
+        )
+        res_sf <- getbb (
+            place_name = "Milano, Italia", format_out = "sf_polygon"
+        )
     })
     if (post_process) {
         post_process_polygons ("mock_bb_poly", min_polys = 2L)
     }
 
-    expect_is (res, "list")
-    expect_true (all (sapply (res, sapply, nrow) > 2))
-    expect_true (all (sapply (res, sapply, is.matrix)))
+    expect_is (res_poly, "list")
+    # test polygon
+    expect_true (all (sapply (res_poly [[1]], nrow) > 2))
+    expect_true (all (sapply (res_poly [[1]], is.matrix)))
+    # test multipolygon
+    expect_true (all (sapply (res_poly [[2]], sapply, nrow) > 2))
+    expect_true (all (sapply (res_poly [[2]], sapply, is.matrix)))
 
-    expect_silent (res_str <- bbox_to_string (res [[1]]))
+    expect_silent (res_str <- sapply (res_poly, bbox_to_string))
     expect_is (res_str, "character")
 
-    post_process <- !dir.exists ("mock_bb_sf")
-    res <- with_mock_dir ("mock_bb_sf", {
-        getbb (place_name = "Salzburg", format_out = "sf_polygon")
-    })
-    if (post_process) {
-        post_process_polygons ("mock_bb_sf", min_polys = 2L)
-    }
-    expect_is (res, "sf")
-    expect_is (res$geometry, "sfc_POLYGON")
-    expect_true (length (res$geometry) > 1)
-    expect_true (ncol (res) > 1)
+    # sf_polygon
+    expect_is (res_sf, "sf")
+    expect_is (res_sf$geometry, "sfc")
+    expect_true (length (res_sf$geometry) > 1)
+    expect_true (ncol (res_sf) > 1)
 })
 
 test_that ("bbox-to-string", {
