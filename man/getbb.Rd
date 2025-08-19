@@ -41,7 +41,7 @@ string for quering inside deffined OSM areas \code{\link[=bbox_to_string]{bbox_t
 \item{silent}{Should the API be printed to screen? TRUE by default}
 }
 \value{
-Defaults to a matrix in the form:
+For \code{format_out = "matrix"}, the default, return the bounding box:
 \code{
   min   max
 x ...   ...
@@ -57,11 +57,15 @@ example, "london uk" is an exact match, but can mean either greater London or
 the City of London), only the first is returned. See examples below for
 illustration.
 
-For \code{format_out = "osm_type_id"}, a character string representing an OSM object in overpass query
-language. For example: \code{"relation(id:11747082)"} represents the area of
-the Catalan Countries. If one exact match exists with potentially multiple
-polygonal boundaries, only the first relation or way is returned. A set of
-objects can also be represented for multiple results (e.g.
+If \code{format_out = "sf_polygon"}, a \code{sf} object. Each row correspon to a
+\code{place_name} within \code{nominatim} result.
+
+For \code{format_out = "osm_type_id"}, a character string representing an OSM
+object in overpass query language. For example:
+\code{"relation(id:11747082)"} represents the area of the Catalan Countries.
+If one exact match exists with potentially multiple polygonal boundaries,
+only the first relation or way is returned. A set of objects can also be
+represented for multiple results (e.g.
 \verb{relation(id:11747082,307833); way(id:22422490)}). See examples below for
 illustration. The OSM objects that can be used as
 \href{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Map_way/relation_to_area_(map_to_area)}{areas in overpass queries}

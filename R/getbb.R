@@ -141,7 +141,7 @@ bbox_to_string <- function (bbox) {
 #' @param key The API key to use for services that require it
 #' @param silent Should the API be printed to screen? TRUE by default
 #'
-#' @return Defaults to a matrix in the form:
+#' @return For `format_out = "matrix"`, the default, return the bounding box:
 #' \code{
 #'   min   max
 #' x ...   ...
@@ -157,11 +157,15 @@ bbox_to_string <- function (bbox) {
 #' the City of London), only the first is returned. See examples below for
 #' illustration.
 #'
-#' For `format_out = "osm_type_id"`, a character string representing an OSM object in overpass query
-#' language. For example: \code{"relation(id:11747082)"} represents the area of
-#' the Catalan Countries. If one exact match exists with potentially multiple
-#' polygonal boundaries, only the first relation or way is returned. A set of
-#' objects can also be represented for multiple results (e.g.
+#' If `format_out = "sf_polygon"`, a `sf` object. Each row correspon to a
+#' `place_name` within `nominatim` result.
+#'
+#' For `format_out = "osm_type_id"`, a character string representing an OSM
+#' object in overpass query language. For example:
+#' `"relation(id:11747082)"` represents the area of the Catalan Countries.
+#' If one exact match exists with potentially multiple polygonal boundaries,
+#' only the first relation or way is returned. A set of objects can also be
+#' represented for multiple results (e.g.
 #' `relation(id:11747082,307833); way(id:22422490)`). See examples below for
 #' illustration. The OSM objects that can be used as
 #' [areas in overpass queries](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Map_way/relation_to_area_(map_to_area))
@@ -261,36 +265,43 @@ getbb <- function (place_name,
         ret <- bb_mat
     } else if (format_out == "string") {
         ret <- bbox_to_string (bbox = bb_mat)
+
     } else if (is_polygon) {
 
         gt_p <- get_geotext_poly (obj)
         gt_mp <- get_geotext_multipoly (obj)
 
-        gt <- c (gt_p, gt_mp)
-        # multipolys below are not strict SF MULTIPOLYGONs, rather just cases
-        # where nominatim returns lists of multiple items
-        if (length (gt) == 0) {
-            message ("No polygonal boundary for ", place_name)
-            ret <- bb_mat
-        } else if (length (gt) == 1) {
-            ret <- gt [[1]]
-        } else {
-            ret <- gt
+        if (format_out == "polygon") {
+
+            gt <- c (gt_p, gt_mp)
+            # multipolys below are not strict SF MULTIPOLYGONs, rather just
+            # cases where nominatim returns lists of multiple items
+            if (length (gt) == 0) {
+                message ("No polygonal boundary for ", place_name)
+                ret <- bb_mat
+            } else if (length (gt) == 1) {
+                ret <- gt [[1]]
+            } else {
+                ret <- gt
+            }
+        } else if (format_out == "sf_polygon") {
+
+            ret_poly <- bb_as_sf_poly (gt_p, gt_mp)
+
+            obj_index <- as.integer (c (names (gt_p), names (gt_mp)))
+            cols <- setdiff (names (obj), c ("boundingbox", "geotext"))
+            ret <- obj [obj_index, cols]
+            utf8cols <- c ("licence", "name", "display_name")
+            ret [, utf8cols] <- setenc_utf8 (ret [, utf8cols])
+
+            geometry <- ret_poly$geometry
+            ret <- make_sf (ret, geometry)
         }
     } else {
         stop (paste0 (
             "format_out not recognised; please specify one of ",
             "[data.frame, matrix, string, polygon]"
         ))
-    }
-
-    if (format_out == "sf_polygon") {
-        ret_poly <- bb_as_sf_poly (gt_p, gt_mp, place_name)
-
-        obj_index <- as.integer (c (names (gt_p), names (gt_mp)))
-        ret <- obj [obj_index, setdiff (names (obj), c ("boundingbox", "geotext"))]
-        geometry <- ret_poly$geometry
-        ret <- make_sf (ret, geometry)
     }
 
     return (ret)
@@ -366,7 +377,8 @@ get_nominatim_query <- function (place_name,
 #' Get all polygons from a 'geojson' object
 #'
 #' @param obj A 'geojson' object
-#' @return List of polygon matrices
+#' @return List of polygons. Each polygon is a list of matrices, the first
+#'   defining the outer ring and the following ones, if present, define holes.
 #' @noRd
 get_geotext_poly <- function (obj) {
 
@@ -410,6 +422,8 @@ get_geotext_poly <- function (obj) {
         index_final <- rep (index_final, times = lens)
         gt_p <- do.call (c, gt_p)
         names (gt_p) <- as.character (index_final)
+
+        gt_p <- split(gt_p, names(gt_p))
     }
 
     return (gt_p)
@@ -420,7 +434,9 @@ get_geotext_poly <- function (obj) {
 #' See Issue #195
 #'
 #' @param obj A 'geojson' object
-#' @return List of multipolygon matrices
+#' @return List of multipolygons.  Each multipolygon is a list of polygons, and
+#'   each polygon is a list of matrices where the first
+#'   defines the outer ring and the following ones, if present, define holes.
 #' @noRd
 get_geotext_multipoly <- function (obj) {
 
@@ -451,6 +467,8 @@ get_geotext_multipoly <- function (obj) {
         # lens <- vapply (gt_mp, length, integer (1))
         # index_final <- rep (index_final, times = lens)
         names (gt_mp) <- as.character (index_final)
+
+        gt_mp <- split(gt_mp, names(gt_mp))
     }
 
     return (gt_mp)
@@ -499,51 +517,51 @@ get1bdypoly <- function (p) {
     return (ret)
 }
 
-#' convert a matrix to an sf polygon
+#' Convert a list of matrices to an sf polygon
 #'
-#' @param mat A matrix
-#' @param pname The name of the polygon
+#' @param pol A list of matrices defining a polygon. First is the outer limit,
+#'   other are holes.
 #'
-#' @return A list that can be converted into a simple features geometry
+#' @return A `sf` object representing the polygon without using \pkg{sf}.
 #' @noRd
-mat2sf_poly <- function (mat, pname) {
-    if (nrow (mat) == 2) {
-        x <- c (mat [1, 1], mat [1, 2], mat [1, 2], mat [1, 1], mat [1, 1])
-        y <- c (mat [2, 2], mat [2, 2], mat [2, 1], mat [2, 1], mat [2, 2])
-        mat <- cbind (x, y)
+mat2sf_poly <- function (pol) {
+    if (length (pol) == 1L && nrow (pol [[1]]) == 2L) {
+        x <- c (pol [1, 1], pol [1, 2], pol [1, 2], pol [1, 1], pol [1, 1])
+        y <- c (pol [2, 2], pol [2, 2], pol [2, 1], pol [2, 1], pol [2, 2])
+        pol <- cbind (x, y)
     }
-    mat_sf <- list (mat)
-    class (mat_sf) <- c ("XY", "POLYGON", "sfg")
-    mat_sf <- list (mat_sf)
-    attr (mat_sf, "class") <- c ("sfc_POLYGON", "sfc")
-    attr (mat_sf, "precision") <- 0
-    bb <- as.vector (t (apply (mat, 2, range)))
+    class (pol) <- c ("XY", "POLYGON", "sfg")
+    pol_sf <- list (pol)
+    attr (pol_sf, "class") <- c ("sfc_POLYGON", "sfc")
+    attr (pol_sf, "precision") <- 0
+    bb <- as.vector (t (apply (do.call (rbind, pol), 2, range)))
     names (bb) <- c ("xmin", "ymin", "xmax", "ymax")
     class (bb) <- "bbox"
-    attr (mat_sf, "bbox") <- bb
+    attr (pol_sf, "bbox") <- bb
     crs <- list (
         input = "EPSG:4326",
         wkt = wkt4326
     )
     class (crs) <- "crs"
-    attr (mat_sf, "crs") <- crs
-    attr (mat_sf, "n_empty") <- 0L
-    mat_sf <- make_sf (mat_sf)
-    names (mat_sf) <- "geometry"
-    attr (mat_sf, "sf_column") <- "geometry"
-    return (mat_sf)
+    attr (pol_sf, "crs") <- crs
+    attr (pol_sf, "n_empty") <- 0L
+    pol_sf <- make_sf (pol_sf)
+    names (pol_sf) <- "geometry"
+    attr (pol_sf, "sf_column") <- "geometry"
+    return (pol_sf)
 }
 
 #' convert a list of matrices to an sf mulipolygon
 #'
 #' @param x A list of matrices
-#' @param mpname The name of the multipolygon
 #'
 #' @return A list that can be converted into a simple features geometry
 #' @noRd
-mat2sf_multipoly <- function (x, mpname) {
+mat2sf_multipoly <- function (x) {
     # get bbox from matrices
-    bb <- as.vector (t (apply (do.call (rbind, x [[1]]), 2, range)))
+    bb <- as.vector (t (apply (
+        do.call (rbind, unlist (x, recursive = FALSE)), 2, range
+    )))
     names (bb) <- c ("xmin", "ymin", "xmax", "ymax")
     class (bb) <- "bbox"
 
@@ -565,29 +583,29 @@ mat2sf_multipoly <- function (x, mpname) {
     return (xsf)
 }
 
-bb_as_sf_poly <- function (gt_p, gt_mp, place_name) {
+bb_as_sf_poly <- function (gt_p, gt_mp) {
 
     if (!is.null (gt_p)) {
         gt_p <- lapply (gt_p, function (i) {
-            mat2sf_poly (i, pname = place_name)
+            mat2sf_poly (i)
         })
     }
     if (!is.null (gt_mp)) {
         gt_mp <- lapply (gt_mp, function (i) {
-            mat2sf_multipoly (list (i), mpname = place_name)
+            mat2sf_multipoly (i)
         })
     }
 
-    if (is.null (gt_p) & is.null (gt_mp)) {
+    if (length (gt_p) == 0 && length (gt_mp) == 0) {
         stop ("Query returned no polygons")
-    } else if (is.null (gt_mp)) {
+    } else if (length (gt_mp) == 0) {
         ret <- do.call (rbind, gt_p)
-    } else if (is.null (gt_p)) {
+    } else if (length (gt_p) == 0) {
         ret <- do.call (rbind, gt_mp)
     } else {
-        ret <- list (
-            "polygon" = do.call (rbind, gt_p),
-            "multipolygon" = do.call (rbind, gt_mp)
+        ret <- do.call (
+            rbind,
+            c (polygon = gt_p, multipolygon = gt_mp)
         )
     }
 

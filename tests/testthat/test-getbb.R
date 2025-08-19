@@ -109,13 +109,8 @@ test_that ("getbb-polygon", {
     }
 
     expect_is (res, "list")
-    expect_true (all (lapply (res, nrow) > 2))
-    expect_true (all (vapply (
-        res, function (i) {
-            methods::is (i, "matrix")
-        },
-        logical (1)
-    )))
+    expect_true (all (sapply (res, sapply, nrow) > 2))
+    expect_true (all (sapply (res, sapply, is.matrix)))
 
     expect_silent (res_str <- bbox_to_string (res [[1]]))
     expect_is (res_str, "character")
