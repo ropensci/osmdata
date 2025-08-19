@@ -432,10 +432,12 @@ get_geotext_poly <- function (obj) {
         index_final <- rep (index_final, times = lens)
         gt_p <- do.call (c, gt_p)
 
+        # Aggregate rings by polygon
         gt_p <- split (
             gt_p,
             paste0 (obj$osm_type [index_final], "/", obj$osm_id [index_final])
         )
+        # Set names to the rings of the polygons
         gt_p <- lapply (gt_p, function (x) {
             if (length (x) > 1) {
                 inner <- paste0 ("inner_", seq_len (length (x) - 1))
@@ -455,7 +457,7 @@ get_geotext_poly <- function (obj) {
 #' See Issue #195
 #'
 #' @param obj A 'geojson' object
-#' @return List of multipolygons.  Each multipolygon is a list of polygons, and
+#' @return List of multipolygons. Each multipolygon is a list of polygons, and
 #'   each polygon is a list of matrices where the first
 #'   defines the outer ring and the following ones, if present, define holes.
 #' @noRd
@@ -486,10 +488,12 @@ get_geotext_multipoly <- function (obj) {
     if (length (gt_mp) > 0) {
         gt_mp <- lapply (gt_mp, function (i) get1bdypoly (i))
 
+        # Aggregate polygons by multipolygon
         gt_mp <- split (
             gt_mp,
             paste0 (obj$osm_type [index_final], "/", obj$osm_id [index_final])
         )
+        # Set names to the polygons and rings of the multypolygons
         gt_mp <- lapply (gt_mp, function (x) {
             names (x) <- paste0 ("pol_", seq_len (length (x)))
             x <- lapply (x, function (y) {
