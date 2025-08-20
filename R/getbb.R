@@ -310,7 +310,8 @@ getbb <- function (place_name,
             ord_poly <- match (obj_id, poly_id)
             geometry <- ret_poly$geometry [ord_poly]
 
-            ret <- make_sf (ret, geometry)
+            requireNamespace ("sf", quietly = TRUE)
+            ret <- sf::st_sf (ret, geometry = sf::st_sfc (geometry))
         }
     }
 
