@@ -309,6 +309,8 @@ getbb <- function (place_name,
             # sort geometries following Nominatim order
             ord_poly <- match (obj_id, poly_id)
             geometry <- ret_poly$geometry [ord_poly]
+            # sub-setting without 'sf' loaded removes attributes:
+            attributes (geometry) <- attributes (ret_poly$geometry)
 
             ret <- make_sf (ret, geometry)
         }
