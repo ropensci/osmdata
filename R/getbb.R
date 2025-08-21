@@ -142,22 +142,19 @@ bbox_to_string <- function (bbox) {
 #' @param silent Should the API be printed to screen? TRUE by default
 #'
 #' @return For `format_out = "matrix"`, the default, return the bounding box:
-#' \code{
+#' ```
 #'   min   max
 #' x ...   ...
 #' y ...   ...
-#' }
+#' ```
 #'
-#' If `format_out = "polygon"`, one or more two-columns matrices of polygonal
-#' longitude-latitude points. Where multiple `place_name` occurrences are found
-#' within `nominatim`, each item of the list of coordinates may itself contain
-#' multiple coordinate matrices where multiple exact matches exist. If one
-#' exact match exists with potentially multiple polygonal boundaries (for
-#' example, "london uk" is an exact match, but can mean either greater London or
-#' the City of London), only the first is returned. See examples below for
-#' illustration.
+#' If `format_out = "polygon"`, a list of polygons and multipolygons with one
+#' item for each `nominatim` result. The items are named with the OSM type and
+#' id. Each polygon is formed by one or more two-columns matrices of polygonal
+#' longitude-latitude points. The first matrix represents the outer boundary and
+#' the next ones represent holes. See examples below for illustration.
 #'
-#' If `format_out = "sf_polygon"`, a `sf` object. Each row correspon to a
+#' If `format_out = "sf_polygon"`, a `sf` object. Each row correspond to a
 #' `place_name` within `nominatim` result.
 #'
 #' For `format_out = "osm_type_id"`, a character string representing an OSM
@@ -191,9 +188,12 @@ bbox_to_string <- function (bbox) {
 #' getbb ("Hereford", format_out = "data.frame", limit = 3)
 #'
 #' # Examples of polygonal boundaries
-#' bb <- getbb ("london uk", format_out = "polygon") # single match
-#' dim (bb [[1]] [[1]]) # matrix of longitude/latitude pairs
+#' bb <- getbb ("Milano, Italy", format_out = "polygon")
+#' # A polygon and a multipolygon:
+#' str (bb) # matrices of longitude/latitude pairs
+#'
 #' bb_sf <- getbb ("kathmandu", format_out = "sf_polygon")
+#' bb_sf
 #' # sf:::plot.sf(bb_sf) # can be plotted if sf is installed
 #' getbb ("london", format_out = "sf_polygon")
 #'
@@ -285,8 +285,6 @@ getbb <- function (place_name,
                     ". Returning the bounding box of the first result"
                 )
                 ret <- bb_mat
-            } else if (length (gt) == 1) {
-                ret <- gt [[1]]
             } else {
                 poly_id <- names (gt)
                 obj_id <- paste0 (obj$osm_type, "/", obj$osm_id)
