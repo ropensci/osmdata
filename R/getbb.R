@@ -196,9 +196,8 @@ bbox_to_string <- function (bbox) {
 #' bb_sf <- getbb ("kathmandu", format_out = "sf_polygon")
 #' # sf:::plot.sf(bb_sf) # can be plotted if sf is installed
 #' getbb ("london", format_out = "sf_polygon")
-#' getbb ("accra", format_out = "sf_polygon") # rectangular bb
 #'
-#' area <- getbb ("València", format_out = "osm_type_id")
+#' getbb ("València", format_out = "osm_type_id")
 #' # select multiple areas with format_out = "osm_type_id"
 #' areas <- getbb ("València", format_out = "data.frame")
 #' bbox_to_string (areas [areas$osm_type != "node", ])
@@ -281,7 +280,10 @@ getbb <- function (place_name,
             # multipolys below are not strict SF MULTIPOLYGONs, rather just
             # cases where nominatim returns lists of multiple items
             if (length (gt) == 0) {
-                message ("No polygonal boundary for ", place_name)
+                message (
+                    "No polygonal boundary for ", place_name,
+                    ". Returning the bounding box of the first result"
+                )
                 ret <- bb_mat
             } else if (length (gt) == 1) {
                 ret <- gt [[1]]
@@ -295,9 +297,26 @@ getbb <- function (place_name,
             }
         } else if (format_out == "sf_polygon") {
 
-            ret_poly <- bb_as_sf_poly (gt_p, gt_mp)
+            if (length (gt_p) + length (gt_mp) == 0) {
+                message (
+                    "No polygonal boundary for ", place_name,
+                    ". Returning the bounding boxes."
+                )
+                ret_poly <- lapply (obj$boundingbox, function (x) {
+                    x <- as.numeric (x)
+                    bb_mat <- matrix (
+                        c (x [3:4], x [1:2]),
+                        nrow = 2, byrow = TRUE
+                    )
+                    mat2sf_poly (list (bb_mat))
+                })
+                ret_poly <- do.call (rbind, ret_poly)
+                poly_id <- paste0 (obj$osm_type, "/", obj$osm_id)
+            } else {
+                ret_poly <- bb_as_sf_poly (gt_p, gt_mp)
+                poly_id <- c (names (gt_p), names (gt_mp))
+            }
 
-            poly_id <- c (names (gt_p), names (gt_mp))
             obj_id <- paste0 (obj$osm_type, "/", obj$osm_id)
             cols <- setdiff (names (obj), c ("boundingbox", "geotext"))
             ret <- obj [obj_id %in% poly_id, cols]
@@ -567,9 +586,11 @@ get1bdypoly <- function (p) {
 #' @noRd
 mat2sf_poly <- function (pol) {
     if (length (pol) == 1L && nrow (pol [[1]]) == 2L) {
+        # no polygon but a bounding box
+        pol <- pol [[1]]
         x <- c (pol [1, 1], pol [1, 2], pol [1, 2], pol [1, 1], pol [1, 1])
         y <- c (pol [2, 2], pol [2, 2], pol [2, 1], pol [2, 1], pol [2, 2])
-        pol <- cbind (x, y)
+        pol <- list (cbind (x, y))
     }
     class (pol) <- c ("XY", "POLYGON", "sfg")
     pol_sf <- list (pol)

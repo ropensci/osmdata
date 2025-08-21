@@ -107,9 +107,8 @@ dim (bb [[1]] [[1]]) # matrix of longitude/latitude pairs
 bb_sf <- getbb ("kathmandu", format_out = "sf_polygon")
 # sf:::plot.sf(bb_sf) # can be plotted if sf is installed
 getbb ("london", format_out = "sf_polygon")
-getbb ("accra", format_out = "sf_polygon") # rectangular bb
 
-area <- getbb ("València", format_out = "osm_type_id")
+getbb ("València", format_out = "osm_type_id")
 # select multiple areas with format_out = "osm_type_id"
 areas <- getbb ("València", format_out = "data.frame")
 bbox_to_string (areas [areas$osm_type != "node", ])
