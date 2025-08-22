@@ -14,3 +14,4 @@ inst/WORDLIST
 .*.un~
 .*.swp
 src/*.o
+src/*.so
