@@ -53,7 +53,7 @@ test_that ("getbb-place_name", {
         res5 <- with_mock_dir ("mock_bb_nope", {
             getbb (place_name = "Salzburg", format_out = "no format")
         }),
-        "format_out not recognised"
+        class = "simpleError"
     )
 
     expect_silent (
@@ -101,40 +101,60 @@ post_process_polygons <- function (dir_name, min_polys = 2) {
 test_that ("getbb-polygon", {
 
     post_process <- !dir.exists ("mock_bb_poly")
-    res <- with_mock_dir ("mock_bb_poly", {
-        getbb (place_name = "Salzburg", format_out = "polygon")
+    with_mock_dir ("mock_bb_poly", {
+        res_poly <- getbb (
+            place_name = "Milano, Italia", format_out = "polygon"
+        )
+        res_sf <- getbb (
+            place_name = "Milano, Italia", format_out = "sf_polygon"
+        )
     })
     if (post_process) {
         post_process_polygons ("mock_bb_poly", min_polys = 2L)
     }
 
-    expect_is (res, "list")
-    expect_true (all (lapply (res, nrow) > 2))
-    expect_true (all (vapply (
-        res, function (i) {
-            methods::is (i, "matrix")
-        },
-        logical (1)
-    )))
+    expect_is (res_poly, "list")
+    # test polygon
+    expect_true (all (sapply (res_poly [[1]], nrow) > 2))
+    expect_true (all (sapply (res_poly [[1]], is.matrix)))
+    # test multipolygon
+    expect_true (all (sapply (res_poly [[2]], sapply, nrow) > 2))
+    expect_true (all (sapply (res_poly [[2]], sapply, is.matrix)))
 
-    expect_silent (res_str <- bbox_to_string (res [[1]]))
+    expect_silent (res_str <- sapply (res_poly, bbox_to_string))
     expect_is (res_str, "character")
 
-    post_process <- !dir.exists ("mock_bb_sf")
-    res <- with_mock_dir ("mock_bb_sf", {
-        getbb (place_name = "Salzburg", format_out = "sf_polygon")
+    # sf_polygon
+    expect_is (res_sf, "sf")
+    expect_is (res_sf$geometry, "sfc")
+    expect_true (length (res_sf$geometry) > 1)
+    expect_true (ncol (res_sf) > 1)
+
+
+    # No polygonal boundary
+
+    with_mock_dir ("mock_bb_poly_no", {
+        expect_message (res_bb <- getbb (
+            place_name = "Sorita de Llitera", format_out = "polygon"
+        ), "No polygonal boundary")
+        expect_message (res_bb_sf <- getbb (
+            place_name = "Sorita de Llitera", format_out = "sf_polygon"
+        ))
     })
-    if (post_process) {
-        post_process_polygons ("mock_bb_sf", min_polys = 2L)
-    }
-    expect_is (res, "sf")
-    expect_is (res$geometry, "sfc_POLYGON")
-    expect_true (length (res$geometry) > 1)
-    expect_true (ncol (res) > 1)
+
+    expect_is (res_bb, "matrix")
+    expect_identical (dim (res_bb), c (2L, 2L))
+    expect_identical (dimnames (res_bb), list (c ("x", "y"), c ("min", "max")))
+
+    # sf_polygon
+    expect_is (res_bb_sf, "sf")
+    expect_is (res_bb_sf$geometry, "sfc")
+    expect_true (ncol (res_bb_sf) > 1)
 })
 
 test_that ("bbox-to-string", {
 
+    # Bounding box
     bb <- cbind (1:2, 3:4)
     expect_is (bbox_to_string (bb), "character")
     rownames (bb) <- c ("x", "y")
@@ -147,6 +167,7 @@ test_that ("bbox-to-string", {
     names (bb) <- c ("left", "bottom", "right", "top")
     expect_is (bbox_to_string (bb), "character")
 
+    # data.frame
     area <- data.frame (osm_type = "relation", osm_id = "11747082")
     expect_is (bbox_to_string (area), "character")
     expect_length (bbox_to_string (area), 1)
@@ -156,4 +177,27 @@ test_that ("bbox-to-string", {
     )
     expect_is (bbox_to_string (area), "character")
     expect_length (bbox_to_string (area), 1)
+
+    # polygon
+    with_mock_dir ("mock_bb_poly", {
+        res_poly <- getbb (
+            place_name = "Milano, Italia", format_out = "polygon"
+        )
+        res_sf <- getbb (
+            place_name = "Milano, Italia", format_out = "sf_polygon"
+        )
+    })
+
+    expect_message (
+        bbox_to_string (res_poly),
+        "more than one polygon; the first will be selected"
+    )
+    str <- list ()
+    expect_silent (str$pol <- bbox_to_string (res_poly [[1]]))
+    expect_silent (str$multipol <- bbox_to_string (res_poly [[2]]))
+    expect_silent (str$sf <- bbox_to_string (res_sf))
+
+    sapply (str, expect_is, "character")
+    sapply (str, expect_length, 1)
+
 })

@@ -1,0 +1,24 @@
+[
+    {
+        "place_id": 76534814,
+        "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "osm_type": "node",
+        "osm_id": 1455834522,
+        "lat": "41.9905713",
+        "lon": "0.4406198",
+        "class": "place",
+        "type": "hamlet",
+        "place_rank": 20,
+        "importance": 0.1654187199679029,
+        "addresstype": "hamlet",
+        "name": "Zurita",
+        "display_name": "Zurita, Baells, La Litera / La Llitera, Huesca, Aragón, España",
+        "boundingbox": [
+            "41.9705713",
+            "42.0105713",
+            "0.4206198",
+            "0.4606198"
+        ],
+        "geotext": "POINT(0.4406198 41.9905713)"
+    }
+]

@@ -2,12 +2,20 @@
 0.2.5.00x (dev version)
 ===================
 
+## Breaking changes
+
+- Remove `magrittr` from imports. User code relaying on reexported pipe `%>%`
+  from `osmdata` must explicitly load it with `library(magrittr)`.
+  Code examples, tests and vignettes now use the pipe from base (`|>`) available since R 4.1 (#361)
+- `getbb(..., format_out = "polygon")` return polygons following [https://www.ogc.org/standards/sfa/].
+  Polygons are defined by a list of matrices of coordinates. The first ring defines the exterior boundary, and the following rings define holes if present.
+  Also fix `getbb(..., format_out = "sf_polygon")` returning each (multi)polygon as a row in an `sf` object. 
+  Before, every ring was an independent polygon, even for holes or multipolygons,
+  and for `format_out = "sf_polygon"`, the features were split in a list with polygons in one item and multipolygons in another (#378).
+
 ## Major changes
 
 - Implemented `c.osmdata_sc` method to join `osmdata_sc` objects (#333)
-- Remove `magrittr` from imports. User code relaying on reexported pipe `%>%` from `osmdata` must explicitly load it
-  with `library(magrittr)`.  Code examples, tests and vignettes now use the pipe from base (`|>`) available since R 4.1
-  (#361)
 - Depends on R >= 4.1 to use the base pipe (`|>`) in examples and vignettes (#371)
 - Deprecate `nodes_only` argument in `opq()`. Superseded by argument `osm_types` (#370)
 - Deprecate `osmdata_sp` (#372)
@@ -29,7 +37,7 @@
 - Restructure class definitions of `osmdata_sf()` and `osmdata_sc()` objects (#373, #374)
 - Revert added `osmdata` class to `osmdata_data_frame()` and `osmdata_sc()` + 
   Fix docs to better represent classes accepted by `trim_osmdata()`, `osm_poly2line()` and extract function (#380)
-- Use terra functions instead of raster (obsolete) in osm_elevation() (#383)
+- Use `terra` functions instead of `raster` (obsolete) in `osm_elevation()` (#383)
 
 
 0.2.5
