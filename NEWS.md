@@ -1,6 +1,4 @@
-
-0.2.5.00x (dev version)
-===================
+# osmdata 0.3.0
 
 ## Breaking changes
 
@@ -38,33 +36,30 @@
 - Revert added `osmdata` class to `osmdata_data_frame()` and `osmdata_sc()` + 
   Fix docs to better represent classes accepted by `trim_osmdata()`, `osm_poly2line()` and extract function (#380)
 - Use `terra` functions instead of `raster` (obsolete) in `osm_elevation()` (#383)
+- Joan Maspons is the new mantainer (#384).
 
 
-0.2.5
-===================
+# osmdata 0.2.5
 
 ## Major changes
 
 - v0.2.4 was removed without notice from CRAN because of #329; this is a rapid re-submission
 
-0.2.4
-===================
+# osmdata 0.2.4
 
 ## Minor changes
 
 - Bug fix to stop getbb call to Nominatim returning 405 error (#328)
 
 
-0.2.3
-===================
+# osmdata 0.2.3
 
 ## Minor changes
 
 - Fix failing test due to changes to 'sp' moving towards deprecation.
 
 
-0.2.2
-===================
+# osmdata 0.2.2
 
 ## Major changes:
 
@@ -78,8 +73,7 @@
 - Fix queries with `!match_case` and only one value (#317).
 - Fix queries with multiple features & multiple osm_types (#318).
 
-0.2.1
-===================
+# osmdata 0.2.1
 
 ## Major changes:
 
@@ -89,8 +83,7 @@
 
 - Couple of minor memory leak bug fixes in `osmdata_data_frame` C++ code.
 
-0.2.0
-===================
+# osmdata 0.2.0
 
 This release welcomes a new package author @jmaspons. The lists of changes here gives an overview of the amazing work he has contributed to this new major version.
 
@@ -111,8 +104,7 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - Improved `osm_osm_id()` to accept vectors of ids and types; thanks to @jmaspons (#268, #282, #283)
 - "get-osmdata.R" file now split into several smaller and more manageable files (#306, thanks to @jmaspons)
 
-0.1.10
-===================
+# osmdata 0.1.10
 
 ## Major changes:
 
@@ -123,8 +115,7 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 
 - Moved jsonlite from Imports to Suggests (now only used in tests).
 
-0.1.9
-===================
+# osmdata 0.1.9
 
 ## Major changes:
 
@@ -138,31 +129,27 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - New dependency on `reproj` package, so that `trim_osmdata()` can be applied
   to re-projected coordinates.
 
-0.1.8
-===================
+# osmdata 0.1.8
 
 ## Minor changes:
 
 - Fix some failing CRAN checks (no change to functionality)
 
 
-0.1.7
-===================
+# osmdata 0.1.7
 
 ## Minor changes:
 
 - `add_osm_feature` bug fix to revert AND behaviour (#240 thanks to @anthonynorth)
 
-0.1.6
-===================
+# osmdata 0.1.6
 
 ## Major changes:
 
 - New function `add_osm_features` to enable OR-combinations of features in
   single queries.
 
-0.1.5
-===================
+# osmdata 0.1.5
 
 ## Minor changes:
 
@@ -170,8 +157,7 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - hard-code WKT string for EPSG:4326, to avoid obsolete proj4strings (#218)
 - bug fix in `print` method via #236; thanks to @odeleongt 
 
-0.1.4
-===================
+# osmdata 0.1.4
 
 ## Major changes:
 
@@ -189,8 +175,7 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - New contributor Enrico Spinielli (@espinielli), via #207, #210, #211, #212 - Thanks!
 
 
-0.1.3
-===================
+# osmdata 0.1.3
 
 ## Major changes:
 
@@ -206,8 +191,7 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - New Contributors: Andrea Gilardi (@agila5)
 - Bug fix for issue#205
 
-0.1.2
-===================
+# osmdata 0.1.2
 
 ## Major changes:
 
@@ -227,15 +211,13 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - Implement `trim_osmdata.sc` method
 - retry httr calls to nominatim, which has lately been timing out quite often
 
-0.1.1
-===================
+# osmdata 0.1.1
 
 ## Minor changes:
 
 - bug fix in `trim_osmdata` function
 
-0.1.0
-===================
+# osmdata 0.1.0
 
 ## Major changes:
 
@@ -245,8 +227,7 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - `opq()` function now accepts polygonal bounding boxes generated with
   `getbb(..., format_out = "polygon")`.
 
-0.0.10
-===================
+# osmdata 0.0.10
 
 ## Minor changes:
 
@@ -255,8 +236,7 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - But fix to ensure all `sf` `data.frame` objects have `stringsAsFactors =
   FALSE`
 
-0.0.9
-===================
+# osmdata 0.0.9
 
 ## Major changes:
 
@@ -278,20 +258,20 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - bug fix for osmdata_sp() (see #56)
 - osmdata_sp() fixed to return osm_id values (see #131; thanks @JimShady).
 
-0.0.8
-===================
+# osmdata 0.0.8
+
 - Fix bug in `trim_osmdata` so that all sf attributes are reinstated, and also
   issue message that sf-preload is necessary for this function
 - Fix bug with opq (key_exact = FALSE) so value_exact is always also set to
   FALSE
 
-0.0.7
-===================
+# osmdata 0.0.7
+
 - Fix bug in `c` method so it works when `sf` not loaded
 - Fix bug in overpass query syntax to match new QL requirements
 
-0.0.6
-===================
+# osmdata 0.0.6
+
 - Add new function 'osm_poly2line()' to coerce the 'osmdata$odm_polygons' object
   for 'osmdata_sf' objects to lines, and append to 'osmdata$osm_lnes'. This is
   important for street networks ('add_osm_objects (key = "highway")'), which are
@@ -305,8 +285,8 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - Fix minor yet important C++ code lines that prevented package being used as
   dependency by other packages on some systems
 
-0.0.5
-===================
+# osmdata 0.0.5
+
 - Add extraction of bounding polygons with `getbb (..., format_out = "polygon")`
 - Add `trim_osmdata` function to trim an `osmdata` object to within a bounding
   polygon (thanks @sytpp)
@@ -317,25 +297,25 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - Rename `add_feature` to `add_osm_feature` (and deprecate old version)
 
 
-0.0.4
-===================
+# osmdata 0.0.4
+
 - Enable alternative overpass API services through `get_overpass_url()` and
   `set_overpass_url()` functions
 - Extend and improve vignette
 
-0.0.3
-===================
+# osmdata 0.0.3
+
 - Change tests only, no functional difference
 
-0.0.2
-===================
+# osmdata 0.0.2
+
 - Rename function `opq_to_string()` to `opq_string()`
 
-0.0.1 (19 May 2017)
-===================
+# osmdata 0.0.1 (19 May 2017)
+
 - Remove configure and Makevars files
 - Fix tests
 
-0.0.0 (18 May 2017)
-===================
+# osmdata 0.0.0 (18 May 2017)
+
 - Initial CRAN release

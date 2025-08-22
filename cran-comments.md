@@ -2,6 +2,7 @@
 
 This submission updates some example code to include the native pipe and bump dependencies to R >= 4.1.
 Updates where possible and deprecates functions using sp package and update the use of raster functions to terra.
+Joan Maspons will be the package mantainer as Mark Padgham communicate to CRAN in a recent mail.
 
 ## Test environments
 
