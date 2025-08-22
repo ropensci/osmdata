@@ -97,6 +97,53 @@
 
 
 ```
+# greenR
+
+<details>
+
+* Version: 
+* GitHub: https://github.com/ropensci/osmdata
+* Source code: NA
+* Number of recursive dependencies: 0
+
+</details>
+
+## Error before installation
+
+### Devel
+
+```
+
+
+
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘bslib’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘bslib’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘data.table’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘data.table’ failed
+
+
+```
+### CRAN
+
+```
+
+
+
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘bslib’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘bslib’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘data.table’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘data.table’ failed
+
+
+```
 # mapscanner
 
 <details>
@@ -116,7 +163,10 @@
 
 
 
-
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘sf’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘sf’ failed
 
 
 ```
@@ -126,7 +176,10 @@
 
 
 
-
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘sf’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘sf’ failed
 
 
 ```
@@ -149,7 +202,27 @@
 
 
 
-
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘igraph’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘igraph’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘plotly’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘plotly’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘promises’ failed
+...
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘rSPDE’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘RSQLite’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘RSQLite’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘sf’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘sf’ failed
 
 
 ```
@@ -159,7 +232,27 @@
 
 
 
-
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘igraph’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘igraph’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘plotly’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘plotly’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘promises’ failed
+...
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘rSPDE’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘RSQLite’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘RSQLite’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘sf’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘sf’ failed
 
 
 ```
@@ -182,7 +275,18 @@
 
 
 
-
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘bslib’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘bslib’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘ggplot2’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘ggplot2’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘hunspell’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘hunspell’ failed
 
 
 ```
@@ -192,7 +296,18 @@
 
 
 
-
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘bslib’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘bslib’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘ggplot2’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘ggplot2’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘hunspell’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘hunspell’ failed
 
 
 ```
@@ -230,6 +345,61 @@
 
 ```
 # rayshader
+
+<details>
+
+* Version: 
+* GitHub: https://github.com/ropensci/osmdata
+* Source code: NA
+* Number of recursive dependencies: 0
+
+</details>
+
+## Error before installation
+
+### Devel
+
+```
+
+
+
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘gifski’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘gifski’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘RcppCGAL’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘RcppCGAL’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘stringi’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘stringi’ failed
+
+
+```
+### CRAN
+
+```
+
+
+
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘gifski’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘gifski’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘RcppCGAL’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘RcppCGAL’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘stringi’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘stringi’ failed
+
+
+```
+# rcrisp
 
 <details>
 
@@ -314,7 +484,10 @@
 
 
 
-
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘OpenImageR’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘OpenImageR’ failed
 
 
 ```
@@ -324,7 +497,10 @@
 
 
 
-
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘OpenImageR’ failed
+Warning in download.packages(pkgs, destdir = tmpd, available = available,  :
+  download of package ‘OpenImageR’ failed
 
 
 ```
