@@ -140,7 +140,7 @@ It is also possible to use bounding polygons rather than rectangular boxes:
 ```{r getbb-haines}
 b <- getbb ("bangalore", format_out = "polygon")
 class (b)
-head (b [[1]])
+str (b)
 ```
 
 ### Features

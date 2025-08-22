@@ -61,7 +61,7 @@ To load the package and check the version:
 library (osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
 packageVersion ("osmdata")
-#> [1] '0.2.5.60'
+#> [1] '0.2.5.68'
 ```
 
 ## Usage
@@ -129,9 +129,11 @@ boxes:
 ``` r
 b <- getbb ("bangalore", format_out = "polygon")
 class (b)
-#> [1] "matrix" "array"
-head (b [[1]])
-#> [1] 77.46005
+#> [1] "list"
+str (b)
+#> List of 1
+#>  $ relation/7902476:List of 1
+#>   ..$ outer: num [1:2605, 1:2] 77.5 77.5 77.5 77.5 77.5 ...
 ```
 
 ### Features
