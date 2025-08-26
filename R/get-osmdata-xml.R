@@ -54,7 +54,7 @@ osmdata_xml <- function (q, filename, quiet = TRUE, encoding) {
 
     if (missing (q)) {
         stop ('argument "q" is missing, with no default.')
-    } else if (is (q, "overpass_query")) {
+    } else if (inherits (q, "overpass_query")) {
         q <- opq_string_intern (q, quiet = quiet)
     } else if (!is.character (q)) {
         stop ("q must be an overpass query or a character string")

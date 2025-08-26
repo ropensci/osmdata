@@ -53,7 +53,7 @@ osmdata_sc <- function (q, doc, quiet = TRUE) {
         if (!quiet) {
             message ("q missing: osmdata object will not include query")
         }
-    } else if (is (q, "overpass_query")) {
+    } else if (inherits (q, "overpass_query")) {
         obj$bbox <- q$bbox
         obj$overpass_call <- opq_string_intern (q, quiet = quiet)
     } else if (is.character (q)) {
