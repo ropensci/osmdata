@@ -29,11 +29,11 @@
 #' @export
 unique_osmdata <- function (dat) {
 
-    if (!is (dat, "osmdata")) {
+    if (!inherits (dat, "osmdata")) {
         stop ("dat must be an osmdata object")
     }
 
-    if (is (dat$osm_points, "sf")) {
+    if (inherits (dat$osm_points, "sf")) {
 
         indx_points <- unique_points_sf (dat)
         indx_lines <- unique_lines_sf (dat)
