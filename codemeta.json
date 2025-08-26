@@ -11,7 +11,7 @@
   "codeRepository": "https://github.com/ropensci/osmdata",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.3.0.9003",
+  "version": "0.3.0.9004",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -257,11 +257,6 @@
     },
     "4": {
       "@type": "SoftwareApplication",
-      "identifier": "methods",
-      "name": "methods"
-    },
-    "5": {
-      "@type": "SoftwareApplication",
       "identifier": "Rcpp",
       "name": "Rcpp",
       "version": ">= 0.12.4",
@@ -273,7 +268,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=Rcpp"
     },
-    "6": {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "rvest",
       "name": "rvest",
@@ -285,7 +280,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rvest"
     },
-    "7": {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
@@ -297,12 +292,12 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
-    "8": {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "utils",
       "name": "utils"
     },
-    "9": {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "xml2",
       "name": "xml2",
@@ -318,21 +313,8 @@
   },
   "applicationCategory": "DataAccess",
   "isPartOf": "https://ropensci.org",
-  "keywords": [
-    "open0street0map",
-    "openstreetmap",
-    "overpass0API",
-    "OSM",
-    "overpass-api",
-    "r",
-    "cpp",
-    "rstats",
-    "osm",
-    "osm-data",
-    "r-package",
-    "peer-reviewed"
-  ],
-  "fileSize": "38074.568KB",
+  "keywords": ["open0street0map", "openstreetmap", "overpass0API", "OSM", "overpass-api", "r", "cpp", "rstats", "osm", "osm-data", "r-package", "peer-reviewed"],
+  "fileSize": "38074.553KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
@@ -376,7 +358,7 @@
       }
     }
   ],
-  "releaseNotes": "https://github.com/ropensci/osmdata/blob/master/NEWS.md",
+  "releaseNotes": "https://github.com/ropensci/osmdata/blob/main/NEWS.md",
   "readme": "https://github.com/ropensci/osmdata/blob/main/README.md",
   "contIntegration": [
     "https://github.com/ropensci/osmdata/actions?query=workflow%3AR-CMD-check",
