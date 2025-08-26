@@ -154,15 +154,15 @@ bb_poly_to_mat.sfc <- function (x) {
 #' @export
 bb_poly_to_mat.SpatialPolygonsDataFrame <- function (x) { # nolint
 
-    x <- slot (x, "polygons")
+    x <- x@polygons
     if (length (x) > 1) {
         more_than_one ()
     }
-    x <- slot (x [[1]], "Polygons")
+    x <- x [[1]]@Polygons
     if (length (x) > 1) {
         more_than_one ()
     }
-    slot (x [[1]], "coords")
+    x [[1]]@coords
 }
 
 #' @export
