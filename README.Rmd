@@ -290,6 +290,7 @@ project, you agree to abide by its terms.
 
 
 
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -308,16 +309,16 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=mpadge">mpadge</a>
 </td>
 <td align="center">
-<a href="https://github.com/Robinlovelace">
-<img src="https://avatars.githubusercontent.com/u/1825120?v=4" width="100px;" alt=""/>
-</a><br>
-<a href="https://github.com/ropensci/osmdata/commits?author=Robinlovelace">Robinlovelace</a>
-</td>
-<td align="center">
 <a href="https://github.com/jmaspons">
 <img src="https://avatars.githubusercontent.com/u/102644?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=jmaspons">jmaspons</a>
+</td>
+<td align="center">
+<a href="https://github.com/Robinlovelace">
+<img src="https://avatars.githubusercontent.com/u/1825120?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=Robinlovelace">Robinlovelace</a>
 </td>
 <td align="center">
 <a href="https://github.com/hrbrmstr">
@@ -348,16 +349,16 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 
 <tr>
 <td align="center">
-<a href="https://github.com/espinielli">
-<img src="https://avatars.githubusercontent.com/u/891692?v=4" width="100px;" alt=""/>
-</a><br>
-<a href="https://github.com/ropensci/osmdata/commits?author=espinielli">espinielli</a>
-</td>
-<td align="center">
 <a href="https://github.com/agila5">
 <img src="https://avatars.githubusercontent.com/u/22221146?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=agila5">agila5</a>
+</td>
+<td align="center">
+<a href="https://github.com/espinielli">
+<img src="https://avatars.githubusercontent.com/u/891692?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=espinielli">espinielli</a>
 </td>
 <td align="center">
 <a href="https://github.com/idshklein">
@@ -877,6 +878,12 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Adicorynia">dicorynia</a>
 </td>
+<td align="center">
+<a href="https://github.com/Aloniss">
+<img src="https://avatars.githubusercontent.com/u/142921829?u=d2364a4bb7520b66e87ff665bc09554646bdddbd&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3AAloniss">Aloniss</a>
+</td>
 </tr>
 
 </table>
@@ -998,6 +1005,7 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
 
 
 

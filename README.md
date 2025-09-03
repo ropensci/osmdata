@@ -309,18 +309,17 @@ project, you agree to abide by its terms.
 
 ## Contributors
 
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-All contributions to this project are gratefully acknowledged using the
-[`allcontributors` package](https://github.com/ropensci/allcontributors)
-following the [allcontributors](https://allcontributors.org)
-specification. Contributions of any kind are welcome!
+All contributions to this project are gratefully acknowledged using the [`allcontributors` package](https://github.com/ropensci/allcontributors) following the [allcontributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
 
 ### Code
 
 <table>
+
 <tr>
 <td align="center">
 <a href="https://github.com/mpadge">
@@ -329,16 +328,16 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/commits?author=mpadge">mpadge</a>
 </td>
 <td align="center">
-<a href="https://github.com/Robinlovelace">
-<img src="https://avatars.githubusercontent.com/u/1825120?v=4" width="100px;" alt=""/>
-</a><br>
-<a href="https://github.com/ropensci/osmdata/commits?author=Robinlovelace">Robinlovelace</a>
-</td>
-<td align="center">
 <a href="https://github.com/jmaspons">
 <img src="https://avatars.githubusercontent.com/u/102644?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=jmaspons">jmaspons</a>
+</td>
+<td align="center">
+<a href="https://github.com/Robinlovelace">
+<img src="https://avatars.githubusercontent.com/u/1825120?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=Robinlovelace">Robinlovelace</a>
 </td>
 <td align="center">
 <a href="https://github.com/hrbrmstr">
@@ -365,18 +364,20 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/commits?author=elipousson">elipousson</a>
 </td>
 </tr>
+
+
 <tr>
-<td align="center">
-<a href="https://github.com/espinielli">
-<img src="https://avatars.githubusercontent.com/u/891692?v=4" width="100px;" alt=""/>
-</a><br>
-<a href="https://github.com/ropensci/osmdata/commits?author=espinielli">espinielli</a>
-</td>
 <td align="center">
 <a href="https://github.com/agila5">
 <img src="https://avatars.githubusercontent.com/u/22221146?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=agila5">agila5</a>
+</td>
+<td align="center">
+<a href="https://github.com/espinielli">
+<img src="https://avatars.githubusercontent.com/u/891692?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/commits?author=espinielli">espinielli</a>
 </td>
 <td align="center">
 <a href="https://github.com/idshklein">
@@ -409,6 +410,8 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/commits?author=ec-nebi">ec-nebi</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/Tazinho">
@@ -453,6 +456,8 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/commits?author=stragu">stragu</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/patperu">
@@ -497,6 +502,8 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/commits?author=danstowell">danstowell</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/ccamara">
@@ -523,11 +530,14 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/commits?author=karpfen">karpfen</a>
 </td>
 </tr>
+
 </table>
+
 
 ### Issue Authors
 
 <table>
+
 <tr>
 <td align="center">
 <a href="https://github.com/sytpp">
@@ -572,6 +582,8 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Ayaakovfeldman">yaakovfeldman</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/gregor-d">
@@ -616,6 +628,8 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Awaholulu">waholulu</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/ibarraespinosa">
@@ -660,6 +674,8 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aslow-data">slow-data</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/mroorda">
@@ -704,6 +720,8 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amarcusyoung">marcusyoung</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/barryrowlingson">
@@ -748,6 +766,8 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Arobitalec">robitalec</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/nfruehADA">
@@ -792,6 +812,8 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Admag-ir">dmag-ir</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/FlxPo">
@@ -836,6 +858,8 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Axiaofanliang">xiaofanliang</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/xtimbeau">
@@ -873,12 +897,21 @@ specification. Contributions of any kind are welcome!
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Adicorynia">dicorynia</a>
 </td>
+<td align="center">
+<a href="https://github.com/Aloniss">
+<img src="https://avatars.githubusercontent.com/u/142921829?u=d2364a4bb7520b66e87ff665bc09554646bdddbd&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3AAloniss">Aloniss</a>
+</td>
 </tr>
+
 </table>
+
 
 ### Issue Contributors
 
 <table>
+
 <tr>
 <td align="center">
 <a href="https://github.com/sckott">
@@ -923,6 +956,8 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Acboettig">cboettig</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/prise6">
@@ -967,6 +1002,8 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3ARobsteranium">Robsteranium</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/assignUser">
@@ -981,9 +1018,12 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Arsbivand">rsbivand</a>
 </td>
 </tr>
+
 </table>
+
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
 
 [![ropensci_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
