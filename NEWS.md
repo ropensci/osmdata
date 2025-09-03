@@ -1,5 +1,9 @@
 # osmdata (development version)
 
+## Minor changes
+
+- Fixed `osm_elevation()` function after raster -> terra upgrade (#389; thanks to @Aloniss)
+
 # osmdata 0.3.0
 
 ## Breaking changes
