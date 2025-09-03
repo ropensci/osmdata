@@ -43,7 +43,7 @@ osm_elevation <- function (dat, elev_file) {
     r <- terra::rast (elev_file)
     check_bbox (dat, r)
 
-    z <- terra::extract (r, dat$vertex [, 1:2])
+    z <- terra::extract (r, dat$vertex [, 1:2], ID = FALSE, raw = TRUE)
     dat$vertex$z_ <- as.double (z)
     dat$vertex <- dat$vertex [, c ("x_", "y_", "z_", "vertex_")]
 
