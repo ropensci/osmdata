@@ -50,7 +50,8 @@
 #' @family package
 #' @author Joan Maspons, Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon
 #' @keywords internal
+#' @importFrom methods slot
 #' @importFrom Rcpp evalCpp
-#' @importFrom utils browseURL read.table
+#' @importFrom utils browseURL
 #' @useDynLib osmdata, .registration = TRUE
 "_PACKAGE"

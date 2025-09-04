@@ -79,19 +79,19 @@ unique_points_sf <- function (dat) {
 #' @noRd
 unique_points_sp <- function (dat) {
 
-    pts <- rownames (dat$osm_points@data)
+    pts <- rownames (slot (dat$osm_points, "data"))
 
-    lns <- dat$osm_lines@lines
+    lns <- slot (dat$osm_lines, "lines")
     lns_pts <- lapply (lns, function (i) {
-        rownames (i@Lines [[1]]@coords)
+        rownames (slot (slot (i, "Lines") [[1]], "coords"))
     })
     lns_pts <- unlist (lns_pts)
     names (lns_pts) <- NULL
     lns_pts <- unique (lns_pts)
 
-    polys <- dat$osm_polygons@polygons
+    polys <- slot (dat$osm_polygons, "polygons")
     poly_pts <- lapply (polys, function (i) {
-        rownames (i@Polygons [[1]]@coords)
+        rownames (slot (slot (i, "Polygons") [[1]], "coords"))
     })
     poly_pts <- unlist (poly_pts)
     names (poly_pts) <- NULL
@@ -119,10 +119,10 @@ unique_lines_sf <- function (dat) {
 #' @noRd
 unique_lines_sp <- function (dat) {
 
-    lns <- rownames (dat$osm_lines@data)
+    lns <- rownames (slot (dat$osm_lines, "data"))
 
-    mlns <- dat$osm_multilines@lines [[1]]
-    mlns <- names (mlns@Lines)
+    mlns <- slot (dat$osm_multilines, "lines") [[1]]
+    mlns <- names (slot (mlns, "Lines"))
     mlns <- unique (mlns)
 
     which (!lns %in% mlns)
@@ -149,11 +149,11 @@ unique_polygons_sf <- function (dat) {
 #' @noRd
 unique_polygons_sp <- function (dat) {
 
-    polys <- rownames (dat$osm_polygons@data)
+    polys <- rownames (slot (dat$osm_polygons, "data"))
 
-    mpolys <- dat$osm_multipolygon@polygons
+    mpolys <- slot (dat$osm_multipolygons, "polygons")
     mpolys <- unlist (lapply (mpolys, function (i) {
-        names (i@Polygons)
+        names (slot (i, "Polygons"))
     }))
     names (mpolys) <- NULL
     mpolys <- unique (mpolys)
