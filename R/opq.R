@@ -710,7 +710,7 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE,
         # nocov start
         u <- paste0 ("https://openstreetmap.org/", type [1], "/", id)
         for (i in u) {
-            browseURL (i)
+            utils::browseURL (i)
         }
         # nocov end
     }
