@@ -75,7 +75,6 @@ remotes::install_git ("https://codeberg.org/ropensci/osmdata")
 remotes::install_github ("ropensci/osmdata")
 remotes::install_gitlab ("ropensci/osmdata")
 remotes::install_git ("https://git.sr.ht/~mpadge/osmdata")
-remotes::install_bitbucket ("mpadge/osmdata")
 ```
 
 To load the package and check the version:
