@@ -4,11 +4,14 @@
   "identifier": "osmdata",
   "description": "Download and import of 'OpenStreetMap' ('OSM') data as 'sf' or 'sp' objects. 'OSM' data are extracted from the 'Overpass' web server (<https://overpass-api.de/>) and processed with very fast 'C++' routines for return to 'R'.",
   "name": "osmdata: Import 'OpenStreetMap' Data as Simple Features or Spatial Objects",
-  "relatedLink": ["https://docs.ropensci.org/osmdata/", "https://CRAN.R-project.org/package=osmdata"],
+  "relatedLink": [
+    "https://docs.ropensci.org/osmdata/",
+    "https://CRAN.R-project.org/package=osmdata"
+  ],
   "codeRepository": "https://github.com/ropensci/osmdata",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.3.0.9004",
+  "version": "0.3.0.9005",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -311,11 +314,24 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=xml2"
     },
-    "SystemRequirements": null
+    "SystemRequirements": {}
   },
   "applicationCategory": "DataAccess",
   "isPartOf": "https://ropensci.org",
-  "keywords": ["open0street0map", "openstreetmap", "overpass0API", "OSM", "overpass-api", "r", "cpp", "rstats", "osm", "osm-data", "r-package", "peer-reviewed"],
+  "keywords": [
+    "open0street0map",
+    "openstreetmap",
+    "overpass0API",
+    "OSM",
+    "overpass-api",
+    "r",
+    "cpp",
+    "rstats",
+    "osm",
+    "osm-data",
+    "r-package",
+    "peer-reviewed"
+  ],
   "fileSize": "38075.219KB",
   "citation": [
     {
@@ -350,7 +366,10 @@
         "issueNumber": "14",
         "datePublished": "2017",
         "isPartOf": {
-          "@type": ["PublicationVolume", "Periodical"],
+          "@type": [
+            "PublicationVolume",
+            "Periodical"
+          ],
           "volumeNumber": "2",
           "name": "Journal of Open Source Software"
         }
@@ -359,7 +378,10 @@
   ],
   "releaseNotes": "https://github.com/ropensci/osmdata/blob/main/NEWS.md",
   "readme": "https://github.com/ropensci/osmdata/blob/main/README.md",
-  "contIntegration": ["https://github.com/ropensci/osmdata/actions?query=workflow%3AR-CMD-check", "https://app.codecov.io/gh/ropensci/osmdata"],
+  "contIntegration": [
+    "https://github.com/ropensci/osmdata/actions?query=workflow%3AR-CMD-check",
+    "https://app.codecov.io/gh/ropensci/osmdata"
+  ],
   "developmentStatus": "https://www.repostatus.org/#active",
   "review": {
     "@type": "Review",

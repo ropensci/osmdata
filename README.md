@@ -49,10 +49,11 @@ following options:
 
 ``` r
 # install.packages("remotes")
+remotes::install_git ("https://codeberg.org/ropensci/osmdata")
+remotes::install_github ("ropensci/osmdata")
+remotes::install_gitlab ("ropensci/osmdata")
 remotes::install_git ("https://git.sr.ht/~mpadge/osmdata")
 remotes::install_bitbucket ("mpadge/osmdata")
-remotes::install_gitlab ("mpadge/osmdata")
-remotes::install_github ("ropensci/osmdata")
 ```
 
 To load the package and check the version:
@@ -61,7 +62,7 @@ To load the package and check the version:
 library (osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
 packageVersion ("osmdata")
-#> [1] '0.2.5.68'
+#> [1] '0.3.0'
 ```
 
 ## Usage
@@ -309,17 +310,18 @@ project, you agree to abide by its terms.
 
 ## Contributors
 
-
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-All contributions to this project are gratefully acknowledged using the [`allcontributors` package](https://github.com/ropensci/allcontributors) following the [allcontributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
+All contributions to this project are gratefully acknowledged using the
+[`allcontributors` package](https://github.com/ropensci/allcontributors)
+following the [allcontributors](https://allcontributors.org)
+specification. Contributions of any kind are welcome!
 
 ### Code
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/mpadge">
@@ -364,8 +366,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=elipousson">elipousson</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/agila5">
@@ -410,8 +410,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=ec-nebi">ec-nebi</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/Tazinho">
@@ -456,8 +454,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=stragu">stragu</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/patperu">
@@ -502,8 +498,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=danstowell">danstowell</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/ccamara">
@@ -530,14 +524,11 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/commits?author=karpfen">karpfen</a>
 </td>
 </tr>
-
 </table>
-
 
 ### Issue Authors
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/sytpp">
@@ -582,8 +573,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Ayaakovfeldman">yaakovfeldman</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/gregor-d">
@@ -628,8 +617,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Awaholulu">waholulu</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/ibarraespinosa">
@@ -674,8 +661,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aslow-data">slow-data</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/mroorda">
@@ -720,8 +705,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amarcusyoung">marcusyoung</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/barryrowlingson">
@@ -766,8 +749,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Arobitalec">robitalec</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/nfruehADA">
@@ -812,8 +793,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Admag-ir">dmag-ir</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/FlxPo">
@@ -858,8 +837,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Axiaofanliang">xiaofanliang</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/xtimbeau">
@@ -904,14 +881,11 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3AAloniss">Aloniss</a>
 </td>
 </tr>
-
 </table>
-
 
 ### Issue Contributors
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/sckott">
@@ -956,8 +930,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Acboettig">cboettig</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/prise6">
@@ -1002,8 +974,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3ARobsteranium">Robsteranium</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/assignUser">
@@ -1018,12 +988,9 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Arsbivand">rsbivand</a>
 </td>
 </tr>
-
 </table>
-
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-
 
 [![ropensci_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
