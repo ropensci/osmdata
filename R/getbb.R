@@ -240,6 +240,14 @@ getbb <- function (place_name,
         silent
     )
 
+    if (length (obj) == 0) {
+        warning (paste0 ("`place_name` '", place_name, "' can't be found"))
+
+        ret <- getbb_empty (format_out)
+
+        return (ret)
+    }
+
     if (format_out == "data.frame") {
         utf8cols <- c ("licence", "name", "display_name")
         obj [, utf8cols] <- setenc_utf8 (obj [, utf8cols])
@@ -259,10 +267,6 @@ getbb <- function (place_name,
     bn <- as.numeric (obj$boundingbox [[1]])
     bb_mat <- matrix (c (bn [3:4], bn [1:2]), nrow = 2, byrow = TRUE)
     dimnames (bb_mat) <- list (c ("x", "y"), c ("min", "max"))
-
-    if (any (is.na (bb_mat))) {
-        stop (paste0 ("`place_name` '", place_name, "' can't be found"))
-    }
 
     if (format_out == "matrix") {
         ret <- bb_mat
@@ -335,6 +339,63 @@ getbb <- function (place_name,
 
     return (ret)
 }
+
+
+#' getbb () result for empty queries
+#'
+#' @inheritParams getbb
+#'
+#' @returns Same structure as getbb () but empty results (0 lenght/nrows).
+#' @noRd
+#'
+#' @examples
+#' lapply (
+#'     c (
+#'         "matrix", "data.frame", "string",
+#'         "polygon", "sf_polygon", "osm_type_id"
+#'     ),
+#'     getbb_empty
+#' )
+getbb_empty <- function (format_out) {
+    ret <- switch (format_out,
+        matrix = matrix (
+            rep (NA_real_),
+            nrow = 2, ncol = 2,
+            dimnames = list (c ("x", "y"), c ("min", "max"))
+        ),
+        data.frame = {
+            x <- data.frame (
+                place_id = integer (), licence = character (),
+                osm_type = character (), osm_id = integer (),
+                lat = character (), lon = character (), class = character (),
+                type = character (), place_rank = integer (),
+                importance = numeric (), addresstype = character (),
+                name = character (), display_name = character ()
+            )
+            x$boundingbox <- list ()
+            x
+        },
+        string = character (),
+        polygon = list (),
+        sf_polygon = {
+            geometry <- mat2sf_poly (list (matrix (rep (NA, 4), nrow = 2)))$geometry
+            df <- data.frame (
+                place_id = NA_integer_, licence = NA_character_,
+                osm_type = NA_character_, osm_id = NA_integer_,
+                lat = NA_character_, lon = NA_character_, class = NA_character_,
+                type = NA_character_, place_rank = NA_integer_,
+                importance = NA_real_, addresstype = NA_character_,
+                name = NA_character_, display_name = NA_character_
+            )
+            x <- make_sf (df, geometry)
+            x [integer (), ]
+        },
+        osm_type_id = character ()
+    )
+
+    return (ret)
+}
+
 
 get_nominatim_query <- function (place_name,
                                  featuretype,

@@ -1,5 +1,9 @@
 # osmdata (development version)
 
+## Major changes
+
+- `gettbb()` throws a warning instead of an error for empty results and return the (empty) result with the expected type according to `format_out` parameter (#394).
+
 ## Minor changes
 
 - Fixed `osm_elevation()` function after raster -> terra upgrade (#389; thanks to @Aloniss)
@@ -42,7 +46,7 @@
 - Revert added `osmdata` class to `osmdata_data_frame()` and `osmdata_sc()` + 
   Fix docs to better represent classes accepted by `trim_osmdata()`, `osm_poly2line()` and extract function (#380)
 - Use `terra` functions instead of `raster` (obsolete) in `osm_elevation()` (#383)
-- Joan Maspons is the new mantainer (#384).
+- Joan Maspons is the new maintainer (#384).
 
 
 # osmdata 0.2.5
