@@ -14,7 +14,7 @@
 # - UNAME, EMAIL for git config
 # - CODEBERG for codeberg.org token
 
-name: push-to-gitlab
+name: push-to-elsewhere
 
 on:
   push:
