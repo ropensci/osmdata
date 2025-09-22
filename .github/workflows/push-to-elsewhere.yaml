@@ -28,8 +28,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # push won't mirror if commit message contains "[nopush]"
-    if: "!(contains(github.event.head_commit.message, '[nopush]'))"
+    # push won't mirror if commit message contains "[nopush]", and will only push *from* main
+    if: ${{ !(contains(github.event.head_commit.message, '[nopush]')) && github.head_ref == 'refs/heads/main' }}
 
     steps:
     - uses: actions/checkout@v2
