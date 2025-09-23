@@ -1,0 +1,45 @@
+# HOWTO generate personal token on codeberg:
+#   1. Personal settings -> Applications -> Generate new token
+#   2. Grant access to repo read/write
+#
+# HOWTO on gitlab:
+# Repo Settings ->
+#   Repository ->
+#     Protected Branches ->
+#       Unprotect master (or whichever) branch
+#
+# TODO on github:
+# Store all necessary variables as secrets, including passwords with secret
+# names as specified below:
+# - UNAME, EMAIL for git config
+# - CODEBERG for codeberg.org token
+
+name: push-to-elsewhere
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # will only push *from* main
+    if: ${{ github.head_ref == 'refs/heads/main' }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Git setup
+      run: |
+          git config --global user.name "ropensci"
+          git config --global user.email "noreply@ropensci.org"
+          git clone https://github.com/ropensci/osmdata
+          git fetch --unshallow origin
+          git remote add codeberg https://${{secrets.UNAME}}:${{secrets.CODEBERG}}@codeberg.org/ropensci/osmdata.git
+          git remote add sourcehut https://${{secrets.UNAME}}:${{secrets.SOURCEHUT}}@sr.ht/mpadge/osmdata.git
+          git remote add gitlab https://${{secrets.UNAME}}:${{secrets.GITLAB}}@gitlab.com/ropensci/osmdata.git
+          git push codeberg main
+          git push sourcehut main
+          git push gitlab main
