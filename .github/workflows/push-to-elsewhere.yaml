@@ -17,9 +17,6 @@
 name: push-to-elsewhere
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -28,21 +25,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # push won't mirror if commit message contains "[nopush]", and will only push *from* main
-    if: ${{ !(contains(github.event.head_commit.message, '[nopush]')) && github.head_ref == 'refs/heads/main' }}
+    # will only push *from* main
+    if: ${{ github.head_ref == 'refs/heads/main' }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Git setup
       run: |
-          sudo git config --global user.name ${{secrets.UNAME}}
-          sudo git config --global user.email ${{secrets.EMAIL}}
-          sudo git clone https://${{secrets.UNAME}}:${{secrets.GH_TOKEN}}@github.com/ropensci/osmdata
-          sudo git fetch --unshallow origin
-          sudo git remote add codeberg https://${{secrets.UNAME}}:${{secrets.CODEBERG}}@codeberg.org/ropensci/osmdata.git
-          sudo git remote add sourcehut https://${{secrets.UNAME}}:${{secrets.SOURCEHUT}}@sr.ht/mpadge/osmdata.git
-          sudo git remote add gitlab https://${{secrets.UNAME}}:${{secrets.GITLAB}}@gitlab.com/ropensci/osmdata.git
-          sudo git push codeberg main
-          sudo git push sourcehut main
-          sudo git push gitlab main
+          git config --global user.name "ropensci"
+          git config --global user.email "noreply@ropensci.org"
+          git clone https://github.com/ropensci/osmdata
+          git fetch --unshallow origin
+          git remote add codeberg https://${{secrets.UNAME}}:${{secrets.CODEBERG}}@codeberg.org/ropensci/osmdata.git
+          git remote add sourcehut https://${{secrets.UNAME}}:${{secrets.SOURCEHUT}}@sr.ht/mpadge/osmdata.git
+          git remote add gitlab https://${{secrets.UNAME}}:${{secrets.GITLAB}}@gitlab.com/ropensci/osmdata.git
+          git push codeberg main
+          git push sourcehut main
+          git push gitlab main
