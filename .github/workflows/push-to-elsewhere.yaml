@@ -41,8 +41,6 @@ jobs:
           git clone https://github.com/ropensci/osmdata
           git fetch --unshallow origin
           git remote add codeberg https://${{secrets.UNAME}}:${{secrets.CODEBERG}}@codeberg.org/ropensci/osmdata.git
-          git remote add sourcehut https://${{secrets.UNAME}}:${{secrets.SOURCEHUT}}@git.sr.ht/mpadge/osmdata.git
           git remote add gitlab https://${{secrets.UNAME}}:${{secrets.GITLAB}}@gitlab.com/ropensci/osmdata.git
           git push codeberg main
-          git push sourcehut main
           git push gitlab main
