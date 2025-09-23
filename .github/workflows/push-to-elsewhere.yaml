@@ -16,12 +16,20 @@
 
 name: push-to-elsewhere
 
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     # will only push *from* main
-    if: ${{ github.head_ref == 'refs/heads/main' }}
+    if: ${{ github.head_ref == 'main' }}
 
     steps:
     - uses: actions/checkout@v4
