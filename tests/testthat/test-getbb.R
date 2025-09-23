@@ -21,6 +21,7 @@ test_that ("getbb-place_name", {
     })
     expect_is (res0, "matrix")
     expect_length (res0, 4)
+    expect_equal (dimnames (res0), list (c ("x", "y"), c ("min", "max")))
 
     res1 <- with_mock_dir ("mock_bb_str", {
         getbb (place_name = "Salzburg", format_out = "string")
@@ -48,6 +49,14 @@ test_that ("getbb-place_name", {
     )
     expect_is (res4, "data.frame")
     expect_true (nrow (res4) > 1L)
+    expect_named (
+        res4,
+        c (
+            "place_id", "licence", "osm_type", "osm_id", "lat", "lon",
+            "class", "type", "place_rank", "importance", "addresstype", "name",
+            "display_name", "boundingbox"
+        )
+    )
 
     expect_error (
         res5 <- with_mock_dir ("mock_bb_nope", {
@@ -64,12 +73,84 @@ test_that ("getbb-place_name", {
     expect_is (res6, "character")
     expect_length (res6, 1L)
 
-    expect_error (
-        with_mock_dir ("mock_bb_typo", {
+
+    ## Empty results
+
+    expect_warning (
+        res_empty_matrix <- with_mock_dir ("mock_bb_typo", {
             getbb ("Salzzburg")
         }),
         "`place_name` 'Salzzburg' can't be found"
     )
+    expect_is (res_empty_matrix, "matrix")
+    expect_length (res_empty_matrix, 4)
+    expect_equal (
+        dimnames (res_empty_matrix),
+        list (c ("x", "y"), c ("min", "max"))
+    )
+
+    expect_warning (
+        res_empty_df <- with_mock_dir ("mock_bb_typo", {
+            getbb ("Salzzburg", format_out = "data.frame")
+        }),
+        "`place_name` 'Salzzburg' can't be found"
+    )
+    expect_is (res4, "data.frame")
+    expect_true (nrow (res_empty_df) == 0L)
+    expect_named (
+        res_empty_df,
+        c (
+            "place_id", "licence", "osm_type", "osm_id", "lat", "lon",
+            "class", "type", "place_rank", "importance", "addresstype", "name",
+            "display_name", "boundingbox"
+        )
+    )
+
+    expect_warning (
+        res_empty_string <- with_mock_dir ("mock_bb_typo", {
+            getbb ("Salzzburg", format_out = "string")
+        }),
+        "`place_name` 'Salzzburg' can't be found"
+    )
+    expect_is (res_empty_string, "character")
+    expect_length (res_empty_string, 0L)
+
+    expect_warning (
+        res_empty_polygon <- with_mock_dir ("mock_bb_typo_pol", {
+            getbb ("Salzzburg", format_out = "polygon")
+        }),
+        "`place_name` 'Salzzburg' can't be found"
+    )
+    expect_is (res_empty_polygon, "list")
+    expect_length (res_empty_polygon, 0L)
+
+    expect_warning (
+        res_empty_sfpolygon <- with_mock_dir ("mock_bb_typo_pol", {
+            getbb ("Salzzburg", format_out = "sf_polygon")
+        }),
+        "`place_name` 'Salzzburg' can't be found"
+    )
+    expect_is (res_empty_sfpolygon, "sf")
+    expect_length (res_empty_sfpolygon$geometry, 0L)
+    expect_true (nrow (res_empty_sfpolygon) == 0L)
+    expect_named (
+        res_empty_sfpolygon,
+        c (
+            "place_id", "licence", "osm_type", "osm_id", "lat", "lon",
+            "class", "type", "place_rank", "importance", "addresstype", "name",
+            "display_name", "geometry"
+        )
+    )
+
+    expect_warning (
+        res_empty_osmid <- with_mock_dir ("mock_bb_typo", {
+            getbb ("Salzzburg", format_out = "osm_type_id")
+        }),
+        "`place_name` 'Salzzburg' can't be found"
+    )
+    expect_is (res_empty_osmid, "character")
+    expect_length (res_empty_osmid, 0L)
+
 })
 
 # Note that the polygon calls produce large mock files which are reduced with
@@ -114,6 +195,8 @@ test_that ("getbb-polygon", {
     }
 
     expect_is (res_poly, "list")
+    expect_true (all (grepl ("^relation/[0-9]+$", names (res_poly))))
+
     # test polygon
     expect_true (all (sapply (res_poly [[1]], nrow) > 2))
     expect_true (all (sapply (res_poly [[1]], is.matrix)))
@@ -129,6 +212,14 @@ test_that ("getbb-polygon", {
     expect_is (res_sf$geometry, "sfc")
     expect_true (length (res_sf$geometry) > 1)
     expect_true (ncol (res_sf) > 1)
+    expect_named (
+        res_sf,
+        c (
+            "place_id", "licence", "osm_type", "osm_id", "lat", "lon",
+            "class", "type", "place_rank", "importance", "addresstype", "name",
+            "display_name", "geometry"
+        )
+    )
 
 
     # No polygonal boundary
