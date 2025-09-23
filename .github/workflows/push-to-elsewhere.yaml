@@ -16,13 +16,6 @@
 
 name: push-to-elsewhere
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
 jobs:
   build:
     runs-on: ubuntu-latest
