@@ -1,0 +1,22 @@
+{
+    "P402": [
+        {
+            "id": "Q234963$1e764606-418d-3eb9-14a7-56e57f8978cd",
+            "rank": "normal",
+            "qualifiers": [
+
+            ],
+            "references": [
+
+            ],
+            "property": {
+                "id": "P402",
+                "data_type": "external-id"
+            },
+            "value": {
+                "type": "value",
+                "content": "11747082"
+            }
+        }
+    ]
+}

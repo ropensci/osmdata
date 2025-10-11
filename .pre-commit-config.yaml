@@ -2,10 +2,15 @@
 # R specific hooks: https://github.com/lorenzwalthert/precommit
 repos:
 -   repo: https://github.com/lorenzwalthert/precommit
-    rev: v0.4.3.9014
+    rev: v0.4.3.9015
     hooks:
     -   id: style-files
-        args: [--style_pkg=spaceout, --style_fun=spaceout_style]    
+        args: [--style_pkg=spaceout, --style_fun=spaceout_style]
+        exclude: >
+          (?x)^(
+          tests/testthat/mock_.*/.*|
+          tests/testthat/_snaps/.*|
+          )$
         additional_dependencies:
         - ropensci-review-tools/spaceout
     # -   id: roxygenize
@@ -41,8 +46,15 @@ repos:
           (.*/|)WORDLIST|
           \.github/workflows/.*|
           data/.*|
+          tests/testthat/mock_.*/.*|
+          tests/testthat/_snaps/.*|
           )$
     # -   id: lintr
+    #     exclude: >
+    #       (?x)^(
+    #       tests/testthat/mock_.*/.*|
+    #       tests/testthat/_snaps/.*|
+    #       )$
     -   id: readme-rmd-rendered
     -   id: parsable-R
     -   id: no-browser-statement

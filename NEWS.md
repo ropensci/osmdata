@@ -1,12 +1,18 @@
 # osmdata (development version)
 
+
+## Breaking changes
+
+- `getbb()` throws a warning instead of an error for empty results and return the (empty) result with the expected type according to `format_out` parameter (#394).
+
 ## Major changes
 
-- `gettbb()` throws a warning instead of an error for empty results and return the (empty) result with the expected type according to `format_out` parameter (#394).
+- `getbb()` can query wikidata ids for OSM relations properties (P402) (idea from @mhpob in #401, implemented in #403).
 
 ## Minor changes
 
 - Fixed `osm_elevation()` function after raster -> terra upgrade (#389; thanks to @Aloniss)
+
 
 # osmdata 0.3.0
 

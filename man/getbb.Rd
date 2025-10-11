@@ -18,7 +18,9 @@ getbb(
 )
 }
 \arguments{
-\item{place_name}{The name of the place you're searching for}
+\item{place_name}{The name of the place you're searching for or a wikidata
+id. For Wikidata, only \code{format_out}, \code{base_url} and \code{silent} are used; all
+other parameters are ignored.}
 
 \item{display_name_contains}{Text string to match with display_name field
 returned by \url{https://wiki.openstreetmap.org/wiki/Nominatim}}
@@ -109,9 +111,12 @@ bb_sf
 getbb ("london", format_out = "sf_polygon")
 
 getbb ("València", format_out = "osm_type_id")
-# select multiple areas with format_out = "osm_type_id"
+# Select multiple areas with format_out = "osm_type_id"
 areas <- getbb ("València", format_out = "data.frame")
 bbox_to_string (areas [areas$osm_type != "node", ])
+
+# Search by wikidata id (València)
+getbb ("Q5720", format_out = "data.frame")
 
 # Using an alternative service (locationiq requires an API key)
 # add LOCATIONIQ=type_your_api_key_here to .Renviron:

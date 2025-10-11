@@ -126,7 +126,9 @@ bbox_to_string <- function (bbox) {
 #'
 #' See <https://wiki.openstreetmap.org/wiki/Nominatim> for details.
 #'
-#' @param place_name The name of the place you're searching for
+#' @param place_name The name of the place you're searching for or a wikidata
+#'   id. For Wikidata, only `format_out`, `base_url` and `silent` are used; all
+#'   other parameters are ignored.
 #' @param display_name_contains Text string to match with display_name field
 #' returned by <https://wiki.openstreetmap.org/wiki/Nominatim>
 #' @param viewbox The bounds in which you're searching
@@ -198,9 +200,12 @@ bbox_to_string <- function (bbox) {
 #' getbb ("london", format_out = "sf_polygon")
 #'
 #' getbb ("València", format_out = "osm_type_id")
-#' # select multiple areas with format_out = "osm_type_id"
+#' # Select multiple areas with format_out = "osm_type_id"
 #' areas <- getbb ("València", format_out = "data.frame")
 #' bbox_to_string (areas [areas$osm_type != "node", ])
+#'
+#' # Search by wikidata id (València)
+#' getbb ("Q5720", format_out = "data.frame")
 #'
 #' # Using an alternative service (locationiq requires an API key)
 #' # add LOCATIONIQ=type_your_api_key_here to .Renviron:
@@ -228,17 +233,38 @@ getbb <- function (place_name,
     format_out <- match.arg (format_out)
     is_polygon <- grepl ("polygon", format_out)
 
-    obj <- get_nominatim_query (
-        place_name,
-        featuretype,
-        is_polygon,
-        display_name_contains,
-        viewbox,
-        key,
-        limit,
-        base_url,
-        silent
-    )
+    if (grepl ("^Q[0-9]+$", place_name)) {
+        rel_id <- get_wikidata_P402 (wikidata = place_name, silent = silent)
+
+        if (is.null (rel_id)) {
+            obj <- NULL
+        } else {
+            if (format_out == "osm_type_id") {
+                return (paste0 ("relation(id:", rel_id, ")"))
+            }
+
+            obj <- get_nominatim_lookup (
+                osm_type = "relation",
+                osm_id = rel_id,
+                is_polygon = is_polygon,
+                base_url = base_url,
+                silent = silent
+            )
+        }
+
+    } else {
+        obj <- get_nominatim_query (
+            place_name = place_name,
+            featuretype = featuretype,
+            is_polygon = is_polygon,
+            display_name_contains = display_name_contains,
+            viewbox = viewbox,
+            key = key,
+            limit = limit,
+            base_url = base_url,
+            silent = silent
+        )
+    }
 
     if (length (obj) == 0) {
         warning (paste0 ("`place_name` '", place_name, "' can't be found"))
@@ -397,6 +423,89 @@ getbb_empty <- function (format_out) {
 }
 
 
+# https://doc.wikimedia.org/Wikibase/master/js/rest-api/#/statements/getItemStatements
+get_wikidata_P402 <- function (wikidata, silent = TRUE) {
+    req <- httr2::request ("https://www.wikidata.org")
+    req <- httr2::req_url_path (
+        req, "w/rest.php/wikibase/v1/entities/items", wikidata, "statements"
+    )
+    req <- httr2::req_url_query (req, property = "P402")
+
+    # Avoid error for responses missing items (status 400 or 404)
+    req <- httr2::req_error (req, is_error = function (resp) FALSE)
+    req <- httr2::req_retry (req, max_tries = 10L)
+
+    if (!silent) {
+        message (req$url)
+    }
+
+    resp <- httr2::req_perform (req)
+    obj <- tryCatch (
+        httr2::resp_body_json (resp, simplifyVector = TRUE),
+        error = function (e) {
+            # nocov start
+            message (paste0 (
+                "Wikidata did not respond as expected ",
+                "(e.g. due to excessive use of their api). ",
+                "Please try again.\n",
+                "The url that failed was:\n", req$url
+            ))
+            # nocov end
+        }
+    )
+
+    if (resp$status_code != 200) {
+        warning (obj$message)
+        rel_id <- NULL
+    } else {
+        rel_id <- obj$P402$value$content
+    }
+
+    return (rel_id)
+}
+
+
+# https://nominatim.org/release-docs/develop/api/Lookup/
+get_nominatim_lookup <- function (osm_type, osm_id, is_polygon, base_url, silent = TRUE) {
+    # https://nominatim.openstreetmap.org/lookup?osm_ids=[N|W|R]<value>,…,…,&<params>
+    osm_type <- gsub ("^node$", "N", osm_type)
+    osm_type <- gsub ("^way$", "W", osm_type)
+    osm_type <- gsub ("^relation$", "R", osm_type)
+    ids <- paste (paste0 (osm_type, osm_id), collapse = ",")
+
+    req <- httr2::request (base_url)
+    req <- httr2::req_url_path (req, "lookup")
+    req <- httr2::req_url_query (req, osm_ids = ids)
+    req <- httr2::req_url_query (req, format = "json", addressdetails = 0)
+
+    if (is_polygon) {
+        req <- httr2::req_url_query (req, polygon_text = 1)
+    }
+
+    req <- httr2::req_retry (req, max_tries = 10L)
+
+    if (!silent) {
+        message (req$url)
+    }
+
+    resp <- httr2::req_perform (req)
+    obj <- tryCatch (
+        httr2::resp_body_json (resp, simplifyVector = TRUE),
+        error = function (e) {
+            # nocov start
+            message (paste0 (
+                "Wikidata did not respond as expected ",
+                "(e.g. due to excessive use of their api). ",
+                "Please try again.\n",
+                "The url that failed was:\n", req$url
+            ))
+            # nocov end
+        }
+    )
+}
+
+
+# https://nominatim.org/release-docs/develop/api/Search/
 get_nominatim_query <- function (place_name,
                                  featuretype,
                                  is_polygon,

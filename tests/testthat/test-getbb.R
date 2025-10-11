@@ -153,6 +153,137 @@ test_that ("getbb-place_name", {
 
 })
 
+
+test_that ("getbb-wikidata", {
+
+    res0 <- with_mock_dir ("mock_bb_wikidata", {
+        getbb (place_name = "Q234963")
+    })
+    expect_is (res0, "matrix")
+    expect_length (res0, 4)
+    expect_equal (dimnames (res0), list (c ("x", "y"), c ("min", "max")))
+
+    res1 <- with_mock_dir ("mock_bb_wikidata", {
+        getbb (place_name = "Q234963", format_out = "string")
+    })
+    expect_is (res1, "character")
+
+    expect_message (
+        res0 <- with_mock_dir ("mock_bb_wikidata", {
+            getbb (place_name = "Q234963", silent = FALSE)
+        })
+    )
+    expect_silent (
+        res4 <- with_mock_dir ("mock_bb_wikidata", {
+            getbb (place_name = "Q234963", format_out = "data.frame")
+        })
+    )
+    expect_is (res4, "data.frame")
+    expect_true (nrow (res4) == 1L)
+    expect_named (
+        res4,
+        c (
+            "place_id", "licence", "osm_type", "osm_id", "lat", "lon",
+            "class", "type", "place_rank", "importance", "addresstype", "name",
+            "display_name", "boundingbox"
+        )
+    )
+
+    expect_error (
+        res5 <- with_mock_dir ("mock_bb_wikidata_nope", {
+            getbb (place_name = "Q234963", format_out = "no format")
+        }),
+        class = "simpleError"
+    )
+
+    expect_silent (
+        res6 <- with_mock_dir ("mock_bb_wikidata", {
+            getbb (place_name = "Q234963", format_out = "osm_type_id")
+        })
+    )
+    expect_is (res6, "character")
+    expect_length (res6, 1L)
+
+
+    ## Empty results
+
+    expect_warning (
+        res_empty_matrix <- with_mock_dir ("mock_bb_wikidata_NULL", {
+            getbb ("Q00")
+        }),
+        "`place_name` 'Q00' can't be found"
+    )
+    expect_is (res_empty_matrix, "matrix")
+    expect_length (res_empty_matrix, 4)
+    expect_equal (
+        dimnames (res_empty_matrix),
+        list (c ("x", "y"), c ("min", "max"))
+    )
+
+    expect_warning (
+        res_empty_df <- with_mock_dir ("mock_bb_wikidata_NULL", {
+            getbb ("Q00", format_out = "data.frame")
+        }),
+        "`place_name` 'Q00' can't be found"
+    )
+    expect_is (res4, "data.frame")
+    expect_true (nrow (res_empty_df) == 0L)
+    expect_named (
+        res_empty_df,
+        c (
+            "place_id", "licence", "osm_type", "osm_id", "lat", "lon",
+            "class", "type", "place_rank", "importance", "addresstype", "name",
+            "display_name", "boundingbox"
+        )
+    )
+
+    expect_warning (
+        res_empty_string <- with_mock_dir ("mock_bb_wikidata_NULL", {
+            getbb ("Q00", format_out = "string")
+        }),
+        "`place_name` 'Q00' can't be found"
+    )
+    expect_is (res_empty_string, "character")
+    expect_length (res_empty_string, 0L)
+
+    expect_warning (
+        res_empty_polygon <- with_mock_dir ("mock_bb_wikidata_NULL", {
+            getbb ("Q00", format_out = "polygon")
+        }),
+        "`place_name` 'Q00' can't be found"
+    )
+    expect_is (res_empty_polygon, "list")
+    expect_length (res_empty_polygon, 0L)
+
+    expect_warning (
+        res_empty_sfpolygon <- with_mock_dir ("mock_bb_wikidata_NULL", {
+            getbb ("Q00", format_out = "sf_polygon")
+        }),
+        "`place_name` 'Q00' can't be found"
+    )
+    expect_is (res_empty_sfpolygon, "sf")
+    expect_length (res_empty_sfpolygon$geometry, 0L)
+    expect_true (nrow (res_empty_sfpolygon) == 0L)
+    expect_named (
+        res_empty_sfpolygon,
+        c (
+            "place_id", "licence", "osm_type", "osm_id", "lat", "lon",
+            "class", "type", "place_rank", "importance", "addresstype", "name",
+            "display_name", "geometry"
+        )
+    )
+
+    expect_warning (
+        res_empty_osmid <- with_mock_dir ("mock_bb_wikidata_NULL", {
+            getbb ("Q00", format_out = "osm_type_id")
+        }),
+        "`place_name` 'Q00' can't be found"
+    )
+    expect_is (res_empty_osmid, "character")
+    expect_length (res_empty_osmid, 0L)
+})
+
+
 # Note that the polygon calls produce large mock files which are reduced with
 # post-processing routines. See `test-features.R` for explanations.
 post_process_polygons <- function (dir_name, min_polys = 2) {
