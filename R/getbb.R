@@ -130,18 +130,23 @@ bbox_to_string <- function (bbox) {
 #'   id. For Wikidata, only `format_out`, `base_url` and `silent` are used; all
 #'   other parameters are ignored.
 #' @param display_name_contains Text string to match with display_name field
-#' returned by <https://wiki.openstreetmap.org/wiki/Nominatim>
-#' @param viewbox The bounds in which you're searching
+#'   returned by <https://wiki.openstreetmap.org/wiki/Nominatim>.
+#' @param viewbox Focuses the search on the given area defined as
+#'   a character string `"x1,y1,x2,y2"` or `c(x1, y1, x2, y2)`. Any two corner
+#'   points of the box are accepted as long as they make a proper box. `x` is
+#'   longitude, `y` is latitude.
 #' @param format_out Character string indicating output format: `matrix`
-#' (default), `string` (see [bbox_to_string()]), `data.frame` (all 'hits' returned
-#' by Nominatim), `sf_polygon` (for polygons that work with the sf package),
-#' `polygon` (full polygonal bounding boxes for each match) or `osm_type_id` (
-#' string for quering inside deffined OSM areas [bbox_to_string()]).
-#' @param base_url Base website from where data is queried
-#' @param featuretype The type of OSM feature (settlement is default; see Note)
+#'   (default), `string` (see [bbox_to_string()]),
+#'   `data.frame` (all 'hits' returned by Nominatim),
+#'   `sf_polygon` (for polygons that work with the sf package),
+#'   `polygon` (full polygonal bounding boxes for each match) or
+#'   `osm_type_id` (string for quering inside deffined OSM areas
+#'   [bbox_to_string()]).
+#' @param base_url Base website from where data is queried.
+#' @param featuretype The type of OSM feature (settlement is default; see Note).
 #' @param limit How many results should the API return?
-#' @param key The API key to use for services that require it
-#' @param silent Should the API be printed to screen? TRUE by default
+#' @param key The API key to use for services that require it.
+#' @param silent Should the API be printed to screen? `TRUE` by default.
 #'
 #' @return For `format_out = "matrix"`, the default, return the bounding box:
 #' ```
@@ -184,10 +189,11 @@ bbox_to_string <- function (bbox) {
 #' @examples
 #' \dontrun{
 #' getbb ("Salzburg")
-#' # select based on display_name, print query url
+#' # Select based on display_name, print query url
 #' getbb ("Hereford", display_name_contains = "United States", silent = FALSE)
 #' # top 3 matches as data frame
 #' getbb ("Hereford", format_out = "data.frame", limit = 3)
+#' getbb ("Hereford", format_out = "data.frame", viewbox = getbb ("England"))
 #'
 #' # Examples of polygonal boundaries
 #' bb <- getbb ("Milano, Italy", format_out = "polygon")
@@ -531,7 +537,12 @@ get_nominatim_query <- function (place_name,
     if (is_polygon) {
         req <- httr2::req_url_query (req, polygon_text = 1)
     }
-
+    if (!is.null (viewbox)) {
+        req <- httr2::req_url_query (
+            req,
+            viewbox = paste (viewbox, collapse = ",")
+        )
+    }
     if (!is.null (key)) {
         req <- httr2::req_url_query (req, key = key)
     }
@@ -572,6 +583,7 @@ get_nominatim_query <- function (place_name,
 
     return (obj)
 }
+
 
 #' Get all polygons from a 'geojson' object
 #'

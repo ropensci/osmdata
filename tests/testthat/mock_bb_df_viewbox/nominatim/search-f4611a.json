@@ -1,0 +1,44 @@
+[
+    {
+        "place_id": 62550056,
+        "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "osm_type": "relation",
+        "osm_id": 86538,
+        "lat": "47.7981346",
+        "lon": "13.0464806",
+        "class": "boundary",
+        "type": "administrative",
+        "place_rank": 12,
+        "importance": 0.688383952836358,
+        "addresstype": "city",
+        "name": "Salzburg",
+        "display_name": "Salzburg, 5020, Österreich",
+        "boundingbox": [
+            "47.7512115",
+            "47.8543925",
+            "12.9856478",
+            "13.1275256"
+        ]
+    },
+    {
+        "place_id": 62639915,
+        "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "osm_type": "relation",
+        "osm_id": 86539,
+        "lat": "47.4166667",
+        "lon": "13.2500000",
+        "class": "boundary",
+        "type": "administrative",
+        "place_rank": 8,
+        "importance": 0.6111662016934614,
+        "addresstype": "state",
+        "name": "Salzburg",
+        "display_name": "Salzburg, Österreich",
+        "boundingbox": [
+            "46.9438580",
+            "48.0414691",
+            "12.0760956",
+            "13.9961250"
+        ]
+    }
+]

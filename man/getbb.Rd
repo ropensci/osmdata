@@ -23,25 +23,30 @@ id. For Wikidata, only \code{format_out}, \code{base_url} and \code{silent} are 
 other parameters are ignored.}
 
 \item{display_name_contains}{Text string to match with display_name field
-returned by \url{https://wiki.openstreetmap.org/wiki/Nominatim}}
+returned by \url{https://wiki.openstreetmap.org/wiki/Nominatim}.}
 
-\item{viewbox}{The bounds in which you're searching}
+\item{viewbox}{Focuses the search on the given area defined as
+a character string \code{"x1,y1,x2,y2"} or \code{c(x1, y1, x2, y2)}. Any two corner
+points of the box are accepted as long as they make a proper box. \code{x} is
+longitude, \code{y} is latitude.}
 
 \item{format_out}{Character string indicating output format: \code{matrix}
-(default), \code{string} (see \code{\link[=bbox_to_string]{bbox_to_string()}}), \code{data.frame} (all 'hits' returned
-by Nominatim), \code{sf_polygon} (for polygons that work with the sf package),
-\code{polygon} (full polygonal bounding boxes for each match) or \code{osm_type_id} (
-string for quering inside deffined OSM areas \code{\link[=bbox_to_string]{bbox_to_string()}}).}
+(default), \code{string} (see \code{\link[=bbox_to_string]{bbox_to_string()}}),
+\code{data.frame} (all 'hits' returned by Nominatim),
+\code{sf_polygon} (for polygons that work with the sf package),
+\code{polygon} (full polygonal bounding boxes for each match) or
+\code{osm_type_id} (string for quering inside deffined OSM areas
+\code{\link[=bbox_to_string]{bbox_to_string()}}).}
 
-\item{base_url}{Base website from where data is queried}
+\item{base_url}{Base website from where data is queried.}
 
-\item{featuretype}{The type of OSM feature (settlement is default; see Note)}
+\item{featuretype}{The type of OSM feature (settlement is default; see Note).}
 
 \item{limit}{How many results should the API return?}
 
-\item{key}{The API key to use for services that require it}
+\item{key}{The API key to use for services that require it.}
 
-\item{silent}{Should the API be printed to screen? TRUE by default}
+\item{silent}{Should the API be printed to screen? \code{TRUE} by default.}
 }
 \value{
 For \code{format_out = "matrix"}, the default, return the bounding box:
@@ -95,10 +100,11 @@ a city is desired, better results will usually be obtained with
 \examples{
 \dontrun{
 getbb ("Salzburg")
-# select based on display_name, print query url
+# Select based on display_name, print query url
 getbb ("Hereford", display_name_contains = "United States", silent = FALSE)
 # top 3 matches as data frame
 getbb ("Hereford", format_out = "data.frame", limit = 3)
+getbb ("Hereford", format_out = "data.frame", viewbox = getbb ("England"))
 
 # Examples of polygonal boundaries
 bb <- getbb ("Milano, Italy", format_out = "polygon")
