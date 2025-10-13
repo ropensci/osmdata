@@ -1,0 +1,23 @@
+[
+    {
+        "place_id": 76459761,
+        "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "osm_type": "relation",
+        "osm_id": 11747082,
+        "lat": "39.6134221",
+        "lon": "2.8829285",
+        "class": "boundary",
+        "type": "political",
+        "place_rank": 25,
+        "importance": 0.06672031815060654,
+        "addresstype": "region",
+        "name": "Països Catalans",
+        "display_name": "Països Catalans, España",
+        "boundingbox": [
+            "38.0294955",
+            "42.9186456",
+            "-1.2411120",
+            "8.4203171"
+        ]
+    }
+]

@@ -21,9 +21,18 @@ function (resp) {
         fixed = TRUE
     )
 
+    resp <- httptest2::gsub_response (
+        resp,
+        "https://www.wikidata.org/w/rest.php/wikibase/v1/entities/items/",
+        "wikidata/",
+        fixed = TRUE
+    )
+
     # Timestamp pattern:
-    ptn <- paste0 ("[A-Za-z]{3},\\s[0-9]{2}\\s[A-Za-z]{3}\\s[0-9]{4}\\s",   # date
-                   "[0-9]{2}\\:[0-9]{2}\\:[0-9]{2}")                        # time
+    ptn <- paste0 (
+        "[A-Za-z]{3},\\s[0-9]{2}\\s[A-Za-z]{3}\\s[0-9]{4}\\s", # date
+        "[0-9]{2}\\:[0-9]{2}\\:[0-9]{2}" # time
+    )
     resp <- httptest2::gsub_response (
         resp,
         ptn,
@@ -46,6 +55,12 @@ function (resp) {
         "Connected\\sas\\:\\s[0-9]*",
         "Connected as: 123456789",
         fixed = FALSE
+    )
+
+    # wikidata errors:
+    resp <- redact_headers (
+        resp,
+        headers = c ("date", "server", "set-cookie", "x-client-ip")
     )
 
     return (resp)
