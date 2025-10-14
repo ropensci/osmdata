@@ -1,3 +1,9 @@
+df_cols <- c (
+    "place_id", "licence", "osm_type", "osm_id", "lat", "lon",
+    "class", "type", "place_rank", "importance", "addresstype", "name",
+    "display_name"
+)
+
 test_that ("bbox", {
 
     expect_error (bbox_to_string (), "bbox must be provided")
@@ -43,20 +49,29 @@ test_that ("getbb-place_name", {
         })
     )
     expect_silent (
-        res4 <- with_mock_dir ("mock_bb_df", {
+        res3 <- with_mock_dir ("mock_bb_df", {
             getbb (place_name = "Salzburg", format_out = "data.frame")
+        })
+    )
+    expect_is (res3, "data.frame")
+    expect_true (nrow (res3) > 1L)
+    expect_named (res3, c (df_cols, "boundingbox"))
+
+    expect_silent (
+        res4 <- with_mock_dir ("mock_bb_df_viewbox", {
+            getbb (
+                place_name = "Salzburg",
+                format_out = "data.frame",
+                viewbox = "9.5307487,46.3722987,17.1607728,49.0205249"
+                # paste(getbb ("Österreich"), collapse = ",")
+            )
         })
     )
     expect_is (res4, "data.frame")
     expect_true (nrow (res4) > 1L)
-    expect_named (
-        res4,
-        c (
-            "place_id", "licence", "osm_type", "osm_id", "lat", "lon",
-            "class", "type", "place_rank", "importance", "addresstype", "name",
-            "display_name", "boundingbox"
-        )
-    )
+    expect_named (res4, c (df_cols, "boundingbox"))
+    expect_true (all (grepl ("Österreich", res4$display_name)))
+    expect_true (nrow (res3) > nrow (res4))
 
     expect_error (
         res5 <- with_mock_dir ("mock_bb_nope", {
@@ -97,14 +112,7 @@ test_that ("getbb-place_name", {
     )
     expect_is (res4, "data.frame")
     expect_true (nrow (res_empty_df) == 0L)
-    expect_named (
-        res_empty_df,
-        c (
-            "place_id", "licence", "osm_type", "osm_id", "lat", "lon",
-            "class", "type", "place_rank", "importance", "addresstype", "name",
-            "display_name", "boundingbox"
-        )
-    )
+    expect_named (res_empty_df, c (df_cols, "boundingbox"))
 
     expect_warning (
         res_empty_string <- with_mock_dir ("mock_bb_typo", {
@@ -133,14 +141,7 @@ test_that ("getbb-place_name", {
     expect_is (res_empty_sfpolygon, "sf")
     expect_length (res_empty_sfpolygon$geometry, 0L)
     expect_true (nrow (res_empty_sfpolygon) == 0L)
-    expect_named (
-        res_empty_sfpolygon,
-        c (
-            "place_id", "licence", "osm_type", "osm_id", "lat", "lon",
-            "class", "type", "place_rank", "importance", "addresstype", "name",
-            "display_name", "geometry"
-        )
-    )
+    expect_named (res_empty_sfpolygon, c (df_cols, "geometry"))
 
     expect_warning (
         res_empty_osmid <- with_mock_dir ("mock_bb_typo", {
@@ -180,14 +181,7 @@ test_that ("getbb-wikidata", {
     )
     expect_is (res4, "data.frame")
     expect_true (nrow (res4) == 1L)
-    expect_named (
-        res4,
-        c (
-            "place_id", "licence", "osm_type", "osm_id", "lat", "lon",
-            "class", "type", "place_rank", "importance", "addresstype", "name",
-            "display_name", "boundingbox"
-        )
-    )
+    expect_named (res4, c (df_cols, "boundingbox"))
 
     expect_error (
         res5 <- with_mock_dir ("mock_bb_wikidata_nope", {
@@ -228,14 +222,7 @@ test_that ("getbb-wikidata", {
     )
     expect_is (res4, "data.frame")
     expect_true (nrow (res_empty_df) == 0L)
-    expect_named (
-        res_empty_df,
-        c (
-            "place_id", "licence", "osm_type", "osm_id", "lat", "lon",
-            "class", "type", "place_rank", "importance", "addresstype", "name",
-            "display_name", "boundingbox"
-        )
-    )
+    expect_named (res_empty_df, c (df_cols, "boundingbox"))
 
     expect_warning (
         res_empty_string <- with_mock_dir ("mock_bb_wikidata_NULL", {
@@ -264,14 +251,7 @@ test_that ("getbb-wikidata", {
     expect_is (res_empty_sfpolygon, "sf")
     expect_length (res_empty_sfpolygon$geometry, 0L)
     expect_true (nrow (res_empty_sfpolygon) == 0L)
-    expect_named (
-        res_empty_sfpolygon,
-        c (
-            "place_id", "licence", "osm_type", "osm_id", "lat", "lon",
-            "class", "type", "place_rank", "importance", "addresstype", "name",
-            "display_name", "geometry"
-        )
-    )
+    expect_named (res_empty_sfpolygon, c (df_cols, "geometry"))
 
     expect_warning (
         res_empty_osmid <- with_mock_dir ("mock_bb_wikidata_NULL", {
@@ -343,14 +323,7 @@ test_that ("getbb-polygon", {
     expect_is (res_sf$geometry, "sfc")
     expect_true (length (res_sf$geometry) > 1)
     expect_true (ncol (res_sf) > 1)
-    expect_named (
-        res_sf,
-        c (
-            "place_id", "licence", "osm_type", "osm_id", "lat", "lon",
-            "class", "type", "place_rank", "importance", "addresstype", "name",
-            "display_name", "geometry"
-        )
-    )
+    expect_named (res_sf, c (df_cols, "geometry"))
 
 
     # No polygonal boundary
