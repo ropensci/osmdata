@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API 0.7.62.8 e802775f">
+  <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+  <meta osm_base="2025-10-21T07:10:15Z"/>
+  <node id="1268011713" lat="41.3869639" lon="2.1645842" version="6" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="2500570243" lat="41.3866556" lon="2.1641681" version="3" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="2500570257" lat="41.3869335" lon="2.1637891" version="3" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="2500570259" lat="41.3869571" lon="2.1640900" version="2" timestamp="2014-10-02T15:19:53Z" changeset="25812826" uid="860575" user="Marcel Herault"/>
+  <node id="2500570264" lat="41.3870610" lon="2.1642297" version="2" timestamp="2014-10-02T15:19:53Z" changeset="25812826" uid="860575" user="Marcel Herault"/>
+  <node id="2500570265" lat="41.3871200" lon="2.1638748" version="2" timestamp="2014-10-02T15:19:53Z" changeset="25812826" uid="860575" user="Marcel Herault"/>
+  <node id="2500570268" lat="41.3871802" lon="2.1634553" version="3" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="2500570269" lat="41.3872239" lon="2.1640145" version="2" timestamp="2014-10-02T15:19:53Z" changeset="25812826" uid="860575" user="Marcel Herault"/>
+  <node id="2500570277" lat="41.3874963" lon="2.1638691" version="3" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="2968509032" lat="41.3867211" lon="2.1642545" version="5" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake">
+    <tag k="entrance" v="yes"/>
+  </node>
+  <node id="3107388266" lat="41.3867072" lon="2.1640879" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388278" lat="41.3868396" lon="2.1639127" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388285" lat="41.3868970" lon="2.1638370" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388287" lat="41.3869050" lon="2.1644995" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388288" lat="41.3869049" lon="2.1645058" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388291" lat="41.3869099" lon="2.1645124" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388293" lat="41.3869146" lon="2.1645120" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388297" lat="41.3869582" lon="2.1645770" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388298" lat="41.3869590" lon="2.1645714" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388305" lat="41.3869660" lon="2.1645677" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388308" lat="41.3869696" lon="2.1645822" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388309" lat="41.3869674" lon="2.1645771" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388314" lat="41.3870081" lon="2.1645139" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388317" lat="41.3870144" lon="2.1645153" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388319" lat="41.3870211" lon="2.1644985" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388320" lat="41.3870207" lon="2.1645070" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388322" lat="41.3871186" lon="2.1635461" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388323" lat="41.3871188" lon="2.1635373" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388325" lat="41.3871257" lon="2.1635276" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388326" lat="41.3871310" lon="2.1635284" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388327" lat="41.3871742" lon="2.1634721" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388328" lat="41.3871748" lon="2.1634611" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388630" lat="41.3871847" lon="2.1634555" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388631" lat="41.3871886" lon="2.1634679" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388632" lat="41.3871892" lon="2.1634618" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388675" lat="41.3874337" lon="2.1639526" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388676" lat="41.3874380" lon="2.1639523" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388677" lat="41.3874440" lon="2.1639391" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388678" lat="41.3874446" lon="2.1639438" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388679" lat="41.3874853" lon="2.1638640" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388680" lat="41.3874857" lon="2.1638829" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388681" lat="41.3874900" lon="2.1638839" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388682" lat="41.3874915" lon="2.1638624" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="3107388683" lat="41.3874948" lon="2.1638773" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="4687277643" lat="41.3874519" lon="2.1639284" version="2" timestamp="2024-01-05T12:07:19Z" changeset="145919417" uid="406589" user="AmyCupcake"/>
+  <node id="4687277646" lat="41.3869688" lon="2.1637430" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="9787630843" lat="41.3869554" lon="2.1637604" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="9787630845" lat="41.3870441" lon="2.1639750" version="1" timestamp="2022-06-01T10:04:51Z" changeset="121804176" uid="3859465" user="Toni Serra"/>
+  <node id="9787630847" lat="41.3871563" lon="2.1641038" version="1" timestamp="2022-06-01T10:04:51Z" changeset="121804176" uid="3859465" user="Toni Serra"/>
+  <node id="9787630849" lat="41.3872300" lon="2.1642228" version="2" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="11491572496" lat="41.3868022" lon="2.1639618" version="1" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="11491572497" lat="41.3867498" lon="2.1640309" version="1" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <node id="11491572498" lat="41.3867242" lon="2.1640646" version="1" timestamp="2024-01-05T12:03:44Z" changeset="145919272" uid="406589" user="AmyCupcake"/>
+  <way id="242590268" version="11" timestamp="2024-01-05T12:07:19Z" changeset="145919417" uid="406589" user="AmyCupcake">
+    <nd ref="2500570243"/>
+    <nd ref="3107388266"/>
+    <nd ref="11491572498"/>
+    <nd ref="11491572497"/>
+    <nd ref="11491572496"/>
+    <nd ref="3107388278"/>
+    <nd ref="3107388285"/>
+    <nd ref="2500570257"/>
+    <nd ref="9787630843"/>
+    <nd ref="4687277646"/>
+    <nd ref="3107388322"/>
+    <nd ref="3107388323"/>
+    <nd ref="3107388325"/>
+    <nd ref="3107388326"/>
+    <nd ref="3107388327"/>
+    <nd ref="3107388328"/>
+    <nd ref="2500570268"/>
+    <nd ref="3107388630"/>
+    <nd ref="3107388632"/>
+    <nd ref="3107388631"/>
+    <nd ref="3107388679"/>
+    <nd ref="3107388682"/>
+    <nd ref="2500570277"/>
+    <nd ref="3107388683"/>
+    <nd ref="3107388681"/>
+    <nd ref="3107388680"/>
+    <nd ref="4687277643"/>
+    <nd ref="3107388677"/>
+    <nd ref="3107388678"/>
+    <nd ref="3107388676"/>
+    <nd ref="3107388675"/>
+    <nd ref="9787630849"/>
+    <nd ref="3107388319"/>
+    <nd ref="3107388320"/>
+    <nd ref="3107388317"/>
+    <nd ref="3107388314"/>
+    <nd ref="3107388305"/>
+    <nd ref="3107388309"/>
+    <nd ref="3107388308"/>
+    <nd ref="1268011713"/>
+    <nd ref="3107388297"/>
+    <nd ref="3107388298"/>
+    <nd ref="3107388293"/>
+    <nd ref="3107388291"/>
+    <nd ref="3107388288"/>
+    <nd ref="3107388287"/>
+    <nd ref="2968509032"/>
+    <nd ref="2500570243"/>
+    <tag k="source" v="Universitat de Barcelona (www.mat.ub.edu), catastro"/>
+  </way>
+  <way id="242590282" version="3" timestamp="2022-06-01T10:04:51Z" changeset="121804176" uid="3859465" user="Toni Serra">
+    <nd ref="2500570265"/>
+    <nd ref="9787630845"/>
+    <nd ref="2500570259"/>
+    <nd ref="2500570264"/>
+    <nd ref="9787630847"/>
+    <nd ref="2500570269"/>
+    <nd ref="2500570265"/>
+    <tag k="source" v="catastro"/>
+  </way>
+  <relation id="3278525" version="5" timestamp="2022-11-26T01:53:42Z" changeset="129387271" uid="11725140" user="jmaspons">
+    <member type="way" ref="242590268" role="outer"/>
+    <member type="way" ref="242590282" role="inner"/>
+    <tag k="building" v="university"/>
+    <tag k="name" v="Facultat de Matemàtiques"/>
+    <tag k="name:ca" v="Facultat de Matemàtiques"/>
+    <tag k="name:en" v="Faculty of Mathematics"/>
+    <tag k="type" v="multipolygon"/>
+    <tag k="website" v="https://mat.ub.edu/"/>
+  </relation>
+</osm>

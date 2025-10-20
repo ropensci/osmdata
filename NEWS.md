@@ -13,6 +13,7 @@
 
 - Fixed `osm_elevation()` function after raster -> terra upgrade (#389; thanks to @Aloniss).
 - Implement described viewbox parameter in `getbb()` (#402).
+- Implement `osmdata_sf(..., out = "meta")` (#405).
 
 
 # osmdata 0.3.0

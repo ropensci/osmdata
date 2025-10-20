@@ -9,7 +9,7 @@
 #' @param unique_vals Pointer to a UniqueVals object containing std::sets of all
 #'       unique IDs and keys for each kind of OSM object (nodes, ways, rels).
 #'
-#' @return A dual Rcpp::DataFrame with the tags and metadata of the relations.
+#' @return A dual Rcpp::DataFrame with the tags and metadata of the relations. TODO: update
 #'
 #' @noRd
 NULL
@@ -64,7 +64,7 @@ rcpp_osmdata_sc <- function(st) {
 
 #' get_osm_relations
 #'
-#' Return a dual Rcpp::List containing all OSM relations, the firmt element of
+#' Return a dual Rcpp::List containing all OSM relations, the first element of
 #' which holds `multipolygon` relations, while the second holds all others,
 #' which are stored as `multilinestring` objects.
 #'
@@ -75,9 +75,9 @@ rcpp_osmdata_sc <- function(st) {
 #'       unique IDs and keys for each kind of OSM object (nodes, ways, rels).
 #'
 #' @return A dual Rcpp::List, the first of which contains the multipolygon
-#'         relations; the second the multilinestring relations.
-#' 
-#' @noRd 
+#'         relations; the second the multilinestring relations. TODO: update
+#'
+#' @noRd
 NULL
 
 #' get_osm_ways
@@ -93,8 +93,8 @@ NULL
 #' @param geom_type Character string specifying "POLYGON" or "LINESTRING"
 #' @param bbox Pointer to the bbox needed for `sf` construction
 #' @param crs Pointer to the crs needed for `sf` construction
-#' 
-#' @noRd 
+#'
+#' @noRd
 NULL
 
 #' get_osm_nodes
@@ -107,8 +107,8 @@ NULL
 #' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
 #' @param bbox Pointer to the bbox needed for `sf` construction
 #' @param crs Pointer to the crs needed for `sf` construction
-#' 
-#' @noRd 
+#'
+#' @noRd
 NULL
 
 #' rcpp_osmdata_sf
@@ -117,8 +117,8 @@ NULL
 #'
 #' @param st Text contents of an overpass API query
 #' @return Rcpp::List objects of OSM data
-#' 
-#' @noRd 
+#'
+#' @noRd
 rcpp_osmdata_sf <- function(st) {
     .Call(`_osmdata_rcpp_osmdata_sf`, st)
 }

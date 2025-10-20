@@ -16,8 +16,8 @@
  *  You should have received a copy of the GNU General Public License along with
  *  osm-router.  If not, see <https://www.gnu.org/licenses/>.
  *
- *  Author:     Mark Padgham 
- *  E-Mail:     mark.padgham@email.com 
+ *  Author:     Mark Padgham
+ *  E-Mail:     mark.padgham@email.com
  *
  *  Description:    Extract OSM data from an object of class XmlData and return
  *                  it in Rcpp::List format.
@@ -34,7 +34,7 @@
 #include <Rcpp.h>
 
 // Note: This code uses explicit index counters within most loops which use Rcpp
-// objects, because these otherwise require a 
+// objects, because these otherwise require a
 // static_cast <size_t> (std::distance (...)). This operation copies each
 // instance and can slow the loops down by several orders of magnitude!
 
@@ -49,7 +49,7 @@
 
 //' get_osm_relations
 //'
-//' Return a dual Rcpp::List containing all OSM relations, the firmt element of
+//' Return a dual Rcpp::List containing all OSM relations, the first element of
 //' which holds `multipolygon` relations, while the second holds all others,
 //' which are stored as `multilinestring` objects.
 //'
@@ -60,10 +60,10 @@
 //'       unique IDs and keys for each kind of OSM object (nodes, ways, rels).
 //'
 //' @return A dual Rcpp::List, the first of which contains the multipolygon
-//'         relations; the second the multilinestring relations.
-//' 
-//' @noRd 
-Rcpp::List osm_sf::get_osm_relations (const Relations &rels, 
+//'         relations; the second the multilinestring relations. TODO: update
+//'
+//' @noRd
+Rcpp::List osm_sf::get_osm_relations (const Relations &rels,
         const std::map <osmid_t, Node> &nodes,
         const std::map <osmid_t, OneWay> &ways, const UniqueVals &unique_vals,
         const Rcpp::NumericVector &bbox, const Rcpp::List &crs)
@@ -80,17 +80,17 @@ Rcpp::List osm_sf::get_osm_relations (const Relations &rels,
 
     double_arr2 lat_vec, lon_vec;
     double_arr3 lat_arr_mp, lon_arr_mp, lon_arr_ls, lat_arr_ls;
-    string_arr2 rowname_vec, id_vec_mp, roles_ls; 
+    string_arr2 rowname_vec, id_vec_mp, roles_ls;
     string_arr3 rowname_arr_mp, rowname_arr_ls;
-    std::vector <osmid_t> ids_ls; 
-    std::vector <std::string> ids_mp, rel_id_mp, rel_id_ls; 
+    std::vector <osmid_t> ids_ls;
+    std::vector <std::string> ids_mp, rel_id_mp, rel_id_ls;
     osmt_arr2 id_vec_ls;
     std::vector <std::string> roles;
 
     unsigned int nmp = 0, nls = 0; // number of multipolygon and multilinestringrelations
     for (auto itr = rels.begin (); itr != rels.end (); ++itr)
     {
-        if (itr->ispoly) 
+        if (itr->ispoly)
             nmp++;
         else
         {
@@ -113,6 +113,11 @@ Rcpp::List osm_sf::get_osm_relations (const Relations &rels,
         kv_mat_ls (Rcpp::Dimension (nls, ncol));
     std::fill (kv_mat_mp.begin (), kv_mat_mp.end (), NA_STRING);
     std::fill (kv_mat_ls.begin (), kv_mat_ls.end (), NA_STRING);
+    Rcpp::CharacterMatrix meta_mat_mp (Rcpp::Dimension (nmp, 5L)),
+        meta_mat_ls (Rcpp::Dimension (nls, 5L));
+    std::fill (meta_mat_mp.begin (), meta_mat_mp.end (), NA_STRING);
+    std::fill (meta_mat_ls.begin (), meta_mat_ls.end (), NA_STRING);
+
     unsigned int count_mp = 0, count_ls = 0;
 
     for (auto itr = rels.begin (); itr != rels.end (); ++itr)
@@ -140,6 +145,12 @@ Rcpp::List osm_sf::get_osm_relations (const Relations &rels,
             ids_mp.clear ();
             ids_mp.shrink_to_fit ();
 
+            meta_mat_mp (count_mp, 0L) = itr->_version;
+            meta_mat_mp (count_mp, 1L) = itr->_timestamp;
+            meta_mat_mp (count_mp, 2L) = itr->_changeset;
+            meta_mat_mp (count_mp, 3L) = itr->_uid;
+            meta_mat_mp (count_mp, 4L) = itr->_user;
+
             osm_convert::get_value_mat_rel (itr, unique_vals, kv_mat_mp, count_mp++);
         } else // store as multilinestring
         {
@@ -154,7 +165,7 @@ Rcpp::List osm_sf::get_osm_relations (const Relations &rels,
             roles_set.clear ();
             for (std::string role: roles)
             {
-                trace_multilinestring (itr, role, ways, nodes, 
+                trace_multilinestring (itr, role, ways, nodes,
                         lon_vec, lat_vec, rowname_vec, ids_ls);
                 std::stringstream ss;
                 ss.str ("");
@@ -176,6 +187,12 @@ Rcpp::List osm_sf::get_osm_relations (const Relations &rels,
                 rowname_vec.shrink_to_fit ();
                 ids_ls.clear ();
                 ids_ls.shrink_to_fit ();
+
+                meta_mat_ls (count_ls, 0L) = itr->_version;
+                meta_mat_ls (count_ls, 1L) = itr->_timestamp;
+                meta_mat_ls (count_ls, 2L) = itr->_changeset;
+                meta_mat_ls (count_ls, 3L) = itr->_uid;
+                meta_mat_ls (count_ls, 4L) = itr->_user;
 
                 osm_convert::get_value_mat_rel (itr, unique_vals, kv_mat_ls, count_ls++);
             }
@@ -208,22 +225,29 @@ Rcpp::List osm_sf::get_osm_relations (const Relations &rels,
         // instances of this loop
         size_t st_nrow = static_cast <size_t> (kv_mat_mp.nrow ());
         Rcpp::CharacterMatrix kv_mat_mp2 (Rcpp::Dimension (st_nrow - 1, ncol));
+        Rcpp::CharacterMatrix meta_mp2 (Rcpp::Dimension (st_nrow - 1, 5L));
         // k is int for type-compatible Rcpp indexing
         for (int k = 0; k < kv_mat_mp.nrow (); k++)
         {
             if (k < j)
+            {
                 kv_mat_mp2 (k, Rcpp::_) = kv_mat_mp (k, Rcpp::_);
-            else if (k > j)
+                meta_mp2 (k, Rcpp::_) = meta_mat_mp (k, Rcpp::_);
+            } else if (k > j)
+            {
                 kv_mat_mp2 (k - 1, Rcpp::_) = kv_mat_mp (k, Rcpp::_);
+                meta_mp2 (k - 1, Rcpp::_) = meta_mat_mp (k, Rcpp::_);
+            }
         }
         kv_mat_mp = kv_mat_mp2;
+        meta_mat_mp = meta_mp2;
     }
 
     Rcpp::List polygonList = osm_convert::convert_poly_linestring_to_sf <std::string>
         (lon_arr_mp, lat_arr_mp, rowname_arr_mp, id_vec_mp, rel_id_mp,
          "MULTIPOLYGON");
     polygonList.attr ("n_empty") = 0;
-    polygonList.attr ("class") = 
+    polygonList.attr ("class") =
         Rcpp::CharacterVector::create ("sfc_MULTIPOLYGON", "sfc");
     polygonList.attr ("precision") = 0.0;
     polygonList.attr ("bbox") = bbox;
@@ -235,29 +259,39 @@ Rcpp::List osm_sf::get_osm_relations (const Relations &rels,
     // TODO: linenames just as in ways?
     // linestringList.attr ("names") = ?
     linestringList.attr ("n_empty") = 0;
-    linestringList.attr ("class") = 
+    linestringList.attr ("class") =
         Rcpp::CharacterVector::create ("sfc_MULTILINESTRING", "sfc");
     linestringList.attr ("precision") = 0.0;
     linestringList.attr ("bbox") = bbox;
     linestringList.attr ("crs") = crs;
 
     Rcpp::DataFrame kv_df_ls;
+    Rcpp::DataFrame meta_df_ls;
     if (rel_id_ls.size () > 0) // only if there are linestrings
     {
-        kv_mat_ls.attr ("names") = unique_vals.k_rel;
         kv_mat_ls.attr ("dimnames") = Rcpp::List::create (rel_id_ls, unique_vals.k_rel);
         kv_df_ls = osm_convert::restructure_kv_mat (kv_mat_ls, true);
+        meta_mat_ls.attr ("dimnames") = Rcpp::List::create (rel_id_ls, metanames);
+        meta_df_ls = meta_mat_ls;
     } else
+    {
         kv_df_ls = R_NilValue;
+        meta_df_ls = R_NilValue;
+    }
 
     Rcpp::DataFrame kv_df_mp;
+    Rcpp::DataFrame meta_df_mp;
     if (rel_id_mp.size () > 0)
     {
-        kv_mat_mp.attr ("names") = unique_vals.k_rel;
         kv_mat_mp.attr ("dimnames") = Rcpp::List::create (rel_id_mp, unique_vals.k_rel);
         kv_df_mp = osm_convert::restructure_kv_mat (kv_mat_mp, false);
+        meta_mat_mp.attr ("dimnames") = Rcpp::List::create (rel_id_mp, metanames);
+        meta_df_mp = meta_mat_mp;
     } else
+    {
         kv_df_mp = R_NilValue;
+        meta_df_mp = R_NilValue;
+    }
 
     // ****** clean up *****
     lon_arr_mp.clear ();
@@ -280,11 +314,13 @@ Rcpp::List osm_sf::get_osm_relations (const Relations &rels,
     roles_ls.clear ();
     roles_ls.shrink_to_fit ();
 
-    Rcpp::List ret (4);
+    Rcpp::List ret (6);
     ret [0] = polygonList;
     ret [1] = kv_df_mp;
-    ret [2] = linestringList;
-    ret [3] = kv_df_ls;
+    ret [2] = meta_df_mp;
+    ret [3] = linestringList;
+    ret [4] = kv_df_ls;
+    ret [5] = meta_df_ls;
     return ret;
 }
 
@@ -301,9 +337,9 @@ Rcpp::List osm_sf::get_osm_relations (const Relations &rels,
 //' @param geom_type Character string specifying "POLYGON" or "LINESTRING"
 //' @param bbox Pointer to the bbox needed for `sf` construction
 //' @param crs Pointer to the crs needed for `sf` construction
-//' 
-//' @noRd 
-void osm_sf::get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
+//'
+//' @noRd
+void osm_sf::get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df, Rcpp::DataFrame &meta_df,
         const std::set <osmid_t> &way_ids, const Ways &ways, const Nodes &nodes,
         const UniqueVals &unique_vals, const std::string &geom_type,
         const Rcpp::NumericVector &bbox, const Rcpp::List &crs)
@@ -320,6 +356,9 @@ void osm_sf::get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
 
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
+    Rcpp::CharacterMatrix meta (Rcpp::Dimension (nrow, 5L));
+    std::fill (meta.begin (), meta.end (), NA_STRING);
+
     unsigned int count = 0;
     for (auto wi = way_ids.begin (); wi != way_ids.end (); ++wi)
     {
@@ -331,19 +370,26 @@ void osm_sf::get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
         osm_convert::trace_way_nmat (ways, nodes, (*wi), nmat);
         if (geom_type == "LINESTRING")
         {
-            nmat.attr ("class") = 
+            nmat.attr ("class") =
                 Rcpp::CharacterVector::create ("XY", geom_type, "sfg");
             wayList [count] = nmat;
         } else // polygons are lists
         {
             Rcpp::List polyList_temp = Rcpp::List (1);
             polyList_temp (0) = nmat;
-            polyList_temp.attr ("class") = 
+            polyList_temp.attr ("class") =
                 Rcpp::CharacterVector::create ("XY", geom_type, "sfg");
             wayList [count] = polyList_temp;
         }
         auto wj = ways.find (*wi);
         osm_convert::get_value_mat_way (wj, unique_vals, kv_mat, count);
+
+        meta (count, 0L) = wj->second._version;
+        meta (count, 1L) = wj->second._timestamp;
+        meta (count, 2L) = wj->second._changeset;
+        meta (count, 3L) = wj->second._uid;
+        meta (count, 4L) = wj->second._user;
+
         count++;
     }
 
@@ -361,11 +407,14 @@ void osm_sf::get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
     kv_df = R_NilValue;
     if (way_ids.size () > 0)
     {
-        kv_mat.attr ("names") = unique_vals.k_way;
         kv_mat.attr ("dimnames") = Rcpp::List::create (waynames, unique_vals.k_way);
         if (kv_mat.nrow () > 0 && kv_mat.ncol () > 0)
             kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
+
+        meta.attr ("dimnames") = Rcpp::List::create (waynames, metanames);
+        meta_df = meta;
     }
+
 }
 
 //' get_osm_nodes
@@ -378,10 +427,10 @@ void osm_sf::get_osm_ways (Rcpp::List &wayList, Rcpp::DataFrame &kv_df,
 //' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
 //' @param bbox Pointer to the bbox needed for `sf` construction
 //' @param crs Pointer to the crs needed for `sf` construction
-//' 
-//' @noRd 
-void osm_sf::get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
-        const Nodes &nodes, const UniqueVals &unique_vals, 
+//'
+//' @noRd
+void osm_sf::get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df, Rcpp::DataFrame &meta_df,
+        const Nodes &nodes, const UniqueVals &unique_vals,
         const Rcpp::NumericVector &bbox, const Rcpp::List &crs)
 {
     size_t nrow = nodes.size (), ncol = unique_vals.k_point.size ();
@@ -391,9 +440,12 @@ void osm_sf::get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
 
     Rcpp::CharacterMatrix kv_mat (Rcpp::Dimension (nrow, ncol));
     std::fill (kv_mat.begin (), kv_mat.end (), NA_STRING);
+    Rcpp::CharacterMatrix meta (Rcpp::Dimension (nrow, 5L));
+    std::fill (meta.begin (), meta.end (), NA_STRING);
 
     std::vector <std::string> ptnames;
     ptnames.reserve (nodes.size ());
+
     unsigned int count = 0;
     for (auto ni = nodes.begin (); ni != nodes.end (); ++ni)
     {
@@ -412,6 +464,13 @@ void osm_sf::get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
         ptxy (1) = ni->second.lat;
         ptList (count) = ptxy;
         ptnames.push_back (std::to_string (ni->first));
+
+        meta (count, 0L) = ni->second._version;
+        meta (count, 1L) = ni->second._timestamp;
+        meta (count, 2L) = ni->second._changeset;
+        meta (count, 3L) = ni->second._uid;
+        meta (count, 4L) = ni->second._user;
+
         for (auto kv_iter = ni->second.key_val.begin ();
                 kv_iter != ni->second.key_val.end (); ++kv_iter)
         {
@@ -425,6 +484,9 @@ void osm_sf::get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
     {
         kv_mat.attr ("dimnames") = Rcpp::List::create (ptnames, unique_vals.k_point);
         kv_df = osm_convert::restructure_kv_mat (kv_mat, false);
+
+        meta.attr ("dimnames") = Rcpp::List::create (ptnames, metanames);
+        meta_df = meta;
     } else
         kv_df = R_NilValue;
 
@@ -452,8 +514,8 @@ void osm_sf::get_osm_nodes (Rcpp::List &ptList, Rcpp::DataFrame &kv_df,
 //'
 //' @param st Text contents of an overpass API query
 //' @return Rcpp::List objects of OSM data
-//' 
-//' @noRd 
+//'
+//' @noRd
 // [[Rcpp::export]]
 Rcpp::List rcpp_osmdata_sf (const std::string& st)
 {
@@ -487,9 +549,9 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st)
     colnames.push_back ("lon");
     colnames.push_back ("lat");
 
-    Rcpp::NumericVector bbox = rcpp_get_bbox_sf (xml.x_min (), xml.y_min (), 
+    Rcpp::NumericVector bbox = rcpp_get_bbox_sf (xml.x_min (), xml.y_min (),
                                               xml.x_max (), xml.y_max ());
-    Rcpp::List crs = Rcpp::List::create (NA_STRING, 
+    Rcpp::List crs = Rcpp::List::create (NA_STRING,
             Rcpp::CharacterVector::create (NA_STRING));
     crs (0) = "EPSG:4326";
     crs (1) = wkt;
@@ -505,12 +567,16 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st)
             bbox, crs);
     Rcpp::List multipolygons = tempList [0];
     // the followin line errors because of ambiguous conversion
-    //Rcpp::DataFrame kv_df_mp = tempList [1]; 
+    //Rcpp::DataFrame kv_df_mp = tempList [1];
     Rcpp::List kv_df_mp = tempList [1];
     kv_df_mp.attr ("class") = "data.frame";
-    Rcpp::List multilinestrings = tempList [2];
-    Rcpp::List kv_df_ls = tempList [3];
+    Rcpp::List meta_df_mp = tempList [2];
+    meta_df_mp.attr ("class") = "data.frame";
+    Rcpp::List multilinestrings = tempList [3];
+    Rcpp::List kv_df_ls = tempList [4];
     kv_df_ls.attr ("class") = "data.frame";
+    Rcpp::List meta_df_ls = tempList [5];
+    meta_df_ls.attr ("class") = "data.frame";
 
     /* --------------------------------------------------------------
      * 3. Extract OSM ways
@@ -530,13 +596,15 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st)
 
     Rcpp::List polyList (poly_ways.size ());
     Rcpp::DataFrame kv_df_polys;
-    osm_sf::get_osm_ways (polyList, kv_df_polys, poly_ways, ways, nodes, unique_vals,
-            "POLYGON", bbox, crs);
+    Rcpp::DataFrame meta_df_polys;
+    osm_sf::get_osm_ways (polyList, kv_df_polys, meta_df_polys,
+            poly_ways, ways, nodes, unique_vals, "POLYGON", bbox, crs);
 
     Rcpp::List lineList (non_poly_ways.size ());
     Rcpp::DataFrame kv_df_lines;
-    osm_sf::get_osm_ways (lineList, kv_df_lines, non_poly_ways, ways, nodes, unique_vals,
-            "LINESTRING", bbox, crs);
+    Rcpp::DataFrame meta_df_lines;
+    osm_sf::get_osm_ways (lineList, kv_df_lines, meta_df_lines,
+            non_poly_ways, ways, nodes, unique_vals, "LINESTRING", bbox, crs);
 
     /* --------------------------------------------------------------
      * 3. Extract OSM nodes
@@ -548,31 +616,38 @@ Rcpp::List rcpp_osmdata_sf (const std::string& st)
     // strings not factors, yet this does not work.
     //Rcpp::DataFrame kv_df_points = Rcpp::DataFrame::create (Rcpp::_["stringsAsFactors"] = false);
     Rcpp::DataFrame kv_df_points;
-    osm_sf::get_osm_nodes (pointList, kv_df_points, nodes, unique_vals, bbox, crs);
+    Rcpp::DataFrame meta_df_points;
+    osm_sf::get_osm_nodes (pointList, kv_df_points, meta_df_points,
+            nodes, unique_vals, bbox, crs);
 
 
     /* --------------------------------------------------------------
      * 5. Collate all data
      * --------------------------------------------------------------*/
 
-    Rcpp::List ret (11);
+    Rcpp::List ret (16);
     ret [0] = bbox;
     ret [1] = pointList;
     ret [2] = kv_df_points;
-    ret [3] = lineList;
-    ret [4] = kv_df_lines;
-    ret [5] = polyList;
-    ret [6] = kv_df_polys;
-    ret [7] = multipolygons;
-    ret [8] = kv_df_mp;
-    ret [9] = multilinestrings;
-    ret [10] = kv_df_ls;
+    ret [3] = meta_df_points;
+    ret [4] = lineList;
+    ret [5] = kv_df_lines;
+    ret [6] = meta_df_lines;
+    ret [7] = polyList;
+    ret [8] = kv_df_polys;
+    ret [9] = meta_df_polys;
+    ret [10] = multipolygons;
+    ret [11] = kv_df_mp;
+    ret [12] = meta_df_mp;
+    ret [13] = multilinestrings;
+    ret [14] = kv_df_ls;
+    ret [15] = meta_df_ls;
 
-    std::vector <std::string> retnames {"bbox", "points", "points_kv",
-        "lines", "lines_kv", "polygons", "polygons_kv",
-        "multipolygons", "multipolygons_kv", 
-        "multilines", "multilines_kv"};
+    std::vector <std::string> retnames {"bbox", "points", "points_kv", "points_meta",
+        "lines", "lines_kv", "lines_meta", "polygons", "polygons_kv", "polygons_meta",
+        "multipolygons", "multipolygons_kv", "multipolygons_meta",
+        "multilines", "multilines_kv", "multilines_meta"};
     ret.attr ("names") = retnames;
-    
+
     return ret;
 }

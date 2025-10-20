@@ -60,7 +60,7 @@
 //' @param unique_vals Pointer to a UniqueVals object containing std::sets of all
 //'       unique IDs and keys for each kind of OSM object (nodes, ways, rels).
 //'
-//' @return A dual Rcpp::DataFrame with the tags and metadata of the relations.
+//' @return A dual Rcpp::DataFrame with the tags and metadata of the relations. TODO: update
 //'
 //' @noRd
 Rcpp::List osm_df::get_osm_relations (const Relations &rels,

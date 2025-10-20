@@ -64,15 +64,15 @@ get_overpass_version <- function (doc) {
 #' @return Nothing. Throw errors or warnings for not implemented queries.
 #'
 #' @noRd
-check_not_implemented_queries <- function (obj) {
+check_not_implemented_queries <- function (obj, meta = FALSE) {
     if (!is.null (obj$overpass_call)) {
 
         if (grepl ("; out (tags|ids)( center)*;$", obj$overpass_call)) {
             stop (
                 "Queries returning no geometries (out tags/ids) not accepted. ",
                 'Use queries with `out="body"` or `out="skel"` instead. ',
-                "Alternatively, you can retrieve the results with osmdata_xml ",
-                "or osmdata_data_frame.",
+                "Alternatively, you can retrieve the results with osmdata_xml() ",
+                "or osmdata_data_frame().",
                 call. = FALSE
             )
         }
@@ -80,21 +80,21 @@ check_not_implemented_queries <- function (obj) {
         if (grepl ("\\[adiff:", obj$overpass_call)) {
             stop (
                 "adiff queries not yet implemented. Alternatively, you can ",
-                "retrieve the results with osmdata_xml or ",
-                "osmdata_data_frame.",
+                "retrieve the results with osmdata_xml() or ",
+                "osmdata_data_frame().",
                 call. = FALSE
             )
         }
 
         if (grepl ("\\[out:csv", obj$overpass_call)) {
-            stop ("out:csv queries only work with osmdata_data_frame.")
+            stop ("out:csv queries only work with osmdata_data_frame().")
         }
 
-        if (grepl ("out meta;$", obj$overpass_call)) {
+        if (!meta & grepl ("out meta;$", obj$overpass_call)) {
             warning (
                 "`out meta` queries not yet implemented. Metadata fields will ",
                 "be missing. Alternatively, you can retrieve the results with ",
-                "osmdata_xml or osmdata_data_frame.",
+                "osmdata_xml(), osmdata_sf(), or osmdata_data_frame().",
                 call. = FALSE
             )
         }
