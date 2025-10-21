@@ -56,11 +56,11 @@
 //' @param rels Pointer to the vector of Relation objects
 //' @param nodes Pointer to the vector of node objects
 //' @param ways Pointer to the vector of way objects
-//' @param unique_vals Pointer to a UniqueVals object containing std::sets of all
-//'       unique IDs and keys for each kind of OSM object (nodes, ways, rels).
+//' @param unique_vals Pointer to a UniqueVals object containing std::sets of
+//'     all unique IDs and keys for each kind of OSM object (nodes, ways, rels).
 //'
-//' @return A dual Rcpp::List, the first of which contains the multipolygon
-//'         relations; the second the multilinestring relations. TODO: update
+//' @return A Rcpp::List which contains the geometry, tags and metadata of the
+//'     multipolygon and multilinestring relations.
 //'
 //' @noRd
 Rcpp::List osm_sf::get_osm_relations (const Relations &rels,

@@ -6,10 +6,11 @@
 #' Return a dual Rcpp::DataFrame containing all OSM relations.
 #'
 #' @param rels Pointer to the vector of Relation objects
-#' @param unique_vals Pointer to a UniqueVals object containing std::sets of all
-#'       unique IDs and keys for each kind of OSM object (nodes, ways, rels).
+#' @param unique_vals Pointer to a UniqueVals object containing std::sets of
+#'     all unique IDs and keys for each kind of OSM object (nodes, ways, rels).
 #'
-#' @return A dual Rcpp::DataFrame with the tags and metadata of the relations. TODO: update
+#' @return A list with three Rcpp::DataFrame with the tags, centers and
+#'     metadata of the relations.
 #'
 #' @noRd
 NULL
@@ -18,10 +19,11 @@ NULL
 #'
 #' Store key-val pairs for OSM ways as a list/data.frame
 #'
-#' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
-#' @param way_ids Vector of <osmid_t> IDs of ways to trace
-#' @param ways Pointer to all ways in data set
-#' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
+#' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs.
+#' @param way_ids Vector of <osmid_t> IDs of ways to trace.
+#' @param ways Pointer to all ways in data set.
+#' @param unique_vals pointer to all unique values (OSM IDs and keys) in data
+#'     set.
 #'
 #' @noRd
 NULL
@@ -30,9 +32,10 @@ NULL
 #'
 #' Store OSM nodes as `sf::POINT` objects
 #'
-#' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs
-#' @param nodes Pointer to all nodes in data set
-#' @param unique_vals pointer to all unique values (OSM IDs and keys) in data set
+#' @param kv_df Pointer to Rcpp::DataFrame to hold key-value pairs.
+#' @param nodes Pointer to all nodes in data set.
+#' @param unique_vals pointer to all unique values (OSM IDs and keys) in data
+#'     set.
 #'
 #' @noRd
 NULL
@@ -71,11 +74,11 @@ rcpp_osmdata_sc <- function(st) {
 #' @param rels Pointer to the vector of Relation objects
 #' @param nodes Pointer to the vector of node objects
 #' @param ways Pointer to the vector of way objects
-#' @param unique_vals Pointer to a UniqueVals object containing std::sets of all
-#'       unique IDs and keys for each kind of OSM object (nodes, ways, rels).
+#' @param unique_vals Pointer to a UniqueVals object containing std::sets of
+#'     all unique IDs and keys for each kind of OSM object (nodes, ways, rels).
 #'
-#' @return A dual Rcpp::List, the first of which contains the multipolygon
-#'         relations; the second the multilinestring relations. TODO: update
+#' @return A Rcpp::List which contains the geometry, tags and metadata of the
+#'     multipolygon and multilinestring relations.
 #'
 #' @noRd
 NULL
