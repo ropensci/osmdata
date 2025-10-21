@@ -316,6 +316,12 @@ get_meta_from_cpp_output <- function (res, what = "points") {
     this <- this [, which (has_data), drop = FALSE]
     if (ncol (this) > 0L) {
         colnames (this) <- paste0 ("osm", colnames (this))
+
+        this [, "osm_user"] <- enc2utf8 (this [, "osm_user"])
+        this [, "osm_timestamp"] <- as.POSIXct (
+            this [, "osm_timestamp"],
+            format = "%Y-%m-%dT%H:%M:%OS", tz = "GMT"
+        )
     }
 
     return (as.data.frame (this))

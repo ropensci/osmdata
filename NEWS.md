@@ -13,7 +13,7 @@
 
 - Fixed `osm_elevation()` function after raster -> terra upgrade (#389; thanks to @Aloniss).
 - Implement described viewbox parameter in `getbb()` (#402).
-- Implement `osmdata_sf(..., out = "meta")` (#405).
+- Implement `osmdata_sf(..., out = "meta")`& metadata columns (also for `osmdata_data.frame()`) are encoded in utf8 (`osm_user`) and formatted as POSIXct (`osm_timestamp`) (#405).
 
 
 # osmdata 0.3.0
