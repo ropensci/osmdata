@@ -1,3 +1,5 @@
+timestamp_fmt_iso8601 <- "%Y-%m-%dT%H:%M:%SZ" # ISO 8601. Z indicates tz = "UTC"
+
 #' Get timestamp from system or optional OSM XML document
 #'
 #' @param doc OSM XML document. If missing, `Sys.time()` is used.
@@ -13,7 +15,10 @@ get_timestamp <- function (doc) {
     if (!missing (doc)) {
         tstmp <- xml2::xml_text (xml2::xml_find_all (doc, "//meta/@osm_base"))
         if (length (tstmp) > 0) {
-            tstmp <- as.POSIXct (tstmp, format = "%Y-%m-%dT%H:%M:%SZ")
+            tstmp <- as.POSIXct (
+                tstmp,
+                format = timestamp_fmt_iso8601, tz = "UTC"
+            )
         }
     } else {
         tstmp <- Sys.time ()
@@ -23,6 +28,7 @@ get_timestamp <- function (doc) {
         tstmp <- Sys.time ()
     }
 
+    ## TODO: avoid a non-standard date string, return a POSIXct value
     out <- paste ("[", format (tstmp, format = "%a %e %b %Y %T"), "]")
     out <- gsub ("  ", " ", out) # remove extra space in %e for single digit days
     out <- gsub ("\\.", "\\\\.", out) # Escape dots
@@ -64,15 +70,15 @@ get_overpass_version <- function (doc) {
 #' @return Nothing. Throw errors or warnings for not implemented queries.
 #'
 #' @noRd
-check_not_implemented_queries <- function (obj) {
+check_not_implemented_queries <- function (obj, meta = FALSE) {
     if (!is.null (obj$overpass_call)) {
 
         if (grepl ("; out (tags|ids)( center)*;$", obj$overpass_call)) {
             stop (
                 "Queries returning no geometries (out tags/ids) not accepted. ",
                 'Use queries with `out="body"` or `out="skel"` instead. ',
-                "Alternatively, you can retrieve the results with osmdata_xml ",
-                "or osmdata_data_frame.",
+                "Alternatively, you can retrieve the results with osmdata_xml() ",
+                "or osmdata_data_frame().",
                 call. = FALSE
             )
         }
@@ -80,21 +86,21 @@ check_not_implemented_queries <- function (obj) {
         if (grepl ("\\[adiff:", obj$overpass_call)) {
             stop (
                 "adiff queries not yet implemented. Alternatively, you can ",
-                "retrieve the results with osmdata_xml or ",
-                "osmdata_data_frame.",
+                "retrieve the results with osmdata_xml() or ",
+                "osmdata_data_frame().",
                 call. = FALSE
             )
         }
 
         if (grepl ("\\[out:csv", obj$overpass_call)) {
-            stop ("out:csv queries only work with osmdata_data_frame.")
+            stop ("out:csv queries only work with osmdata_data_frame().")
         }
 
-        if (grepl ("out meta;$", obj$overpass_call)) {
+        if (!meta & grepl ("out meta;$", obj$overpass_call)) {
             warning (
                 "`out meta` queries not yet implemented. Metadata fields will ",
                 "be missing. Alternatively, you can retrieve the results with ",
-                "osmdata_xml or osmdata_data_frame.",
+                "osmdata_xml(), osmdata_sf(), or osmdata_data_frame().",
                 call. = FALSE
             )
         }
@@ -316,6 +322,12 @@ get_meta_from_cpp_output <- function (res, what = "points") {
     this <- this [, which (has_data), drop = FALSE]
     if (ncol (this) > 0L) {
         colnames (this) <- paste0 ("osm", colnames (this))
+
+        this [, "osm_user"] <- enc2utf8 (this [, "osm_user"])
+        this [, "osm_timestamp"] <- as.POSIXct (
+            this [, "osm_timestamp"],
+            format = timestamp_fmt_iso8601, tz = "UTC"
+        )
     }
 
     return (as.data.frame (this))

@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/ropensci/osmdata",
   "issueTracker": "https://github.com/ropensci/osmdata/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.3.0.9018",
+  "version": "0.3.0.9019",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -316,7 +316,7 @@
   "applicationCategory": "DataAccess",
   "isPartOf": "https://ropensci.org",
   "keywords": ["open0street0map", "openstreetmap", "overpass0API", "OSM", "overpass-api", "r", "cpp", "rstats", "osm", "osm-data", "r-package", "peer-reviewed"],
-  "fileSize": "38090.023KB",
+  "fileSize": "38378.699KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",

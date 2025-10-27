@@ -74,7 +74,7 @@ osmdata_sf <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) { # noli
         stop ("q must be an overpass query or a character string")
     }
 
-    check_not_implemented_queries (obj)
+    check_not_implemented_queries (obj, meta = TRUE)
 
     temp <- fill_overpass_data (obj, doc, quiet = quiet)
     obj <- temp$obj
@@ -100,6 +100,10 @@ osmdata_sf <- function (q, doc, quiet = TRUE, stringsAsFactors = FALSE) { # noli
     kv_df <- grep ("_kv$", names (res)) # objects with tags
     res [kv_df] <- fix_columns_list (res [kv_df])
     res [kv_df] <- lapply (res [kv_df], setenc_utf8)
+
+    res [paste0 (sf_types, "_meta")] <- lapply (sf_types, function (type) {
+        get_meta_from_cpp_output (res, type)
+    })
 
     if (missing (q)) {
         obj$bbox <- paste (res$bbox, collapse = " ")
@@ -242,15 +246,28 @@ fill_sf_objects <- function (res, obj, type = "points",
     geometry <- res [[type]]
     obj_name <- paste0 ("osm_", type)
     kv_name <- paste0 (type, "_kv")
+    meta_name <- paste0 (type, "_meta")
 
     if (length (res [[kv_name]]) > 0) {
 
         if (!stringsAsFactors) {
             res [[kv_name]] [] <- lapply (res [[kv_name]], as.character)
         }
+        df <- data.frame ( # sort columns osm_id, osm_type, meta, tags
+            res [[kv_name]] [, intersect (
+                c ("osm_id", "osm_type"),
+                names (res [[kv_name]])
+            ), drop = FALSE],
+            res [[meta_name]],
+            res [[kv_name]] [, setdiff (
+                names (res [[kv_name]]),
+                c ("osm_id", "osm_type")
+            ), drop = FALSE],
+            check.names = FALSE
+        )
         obj [[obj_name]] <- make_sf (
             geometry,
-            res [[kv_name]],
+            df,
             stringsAsFactors = stringsAsFactors
         )
 

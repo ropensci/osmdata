@@ -182,10 +182,6 @@ test_that ("not implemented queries", {
         "`out meta` queries not yet implemented."
     )
     expect_warning (
-        osmdata_sf (q = qmeta, doc = doc),
-        "`out meta` queries not yet implemented."
-    )
-    expect_warning (
         osmdata_sc (q = qmeta, doc = doc),
         "`out meta` queries not yet implemented."
     )

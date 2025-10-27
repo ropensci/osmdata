@@ -126,6 +126,32 @@ test_that ("ways", {
 })
 
 
+test_that ("out meta", {
+    q <- opq_osm_id (id = "3278525", type = "relation", out = "meta")
+
+    osm_meta <- test_path ("fixtures", "osm-meta_geom.osm")
+    doc <- xml2::read_xml (osm_meta)
+
+    x <- osmdata_sf (q, doc, quiet = FALSE)
+    x_no_call <- osmdata_sf (doc = doc)
+
+    cols <- c (
+        "osm_id", "osm_version", "osm_timestamp",
+        "osm_changeset", "osm_uid", "osm_user"
+    )
+    lapply (
+        x [c ("osm_points", "osm_polygons", "osm_multipolygons")],
+        function (sf) expect_named (as.data.frame (sf) [, 1:6], cols)
+    )
+    lapply (
+        x_no_call [c ("osm_points", "osm_polygons", "osm_multipolygons")],
+        function (sf) expect_named (as.data.frame (sf) [, 1:6], cols)
+    )
+    expect_s3_class (x, "osmdata_sf")
+    expect_s3_class (x_no_call, "osmdata_sf")
+})
+
+
 test_that ("non-valid key names", {
     osm_multi <- test_path ("fixtures", "osm-multi.osm")
     q0 <- opq (bbox = c (1, 1, 5, 5))
@@ -135,6 +161,7 @@ test_that ("non-valid key names", {
         expect_true ("name:ca" %in% names (f))
     })
 })
+
 
 test_that ("clashes in key names", {
     osm_multi_key_clashes <- test_path ("fixtures", "osm-key_clashes.osm")
@@ -151,6 +178,7 @@ test_that ("clashes in key names", {
         expect_true (all (c ("osm_id", "osm_id.1") %in% names (f)))
     })
 })
+
 
 test_that ("duplicated column names", {
     # https://github.com/ropensci/osmdata/issues/348
