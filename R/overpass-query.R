@@ -64,15 +64,15 @@ overpass_status <- function (quiet = FALSE) {
 # for APIs with status messages
 get_slot_time <- function (status, quiet) {
 
-    status_now <- strsplit (status, "\n") [[1]] [3]
+    status_now <- strsplit (status, "\n") [[1]] [3] # TODO: avoid access by pos
     if (!quiet) message (status_now)
 
     if (grepl ("after", status_now)) {
         available <- FALSE
         slot_time <- strptime (
             gsub ("Slot available after: ", "", status_now),
-            format = "%FT%TZ",
-            tz = "GMT"
+            format = "%FT%TZ", # ISO 8601. Z indicates tz = "UTC"
+            tz = "UTC"
         )
         slot_time <- as.POSIXct (slot_time, tz = Sys.timezone ())
     } else {

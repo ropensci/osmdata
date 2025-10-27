@@ -1,3 +1,5 @@
+timestamp_fmt_iso8601 <- "%Y-%m-%dT%H:%M:%SZ" # ISO 8601. Z indicates tz = "UTC"
+
 #' Get timestamp from system or optional OSM XML document
 #'
 #' @param doc OSM XML document. If missing, `Sys.time()` is used.
@@ -13,7 +15,10 @@ get_timestamp <- function (doc) {
     if (!missing (doc)) {
         tstmp <- xml2::xml_text (xml2::xml_find_all (doc, "//meta/@osm_base"))
         if (length (tstmp) > 0) {
-            tstmp <- as.POSIXct (tstmp, format = "%Y-%m-%dT%H:%M:%SZ")
+            tstmp <- as.POSIXct (
+                tstmp,
+                format = timestamp_fmt_iso8601, tz = "UTC"
+            )
         }
     } else {
         tstmp <- Sys.time ()
@@ -23,6 +28,7 @@ get_timestamp <- function (doc) {
         tstmp <- Sys.time ()
     }
 
+    ## TODO: avoid a non-standard date string, return a POSIXct value
     out <- paste ("[", format (tstmp, format = "%a %e %b %Y %T"), "]")
     out <- gsub ("  ", " ", out) # remove extra space in %e for single digit days
     out <- gsub ("\\.", "\\\\.", out) # Escape dots
@@ -320,7 +326,7 @@ get_meta_from_cpp_output <- function (res, what = "points") {
         this [, "osm_user"] <- enc2utf8 (this [, "osm_user"])
         this [, "osm_timestamp"] <- as.POSIXct (
             this [, "osm_timestamp"],
-            format = "%Y-%m-%dT%H:%M:%OS", tz = "GMT"
+            format = timestamp_fmt_iso8601, tz = "UTC"
         )
     }
 
