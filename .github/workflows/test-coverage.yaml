@@ -6,7 +6,7 @@ on:
     branches:
       - main
 
-name: test-coverage.yaml
+name: test-coverage
 
 permissions: read-all
 
