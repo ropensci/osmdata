@@ -1,5 +1,3 @@
-context ("unique-osm-data")
-
 require (sf)
 
 test_that ("unique sf", {

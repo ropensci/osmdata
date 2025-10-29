@@ -1,6 +1,3 @@
-test_all <- (identical (Sys.getenv ("MPADGE_LOCAL", "false"), "true") ||
-    identical (Sys.getenv ("GITHUB_WORKFLOW", "nope"), "test-coverage"))
-
 test_that ("multipolygon", {
     osm_multi <- test_path ("fixtures", "osm-multi.osm")
     x_sf <- sf::st_read (
@@ -38,8 +35,7 @@ test_that ("multipolygon", {
     g <- x$geometry
     g_sf <- x_sf$geometry
     attrs <- names (attributes (g))
-    # if (!test_all) # CRS is no longer idencial because x has
-    # proj4strin
+    # CRS is not identical (x: st_crs(4326); x_sf: st_crs("WGS84"))
     attrs <- attrs [attrs != "crs"]
     for (a in attrs) {
         expect_identical (attr (g, a), attr (g_sf, a))
@@ -75,7 +71,7 @@ test_that ("multilinestring", {
     g <- x$geometry
     g_sf <- x_sf$geometry
     attrs <- names (attributes (g))
-    # if (!test_all)
+    # CRS is not identical (x: st_crs(4326); x_sf: st_crs("WGS84"))
     attrs <- attrs [attrs != "crs"]
     for (a in attrs) {
         expect_identical (attr (g, a), attr (g_sf, a))
@@ -118,7 +114,7 @@ test_that ("ways", {
     g <- x$geometry
     g_sf <- x_sf$geometry
     attrs <- names (attributes (g))
-    # if (!test_all)
+    # CRS is not identical (x: st_crs(4326); x_sf: st_crs("WGS84"))
     attrs <- attrs [attrs != "crs"]
     for (a in attrs) {
         expect_identical (attr (g, a), attr (g_sf, a))
