@@ -285,61 +285,59 @@ test_that ("make_query", {
         )
         expect_equal (doc, doc2)
 
-        if (test_all) {
 
-            res <- with_mock_dir ("mock_osm_sp", {
-                expect_warning (osmdata_sp (qry), "Deprecated")
-            })
-            expect_message (print (res), "Object of class 'osmdata' with")
-            expect_silent (
-                expect_warning (res <- osmdata_sp (qry, doc), "Deprecated")
-            )
-            expect_message (print (res), "Object of class 'osmdata' with")
-            expect_silent (expect_warning (res <- osmdata_sp (qry, "junk.osm"), "Deprecated"))
-            expect_message (
-                expect_warning (res <- osmdata_sp (qry, "junk.osm", quiet = FALSE), "Deprecated")
-            )
+        res <- with_mock_dir ("mock_osm_sp", {
+            expect_warning (osmdata_sp (qry), "Deprecated")
+        })
+        expect_message (print (res), "Object of class 'osmdata' with")
+        expect_silent (
+            expect_warning (res <- osmdata_sp (qry, doc), "Deprecated")
+        )
+        expect_message (print (res), "Object of class 'osmdata' with")
+        expect_silent (expect_warning (res <- osmdata_sp (qry, "junk.osm"), "Deprecated"))
+        expect_message (
+            expect_warning (res <- osmdata_sp (qry, "junk.osm", quiet = FALSE), "Deprecated")
+        )
 
-            expect_s3_class (res, "osmdata")
-            nms <- c (
-                "bbox", "overpass_call", "meta", "osm_points",
-                "osm_lines", "osm_polygons", "osm_multilines",
-                "osm_multipolygons"
-            )
-            expect_named (res, expected = nms, ignore.order = FALSE)
-            nms <- c ("timestamp", "OSM_version", "overpass_version")
-            expect_named (res$meta, expected = nms)
+        expect_s3_class (res, "osmdata")
+        nms <- c (
+            "bbox", "overpass_call", "meta", "osm_points",
+            "osm_lines", "osm_polygons", "osm_multilines",
+            "osm_multipolygons"
+        )
+        expect_named (res, expected = nms, ignore.order = FALSE)
+        nms <- c ("timestamp", "OSM_version", "overpass_version")
+        expect_named (res$meta, expected = nms)
 
-            res <- with_mock_dir ("mock_osm_sf", {
-                osmdata_sf (qry)
-            })
-            expect_message (print (res), "Object of class 'osmdata' with")
-            expect_silent (res <- osmdata_sf (qry, doc))
-            expect_message (print (res), "Object of class 'osmdata' with")
-            expect_silent (res <- osmdata_sf (qry, "junk.osm"))
-            expect_message (res <- osmdata_sf (qry, "junk.osm", quiet = FALSE))
-            expect_s3_class (res, "osmdata")
-            nms <- c (
-                "bbox", "overpass_call", "meta", "osm_points",
-                "osm_lines", "osm_polygons", "osm_multilines",
-                "osm_multipolygons"
-            )
-            expect_named (res, expected = nms, ignore.order = FALSE)
+        res <- with_mock_dir ("mock_osm_sf", {
+            osmdata_sf (qry)
+        })
+        expect_message (print (res), "Object of class 'osmdata' with")
+        expect_silent (res <- osmdata_sf (qry, doc))
+        expect_message (print (res), "Object of class 'osmdata' with")
+        expect_silent (res <- osmdata_sf (qry, "junk.osm"))
+        expect_message (res <- osmdata_sf (qry, "junk.osm", quiet = FALSE))
+        expect_s3_class (res, "osmdata")
+        nms <- c (
+            "bbox", "overpass_call", "meta", "osm_points",
+            "osm_lines", "osm_polygons", "osm_multilines",
+            "osm_multipolygons"
+        )
+        expect_named (res, expected = nms, ignore.order = FALSE)
 
-            res <- with_mock_dir ("mock_osm_df", {
-                osmdata_data_frame (qry)
-            })
-            expect_s3_class (res, "data.frame")
-            expect_silent (res <- osmdata_data_frame (qry, doc))
-            expect_s3_class (res, "data.frame")
-            expect_silent (res <- osmdata_data_frame (qry, "junk.osm"))
-            expect_message (res <- osmdata_data_frame (qry, "junk.osm", quiet = FALSE))
+        res <- with_mock_dir ("mock_osm_df", {
+            osmdata_data_frame (qry)
+        })
+        expect_s3_class (res, "data.frame")
+        expect_silent (res <- osmdata_data_frame (qry, doc))
+        expect_s3_class (res, "data.frame")
+        expect_silent (res <- osmdata_data_frame (qry, "junk.osm"))
+        expect_message (res <- osmdata_data_frame (qry, "junk.osm", quiet = FALSE))
 
-            nms <- c (
-                "names", "row.names", "class", "bbox", "overpass_call", "meta"
-            )
-            expect_named (attributes (res), expected = nms, ignore.order = FALSE)
-        }
+        nms <- c (
+            "names", "row.names", "class", "bbox", "overpass_call", "meta"
+        )
+        expect_named (attributes (res), expected = nms, ignore.order = FALSE)
 
         if (file.exists ("junk.osm")) invisible (file.remove ("junk.osm"))
     }
@@ -350,38 +348,36 @@ test_that ("query-no-quiet", {
     qry <- opq (bbox = c (-0.116, 51.516, -0.115, 51.517))
     qry <- add_osm_feature (qry, key = "highway")
 
-    if (test_all) {
-        with_mock_dir ("mock_osm_xml", {
-            expect_message (
-                x <- osmdata_xml (qry, quiet = FALSE),
-                "Issuing query to Overpass API"
-            )
-        })
-        with_mock_dir ("mock_osm_sp", {
-            expect_message (
-                expect_warning (x <- osmdata_sp (qry, quiet = FALSE), "Deprecated"),
-                "Issuing query to Overpass API"
-            )
-        })
-        with_mock_dir ("mock_osm_sf", {
-            expect_message (
-                x <- osmdata_sf (qry, quiet = FALSE),
-                "Issuing query to Overpass API"
-            )
-        })
-        with_mock_dir ("mock_osm_sc", {
-            expect_message (
-                x <- osmdata_sc (qry, quiet = FALSE),
-                "Issuing query to Overpass API"
-            )
-        })
-        with_mock_dir ("mock_osm_df", {
-            expect_message (
-                x <- osmdata_data_frame (qry, quiet = FALSE),
-                "Issuing query to Overpass API"
-            )
-        })
-    }
+    with_mock_dir ("mock_osm_xml", {
+        expect_message (
+            x <- osmdata_xml (qry, quiet = FALSE),
+            "Issuing query to Overpass API"
+        )
+    })
+    with_mock_dir ("mock_osm_sp", {
+        expect_message (
+            expect_warning (x <- osmdata_sp (qry, quiet = FALSE), "Deprecated"),
+            "Issuing query to Overpass API"
+        )
+    })
+    with_mock_dir ("mock_osm_sf", {
+        expect_message (
+            x <- osmdata_sf (qry, quiet = FALSE),
+            "Issuing query to Overpass API"
+        )
+    })
+    with_mock_dir ("mock_osm_sc", {
+        expect_message (
+            x <- osmdata_sc (qry, quiet = FALSE),
+            "Issuing query to Overpass API"
+        )
+    })
+    with_mock_dir ("mock_osm_df", {
+        expect_message (
+            x <- osmdata_data_frame (qry, quiet = FALSE),
+            "Issuing query to Overpass API"
+        )
+    })
 })
 
 test_that ("add_osm_features", {

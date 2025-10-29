@@ -1,5 +1,3 @@
-context ("c")
-
 test_that ("c-method", {
 
     # osmdata_sf:

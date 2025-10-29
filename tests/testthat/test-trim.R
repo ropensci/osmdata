@@ -1,5 +1,3 @@
-context ("trim-osm-data")
-
 skip_on_os ("mac")
 skip_on_os ("windows")
 

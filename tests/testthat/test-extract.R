@@ -1,5 +1,3 @@
-context ("extract-objects")
-
 # ------------------- void values
 test_that ("osm_points-void", {
     expect_error (
