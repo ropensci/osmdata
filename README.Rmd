@@ -61,7 +61,7 @@ to allow access to small-to-medium-sized OSM datasets (see
 reading-in bulk OSM data extracts).
 
 
-## Installation
+## Source code and installation
 
 To install latest CRAN version:
 ```{r cran-install, eval=FALSE}
@@ -71,11 +71,21 @@ Alternatively, install the development version with any one of the following
 options:
 ```{r remotes, eval = FALSE}
 # install.packages("remotes")
-remotes::install_git ("https://codeberg.org/ropensci/osmdata")
 remotes::install_github ("ropensci/osmdata")
+remotes::install_git ("https://codeberg.org/ropensci/osmdata")
 remotes::install_gitlab ("ropensci/osmdata")
 remotes::install_git ("https://git.sr.ht/~mpadge/osmdata")
 ```
+
+These reflect the four locations at which the source code of this package is
+currently hosted:
+
+- https://github.com/ropensci/osmdata
+- https://codeberg.org/ropensci/osmdata
+- https://gitlab.com/ropensci/osmdata
+- https://git.sr.ht/~mpadge/osmdata
+
+The first of these, [github.com/ropensci/osmdata](https://github.com/ropensci/osmdata), is currently the primary location for the source code, and any questions or suggestions should preferably be directed there, although we will also respond to comments or issues on any of the other platforms.
 
 To load the package and check the version:
 ```{r, eval=TRUE}

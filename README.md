@@ -36,7 +36,7 @@ designed to allow access to small-to-medium-sized OSM datasets (see
 [`osmextract`](https://github.com/ropensci/osmextract) for an approach
 for reading-in bulk OSM data extracts).
 
-## Installation
+## Source code and installation
 
 To install latest CRAN version:
 
@@ -49,11 +49,25 @@ following options:
 
 ``` r
 # install.packages("remotes")
-remotes::install_git ("https://codeberg.org/ropensci/osmdata")
 remotes::install_github ("ropensci/osmdata")
+remotes::install_git ("https://codeberg.org/ropensci/osmdata")
 remotes::install_gitlab ("ropensci/osmdata")
 remotes::install_git ("https://git.sr.ht/~mpadge/osmdata")
 ```
+
+These reflect the four locations at which the source code of this
+package is currently hosted:
+
+- <https://github.com/ropensci/osmdata>
+- <https://codeberg.org/ropensci/osmdata>
+- <https://gitlab.com/ropensci/osmdata>
+- <https://git.sr.ht/~mpadge/osmdata>
+
+The first of these,
+[github.com/ropensci/osmdata](https://github.com/ropensci/osmdata), is
+currently the primary location for the source code, and any questions or
+suggestions should preferably be directed there, although we will also
+respond to comments or issues on any of the other platforms.
 
 To load the package and check the version:
 
@@ -133,7 +147,7 @@ class (b)
 str (b)
 #> List of 1
 #>  $ relation/7902476:List of 1
-#>   ..$ outer: num [1:2605, 1:2] 77.5 77.5 77.5 77.5 77.5 ...
+#>   ..$ outer: num [1:2603, 1:2] 77.5 77.5 77.5 77.5 77.5 ...
 ```
 
 ### Features
@@ -310,7 +324,9 @@ project, you agree to abide by its terms.
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+
 <!-- prettier-ignore-start -->
+
 <!-- markdownlint-disable -->
 
 All contributions to this project are gratefully acknowledged using the
@@ -321,675 +337,921 @@ specification. Contributions of any kind are welcome!
 ### Code
 
 <table>
+
 <tr>
+
 <td align="center">
+
 <a href="https://github.com/mpadge">
 <img src="https://avatars.githubusercontent.com/u/6697851?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=mpadge">mpadge</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/jmaspons">
 <img src="https://avatars.githubusercontent.com/u/102644?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=jmaspons">jmaspons</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/Robinlovelace">
 <img src="https://avatars.githubusercontent.com/u/1825120?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=Robinlovelace">Robinlovelace</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/hrbrmstr">
 <img src="https://avatars.githubusercontent.com/u/509878?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=hrbrmstr">hrbrmstr</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/virgesmith">
 <img src="https://avatars.githubusercontent.com/u/19323577?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=virgesmith">virgesmith</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/maelle">
 <img src="https://avatars.githubusercontent.com/u/8360597?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=maelle">maelle</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/elipousson">
 <img src="https://avatars.githubusercontent.com/u/931136?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=elipousson">elipousson</a>
 </td>
+
 </tr>
+
 <tr>
+
 <td align="center">
+
 <a href="https://github.com/agila5">
 <img src="https://avatars.githubusercontent.com/u/22221146?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=agila5">agila5</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/espinielli">
 <img src="https://avatars.githubusercontent.com/u/891692?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=espinielli">espinielli</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/idshklein">
 <img src="https://avatars.githubusercontent.com/u/12258810?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=idshklein">idshklein</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/anthonynorth">
 <img src="https://avatars.githubusercontent.com/u/391385?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=anthonynorth">anthonynorth</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/jeroen">
 <img src="https://avatars.githubusercontent.com/u/216319?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=jeroen">jeroen</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/neogeomat">
 <img src="https://avatars.githubusercontent.com/u/2562658?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=neogeomat">neogeomat</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/ec-nebi">
 <img src="https://avatars.githubusercontent.com/u/48711241?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=ec-nebi">ec-nebi</a>
 </td>
+
 </tr>
+
 <tr>
+
 <td align="center">
+
 <a href="https://github.com/Tazinho">
 <img src="https://avatars.githubusercontent.com/u/11295192?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=Tazinho">Tazinho</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/odeleongt">
 <img src="https://avatars.githubusercontent.com/u/1044835?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=odeleongt">odeleongt</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/Mashin6">
 <img src="https://avatars.githubusercontent.com/u/5265707?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=Mashin6">Mashin6</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/angela-li">
 <img src="https://avatars.githubusercontent.com/u/15808896?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=angela-li">angela-li</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/rgzn">
 <img src="https://avatars.githubusercontent.com/u/1675905?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=rgzn">rgzn</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/fzenoni">
 <img src="https://avatars.githubusercontent.com/u/6040873?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=fzenoni">fzenoni</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/stragu">
 <img src="https://avatars.githubusercontent.com/u/1747497?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=stragu">stragu</a>
 </td>
+
 </tr>
+
 <tr>
+
 <td align="center">
+
 <a href="https://github.com/patperu">
 <img src="https://avatars.githubusercontent.com/u/82020?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=patperu">patperu</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/MHenderson">
 <img src="https://avatars.githubusercontent.com/u/23988?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=MHenderson">MHenderson</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/karthik">
 <img src="https://avatars.githubusercontent.com/u/138494?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=karthik">karthik</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/jlacko">
 <img src="https://avatars.githubusercontent.com/u/29260421?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=jlacko">jlacko</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/JimShady">
 <img src="https://avatars.githubusercontent.com/u/2901470?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=JimShady">JimShady</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/dpprdan">
 <img src="https://avatars.githubusercontent.com/u/1423562?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=dpprdan">dpprdan</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/danstowell">
 <img src="https://avatars.githubusercontent.com/u/202965?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=danstowell">danstowell</a>
 </td>
+
 </tr>
+
 <tr>
+
 <td align="center">
+
 <a href="https://github.com/ccamara">
 <img src="https://avatars.githubusercontent.com/u/706549?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=ccamara">ccamara</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/brry">
 <img src="https://avatars.githubusercontent.com/u/8860095?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=brry">brry</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/arfon">
 <img src="https://avatars.githubusercontent.com/u/4483?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=arfon">arfon</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/karpfen">
 <img src="https://avatars.githubusercontent.com/u/11758039?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/commits?author=karpfen">karpfen</a>
 </td>
+
 </tr>
+
 </table>
 
 ### Issue Authors
 
 <table>
+
 <tr>
+
 <td align="center">
+
 <a href="https://github.com/sytpp">
 <img src="https://avatars.githubusercontent.com/u/8035937?u=8efe7a4f4c3088bb35974e7488950c25658693ae&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Asytpp">sytpp</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/niklaas">
 <img src="https://avatars.githubusercontent.com/u/705637?u=9ef0f501320a5b1466a00d542a07ec7384dd41dc&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aniklaas">niklaas</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/RoyalTS">
 <img src="https://avatars.githubusercontent.com/u/702580?u=e7d21835a6f7ba3a2f1ea7a573266708d62b1af7&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3ARoyalTS">RoyalTS</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/lrob">
 <img src="https://avatars.githubusercontent.com/u/1830221?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Alrob">lrob</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/mem48">
 <img src="https://avatars.githubusercontent.com/u/15819577?u=0c128db4e7567656c23e83e4314111fcea424526&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amem48">mem48</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/beingalink">
 <img src="https://avatars.githubusercontent.com/u/871741?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Abeingalink">beingalink</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/yaakovfeldman">
 <img src="https://avatars.githubusercontent.com/u/17687145?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Ayaakovfeldman">yaakovfeldman</a>
 </td>
+
 </tr>
+
 <tr>
+
 <td align="center">
+
 <a href="https://github.com/gregor-d">
 <img src="https://avatars.githubusercontent.com/u/33283245?u=3d70f9d18b0be2c20cf08a9c7d51353797d61208&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Agregor-d">gregor-d</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/gregmacfarlane">
 <img src="https://avatars.githubusercontent.com/u/2234830?u=954f7029df0417634df181e7a27c5e163ebc8c6d&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Agregmacfarlane">gregmacfarlane</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/legengliu">
 <img src="https://avatars.githubusercontent.com/u/7606454?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Alegengliu">legengliu</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/mtennekes">
 <img src="https://avatars.githubusercontent.com/u/2444081?u=f23eed4be015f25b0a0111f580c05088b5155225&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amtennekes">mtennekes</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/lbuk">
 <img src="https://avatars.githubusercontent.com/u/7860160?u=d118fff4f86b8088c9a442cd3240af93cf2f60ec&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Albuk">lbuk</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/prokulski">
 <img src="https://avatars.githubusercontent.com/u/19608488?u=6262849a1ad7d194a34483b23e94d8cc5b4d61ca&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aprokulski">prokulski</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/waholulu">
 <img src="https://avatars.githubusercontent.com/u/2868000?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Awaholulu">waholulu</a>
 </td>
+
 </tr>
+
 <tr>
+
 <td align="center">
+
 <a href="https://github.com/ibarraespinosa">
 <img src="https://avatars.githubusercontent.com/u/27447280?u=b693a01a01dc14ec2a45765fb074490af40d6e4a&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aibarraespinosa">ibarraespinosa</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/tbuckl">
 <img src="https://avatars.githubusercontent.com/u/98956?u=9580c2ee3c03cbbe44ac8180b0f6a6725b0415f0&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Atbuckl">tbuckl</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/morellek">
 <img src="https://avatars.githubusercontent.com/u/38642291?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amorellek">morellek</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/mdsumner">
 <img src="https://avatars.githubusercontent.com/u/4107631?u=77e928f4bb904a5c2e8927a02194b86662408329&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amdsumner">mdsumner</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/michielvandijk">
 <img src="https://avatars.githubusercontent.com/u/5227806?u=956e61310e9c7ee08749ddb95458c571eafa76e3&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amichielvandijk">michielvandijk</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/loreabad6">
 <img src="https://avatars.githubusercontent.com/u/10034237?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aloreabad6">loreabad6</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/slow-data">
 <img src="https://avatars.githubusercontent.com/u/20839947?u=cd0522e56560daff7a7ed3bfedaa0ca6c85699f2&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aslow-data">slow-data</a>
 </td>
+
 </tr>
+
 <tr>
+
 <td align="center">
+
 <a href="https://github.com/mroorda">
 <img src="https://avatars.githubusercontent.com/u/41475296?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amroorda">mroorda</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/MiKatt">
 <img src="https://avatars.githubusercontent.com/u/19970683?u=1d21f231f6c2b14ce65c740014612d5e1e2ff080&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3AMiKatt">MiKatt</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/alanlzl">
 <img src="https://avatars.githubusercontent.com/u/15748113?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aalanlzl">alanlzl</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/PublicHealthDataGeek">
 <img src="https://avatars.githubusercontent.com/u/43342160?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3APublicHealthDataGeek">PublicHealthDataGeek</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/mgageo">
 <img src="https://avatars.githubusercontent.com/u/2681495?u=a98e4f2bcb64aa79f87f9e16029c8a0d3cd69768&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amgageo">mgageo</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/polettif">
 <img src="https://avatars.githubusercontent.com/u/17431069?u=757eac2821736acbb02e7c90b456411d256d5780&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Apolettif">polettif</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/marcusyoung">
 <img src="https://avatars.githubusercontent.com/u/10391966?u=a2adfcee6f8890325987a1ef526578a6191a3605&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amarcusyoung">marcusyoung</a>
 </td>
+
 </tr>
+
 <tr>
+
 <td align="center">
+
 <a href="https://github.com/barryrowlingson">
 <img src="https://avatars.githubusercontent.com/u/888980?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Abarryrowlingson">barryrowlingson</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/ChrisWoodsSays">
 <img src="https://avatars.githubusercontent.com/u/42043980?u=4a06c6ac41bfacc2897cd84c6a8114ae1b53c717&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3AChrisWoodsSays">ChrisWoodsSays</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/daluna1">
 <img src="https://avatars.githubusercontent.com/u/60740817?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Adaluna1">daluna1</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/khzannat26">
 <img src="https://avatars.githubusercontent.com/u/63047666?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Akhzannat26">khzannat26</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/gdkrmr">
 <img src="https://avatars.githubusercontent.com/u/12512930?u=707403b80950281e091cfb9b278034842257e5df&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Agdkrmr">gdkrmr</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/dipenpatel235">
 <img src="https://avatars.githubusercontent.com/u/8135097?u=57ce3616c4b1eb8928d0eb049d58866f7990e43c&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Adipenpatel235">dipenpatel235</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/robitalec">
 <img src="https://avatars.githubusercontent.com/u/16324625?u=a7a98d4e17a14bf97383a5059ef4a079e15438d7&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Arobitalec">robitalec</a>
 </td>
+
 </tr>
+
 <tr>
+
 <td align="center">
+
 <a href="https://github.com/nfruehADA">
 <img src="https://avatars.githubusercontent.com/u/69671715?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3AnfruehADA">nfruehADA</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/orlandombaa">
 <img src="https://avatars.githubusercontent.com/u/48104481?u=66d48bb0e7efb664a94eace3472aa6a06960a7f4&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aorlandombaa">orlandombaa</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/changwoo-lee">
 <img src="https://avatars.githubusercontent.com/u/45101999?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Achangwoo-lee">changwoo-lee</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/maellecoursonnais">
 <img src="https://avatars.githubusercontent.com/u/64737131?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amaellecoursonnais">maellecoursonnais</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/Suspicis">
 <img src="https://avatars.githubusercontent.com/u/78321010?u=0b4fbe51ef6fed8d90b4d4d1dabd5608f64bfc66&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3ASuspicis">Suspicis</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/AlbertRapp">
 <img src="https://avatars.githubusercontent.com/u/65388595?u=997160e784fbf960fb1609ce5e3b367670aeeeac&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3AAlbertRapp">AlbertRapp</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/dmag-ir">
 <img src="https://avatars.githubusercontent.com/u/89243490?u=8f64a3cd937d87a5de9d1484f25b789c960c6947&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Admag-ir">dmag-ir</a>
 </td>
+
 </tr>
+
 <tr>
+
 <td align="center">
+
 <a href="https://github.com/FlxPo">
 <img src="https://avatars.githubusercontent.com/u/5145583?u=cbd02ee0a0fa0447429f38bd7e3a1da57c841239&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3AFlxPo">FlxPo</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/vanhry">
 <img src="https://avatars.githubusercontent.com/u/26137289?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Avanhry">vanhry</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/boiled-data">
 <img src="https://avatars.githubusercontent.com/u/73987518?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Aboiled-data">boiled-data</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/mlucassc">
 <img src="https://avatars.githubusercontent.com/u/104909905?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amlucassc">mlucassc</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/jedalong">
 <img src="https://avatars.githubusercontent.com/u/7062177?u=3dfa8ef1f2045ea6c368fb5e9f706e62e748c5df&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Ajedalong">jedalong</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/mooibroekd">
 <img src="https://avatars.githubusercontent.com/u/115638962?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Amooibroekd">mooibroekd</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/xiaofanliang">
 <img src="https://avatars.githubusercontent.com/u/22874361?u=7d6ade584aeaf34e1fde47c400ffae1a82b79a25&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Axiaofanliang">xiaofanliang</a>
 </td>
+
 </tr>
+
 <tr>
+
 <td align="center">
+
 <a href="https://github.com/xtimbeau">
 <img src="https://avatars.githubusercontent.com/u/54633745?u=578caa070217a333e22be67990e42e8bdf434512&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Axtimbeau">xtimbeau</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/joostschouppe">
 <img src="https://avatars.githubusercontent.com/u/10122639?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Ajoostschouppe">joostschouppe</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/stalkerGH">
 <img src="https://avatars.githubusercontent.com/u/25331715?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3AstalkerGH">stalkerGH</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/RegularnaMatrica">
 <img src="https://avatars.githubusercontent.com/u/65914613?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3ARegularnaMatrica">RegularnaMatrica</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/temospena">
 <img src="https://avatars.githubusercontent.com/u/39107166?u=d7a7e9cadb9e2426317b9ab5056f7abba5481465&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Atemospena">temospena</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/dicorynia">
 <img src="https://avatars.githubusercontent.com/u/31208891?u=56ed5070ad7c2f137a441b87a997992140984ca9&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3Adicorynia">dicorynia</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/Aloniss">
 <img src="https://avatars.githubusercontent.com/u/142921829?u=d2364a4bb7520b66e87ff665bc09554646bdddbd&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+author%3AAloniss">Aloniss</a>
 </td>
+
 </tr>
+
 </table>
 
 ### Issue Contributors
 
 <table>
+
 <tr>
+
 <td align="center">
+
 <a href="https://github.com/sckott">
 <img src="https://avatars.githubusercontent.com/u/577668?u=c54eb1ce08ff22365e094559a109a12437bdca40&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Asckott">sckott</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/nsfinkelstein">
 <img src="https://avatars.githubusercontent.com/u/2919482?u=eb162d42c4563f2cef29a6eef1d8e9e28862242d&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Ansfinkelstein">nsfinkelstein</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/gawbul">
 <img src="https://avatars.githubusercontent.com/u/321291?u=701bb38c3c5ee3908bfeb367feb71e22a2d85be9&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Agawbul">gawbul</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/edzer">
 <img src="https://avatars.githubusercontent.com/u/520851?u=9bc892c3523be428dc211f2ccbcf04e8e0e564ff&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Aedzer">edzer</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/MAnalytics">
 <img src="https://avatars.githubusercontent.com/u/27354347?u=47f4c742c95c72b88a07ac1cb6406c9e1d186a54&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3AMAnalytics">MAnalytics</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/richardellison">
 <img src="https://avatars.githubusercontent.com/u/10625733?u=8d7cd55a61f1a1b3f9973ddff5adbb45e0b193c6&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Arichardellison">richardellison</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/cboettig">
 <img src="https://avatars.githubusercontent.com/u/222586?u=dfbe54d3b4d538dc2a8c276bb5545fdf4684752f&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Acboettig">cboettig</a>
 </td>
+
 </tr>
+
 <tr>
+
 <td align="center">
+
 <a href="https://github.com/prise6">
 <img src="https://avatars.githubusercontent.com/u/6558161?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Aprise6">prise6</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/PaoloFrac">
 <img src="https://avatars.githubusercontent.com/u/38490683?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3APaoloFrac">PaoloFrac</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/Dris101">
 <img src="https://avatars.githubusercontent.com/u/11404162?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3ADris101">Dris101</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/TomBor">
 <img src="https://avatars.githubusercontent.com/u/8322713?u=bf72198850753d4eb709b2b17d89b4afa68936a1&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3ATomBor">TomBor</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/matkoniecz">
 <img src="https://avatars.githubusercontent.com/u/899988?u=1a682cd39f51bb0224a52c7640a040c849b73ae8&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Amatkoniecz">matkoniecz</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/urswilke">
 <img src="https://avatars.githubusercontent.com/u/13970666?u=0c6b83fb03792d052736768a8832300661c84370&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Aurswilke">urswilke</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/Robsteranium">
 <img src="https://avatars.githubusercontent.com/u/49654?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3ARobsteranium">Robsteranium</a>
 </td>
+
 </tr>
+
 <tr>
+
 <td align="center">
+
 <a href="https://github.com/assignUser">
 <img src="https://avatars.githubusercontent.com/u/16141871?u=b8095df6a10813031922a72335bd6579d5494c16&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3AassignUser">assignUser</a>
 </td>
+
 <td align="center">
+
 <a href="https://github.com/rsbivand">
 <img src="https://avatars.githubusercontent.com/u/10198404?u=130e1eda9687fabcf3606cbcbcfea79708207f7e&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ropensci/osmdata/issues?q=is%3Aissue+commenter%3Arsbivand">rsbivand</a>
 </td>
+
 </tr>
+
 </table>
+
 <!-- markdownlint-enable -->
+
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 [![ropensci_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
