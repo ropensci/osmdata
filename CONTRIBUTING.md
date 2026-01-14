@@ -60,11 +60,6 @@ To refresh the `README.md` file after modifying `README.Rmd`, use:
 devtools::build_readme(output_format="md_document")
 ```
 
-When updating the package dependencies in `DESCRIPTION` or other metadata,
-refresh `codemeta.json`:
-```r
-codemetar::write_codemeta()
-```
 
 ## Code of Conduct
 

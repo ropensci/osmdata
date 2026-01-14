@@ -12,7 +12,6 @@
 ^_pkgdown\.yml$
 ^aaa\.Rmd$
 ^appveyor\.yml$
-^codemeta\.json$
 ^configure$
 ^cran-comments.md$
 ^docs/
