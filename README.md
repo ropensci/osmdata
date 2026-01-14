@@ -4,8 +4,8 @@
 
 <!-- badges: start -->
 
-[![R build
-status](https://github.com/ropensci/osmdata/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/osmdata/actions?query=workflow%3AR-CMD-check)
+[![R CMD
+check](https://github.com/ropensci/osmdata/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/osmdata/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/ropensci/osmdata/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/osmdata)
 [![Project Status:
 Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
@@ -75,7 +75,7 @@ To load the package and check the version:
 library (osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
 packageVersion ("osmdata")
-#> [1] '0.3.0'
+#> [1] '0.3.0.9021'
 ```
 
 ## Usage
@@ -147,7 +147,7 @@ class (b)
 str (b)
 #> List of 1
 #>  $ relation/7902476:List of 1
-#>   ..$ outer: num [1:2603, 1:2] 77.5 77.5 77.5 77.5 77.5 ...
+#>   ..$ outer: num [1:4981, 1:2] 77.5 77.5 77.5 77.5 77.5 ...
 ```
 
 ### Features
