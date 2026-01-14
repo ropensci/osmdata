@@ -14,7 +14,7 @@
 # - UNAME, EMAIL for git config
 # - CODEBERG for codeberg.org token
 # - GITLAB for gitlab.com token
-# - SOURCEHUT for sourcehut.sr.ht token
+# - SOURCEHUT_SSH_KEY for sourcehut.sr.ht SSH private key
 
 name: push-to-elsewhere
 
@@ -46,5 +46,17 @@ jobs:
           git push --tags codeberg main
           git remote add gitlab https://${{secrets.UNAME}}:${{secrets.GITLAB}}@gitlab.com/ropensci/osmdata.git
           git push --tags gitlab main
-          git remote add originsh https://${{secrets.UNAME}}:${{secrets.SOURCEHUT}}@git.sr.ht/~mpadge/osmdata.git
-          git push --tags originsh main
+
+    - name: Setup SSH for SourceHut
+      run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -t rsa git.sr.ht >> ~/.ssh/known_hosts
+          echo "${{ secrets.SOURCEHUT_SSH_KEY }}" > ~/.ssh/id_sourcehut
+          chmod 600 ~/.ssh/id_sourcehut
+          eval $(ssh-agent -s)
+          ssh-add ~/.ssh/id_sourcehut
+
+    - name: Add SourceHut remote and push
+      run: |
+          git remote add sourcehut git@git.sr.ht:~mpadge/osmdata
+          git push --tags sourcehut main
