@@ -14,8 +14,6 @@ repos:
         additional_dependencies:
         - ropensci-review-tools/spaceout
     # -   id: roxygenize
-    # codemeta must be above use-tidy-description when both are used
-    # -   id: codemeta-description-updated
     -   id: use-tidy-description
     -   id: spell-check
         exclude: >
@@ -64,7 +62,7 @@ repos:
     # -   id: pkgdown
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
-    hooks: 
+    hooks:
     -   id: check-added-large-files
         args: ['--maxkb=200']
     -   id: file-contents-sorter
