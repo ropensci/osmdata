@@ -13,6 +13,8 @@
 # names as specified below:
 # - UNAME, EMAIL for git config
 # - CODEBERG for codeberg.org token
+# - GITLAB for gitlab.com token
+# - SOURCEHUT for sourcehut.sr.ht token
 
 name: push-to-elsewhere
 
@@ -41,6 +43,8 @@ jobs:
           git clone https://github.com/ropensci/osmdata
           git fetch --unshallow origin
           git remote add codeberg https://${{secrets.UNAME}}:${{secrets.CODEBERG}}@codeberg.org/ropensci/osmdata.git
+          git push --tags codeberg main
           git remote add gitlab https://${{secrets.UNAME}}:${{secrets.GITLAB}}@gitlab.com/ropensci/osmdata.git
-          git push codeberg main
-          git push gitlab main
+          git push --tags gitlab main
+          git remote add originsh https://${{secrets.UNAME}}:${{secrets.SOURCEHUT}}@git.sr.ht/~mpadge/osmdata.git
+          git push --tags originsh main
