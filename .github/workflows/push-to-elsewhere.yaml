@@ -47,16 +47,23 @@ jobs:
           git remote add gitlab https://${{secrets.UNAME}}:${{secrets.GITLAB}}@gitlab.com/ropensci/osmdata.git
           git push --tags gitlab main
 
-    - name: Setup SSH for SourceHut
+    - name: Setup SSH and push to SourceHut
       run: |
           mkdir -p ~/.ssh
           ssh-keyscan -t rsa git.sr.ht >> ~/.ssh/known_hosts
           echo "${{ secrets.SOURCEHUT_SSH_KEY }}" > ~/.ssh/id_sourcehut
           chmod 600 ~/.ssh/id_sourcehut
-          eval $(ssh-agent -s)
-          ssh-add ~/.ssh/id_sourcehut
 
-    - name: Add SourceHut remote and push
-      run: |
+          # Create SSH config to force using this key
+          cat > ~/.ssh/config << EOF
+          Host git.sr.ht
+            IdentityFile ~/.ssh/id_sourcehut
+            IdentitiesOnly yes
+            StrictHostKeyChecking no
+          EOF
+
+          # Use GIT_SSH_COMMAND to ensure the right key is used
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_sourcehut -o IdentitiesOnly=yes"
+
           git remote add sourcehut git@git.sr.ht:~mpadge/osmdata
           git push --tags sourcehut main
