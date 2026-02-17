@@ -650,18 +650,22 @@ check_features <- function (features) {
 #'     add_osm_feature (key = "name") |>
 #'     opq_csv (c ("::type", "::id", "name", "name:ca", "::user", "::uid"))
 #' cat (opq_string (q_csv))
+#' \dontrun{
 #' d_csv <- osmdata_data_frame (q_csv)
 #' d_csv
+#' }
 #'
 #' q_touched <- opq (
 #'     bbox = "relation(id:11755232)", out = "meta",
-#'     osm_type = "node", timeout = 50
+#'     osm_type = "node", timeout = 100
 #' ) |>
 #'     filter_osm_user (user = "jmaspons", touched = TRUE) |>
 #'     add_osm_feature (key = "name")
 #' cat (opq_string (q_touched))
+#' \dontrun{
 #' d_touched <- osmdata_data_frame (q_touched)
 #' d_touched
+#' }
 filter_osm_user <- function (opq, user, touched = FALSE, is_uid) {
     if (missing (is_uid)) {
         is_uid <- is.numeric (user) || all (grepl ("^[0-9]+$", user))
