@@ -96,6 +96,7 @@ Other queries:
 \code{\link{add_osm_feature}()},
 \code{\link{add_osm_features}()},
 \code{\link{bbox_to_string}()},
+\code{\link{filter_osm_user}()},
 \code{\link{getbb}()},
 \code{\link{opq}()},
 \code{\link{opq_around}()},

@@ -618,6 +618,76 @@ check_features <- function (features) {
     }
 }
 
+
+#' Add an user filter to an Overpass query
+#'
+#' Select objects last edited or ever touched by a specific user.
+#'
+#' @param opq An `overpass_query` object.
+#' @param user A vector of user names or user ids. If `is.numeric(user)` or
+#'     `all(grepl(^[0-9]+$, user`)), assumes that `user` is a user id.
+#' @param touched If `TRUE`, selects objects of which at least one version has been edited
+#'     by `user`. If `FALSE` (default), selects objects with `user` as the last editor
+#'     only.
+#' @param is_uid If `FALSE`, assume that `user` is the user name. Useful to filter for a
+#'     user name which contains numbers only and otherwise would be considered an user id.
+#'
+#' @details
+#' See
+#' \url{https://dev.overpass-api.de/overpass-doc/en/criteria/misc_criteria.html#by_user}
+#' for details.
+#'
+#'
+#' @returns An [opq] object.
+#'
+#' @family queries
+#' @export
+#'
+#' @examples
+#' # Notice the "::user" and "::uid" fields in the oqp_csv()
+#' q_csv <- opq (bbox = "relation(id:11755232)", out = "meta", osm_type = "node") |>
+#'     filter_osm_user (user = "jmaspons") |>
+#'     add_osm_feature (key = "name") |>
+#'     opq_csv (c ("::type", "::id", "name", "name:ca", "::user", "::uid"))
+#' cat (opq_string (q_csv))
+#' d_csv <- osmdata_data_frame (q_csv)
+#' d_csv
+#'
+#' q_touched <- opq (
+#'     bbox = "relation(id:11755232)", out = "meta",
+#'     osm_type = "node", timeout = 50
+#' ) |>
+#'     filter_osm_user (user = "jmaspons", touched = TRUE) |>
+#'     add_osm_feature (key = "name")
+#' cat (opq_string (q_touched))
+#' d_touched <- osmdata_data_frame (q_touched)
+#' d_touched
+filter_osm_user <- function (opq, user, touched = FALSE, is_uid) {
+    if (missing (is_uid)) {
+        is_uid <- is.numeric (user) || all (grepl ("^[0-9]+$", user))
+    }
+    stopifnot (is.logical (is_uid))
+
+    opq$user <- if (is_uid) {
+        user <- paste (user, collapse = ",")
+        if (touched) {
+            paste0 ("(uid_touched:", user, ")")
+        } else {
+            paste0 ("(uid:", user, ")")
+        }
+    } else {
+        user <- paste (user, collapse = "\",\"")
+        if (touched) {
+            paste0 ("(user_touched:\"", user, "\")")
+        } else {
+            paste0 ("(user:\"", user, "\")")
+        }
+    }
+
+    return (opq)
+}
+
+
 #' Add a feature specified by OSM ID to an Overpass query
 #'
 #' @inheritParams opq
@@ -943,63 +1013,66 @@ opq_string_intern <- function (opq, quiet = TRUE) {
     res <- NULL
     if (!is.null (opq$features)) { # opq with add_osm_feature
 
-        features <- opq$features
+        filters <- opq$features
 
-        if (length (features) > 1L) { # from add_osm_features fn
+        if (length (filters) > 1L) { # from add_osm_features()
 
-            features <- vapply (features, function (i) {
+            filters <- vapply (filters, function (i) {
                 paste (i, collapse = "")
             },
-            character (1),
+            FUN.VALUE = character (1),
             USE.NAMES = FALSE
             )
         }
 
+        if (!is.null (opq$user)) { # from filter_osm_user()
+            filters <- paste (filters, opq$user)
+        }
+
         if (!is.null (attr (opq, "enclosing"))) {
 
-            if (length (features) > 1) {
+            if (length (filters) > 1) {
                 stop ("enclosing queries can only accept one feature")
             }
 
             lat <- strsplit (opq$bbox, ",") [[1]] [1]
             lon <- strsplit (opq$bbox, ",") [[1]] [2]
-            features <- paste0 (
+            filters <- paste0 (
                 "is_in(", lat, ",",
                 lon, ")->.a;",
                 attr (opq, "enclosing"),
                 "(pivot.a)",
-                features,
+                filters,
                 ";"
             )
 
         } else {
 
-            types_features <- expand.grid (
+            types_filters <- expand.grid (
                 osm_types = opq$osm_types,
-                features = features,
+                filters = filters,
                 stringsAsFactors = FALSE
             )
 
             if (!map_to_area) {
-                features <- c (sprintf (
+                filters <- c (sprintf (
                     "  %s %s (%s);\n",
-                    types_features$osm_types,
-                    types_features$features,
+                    types_filters$osm_types,
+                    types_filters$filters,
                     opq$bbox
                 ))
-
             } else {
                 opq$prefix <- gsub ("\n$", "", opq$prefix)
                 search_area <- paste0 (
                     opq$bbox,
                     "; map_to_area->.searchArea; );\n(\n"
                 )
-                features <- c (
+                filters <- c (
                     search_area,
                     sprintf (
                         "  %s %s (area.searchArea);\n",
-                        types_features$osm_types,
-                        types_features$features
+                        types_filters$osm_types,
+                        types_filters$filters
                     )
                 )
             }
@@ -1007,7 +1080,7 @@ opq_string_intern <- function (opq, quiet = TRUE) {
 
         res <- paste0 (
             opq$prefix,
-            paste (features, collapse = ""),
+            paste (filters, collapse = ""),
             opq$suffix
         )
 
@@ -1022,7 +1095,7 @@ opq_string_intern <- function (opq, quiet = TRUE) {
         id <- paste (id, collapse = "")
         res <- paste0 (opq$prefix, id, opq$suffix)
 
-    } else { # straight opq with neither features nor ID specified
+    } else { # straight opq with neither tag filters nor ID specified
 
         if (!quiet) {
             message (
@@ -1034,14 +1107,14 @@ opq_string_intern <- function (opq, quiet = TRUE) {
         }
 
         if (!map_to_area) {
-            bbox <- sprintf ("  %s (%s);\n", opq$osm_types, opq$bbox)
+            bbox <- sprintf ("  %s (%s);\n", paste (opq$osm_types, opq$user), opq$bbox)
         } else {
             opq$prefix <- gsub ("\n$", "", opq$prefix)
             search_area <-
                 paste0 (opq$bbox, "; map_to_area->.searchArea; );\n(\n")
             bbox <- c (
                 search_area,
-                sprintf ("  %s (area.searchArea);\n", opq$osm_types)
+                sprintf ("  %s (area.searchArea);\n", paste (opq$osm_types, opq$user))
             )
         }
 

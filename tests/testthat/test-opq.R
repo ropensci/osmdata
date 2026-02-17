@@ -98,6 +98,25 @@ test_that ("adiff", {
     expect_true (grepl ("adiff\\:", q3$prefix))
 })
 
+test_that ("filter_osm_user", {
+    q <- opq (bbox = c (8.42, -1.24, 42.92, 28.03))
+    expect_error (filter_osm_user (q, user = 1, is_uid = "NO"))
+
+    qu <- list ()
+    qu$uid <- filter_osm_user (q, user = 1)
+    qu$tuid <- filter_osm_user (q, user = 1, touched = TRUE)
+    qu$user <- filter_osm_user (q, user = "Steve")
+    qu$tuser <- filter_osm_user (q, user = "Steve", touched = TRUE)
+    qu$uids <- filter_osm_user (q, user = 1:3)
+    qu$users <- filter_osm_user (q, user = c ("Steve", "Karl"))
+    qu$isuid <- filter_osm_user (q, user = "007", is_uid = FALSE)
+
+    lapply (qu, expect_s3_class, class = "overpass_query")
+    lapply (qu, function (x) expect_true (grepl ("\\((user|uid)(_touched)*:.+\\)", x$user)))
+    expect_identical (qu$uids$user, "(uid:1,2,3)")
+    expect_identical (qu$users$user, '(user:"Steve","Karl")')
+})
+
 test_that ("osm_types", {
 
     q0 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
@@ -126,20 +145,20 @@ test_that ("osm_types", {
         "\"amenity\"=\"dancing_school\""
     )
     q2 <- opq ("relation(id:349053)") |> # "Catalunya"
-        add_osm_features(features = features)
+        add_osm_features (features = features)
     s <- opq_string (q2)
 
     n_fts <- length (features)
     n_fts_in_query <- length (gregexpr ("amenity", s) [[1]])
     # Query should have that number repeated for each osm_types (default to
     # node, way, relation):
-    expect_equal (n_fts_in_query, n_fts * length(q2$osm_types))
+    expect_equal (n_fts_in_query, n_fts * length (q2$osm_types))
 
     # nodes only
     q3 <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), osm_types = "node")
 
     # Deprecated nodes_only
-    expect_warning(
+    expect_warning (
         q_dep <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517), nodes_only = TRUE),
         "Deprecated"
     )
@@ -240,6 +259,18 @@ test_that ("opq_string", {
     expect_false (grepl ("value", s0))
     expect_true (grepl ("out body", s0)) # full data body; (nodes,ways,rels)
 
+    # bbox only with user:
+    q_user <- filter_osm_user (q0, user = 1)
+    s_user <- opq_string (q_user)
+
+    expect_type (s_user, "character")
+    expect_length (s_user, 1L)
+    expect_true (grepl ("\\(uid:1\\)", s_user))
+    expect_false (grepl ("key", s_user))
+    expect_false (grepl ("value", s_user))
+    expect_true (grepl ("out body", s_user)) # full data body; (nodes,ways,rels)
+
+
     # area only:
     expect_silent (
         q0 <- opq (bbox = "relation(id:11747082)")
@@ -260,7 +291,19 @@ test_that ("opq_string", {
     expect_false (grepl ("value", s0))
     expect_true (grepl ("out body", s0)) # full data body; (nodes,ways,rels)
 
-    # nodes_only parameter:
+    # area only with user:
+    q_user <- filter_osm_user (q0, user = 1)
+    s_user <- opq_string (q_user)
+
+    expect_type (s_user, "character")
+    expect_length (s_user, 1L)
+    expect_true (grepl ("\\(uid:1\\)", s_user))
+    expect_false (grepl ("key", s_user))
+    expect_false (grepl ("value", s_user))
+    expect_true (grepl ("out body", s_user)) # full data body; (nodes,ways,rels)
+
+
+    # nodes only:
     q1 <- opq (
         bbox = c (-0.118, 51.514, -0.115, 51.517),
         osm_types = "node"
@@ -279,7 +322,16 @@ test_that ("opq_string", {
     expect_false (grepl ("\\(\\._;>;\\)", s1))
     expect_false (all (grepl ("way|relation", strsplit (s1, "\\n") [[1]] [-2])))
 
-    # nodes_only parameter with features:
+    # nodes only with user:
+    q_user <- filter_osm_user (q1, user = 1)
+    s_user <- opq_string (q_user)
+
+    expect_true (grepl ("\\(uid:1\\)", s_user))
+    expect_false (grepl ("\\(\\._;>;\\)", s_user))
+    expect_false (all (grepl ("way|relation", strsplit (s_user, "\\n") [[1]] [-2])))
+
+
+    # nodes only with tags:
     q1 <- opq (
         bbox = c (-0.118, 51.514, -0.115, 51.517),
         osm_types = "node"
@@ -290,21 +342,43 @@ test_that ("opq_string", {
     expect_false (grepl ("\\(\\._;>;\\)", s1))
     expect_false (grepl ("way|relation", s1))
 
-    q1 <- opq (
+    q2 <- opq (
         bbox = "relation(id:11747082)",
         osm_types = "node"
     )
-    q1 <- add_osm_feature (q1, key = "amenity", value = "restaurant")
-    s1 <- opq_string (q1)
+    q2 <- add_osm_feature (q2, key = "amenity", value = "restaurant")
+    s2 <- opq_string (q2)
     # nodes only, so "out" instead of "out body" and no way nor relation on clauses
-    expect_false (grepl ("\\(\\._;>;\\)", s1))
-    expect_false (all (grepl ("way|relation", strsplit (s1, "\\n") [[1]] [-2])))
+    expect_false (grepl ("\\(\\._;>;\\)", s2))
+    expect_false (all (grepl ("way|relation", strsplit (s2, "\\n") [[1]] [-2])))
+
+    # nodes only with tags and user:
+    q_user1 <- filter_osm_user (q1, user = 1)
+    s_user1 <- opq_string (q_user1)
+    expect_true (grepl ("\\(uid:1\\)", s_user1))
+    expect_false (grepl ("\\(\\._;>;\\)", s_user1))
+    expect_false (grepl ("way|relation", s_user1))
+
+    q_user2 <- filter_osm_user (q2, user = 1)
+    s_user2 <- opq_string (q_user2)
+    expect_true (grepl ("\\(uid:1\\)", s_user2))
+    expect_false (grepl ("\\(\\._;>;\\)", s_user2))
+    expect_false (all (grepl ("way|relation", strsplit (s_user2, "\\n") [[1]] [-2])))
+
 
     # key-value pair:
     q2 <- add_osm_feature (q0, key = "highway", value = "!primary")
     s2 <- opq_string (q2)
     expect_true (grepl ("highway", s2))
     expect_true (grepl ("primary", s2))
+
+    # key-value pair with user:
+    q_user2 <- filter_osm_user (q2, user = 1)
+    s_user2 <- opq_string (q_user2)
+    expect_true (grepl ("\\(uid:1\\)", s_user2))
+    expect_true (grepl ("highway", s_user2))
+    expect_true (grepl ("primary", s_user2))
+
 
     # opq_enclosing:
     lat <- 54.33601
@@ -322,6 +396,19 @@ test_that ("opq_string", {
     # the object -> pivot calls for an enclosing query:
     expect_true (grepl ("\\->\\.a", s3))
     expect_true (grepl ("pivot\\.a", s3))
+
+    # opq_enclosing with user:
+    q_user3 <- filter_osm_user (q3, user = 1)
+    s_user3 <- opq_string (q_user3)
+
+    expect_true (grepl ("\\(uid:1\\)", s_user3))
+    expect_length (q_user3$features, 1L)
+    expect_true (grepl (key, s_user3))
+    expect_true (grepl (value, s_user3))
+    # the object -> pivot calls for an enclosing query:
+    expect_true (grepl ("\\->\\.a", s_user3))
+    expect_true (grepl ("pivot\\.a", s_user3))
+
 
     # opq_osm_id:
     q4 <- opq_osm_id (id = 1, type = "node")
