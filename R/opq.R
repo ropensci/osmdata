@@ -629,10 +629,13 @@ check_features <- function (features) {
 #' @param touched If `TRUE`, selects objects of which at least one version has been edited
 #'     by `user`. If `FALSE` (default), selects objects with `user` as the last editor
 #'     only.
-#' @param is_uid If `FALSE`, assume that `user` is the user name. Useful to filter for a
+#' @param is_uid If `FALSE`, assume that `user` are user names. Useful to filter for a
 #'     user name which contains numbers only and otherwise would be considered an user id.
 #'
 #' @details
+#' The order of `filter_osm_user()` in a query construction is not relevant and is applied
+#' to the whole query (i.e. it affects all the statements of the query).
+#'
 #' See
 #' \url{https://dev.overpass-api.de/overpass-doc/en/criteria/misc_criteria.html#by_user}
 #' for details.
@@ -650,6 +653,8 @@ check_features <- function (features) {
 #'     add_osm_feature (key = "name") |>
 #'     opq_csv (c ("::type", "::id", "name", "name:ca", "::user", "::uid"))
 #' cat (opq_string (q_csv))
+#' # Warning: csv queries can fail without errors in long running queries. For timeouts,
+#' # it returns empty results.
 #' \dontrun{
 #' d_csv <- osmdata_data_frame (q_csv)
 #' d_csv

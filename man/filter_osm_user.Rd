@@ -16,7 +16,7 @@ filter_osm_user(opq, user, touched = FALSE, is_uid)
 by \code{user}. If \code{FALSE} (default), selects objects with \code{user} as the last editor
 only.}
 
-\item{is_uid}{If \code{FALSE}, assume that \code{user} is the user name. Useful to filter for a
+\item{is_uid}{If \code{FALSE}, assume that \code{user} are user names. Useful to filter for a
 user name which contains numbers only and otherwise would be considered an user id.}
 }
 \value{
@@ -26,6 +26,9 @@ An \link{opq} object.
 Select objects last edited or ever touched by a specific user.
 }
 \details{
+The order of \code{filter_osm_user()} in a query construction is not relevant and is applied
+to the whole query (i.e. it affects all the statements of the query).
+
 See
 \url{https://dev.overpass-api.de/overpass-doc/en/criteria/misc_criteria.html#by_user}
 for details.
@@ -37,6 +40,8 @@ q_csv <- opq (bbox = "relation(id:11755232)", out = "meta", osm_type = "node") |
     add_osm_feature (key = "name") |>
     opq_csv (c ("::type", "::id", "name", "name:ca", "::user", "::uid"))
 cat (opq_string (q_csv))
+# Warning: csv queries can fail without errors in long running queries. For timeouts,
+# it returns empty results.
 \dontrun{
 d_csv <- osmdata_data_frame (q_csv)
 d_csv
