@@ -8,6 +8,7 @@
 ## Major changes
 
 - `getbb()` can query wikidata ids for OSM relations properties (P402) (idea from @mhpob in #401, implemented in #403).
+- Add `filter_osm_user()` to add user filter to `overpass_queries` objects (#414).
 
 ## Minor changes
 
