@@ -11,39 +11,37 @@
 #'
 #' @section Functions to Prepare Queries:
 #' \itemize{
-#' \item \link{getbb}: Get bounding box for a given place name
-#' \item \link{bbox_to_string}: Convert a named matrix or a named vector
-#' (or an unnamed vector) return a string
-#' \item \link{overpass_status}: Retrieve status of the overpass API
-#' \item \link{opq}: Build an overpass query
-#' \item \link{add_osm_feature}: Add a feature to an overpass query
-#' \item \link{opq_string}: Convert an osmdata query to overpass API
-#' string
+#' \item [getbb()]: Get bounding box for a given place name
+#' \item [bbox_to_string()]: Convert a named matrix or a named vector (or an
+#'     unnamed vector) return a string
+#' \item [overpass_status()]: Retrieve status of the overpass API
+#' \item [opq()]: Build an overpass query
+#' \item [add_osm_feature()]: Add a feature to an overpass query
+#' \item [opq_string()]: Convert an osmdata query to overpass API string
 #' }
 #'
 #' @section Functions to Get Additional OSM Information:
 #' \itemize{
-#' \item \link{available_features}: List recognised features in OSM
-#' \item \link{available_tags}: List tags associated with a feature
+#' \item [available_features()]: List recognised features in OSM
+#' \item [available_tags()]: List tags associated with a feature
 #' }
 #'
 #' @section Functions to Extract OSM Data:
 #' \itemize{
-#' \item \link{osmdata_data_frame}: Return OSM data in \code{\link{data.frame}}
-#'     format
-#' \item \link{osmdata_sc}: Return OSM data in \pkg{silicate} format
-#' \item \link{osmdata_sf}: Return OSM data in \pkg{sf} format
-#' \item \link{osmdata_sp}: Return OSM data in \pkg{sp} format (DEPRECATED)
-#' \item \link{osmdata_xml}: Return OSM data in \pkg{xml2} format
+#' \item [osmdata_data_frame()]: Return OSM data in [`data.frame`] format
+#' \item [osmdata_sc()]: Return OSM data in \pkg{silicate} format
+#' \item [osmdata_sf()]: Return OSM data in \pkg{sf} format
+#' \item [osmdata_sp()]: Return OSM data in \pkg{sp} format (DEPRECATED)
+#' \item [osmdata_xml()]: Return OSM data in \pkg{xml2} format
 #' }
 #'
 #' @section Functions to Search Data:
 #' \itemize{
-#' \item `osm_points`: Extract all `osm_points` objects
-#' \item `osm_lines`: Extract all `osm_lines` objects
-#' \item `osm_polygons`: Extract all `osm_polygons` objects
-#' \item `osm_multilines`: Extract all `osm_multilines` objects
-#' \item `osm_multipolygons`: Extract all `osm_multipolygons` objects
+#' \item [osm_points()]: Extract all `osm_points` objects
+#' \item [osm_lines()]: Extract all `osm_lines` objects
+#' \item [osm_polygons()]: Extract all `osm_polygons` objects
+#' \item [osm_multilines()]: Extract all `osm_multilines` objects
+#' \item [osm_multipolygons()]: Extract all `osm_multipolygons` objects
 #' }
 #'
 #' @docType package

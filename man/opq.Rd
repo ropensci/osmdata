@@ -20,12 +20,12 @@ opq(
 \item{bbox}{Either (i) four numeric values specifying the maximal and minimal
 longitudes and latitudes, in the form \code{c(xmin, ymin, xmax, ymax)}
 or (ii) a character string in the form \code{xmin,ymin,xmax,ymax}. These
-will be passed to \link{getbb} to be converted to a numerical bounding
+will be passed to \code{\link[=getbb]{getbb()}} to be converted to a numerical bounding
 box. Can also be (iii) a matrix representing a bounding polygon as
 returned from \code{getbb(..., format_out = "polygon")}. To search in an
 area, (iv) a character string with a relation or a (closed) way id in
 the format \code{"way(id:1)"}, \code{"relation(id:1, 2)"} or \code{"relation(id:1, 2, 3); way(id:2)"} as returned by \code{getbb(..., format_out = "osm_type_id")}
-or \link{bbox_to_string} with a \code{data.frame} from \code{getbb(..., format_out = "data.frame")} to select all areas combined (relations and ways).}
+or \code{\link[=bbox_to_string]{bbox_to_string()}} with a \code{data.frame} from \code{getbb(..., format_out = "data.frame")} to select all areas combined (relations and ways).}
 
 \item{nodes_only}{WARNING: this parameter is equivalent to
 \code{osm_types = "node"} and is DEPRECATED. If \code{TRUE}, query OSM nodes

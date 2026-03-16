@@ -7,7 +7,7 @@
 osm_elevation(dat, elev_file)
 }
 \arguments{
-\item{dat}{An \code{SC} object produced by \link{osmdata_sc}.}
+\item{dat}{An \code{SC} object produced by \code{\link[=osmdata_sc]{osmdata_sc()}}.}
 
 \item{elev_file}{A vector of one or more character strings specifying paths
 to \code{.tif} files (or anything that \pkg{terra} can read) containing global
@@ -21,7 +21,7 @@ appended to the vertices.
 Add elevation data to a previously-extracted OSM data set, using a
 pre-downloaded global elevation file from
 \url{https://srtm.csi.cgiar.org/srtmdata/}. Currently only works for
-\code{SC}-class objects returned from \link{osmdata_sc}.
+\code{SC}-class objects returned from \code{\link[=osmdata_sc]{osmdata_sc()}}.
 }
 \examples{
 \dontrun{

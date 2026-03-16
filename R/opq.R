@@ -3,13 +3,13 @@
 #' @param bbox Either (i) four numeric values specifying the maximal and minimal
 #'      longitudes and latitudes, in the form \code{c(xmin, ymin, xmax, ymax)}
 #'      or (ii) a character string in the form \code{xmin,ymin,xmax,ymax}. These
-#'      will be passed to \link{getbb} to be converted to a numerical bounding
+#'      will be passed to [getbb()] to be converted to a numerical bounding
 #'      box. Can also be (iii) a matrix representing a bounding polygon as
 #'      returned from `getbb(..., format_out = "polygon")`. To search in an
 #'      area, (iv) a character string with a relation or a (closed) way id in
 #'      the format `"way(id:1)"`, `"relation(id:1, 2)"` or `"relation(id:1, 2,
 #'      3); way(id:2)"` as returned by `getbb(..., format_out = "osm_type_id")`
-#'      or \link{bbox_to_string} with a `data.frame` from `getbb(..., format_out
+#'      or [bbox_to_string()] with a `data.frame` from `getbb(..., format_out
 #'      = "data.frame")` to select all areas combined (relations and ways).
 #' @param nodes_only WARNING: this parameter is equivalent to
 #'      `osm_types = "node"` and is DEPRECATED. If `TRUE`, query OSM nodes
@@ -20,7 +20,7 @@
 #'      `highway = "traffic_signals"` are represented by nodes only. Queries are
 #'      built by default to return all nodes, ways, and relation, but this can
 #'      be very inefficient for node-only queries. Setting this value to `"node"`
-#'      for such cases makes queries more efficient and, in [`osmdata_sf()`], the
+#'      for such cases makes queries more efficient and, in [osmdata_sf()], the
 #'      data will be returned in the `osm_points` list item only.
 #' @param out The level of verbosity of the overpass result: `body` (geometries
 #'      and tags, the default), `tags` (tags without geometry), `meta` (like
@@ -263,24 +263,24 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #' not sensitive to case
 #' @param bbox optional bounding box for the feature query; must be set if no
 #'        opq query bbox has been set
-#' @return \link{opq} object
+#' @return An [opq] object.
 #'
 #' @note `key_exact` should generally be `TRUE`, because OSM uses a
 #' reasonably well defined set of possible keys, as returned by
-#' \link{available_features}. Setting `key_exact = FALSE` allows matching
+#' [available_features()]. Setting `key_exact = FALSE` allows matching
 #' of regular expressions on OSM keys, as described in Section 6.1.5 of
 #' <https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL>. The actual
 #' query submitted to the overpass API can be obtained from
-#' \link{opq_string}.
+#' [opq_string()].
 #'
 #' @references <https://wiki.openstreetmap.org/wiki/Map_Features>
-#' @seealso [add_osm_features]
+#' @seealso [add_osm_features()]
 #'
 #' @section `add_osm_feature` vs `add_osm_features`:
-#' Features defined within an [add_osm_features] call are combined with a
+#' Features defined within an [add_osm_features()] call are combined with a
 #' logical OR.
 #'
-#' Chained calls to either [add_osm_feature] or `add_osm_features()` combines
+#' Chained calls to either `add_osm_feature()` or [add_osm_features()] combines
 #' features from these calls in a logical AND; this is analagous to chaining
 #' `dplyr::filter()` on a data frame.
 #'
@@ -478,7 +478,7 @@ check_bind_key_pre <- function (bind = "=", key_pre = "") {
 
 #' Add multiple features to an Overpass query
 #'
-#' Alternative version of \link{add_osm_feature} for creating single queries
+#' Alternative version of [add_osm_feature()] for creating single queries
 #' with multiple features. Key-value matching may be controlled by using the
 #' filter symbols described in
 #' \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_tag_.28has-kv.29}.
@@ -491,7 +491,7 @@ check_bind_key_pre <- function (bind = "=", key_pre = "") {
 #'      quotations. See examples for details.
 #' @param bbox optional bounding box for the feature query; must be set if no
 #'      opq query bbox has been set.
-#' @return \link{opq} object
+#' @return An [opq] object.
 #'
 #' @references \url{https://wiki.openstreetmap.org/wiki/Map_Features}
 #' @seealso [add_osm_feature]
@@ -709,7 +709,7 @@ filter_osm_user <- function (opq, user, touched = FALSE, is_uid) {
 #' @param open_url If `TRUE`, open the OSM page of the specified object in web
 #'      browser. Multiple objects (`id` values) will be opened in multiple
 #'      pages.
-#' @return \link{opq} object
+#' @return An [opq] object.
 #'
 #' @references
 #' \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_element_id}
@@ -801,8 +801,8 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE,
 #'
 #' Find all features which enclose a given point, and optionally match specific
 #' 'key'-'value' pairs. This function is \emph{not} intended to be combined with
-#' \link{add_osm_feature}, rather is only to be used in the sequence
-#' \link{opq_enclosing} -> \link{opq_string} -> \link{osmdata_xml} (or other
+#' [add_osm_feature()], rather is only to be used in the sequence
+#' [opq_enclosing()] -> [opq_string()] -> [osmdata_xml()] (or other
 #' extraction function). See examples for how to use.
 #'
 #' @param lon Longitude of desired point
@@ -868,8 +868,8 @@ opq_enclosing <- function (lon = NULL, lat = NULL,
 #'
 #' Find all features around a given point, and optionally match specific
 #' 'key'-'value' pairs. This function is \emph{not} intended to be combined with
-#' \link{add_osm_feature}, rather is only to be used in the sequence
-#' \link{opq_around} -> \link{osmdata_xml} (or other extraction function). See
+#' [add_osm_feature()], rather is only to be used in the sequence
+#' [opq_around()] -> [osmdata_xml()] (or other extraction function). See
 #' examples for how to use.
 #'
 #' @param radius Radius in metres around the point for which data should be
@@ -920,7 +920,7 @@ opq_around <- function (lon, lat, radius = 15,
 #' Transform an Overpass query to return the result in a csv format
 #'
 #' @param q A opq string or an object of class `overpass_query` constructed with
-#'     \link{opq} or alternative opq builders (+ \link{add_osm_feature}/s).
+#'     [opq()] or alternative opq builders (+ [add_osm_feature()]/s).
 #' @param fields a character vector with the field names.
 #' @param header if \code{FALSE}, do not ask for column names.
 #'
@@ -929,7 +929,7 @@ opq_around <- function (lon, lat, radius = 15,
 #'
 #' @details The output format `csv`, ask for results in csv. See
 #'  [CSV output mode](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#CSV_output_mode)
-#'  for details. To get the data, use \link{osmdata_data_frame}.
+#'  for details. To get the data, use [osmdata_data_frame()].
 #'
 #' @note csv queries that reach the timeout will return a 0 row data.frame
 #'    without any warning. Increase `timeout` in `q` if you don't see the

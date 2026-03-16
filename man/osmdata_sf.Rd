@@ -2,14 +2,13 @@
 % Please edit documentation in R/get-osmdata-sf.R
 \name{osmdata_sf}
 \alias{osmdata_sf}
-\title{Return an OSM Overpass query as an \link{osmdata} object in \pkg{sf}
-format.}
+\title{Return an OSM Overpass query as an \link{osmdata} object in \pkg{sf} format.}
 \usage{
 osmdata_sf(q, doc, quiet = TRUE, stringsAsFactors = FALSE)
 }
 \arguments{
 \item{q}{An object of class \code{overpass_query} constructed with
-\link{opq} and \link{add_osm_feature} or a string with a valid query, such
+\code{\link[=opq]{opq()}} and \code{\link[=add_osm_feature]{add_osm_feature()}} or a string with a valid query, such
 as \code{"(node(39.4712701,-0.3841326,39.4713799,-0.3839475);); out;"}.
 39.4712701,-0.3841326,39.4713799,-0.3839475
 May be be omitted, in which case the \link{osmdata} object will not
@@ -17,7 +16,7 @@ include the query. See examples below.}
 
 \item{doc}{If missing, \code{doc} is obtained by issuing the overpass query,
 \code{q}, otherwise either the name of a file from which to read data,
-or an object of class \pkg{xml2} returned from \link{osmdata_xml}.}
+or an object of class \pkg{xml2} returned from \code{\link[=osmdata_xml]{osmdata_xml()}}.}
 
 \item{quiet}{suppress status messages.}
 
@@ -25,12 +24,11 @@ or an object of class \pkg{xml2} returned from \link{osmdata_xml}.}
 coerced to factors?}
 }
 \value{
-An object of class \code{osmdata_sf} with the OSM components (points, lines,
-and polygons) represented in \pkg{sf} format.
+An object of class \code{osmdata_sf} with the OSM components (points,
+lines, and polygons) represented in \pkg{sf} format.
 }
 \description{
-Return an OSM Overpass query as an \link{osmdata} object in \pkg{sf}
-format.
+Return an OSM Overpass query as an \link{osmdata} object in \pkg{sf} format.
 }
 \note{
 In 'dplyr'-type workflows in which the output of this function is

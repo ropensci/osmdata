@@ -10,7 +10,7 @@ bbox_to_string(bbox)
 \item{bbox}{bounding box as character, matrix, vector or a data.frame with
 \code{osm_type} and \code{osm_id} columns.
 If character, the bbox will be found (geocoded) and extracted with
-\link{getbb}. Unnamed vectors will be sorted appropriately and must merely be
+\code{\link[=getbb]{getbb()}}. Unnamed vectors will be sorted appropriately and must merely be
 in the order (x, y, x, y).}
 }
 \value{

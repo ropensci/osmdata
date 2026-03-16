@@ -10,8 +10,9 @@ osmdata_xml(q, filename, quiet = TRUE, encoding)
 }
 \arguments{
 \item{q}{An object of class \code{overpass_query} constructed with
-\link{opq} and \link{add_osm_feature} or a string with a valid query, such
-as \code{"(node(39.4712701,-0.3841326,39.4713799,-0.3839475);); out;"}. See examples below.}
+\code{\link[=opq]{opq()}} and \code{\link[=add_osm_feature]{add_osm_feature()}} or a string with a valid query, such as
+\code{"(node(39.4712701,-0.3841326,39.4713799,-0.3839475);); out;"}. See
+examples below.}
 
 \item{filename}{If given, OSM data are saved to the named file}
 

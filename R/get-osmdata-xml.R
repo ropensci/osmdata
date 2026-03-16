@@ -3,13 +3,14 @@
 #' or a raw vector.
 #'
 #' @param q An object of class `overpass_query` constructed with
-#'   \link{opq} and \link{add_osm_feature} or a string with a valid query, such
-#'   as `"(node(39.4712701,-0.3841326,39.4713799,-0.3839475);); out;"`. See examples below.
+#'     [opq()] and [add_osm_feature()] or a string with a valid query, such as
+#'     `"(node(39.4712701,-0.3841326,39.4713799,-0.3839475);); out;"`. See
+#'     examples below.
 #' @param filename If given, OSM data are saved to the named file
 #' @param quiet suppress status messages.
 #' @param encoding Unless otherwise specified XML documents are assumed to be
-#'        encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
-#'        an explicit encoding directive, this allows you to supply a default.
+#'     encoded as UTF-8 or UTF-16. If the document is not UTF-8/16, and lacks
+#'     an explicit encoding directive, this allows you to supply a default.
 #' @return An object of class `xml2::xml_document` containing the result of the
 #'         overpass API query.
 #'
