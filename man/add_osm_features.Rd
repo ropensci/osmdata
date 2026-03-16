@@ -28,20 +28,20 @@ opq query bbox has been set.}
 \item{value_exact}{If FALSE, \code{value} is not interpreted exactly}
 }
 \value{
-\link{opq} object
+An \link{opq} object.
 }
 \description{
-Alternative version of \link{add_osm_feature} for creating single queries
+Alternative version of \code{\link[=add_osm_feature]{add_osm_feature()}} for creating single queries
 with multiple features. Key-value matching may be controlled by using the
 filter symbols described in
 \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_tag_.28has-kv.29}.
 }
 \section{\code{add_osm_feature} vs \code{add_osm_features}}{
 
-Features defined within an \link{add_osm_features} call are combined with a
+Features defined within an \code{\link[=add_osm_features]{add_osm_features()}} call are combined with a
 logical OR.
 
-Chained calls to either \link{add_osm_feature} or \code{add_osm_features()} combines
+Chained calls to either \code{add_osm_feature()} or \code{\link[=add_osm_features]{add_osm_features()}} combines
 features from these calls in a logical AND; this is analagous to chaining
 \code{dplyr::filter()} on a data frame.
 

@@ -65,7 +65,7 @@ get_overpass_version <- function (doc) {
 #' implemented for osmdata_* functions except for osmdata_xml (no out:csv) and
 #' osmdata_data_frame.
 #'
-#' @param obj Initial \link{osmdata} object
+#' @param obj Initial [osmdata] object
 #'
 #' @return Nothing. Throw errors or warnings for not implemented queries.
 #'
@@ -147,10 +147,10 @@ fix_columns_list <- function (l) {
 #' fill osmdata object with overpass data and metadata, and return character
 #' version of OSM xml document
 #'
-#' @param obj Initial \link{osmdata} object
+#' @param obj Initial [osmdata] object
 #' @param doc Document contain XML-formatted version of OSM data
 #' @inheritParams osmdata_sf
-#' @return List of an \link{osmdata} object (`obj`), and XML
+#' @return List of an [osmdata] object (`obj`), and XML
 #'      document (`doc`)
 #' @noRd
 fill_overpass_data <- function (obj, doc, quiet = TRUE, encoding = "UTF-8") {

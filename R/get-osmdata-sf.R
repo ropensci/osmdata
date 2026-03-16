@@ -1,24 +1,22 @@
-#' Return an OSM Overpass query as an \link{osmdata} object in \pkg{sf}
-#' format.
+#' Return an OSM Overpass query as an [osmdata] object in \pkg{sf} format.
 #'
 #' @note In 'dplyr'-type workflows in which the output of this function is
 #' piped to other functions, it will generally be necessary to explicitly load
 #' the \pkg{sf} package into the current workspace with 'library(sf)'.
 #'
 #' @param q An object of class `overpass_query` constructed with
-#'      \link{opq} and \link{add_osm_feature} or a string with a valid query, such
+#'      [opq()] and [add_osm_feature()] or a string with a valid query, such
 #'      as `"(node(39.4712701,-0.3841326,39.4713799,-0.3839475);); out;"`.
-#'      39.4712701,-0.3841326,39.4713799,-0.3839475
-#'      May be be omitted, in which case the \link{osmdata} object will not
+#'      May be be omitted, in which case the [osmdata] object will not
 #'      include the query. See examples below.
 #' @param doc If missing, `doc` is obtained by issuing the overpass query,
-#'        `q`, otherwise either the name of a file from which to read data,
-#'        or an object of class \pkg{xml2} returned from \link{osmdata_xml}.
+#'      `q`, otherwise either the name of a file from which to read data,
+#'      or an object of class \pkg{xml2} returned from [osmdata_xml()].
 #' @param quiet suppress status messages.
 #' @param stringsAsFactors Should character strings in 'sf' 'data.frame' be
-#' coerced to factors?
-#' @return An object of class `osmdata_sf` with the OSM components (points, lines,
-#'         and polygons) represented in \pkg{sf} format.
+#'      coerced to factors?
+#' @return An object of class `osmdata_sf` with the OSM components (points,
+#'      lines, and polygons) represented in \pkg{sf} format.
 #'
 #' @family extract
 #' @export

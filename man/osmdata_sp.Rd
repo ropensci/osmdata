@@ -9,15 +9,14 @@ osmdata_sp(q, doc, quiet = TRUE)
 }
 \arguments{
 \item{q}{An object of class \code{overpass_query} constructed with
-\link{opq} and \link{add_osm_feature} or a string with a valid query, such
+\code{\link[=opq]{opq()}} and \code{\link[=add_osm_feature]{add_osm_feature()}} or a string with a valid query, such
 as \code{"(node(39.4712701,-0.3841326,39.4713799,-0.3839475);); out;"}.
-39.4712701,-0.3841326,39.4713799,-0.3839475
 May be be omitted, in which case the \link{osmdata} object will not
 include the query. See examples below.}
 
 \item{doc}{If missing, \code{doc} is obtained by issuing the overpass query,
 \code{q}, otherwise either the name of a file from which to read data,
-or an object of class \pkg{xml2} returned from \link{osmdata_xml}.}
+or an object of class \pkg{xml2} returned from \code{\link[=osmdata_xml]{osmdata_xml()}}.}
 
 \item{quiet}{suppress status messages.}
 }

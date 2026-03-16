@@ -58,7 +58,7 @@ because the server may time out before all data are delivered.}
 may need to be increased in order to handle large queries.}
 }
 \value{
-\link{opq} object
+An \link{opq} object.
 }
 \description{
 Add a feature specified by OSM ID to an Overpass query

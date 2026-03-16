@@ -36,7 +36,7 @@ not sensitive to case}
 opq query bbox has been set}
 }
 \value{
-\link{opq} object
+An \link{opq} object.
 }
 \description{
 Add a feature to an Overpass query
@@ -44,18 +44,18 @@ Add a feature to an Overpass query
 \note{
 \code{key_exact} should generally be \code{TRUE}, because OSM uses a
 reasonably well defined set of possible keys, as returned by
-\link{available_features}. Setting \code{key_exact = FALSE} allows matching
+\code{\link[=available_features]{available_features()}}. Setting \code{key_exact = FALSE} allows matching
 of regular expressions on OSM keys, as described in Section 6.1.5 of
 \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL}. The actual
 query submitted to the overpass API can be obtained from
-\link{opq_string}.
+\code{\link[=opq_string]{opq_string()}}.
 }
 \section{\code{add_osm_feature} vs \code{add_osm_features}}{
 
-Features defined within an \link{add_osm_features} call are combined with a
+Features defined within an \code{\link[=add_osm_features]{add_osm_features()}} call are combined with a
 logical OR.
 
-Chained calls to either \link{add_osm_feature} or \code{add_osm_features()} combines
+Chained calls to either \code{add_osm_feature()} or \code{\link[=add_osm_features]{add_osm_features()}} combines
 features from these calls in a logical AND; this is analagous to chaining
 \code{dplyr::filter()} on a data frame.
 
@@ -105,7 +105,7 @@ cat (opq_string (q_keys))
 \url{https://wiki.openstreetmap.org/wiki/Map_Features}
 }
 \seealso{
-\link{add_osm_features}
+\code{\link[=add_osm_features]{add_osm_features()}}
 
 Other queries: 
 \code{\link{add_osm_features}()},

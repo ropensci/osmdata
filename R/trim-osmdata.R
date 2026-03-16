@@ -106,7 +106,7 @@ bb_poly_to_mat <- function (x) {
 #' these methods, but there is no equivalent exported function there. See
 #' \url{https://github.com/r-lib/roxygen2/issues/1592}.
 #'
-#' @param x A bounding-box input to \link{getbb} or \link{opq}.
+#' @param x A bounding-box input to [getbb()] or [opq()].
 #'
 #' @note About the need to export private methods
 #'   github.com/r-lib/roxygen2/issues/1592

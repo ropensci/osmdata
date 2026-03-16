@@ -8,14 +8,14 @@ osmdata_data_frame(q, doc, quiet = TRUE, stringsAsFactors = FALSE)
 }
 \arguments{
 \item{q}{An object of class \code{overpass_query} constructed with
-\link{opq} and \link{add_osm_feature} or a string with a valid query, such
+\code{\link[=opq]{opq()}} and \code{\link[=add_osm_feature]{add_osm_feature()}} or a string with a valid query, such
 as \code{"(node(39.4712701,-0.3841326,39.4713799,-0.3839475);); out;"}.
 May be be omitted, in which case the attributes of the \link{data.frame}
 will not include the query. See examples below.}
 
 \item{doc}{If missing, \code{doc} is obtained by issuing the overpass query,
 \code{q}, otherwise either the name of a file from which to read data,
-or an object of class \pkg{xml2} returned from \link{osmdata_xml}.}
+or an object of class \pkg{xml2} returned from \code{\link[=osmdata_xml]{osmdata_xml()}}.}
 
 \item{quiet}{suppress status messages.}
 
@@ -33,7 +33,7 @@ Return an OSM Overpass query as a \link{data.frame} object.
 If you are not interested in the geometries of the results, it's a
 good option to query for objects that match the features only and forget
 about members of the ways and relations. You can achieve this by passing
-the parameter \code{body = "tags"} to \code{\link{opq}}.
+the parameter \code{body = "tags"} to \code{\link[=opq]{opq()}}.
 }
 \examples{
 \dontrun{

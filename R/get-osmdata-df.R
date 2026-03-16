@@ -1,11 +1,11 @@
-#' Return an OSM Overpass query as a \link{data.frame} object.
+#' Return an OSM Overpass query as a [data.frame] object.
 #'
 #'
 #' @inheritParams osmdata_sf
 #' @param q An object of class `overpass_query` constructed with
-#'      \link{opq} and \link{add_osm_feature} or a string with a valid query, such
+#'      [opq()] and [add_osm_feature()] or a string with a valid query, such
 #'      as `"(node(39.4712701,-0.3841326,39.4713799,-0.3839475);); out;"`.
-#'      May be be omitted, in which case the attributes of the \link{data.frame}
+#'      May be be omitted, in which case the attributes of the [data.frame]
 #'      will not include the query. See examples below.
 #' @param stringsAsFactors Should character strings in the 'data.frame' be
 #'      coerced to factors?
@@ -15,7 +15,7 @@
 #' @details If you are not interested in the geometries of the results, it's a
 #'      good option to query for objects that match the features only and forget
 #'      about members of the ways and relations. You can achieve this by passing
-#'      the parameter `body = "tags"` to \code{\link{opq}}.
+#'      the parameter `body = "tags"` to [opq()].
 #'
 #' @family extract
 #' @export

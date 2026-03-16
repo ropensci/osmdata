@@ -8,7 +8,7 @@ opq_csv(q, fields, header = TRUE)
 }
 \arguments{
 \item{q}{A opq string or an object of class \code{overpass_query} constructed with
-\link{opq} or alternative opq builders (+ \link{add_osm_feature}/s).}
+\code{\link[=opq]{opq()}} or alternative opq builders (+ \code{\link[=add_osm_feature]{add_osm_feature()}}/s).}
 
 \item{fields}{a character vector with the field names.}
 
@@ -24,7 +24,7 @@ Transform an Overpass query to return the result in a csv format
 \details{
 The output format \code{csv}, ask for results in csv. See
 \href{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#CSV_output_mode}{CSV output mode}
-for details. To get the data, use \link{osmdata_data_frame}.
+for details. To get the data, use \code{\link[=osmdata_data_frame]{osmdata_data_frame()}}.
 }
 \note{
 csv queries that reach the timeout will return a 0 row data.frame

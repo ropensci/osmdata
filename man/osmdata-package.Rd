@@ -17,45 +17,45 @@ to find all lines which intersect a given point).
 \section{Functions to Prepare Queries}{
 
 \itemize{
-\item \link{getbb}: Get bounding box for a given place name
-\item \link{bbox_to_string}: Convert a named matrix or a named vector
-(or an unnamed vector) return a string
-\item \link{overpass_status}: Retrieve status of the overpass API
-\item \link{opq}: Build an overpass query
-\item \link{add_osm_feature}: Add a feature to an overpass query
-\item \link{opq_string}: Convert an osmdata query to overpass API
-string
+\item \code{\link[=getbb]{getbb()}}: Get bounding box for a given place name
+\item \code{\link[=bbox_to_string]{bbox_to_string()}}: Convert a named matrix or a named vector (or an
+unnamed vector) return a string
+\item \code{\link[=overpass_status]{overpass_status()}}: Retrieve status of the overpass API
+\item \code{\link[=opq]{opq()}}: Build an overpass query
+\item \code{\link[=add_osm_feature]{add_osm_feature()}}: Add a feature to an overpass query
+\item \code{\link[=add_osm_features]{add_osm_features()}}: Add multiple features to an Overpass query
+\item \code{\link[=filter_osm_user]{filter_osm_user()}}: Add an user filter to an Overpass query
+\item \code{\link[=opq_string]{opq_string()}}: Convert an osmdata query to overpass API string
 }
 }
 
 \section{Functions to Get Additional OSM Information}{
 
 \itemize{
-\item \link{available_features}: List recognised features in OSM
-\item \link{available_tags}: List tags associated with a feature
+\item \code{\link[=available_features]{available_features()}}: List recognised features in OSM
+\item \code{\link[=available_tags]{available_tags()}}: List tags associated with a feature
 }
 }
 
 \section{Functions to Extract OSM Data}{
 
 \itemize{
-\item \link{osmdata_data_frame}: Return OSM data in \code{\link{data.frame}}
-format
-\item \link{osmdata_sc}: Return OSM data in \pkg{silicate} format
-\item \link{osmdata_sf}: Return OSM data in \pkg{sf} format
-\item \link{osmdata_sp}: Return OSM data in \pkg{sp} format (DEPRECATED)
-\item \link{osmdata_xml}: Return OSM data in \pkg{xml2} format
+\item \code{\link[=osmdata_data_frame]{osmdata_data_frame()}}: Return OSM data in \code{\link{data.frame}} format
+\item \code{\link[=osmdata_sc]{osmdata_sc()}}: Return OSM data in \pkg{silicate} format
+\item \code{\link[=osmdata_sf]{osmdata_sf()}}: Return OSM data in \pkg{sf} format
+\item \code{\link[=osmdata_sp]{osmdata_sp()}}: Return OSM data in \pkg{sp} format (DEPRECATED)
+\item \code{\link[=osmdata_xml]{osmdata_xml()}}: Return OSM data in \pkg{xml2} format
 }
 }
 
 \section{Functions to Search Data}{
 
 \itemize{
-\item \code{osm_points}: Extract all \code{osm_points} objects
-\item \code{osm_lines}: Extract all \code{osm_lines} objects
-\item \code{osm_polygons}: Extract all \code{osm_polygons} objects
-\item \code{osm_multilines}: Extract all \code{osm_multilines} objects
-\item \code{osm_multipolygons}: Extract all \code{osm_multipolygons} objects
+\item \code{\link[=osm_points]{osm_points()}}: Extract all \code{osm_points} objects
+\item \code{\link[=osm_lines]{osm_lines()}}: Extract all \code{osm_lines} objects
+\item \code{\link[=osm_polygons]{osm_polygons()}}: Extract all \code{osm_polygons} objects
+\item \code{\link[=osm_multilines]{osm_multilines()}}: Extract all \code{osm_multilines} objects
+\item \code{\link[=osm_multipolygons]{osm_multipolygons()}}: Extract all \code{osm_multipolygons} objects
 }
 }
 

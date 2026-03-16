@@ -3,9 +3,9 @@
 #' Add elevation data to a previously-extracted OSM data set, using a
 #' pre-downloaded global elevation file from
 #' \url{https://srtm.csi.cgiar.org/srtmdata/}. Currently only works for
-#' `SC`-class objects returned from \link{osmdata_sc}.
+#' `SC`-class objects returned from [osmdata_sc()].
 #'
-#' @param dat An `SC` object produced by \link{osmdata_sc}.
+#' @param dat An `SC` object produced by [osmdata_sc()].
 #' @param elev_file A vector of one or more character strings specifying paths
 #' to `.tif` files (or anything that \pkg{terra} can read) containing global
 #' elevation data. `.zip` files will be uncompressed.

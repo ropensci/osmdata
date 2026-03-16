@@ -1,4 +1,4 @@
-#' DEPRECATED: Return an OSM Overpass query as an \link{osmdata} object in \pkg{sp}
+#' DEPRECATED: Return an OSM Overpass query as an [osmdata] object in \pkg{sp}
 #' format.
 #'
 #' @inheritParams osmdata_sf
