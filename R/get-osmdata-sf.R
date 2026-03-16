@@ -7,7 +7,6 @@
 #' @param q An object of class `overpass_query` constructed with
 #'      [opq()] and [add_osm_feature()] or a string with a valid query, such
 #'      as `"(node(39.4712701,-0.3841326,39.4713799,-0.3839475);); out;"`.
-#'      39.4712701,-0.3841326,39.4713799,-0.3839475
 #'      May be be omitted, in which case the [osmdata] object will not
 #'      include the query. See examples below.
 #' @param doc If missing, `doc` is obtained by issuing the overpass query,

@@ -23,6 +23,8 @@ unnamed vector) return a string
 \item \code{\link[=overpass_status]{overpass_status()}}: Retrieve status of the overpass API
 \item \code{\link[=opq]{opq()}}: Build an overpass query
 \item \code{\link[=add_osm_feature]{add_osm_feature()}}: Add a feature to an overpass query
+\item \code{\link[=add_osm_features]{add_osm_features()}}: Add multiple features to an Overpass query
+\item \code{\link[=filter_osm_user]{filter_osm_user()}}: Add an user filter to an Overpass query
 \item \code{\link[=opq_string]{opq_string()}}: Convert an osmdata query to overpass API string
 }
 }

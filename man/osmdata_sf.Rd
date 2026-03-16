@@ -10,7 +10,6 @@ osmdata_sf(q, doc, quiet = TRUE, stringsAsFactors = FALSE)
 \item{q}{An object of class \code{overpass_query} constructed with
 \code{\link[=opq]{opq()}} and \code{\link[=add_osm_feature]{add_osm_feature()}} or a string with a valid query, such
 as \code{"(node(39.4712701,-0.3841326,39.4713799,-0.3839475);); out;"}.
-39.4712701,-0.3841326,39.4713799,-0.3839475
 May be be omitted, in which case the \link{osmdata} object will not
 include the query. See examples below.}
 
