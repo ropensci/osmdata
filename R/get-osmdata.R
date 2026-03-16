@@ -4,7 +4,7 @@ timestamp_fmt_iso8601 <- "%Y-%m-%dT%H:%M:%SZ" # ISO 8601. Z indicates tz = "UTC"
 #'
 #' @param doc OSM XML document. If missing, `Sys.time()` is used.
 #'
-#' @return An R timestamp object
+#' @return A POSIXct timestamp
 #'
 #' @note This defines the timestamp format for \pkg{osmdata} objects, which
 #' includes months as text to ensure umambiguous timestamps
@@ -28,10 +28,7 @@ get_timestamp <- function (doc) {
         tstmp <- Sys.time ()
     }
 
-    ## TODO: avoid a non-standard date string, return a POSIXct value
-    out <- paste ("[", format (tstmp, format = "%a %e %b %Y %T"), "]")
-    out <- gsub ("  ", " ", out) # remove extra space in %e for single digit days
-    out <- gsub ("\\.", "\\\\.", out) # Escape dots
+    tstmp
 }
 
 

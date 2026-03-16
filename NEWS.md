@@ -4,6 +4,7 @@
 ## Breaking changes
 
 - `getbb()` throws a warning instead of an error for empty results and return the (empty) result with the expected type according to `format_out` parameter (#394).
+- Timestamp in metadata has a POSIXct time. Before it was character with a non-standard locale dependent date format (#416).
 
 ## Major changes
 
