@@ -284,6 +284,10 @@ test_that ("make_query", {
             })
         )
         expect_equal (doc, doc2)
+        timestamp <- as.POSIXct (
+            xml2::xml_attr (xml2::xml_child (doc, "meta"), attr = "osm_base"),
+            tz = "UTC"
+        )
 
 
         res <- with_mock_dir ("mock_osm_sp", {
@@ -293,11 +297,14 @@ test_that ("make_query", {
         expect_silent (
             expect_warning (res <- osmdata_sp (qry, doc), "Deprecated")
         )
+        expect_identical (res$meta$timestamp, timestamp)
         expect_message (print (res), "Object of class 'osmdata' with")
         expect_silent (expect_warning (res <- osmdata_sp (qry, "junk.osm"), "Deprecated"))
+        expect_identical (res$meta$timestamp, timestamp)
         expect_message (
             expect_warning (res <- osmdata_sp (qry, "junk.osm", quiet = FALSE), "Deprecated")
         )
+        expect_identical (res$meta$timestamp, timestamp)
 
         expect_s3_class (res, "osmdata")
         nms <- c (
@@ -309,14 +316,18 @@ test_that ("make_query", {
         nms <- c ("timestamp", "OSM_version", "overpass_version")
         expect_named (res$meta, expected = nms)
 
+
         res <- with_mock_dir ("mock_osm_sf", {
             osmdata_sf (qry)
         })
+        expect_identical (res$meta$timestamp, timestamp)
         expect_message (print (res), "Object of class 'osmdata' with")
         expect_silent (res <- osmdata_sf (qry, doc))
+        expect_identical (res$meta$timestamp, timestamp)
         expect_message (print (res), "Object of class 'osmdata' with")
         expect_silent (res <- osmdata_sf (qry, "junk.osm"))
         expect_message (res <- osmdata_sf (qry, "junk.osm", quiet = FALSE))
+        expect_identical (res$meta$timestamp, timestamp)
         expect_s3_class (res, "osmdata")
         nms <- c (
             "bbox", "overpass_call", "meta", "osm_points",
@@ -325,14 +336,18 @@ test_that ("make_query", {
         )
         expect_named (res, expected = nms, ignore.order = FALSE)
 
+
         res <- with_mock_dir ("mock_osm_df", {
             osmdata_data_frame (qry)
         })
         expect_s3_class (res, "data.frame")
+        expect_identical (attr (res, "meta")$timestamp, timestamp)
         expect_silent (res <- osmdata_data_frame (qry, doc))
         expect_s3_class (res, "data.frame")
+        expect_identical (attr (res, "meta")$timestamp, timestamp)
         expect_silent (res <- osmdata_data_frame (qry, "junk.osm"))
         expect_message (res <- osmdata_data_frame (qry, "junk.osm", quiet = FALSE))
+        expect_identical (attr (res, "meta")$timestamp, timestamp)
 
         nms <- c (
             "names", "row.names", "class", "bbox", "overpass_call", "meta"
