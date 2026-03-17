@@ -2,7 +2,7 @@
 % Please edit documentation in R/opq.R
 \name{opq_osm_id}
 \alias{opq_osm_id}
-\title{Add a feature specified by OSM ID to an Overpass query}
+\title{Add features specified by OSM ID to an Overpass query}
 \usage{
 opq_osm_id(
   id = NULL,
@@ -61,7 +61,7 @@ may need to be increased in order to handle large queries.}
 An \link{opq} object.
 }
 \description{
-Add a feature specified by OSM ID to an Overpass query
+Add features specified by OSM ID to an Overpass query
 }
 \note{
 Extracting elements by ID requires explicitly specifying the type of

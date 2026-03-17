@@ -25,7 +25,7 @@ object(s) which contain the object specified by \code{id}.
 # "Chiswick Eyot" (which is an island).
 \dontrun{
 dat <- opq ("London UK") |>
-    add_osm_feature (key = "name", value = "Thames", exact = FALSE) |>
+    filter_osm_tags (key = "name", value = "Thames", exact = FALSE) |>
     osmdata_sf ()
 index <- which (dat$osm_multipolygons$name == "Chiswick Eyot")
 id <- rownames (dat$osm_polygons [id, ])

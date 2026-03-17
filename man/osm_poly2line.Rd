@@ -26,7 +26,7 @@ repeated as \code{LINESTRING} objects in \code{osm_lines}.
 \examples{
 \dontrun{
 query <- opq ("colchester uk") |>
-    add_osm_feature (key = "highway")
+    filter_osm_tags (key = "highway")
 # Then extract data from 'Overpass' API
 dat <- osmdata_sf (query)
 # colchester has lots of roundabouts, and these are stored in 'osm_polygons'

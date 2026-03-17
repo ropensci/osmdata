@@ -296,7 +296,7 @@ osm_points <- function (dat, id) {
 #' @examples
 #' \dontrun{
 #' dat <- opq ("hengelo nl") |>
-#'     add_osm_feature (key = "highway") |>
+#'     filter_osm_tags (key = "highway") |>
 #'     osmdata_sf ()
 #' bus <- dat$osm_points [which (dat$osm_points$highway == "bus_stop"), ] |>
 #'     rownames () # all OSM IDs of bus stops
@@ -304,7 +304,7 @@ osm_points <- function (dat, id) {
 #'
 #' # All lines which intersect with Piccadilly Circus in London, UK
 #' dat <- opq ("Fitzrovia London") |>
-#'     add_osm_feature (key = "highway") |>
+#'     filter_osm_tags (key = "highway") |>
 #'     osmdata_sf ()
 #' i <- which (dat$osm_polygons$name == "Piccadilly Circus")
 #' id <- rownames (dat$osm_polygons [i, ])
@@ -353,7 +353,7 @@ osm_lines <- function (dat, id) {
 #' # Extract polygons which intersect Conway Street in London
 #' \dontrun{
 #' dat <- opq ("Marylebone London") |>
-#'     add_osm_feature (key = "highway") |>
+#'     filter_osm_tags (key = "highway") |>
 #'     osmdata_sf ()
 #' conway <- which (dat$osm_lines$name == "Conway Street")
 #' id <- rownames (dat$osm_lines [conway, ])
@@ -401,7 +401,7 @@ osm_polygons <- function (dat, id) {
 #' @examples
 #' \dontrun{
 #' dat <- opq ("London UK") |>
-#'     add_osm_feature (key = "name", value = "Thames", exact = FALSE) |>
+#'     filter_osm_tags (key = "name", value = "Thames", exact = FALSE) |>
 #'     osmdata_sf ()
 #' # Get ids of lines called "The Thames":
 #' id <- rownames (dat$osm_lines [which (dat$osm_lines$name == "The Thames"), ])
@@ -454,7 +454,7 @@ osm_multilines <- function (dat, id) {
 #' # "Chiswick Eyot" (which is an island).
 #' \dontrun{
 #' dat <- opq ("London UK") |>
-#'     add_osm_feature (key = "name", value = "Thames", exact = FALSE) |>
+#'     filter_osm_tags (key = "name", value = "Thames", exact = FALSE) |>
 #'     osmdata_sf ()
 #' index <- which (dat$osm_multipolygons$name == "Chiswick Eyot")
 #' id <- rownames (dat$osm_polygons [id, ])

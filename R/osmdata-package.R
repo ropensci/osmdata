@@ -16,8 +16,8 @@
 #'     unnamed vector) return a string
 #' \item [overpass_status()]: Retrieve status of the overpass API
 #' \item [opq()]: Build an overpass query
-#' \item [add_osm_feature()]: Add a feature to an overpass query
-#' \item [add_osm_features()]: Add multiple features to an Overpass query
+#' \item [filter_osm_tags()]: Add tags to all current statements of an Overpass query
+#' \item [add_osm_tags()]: Add multiple tags to independent statments of an Overpass query
 #' \item [filter_osm_user()]: Add an user filter to an Overpass query
 #' \item [opq_string()]: Convert an osmdata query to overpass API string
 #' }

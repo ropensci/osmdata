@@ -3,7 +3,7 @@
 \name{add_osm_tags}
 \alias{add_osm_tags}
 \alias{add_osm_features}
-\title{Add multiple features to an Overpass query}
+\title{Add multiple tags to an Overpass query as independent statements}
 \usage{
 add_osm_tags(opq, features, bbox = NULL, key_exact = TRUE, value_exact = TRUE)
 
@@ -22,7 +22,7 @@ add_osm_features(
 key-value pairs with keys and values enclosed in escape-formatted
 quotations. See examples for details.}
 
-\item{bbox}{optional bounding box for the feature query; must be set if no
+\item{bbox}{optional bounding box for the query; must be set if no
 opq query bbox has been set.}
 
 \item{key_exact}{If FALSE, \code{key} is not interpreted exactly; see
@@ -34,52 +34,54 @@ opq query bbox has been set.}
 An \link{opq} object.
 }
 \description{
-Alternative version of \code{\link[=add_osm_feature]{add_osm_feature()}} for creating single queries
-with multiple features. Key-value matching may be controlled by using the
-filter symbols described in
+Alternative version of \code{\link[=filter_osm_tags]{filter_osm_tags()}} for creating single queries
+with multiple tags in independent statements. Key-value matching may be
+controlled by using the filter symbols described in
 \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_tag_.28has-kv.29}.
-}
-\section{\code{add_osm_feature} vs \code{add_osm_features}}{
 
-Features defined within an \code{\link[=add_osm_features]{add_osm_features()}} call are combined with a
+\code{add_osm_features()} will be DEPRECATED in future versions.
+}
+\section{\code{filter_osm_tags} vs \code{add_osm_tags}}{
+
+Tags defined within an \code{\link[=add_osm_tags]{add_osm_tags()}} call are combined with a
 logical OR.
 
-Chained calls to either \code{add_osm_feature()} or \code{\link[=add_osm_features]{add_osm_features()}} combines
-features from these calls in a logical AND; this is analagous to chaining
+Chained calls to either \code{filter_osm_tags()} or \code{\link[=add_osm_tags]{add_osm_tags()}} combines
+tags from these calls in a logical AND; this is analagous to chaining
 \code{dplyr::filter()} on a data frame.
 
-\code{add_osm_features()} with only one feature is logically equivalent to
-\code{add_osm_feature()}.
+\code{add_osm_tags()} with only one tag is logically equivalent to
+\code{filter_osm_tags()}.
 }
 
 \examples{
 \dontrun{
 q <- opq ("portsmouth usa") |>
-    add_osm_features (features = list (
+    add_osm_tags (features = list (
         "amenity" = "restaurant",
         "amenity" = "pub"
     ))
 
 q <- opq ("portsmouth usa") |>
-    add_osm_features (features = c (
+    add_osm_tags (features = c (
         "\"amenity\"=\"restaurant\"",
         "\"amenity\"=\"pub\""
     ))
 cat (opq_string (q))
 # This extracts in a single query the same result as the following:
 q1 <- opq ("portsmouth usa") |>
-    add_osm_feature (
+    filter_osm_tags (
         key = "amenity",
         value = "restaurant"
     )
 q2 <- opq ("portsmouth usa") |>
-    add_osm_feature (key = "amenity", value = "pub")
+    filter_osm_tags (key = "amenity", value = "pub")
 c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 
 # Get objects with keys (`natural` OR `waterway`) AND `name`
 q_keys <- opq ("Badia del Vallès", osm_types = "nwr", out = "tags") |>
-    add_osm_features (features = list (natural = NULL, waterway = NULL)) |>
-    add_osm_feature (key = "name")
+    add_osm_tags (features = list (natural = NULL, waterway = NULL)) |>
+    filter_osm_tags (key = "name")
 cat (opq_string (q_keys))
 }
 }
@@ -87,7 +89,7 @@ cat (opq_string (q_keys))
 \url{https://wiki.openstreetmap.org/wiki/Map_Features}
 }
 \seealso{
-\link{add_osm_feature}
+\link{filter_osm_tags}
 
 Other queries: 
 \code{\link{bbox_to_string}()},

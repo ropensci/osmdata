@@ -3,7 +3,7 @@
 \name{filter_osm_tags}
 \alias{filter_osm_tags}
 \alias{add_osm_feature}
-\title{Add a feature to an Overpass query}
+\title{Add tags to all current statements of an Overpass query}
 \usage{
 filter_osm_tags(
   opq,
@@ -28,10 +28,10 @@ add_osm_feature(
 \arguments{
 \item{opq}{An \code{overpass_query} object}
 
-\item{key}{feature key; can be negated with an initial exclamation mark,
+\item{key}{tag key; can be negated with an initial exclamation mark,
 \code{key = "!this"}, and can also be a vector if \code{value} is missing.}
 
-\item{value}{value for feature key; can be negated with an initial
+\item{value}{value for tag key; can be negated with an initial
 exclamation mark, \code{value = "!this"}, and can also be a vector,
 \code{value = c ("this", "that")}.}
 
@@ -43,14 +43,14 @@ exclamation mark, \code{value = "!this"}, and can also be a vector,
 \item{match_case}{If FALSE, matching for both \code{key} and \code{value} is
 not sensitive to case}
 
-\item{bbox}{optional bounding box for the feature query; must be set if no
+\item{bbox}{optional bounding box for the query; must be set if no
 opq query bbox has been set}
 }
 \value{
 An \link{opq} object.
 }
 \description{
-Add a feature to an Overpass query
+\code{add_osm_feature()} will be DEPRECATED in future versions.
 }
 \note{
 \code{key_exact} should generally be \code{TRUE}, because OSM uses a
@@ -61,54 +61,54 @@ of regular expressions on OSM keys, as described in Section 6.1.5 of
 query submitted to the overpass API can be obtained from
 \code{\link[=opq_string]{opq_string()}}.
 }
-\section{\code{add_osm_feature} vs \code{add_osm_features}}{
+\section{\code{filter_osm_tags} vs \code{add_osm_tags}}{
 
-Features defined within an \code{\link[=add_osm_features]{add_osm_features()}} call are combined with a
+Tags defined within an \code{\link[=add_osm_tags]{add_osm_tags()}} call are combined with a
 logical OR.
 
-Chained calls to either \code{add_osm_feature()} or \code{\link[=add_osm_features]{add_osm_features()}} combines
-features from these calls in a logical AND; this is analagous to chaining
+Chained calls to either \code{filter_osm_tags()} or \code{\link[=add_osm_tags]{add_osm_tags()}} combines
+tags from these calls in a logical AND; this is analagous to chaining
 \code{dplyr::filter()} on a data frame.
 
-\code{add_osm_features()} with only one feature is logically equivalent to
-\code{add_osm_feature()}.
+\code{add_osm_tags()} with only one tag is logically equivalent to
+\code{filter_osm_tags()}.
 }
 
 \examples{
 \dontrun{
 q <- opq ("portsmouth usa") |>
-    add_osm_feature (
+    filter_osm_tags (
         key = "amenity",
         value = "restaurant"
     ) |>
-    add_osm_feature (key = "amenity", value = "pub")
+    filter_osm_tags (key = "amenity", value = "pub")
 osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
 q1 <- opq ("portsmouth usa") |>
-    add_osm_feature (
+    filter_osm_tags (
         key = "amenity",
         value = "restaurant"
     )
 q2 <- opq ("portsmouth usa") |>
-    add_osm_feature (key = "amenity", value = "pub")
+    filter_osm_tags (key = "amenity", value = "pub")
 c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 
 # Use of negation to extract all non-primary highways
 q <- opq ("portsmouth uk") |>
-    add_osm_feature (key = "highway", value = "!primary")
+    filter_osm_tags (key = "highway", value = "!primary")
 
 # key negation without warnings
 q3 <- opq ("Vinçà", osm_type = "node") |>
-    add_osm_feature (key = c ("name", "!name:ca"))
+    filter_osm_tags (key = c ("name", "!name:ca"))
 cat (opq_string (q3))
 q4 <- opq ("el Carxe", osm_type = "node") |>
-    add_osm_feature (key = "natural", value = "peak") |>
-    add_osm_feature (key = "!ele")
+    filter_osm_tags (key = "natural", value = "peak") |>
+    filter_osm_tags (key = "!ele")
 cat (opq_string (q4))
 
 # Get objects with keys (`natural` OR `waterway`) AND `name`
 q_keys <- opq ("Badia del Vallès", osm_types = "nwr", out = "tags") |>
-    add_osm_features (features = list (natural = NULL, waterway = NULL)) |>
-    add_osm_feature (key = "name")
+    add_osm_tags (features = list (natural = NULL, waterway = NULL)) |>
+    filter_osm_tags (key = "name")
 cat (opq_string (q_keys))
 }
 }
@@ -116,7 +116,7 @@ cat (opq_string (q_keys))
 \url{https://wiki.openstreetmap.org/wiki/Map_Features}
 }
 \seealso{
-\code{\link[=add_osm_features]{add_osm_features()}}
+\code{\link[=add_osm_tags]{add_osm_tags()}}
 
 Other queries: 
 \code{\link{add_osm_tags}()},

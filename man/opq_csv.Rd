@@ -8,7 +8,8 @@ opq_csv(q, fields, header = TRUE)
 }
 \arguments{
 \item{q}{A opq string or an object of class \code{overpass_query} constructed with
-\code{\link[=opq]{opq()}} or alternative opq builders (+ \code{\link[=add_osm_feature]{add_osm_feature()}}/s).}
+\code{\link[=opq]{opq()}} or alternative opq builders (+ \code{\link[=filter_osm_tags]{filter_osm_tags()}},
+\code{\link[=add_osm_tags]{add_osm_tags()}}, \code{\link[=filter_osm_user]{filter_osm_user()}}).}
 
 \item{fields}{a character vector with the field names.}
 
@@ -35,8 +36,8 @@ expected result.
 \dontrun{
 q <- getbb ("Catalan Countries", format_out = "osm_type_id") |>
     opq (out = "tags center", osm_type = "relation", timeout = 100) |>
-    add_osm_feature ("admin_level", "7") |>
-    add_osm_feature ("boundary", "administrative") |>
+    filter_osm_tags ("admin_level", "7") |>
+    filter_osm_tags ("boundary", "administrative") |>
     opq_csv (fields = c ("name", "::type", "::id", "::lat", "::lon"))
 comarques <- osmdata_data_frame (q) # without timeout parameter, 0 rows
 
