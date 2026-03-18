@@ -107,7 +107,7 @@ cat (opq_string (q4))
 
 # Get objects with keys (`natural` OR `waterway`) AND `name`
 q_keys <- opq ("Badia del Vallès", osm_types = "nwr", out = "tags") |>
-    add_osm_tags (features = list (natural = NULL, waterway = NULL)) |>
+    add_osm_tags (tags = list (natural = NULL, waterway = NULL)) |>
     filter_osm_tags (key = "name")
 cat (opq_string (q_keys))
 }

@@ -5,7 +5,7 @@
 \alias{add_osm_features}
 \title{Add multiple tags to an Overpass query as independent statements}
 \usage{
-add_osm_tags(opq, features, bbox = NULL, key_exact = TRUE, value_exact = TRUE)
+add_osm_tags(opq, tags, bbox = NULL, key_exact = TRUE, value_exact = TRUE)
 
 add_osm_features(
   opq,
@@ -18,7 +18,7 @@ add_osm_features(
 \arguments{
 \item{opq}{An \code{overpass_query} object}
 
-\item{features}{A named list or vector with the format \code{list("<key>" = "<value>")} or \code{c("<key>" = "<value>")} or a character vector of
+\item{tags}{A named list or vector with the format \code{list("<key>" = "<value>")} or \code{c("<key>" = "<value>")} or a character vector of
 key-value pairs with keys and values enclosed in escape-formatted
 quotations. See examples for details.}
 
@@ -29,6 +29,8 @@ opq query bbox has been set.}
 \url{https://wiki.openstreetmap.org/wiki/Overpass_API}}
 
 \item{value_exact}{If FALSE, \code{value} is not interpreted exactly}
+
+\item{features}{Same as \code{tags}.}
 }
 \value{
 An \link{opq} object.
@@ -57,13 +59,13 @@ tags from these calls in a logical AND; this is analagous to chaining
 \examples{
 \dontrun{
 q <- opq ("portsmouth usa") |>
-    add_osm_tags (features = list (
+    add_osm_tags (tags = list (
         "amenity" = "restaurant",
         "amenity" = "pub"
     ))
 
 q <- opq ("portsmouth usa") |>
-    add_osm_tags (features = c (
+    add_osm_tags (tags = c (
         "\"amenity\"=\"restaurant\"",
         "\"amenity\"=\"pub\""
     ))
@@ -80,7 +82,7 @@ c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 
 # Get objects with keys (`natural` OR `waterway`) AND `name`
 q_keys <- opq ("Badia del Vallès", osm_types = "nwr", out = "tags") |>
-    add_osm_tags (features = list (natural = NULL, waterway = NULL)) |>
+    add_osm_tags (tags = list (natural = NULL, waterway = NULL)) |>
     filter_osm_tags (key = "name")
 cat (opq_string (q_keys))
 }

@@ -206,11 +206,11 @@ opq <- function (bbox = NULL, nodes_only,
 }
 
 # used in the following filter_osm_tags fn
-paste_features <- function (key, value, key_pre = "", bind = "=",
-                            match_case = FALSE, value_exact = FALSE) {
+paste_tags <- function (key, value, key_pre = "", bind = "=",
+                        match_case = FALSE, value_exact = FALSE) {
     if (is.null (value)) {
 
-        feature <- ifelse (substring (key, 1, 1) == "!",
+        tag <- ifelse (substring (key, 1, 1) == "!",
             sprintf ('[!"%s"]', substring (key, 2, nchar (key))),
             sprintf ('["%s"]', key)
         )
@@ -235,17 +235,17 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
                 key_pre <- ""
             }
         }
-        feature <- paste0 (sprintf (
+        tag <- paste0 (sprintf (
             '[%s"%s"%s"%s"',
             key_pre, key, bind, value
         ))
         if (!match_case) {
-            feature <- paste0 (feature, ",i")
+            tag <- paste0 (tag, ",i")
         }
-        feature <- paste0 (feature, "]")
+        tag <- paste0 (tag, "]")
     }
 
-    return (feature)
+    return (tag)
 }
 
 #' Add tags to all current statements of an Overpass query
@@ -323,7 +323,7 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #'
 #' # Get objects with keys (`natural` OR `waterway`) AND `name`
 #' q_keys <- opq ("Badia del Vallès", osm_types = "nwr", out = "tags") |>
-#'     add_osm_tags (features = list (natural = NULL, waterway = NULL)) |>
+#'     add_osm_tags (tags = list (natural = NULL, waterway = NULL)) |>
 #'     filter_osm_tags (key = "name")
 #' cat (opq_string (q_keys))
 #' }
@@ -353,16 +353,16 @@ filter_osm_tags <- function (opq,
         value <- NULL
     }
 
-    feature <- paste_features (
+    tags <- paste_tags (
         key, value, bind_key_pre$key_pre, bind_key_pre$bind,
         match_case, value_exact
     )
-    feature <- paste (feature, collapse = " ")
+    tags <- paste (tags, collapse = " ")
 
     if (is.null (opq$features)) {
-        opq$features <- feature
+        opq$features <- tags
     } else {
-        opq$features <- paste (opq$features, feature)
+        opq$features <- paste (opq$features, tags)
     }
 
     if (any (w <- !grepl ("\\[(\\\"|~)", opq$features))) {
@@ -419,7 +419,7 @@ add_osm_feature <- function (opq, # TODO: DEPRECATE
 #' @noRd
 set_bind_key_pre <- function (key_exact = TRUE,
                               value_exact = TRUE,
-                              features = NULL,
+                              tags = NULL,
                               bind = "=",
                               key_pre = "") {
     if (!is.null (value_exact)) {
@@ -428,35 +428,35 @@ set_bind_key_pre <- function (key_exact = TRUE,
 
     check_bind_key_pre (bind, key_pre)
 
-    if (!is.null (features)) {
+    if (!is.null (tags)) {
         if (length (bind) == 1) {
-            bind <- rep_len (bind, length (features))
-        } else if (!identical_length (features, bind)) {
+            bind <- rep_len (bind, length (tags))
+        } else if (!identical_length (tags, bind)) {
             stop (
-                "bind must be length 1 or the same length as features"
+                "bind must be length 1 or the same length as tags"
             )
         }
 
         if (length (key_pre) == 1) {
-            key_pre <- rep_len (key_pre, length (features))
-        } else if (!identical_length (features, key_pre)) {
+            key_pre <- rep_len (key_pre, length (tags))
+        } else if (!identical_length (tags, key_pre)) {
             stop (
-                "key_pre must be length 1 or the same length as features"
+                "key_pre must be length 1 or the same length as tags"
             )
         }
     }
 
-    features_len <- 1L
-    if (!is.null (features)) {
-        features_len <- length (features)
+    tags_len <- 1L
+    if (!is.null (tags)) {
+        tags_len <- length (tags)
     }
 
     if (!is.null (value_exact) && !value_exact) {
-        bind <- rep_len ("~", features_len)
+        bind <- rep_len ("~", tags_len)
     }
 
     if (!is.null (key_exact) && !key_exact) {
-        key_pre <- rep_len ("~", features_len)
+        key_pre <- rep_len ("~", tags_len)
     }
 
     list (
@@ -510,7 +510,7 @@ check_bind_key_pre <- function (bind = "=", key_pre = "") {
 #'
 #' @inheritParams filter_osm_tags
 #' @inheritSection filter_osm_tags `filter_osm_tags` vs `add_osm_tags`
-#' @param features A named list or vector with the format `list("<key>" =
+#' @param tags A named list or vector with the format `list("<key>" =
 #'      "<value>")` or `c("<key>" = "<value>")` or a character vector of
 #'      key-value pairs with keys and values enclosed in escape-formatted
 #'      quotations. See examples for details.
@@ -527,13 +527,13 @@ check_bind_key_pre <- function (bind = "=", key_pre = "") {
 #' @examples
 #' \dontrun{
 #' q <- opq ("portsmouth usa") |>
-#'     add_osm_tags (features = list (
+#'     add_osm_tags (tags = list (
 #'         "amenity" = "restaurant",
 #'         "amenity" = "pub"
 #'     ))
 #'
 #' q <- opq ("portsmouth usa") |>
-#'     add_osm_tags (features = c (
+#'     add_osm_tags (tags = c (
 #'         "\"amenity\"=\"restaurant\"",
 #'         "\"amenity\"=\"pub\""
 #'     ))
@@ -550,12 +550,12 @@ check_bind_key_pre <- function (bind = "=", key_pre = "") {
 #'
 #' # Get objects with keys (`natural` OR `waterway`) AND `name`
 #' q_keys <- opq ("Badia del Vallès", osm_types = "nwr", out = "tags") |>
-#'     add_osm_tags (features = list (natural = NULL, waterway = NULL)) |>
+#'     add_osm_tags (tags = list (natural = NULL, waterway = NULL)) |>
 #'     filter_osm_tags (key = "name")
 #' cat (opq_string (q_keys))
 #' }
 add_osm_tags <- function (opq,
-                          features,
+                          tags,
                           bbox = NULL,
                           key_exact = TRUE,
                           value_exact = TRUE) {
@@ -572,37 +572,37 @@ add_osm_tags <- function (opq,
         opq$suffix <- ");\n(._;>;);\nout body;"
     }
 
-    check_features (features)
+    check_tags (tags)
 
-    if (is_named (features)) {
+    if (is_named (tags)) {
         bind_key_pre <-
             set_bind_key_pre (
-                features = features,
+                tags = tags,
                 value_exact = value_exact,
                 key_exact = key_exact
             )
 
-        features <- mapply (
+        tags <- mapply (
             function (key, value, key_pre, bind) {
-                paste_features (key, value,
+                paste_tags (key, value,
                     key_pre = key_pre, bind = bind,
                     match_case = TRUE, value_exact = value_exact
                 )
             },
-            key = names (features), value = features,
+            key = names (tags), value = tags,
             key_pre = bind_key_pre$key_pre, bind = bind_key_pre$bind,
             SIMPLIFY = FALSE
         )
-        features <- as.character (features)
+        tags <- as.character (tags)
 
     }
 
-    index <- which (!grepl ("^\\[", features))
-    features [index] <- paste0 ("[", features [index])
-    index <- which (!grepl ("\\]$", features))
-    features [index] <- paste0 (features [index], "]")
+    index <- which (!grepl ("^\\[", tags))
+    tags [index] <- paste0 ("[", tags [index])
+    index <- which (!grepl ("\\]$", tags))
+    tags [index] <- paste0 (tags [index], "]")
 
-    opq$features <- unique (c (opq$features, features))
+    opq$features <- unique (c (opq$features, tags))
 
     opq
 }
@@ -610,6 +610,7 @@ add_osm_tags <- function (opq,
 #' @rdname add_osm_tags
 #'
 #' @description `add_osm_features()` will be DEPRECATED in future versions.
+#' @param features Same as `tags`.
 #'
 #' @export
 add_osm_features <- function (opq, # TODO: DEPRECATE
@@ -619,7 +620,7 @@ add_osm_features <- function (opq, # TODO: DEPRECATE
                               value_exact = TRUE) {
     add_osm_tags (
         opq = opq,
-        features = features,
+        tags = features,
         bbox = bbox,
         key_exact = key_exact,
         value_exact = value_exact
@@ -644,19 +645,19 @@ is_escape_delimited <- function (x) {
 #' Check if tags is provided and uses the required class and formatting
 #'
 #' @noRd
-check_features <- function (features) {
-    if (missing (features)) {
-        stop ("features must be provided", call. = FALSE)
+check_tags <- function (tags) {
+    if (missing (tags)) {
+        stop ("tags must be provided", call. = FALSE)
     }
 
     stopifnot (
-        "features must be a list or character vector." =
-            is.character (features) | is.list (features)
+        "tags must be a list or character vector." =
+            is.character (tags) | is.list (tags)
     )
 
-    if (!is_named (features) && is_escape_delimited (features)) {
+    if (!is_named (tags) && is_escape_delimited (tags)) {
         stop (
-            "features must be a named list or vector or a character vector ",
+            "tags must be a named list or vector or a character vector ",
             "enclosed in escape delimited quotations (see examples)",
             call. = FALSE
         )
@@ -891,7 +892,7 @@ opq_enclosing <- function (lon = NULL, lat = NULL,
     prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
     suffix <- ");\n(._;>;);\nout;"
 
-    features <- paste_features (key,
+    tags <- paste_tags (key,
         value,
         value_exact = TRUE,
         match_case = TRUE
@@ -900,7 +901,7 @@ opq_enclosing <- function (lon = NULL, lat = NULL,
         bbox = bbox,
         prefix = paste0 (prefix, ";\n(\n"),
         suffix = suffix,
-        features = features
+        features = tags
     )
     class (res) <- c (class (res), "overpass_query")
     attr (res, "datetime") <- attr (res, "datetime2") <- NULL

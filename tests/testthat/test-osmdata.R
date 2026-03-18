@@ -400,7 +400,7 @@ test_that ("add_osm_features", {
     qry <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
     expect_error (
         qry <- add_osm_features (qry),
-        "features must be provided"
+        "tags must be provided"
     )
 
     qry$bbox <- NULL
@@ -413,7 +413,7 @@ test_that ("add_osm_features", {
 
     expect_error (
         qry <- add_osm_features (qry, features = "a"),
-        "features must be a named list or vector or a character vector enclosed in escape delimited quotations \\(see examples\\)"
+        "tags must be a named list or vector or a character vector enclosed in escape delimited quotations \\(see examples\\)"
     )
 
     bbox <- c (-0.118, 51.514, -0.115, 51.517)
