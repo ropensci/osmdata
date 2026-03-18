@@ -51,9 +51,9 @@ cities <- osmdata_data_frame (qid)
 }
 \seealso{
 Other queries: 
-\code{\link{add_osm_feature}()},
-\code{\link{add_osm_features}()},
+\code{\link{add_osm_tags}()},
 \code{\link{bbox_to_string}()},
+\code{\link{filter_osm_tags}()},
 \code{\link{filter_osm_user}()},
 \code{\link{getbb}()},
 \code{\link{opq}()},

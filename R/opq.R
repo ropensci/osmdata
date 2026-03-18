@@ -327,7 +327,7 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #'     add_osm_feature (key = "name")
 #' cat (opq_string (q_keys))
 #' }
-add_osm_feature <- function (opq,
+filter_osm_tags <- function (opq,
                              key,
                              value,
                              key_exact = TRUE,
@@ -384,6 +384,27 @@ add_osm_feature <- function (opq,
 
     opq
 }
+
+#' @rdname filter_osm_tags
+#' @export
+add_osm_feature <- function (opq, # TODO: DEPRECATE
+                             key,
+                             value,
+                             key_exact = TRUE,
+                             value_exact = TRUE,
+                             match_case = TRUE,
+                             bbox = NULL) {
+    filter_osm_tags (
+        opq = opq,
+        key = key,
+        value = value,
+        key_exact = key_exact,
+        value_exact = value_exact,
+        match_case = match_case,
+        bbox = bbox
+    )
+}
+
 
 #' Get conditional operator/prefix values based on value_exact and key_exact
 #'
@@ -529,11 +550,11 @@ check_bind_key_pre <- function (bind = "=", key_pre = "") {
 #'     add_osm_feature (key = "name")
 #' cat (opq_string (q_keys))
 #' }
-add_osm_features <- function (opq,
-                              features,
-                              bbox = NULL,
-                              key_exact = TRUE,
-                              value_exact = TRUE) {
+add_osm_tags <- function (opq,
+                          features,
+                          bbox = NULL,
+                          key_exact = TRUE,
+                          value_exact = TRUE) {
     if (is.null (bbox) && is.null (opq$bbox)) {
         stop ("Bounding box has to either be set in opq or must be set here")
     }
@@ -581,6 +602,23 @@ add_osm_features <- function (opq,
 
     opq
 }
+
+#' @rdname add_osm_tags
+#' @export
+add_osm_features <- function (opq, # TODO: DEPRECATE
+                              features,
+                              bbox = NULL,
+                              key_exact = TRUE,
+                              value_exact = TRUE) {
+    add_osm_tags (
+        opq = opq,
+        features = features,
+        bbox = bbox,
+        key_exact = key_exact,
+        value_exact = value_exact
+    )
+}
+
 
 #' Is features a named list or character vector?
 #'
