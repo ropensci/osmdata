@@ -24,6 +24,20 @@ Please use \code{\link[=osmdata_sf]{osmdata_sf()}} or \code{\link[=osmdata_sc]{o
 Since version 0.3, using \code{\link[=osmdata_sp]{osmdata_sp()}} will produce a deprecation warning.
 }
 }
+
+\describe{
+\item{\code{add_osm_feature()}}{
+Please use \code{\link[=filter_osm_tags]{filter_osm_tags()}} instead.
+In future versions, using \code{\link[=add_osm_feature]{add_osm_feature()}} will produce a deprecation warning.
+}
+}
+
+\describe{
+\item{\code{add_osm_features()}}{
+Please use \code{\link[=add_osm_tags]{add_osm_tags()}} instead.
+In future versions, using \code{\link[=add_osm_features]{add_osm_features()}} will produce a deprecation warning.
+}
+}
 }
 
 \keyword{internal}

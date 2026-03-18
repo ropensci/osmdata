@@ -24,7 +24,7 @@ polygon.
 \examples{
 \dontrun{
 dat <- opq ("hengelo nl") |>
-    add_osm_feature (key = "highway") |>
+    filter_osm_tags (key = "highway") |>
     osmdata_sf ()
 bus <- dat$osm_points [which (dat$osm_points$highway == "bus_stop"), ] |>
     rownames () # all OSM IDs of bus stops
@@ -32,7 +32,7 @@ osm_lines (dat, bus) # all highways containing bus stops
 
 # All lines which intersect with Piccadilly Circus in London, UK
 dat <- opq ("Fitzrovia London") |>
-    add_osm_feature (key = "highway") |>
+    filter_osm_tags (key = "highway") |>
     osmdata_sf ()
 i <- which (dat$osm_polygons$name == "Piccadilly Circus")
 id <- rownames (dat$osm_polygons [i, ])

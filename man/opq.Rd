@@ -93,41 +93,41 @@ are likely to be rejected.
 \dontrun{
 q <- getbb ("portsmouth", display_name_contains = "United States") |>
     opq () |>
-    add_osm_feature ("amenity", "restaurant") |>
-    add_osm_feature ("amenity", "pub")
+    filter_osm_tags ("amenity", "restaurant") |>
+    filter_osm_tags ("amenity", "pub")
 osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
 q1 <- getbb ("portsmouth", display_name_contains = "United States") |>
     opq () |>
-    add_osm_feature ("amenity", "restaurant")
+    filter_osm_tags ("amenity", "restaurant")
 q2 <- getbb ("portsmouth", display_name_contains = "United States") |>
     opq () |>
-    add_osm_feature ("amenity", "pub")
+    filter_osm_tags ("amenity", "pub")
 c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 
 # Use `osm_types = "node"` to retrieve single point data only, such as for central
 # locations of cities.
 opq <- opq (bbox, osm_types = "node") |>
-    add_osm_feature (key = "place", value = "city") |>
+    filter_osm_tags (key = "place", value = "city") |>
     osmdata_sf (quiet = FALSE)
 
 # Filter by a search area
 qa1 <- getbb ("Catalan Countries", format_out = "osm_type_id") |>
     opq (osm_types = "node") |>
-    add_osm_feature (key = "capital", value = "4")
+    filter_osm_tags (key = "capital", value = "4")
 opqa1 <- osmdata_sf (qa1)
 # Filter by a multiple search areas
 bb <- getbb ("Vilafranca", format_out = "data.frame")
 qa2 <- bbox_to_string (bb [bb$osm_type != "node", ]) |>
     opq (osm_types = "node") |>
-    add_osm_feature (key = "place")
+    filter_osm_tags (key = "place")
 opqa2 <- osmdata_sf (qa2)
 }
 }
 \seealso{
 Other queries: 
-\code{\link{add_osm_feature}()},
-\code{\link{add_osm_features}()},
+\code{\link{add_osm_tags}()},
 \code{\link{bbox_to_string}()},
+\code{\link{filter_osm_tags}()},
 \code{\link{filter_osm_user}()},
 \code{\link{getbb}()},
 \code{\link{opq_around}()},

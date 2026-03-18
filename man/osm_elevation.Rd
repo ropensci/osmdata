@@ -26,7 +26,7 @@ pre-downloaded global elevation file from
 \examples{
 \dontrun{
 query <- opq ("omaha nebraska") |>
-    add_osm_feature (key = "highway")
+    filter_osm_tags (key = "highway")
 # Elevation can only be applied to \pkg{silicate} 'SC'-class data:
 dat <- osmdata_sc (query)
 dat$vertex

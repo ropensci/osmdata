@@ -9,7 +9,7 @@ osmdata_sp(q, doc, quiet = TRUE)
 }
 \arguments{
 \item{q}{An object of class \code{overpass_query} constructed with
-\code{\link[=opq]{opq()}} and \code{\link[=add_osm_feature]{add_osm_feature()}} or a string with a valid query, such
+\code{\link[=opq]{opq()}} and \code{\link[=filter_osm_tags]{filter_osm_tags()}} or a string with a valid query, such
 as \code{"(node(39.4712701,-0.3841326,39.4713799,-0.3839475);); out;"}.
 May be be omitted, in which case the \link{osmdata} object will not
 include the query. See examples below.}
@@ -31,7 +31,7 @@ format.
 \examples{
 \dontrun{
 query <- opq ("hampi india") |>
-    add_osm_feature (key = "historic", value = "ruins")
+    filter_osm_tags (key = "historic", value = "ruins")
 # Then extract data from 'Overpass' API
 hampi_sp <- osmdata_sp (query)
 }
