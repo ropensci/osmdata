@@ -137,7 +137,7 @@ test_that ("osm_types", {
     )
     expect_true ("nwr" == q1$osm_types)
 
-    features <- c (
+    tags <- c (
         "\"amenity\"=\"school\"",
         "\"amenity\"=\"kindergarten\"",
         "\"amenity\"=\"music_school\"",
@@ -145,10 +145,10 @@ test_that ("osm_types", {
         "\"amenity\"=\"dancing_school\""
     )
     q2 <- opq ("relation(id:349053)") |> # "Catalunya"
-        add_osm_features (features = features)
+        add_osm_tags (tags = tags)
     s <- opq_string (q2)
 
-    n_fts <- length (features)
+    n_fts <- length (tags)
     n_fts_in_query <- length (gregexpr ("amenity", s) [[1]])
     # Query should have that number repeated for each osm_types (default to
     # node, way, relation):
@@ -336,7 +336,7 @@ test_that ("opq_string", {
         bbox = c (-0.118, 51.514, -0.115, 51.517),
         osm_types = "node"
     )
-    q1 <- add_osm_feature (q1, key = "amenity", value = "restaurant")
+    q1 <- filter_osm_tags (q1, key = "amenity", value = "restaurant")
     s1 <- opq_string (q1)
     # nodes only, so "out" instead of "out body" and no way nor relation
     expect_false (grepl ("\\(\\._;>;\\)", s1))
@@ -346,7 +346,7 @@ test_that ("opq_string", {
         bbox = "relation(id:11747082)",
         osm_types = "node"
     )
-    q2 <- add_osm_feature (q2, key = "amenity", value = "restaurant")
+    q2 <- filter_osm_tags (q2, key = "amenity", value = "restaurant")
     s2 <- opq_string (q2)
     # nodes only, so "out" instead of "out body" and no way nor relation on clauses
     expect_false (grepl ("\\(\\._;>;\\)", s2))
@@ -367,7 +367,7 @@ test_that ("opq_string", {
 
 
     # key-value pair:
-    q2 <- add_osm_feature (q0, key = "highway", value = "!primary")
+    q2 <- filter_osm_tags (q0, key = "highway", value = "!primary")
     s2 <- opq_string (q2)
     expect_true (grepl ("highway", s2))
     expect_true (grepl ("primary", s2))

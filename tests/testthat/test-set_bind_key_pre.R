@@ -1,6 +1,6 @@
 # NOTE: As of November 2022, these conditions are currently not possible, and
 # can only be triggered by direct calls to the internal functions. The bind
-# and key_pre parameters may be exposed in add_osm_features() in the future if
+# and key_pre parameters may be exposed in add_osm_tags() in the future if
 # package developers decide the option could be useful.
 
 test_that ("set_bind_key_pre errors", {

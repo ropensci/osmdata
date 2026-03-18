@@ -3,27 +3,27 @@ has_internet <- curl::has_internet ()
 test_that ("query-construction", {
 
     q0 <- opq (bbox = c (-0.12, 51.51, -0.11, 51.52))
-    expect_error (q1 <- add_osm_feature (q0), "key must be provided")
-    expect_silent (q1 <- add_osm_feature (q0, key = "aaa")) # bbox from qry
+    expect_error (q1 <- filter_osm_tags (q0), "key must be provided")
+    expect_silent (q1 <- filter_osm_tags (q0, key = "aaa")) # bbox from qry
     q0$bbox <- NULL
     expect_error (
-        q1 <- add_osm_feature (q0, key = "aaa"),
+        q1 <- filter_osm_tags (q0, key = "aaa"),
         "Bounding box has to either be set in opq or must be set here"
     )
     q0 <- opq (bbox = c (-0.12, 51.51, -0.11, 51.52))
-    q1 <- add_osm_feature (q0, key = "aaa")
+    q1 <- filter_osm_tags (q0, key = "aaa")
     expect_false (grepl ("=", q1$features))
-    q1 <- add_osm_feature (q0, key = "aaa", value = "bbb")
+    q1 <- filter_osm_tags (q0, key = "aaa", value = "bbb")
     expect_true (grepl ("=", q1$features))
     expect_message (
-        q1 <- add_osm_feature (q0,
+        q1 <- filter_osm_tags (q0,
             key = "aaa", value = "bbb",
             key_exact = FALSE
         ),
         "key_exact = FALSE can only combined with value_exact = FALSE;"
     )
     expect_silent (
-        q1 <- add_osm_feature (q0,
+        q1 <- filter_osm_tags (q0,
             key = "aaa", value = "bbb",
             key_exact = FALSE, value_exact = FALSE
         )
@@ -33,14 +33,14 @@ test_that ("query-construction", {
 test_that ("add feature", {
 
     qry <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
-    qry1 <- add_osm_feature (qry, key = "highway")
-    qry2 <- add_osm_feature (qry, key = "highway", value = "primary")
-    qry3 <- add_osm_feature (qry,
+    qry1 <- filter_osm_tags (qry, key = "highway")
+    qry2 <- filter_osm_tags (qry, key = "highway", value = "primary")
+    qry3 <- filter_osm_tags (qry,
         key = "highway",
         value = c ("primary", "tertiary")
     )
-    qry4 <- add_osm_feature (qry, key = "highway", value = "!primary")
-    qry5 <- add_osm_feature (qry,
+    qry4 <- filter_osm_tags (qry, key = "highway", value = "!primary")
+    qry5 <- filter_osm_tags (qry,
         key = "highway", value = "primary",
         match_case = FALSE
     )
@@ -56,7 +56,7 @@ test_that ("add feature", {
     bbox <- c (-0.118, 51.514, -0.115, 51.517)
     qry <- opq (bbox = bbox)
     bbox2 <- bbox + c (0.01, 0.01, -0.01, -0.01)
-    qry6 <- add_osm_feature (
+    qry6 <- filter_osm_tags (
         qry,
         bbox = bbox2,
         key = "highway",
@@ -65,14 +65,14 @@ test_that ("add feature", {
     expect_true (!identical (qry$bbox, qry6$bbox))
 
     qry7 <- opq ("relation(id:74310)") |> # "Vinçà"
-        add_osm_feature (key = c ("name", "!name:ca"))
+        filter_osm_tags (key = c ("name", "!name:ca"))
     qry8 <- opq ("relation(id:11755232)") |> # "el Carxe"
-        add_osm_feature (key = "natural", value = "peak") |>
-        add_osm_feature (key = "!ele")
+        filter_osm_tags (key = "natural", value = "peak") |>
+        filter_osm_tags (key = "!ele")
     expect_warning (
         qry9 <- opq ("relation(id:11755232)") |> # "el Carxe"
-            add_osm_feature (key = "!ele") |>
-            add_osm_feature (key = "natural", value = "peak"),
+            filter_osm_tags (key = "!ele") |>
+            filter_osm_tags (key = "natural", value = "peak"),
         "The query will request objects whith only a negated key "
     )
     expect_identical (qry7$features, "[\"name\"] [!\"name:ca\"]")
@@ -249,7 +249,7 @@ test_that ("osmdata without query", {
 test_that ("make_query", {
 
     qry <- opq (bbox = c (-0.116, 51.516, -0.115, 51.517))
-    qry <- add_osm_feature (qry, key = "highway")
+    qry <- filter_osm_tags (qry, key = "highway")
 
     if (!has_internet) {
         expect_error (
@@ -361,7 +361,7 @@ test_that ("make_query", {
 test_that ("query-no-quiet", {
 
     qry <- opq (bbox = c (-0.116, 51.516, -0.115, 51.517))
-    qry <- add_osm_feature (qry, key = "highway")
+    qry <- filter_osm_tags (qry, key = "highway")
 
     with_mock_dir ("mock_osm_xml", {
         expect_message (
@@ -395,47 +395,47 @@ test_that ("query-no-quiet", {
     })
 })
 
-test_that ("add_osm_features", {
+test_that ("add_osm_tags", {
 
     qry <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
     expect_error (
-        qry <- add_osm_features (qry),
+        qry <- add_osm_tags (qry),
         "tags must be provided"
     )
 
     qry$bbox <- NULL
     expect_error (
-        qry <- add_osm_features (qry, features = "a"),
+        qry <- add_osm_tags (qry, tags = "a"),
         "Bounding box has to either be set in opq or must be set here"
     )
 
     qry <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))
 
     expect_error (
-        qry <- add_osm_features (qry, features = "a"),
+        qry <- add_osm_tags (qry, tags = "a"),
         "tags must be a named list or vector or a character vector enclosed in escape delimited quotations \\(see examples\\)"
     )
 
     bbox <- c (-0.118, 51.514, -0.115, 51.517)
     bbox_mod <- bbox + c (-0.001, -0.001, 0.001, 0.001)
     qry0 <- opq (bbox = bbox)
-    qry1 <- add_osm_features (qry0, features = "\"amenity\"=\"restaurant\"")
-    qry2 <- add_osm_features (qry0,
-        features = "\"amenity\"=\"restaurant\"",
+    qry1 <- add_osm_tags (qry0, tags = "\"amenity\"=\"restaurant\"")
+    qry2 <- add_osm_tags (qry0,
+        tags = "\"amenity\"=\"restaurant\"",
         bbox = bbox_mod
     )
     expect_false (identical (qry1$bbox, qry2$bbox))
 
-    qry3 <- add_osm_features (qry0, features = c ("amenity" = "restaurant"))
+    qry3 <- add_osm_tags (qry0, tags = c ("amenity" = "restaurant"))
     expect_identical (qry1, qry3)
 
-    qry4 <- add_osm_features (qry0,
-        features = c ("amenity" = "restaurant", "amentity" = "pub")
+    qry4 <- add_osm_tags (qry0,
+        tags = c ("amenity" = "restaurant", "amentity" = "pub")
     )
     expect_s3_class (qry4, "overpass_query")
 
-    qry5 <- add_osm_features (qry0,
-        features = list ("amenity" = "restaurant", "amentity" = "pub")
+    qry5 <- add_osm_tags (qry0,
+        tags = list ("amenity" = "restaurant", "amentity" = "pub")
     )
     expect_s3_class (qry5, "overpass_query")
 })
