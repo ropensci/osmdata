@@ -647,7 +647,7 @@ check_features <- function (features) {
 #' @export
 #'
 #' @examples
-#' # Notice the "::user" and "::uid" fields in the oqp_csv()
+#' # Notice the "::user" and "::uid" fields in the opq_csv()
 #' q_csv <- opq (bbox = "relation(id:11755232)", out = "meta", osm_type = "node") |>
 #'     filter_osm_user (user = "jmaspons") |>
 #'     add_osm_feature (key = "name") |>
