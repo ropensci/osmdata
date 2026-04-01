@@ -22,8 +22,8 @@ to find all lines which intersect a given point).
 unnamed vector) return a string
 \item \code{\link[=overpass_status]{overpass_status()}}: Retrieve status of the overpass API
 \item \code{\link[=opq]{opq()}}: Build an overpass query
-\item \code{\link[=add_osm_feature]{add_osm_feature()}}: Add a feature to an overpass query
-\item \code{\link[=add_osm_features]{add_osm_features()}}: Add multiple features to an Overpass query
+\item \code{\link[=filter_osm_tags]{filter_osm_tags()}}: Add tags to all current statements of an Overpass query
+\item \code{\link[=add_osm_tags]{add_osm_tags()}}: Add multiple tags to independent statments of an Overpass query
 \item \code{\link[=filter_osm_user]{filter_osm_user()}}: Add an user filter to an Overpass query
 \item \code{\link[=opq_string]{opq_string()}}: Convert an osmdata query to overpass API string
 }

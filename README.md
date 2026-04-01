@@ -82,7 +82,7 @@ packageVersion ("osmdata")
 
 [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API) queries
 can be built from a base query constructed with `opq` followed by
-`add_osm_feature`. The corresponding OSM objects are then downloaded and
+`filter_osm_tags`. The corresponding OSM objects are then downloaded and
 converted to [Simple Feature
 (`sf`)](https://cran.r-project.org/package=sf) objects with
 `osmdata_sf()`, [Spatial (`sp`)](https://cran.r-project.org/package=sp)
@@ -92,7 +92,7 @@ objects with `osmdata_sp()` (DEPRECATED) or [Silicate
 
 ``` r
 x <- opq (bbox = c (-0.27, 51.47, -0.20, 51.50)) |> # Chiswick Eyot in London, U.K.
-    add_osm_feature (key = "name", value = "Thames", value_exact = FALSE) |>
+    filter_osm_tags (key = "name", value = "Thames", value_exact = FALSE) |>
     osmdata_sf ()
 x
 ```
@@ -153,19 +153,19 @@ str (b)
 ### Features
 
 The next step is to define features of interest using the
-[`add_osm_feature()`
-function](https://docs.ropensci.org/osmdata/reference/add_osm_feature.html).
+[`filter_osm_tags()`
+function](https://docs.ropensci.org/osmdata/reference/filter_osm_tags.html).
 This function accepts `key` and `value` parameters specifying desired
 features in the [OSM key-vale
 schema](https://wiki.openstreetmap.org/wiki/Map_Features). Multiple
-`add_osm_feature()` calls may be combined as illustrated below, with the
+`filter_osm_tags()` calls may be combined as illustrated below, with the
 result being a logical AND operation, thus returning all amenities that
 are labelled both as restaurants and also as pubs:
 
 ``` r
 q <- opq ("portsmouth usa") |>
-    add_osm_feature (key = "amenity", value = "restaurant") |>
-    add_osm_feature (key = "amenity", value = "pub") # There are none of these
+    filter_osm_tags (key = "amenity", value = "restaurant") |>
+    filter_osm_tags (key = "amenity", value = "pub") # There are none of these
 ```
 
 Features can also be requested by key only, in which case features with
@@ -173,7 +173,7 @@ any values for the specified key will be returned:
 
 ``` r
 q <- opq ("portsmouth usa") |>
-    add_osm_feature (key = "amenity")
+    filter_osm_tags (key = "amenity")
 ```
 
 Such key-only queries can, however, translate into requesting very large
@@ -186,8 +186,8 @@ restaurants and that are not labelled as pubs:
 
 ``` r
 q <- opq ("portsmouth usa") |>
-    add_osm_feature (key = "amenity", value = "!restaurant") |>
-    add_osm_feature (key = "amenity", value = "!pub") # There are a lot of these
+    filter_osm_tags (key = "amenity", value = "!restaurant") |>
+    filter_osm_tags (key = "amenity", value = "!pub") # There are a lot of these
 ```
 
 Additional arguments allow for more refined matching, such as the
@@ -195,23 +195,23 @@ following request for all pubs with “irish” in the name:
 
 ``` r
 q <- opq ("washington dc") |>
-    add_osm_feature (key = "amenity", value = "pub") |>
-    add_osm_feature (
+    filter_osm_tags (key = "amenity", value = "pub") |>
+    filter_osm_tags (
         key = "name", value = "irish",
         value_exact = FALSE, match_case = FALSE
     )
 ```
 
 Logical OR combinations can be constructed using the separate
-[`add_osm_features()`
-function](https://docs.ropensci.org/osmdata/reference/add_osm_features.html).
+[`add_osm_tags()`
+function](https://docs.ropensci.org/osmdata/reference/add_osm_tags.html).
 The first of the above examples requests all features that are both
 restaurants AND pubs. The following query will request data on
 restaurants OR pubs:
 
 ``` r
 q <- opq ("portsmouth usa") |>
-    add_osm_features (features = c (
+    add_osm_tags (features = c (
         "\"amenity\"=\"restaurant\"",
         "\"amenity\"=\"pub\""
     ))
@@ -231,7 +231,7 @@ and
 
 ### Data Formats
 
-An overpass query constructed with the `opq()` and `add_osm_feature()`
+An overpass query constructed with the `opq()` and `filter_osm_tags()`
 functions is then sent to the [overpass
 server](https://overpass-turbo.eu) to request data. These data may be
 returned in a variety of formats, currently including:

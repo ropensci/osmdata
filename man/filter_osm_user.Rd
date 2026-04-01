@@ -37,7 +37,7 @@ for details.
 # Notice the "::user" and "::uid" fields in the opq_csv()
 q_csv <- opq (bbox = "relation(id:11755232)", out = "meta", osm_type = "node") |>
     filter_osm_user (user = "jmaspons") |>
-    add_osm_feature (key = "name") |>
+    filter_osm_tags (key = "name") |>
     opq_csv (c ("::type", "::id", "name", "name:ca", "::user", "::uid"))
 cat (opq_string (q_csv))
 # Warning: csv queries can fail without errors in long running queries. For timeouts,
@@ -52,7 +52,7 @@ q_touched <- opq (
     osm_type = "node", timeout = 100
 ) |>
     filter_osm_user (user = "jmaspons", touched = TRUE) |>
-    add_osm_feature (key = "name")
+    filter_osm_tags (key = "name")
 cat (opq_string (q_touched))
 \dontrun{
 d_touched <- osmdata_data_frame (q_touched)
@@ -61,9 +61,9 @@ d_touched
 }
 \seealso{
 Other queries: 
-\code{\link{add_osm_feature}()},
-\code{\link{add_osm_features}()},
+\code{\link{add_osm_tags}()},
 \code{\link{bbox_to_string}()},
+\code{\link{filter_osm_tags}()},
 \code{\link{getbb}()},
 \code{\link{opq}()},
 \code{\link{opq_around}()},

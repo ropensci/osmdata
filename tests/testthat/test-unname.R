@@ -3,7 +3,7 @@ require (sf)
 test_that ("unname", {
 
     qry <- opq (bbox = c (-0.116, 51.516, -0.115, 51.517))
-    qry <- add_osm_feature (qry, key = "highway")
+    qry <- filter_osm_tags (qry, key = "highway")
 
     res <- with_mock_dir ("mock_unname", {
         osmdata_sf (qry)

@@ -70,33 +70,33 @@
 #' \dontrun{
 #' q <- getbb ("portsmouth", display_name_contains = "United States") |>
 #'     opq () |>
-#'     add_osm_feature ("amenity", "restaurant") |>
-#'     add_osm_feature ("amenity", "pub")
+#'     filter_osm_tags ("amenity", "restaurant") |>
+#'     filter_osm_tags ("amenity", "pub")
 #' osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
 #' q1 <- getbb ("portsmouth", display_name_contains = "United States") |>
 #'     opq () |>
-#'     add_osm_feature ("amenity", "restaurant")
+#'     filter_osm_tags ("amenity", "restaurant")
 #' q2 <- getbb ("portsmouth", display_name_contains = "United States") |>
 #'     opq () |>
-#'     add_osm_feature ("amenity", "pub")
+#'     filter_osm_tags ("amenity", "pub")
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 #'
 #' # Use `osm_types = "node"` to retrieve single point data only, such as for central
 #' # locations of cities.
 #' opq <- opq (bbox, osm_types = "node") |>
-#'     add_osm_feature (key = "place", value = "city") |>
+#'     filter_osm_tags (key = "place", value = "city") |>
 #'     osmdata_sf (quiet = FALSE)
 #'
 #' # Filter by a search area
 #' qa1 <- getbb ("Catalan Countries", format_out = "osm_type_id") |>
 #'     opq (osm_types = "node") |>
-#'     add_osm_feature (key = "capital", value = "4")
+#'     filter_osm_tags (key = "capital", value = "4")
 #' opqa1 <- osmdata_sf (qa1)
 #' # Filter by a multiple search areas
 #' bb <- getbb ("Vilafranca", format_out = "data.frame")
 #' qa2 <- bbox_to_string (bb [bb$osm_type != "node", ]) |>
 #'     opq (osm_types = "node") |>
-#'     add_osm_feature (key = "place")
+#'     filter_osm_tags (key = "place")
 #' opqa2 <- osmdata_sf (qa2)
 #' }
 opq <- function (bbox = NULL, nodes_only,
@@ -205,12 +205,12 @@ opq <- function (bbox = NULL, nodes_only,
     return (res)
 }
 
-# used in the following add_osm_feature fn
-paste_features <- function (key, value, key_pre = "", bind = "=",
-                            match_case = FALSE, value_exact = FALSE) {
+# used in the following filter_osm_tags fn
+paste_tags <- function (key, value, key_pre = "", bind = "=",
+                        match_case = FALSE, value_exact = FALSE) {
     if (is.null (value)) {
 
-        feature <- ifelse (substring (key, 1, 1) == "!",
+        tag <- ifelse (substring (key, 1, 1) == "!",
             sprintf ('[!"%s"]', substring (key, 2, nchar (key))),
             sprintf ('["%s"]', key)
         )
@@ -235,25 +235,25 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
                 key_pre <- ""
             }
         }
-        feature <- paste0 (sprintf (
+        tag <- paste0 (sprintf (
             '[%s"%s"%s"%s"',
             key_pre, key, bind, value
         ))
         if (!match_case) {
-            feature <- paste0 (feature, ",i")
+            tag <- paste0 (tag, ",i")
         }
-        feature <- paste0 (feature, "]")
+        tag <- paste0 (tag, "]")
     }
 
-    return (feature)
+    return (tag)
 }
 
-#' Add a feature to an Overpass query
+#' Add tags to all current statements of an Overpass query
 #'
 #' @param opq An `overpass_query` object
-#' @param key feature key; can be negated with an initial exclamation mark,
+#' @param key tag key; can be negated with an initial exclamation mark,
 #' `key = "!this"`, and can also be a vector if `value` is missing.
-#' @param value value for feature key; can be negated with an initial
+#' @param value value for tag key; can be negated with an initial
 #' exclamation mark, `value = "!this"`, and can also be a vector,
 #' `value = c ("this", "that")`.
 #' @param key_exact If FALSE, `key` is not interpreted exactly; see
@@ -261,7 +261,7 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #' @param value_exact If FALSE, `value` is not interpreted exactly
 #' @param match_case If FALSE, matching for both `key` and `value` is
 #' not sensitive to case
-#' @param bbox optional bounding box for the feature query; must be set if no
+#' @param bbox optional bounding box for the query; must be set if no
 #'        opq query bbox has been set
 #' @return An [opq] object.
 #'
@@ -274,18 +274,18 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #' [opq_string()].
 #'
 #' @references <https://wiki.openstreetmap.org/wiki/Map_Features>
-#' @seealso [add_osm_features()]
+#' @seealso [add_osm_tags()]
 #'
-#' @section `add_osm_feature` vs `add_osm_features`:
-#' Features defined within an [add_osm_features()] call are combined with a
+#' @section `filter_osm_tags` vs `add_osm_tags`:
+#' Tags defined within an [add_osm_tags()] call are combined with a
 #' logical OR.
 #'
-#' Chained calls to either `add_osm_feature()` or [add_osm_features()] combines
-#' features from these calls in a logical AND; this is analagous to chaining
+#' Chained calls to either `filter_osm_tags()` or [add_osm_tags()] combines
+#' tags from these calls in a logical AND; this is analagous to chaining
 #' `dplyr::filter()` on a data frame.
 #'
-#' `add_osm_features()` with only one feature is logically equivalent to
-#' `add_osm_feature()`.
+#' `add_osm_tags()` with only one tag is logically equivalent to
+#' `filter_osm_tags()`.
 #'
 #' @family queries
 #' @export
@@ -293,41 +293,41 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #' @examples
 #' \dontrun{
 #' q <- opq ("portsmouth usa") |>
-#'     add_osm_feature (
+#'     filter_osm_tags (
 #'         key = "amenity",
 #'         value = "restaurant"
 #'     ) |>
-#'     add_osm_feature (key = "amenity", value = "pub")
+#'     filter_osm_tags (key = "amenity", value = "pub")
 #' osmdata_sf (q) # all objects that are restaurants AND pubs (there are none!)
 #' q1 <- opq ("portsmouth usa") |>
-#'     add_osm_feature (
+#'     filter_osm_tags (
 #'         key = "amenity",
 #'         value = "restaurant"
 #'     )
 #' q2 <- opq ("portsmouth usa") |>
-#'     add_osm_feature (key = "amenity", value = "pub")
+#'     filter_osm_tags (key = "amenity", value = "pub")
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 #'
 #' # Use of negation to extract all non-primary highways
 #' q <- opq ("portsmouth uk") |>
-#'     add_osm_feature (key = "highway", value = "!primary")
+#'     filter_osm_tags (key = "highway", value = "!primary")
 #'
 #' # key negation without warnings
 #' q3 <- opq ("Vinçà", osm_type = "node") |>
-#'     add_osm_feature (key = c ("name", "!name:ca"))
+#'     filter_osm_tags (key = c ("name", "!name:ca"))
 #' cat (opq_string (q3))
 #' q4 <- opq ("el Carxe", osm_type = "node") |>
-#'     add_osm_feature (key = "natural", value = "peak") |>
-#'     add_osm_feature (key = "!ele")
+#'     filter_osm_tags (key = "natural", value = "peak") |>
+#'     filter_osm_tags (key = "!ele")
 #' cat (opq_string (q4))
 #'
 #' # Get objects with keys (`natural` OR `waterway`) AND `name`
 #' q_keys <- opq ("Badia del Vallès", osm_types = "nwr", out = "tags") |>
-#'     add_osm_features (features = list (natural = NULL, waterway = NULL)) |>
-#'     add_osm_feature (key = "name")
+#'     add_osm_tags (tags = list (natural = NULL, waterway = NULL)) |>
+#'     filter_osm_tags (key = "name")
 #' cat (opq_string (q_keys))
 #' }
-add_osm_feature <- function (opq,
+filter_osm_tags <- function (opq,
                              key,
                              value,
                              key_exact = TRUE,
@@ -353,25 +353,26 @@ add_osm_feature <- function (opq,
         value <- NULL
     }
 
-    feature <- paste_features (
+    tags <- paste_tags (
         key, value, bind_key_pre$key_pre, bind_key_pre$bind,
         match_case, value_exact
     )
-    feature <- paste (feature, collapse = " ")
+    tags <- paste (tags, collapse = " ")
 
     if (is.null (opq$features)) {
-        opq$features <- feature
+        opq$features <- tags
     } else {
-        opq$features <- paste (opq$features, feature)
+        opq$features <- paste (opq$features, tags)
     }
 
     if (any (w <- !grepl ("\\[(\\\"|~)", opq$features))) {
         warning (
             "The query will request objects whith only a negated key (",
             paste (opq$features [w], collapse = ", "), ") , which can be quite ",
-            "expensive for overpass servers. Add other features or be shure ",
+            "expensive for overpass servers. Add other tags or be shure ",
             "that that is what you want. To avoid this warning, reorder your ",
-            "calls to add_osm_feature/s and leave key negations at the end."
+            "calls to filter_osm_tags() / add_osm_tags() and leave key ",
+            "negations at the end."
         )
     }
 
@@ -385,6 +386,30 @@ add_osm_feature <- function (opq,
     opq
 }
 
+#' @rdname filter_osm_tags
+#'
+#' @description `add_osm_feature()` will be DEPRECATED in future versions.
+#'
+#' @export
+add_osm_feature <- function (opq, # TODO: DEPRECATE
+                             key,
+                             value,
+                             key_exact = TRUE,
+                             value_exact = TRUE,
+                             match_case = TRUE,
+                             bbox = NULL) {
+    filter_osm_tags (
+        opq = opq,
+        key = key,
+        value = value,
+        key_exact = key_exact,
+        value_exact = value_exact,
+        match_case = match_case,
+        bbox = bbox
+    )
+}
+
+
 #' Get conditional operator/prefix values based on value_exact and key_exact
 #'
 #' @param bind Operator used to combine key and value. Options include "="
@@ -394,7 +419,7 @@ add_osm_feature <- function (opq,
 #' @noRd
 set_bind_key_pre <- function (key_exact = TRUE,
                               value_exact = TRUE,
-                              features = NULL,
+                              tags = NULL,
                               bind = "=",
                               key_pre = "") {
     if (!is.null (value_exact)) {
@@ -403,35 +428,35 @@ set_bind_key_pre <- function (key_exact = TRUE,
 
     check_bind_key_pre (bind, key_pre)
 
-    if (!is.null (features)) {
+    if (!is.null (tags)) {
         if (length (bind) == 1) {
-            bind <- rep_len (bind, length (features))
-        } else if (!identical_length (features, bind)) {
+            bind <- rep_len (bind, length (tags))
+        } else if (!identical_length (tags, bind)) {
             stop (
-                "bind must be length 1 or the same length as features"
+                "bind must be length 1 or the same length as tags"
             )
         }
 
         if (length (key_pre) == 1) {
-            key_pre <- rep_len (key_pre, length (features))
-        } else if (!identical_length (features, key_pre)) {
+            key_pre <- rep_len (key_pre, length (tags))
+        } else if (!identical_length (tags, key_pre)) {
             stop (
-                "key_pre must be length 1 or the same length as features"
+                "key_pre must be length 1 or the same length as tags"
             )
         }
     }
 
-    features_len <- 1L
-    if (!is.null (features)) {
-        features_len <- length (features)
+    tags_len <- 1L
+    if (!is.null (tags)) {
+        tags_len <- length (tags)
     }
 
     if (!is.null (value_exact) && !value_exact) {
-        bind <- rep_len ("~", features_len)
+        bind <- rep_len ("~", tags_len)
     }
 
     if (!is.null (key_exact) && !key_exact) {
-        key_pre <- rep_len ("~", features_len)
+        key_pre <- rep_len ("~", tags_len)
     }
 
     list (
@@ -476,25 +501,25 @@ check_bind_key_pre <- function (bind = "=", key_pre = "") {
     }
 }
 
-#' Add multiple features to an Overpass query
+#' Add multiple tags to an Overpass query as independent statements
 #'
-#' Alternative version of [add_osm_feature()] for creating single queries
-#' with multiple features. Key-value matching may be controlled by using the
-#' filter symbols described in
+#' Alternative version of [filter_osm_tags()] for creating single queries
+#' with multiple tags in independent statements. Key-value matching may be
+#' controlled by using the filter symbols described in
 #' \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_tag_.28has-kv.29}.
 #'
-#' @inheritParams add_osm_feature
-#' @inheritSection add_osm_feature `add_osm_feature` vs `add_osm_features`
-#' @param features A named list or vector with the format `list("<key>" =
+#' @inheritParams filter_osm_tags
+#' @inheritSection filter_osm_tags `filter_osm_tags` vs `add_osm_tags`
+#' @param tags A named list or vector with the format `list("<key>" =
 #'      "<value>")` or `c("<key>" = "<value>")` or a character vector of
 #'      key-value pairs with keys and values enclosed in escape-formatted
 #'      quotations. See examples for details.
-#' @param bbox optional bounding box for the feature query; must be set if no
+#' @param bbox optional bounding box for the query; must be set if no
 #'      opq query bbox has been set.
 #' @return An [opq] object.
 #'
 #' @references \url{https://wiki.openstreetmap.org/wiki/Map_Features}
-#' @seealso [add_osm_feature]
+#' @seealso [filter_osm_tags]
 #'
 #' @family queries
 #' @export
@@ -502,38 +527,38 @@ check_bind_key_pre <- function (bind = "=", key_pre = "") {
 #' @examples
 #' \dontrun{
 #' q <- opq ("portsmouth usa") |>
-#'     add_osm_features (features = list (
+#'     add_osm_tags (tags = list (
 #'         "amenity" = "restaurant",
 #'         "amenity" = "pub"
 #'     ))
 #'
 #' q <- opq ("portsmouth usa") |>
-#'     add_osm_features (features = c (
+#'     add_osm_tags (tags = c (
 #'         "\"amenity\"=\"restaurant\"",
 #'         "\"amenity\"=\"pub\""
 #'     ))
 #' cat (opq_string (q))
 #' # This extracts in a single query the same result as the following:
 #' q1 <- opq ("portsmouth usa") |>
-#'     add_osm_feature (
+#'     filter_osm_tags (
 #'         key = "amenity",
 #'         value = "restaurant"
 #'     )
 #' q2 <- opq ("portsmouth usa") |>
-#'     add_osm_feature (key = "amenity", value = "pub")
+#'     filter_osm_tags (key = "amenity", value = "pub")
 #' c (osmdata_sf (q1), osmdata_sf (q2)) # all restaurants OR pubs
 #'
 #' # Get objects with keys (`natural` OR `waterway`) AND `name`
 #' q_keys <- opq ("Badia del Vallès", osm_types = "nwr", out = "tags") |>
-#'     add_osm_features (features = list (natural = NULL, waterway = NULL)) |>
-#'     add_osm_feature (key = "name")
+#'     add_osm_tags (tags = list (natural = NULL, waterway = NULL)) |>
+#'     filter_osm_tags (key = "name")
 #' cat (opq_string (q_keys))
 #' }
-add_osm_features <- function (opq,
-                              features,
-                              bbox = NULL,
-                              key_exact = TRUE,
-                              value_exact = TRUE) {
+add_osm_tags <- function (opq,
+                          tags,
+                          bbox = NULL,
+                          key_exact = TRUE,
+                          value_exact = TRUE) {
     if (is.null (bbox) && is.null (opq$bbox)) {
         stop ("Bounding box has to either be set in opq or must be set here")
     }
@@ -547,71 +572,92 @@ add_osm_features <- function (opq,
         opq$suffix <- ");\n(._;>;);\nout body;"
     }
 
-    check_features (features)
+    check_tags (tags)
 
-    if (is_named (features)) {
+    if (is_named (tags)) {
         bind_key_pre <-
             set_bind_key_pre (
-                features = features,
+                tags = tags,
                 value_exact = value_exact,
                 key_exact = key_exact
             )
 
-        features <- mapply (
+        tags <- mapply (
             function (key, value, key_pre, bind) {
-                paste_features (key, value,
+                paste_tags (key, value,
                     key_pre = key_pre, bind = bind,
                     match_case = TRUE, value_exact = value_exact
                 )
             },
-            key = names (features), value = features,
+            key = names (tags), value = tags,
             key_pre = bind_key_pre$key_pre, bind = bind_key_pre$bind,
             SIMPLIFY = FALSE
         )
-        features <- as.character (features)
+        tags <- as.character (tags)
 
     }
 
-    index <- which (!grepl ("^\\[", features))
-    features [index] <- paste0 ("[", features [index])
-    index <- which (!grepl ("\\]$", features))
-    features [index] <- paste0 (features [index], "]")
+    index <- which (!grepl ("^\\[", tags))
+    tags [index] <- paste0 ("[", tags [index])
+    index <- which (!grepl ("\\]$", tags))
+    tags [index] <- paste0 (tags [index], "]")
 
-    opq$features <- unique (c (opq$features, features))
+    opq$features <- unique (c (opq$features, tags))
 
     opq
 }
 
-#' Is features a named list or character vector?
+#' @rdname add_osm_tags
+#'
+#' @description `add_osm_features()` will be DEPRECATED in future versions.
+#' @param features Same as `tags`.
+#'
+#' @export
+add_osm_features <- function (opq, # TODO: DEPRECATE
+                              features,
+                              bbox = NULL,
+                              key_exact = TRUE,
+                              value_exact = TRUE) {
+    add_osm_tags (
+        opq = opq,
+        tags = features,
+        bbox = bbox,
+        key_exact = key_exact,
+        value_exact = value_exact
+    )
+}
+
+
+#' Is tags a named list or character vector?
 #'
 #' @noRd
 is_named <- function (x) {
     !is.null (names (x)) && !any ("" %in% names (x))
 }
 
-#' Is features an escape-delimited string?
+#' Is tags an escape-delimited string?
 #'
 #' @noRd
 is_escape_delimited <- function (x) {
     length (which (!grepl ("\\\"", x))) > 0L
 }
 
-#' Check if features is provided and uses the required class and formatting
+#' Check if tags is provided and uses the required class and formatting
 #'
 #' @noRd
-check_features <- function (features) {
-    if (missing (features)) {
-        stop ("features must be provided", call. = FALSE)
+check_tags <- function (tags) {
+    if (missing (tags)) {
+        stop ("tags must be provided", call. = FALSE)
     }
 
     stopifnot (
-        "features must be a list or character vector." =
-            is.character (features) | is.list (features)
+        "tags must be a list or character vector." =
+            is.character (tags) | is.list (tags)
     )
 
-    if (!is_named (features) && is_escape_delimited (features)) {
+    if (!is_named (tags) && is_escape_delimited (tags)) {
         stop (
-            "features must be a named list or vector or a character vector ",
+            "tags must be a named list or vector or a character vector ",
             "enclosed in escape delimited quotations (see examples)",
             call. = FALSE
         )
@@ -650,7 +696,7 @@ check_features <- function (features) {
 #' # Notice the "::user" and "::uid" fields in the opq_csv()
 #' q_csv <- opq (bbox = "relation(id:11755232)", out = "meta", osm_type = "node") |>
 #'     filter_osm_user (user = "jmaspons") |>
-#'     add_osm_feature (key = "name") |>
+#'     filter_osm_tags (key = "name") |>
 #'     opq_csv (c ("::type", "::id", "name", "name:ca", "::user", "::uid"))
 #' cat (opq_string (q_csv))
 #' # Warning: csv queries can fail without errors in long running queries. For timeouts,
@@ -665,7 +711,7 @@ check_features <- function (features) {
 #'     osm_type = "node", timeout = 100
 #' ) |>
 #'     filter_osm_user (user = "jmaspons", touched = TRUE) |>
-#'     add_osm_feature (key = "name")
+#'     filter_osm_tags (key = "name")
 #' cat (opq_string (q_touched))
 #' \dontrun{
 #' d_touched <- osmdata_data_frame (q_touched)
@@ -697,7 +743,7 @@ filter_osm_user <- function (opq, user, touched = FALSE, is_uid) {
 }
 
 
-#' Add a feature specified by OSM ID to an Overpass query
+#' Add features specified by OSM ID to an Overpass query
 #'
 #' @inheritParams opq
 #' @param id One or more official OSM identifiers (long-form integers), which
@@ -801,7 +847,7 @@ opq_osm_id <- function (id = NULL, type = NULL, open_url = FALSE,
 #'
 #' Find all features which enclose a given point, and optionally match specific
 #' 'key'-'value' pairs. This function is \emph{not} intended to be combined with
-#' [add_osm_feature()], rather is only to be used in the sequence
+#' [filter_osm_tags()], rather is only to be used in the sequence
 #' [opq_enclosing()] -> [opq_string()] -> [osmdata_xml()] (or other
 #' extraction function). See examples for how to use.
 #'
@@ -846,7 +892,7 @@ opq_enclosing <- function (lon = NULL, lat = NULL,
     prefix <- paste0 ("[out:xml][timeout:", timeout, "]")
     suffix <- ");\n(._;>;);\nout;"
 
-    features <- paste_features (key,
+    tags <- paste_tags (key,
         value,
         value_exact = TRUE,
         match_case = TRUE
@@ -855,7 +901,7 @@ opq_enclosing <- function (lon = NULL, lat = NULL,
         bbox = bbox,
         prefix = paste0 (prefix, ";\n(\n"),
         suffix = suffix,
-        features = features
+        features = tags
     )
     class (res) <- c (class (res), "overpass_query")
     attr (res, "datetime") <- attr (res, "datetime2") <- NULL
@@ -868,7 +914,7 @@ opq_enclosing <- function (lon = NULL, lat = NULL,
 #'
 #' Find all features around a given point, and optionally match specific
 #' 'key'-'value' pairs. This function is \emph{not} intended to be combined with
-#' [add_osm_feature()], rather is only to be used in the sequence
+#' [filter_osm_tags()], rather is only to be used in the sequence
 #' [opq_around()] -> [osmdata_xml()] (or other extraction function). See
 #' examples for how to use.
 #'
@@ -920,7 +966,8 @@ opq_around <- function (lon, lat, radius = 15,
 #' Transform an Overpass query to return the result in a csv format
 #'
 #' @param q A opq string or an object of class `overpass_query` constructed with
-#'     [opq()] or alternative opq builders (+ [add_osm_feature()]/s).
+#'     [opq()] or alternative opq builders (+ [filter_osm_tags()],
+#'     [add_osm_tags()], [filter_osm_user()]).
 #' @param fields a character vector with the field names.
 #' @param header if \code{FALSE}, do not ask for column names.
 #'
@@ -942,8 +989,8 @@ opq_around <- function (lon, lat, radius = 15,
 #' \dontrun{
 #' q <- getbb ("Catalan Countries", format_out = "osm_type_id") |>
 #'     opq (out = "tags center", osm_type = "relation", timeout = 100) |>
-#'     add_osm_feature ("admin_level", "7") |>
-#'     add_osm_feature ("boundary", "administrative") |>
+#'     filter_osm_tags ("admin_level", "7") |>
+#'     filter_osm_tags ("boundary", "administrative") |>
 #'     opq_csv (fields = c ("name", "::type", "::id", "::lat", "::lon"))
 #' comarques <- osmdata_data_frame (q) # without timeout parameter, 0 rows
 #'
@@ -1011,7 +1058,7 @@ opq_string <- function (opq) {
 }
 
 # The quiet param is not exposed here, but is passed through by the various
-# `osmdata_s*` functions, to issue messages when neither features nor ID
+# `osmdata_s*` functions, to issue messages when neither tags nor ID
 # specified.
 opq_string_intern <- function (opq, quiet = TRUE) {
 
@@ -1020,11 +1067,11 @@ opq_string_intern <- function (opq, quiet = TRUE) {
     map_to_area <- grepl ("(node|way|relation|rel)\\(id:[0-9, ]+\\)", opq$bbox)
 
     res <- NULL
-    if (!is.null (opq$features)) { # opq with add_osm_feature
+    if (!is.null (opq$features)) { # opq with filter_osm_tags
 
         filters <- opq$features
 
-        if (length (filters) > 1L) { # from add_osm_features()
+        if (length (filters) > 1L) { # from add_osm_tags()
 
             filters <- vapply (filters, function (i) {
                 paste (i, collapse = "")
@@ -1041,7 +1088,7 @@ opq_string_intern <- function (opq, quiet = TRUE) {
         if (!is.null (attr (opq, "enclosing"))) {
 
             if (length (filters) > 1) {
-                stop ("enclosing queries can only accept one feature")
+                stop ("enclosing queries can only accept one tag")
             }
 
             lat <- strsplit (opq$bbox, ",") [[1]] [1]
@@ -1111,7 +1158,7 @@ opq_string_intern <- function (opq, quiet = TRUE) {
                 "The overpass server is intended to be used to extract ",
                 "specific features;\nthis query may place an undue ",
                 "burden on server resources.\nPlease consider specifying ",
-                "features via 'add_osm_feature' or 'opq_osm_id'."
+                "tags via 'filter_osm_tags' or 'opq_osm_id'."
             )
         }
 

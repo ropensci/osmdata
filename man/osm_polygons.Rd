@@ -25,7 +25,7 @@ or polygon.
 # Extract polygons which intersect Conway Street in London
 \dontrun{
 dat <- opq ("Marylebone London") |>
-    add_osm_feature (key = "highway") |>
+    filter_osm_tags (key = "highway") |>
     osmdata_sf ()
 conway <- which (dat$osm_lines$name == "Conway Street")
 id <- rownames (dat$osm_lines [conway, ])

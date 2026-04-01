@@ -12,7 +12,7 @@
 #' @examples
 #' \dontrun{
 #' query <- opq ("hampi india") |>
-#'     add_osm_feature (key = "historic", value = "ruins")
+#'     filter_osm_tags (key = "historic", value = "ruins")
 #' # Then extract data from 'Overpass' API
 #' hampi_sp <- osmdata_sp (query)
 #' }

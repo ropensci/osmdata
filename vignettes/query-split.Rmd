@@ -81,10 +81,10 @@ queries:
 res <- list ()
 
 res [[1]] <- opq (bbox = bbs [[1]]) |>
-    add_osm_feature (key = "admin_level", value = "8") |>
+    filter_osm_tags (key = "admin_level", value = "8") |>
     osmdata_sf ()
 res [[2]] <- opq (bbox = bbs [[2]]) |>
-    add_osm_feature (key = "admin_level", value = "8") |>
+    filter_osm_tags (key = "admin_level", value = "8") |>
     osmdata_sf ()
 ```
 
@@ -163,7 +163,7 @@ while (length (queue) > 0) {
     opres <- NULL
     opres <- try ({
         opq (bbox = queue [[1]], timeout = 25) |>
-            add_osm_feature (key = "natural", value = "tree") |>
+            filter_osm_tags (key = "natural", value = "tree") |>
             osmdata_sf ()
     })
 
