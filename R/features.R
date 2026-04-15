@@ -157,7 +157,12 @@ tags_from_tables <- function (pg) {
         if (identical (names (i) [1:2], c ("Key", "Value"))) {
             res <- i [, 1:2]
         } else {
-            res <- do.call (rbind, strsplit (i [[1]], split = "="))
+            # "Key" has value, generally "<key>=*", but sometimes multiple
+            # entries separated by commas.
+            keys_i <- unlist (strsplit (i [[1]], ","))
+            keys_i <- grep ("\\=", keys_i, value = TRUE)
+            keys_i <- gsub ("^\\s*|\\s*$", "", keys_i)
+            res <- do.call (rbind, strsplit (keys_i, split = "="))
             res <- data.frame (res)
             names (res) <- c ("Key", "Value")
         }
