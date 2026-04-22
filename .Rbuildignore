@@ -6,7 +6,9 @@
 ^README\.html$
 ^\.Rproj\.user$
 ^\.ccls-cache$
+^\.claude$
 ^\.github$
+^\.positai$
 ^\.pre-commit-config\.yaml$
 ^\.travis\.yml$
 ^_pkgdown\.yml$
