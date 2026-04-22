@@ -161,7 +161,7 @@ tags_from_tables <- function (pg) {
             # entries separated by commas.
             keys_i <- unlist (strsplit (i [[1]], ","))
             keys_i <- grep ("\\=", keys_i, value = TRUE)
-            keys_i <- gsub ("^\\s*|\\s*$", "", keys_i)
+            keys_i <- trimws (keys_i)
             res <- do.call (rbind, strsplit (keys_i, split = "="))
             res <- data.frame (res)
             names (res) <- c ("Key", "Value")
