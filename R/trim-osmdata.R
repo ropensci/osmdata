@@ -31,7 +31,7 @@
 #' \dontrun{
 #' bb <- getbb ("colchester uk")
 #' query <- opq (bb) |>
-#'     add_osm_feature (key = "highway")
+#'     filter_osm_tags (key = "highway")
 #' # Then extract data from 'Overpass' API
 #' dat <- osmdata_sf (query, quiet = FALSE)
 #' # Then get bounding *polygon* for Colchester, as opposed to rectangular
@@ -49,7 +49,7 @@
 #' # Server-side trimming equivalent
 #' bb <- getbb ("colchester uk", format_out = "osm_type_id")
 #' query <- opq (bb) |>
-#'     add_osm_feature (key = "highway")
+#'     filter_osm_tags (key = "highway")
 #' dat <- osmdata_sf (query, quiet = FALSE)
 #' }
 #' @export

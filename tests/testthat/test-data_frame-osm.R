@@ -69,7 +69,7 @@ test_that ("empty result", {
     colnames (bb) <- c ("min", "max")
 
     q0 <- opq (bb, osm_types = "node", datetime = "1714-09-11T00:00:00Z") |>
-        add_osm_feature ("does not exist", "&%$")
+        filter_osm_tags ("does not exist", "&%$")
 
     osm_empty <- test_path ("fixtures", "osm-empty.osm")
     doc <- xml2::read_xml (osm_empty)
@@ -104,7 +104,7 @@ test_that ("empty result", {
         datetime = "1714-09-11T00:00:00Z",
         adiff = TRUE
     ) |>
-        add_osm_feature ("does not exist", "&%$")
+        filter_osm_tags ("does not exist", "&%$")
 
     # osm_empty <- test_path ("fixtures", "osm-empty.osm") # same result
     # doc <- xml2::read_xml (osm_empty)
@@ -177,9 +177,9 @@ test_that ("date", {
     rownames (bb) <- c ("x", "y")
     colnames (bb) <- c ("min", "max")
     q <- opq (bb, osm_types = "node", datetime = "2020-11-07T00:00:00Z") |>
-        add_osm_feature ("natural", "peak") |>
-        add_osm_feature ("prominence") |>
-        add_osm_feature ("name:ca")
+        filter_osm_tags ("natural", "peak") |>
+        filter_osm_tags ("prominence") |>
+        filter_osm_tags ("name:ca")
 
     osm_meta_date <- test_path ("fixtures", "osm-date.osm")
     doc <- xml2::read_xml (osm_meta_date)
@@ -222,7 +222,7 @@ test_that ("out tags center", {
     rownames (bb) <- c ("x", "y")
     colnames (bb) <- c ("min", "max")
     q <- opq (bb, out = "tags center") |>
-        add_osm_feature ("amenity", "community_centre")
+        filter_osm_tags ("amenity", "community_centre")
 
     osm_tags_center <- test_path ("fixtures", "osm-tags_center.osm")
     doc <- xml2::read_xml (osm_tags_center)
@@ -258,9 +258,9 @@ test_that ("out meta & diff", {
         datetime = "2020-11-07T00:00:00Z",
         datetime2 = "2022-12-04T00:00:00Z"
     ) |>
-        add_osm_feature ("natural", "peak") |>
-        add_osm_feature ("prominence") |>
-        add_osm_feature ("name:ca")
+        filter_osm_tags ("natural", "peak") |>
+        filter_osm_tags ("prominence") |>
+        filter_osm_tags ("name:ca")
 
     osm_meta_diff <- test_path ("fixtures", "osm-meta_diff.osm")
     doc <- xml2::read_xml (osm_meta_diff)
@@ -310,9 +310,9 @@ test_that ("out meta & adiff", {
         osm_types = "node", out = "meta",
         datetime = "2020-11-07T00:00:00Z", adiff = TRUE
     ) |>
-        add_osm_feature ("natural", "peak") |>
-        add_osm_feature ("prominence") |>
-        add_osm_feature ("name:ca")
+        filter_osm_tags ("natural", "peak") |>
+        filter_osm_tags ("prominence") |>
+        filter_osm_tags ("name:ca")
 
     osm_meta_adiff <- test_path ("fixtures", "osm-meta_adiff.osm")
     doc <- xml2::read_xml (osm_meta_adiff)
@@ -372,7 +372,7 @@ test_that ("out tags center & adiff", {
         adiff = TRUE,
         timeout = 50
     ) |>
-        add_osm_feature ("amenity", "community_centre")
+        filter_osm_tags ("amenity", "community_centre")
 
     osm_tags_center <- test_path ("fixtures", "osm-tags_center-adiff.osm")
     doc <- xml2::read_xml (osm_tags_center)
@@ -421,7 +421,7 @@ test_that ("adiff2", {
         datetime2 = "2016-11-07T00:00:00Z",
         adiff = TRUE
     ) |>
-        add_osm_feature ("amenity", "restaurant")
+        filter_osm_tags ("amenity", "restaurant")
 
     osm_adiff2 <- test_path ("fixtures", "osm-adiff2.osm")
     doc <- xml2::read_xml (osm_adiff2)
@@ -462,8 +462,8 @@ test_that ("adiff2", {
 test_that ("out:csv", {
     # q <- getbb ("Catalan Countries", format_out = "osm_type_id") |>
     q <- opq (bbox = "relation(id:11747082)", out = "tags center", osm_type = "relation", timeout = 50) |>
-        add_osm_feature ("admin_level", "7") |>
-        add_osm_feature ("boundary", "administrative") |>
+        filter_osm_tags ("admin_level", "7") |>
+        filter_osm_tags ("boundary", "administrative") |>
         opq_csv (fields = c ("name", "::type", "::id", "::lat", "::lon"))
 
     with_mock_dir ("mock_csv", {
@@ -476,7 +476,7 @@ test_that ("out:csv", {
     # qqoutes <- getbb ("Barcelona", format_out = "osm_type_id") |>
     qqoutes <- opq (bbox = "relation(id:347950)", osm_types = "nwr", out = "tags") |>
         opq_csv (fields = c ("name", "::id", "no_exists", "amenity")) |>
-        add_osm_feature (
+        filter_osm_tags (
             key = "name", value = "\\\"|,|Pont",
             value_exact = FALSE
         )

@@ -25,7 +25,7 @@ typical output of \pkg{sf}.
 \examples{
 \dontrun{
 query <- opq ("colchester uk") |>
-    add_osm_feature (key = "highway")
+    filter_osm_tags (key = "highway")
 # Then extract data from 'Overpass' API
 dat <- osmdata_sf (query)
 dat

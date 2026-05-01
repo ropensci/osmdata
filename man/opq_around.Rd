@@ -24,7 +24,7 @@ because the server may time out before all data are delivered.}
 \description{
 Find all features around a given point, and optionally match specific
 'key'-'value' pairs. This function is \emph{not} intended to be combined with
-\code{\link[=add_osm_feature]{add_osm_feature()}}, rather is only to be used in the sequence
+\code{\link[=filter_osm_tags]{filter_osm_tags()}}, rather is only to be used in the sequence
 \code{\link[=opq_around]{opq_around()}} -> \code{\link[=osmdata_xml]{osmdata_xml()}} (or other extraction function). See
 examples for how to use.
 }
@@ -42,9 +42,9 @@ x <- opq_around (lon, lat, radius, key, value) |>
 }
 \seealso{
 Other queries: 
-\code{\link{add_osm_feature}()},
-\code{\link{add_osm_features}()},
+\code{\link{add_osm_tags}()},
 \code{\link{bbox_to_string}()},
+\code{\link{filter_osm_tags}()},
 \code{\link{filter_osm_user}()},
 \code{\link{getbb}()},
 \code{\link{opq}()},

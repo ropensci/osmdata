@@ -3,7 +3,7 @@
 #' or a raw vector.
 #'
 #' @param q An object of class `overpass_query` constructed with
-#'     [opq()] and [add_osm_feature()] or a string with a valid query, such as
+#'     [opq()] and [filter_osm_tags()] or a string with a valid query, such as
 #'     `"(node(39.4712701,-0.3841326,39.4713799,-0.3839475);); out;"`. See
 #'     examples below.
 #' @param filename If given, OSM data are saved to the named file
@@ -23,7 +23,7 @@
 #' @examples
 #' \dontrun{
 #' query <- opq ("hampi india") |>
-#'     add_osm_feature (key = "historic", value = "ruins")
+#'     filter_osm_tags (key = "historic", value = "ruins")
 #' # Then extract data from 'Overpass' API and save to local file:
 #' osmdata_xml (query, filename = "hampi.osm")
 #' }

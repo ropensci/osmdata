@@ -10,26 +10,26 @@ bb <- getbb ("kichijoji japan")
 bb [2, 1] <- bb [2, 1] - 0.2 * diff (bb [2, ])
 bb [2, 2] <- mean (bb [2, ])
 hw <- opq (bb) |>
-    add_osm_feature (key = "highway") |>
+    filter_osm_tags (key = "highway") |>
     osmdata_sf (quiet = FALSE) |>
     osm_poly2line () |>
     extract2 ("osm_lines")
 b <- opq (bb) |>
-    add_osm_feature (key = "building") |>
+    filter_osm_tags (key = "building") |>
     osmdata_sf (quiet = FALSE) |>
     extract2 ("osm_polygons")
 g1 <- opq (bb) |>
-    add_osm_feature (key = "landuse", value = "grass") |>
+    filter_osm_tags (key = "landuse", value = "grass") |>
     osmdata_sf (quiet = FALSE) |>
     extract2 ("osm_polygons")
 g2 <- opq (bb) |>
-    add_osm_feature (key = "leisure", value = "park") |>
+    filter_osm_tags (key = "leisure", value = "park") |>
     osmdata_sf (quiet = FALSE) |>
     extract2 ("osm_polygons")
 g <- sf::st_sf (osm_id = c (g1$osm_id, g2$osm_id),
                  geometry = c (g1$geometry, g2$geometry))
 w <- opq (bb) |>
-    add_osm_feature (key = "natural", value = "water") |>
+    filter_osm_tags (key = "natural", value = "water") |>
     osmdata_sf (quiet = FALSE) |>
     extract2 ("osm_polygons")
 

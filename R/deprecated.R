@@ -18,6 +18,20 @@
 #'   }
 #' }
 #'
+#' \describe{
+#'   \item{`add_osm_feature()`}{
+#'     Please use [`filter_osm_tags()`] instead.
+#'     In future versions, using [`add_osm_feature()`] will produce a deprecation warning.
+#'   }
+#' }
+#'
+#' \describe{
+#'   \item{`add_osm_features()`}{
+#'     Please use [`add_osm_tags()`] instead.
+#'     In future versions, using [`add_osm_features()`] will produce a deprecation warning.
+#'   }
+#' }
+#'
 #' @name osmdata-deprecated
 #' @keywords internal
 NULL

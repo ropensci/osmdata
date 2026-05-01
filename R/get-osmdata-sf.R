@@ -5,7 +5,7 @@
 #' the \pkg{sf} package into the current workspace with 'library(sf)'.
 #'
 #' @param q An object of class `overpass_query` constructed with
-#'      [opq()] and [add_osm_feature()] or a string with a valid query, such
+#'      [opq()] and [filter_osm_tags()] or a string with a valid query, such
 #'      as `"(node(39.4712701,-0.3841326,39.4713799,-0.3839475);); out;"`.
 #'      May be be omitted, in which case the [osmdata] object will not
 #'      include the query. See examples below.
@@ -24,7 +24,7 @@
 #' @examples
 #' \dontrun{
 #' query <- opq ("hampi india") |>
-#'     add_osm_feature (key = "historic", value = "ruins")
+#'     filter_osm_tags (key = "historic", value = "ruins")
 #' # Then extract data from 'Overpass' API
 #' hampi_sf <- osmdata_sf (query)
 #' }

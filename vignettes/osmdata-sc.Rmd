@@ -74,7 +74,7 @@ through the `osm_elevation()` function. The entire procedure is demonstrated
 with the following lines:
 ```{r omaha, eval = FALSE}
 dat <- opq ("omaha nebraska") |>
-    add_osm_feature (key = "highway") |>
+    filter_osm_tags (key = "highway") |>
     osmdata_sc ()
 ```
 This object has a `vertex` table like this:
