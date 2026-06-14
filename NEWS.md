@@ -1,6 +1,5 @@
 # osmdata (development version)
 
-
 ## Breaking changes
 
 - `getbb()` throws a warning instead of an error for empty results and return the (empty) result with the expected type according to `format_out` parameter (#394).
@@ -66,6 +65,7 @@
 
 - v0.2.4 was removed without notice from CRAN because of #329; this is a rapid re-submission
 
+
 # osmdata 0.2.4
 
 ## Minor changes
@@ -94,6 +94,7 @@
 - Fix queries with `!match_case` and only one value (#317).
 - Fix queries with multiple features & multiple osm_types (#318).
 
+
 # osmdata 0.2.1
 
 ## Major changes:
@@ -103,6 +104,7 @@
 ## Minor changes
 
 - Couple of minor memory leak bug fixes in `osmdata_data_frame` C++ code.
+
 
 # osmdata 0.2.0
 
@@ -125,6 +127,7 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - Improved `osm_osm_id()` to accept vectors of ids and types; thanks to @jmaspons (#268, #282, #283)
 - "get-osmdata.R" file now split into several smaller and more manageable files (#306, thanks to @jmaspons)
 
+
 # osmdata 0.1.10
 
 ## Major changes:
@@ -135,6 +138,7 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 ## Minor changes:
 
 - Moved jsonlite from Imports to Suggests (now only used in tests).
+
 
 # osmdata 0.1.9
 
@@ -150,6 +154,7 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - New dependency on `reproj` package, so that `trim_osmdata()` can be applied
   to re-projected coordinates.
 
+
 # osmdata 0.1.8
 
 ## Minor changes:
@@ -163,12 +168,14 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 
 - `add_osm_feature` bug fix to revert AND behaviour (#240 thanks to @anthonynorth)
 
+
 # osmdata 0.1.6
 
 ## Major changes:
 
 - New function `add_osm_features` to enable OR-combinations of features in
   single queries.
+
 
 # osmdata 0.1.5
 
@@ -177,6 +184,7 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - Bug fix in `getbb()` via #232, thanks to @changwoo-lee
 - hard-code WKT string for EPSG:4326, to avoid obsolete proj4strings (#218)
 - bug fix in `print` method via #236; thanks to @odeleongt 
+
 
 # osmdata 0.1.4
 
@@ -212,6 +220,7 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - New Contributors: Andrea Gilardi (@agila5)
 - Bug fix for issue#205
 
+
 # osmdata 0.1.2
 
 ## Major changes:
@@ -232,11 +241,13 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - Implement `trim_osmdata.sc` method
 - retry httr calls to nominatim, which has lately been timing out quite often
 
+
 # osmdata 0.1.1
 
 ## Minor changes:
 
 - bug fix in `trim_osmdata` function
+
 
 # osmdata 0.1.0
 
@@ -248,14 +259,15 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - `opq()` function now accepts polygonal bounding boxes generated with
   `getbb(..., format_out = "polygon")`.
 
+
 # osmdata 0.0.10
 
 ## Minor changes:
 
 - Bug fix for vectorized lists of values in `add_osm_feature`, so only listed
   items are returns (see #139; thanks @loreabad6)
-- But fix to ensure all `sf` `data.frame` objects have `stringsAsFactors =
-  FALSE`
+- But fix to ensure all `sf` `data.frame` objects have `stringsAsFactors = FALSE`
+
 
 # osmdata 0.0.9
 
@@ -279,6 +291,7 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - bug fix for osmdata_sp() (see #56)
 - osmdata_sp() fixed to return osm_id values (see #131; thanks @JimShady).
 
+
 # osmdata 0.0.8
 
 - Fix bug in `trim_osmdata` so that all sf attributes are reinstated, and also
@@ -286,10 +299,12 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - Fix bug with opq (key_exact = FALSE) so value_exact is always also set to
   FALSE
 
+
 # osmdata 0.0.7
 
 - Fix bug in `c` method so it works when `sf` not loaded
 - Fix bug in overpass query syntax to match new QL requirements
+
 
 # osmdata 0.0.6
 
@@ -305,6 +320,7 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
 - Make C++ code interruptible so long processing can be cancelled
 - Fix minor yet important C++ code lines that prevented package being used as
   dependency by other packages on some systems
+
 
 # osmdata 0.0.5
 
@@ -324,18 +340,22 @@ This release welcomes a new package author @jmaspons. The lists of changes here 
   `set_overpass_url()` functions
 - Extend and improve vignette
 
+
 # osmdata 0.0.3
 
 - Change tests only, no functional difference
+
 
 # osmdata 0.0.2
 
 - Rename function `opq_to_string()` to `opq_string()`
 
+
 # osmdata 0.0.1 (19 May 2017)
 
 - Remove configure and Makevars files
 - Fix tests
+
 
 # osmdata 0.0.0 (18 May 2017)
 

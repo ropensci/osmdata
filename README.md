@@ -75,7 +75,7 @@ To load the package and check the version:
 library (osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
 packageVersion ("osmdata")
-#> [1] '0.3.0.9021'
+#> [1] '0.3.0.9028'
 ```
 
 ## Usage
@@ -265,7 +265,7 @@ citation ("osmdata")
 #> 
 #>   Mark Padgham, Bob Rudis, Robin Lovelace, Maëlle Salmon (2017).
 #>   "osmdata." _Journal of Open Source Software_, *2*(14), 305.
-#>   doi:10.21105/joss.00305 <https://doi.org/10.21105/joss.00305>,
+#>   doi:10.21105/joss.00305 <https://doi.org/10.21105/joss.00305>.
 #>   <https://joss.theoj.org/papers/10.21105/joss.00305>.
 #> 
 #> A BibTeX entry for LaTeX users is
