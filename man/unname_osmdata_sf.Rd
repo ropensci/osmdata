@@ -37,10 +37,10 @@ head (as.matrix (hampi_clean$osm_lines$geometry [[1]]))
 }
 }
 \seealso{
-Other transform: 
-\code{\link{osm_elevation}()},
-\code{\link{osm_poly2line}()},
-\code{\link{trim_osmdata}()},
-\code{\link{unique_osmdata}()}
+Other transform:
+\code{\link[=osm_elevation]{osm_elevation()}},
+\code{\link[=osm_poly2line]{osm_poly2line()}},
+\code{\link[=trim_osmdata]{trim_osmdata()}},
+\code{\link[=unique_osmdata]{unique_osmdata()}}
 }
 \concept{transform}

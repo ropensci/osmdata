@@ -25,9 +25,9 @@
 #' @param out The level of verbosity of the overpass result: `body` (geometries
 #'      and tags, the default), `tags` (tags without geometry), `meta` (like
 #'      body + Timestamp, Version, Changeset, User, User ID of the last
-#'      edition), `skel` (geometries only), `tags center` (tags without geometry
-#'      + the coordinates of the center of the bounding box) and `ids` (type and
-#'      id of the objects only).
+#'      edition), `skel` (geometries only), `tags center` (tags without
+#'      geometry + the coordinates of the center of the bounding box) and `ids`
+#'      (type and id of the objects only).
 #' @param datetime If specified, a date and time to extract data from the OSM
 #'      database as it was up to the specified date and time, as described at
 #'      \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#date}.

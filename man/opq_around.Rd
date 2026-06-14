@@ -41,17 +41,17 @@ x <- opq_around (lon, lat, radius, key, value) |>
 }
 }
 \seealso{
-Other queries: 
-\code{\link{add_osm_feature}()},
-\code{\link{add_osm_features}()},
-\code{\link{bbox_to_string}()},
-\code{\link{filter_osm_user}()},
-\code{\link{getbb}()},
-\code{\link{opq}()},
-\code{\link{opq_csv}()},
-\code{\link{opq_enclosing}()},
-\code{\link{opq_osm_id}()},
-\code{\link{opq_string}()},
-\code{\link{overpass_status}()}
+Other queries:
+\code{\link[=add_osm_feature]{add_osm_feature()}},
+\code{\link[=add_osm_features]{add_osm_features()}},
+\code{\link[=bbox_to_string]{bbox_to_string()}},
+\code{\link[=filter_osm_user]{filter_osm_user()}},
+\code{\link[=getbb]{getbb()}},
+\code{\link[=opq]{opq()}},
+\code{\link[=opq_csv]{opq_csv()}},
+\code{\link[=opq_enclosing]{opq_enclosing()}},
+\code{\link[=opq_osm_id]{opq_osm_id()}},
+\code{\link[=opq_string]{opq_string()}},
+\code{\link[=overpass_status]{overpass_status()}}
 }
 \concept{queries}

@@ -58,10 +58,10 @@ no_townhall
 }
 }
 \seealso{
-Other extract: 
-\code{\link{osmdata_data_frame}()},
-\code{\link{osmdata_sc}()},
-\code{\link{osmdata_sf}()},
-\code{\link{osmdata_xml}()}
+Other extract:
+\code{\link[=osmdata_data_frame]{osmdata_data_frame()}},
+\code{\link[=osmdata_sc]{osmdata_sc()}},
+\code{\link[=osmdata_sf]{osmdata_sf()}},
+\code{\link[=osmdata_xml]{osmdata_xml()}}
 }
 \concept{extract}

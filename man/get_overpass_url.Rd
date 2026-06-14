@@ -19,7 +19,7 @@ get_overpass_url ()
 \seealso{
 \code{\link[=set_overpass_url]{set_overpass_url()}}
 
-Other overpass: 
-\code{\link{set_overpass_url}()}
+Other overpass:
+\code{\link[=set_overpass_url]{set_overpass_url()}}
 }
 \concept{overpass}

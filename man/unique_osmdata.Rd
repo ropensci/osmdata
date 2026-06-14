@@ -37,10 +37,10 @@ dat
 # fewer members.
 }
 \seealso{
-Other transform: 
-\code{\link{osm_elevation}()},
-\code{\link{osm_poly2line}()},
-\code{\link{trim_osmdata}()},
-\code{\link{unname_osmdata_sf}()}
+Other transform:
+\code{\link[=osm_elevation]{osm_elevation()}},
+\code{\link[=osm_poly2line]{osm_poly2line()}},
+\code{\link[=trim_osmdata]{trim_osmdata()}},
+\code{\link[=unname_osmdata_sf]{unname_osmdata_sf()}}
 }
 \concept{transform}

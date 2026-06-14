@@ -32,9 +32,9 @@ pages.}
 \item{out}{The level of verbosity of the overpass result: \code{body} (geometries
 and tags, the default), \code{tags} (tags without geometry), \code{meta} (like
 body + Timestamp, Version, Changeset, User, User ID of the last
-edition), \code{skel} (geometries only), \verb{tags center} (tags without geometry
-+ the coordinates of the center of the bounding box) and \code{ids} (type and
-id of the objects only).}
+edition), \code{skel} (geometries only), \verb{tags center} (tags without
+geometry + the coordinates of the center of the bounding box) and \code{ids}
+(type and id of the objects only).}
 
 \item{datetime}{If specified, a date and time to extract data from the OSM
 database as it was up to the specified date and time, as described at
@@ -92,17 +92,17 @@ datAiO <- opq_osm_id (id = id, type = type) |>
 \url{https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#By_element_id}
 }
 \seealso{
-Other queries: 
-\code{\link{add_osm_feature}()},
-\code{\link{add_osm_features}()},
-\code{\link{bbox_to_string}()},
-\code{\link{filter_osm_user}()},
-\code{\link{getbb}()},
-\code{\link{opq}()},
-\code{\link{opq_around}()},
-\code{\link{opq_csv}()},
-\code{\link{opq_enclosing}()},
-\code{\link{opq_string}()},
-\code{\link{overpass_status}()}
+Other queries:
+\code{\link[=add_osm_feature]{add_osm_feature()}},
+\code{\link[=add_osm_features]{add_osm_features()}},
+\code{\link[=bbox_to_string]{bbox_to_string()}},
+\code{\link[=filter_osm_user]{filter_osm_user()}},
+\code{\link[=getbb]{getbb()}},
+\code{\link[=opq]{opq()}},
+\code{\link[=opq_around]{opq_around()}},
+\code{\link[=opq_csv]{opq_csv()}},
+\code{\link[=opq_enclosing]{opq_enclosing()}},
+\code{\link[=opq_string]{opq_string()}},
+\code{\link[=overpass_status]{overpass_status()}}
 }
 \concept{queries}

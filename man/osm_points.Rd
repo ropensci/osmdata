@@ -28,10 +28,10 @@ waterfall <- pts [which (pts$waterway == "waterfall"), ]
 }
 }
 \seealso{
-Other search: 
-\code{\link{osm_lines}()},
-\code{\link{osm_multilines}()},
-\code{\link{osm_multipolygons}()},
-\code{\link{osm_polygons}()}
+Other search:
+\code{\link[=osm_lines]{osm_lines()}},
+\code{\link[=osm_multilines]{osm_multilines()}},
+\code{\link[=osm_multipolygons]{osm_multipolygons()}},
+\code{\link[=osm_polygons]{osm_polygons()}}
 }
 \concept{search}

@@ -24,7 +24,7 @@ available_features ()
 \url{https://wiki.openstreetmap.org/wiki/Map_Features}
 }
 \seealso{
-Other osminfo: 
-\code{\link{available_tags}()}
+Other osminfo:
+\code{\link[=available_tags]{available_tags()}}
 }
 \concept{osminfo}
