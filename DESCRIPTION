@@ -1,6 +1,6 @@
 Package: osmdata
 Title: Import 'OpenStreetMap' Data as Simple Features or Spatial Objects
-Version: 0.4.0
+Version: 0.4.0.9000
 Authors@R: c(
     person("Joan", "Maspons", , "joanmaspons@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-2286-8727")),
@@ -52,10 +52,10 @@ LinkingTo:
     Rcpp
 VignetteBuilder:
     knitr
+Config/roxygen2/markdown: TRUE
+Config/roxygen2/version: 8.0.0
 Encoding: UTF-8
 NeedsCompilation: yes
 X-schema.org-applicationCategory: Data Access
 X-schema.org-isPartOf: https://ropensci.org
 X-schema.org-keywords: open0street0map, openstreetmap, overpass0API, OSM
-Config/roxygen2/markdown: TRUE
-Config/roxygen2/version: 8.0.0
