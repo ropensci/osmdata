@@ -251,18 +251,24 @@ fill_sf_objects <- function (res, obj, type = "points",
         if (!stringsAsFactors) {
             res [[kv_name]] [] <- lapply (res [[kv_name]], as.character)
         }
+
         df <- data.frame ( # sort columns osm_id, osm_type, meta, tags
             res [[kv_name]] [, intersect (
                 c ("osm_id", "osm_type"),
                 names (res [[kv_name]])
-            ), drop = FALSE],
-            res [[meta_name]],
-            res [[kv_name]] [, setdiff (
-                names (res [[kv_name]]),
-                c ("osm_id", "osm_type")
-            ), drop = FALSE],
-            check.names = FALSE
+            ), drop = FALSE]
         )
+        if (ncol (res [[meta_name]]) > 0) {
+            df <- cbind (df, res [[meta_name]])
+        }
+        df <- cbind (
+            df,
+            res [[kv_name]] [,
+                setdiff (names (res [[kv_name]]), c ("osm_id", "osm_type")),
+                drop = FALSE
+            ]
+        )
+
         obj [[obj_name]] <- make_sf (
             geometry,
             df,
