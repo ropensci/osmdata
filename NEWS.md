@@ -1,5 +1,10 @@
 # osmdata (development version)
 
+## Minor changes
+
+- Fix `osmdata_sf()` for points without metadata (#426).
+
+
 # osmdata 0.4.0
 
 ## Breaking changes
