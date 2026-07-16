@@ -8,7 +8,7 @@
     ## Added and edited code here by JimShady to use random API each time.
     available_apis <- c (
         "https://overpass-api.de/api/interpreter",
-        "https://overpass.kumi.systems/api/interpreter"
+        "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
     )
 
     op.osmdata <- list ( # nolint
@@ -64,15 +64,7 @@ get_overpass_url <- function () {
 #' are:
 #' \itemize{
 #' \item "https://overpass-api.de/api/interpreter" (default)
-#' \item "https://overpass.kumi.systems/api/interpreter"
-#' \item "https://overpass.osm.rambler.ru/cgi/interpreter"
-#' \item "https://api.openstreetmap.fr/oapi/interpreter"
-#' \item "https://overpass.osm.vi-di.fr/api/interpreter"
-#' }
-#' Additional APIs with limited local coverage include:
-#' \itemize{
-#' \item "https://overpass.osm.ch/api/interpreter" (Switzerland)
-#' \item "https://overpass.openstreetmap.ie/api/interpreter" (Ireland)
+#' \item "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
 #' }
 #'
 #' For further details, see
