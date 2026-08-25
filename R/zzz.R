@@ -11,10 +11,21 @@
         "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
     )
 
-    op.osmdata <- list ( # nolint
-        osmdata.base_url = # nolint
-            sample (available_apis, 1)
-    )
+    base_url <- sample (available_apis, 1)
+
+    if (interactive ()) {
+        statuses <- lapply (available_apis, check_status)
+        ok <- vapply (
+            statuses,
+            function (s) isTRUE (s$status == 200L),
+            logical (1)
+        )
+        if (any (ok)) {
+            base_url <- sample (available_apis [ok], 1)
+        }
+    }
+
+    op.osmdata <- list (osmdata.base_url = base_url)
 
     ## End of code edited by JimShady
 
