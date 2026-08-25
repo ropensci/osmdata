@@ -61,6 +61,31 @@ overpass_status <- function (quiet = FALSE) {
 
 }
 
+#' @noRd
+check_status <- function (url) {
+    st_type <- "status"
+    status_url <- gsub ("interpreter", st_type, url)
+    req <- httr2::request (status_url)
+    req <- httr2::req_error (req, is_error = function (resp) FALSE)
+    req <- httr2::req_timeout (req, seconds = 10)
+    resp <- tryCatch (
+        httr2::req_perform (req),
+        error = function (e) e
+    )
+    if (inherits (resp, "error")) {
+        ret <- list (status = NA_integer_, message = conditionMessage (resp))
+    } else {
+        code <- httr2::resp_status (resp)
+        msg <- if (code == 200L) {
+            "OK"
+        } else {
+            paste0 ("HTTP ", code, " ", httr2::resp_status_desc (resp), ".")
+        }
+        ret <- list (status = code, message = msg)
+    }
+    ret
+}
+
 # for APIs with status messages
 get_slot_time <- function (status, quiet) {
 
