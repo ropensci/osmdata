@@ -3,13 +3,8 @@
 
     op <- options ()
 
-    ## https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances # nolint
-    ## see https://github.com/ropensci/osmdata/pull/149
     ## Added and edited code here by JimShady to use random API each time.
-    available_apis <- c (
-        "https://overpass-api.de/api/interpreter",
-        "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
-    )
+    available_apis <- list_overpass_urls ()
 
     base_url <- sample (available_apis, 1)
 
@@ -45,6 +40,30 @@
     packageStartupMessage (msg)
 }
 
+#' list_overpass_urls
+#'
+#' List public Overpass API URLs. These are mirrors sampled by default
+#' when the package loads.
+#'
+#' For further details, see
+#' <https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances>
+#' and <https://github.com/ropensci/osmdata/pull/149>.
+#'
+#' @return A character vector of Overpass API interpreter URLs.
+#'
+#' @seealso [get_overpass_url()], [set_overpass_url()]
+#'
+#' @family overpass
+#' @examples
+#' list_overpass_urls ()
+#' @export
+list_overpass_urls <- function () {
+    c (
+        "https://overpass-api.de/api/interpreter",
+        "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
+    )
+}
+
 #' get_overpass_url
 #'
 #' Return the URL of the specified overpass API. Default is
@@ -52,7 +71,7 @@
 #'
 #' @return The overpass API URL
 #'
-#' @seealso [set_overpass_url()]
+#' @seealso [set_overpass_url()], [list_overpass_urls()]
 #'
 #' @family overpass
 #' @examples
@@ -71,12 +90,8 @@ get_overpass_url <- function () {
 
 #' set_overpass_url
 #'
-#' Set the URL of the specified overpass API. Possible APIs with global coverage
-#' are:
-#' \itemize{
-#' \item "https://overpass-api.de/api/interpreter" (default)
-#' \item "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
-#' }
+#' Set the URL of the specified overpass API. Possible APIs with global
+#' coverage are returned by [list_overpass_urls()].
 #'
 #' For further details, see
 #' <https://wiki.openstreetmap.org/wiki/Overpass_API>
@@ -85,9 +100,13 @@ get_overpass_url <- function () {
 #'
 #' @return The overpass API URL
 #'
-#' @seealso [get_overpass_url()]
+#' @seealso [get_overpass_url()], [list_overpass_urls()]
 #'
 #' @family overpass
+#' @examples
+#' \dontrun{
+#' set_overpass_url (list_overpass_urls () [1])
+#' }
 #' @export
 set_overpass_url <- function (overpass_url) {
 
