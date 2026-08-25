@@ -21,8 +21,6 @@ overpass_status <- function (quiet = FALSE) {
         st_type <- "timestamp"
     }
 
-    status_url <- gsub ("interpreter", st_type, overpass_url)
-
     if (!curl::has_internet ()) {
 
         status <- "No internet connection"
@@ -32,13 +30,20 @@ overpass_status <- function (quiet = FALSE) {
 
     } else {
 
-        req <- httr2::request (status_url)
-        req <- httr2::req_retry (req, max_tries = 10L)
-        status <- httr2::req_perform (req)
+        chk <- check_status (overpass_url)
 
-        if (!is.null (status)) {
+        if (is.na (chk$status) || chk$status != 200L) {
 
-            status <- httr2::resp_body_string (status)
+            status <- chk$message
+            if (!quiet) message (status)
+            slot_time <- Sys.time () + 10
+
+        } else {
+
+            status_url <- gsub ("interpreter", st_type, overpass_url)
+            req <- httr2::request (status_url)
+            status <- httr2::resp_body_string (httr2::req_perform (req))
+
             if (st_type == "status") {
                 slt <- get_slot_time (status = status, quiet = quiet)
             } else if (st_type == "timestamp") {
@@ -47,10 +52,6 @@ overpass_status <- function (quiet = FALSE) {
 
             available <- slt$available
             slot_time <- slt$slot_time
-        } else {
-
-            # status not even returned so pause the whole shebang for 10 seconds
-            slot_time <- Sys.time () + 10
         }
     }
 
