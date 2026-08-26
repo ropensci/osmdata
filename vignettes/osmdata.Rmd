@@ -192,7 +192,7 @@ base url:
 
 ```{r}
 get_overpass_url ()
-new_url <- "https://overpass.openstreetmap.ie/api/interpreter"
+new_url <- "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
 ```
 
 ```{r, eval=FALSE}

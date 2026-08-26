@@ -1,5 +1,9 @@
 # osmdata (development version)
 
+## Major changes
+
+- Add `list_overpass_urls()` and prefer a responsive Overpass API mirror, checked via a new `check_status()` helper, on package load and in `overpass_query()` (#428).
+
 ## Minor changes
 
 - Fix `osmdata_sf()` for points without metadata (#426).
