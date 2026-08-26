@@ -17,7 +17,9 @@ Authors@R: c(
     person("Marcin", "Kalicinski", role = c("ctb", "cph"),
            comment = "Author of included RapidXML code"),
     person("Eli", "Pousson", , "eli.pousson@gmail.com", role = "ctb",
-           comment = c(ORCID = "0000-0001-8280-1706"))
+           comment = c(ORCID = "0000-0001-8280-1706")),
+    person("Claudiu", "Forgaci", , "c.forgaci@tudelft.nl", role = "aut",
+           comment = c(ORCID = "0000-0003-3218-5102"))
   )
 Description: Download and import of 'OpenStreetMap' ('OSM') data as 'sf'
     or 'sp' objects.  'OSM' data are extracted from the 'Overpass' web
