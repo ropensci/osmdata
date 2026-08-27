@@ -395,6 +395,23 @@ test_that ("query-no-quiet", {
     })
 })
 
+test_that ("user agent", {
+    qry <- opq_osm_id (id = "2131123", type = "relation", out = "tags")
+
+    with_mock_dir ("mock_no_user_agent", {
+        x_noUA <- osmdata_data_frame (qry)
+    })
+
+    user_agent_ori <- getOption ("osmdata.user_agent")
+    options (osmdata.user_agent = "osmdata (https://github.com/ropensci/osmdata)")
+    with_mock_dir ("mock_user_agent", {
+        x_UA <- osmdata_data_frame (qry)
+    })
+    expect_identical (x_noUA, x_UA)
+
+    options (osmdata.user_agent = user_agent_ori)
+})
+
 test_that ("add_osm_features", {
 
     qry <- opq (bbox = c (-0.118, 51.514, -0.115, 51.517))

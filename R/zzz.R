@@ -4,8 +4,8 @@
     op <- options ()
 
     ## Added and edited code here by JimShady to use random API each time.
-    available_apis <- list_overpass_urls ()
 
+    available_apis <- list_overpass_urls ()
     base_url <- sample (available_apis, 1)
 
     if (interactive ()) {
@@ -20,7 +20,13 @@
         }
     }
 
-    op.osmdata <- list (osmdata.base_url = base_url)
+    op.osmdata <- list (
+        osmdata.base_url = base_url,
+        osmdata.user_agent = paste (
+            "osmdata", utils::packageVersion ("osmdata"),
+            "(https://github.com/ropensci/osmdata)"
+        )
+    )
 
     ## End of code edited by JimShady
 

@@ -440,6 +440,7 @@ get_wikidata_P402 <- function (wikidata, silent = TRUE) {
     # Avoid error for responses missing items (status 400 or 404)
     req <- httr2::req_error (req, is_error = function (resp) FALSE)
     req <- httr2::req_retry (req, max_tries = 10L)
+    req <- httr2::req_user_agent (req, string = getOption ("osmdata.user_agent"))
 
     if (!silent) {
         message (req$url)
@@ -489,6 +490,7 @@ get_nominatim_lookup <- function (osm_type, osm_id, is_polygon, base_url, silent
     }
 
     req <- httr2::req_retry (req, max_tries = 10L)
+    req <- httr2::req_user_agent (req, string = getOption ("osmdata.user_agent"))
 
     if (!silent) {
         message (req$url)
@@ -555,6 +557,7 @@ get_nominatim_query <- function (place_name,
     }
 
     req <- httr2::req_retry (req, max_tries = 10L)
+    req <- httr2::req_user_agent (req, string = getOption ("osmdata.user_agent"))
 
     resp <- httr2::req_perform (req)
     obj <- tryCatch (
