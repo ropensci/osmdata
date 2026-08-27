@@ -1,14 +1,18 @@
 #' osm_elevation
 #'
 #' Add elevation data to a previously-extracted OSM data set, using a
-#' pre-downloaded global elevation file from
-#' \url{https://srtm.csi.cgiar.org/srtmdata/}. Currently only works for
-#' `SC`-class objects returned from [osmdata_sc()].
+#' pre-downloaded elevation file. Currently only works for `SC`-class objects returned
+#' from [osmdata_sc()].
 #'
 #' @param dat An `SC` object produced by [osmdata_sc()].
 #' @param elev_file A vector of one or more character strings specifying paths
 #' to `.tif` files (or anything that \pkg{terra} can read) containing global
 #' elevation data. `.zip` files will be uncompressed.
+#'
+#' @details Elevation data can be downloaded from
+#' \url{https://portal.opentopography.org/raster?opentopoID=OTSRTM.082015.4326.1},
+#' \url{https://www.earthdata.nasa.gov/data/catalog/lpcloud-srtmgl1-003} or similar.
+#'
 #'
 #' @return A modified version of the input `dat` with an additional `z_` column
 #' appended to the vertices.
@@ -22,19 +26,13 @@
 #' dat <- osmdata_sc (query)
 #' dat$vertex
 #' # The vertex table will have columns ("x_", "y_", "vertex_"). Then
-#' # download elevation data from \url{https://srtm.csi.cgiar.org/srtmdata/}
-#' # (or elsewhere), and add elevation column, "z_" with:
+#' # download elevation data, and add elevation column, "z_" with:
 #' dat <- osm_elevation (dat, elev_file = "/path/to/elevation/data.tiff")
 #' }
 #' @export
 osm_elevation <- function (dat, elev_file) {
 
     requireNamespace ("terra", quietly = TRUE)
-
-    message (
-        "Elevation data from Consortium for Spatial Information; ",
-        "see http://srtm.csi.cgiar.org/srtmdata/"
-    )
 
     elev_file <- check_elev_file (elev_file)
     if (length (elev_file) > 1) {
