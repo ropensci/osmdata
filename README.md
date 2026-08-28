@@ -90,6 +90,7 @@ To load the package and check the version:
 ``` r
 library (osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
+#> connected to: https://overpass-api.de/api/interpreter
 packageVersion ("osmdata")
 #> [1] '0.4.0.9002'
 ```

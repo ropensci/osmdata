@@ -41,7 +41,8 @@
 .onAttach <- function (libname, pkgname) { # nolint
     msg <- paste0 (
         "Data (c) OpenStreetMap contributors,",
-        " ODbL 1.0. https://www.openstreetmap.org/copyright"
+        " ODbL 1.0. https://www.openstreetmap.org/copyright\n",
+        "connected to: ", get_overpass_url ()
     )
     packageStartupMessage (msg)
 }
