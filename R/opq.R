@@ -274,7 +274,6 @@ paste_features <- function (key, value, key_pre = "", bind = "=",
 #' [opq_string()].
 #'
 #' @references <https://wiki.openstreetmap.org/wiki/Map_Features>
-#' @seealso [add_osm_features()]
 #'
 #' @section `add_osm_feature` vs `add_osm_features`:
 #' Features defined within an [add_osm_features()] call are combined with a
@@ -494,7 +493,6 @@ check_bind_key_pre <- function (bind = "=", key_pre = "") {
 #' @return An [opq] object.
 #'
 #' @references \url{https://wiki.openstreetmap.org/wiki/Map_Features}
-#' @seealso [add_osm_feature]
 #'
 #' @family queries
 #' @export

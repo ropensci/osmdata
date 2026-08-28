@@ -4,8 +4,8 @@
     op <- options ()
 
     ## Added and edited code here by JimShady to use random API each time.
-    available_apis <- list_overpass_urls ()
 
+    available_apis <- list_overpass_urls ()
     base_url <- sample (available_apis, 1)
 
     if (interactive ()) {
@@ -20,7 +20,13 @@
         }
     }
 
-    op.osmdata <- list (osmdata.base_url = base_url)
+    op.osmdata <- list (
+        osmdata.base_url = base_url,
+        osmdata.user_agent = paste (
+            "osmdata", utils::packageVersion ("osmdata"),
+            "(https://github.com/ropensci/osmdata)"
+        )
+    )
 
     ## End of code edited by JimShady
 
@@ -35,7 +41,8 @@
 .onAttach <- function (libname, pkgname) { # nolint
     msg <- paste0 (
         "Data (c) OpenStreetMap contributors,",
-        " ODbL 1.0. https://www.openstreetmap.org/copyright"
+        " ODbL 1.0. https://www.openstreetmap.org/copyright\n",
+        "connected to: ", get_overpass_url ()
     )
     packageStartupMessage (msg)
 }
@@ -50,8 +57,6 @@
 #' and <https://github.com/ropensci/osmdata/pull/149>.
 #'
 #' @return A character vector of Overpass API interpreter URLs.
-#'
-#' @seealso [get_overpass_url()], [set_overpass_url()]
 #'
 #' @family overpass
 #' @examples
@@ -70,8 +75,6 @@ list_overpass_urls <- function () {
 #' `https://overpass-api.de/api/interpreter/`.
 #'
 #' @return The overpass API URL
-#'
-#' @seealso [set_overpass_url()], [list_overpass_urls()]
 #'
 #' @family overpass
 #' @examples
@@ -99,8 +102,6 @@ get_overpass_url <- function () {
 #' @param overpass_url The desired overpass API URL
 #'
 #' @return The overpass API URL
-#'
-#' @seealso [get_overpass_url()], [list_overpass_urls()]
 #'
 #' @family overpass
 #' @examples

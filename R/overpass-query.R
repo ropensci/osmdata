@@ -42,6 +42,7 @@ overpass_status <- function (quiet = FALSE) {
 
             status_url <- gsub ("interpreter", st_type, overpass_url)
             req <- httr2::request (status_url)
+            req <- httr2::req_user_agent (req, string = getOption ("osmdata.user_agent"))
             status <- httr2::resp_body_string (httr2::req_perform (req))
 
             if (st_type == "status") {
@@ -69,6 +70,7 @@ check_status <- function (url) {
     req <- httr2::request (status_url)
     req <- httr2::req_error (req, is_error = function (resp) FALSE)
     req <- httr2::req_timeout (req, seconds = 10)
+    req <- httr2::req_user_agent (req, string = getOption ("osmdata.user_agent"))
     resp <- tryCatch (
         httr2::req_perform (req),
         error = function (e) e
@@ -217,6 +219,7 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
         req <- httr2::req_method (req, "POST")
         req <- httr2::req_retry (req, max_tries = 10L)
         req <- httr2::req_body_raw (req, body = query)
+        req <- httr2::req_user_agent (req, string = getOption ("osmdata.user_agent"))
 
         resp <- httr2::req_perform (req)
 
@@ -239,6 +242,7 @@ overpass_query <- function (query, quiet = FALSE, wait = TRUE, pad_wait = 5,
             req <- httr2::req_method (req, "POST")
             req <- httr2::req_retry (req, max_tries = 10L)
             req <- httr2::req_body_raw (req, body = query)
+            req <- httr2::req_user_agent (req, string = getOption ("osmdata.user_agent"))
 
             resp <- httr2::req_perform (req)
 

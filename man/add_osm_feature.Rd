@@ -105,8 +105,6 @@ cat (opq_string (q_keys))
 \url{https://wiki.openstreetmap.org/wiki/Map_Features}
 }
 \seealso{
-\code{\link[=add_osm_features]{add_osm_features()}}
-
 Other queries:
 \code{\link[=add_osm_features]{add_osm_features()}},
 \code{\link[=bbox_to_string]{bbox_to_string()}},

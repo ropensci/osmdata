@@ -36,6 +36,22 @@ designed to allow access to small-to-medium-sized OSM datasets (see
 [`osmextract`](https://github.com/ropensci/osmextract) for an approach
 for reading-in bulk OSM data extracts).
 
+<!-- escaped \[ \] fix resulting README.md by removing \ -->
+
+> [!IMPORTANT]  
+> You are responsible for following the [Usage
+> Policy](https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances).
+> of the server you are connected to. See
+> [`get_overpass_url()`](https://docs.ropensci.org/osmdata/reference/get_overpass_url.html)
+> to check the server.
+>
+> You can modify the user agent of the requests by setting the option
+> `osmdata.user_agent`:
+>
+> ``` r
+> options(osmdata.user_agent = "my new user agent")
+> ```
+
 ## Source code and installation
 
 To install latest CRAN version:
@@ -74,8 +90,9 @@ To load the package and check the version:
 ``` r
 library (osmdata)
 #> Data (c) OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright
+#> connected to: https://overpass-api.de/api/interpreter
 packageVersion ("osmdata")
-#> [1] '0.3.0.9028'
+#> [1] '0.4.0.9002'
 ```
 
 ## Usage

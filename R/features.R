@@ -19,6 +19,7 @@ available_features <- function () {
     if (curl::has_internet ()) {
 
         req <- httr2::request (url_ftrs)
+        req <- httr2::req_user_agent (req, string = getOption ("osmdata.user_agent"))
         resp <- httr2::req_perform (req)
         pg <- httr2::resp_body_html (resp)
 
@@ -60,6 +61,7 @@ available_tags <- function (feature) {
         }
 
         req <- httr2::request (url_ftrs)
+        req <- httr2::req_user_agent (req, string = getOption ("osmdata.user_agent"))
         resp <- httr2::req_perform (req)
         pg <- httr2::resp_body_html (resp)
 
