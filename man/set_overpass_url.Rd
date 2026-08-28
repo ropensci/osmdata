@@ -13,21 +13,21 @@ set_overpass_url(overpass_url)
 The overpass API URL
 }
 \description{
-Set the URL of the specified overpass API. Possible APIs with global coverage
-are:
-\itemize{
-\item "https://overpass-api.de/api/interpreter" (default)
-\item "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
-}
+Set the URL of the specified overpass API. Possible APIs with global
+coverage are returned by \code{\link[=list_overpass_urls]{list_overpass_urls()}}.
 }
 \details{
 For further details, see
 \url{https://wiki.openstreetmap.org/wiki/Overpass_API}
 }
+\examples{
+\dontrun{
+set_overpass_url (list_overpass_urls () [1])
+}
+}
 \seealso{
-\code{\link[=get_overpass_url]{get_overpass_url()}}
-
 Other overpass:
-\code{\link[=get_overpass_url]{get_overpass_url()}}
+\code{\link[=get_overpass_url]{get_overpass_url()}},
+\code{\link[=list_overpass_urls]{list_overpass_urls()}}
 }
 \concept{overpass}

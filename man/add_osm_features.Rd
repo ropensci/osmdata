@@ -84,8 +84,6 @@ cat (opq_string (q_keys))
 \url{https://wiki.openstreetmap.org/wiki/Map_Features}
 }
 \seealso{
-\link{add_osm_feature}
-
 Other queries:
 \code{\link[=add_osm_feature]{add_osm_feature()}},
 \code{\link[=bbox_to_string]{bbox_to_string()}},

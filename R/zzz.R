@@ -58,8 +58,6 @@
 #'
 #' @return A character vector of Overpass API interpreter URLs.
 #'
-#' @seealso [get_overpass_url()], [set_overpass_url()]
-#'
 #' @family overpass
 #' @examples
 #' list_overpass_urls ()
@@ -77,8 +75,6 @@ list_overpass_urls <- function () {
 #' `https://overpass-api.de/api/interpreter/`.
 #'
 #' @return The overpass API URL
-#'
-#' @seealso [set_overpass_url()], [list_overpass_urls()]
 #'
 #' @family overpass
 #' @examples
@@ -106,8 +102,6 @@ get_overpass_url <- function () {
 #' @param overpass_url The desired overpass API URL
 #'
 #' @return The overpass API URL
-#'
-#' @seealso [get_overpass_url()], [list_overpass_urls()]
 #'
 #' @family overpass
 #' @examples
