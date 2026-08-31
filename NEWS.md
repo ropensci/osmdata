@@ -8,6 +8,7 @@
 
 - Fix `osmdata_sf()` for points without metadata (#426).
 - Add user agent in requests to servers (#430).
+- Update death links (#433).
 
 
 # osmdata 0.4.0

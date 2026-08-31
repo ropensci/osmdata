@@ -19,9 +19,13 @@ appended to the vertices.
 }
 \description{
 Add elevation data to a previously-extracted OSM data set, using a
-pre-downloaded global elevation file from
-\url{https://srtm.csi.cgiar.org/srtmdata/}. Currently only works for
-\code{SC}-class objects returned from \code{\link[=osmdata_sc]{osmdata_sc()}}.
+pre-downloaded elevation file. Currently only works for \code{SC}-class objects returned
+from \code{\link[=osmdata_sc]{osmdata_sc()}}.
+}
+\details{
+Elevation data can be downloaded from
+\url{https://portal.opentopography.org/raster?opentopoID=OTSRTM.082015.4326.1},
+\url{https://www.earthdata.nasa.gov/data/catalog/lpcloud-srtmgl1-003} or similar.
 }
 \examples{
 \dontrun{
@@ -31,8 +35,7 @@ query <- opq ("omaha nebraska") |>
 dat <- osmdata_sc (query)
 dat$vertex
 # The vertex table will have columns ("x_", "y_", "vertex_"). Then
-# download elevation data from \url{https://srtm.csi.cgiar.org/srtmdata/}
-# (or elsewhere), and add elevation column, "z_" with:
+# download elevation data, and add elevation column, "z_" with:
 dat <- osm_elevation (dat, elev_file = "/path/to/elevation/data.tiff")
 }
 }
