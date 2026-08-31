@@ -1,7 +1,7 @@
 #' osm_elevation
 #'
 #' Add elevation data to a previously-extracted OSM data set, using a
-#' pre-downloaded elevation file. Currently only works for `SC`-class objects returned
+#' pre-downloaded elevation file (see Details). Currently only works for `SC`-class objects returned
 #' from [osmdata_sc()].
 #'
 #' @param dat An `SC` object produced by [osmdata_sc()].
