@@ -1,4 +1,7 @@
-# CRAN notes for osmdata_0.4.0 submission
+# CRAN notes for osmdata_0.4.1 submission
+
+Patch release to remove failing servers from the default options and checks to ensure the selected server works + bug fix.
+
 
 ## Test environments
 
@@ -9,11 +12,8 @@ This submission generates NO notes on:
 * MacOS (via github actions): R-release
 * win-builder: R-oldrelease, R-release, R-devel
 
-Package also checked using `Clang++ -Weverything and local memory sanitzer with clean results.
+Package also checked using:
+rhub::rhub_check(platform = c("m1-san", "clang-asan", "clang-ubsan", "gcc-asan", "rchk", "valgrind"))
 
-## revdepcheck results
-
-We checked 15 reverse dependencies (2 from CRAN + 13 from Bioconductor), comparing R CMD check results across CRAN and dev versions of this package.
-
- * We saw 0 new problems
- * We failed to check 0 packages
+Platforms "clang-asan", "clang-ubsan", "rchk", "valgrind" fail with errors in dependencies (terra, libudunits2)
+See https://github.com/ropensci/osmdata/actions/runs/33199908632 for details.

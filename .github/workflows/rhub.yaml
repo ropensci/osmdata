@@ -15,7 +15,9 @@ on:
       config:
         description: 'A comma separated list of R-hub platforms to use.'
         type: string
-        default: 'linux,windows,macos'
+        default: 'linux,windows,macos,m1-san,clang-asan,clang-ubsan,gcc-asan,rchk,valgrind'
+            # 'clang16,clang17,clang18,clang19,clang20,clang21,clang22,gcc13,gcc14,gcc15,gcc16'
+            # from rhub::rhub_platforms()
       name:
         description: 'Run name. You can leave this empty now.'
         type: string

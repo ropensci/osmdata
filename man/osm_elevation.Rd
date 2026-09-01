@@ -19,7 +19,7 @@ appended to the vertices.
 }
 \description{
 Add elevation data to a previously-extracted OSM data set, using a
-pre-downloaded elevation file. Currently only works for \code{SC}-class objects returned
+pre-downloaded elevation file (see Details). Currently only works for \code{SC}-class objects returned
 from \code{\link[=osmdata_sc]{osmdata_sc()}}.
 }
 \details{
