@@ -1,5 +1,9 @@
 # osmdata (development version)
 
+## Minor changes
+
+- Fix bug in extraction that presumed overpass data only (#434)
+
 # osmdata 0.4.1
 
 ## Major changes

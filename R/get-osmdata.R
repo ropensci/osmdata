@@ -320,11 +320,15 @@ get_meta_from_cpp_output <- function (res, what = "points") {
     if (ncol (this) > 0L) {
         colnames (this) <- paste0 ("osm", colnames (this))
 
-        this [, "osm_user"] <- enc2utf8 (this [, "osm_user"])
-        this [, "osm_timestamp"] <- as.POSIXct (
-            this [, "osm_timestamp"],
-            format = timestamp_fmt_iso8601, tz = "UTC"
-        )
+        if ("osm_user" %in% colnames (this)) {
+            this [, "osm_user"] <- enc2utf8 (this [, "osm_user"])
+        }
+        if ("osm_timestamp" %in% colnames (this)) {
+            this [, "osm_timestamp"] <- as.POSIXct (
+                this [, "osm_timestamp"],
+                format = timestamp_fmt_iso8601, tz = "UTC"
+            )
+        }
     }
 
     return (as.data.frame (this))
