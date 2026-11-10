@@ -2,7 +2,7 @@
 # R specific hooks: https://github.com/lorenzwalthert/precommit
 repos:
 -   repo: https://github.com/lorenzwalthert/precommit
-    rev: v0.4.3.9025
+    rev: v0.4.3.9034
     hooks:
     -   id: style-files
         args: [--style_pkg=spaceout, --style_fun=spaceout_style]
@@ -12,7 +12,7 @@ repos:
           tests/testthat/_snaps/.*|
           )$
         additional_dependencies:
-        - ropensci-review-tools/spaceout
+        - mpadge/spaceout
     # -   id: roxygenize
     -   id: use-tidy-description
     -   id: spell-check
